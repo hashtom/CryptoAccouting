@@ -94,6 +94,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="CoreClass\" />
+    <Folder Include="UIClass\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -106,14 +108,29 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="FirstViewController.cs" />
-    <Compile Include="SecondViewController.cs" />
-    <Compile Include="FirstViewController.designer.cs">
-      <DependentUpon>FirstViewController.cs</DependentUpon>
+    <Compile Include="TradeViewController.cs" />
+    <Compile Include="TradeViewController.designer.cs">
+      <DependentUpon>TradeViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="SecondViewController.designer.cs">
-      <DependentUpon>SecondViewController.cs</DependentUpon>
+    <Compile Include="SettingViewController.cs" />
+    <Compile Include="SettingViewController.designer.cs">
+      <DependentUpon>SettingViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="TradeNavigationController.cs" />
+    <Compile Include="TradeNavigationController.designer.cs">
+      <DependentUpon>TradeNavigationController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BalanceNavigationController.cs" />
+    <Compile Include="BalanceNavigationController.designer.cs">
+      <DependentUpon>BalanceNavigationController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BalanceViewController.cs" />
+    <Compile Include="BalanceViewController.designer.cs">
+      <DependentUpon>BalanceViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CoreClass\Asset.cs" />
+    <Compile Include="CoreClass\Position.cs" />
+    <Compile Include="UIClass\BalanceTableSource.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
