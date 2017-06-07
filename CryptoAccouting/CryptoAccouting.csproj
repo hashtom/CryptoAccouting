@@ -129,10 +129,13 @@
     <Compile Include="BalanceViewController.designer.cs">
       <DependentUpon>BalanceViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="CoreClass\Asset.cs" />
+    <Compile Include="CoreClass\AssetAttribute.cs" />
     <Compile Include="CoreClass\Position.cs" />
     <Compile Include="UIClass\BalanceTableSource.cs" />
     <Compile Include="UIClass\CustomBalanceCell.cs" />
+    <Compile Include="CoreClass\Exchange.cs" />
+    <Compile Include="CoreClass\CryptoAccoutingCore.cs" />
+    <Compile Include="CoreClass\ExchangeAPI.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\bitcoin.png" />
