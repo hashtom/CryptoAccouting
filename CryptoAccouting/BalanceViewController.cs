@@ -10,11 +10,11 @@ namespace CryptoAccouting
 
         List<Position> positions;
 
-        public BalanceViewController (IntPtr handle) : base (handle)
+        public BalanceViewController(IntPtr handle) : base(handle)
         {
             positions = new List<Position> {
-                new Position {Code = "BTC", Amount=1000, ClosePrice=2800, CcyPrice="BTC"},
-                new Position {Code = "REP", Amount=5000, ClosePrice=0.0013, CcyPrice="BTC"}
+                new Position(new AssetAttribute{Code="BTC"}) {Amount=1000, ClosePrice=2800, CcyPrice="BTC"},
+                new Position (new AssetAttribute{Code = "REP"}){Amount=5000, ClosePrice=0.0013, CcyPrice="BTC"}
 			};
         }
 

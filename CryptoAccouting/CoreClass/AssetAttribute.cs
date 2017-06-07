@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace CryptoAccouting
 {
     public class AssetAttribute
@@ -13,12 +14,11 @@ namespace CryptoAccouting
         public AssetAttribute()
         {
         }
-
     }
 
 	public enum AssetType
 	{
-		CryptoCoin,
+		Crypto,
 		Cash,
         Other
 	}

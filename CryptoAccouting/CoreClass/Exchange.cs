@@ -16,7 +16,8 @@ namespace CryptoAccouting
             ListedAssets = new List<AssetAttribute>();
         }
 
-        public void AddListedAsset(ref AssetAttribute asset){
+        public void AttachAsset(ref AssetAttribute asset){
+            //if (ListedAssets.Any(x => x.RizaiOrderId == order.RizaiOrderId)) DetachOrder(order);
             ListedAssets.Add(asset);
         }
     }
