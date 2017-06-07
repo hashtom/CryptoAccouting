@@ -68,6 +68,7 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
+                                            <accessibility key="accessibilityConfiguration" identifier="code_label"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1091" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" text="3,000">
                                             <rect key="frame" x="200" y="11" width="75" height="21"/>
@@ -75,6 +76,7 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
+                                            <accessibility key="accessibilityConfiguration" identifier="price_label"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1092" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" text="+3.5%">
                                             <rect key="frame" x="283" y="11" width="69" height="21"/>
@@ -89,6 +91,7 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
+                                            <accessibility key="accessibilityConfiguration" identifier="dayreturn_label"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1094" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" text="800">
                                             <rect key="frame" x="130" y="11" width="42" height="21"/>
@@ -96,10 +99,12 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
+                                            <accessibility key="accessibilityConfiguration" identifier="amount_label"/>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="1096" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                             <rect key="frame" x="1" y="-25" width="52" height="68"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <accessibility key="accessibilityConfiguration" identifier="CoinImage"/>
                                         </imageView>
                                     </subviews>
                                 </tableViewCellContentView>
@@ -198,4 +203,9 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina47"/>
     </simulatedMetricsContainer>
+    <resources>
+        <image name="Images/bitcoin.png" width="16" height="16"/>
+        <image name="Images/augur.png" width="16" height="16"/>
+        <image name="Images/ethereum.png" width="16" height="16"/>
+    </resources>
 </document>

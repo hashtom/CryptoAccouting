@@ -7,7 +7,7 @@ namespace CryptoAccouting
 	public class BalanceTableSource : UITableViewSource
 	{
 		Position[] tableItems;
-		string cellIdentifier = "BalanceCell"; // set in the Storyboard
+        NSString cellIdentifier = new NSString("BalanceCell"); // set in the Storyboard
 
 		public BalanceTableSource(Position[] items)
 		{
@@ -21,13 +21,13 @@ namespace CryptoAccouting
 
 		public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
 		{
-			// in a Storyboard, Dequeue will ALWAYS return a cell, 
-			var cell = tableView.DequeueReusableCell(cellIdentifier);
-			// now set the properties as normal
-			//cell.TextLabel.Text = tableItems[indexPath.Row].ItemName;
-			//cell.DetailTextLabel.Text = tableItems[indexPath.Row].Category.ToString();
-			//if ( tableItems[indexPath.Row].DressPhotoFile != null)
-			//	cell.ImageView.Image = UIImage.FromFile(tableItems[indexPath.Row].DressPhotoFile);
+
+            var cell = tableView.DequeueReusableCell(cellIdentifier) as CustomBalanceCell;
+			if (cell == null)
+				cell = new CustomBalanceCell (cellIdentifier);
+            cell.UpdateCell(tableItems[indexPath.Row].Code
+                            , tableItems[indexPath.Row].Amount.ToString()
+                            , UIImage.FromFile("Images/bitcoin.png"));
 
 			return cell;
 		}

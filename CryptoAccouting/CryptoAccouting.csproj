@@ -96,6 +96,7 @@
     <Folder Include="Resources\" />
     <Folder Include="CoreClass\" />
     <Folder Include="UIClass\" />
+    <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -131,6 +132,12 @@
     <Compile Include="CoreClass\Asset.cs" />
     <Compile Include="CoreClass\Position.cs" />
     <Compile Include="UIClass\BalanceTableSource.cs" />
+    <Compile Include="UIClass\CustomBalanceCell.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Images\bitcoin.png" />
+    <BundleResource Include="Images\augur.png" />
+    <BundleResource Include="Images\ethereum.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
