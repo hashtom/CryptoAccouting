@@ -10,7 +10,7 @@ namespace CryptoAccouting
         public DateTime BalanceDate { get; set; }
         public double ClosePrice { get; set; }
         public string CcyPrice { get; set; }
-        public DateTime LastUpdate { get; }
+        public DateTime UpdateTime { get; }
 
         public Position(AssetAttribute asset)
         {

@@ -9,7 +9,7 @@ namespace CryptoAccouting
         public string Name { get; set; }
         public AssetType Type { get; set; }
         public DateTime ListedDate { get; set; }
-        public DateTime LastUpdate { get; }
+        public DateTime UpdateTime { get; }
 
         public AssetAttribute()
         {

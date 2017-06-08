@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -106,24 +106,12 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\First.imageset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\First.imageset\vector.pdf">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\Second.imageset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\Second.imageset\vector.pdf">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\First.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\First.imageset\vector.pdf" />
+    <ImageAsset Include="Assets.xcassets\Second.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Second.imageset\vector.pdf" />
+    <ImageAsset Include="Assets.xcassets\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -168,6 +156,7 @@
     <Compile Include="CoreClass\Exchange.cs" />
     <Compile Include="CoreClass\CryptoAccoutingCore.cs" />
     <Compile Include="CoreClass\ExchangeAPI.cs" />
+    <Compile Include="CoreClass\Balance.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\bitcoin.png" />
