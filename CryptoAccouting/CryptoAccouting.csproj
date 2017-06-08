@@ -92,8 +92,8 @@
     <Reference Include="NBitcoin, Version=3.0.2.26, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NBitcoin.3.0.2.26\lib\netstandard1.3\NBitcoin.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="QBitNinja.Client, Version=1.0.3.38, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\QBitNinja.Client.1.0.3.38\lib\netstandard1.1\QBitNinja.Client.dll</HintPath>
@@ -133,6 +133,7 @@
     <InterfaceDefinition Include="Main.storyboard" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <None Include="packages.config" />
