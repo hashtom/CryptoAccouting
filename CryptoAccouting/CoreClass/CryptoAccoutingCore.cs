@@ -15,5 +15,11 @@ namespace CryptoAccouting
             positions = new List<Position>();
 
         }
+
+        private void fetchAssets()
+        {
+
+ 
+        }
     }
 }
