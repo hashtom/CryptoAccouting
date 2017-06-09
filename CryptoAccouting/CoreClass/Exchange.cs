@@ -7,16 +7,16 @@ namespace CryptoAccouting
     {
         public string ExchangeName { get; }
         public string ExchangeCode { get; }
-        public List<AssetAttribute> ListedAssets;
+        public List<Instrument> ListedAssets;
 
         public Exchange(string exchangeName, string exchangeCode)
         {
             ExchangeCode = exchangeCode;
             ExchangeName = exchangeName;
-            ListedAssets = new List<AssetAttribute>();
+            ListedAssets = new List<Instrument>();
         }
 
-        public void AttachAsset(ref AssetAttribute asset){
+        public void AttachAsset(ref Instrument asset){
             //if (ListedAssets.Any(x => x.RizaiOrderId == order.RizaiOrderId)) DetachOrder(order);
             ListedAssets.Add(asset);
         }

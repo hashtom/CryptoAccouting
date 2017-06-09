@@ -13,7 +13,25 @@ namespace CryptoAccouting
 
         public Balance()
         {
+			UpdateTime = DateTime.Now;
+            positions = new List<Position>();
         }
+
+        public void AttachPosition(Position position)
+		{
+            if (positions.Any(x => x.PositionID == position.PositionID)) DetachOrder(position);
+			positions.Add(position);
+		}
+
+		public void DetachPosition(Position position)
+		{
+			positions.RemoveAll(x => x.PositionID == position.PositionID);
+		}
+
+		public int Count()
+		{
+			return positions.Count;
+		}
 
         public IEnumerator<Position> GetEnumerator()
 		{

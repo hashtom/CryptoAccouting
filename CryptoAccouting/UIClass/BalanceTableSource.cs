@@ -25,7 +25,7 @@ namespace CryptoAccouting
             var cell = tableView.DequeueReusableCell(cellIdentifier) as CustomBalanceCell;
 			if (cell == null)
 				cell = new CustomBalanceCell (cellIdentifier);
-            cell.UpdateCell(tableItems[indexPath.Row].Asset.Code
+            cell.UpdateCell(tableItems[indexPath.Row].Asset.Symbol
                             , tableItems[indexPath.Row].Amount.ToString()
                             , UIImage.FromFile("Images/bitcoin.png"));
 
