@@ -8,6 +8,7 @@ namespace CryptoAccouting
         public int Volume_1D { get; set; }
         public DateTime PriceDate { get; set; }
         public Exchange PriceExchange { get; set; }
+        public DateTime UpdateTime { get; private set; }
 		
         public Price()
         {

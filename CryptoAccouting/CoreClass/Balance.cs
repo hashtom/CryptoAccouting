@@ -7,9 +7,9 @@ namespace CryptoAccouting
 {
     public class Balance : IEnumerable<Position>
     {
-        public string BalanceID { get; set; }
-        public DateTime UpdateTime { get; set; }
+        public string BalanceID { get; }
         private List<Position> positions;
+        public DateTime UpdateTime { get; private set; }
 
         public Balance()
         {

@@ -8,6 +8,7 @@ namespace CryptoAccouting
         public string ExchangeName { get; }
         public string ExchangeCode { get; }
         public List<Instrument> ListedAssets;
+        public DateTime UpdateTime { get; private set; }
 
         public Exchange(string exchangeName, string exchangeCode)
         {
