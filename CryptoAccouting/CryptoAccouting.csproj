@@ -160,9 +160,9 @@
     <Compile Include="CoreClass\Price.cs" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Images\bitcoin.png" />
-    <BundleResource Include="Images\augur.png" />
-    <BundleResource Include="Images\ethereum.png" />
+    <BundleResource Include="Images\btc.png" />
+    <BundleResource Include="Images\rep.png" />
+    <BundleResource Include="Images\eth.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

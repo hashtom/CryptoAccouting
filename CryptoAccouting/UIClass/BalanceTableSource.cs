@@ -27,7 +27,10 @@ namespace CryptoAccouting
 				cell = new CustomBalanceCell (cellIdentifier);
             cell.UpdateCell(tableItems[indexPath.Row].Asset.Symbol
                             , tableItems[indexPath.Row].Amount.ToString()
-                            , UIImage.FromFile("Images/bitcoin.png"));
+                            , tableItems[indexPath.Row].PriceData.ClosePrice.ToString()
+                            , tableItems[indexPath.Row].PriceData.Volume_1D.ToString()
+                            , UIImage.FromFile(tableItems[indexPath.Row].Asset.LogoFileName));
+                            //, UIImage.FromFile("Images/bitcoin.png"));
 
 			return cell;
 		}

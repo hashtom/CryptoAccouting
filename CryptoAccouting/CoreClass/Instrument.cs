@@ -12,6 +12,7 @@ namespace CryptoAccouting
         public DateTime ListedDate { get; set; }
         public List<Exchange> Exchanges;
 		public Price PriceValue { get; set; }
+        public string LogoFileName { get; set; }
         public DateTime UpdateTime { get; }
 
         public Instrument()

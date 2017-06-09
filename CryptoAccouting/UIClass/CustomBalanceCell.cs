@@ -8,7 +8,7 @@ namespace CryptoAccouting
     
     public class CustomBalanceCell : UITableViewCell
     {
-        UILabel codeLabel, amountLabel, priceLabel, dayReturnLabel;
+        UILabel codeLabel, amountLabel, priceLabel, volumeLabel;
         UIImageView imageView;
         public CustomBalanceCell(NSString cellId) : base(UITableViewCellStyle.Default, cellId)
 	{
@@ -31,14 +31,32 @@ namespace CryptoAccouting
                 BackgroundColor = UIColor.Clear
             };
 
+			priceLabel = new UILabel()
+			{
+				Font = UIFont.FromName("AmericanTypewriter", 12f),
+				TextColor = UIColor.FromRGB(38, 127, 0),
+				TextAlignment = UITextAlignment.Center,
+				BackgroundColor = UIColor.Clear
+			};
+
+			volumeLabel = new UILabel()
+			{
+				Font = UIFont.FromName("AmericanTypewriter", 12f),
+				TextColor = UIColor.FromRGB(38, 127, 0),
+				TextAlignment = UITextAlignment.Center,
+				BackgroundColor = UIColor.Clear
+			};
+
             ContentView.AddSubviews(new UIView[] { codeLabel, amountLabel, imageView });
 
         }
-        public void UpdateCell(string caption, string subtitle, UIImage image)
+        public void UpdateCell(string code, string amount, string price, string volume, UIImage image)
         {
             imageView.Image = image;
-            codeLabel.Text = caption;
-            amountLabel.Text = subtitle;
+            codeLabel.Text = code;
+            amountLabel.Text = amount;
+            priceLabel.Text = price;
+            volumeLabel.Text = volume;
         }
         public override void LayoutSubviews()
         {

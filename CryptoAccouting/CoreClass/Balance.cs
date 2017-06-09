@@ -19,7 +19,7 @@ namespace CryptoAccouting
 
         public void AttachPosition(Position position)
 		{
-            if (positions.Any(x => x.PositionID == position.PositionID)) DetachOrder(position);
+            if (positions.Any(x => x.PositionID == position.PositionID)) DetachPosition(position);
 			positions.Add(position);
 		}
 
