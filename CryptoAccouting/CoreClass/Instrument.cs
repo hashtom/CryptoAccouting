@@ -13,12 +13,12 @@ namespace CryptoAccouting
         public List<Exchange> Exchanges;
 		public Price PriceValue { get; set; }
         public string LogoFileName { get; set; }
-        public DateTime UpdateTime { get; private set; }
+        public DateTime UpdateTime { get; }
 
         public Instrument()
         {
 			Exchanges = new List<Exchange>();
-			PriceValue = new Price();
+            // PriceValue = fetchPrice() //todo
         }
     }
 
