@@ -6,17 +6,20 @@ namespace CryptoAccouting
 {
 	public class BalanceTableSource : UITableViewSource
 	{
-		Position[] tableItems;
+        Balance balanceViewItems;   
         NSString cellIdentifier = new NSString("BalanceCell"); // set in the Storyboard
 
-		public BalanceTableSource(Position[] items)
+        public BalanceTableSource(Balance myBalance)
 		{
-			tableItems = items;
+			balanceViewItems = myBalance;
 		}
 
 		public override nint RowsInSection(UITableView tableview, nint section)
 		{
-			return tableItems.Length;
+            //int a = balanceViewItems.Count();
+
+			return balanceViewItems.Count();
+
 		}
 
 		public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
@@ -25,18 +28,17 @@ namespace CryptoAccouting
             var cell = tableView.DequeueReusableCell(cellIdentifier) as CustomBalanceCell;
 			if (cell == null)
 				cell = new CustomBalanceCell (cellIdentifier);
-            cell.UpdateCell(tableItems[indexPath.Row].Asset.Symbol
-                            , tableItems[indexPath.Row].Amount.ToString()
-                            , tableItems[indexPath.Row].PriceData.ClosePrice.ToString()
-                            , tableItems[indexPath.Row].PriceData.Volume_1D.ToString()
-                            , UIImage.FromFile(tableItems[indexPath.Row].Asset.LogoFileName));
-                            //, UIImage.FromFile("Images/bitcoin.png"));
+            cell.UpdateCell(balanceViewItems.fetchPositionByIndex(indexPath.Row).CoinAsset.Symbol
+                            , balanceViewItems.fetchPositionByIndex(indexPath.Row).Amount.ToString()
+                            , balanceViewItems.fetchPositionByIndex(indexPath.Row).PriceData.LatestPrice.ToString()
+                            , balanceViewItems.fetchPositionByIndex(indexPath.Row).PriceData.DayVolume.ToString()
+                            , UIImage.FromFile(balanceViewItems.fetchPositionByIndex(indexPath.Row).CoinAsset.LogoFileName));
 
 			return cell;
 		}
 		public Position GetItem(int id)
 		{
-			return tableItems[id];
+            return balanceViewItems.fetchPositionByIndex(id);
 		}
 	}
 

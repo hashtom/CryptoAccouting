@@ -7,7 +7,7 @@ namespace CryptoAccouting
 {
     public class Balance : IEnumerable<Position>
     {
-        public string BalanceID { get; }
+        public string BalanceName { get; set; }
         private List<Position> positions;
         public DateTime UpdateTime { get; private set; }
 
@@ -19,16 +19,22 @@ namespace CryptoAccouting
 
         public void AttachPosition(Position position)
 		{
-            if (positions.Any(x => x.PositionID == position.PositionID)) DetachPosition(position);
+            if (positions.Any(x => x.Id == position.Id)) DetachPosition(position);
 			positions.Add(position);
 		}
 
 		public void DetachPosition(Position position)
 		{
-			positions.RemoveAll(x => x.PositionID == position.PositionID);
+			positions.RemoveAll(x => x.Id == position.Id);
 		}
 
-		public int Count()
+        public Position fetchPositionByIndex(int indexNumber){
+            //Position[] pos = positions.ToArray();
+            //return pos[indexNumber];
+            return positions[indexNumber];
+        }
+
+        public int Count()
 		{
 			return positions.Count;
 		}
