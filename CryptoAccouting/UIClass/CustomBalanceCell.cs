@@ -19,7 +19,7 @@ namespace CryptoAccouting
 
             codeLabel = new UILabel()
             {
-                Font = UIFont.FromName("ArialMT", 22f),
+                Font = UIFont.FromName("ArialMT", 16f),
                 TextColor = UIColor.Black,
                 TextAlignment = UITextAlignment.Left,
                 BackgroundColor = UIColor.Clear

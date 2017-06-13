@@ -28,6 +28,7 @@ namespace CryptoAccouting
             var cell = tableView.DequeueReusableCell(cellIdentifier) as CustomBalanceCell;
 			if (cell == null)
 				cell = new CustomBalanceCell (cellIdentifier);
+            
             cell.UpdateCell(balanceViewItems.fetchPositionByIndex(indexPath.Row).CoinAsset.Symbol
                             , balanceViewItems.fetchPositionByIndex(indexPath.Row).Amount.ToString()
                             , balanceViewItems.fetchPositionByIndex(indexPath.Row).PriceData.LatestPrice.ToString()
@@ -41,5 +42,32 @@ namespace CryptoAccouting
             return balanceViewItems.fetchPositionByIndex(id);
 		}
 	}
+
+	//public class HeaderTableSource : UITableViewSource
+	//{
+	//	NSString cellIdentifier = new NSString("BalanceCell"); // set in the Storyboard
+
+	//	public override nint RowsInSection(UITableView tableview, nint section)
+	//	{
+	//		return 1;
+
+	//	}
+
+	//	public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
+	//	{
+
+	//		var cell = tableView.DequeueReusableCell(cellIdentifier) as CustomBalanceCell;
+	//		if (cell == null)
+	//			cell = new CustomBalanceCell(cellIdentifier);
+
+	//		cell.UpdateCell("Symbol"
+	//						, "Amount"
+	//						, "Latest Price"
+	//						, "Day Volume"
+	//						, null);
+
+	//		return cell;
+	//	}
+	//}
 
 }

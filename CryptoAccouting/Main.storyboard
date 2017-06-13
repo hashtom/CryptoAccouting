@@ -50,13 +50,13 @@
         <scene sceneID="709">
             <objects>
                 <tableViewController id="710" sceneMemberID="viewController" customClass="BalanceViewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="712">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="712" sectionIndexMinimumDisplayRowCount="2" allowsSelection="NO" separatorStyle="singleLineEtched">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" id="715" reuseIdentifier="BalanceCell" accessoryType="detailButton">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="715" reuseIdentifier="BalanceCell" accessoryType="detailButton">
+                                <rect key="frame" x="0.0" y="186" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="715" id="716">
                                     <rect key="frame" x="0.0" y="0.0" width="327" height="43"/>
@@ -64,23 +64,61 @@
                                     <subviews/>
                                 </tableViewCellContentView>
                                 <connections/>
+                                <color key="tintColor" colorSpace="calibratedRGB" red="1" green="1" blue="0" alpha="1"/>
+                                <color key="backgroundColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                             </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="710" id="713"/>
                             <outlet property="delegate" destination="710" id="714"/>
                         </connections>
+                        <view contentMode="scaleToFill" id="2282" key="tableHeaderView">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="130"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" colorSpace="calibratedRGB" red="0.10588235294117647" green="0.2" blue="0.996078431372549" alpha="1"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2283" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" text="JPY">
+                                    <rect key="frame" x="16" y="45" width="42" height="21"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2284" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" text="1000">
+                                    <rect key="frame" x="76" y="32" width="283" height="58"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="36"/>
+                                    <color key="textColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                        </view>
+                        <color key="separatorColor" colorSpace="calibratedRGB" red="1" green="0.49803921568627452" blue="0" alpha="1"/>
                     </tableView>
                     <navigationItem id="859" key="navigationItem" title="Asset Balance">
                         <barButtonItem key="rightBarButtonItem" id="2226" systemItem="add" style="plain"/>
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="2288">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bridgeplace" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2287" translatesAutoresizingMaskIntoConstraints="NO" key="customView">
+                                <rect key="frame" x="0.0" y="0.0" width="87" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="italicSystem" pointSize="16"/>
+                                <color key="textColor" colorSpace="calibratedRGB" red="1" green="0.49803921568627452" blue="0" alpha="1"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="AddCoinButton" destination="2226" id="name-outlet-2226"/>
+                        <outlet property="labelTotalAsset" destination="2284" id="name-outlet-2284"/>
+                        <outlet property="BalanceTopView" destination="2282" id="name-outlet-2282"/>
+                        <outlet property="labelCurrency" destination="2283" id="name-outlet-2283"/>
                     </connections>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="717" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1277" y="-341"/>
+            <point key="canvasLocation" x="1274" y="-424"/>
         </scene>
         <scene sceneID="718">
             <objects>
@@ -153,6 +191,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="875" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="709" y="471"/>
+        </scene>
+        <scene sceneID="2275">
+            <objects>
+                <viewController id="2274" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="2270"/>
+                        <viewControllerLayoutGuide type="bottom" id="2271"/>
+                    </layoutGuides>
+                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="2276">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <toolbarItems/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2277" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1699" y="100"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

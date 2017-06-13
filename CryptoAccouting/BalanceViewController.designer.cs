@@ -18,11 +18,47 @@ namespace CryptoAccouting
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIBarButtonItem AddCoinButton { get; set; }
 
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIView BalanceTopView { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelCurrency { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelPercent { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelTotalAsset { get; set; }
+
         void ReleaseDesignerOutlets ()
         {
             if (AddCoinButton != null) {
                 AddCoinButton.Dispose ();
                 AddCoinButton = null;
+            }
+
+            if (BalanceTopView != null) {
+                BalanceTopView.Dispose ();
+                BalanceTopView = null;
+            }
+
+            if (labelCurrency != null) {
+                labelCurrency.Dispose ();
+                labelCurrency = null;
+            }
+
+            if (labelPercent != null) {
+                labelPercent.Dispose ();
+                labelPercent = null;
+            }
+
+            if (labelTotalAsset != null) {
+                labelTotalAsset.Dispose ();
+                labelTotalAsset = null;
             }
         }
     }

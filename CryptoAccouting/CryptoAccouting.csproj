@@ -146,6 +146,7 @@
     <Compile Include="CoreClass\ExchangeAPI.cs" />
     <Compile Include="CoreClass\Balance.cs" />
     <Compile Include="CoreClass\Price.cs" />
+    <Compile Include="UIClass\AppConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\btc.png" />
