@@ -3,7 +3,7 @@ namespace CryptoAccouting
 {
     public class Price
     {
-        public Instrument Asset { get; }
+        public Instrument Coin { get; }
 		public string BaseCurrency { get; set; }
         public Exchange PriceExchange { get; set; }
 
@@ -12,11 +12,11 @@ namespace CryptoAccouting
 		public double PrevClose { get; set; }
 		public DateTime PriceDate { get; set; }
 
-		public DateTime UpdateTime { get; }
+		public DateTime UpdateTime { get; private set; }
 
-        public Price(Instrument asset)
+        public Price(Instrument coin)
         {
-            Asset = asset;
+            Coin = coin;
             UpdateTime = DateTime.Now;
         }
 

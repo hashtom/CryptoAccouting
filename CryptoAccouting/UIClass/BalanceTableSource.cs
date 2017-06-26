@@ -29,11 +29,11 @@ namespace CryptoAccouting
 			if (cell == null)
 				cell = new CustomBalanceCell (cellIdentifier);
             
-            cell.UpdateCell(balanceViewItems.fetchPositionByIndex(indexPath.Row).CoinAsset.Symbol
+            cell.UpdateCell(balanceViewItems.fetchPositionByIndex(indexPath.Row).Coin.Symbol
                             , balanceViewItems.fetchPositionByIndex(indexPath.Row).Amount.ToString()
                             , balanceViewItems.fetchPositionByIndex(indexPath.Row).PriceData.LatestPrice.ToString()
                             , balanceViewItems.fetchPositionByIndex(indexPath.Row).PriceData.DayVolume.ToString()
-                            , UIImage.FromFile(balanceViewItems.fetchPositionByIndex(indexPath.Row).CoinAsset.LogoFileName));
+                            , UIImage.FromFile(balanceViewItems.fetchPositionByIndex(indexPath.Row).Coin.LogoFileName));
 
 			return cell;
 		}

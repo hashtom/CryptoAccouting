@@ -6,7 +6,7 @@ namespace CryptoAccouting
     public class Position
     {
         public string Id { get; }
-        public Instrument CoinAsset { get; }    
+        public Instrument Coin { get; }    
         public int Amount { get; set; }
         public Price PriceData { get; private set; }
 
@@ -15,9 +15,9 @@ namespace CryptoAccouting
 
 
 
-		public Position(Instrument asset, string positionId)
+		public Position(Instrument coin, string positionId)
         {
-            CoinAsset = asset;
+            Coin = coin;
             Id = positionId;
         }
 
