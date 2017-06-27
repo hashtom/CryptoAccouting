@@ -1,35 +1,57 @@
 ﻿using System;
 using System.Text;
-using ServiceStack.Text;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
+using ServiceStack.Text;
+using RestSharp;
+using RestSharp.Authenticators;
 
 namespace CryptoAccouting
 {
-    public static class ZaifAPI
+    public class ZaifAPI
     {
 
-        // RestSharpでAPIにアクセスしservicestack.textでパース
+		// RestSharpでAPIにアクセスしservicestack.textでパース
+
+
+		const string BaseUrl = "https://api.zaif.jp/";
+
+
+		readonly string _apiKey;
+		readonly string _apiSecret;
+        readonly string _apiMethod;
+
+		public ZaifAPI(string apiKey, string apiSecret, string apiMethod)
+		{
+			_apiKey = apiKey;
+			_apiSecret = apiSecret;
+            _apiMethod = apiMethod;
+		}
+
+		public T Execute<T>(RestRequest request) where T : new()
+		{
+			var client = new RestClient();
+			client.BaseUrl = new System.Uri(BaseUrl);
+			client.Authenticator = new HttpBasicAuthenticator(_apiKey, _apiSecret);
+			request.AddParameter("AccountSid", _apiKey, ParameterType.UrlSegment); // used on every request
+			var response = client.Execute<T>(request);
+
+			if (response.ErrorException != null)
+			{
+				const string message = "Error retrieving response.  Check inner details for more info.";
+				var Exception = new ApplicationException(message, response.ErrorException);
+				throw Exception;
+			}
+			return response.Data;
+		}
+
 
 
 		internal static void FetchTransaction()
 		{
-			var result = JsonObject.Parse(json).Object("rxtermsProperties")
-		.ConvertTo(x => new RxTerm
-		{
-			BrandName = x.Get("brandName"),
-			DisplayName = x.Get("displayName"),
-			Synonym = x.Get("synonym"),
-			FullName = x.Get("fullName"),
-			FullGenericName = x.Get("fullGenericName"),
-			Strength = x.Get("strength"),
-			RxTermDoseForm = x.Get("rxtermsDoseForm"),
-			Route = x.Get("route"),
-			RxCUI = x.Get("rxcui"),
-			RxNormDoseForm = x.Get("rxnormDoseForm"),
-		});
+
 		}
 
 
