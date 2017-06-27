@@ -6,14 +6,13 @@ namespace CryptoAccouting
     public class Position
     {
         public string Id { get; }
-        public Instrument Coin { get; }    
-        public int Amount { get; set; }
-        public Price PriceData { get; private set; }
-
+        public Instrument Coin { get; }
 		public DateTime BalanceDate { get; set; }
+        public double Amount { get; set; }
+        public double BookPrice { get; set; }
+        public Price PriceData { get; private set; }
+        public Transaction Tx { get; private set; }
         public DateTime UpdateTime { get; private set; }
-
-
 
 		public Position(Instrument coin, string positionId)
         {
@@ -25,5 +24,19 @@ namespace CryptoAccouting
            PriceData = p;
         }
 
-    }
+        public double ProfitLoss(){
+            return MarketValuePrevClose() - BookValue();
+        }
+
+		public double BookValue()
+		{
+			return Amount * BookPrice;
+		}
+
+        public double MarketValuePrevClose()
+		{
+			return Amount * Amount * PriceData.PrevClose;
+		}
+
+	}
 }

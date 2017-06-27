@@ -5,7 +5,7 @@ namespace CryptoAccouting
     {
         public Instrument Coin { get; }
 		public string BaseCurrency { get; set; }
-        public Exchange PriceExchange { get; set; }
+        public string PriceSource { get; set; }
 
 		public double LatestPrice { get; set; }
 		public int DayVolume { get; set; }
