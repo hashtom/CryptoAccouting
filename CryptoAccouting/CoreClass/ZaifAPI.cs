@@ -4,34 +4,37 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
-using ServiceStack.Text;
+//using ServiceStack.Text;
 using RestSharp;
 using RestSharp.Authenticators;
+using System.Linq;
+using System.Xml.Linq;
+using System.IO;
+
 
 namespace CryptoAccouting
 {
     public class ZaifAPI
     {
-
 		// RestSharpでAPIにアクセスしservicestack.textでパース
 
 
 		const string BaseUrl = "https://api.zaif.jp/";
 
 
-		readonly string _apiKey;
-		readonly string _apiSecret;
-        readonly string _apiMethod;
+		private readonly string _apiKey;
+		private readonly string _apiSecret;
+        private string _apiMethod;
 
-		public ZaifAPI(string apiKey, string apiSecret, string apiMethod)
+		public ZaifAPI(string apiKey, string apiSecret)
 		{
 			_apiKey = apiKey;
 			_apiSecret = apiSecret;
-            _apiMethod = apiMethod;
 		}
 
 		public T Execute<T>(RestRequest request) where T : new()
 		{
+            double nonce = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
 			var client = new RestClient();
 			client.BaseUrl = new System.Uri(BaseUrl);
 			client.Authenticator = new HttpBasicAuthenticator(_apiKey, _apiSecret);
@@ -47,9 +50,18 @@ namespace CryptoAccouting
 			return response.Data;
 		}
 
+        public string FetchPrice(){
+            _apiMethod = "depth";
+            var request = new RestRequest();
+            request.Resource = "/api/1/depth/btc_jpy";
+            //request.AddParameter(""); 
 
+            var ret = Execute<ZaifPrice>(request);
+            return ret.TestString();
 
-		internal static void FetchTransaction()
+        }
+
+		public void FetchTransaction()
 		{
 
 		}
@@ -103,6 +115,22 @@ namespace CryptoAccouting
 			return text;
 		}
 
+        public class ZaifPrice
+        {
+            public List<ZaifValue> Asks { get; set; }
+            public List<ZaifValue> Bids { get; set; }
+
+            public string TestString(){
+                return Asks.Select(x => x.Price).First();
+            }
+
+        }
+
+		public class ZaifValue
+		{
+			public string Price { get; set; }
+			public string Qty { get; set; }
+		}
     }
 
 

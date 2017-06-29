@@ -5,17 +5,18 @@ namespace CryptoAccouting
 {
     public class Exchange
     {
-        public string ExchangeName { get; }
-        public string ExchangeCode { get; }
+        //public string ExchangeName { get; }
+        public EnuExchangeType ExchangeType { get; }
         public List<Instrument> ListedAssets;
         public List<Transaction> Transactions;
 
         public DateTime UpdateTime { get; private set; }
 
-        public Exchange(string exchangeName, string exchangeCode)
+        public Exchange(EnuExchangeType excType)
         {
-            ExchangeCode = exchangeCode;
-            ExchangeName = exchangeName;
+			//ExchangeName = exchangeName;
+            ExchangeType = excType;
+
             ListedAssets = new List<Instrument>();
             Transactions = new List<Transaction>();
         }
@@ -29,4 +30,13 @@ namespace CryptoAccouting
             Transactions.Add(tx);
         }
     }
+
+	public enum EnuExchangeType
+	{
+		Zaif = 1,
+		BitFlyer = 2,
+		Kraken = 3,
+		CoinCheck = 4,
+		BitBank = 5
+	}
 }
