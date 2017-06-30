@@ -36,10 +36,30 @@ namespace CryptoAccouting
 		{
             double nonce = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
 			var client = new RestClient();
-			client.BaseUrl = new System.Uri(BaseUrl);
-			client.Authenticator = new HttpBasicAuthenticator(_apiKey, _apiSecret);
-			request.AddParameter("AccountSid", _apiKey, ParameterType.UrlSegment); // used on every request
-			var response = client.Execute<T>(request);
+            client.BaseUrl = new System.Uri(BaseUrl);
+			//client.Authenticator = new HttpBasicAuthenticator(_apiKey, _apiSecret);
+
+            request.AddParameter("nonce", nonce.ToString());
+			//request.AddParameter("AccountSid", _apiKey, ParameterType.UrlSegment); // used on every request
+			request.AddParameter("method", _apiMethod);
+
+            request.RequestFormat = DataFormat.Json;
+
+			// メッセージをHMACSHA512で署名
+			var content = new FormUrlEncodedContent(new Dictionary<string, string>
+			{
+				{ "nonce", nonce.ToString() },
+                { "method", _apiMethod }
+			});
+            var msg = content.ToString();
+
+            byte[] hash = new HMACSHA512(Encoding.UTF8.GetBytes(_apiSecret)).ComputeHash(Encoding.UTF8.GetBytes(msg));
+            string aaa = request.Parameters.ToString();
+            string sign = BitConverter.ToString(hash).ToLower().Replace("-", "");
+			request.AddHeader("key", _apiKey);
+			request.AddHeader("Sign", sign);
+
+            var response = client.Execute<T>(request);
 
 			if (response.ErrorException != null)
 			{
@@ -52,9 +72,10 @@ namespace CryptoAccouting
 
         public string FetchPrice(){
             _apiMethod = "depth";
-            var request = new RestRequest();
+            var request = new RestRequest(Method.GET);
             request.Resource = "/api/1/depth/btc_jpy";
-            //request.AddParameter(""); 
+
+			//request.AddParameter(""); 
 
             var ret = Execute<ZaifPrice>(request);
             return ret.TestString();
@@ -121,15 +142,15 @@ namespace CryptoAccouting
             public List<ZaifValue> Bids { get; set; }
 
             public string TestString(){
-                return Asks.Select(x => x.Price).First();
+                return Asks.Select(x => x.Price).First().ToString();
             }
 
         }
 
 		public class ZaifValue
 		{
-			public string Price { get; set; }
-			public string Qty { get; set; }
+            public double Price { get; set; }
+			public double Qty { get; set; }
 		}
     }
 
