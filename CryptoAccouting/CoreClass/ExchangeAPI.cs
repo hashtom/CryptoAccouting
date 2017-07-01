@@ -2,15 +2,20 @@
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace CryptoAccouting
 {
-    public class ExchangeAPI
+    public static class ExchangeAPI
     {
-        private ZaifAPI zaif;
+        private static HttpClient http;
+        private static string apikey, apisecret;
 
-        public void Login(EnuExchangeType exType){
-            
+        private static void getAPIKey(EnuExchangeType exType){
+
+            http = new HttpClient();
+
 			switch (exType)
 			{
 				case EnuExchangeType.Zaif:
@@ -20,25 +25,23 @@ namespace CryptoAccouting
 
                     //var doc = XElement.Parse("TestData/apikey.xml").Descendants("broker").Where(n => n.Attribute("name").Value == "Zaif");
                     var doc = XElement.Parse(xmldoc).Descendants("broker").Where(n => n.Attribute("name").Value == "Zaif");
-					string _key = doc.Descendants("key").Select(x => x.Value).First();
-					string _secret = doc.Descendants("secret").Select(x => x.Value).First();
-                    zaif = new ZaifAPI(_key, _secret);
+					apikey = doc.Descendants("key").Select(x => x.Value).First();
+					apisecret = doc.Descendants("secret").Select(x => x.Value).First();
                     break;
 				default:
 					break;
 			}
 		}
 
-        public string FetchPrice(EnuExchangeType exType){
-
-
-
+        public static Task<string> FetchPriceAsync(EnuExchangeType exType){
+            
             switch (exType) {
                 case EnuExchangeType.Zaif :
-                    return zaif.FetchPrice(); // Test
+                    getAPIKey(EnuExchangeType.Zaif);
+                    return ZaifAPI.FetchPriceAsync(http,apikey,apisecret); // Test
                 default:
-                    return "null";
-            } 
+                    return null;
+			} 
         }
         internal static void FetchPosition(EnuExchangeType exc){
             
