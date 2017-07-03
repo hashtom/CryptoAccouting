@@ -30,7 +30,7 @@ namespace CryptoAccouting
 			positions.RemoveAll(x => x.Id == position.Id);
 		}
 
-        public Position fetchPositionByIndex(int indexNumber){
+        public Position GetPositionByIndex(int indexNumber){
             //Position[] pos = positions.ToArray();
             //return pos[indexNumber];
             return positions[indexNumber];

@@ -26,6 +26,11 @@ namespace CryptoAccouting
             txs.RemoveAll(x => x.txid == tx.txid);
 		}
 
+        public Transaction GetTransactionByIndex(int indexNumber)
+		{
+			return txs[indexNumber];
+		}
+
 		public int Count()
 		{
 			return txs.Count;

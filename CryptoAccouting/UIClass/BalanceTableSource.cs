@@ -26,17 +26,17 @@ namespace CryptoAccouting
 			if (cell == null)
 				cell = new CustomBalanceCell (cellIdentifier);
             
-            cell.UpdateCell(balanceViewItems.fetchPositionByIndex(indexPath.Row).Coin.Symbol
-                            , balanceViewItems.fetchPositionByIndex(indexPath.Row).Amount.ToString()
-                            , balanceViewItems.fetchPositionByIndex(indexPath.Row).PriceData.LatestPrice.ToString()
-                            , balanceViewItems.fetchPositionByIndex(indexPath.Row).PriceData.DayVolume.ToString()
-                            , UIImage.FromFile(balanceViewItems.fetchPositionByIndex(indexPath.Row).Coin.LogoFileName));
+            cell.UpdateCell(balanceViewItems.GetPositionByIndex(indexPath.Row).Coin.Symbol
+                            , balanceViewItems.GetPositionByIndex(indexPath.Row).Amount.ToString()
+                            , balanceViewItems.GetPositionByIndex(indexPath.Row).PriceData.LatestPrice.ToString()
+                            , balanceViewItems.GetPositionByIndex(indexPath.Row).PriceData.DayVolume.ToString()
+                            , UIImage.FromFile(balanceViewItems.GetPositionByIndex(indexPath.Row).Coin.LogoFileName));
 
 			return cell;
 		}
 		public Position GetItem(int id)
 		{
-            return balanceViewItems.fetchPositionByIndex(id);
+            return balanceViewItems.GetPositionByIndex(id);
 		}
 	}
 
