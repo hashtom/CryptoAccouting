@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Linq;
 
 namespace CryptoAccouting
@@ -14,25 +16,60 @@ namespace CryptoAccouting
         static string _apiKey;
         static string _apiSecret;
 
-        public static async Task<string> FetchPriceAsync(HttpClient http, string apikey, string secret){
+        public static async Task<Price> FetchPriceAsync(HttpClient http, string apikey, string secret, Price p){
             
             _apiKey = apikey;
             _apiSecret = secret;
 
-            http.BaseAddress = new Uri("https://api.zaif.jp");
-            Uri path = new Uri("/api/1/depth/btc_jpy", UriKind.Relative);
+            if (p.Coin.Symbol != "BTC") return null; // will add exception statement here
 
-            return await SendAsync(http, path, "depth");
+            http.BaseAddress = new Uri(BaseUrl);
+            Uri path = new Uri("api/1/ticker/btc_jpy", UriKind.Relative);
 
-        }
+            var json = await SendAsync(http, path, "ticker");
 
-        public static void FetchTransaction(HttpClient http)
+            p.LatestPrice = (double)json.SelectToken("$.last");
+            p.DayVolume = (int)json.SelectToken("$.volume");
+            p.PriceSource = "zaif";
+            p.PriceDate = DateTime.Now;
+            p.UpdateTime = DateTime.Now;
+
+            //var price = (string)json.SelectToken("$.asks[0][0]");
+            //var amount = (string)json.SelectToken("$.asks[0][1]");
+
+            return p;
+		}
+
+		private static DateTime FromEpochSeconds(this DateTime date, long EpochSeconds)
 		{
+			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+			return epoch.AddSeconds(EpochSeconds);
 
 		}
 
+        public static async void FetchTransaction(HttpClient http, string apikey, string secret)
+		{
+			_apiKey = apikey;
+			_apiSecret = secret;
 
-		static async Task<string> SendAsync(HttpClient http, Uri path, string method, Dictionary<string, string> parameters = null)
+			http.BaseAddress = new Uri(BaseUrl);
+			Uri path = new Uri("tapi", UriKind.Relative);
+
+
+            //var param = new Dictionary<string, string>
+            //{
+            //    { "currency_pair", "btc_jpy" },
+            //    { "action", "bid" },
+            //    { "price", "100000" },
+            //    { "amount", "0.01" },
+            //};
+
+            var json = await SendAsync(http, path, "trade_history");
+            Console.WriteLine("json");
+		}
+
+
+        private static async Task<JObject> SendAsync(HttpClient http, Uri path, string method, Dictionary<string, string> parameters = null)
 		{
 
             // nonceにunixtimeを用いる。整数だと1秒に一回しかAPIを呼べない。
@@ -59,17 +96,14 @@ namespace CryptoAccouting
             http.DefaultRequestHeaders.Add("key", _apiKey);
 			http.DefaultRequestHeaders.Add("Sign", sign);
 
-			// 送信
 			HttpResponseMessage res = await http.PostAsync(path, content);
-
-			//返答内容を取得
-			string text = await res.Content.ReadAsStringAsync();
+            var json = JObject.Parse(await res.Content.ReadAsStringAsync());
 
 			//通信上の失敗
 			if (!res.IsSuccessStatusCode)
-				return "";
+                return null;
 
-			return text;
+            return json;
 		}
 
     }

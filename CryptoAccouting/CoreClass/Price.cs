@@ -12,7 +12,7 @@ namespace CryptoAccouting
 		public double PrevClose { get; set; }
 		public DateTime PriceDate { get; set; }
 
-		public DateTime UpdateTime { get; private set; }
+		public DateTime UpdateTime { get; set; }
 
         public Price(Instrument coin)
         {

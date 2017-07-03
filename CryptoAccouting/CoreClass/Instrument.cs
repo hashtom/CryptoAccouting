@@ -10,14 +10,14 @@ namespace CryptoAccouting
         public string Name { get; set; }
         public InstrumentType Type { get; set; }
         public DateTime ListedDate { get; set; }
-        public List<Exchange> Exchanges;
+//        public List<Exchange> Exchanges;
 		public Price PriceValue { get; set; }
         public string LogoFileName { get; set; }
         public DateTime UpdateTime { get; }
 
         public Instrument()
         {
-			Exchanges = new List<Exchange>();
+			//Exchanges = new List<Exchange>();
             // PriceValue = fetchPrice() //todo
         }
     }
