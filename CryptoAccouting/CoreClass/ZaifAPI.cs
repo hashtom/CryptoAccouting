@@ -12,49 +12,36 @@ namespace CryptoAccouting
 {
     public static class ZaifAPI
     {
-		const string BaseUrl = "https://api.zaif.jp/";
-        static string _apiKey;
-        static string _apiSecret;
+        private const string BaseUrl = "https://api.zaif.jp/";
+        private static string _apiKey;
+        private static string _apiSecret;
 
-        public static async Task<Price> FetchPriceAsync(HttpClient http, string apikey, string secret, Price p){
+        public static async Task<JObject> FetchPriceAsync(HttpClient http, string apikey, string secret){
             
             _apiKey = apikey;
             _apiSecret = secret;
 
-            if (p.Coin.Symbol != "BTC") return null; // will add exception statement here
-
             http.BaseAddress = new Uri(BaseUrl);
             Uri path = new Uri("api/1/ticker/btc_jpy", UriKind.Relative);
 
-            var json = await SendAsync(http, path, "ticker");
+            return await SendAsync(http, path, "ticker");
 
-            p.LatestPrice = (double)json.SelectToken("$.last");
-            p.DayVolume = (int)json.SelectToken("$.volume");
-            p.PriceSource = "zaif";
-            p.PriceDate = DateTime.Now;
-            p.UpdateTime = DateTime.Now;
-
-            //var price = (string)json.SelectToken("$.asks[0][0]");
-            //var amount = (string)json.SelectToken("$.asks[0][1]");
-
-            return p;
 		}
 
-		private static DateTime FromEpochSeconds(this DateTime date, long EpochSeconds)
+        public static DateTime FromEpochSeconds(this DateTime date, long EpochSeconds)
 		{
 			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			return epoch.AddSeconds(EpochSeconds);
 
 		}
 
-        public static async void FetchTransaction(HttpClient http, string apikey, string secret)
+        public static async Task<JObject> FetchTransaction(HttpClient http, string apikey, string secret)
 		{
 			_apiKey = apikey;
 			_apiSecret = secret;
 
 			http.BaseAddress = new Uri(BaseUrl);
 			Uri path = new Uri("tapi", UriKind.Relative);
-
 
             //var param = new Dictionary<string, string>
             //{
@@ -64,8 +51,8 @@ namespace CryptoAccouting
             //    { "amount", "0.01" },
             //};
 
-            var json = await SendAsync(http, path, "trade_history");
-            Console.WriteLine("json");
+            return await SendAsync(http, path, "trade_history");
+
 		}
 
 

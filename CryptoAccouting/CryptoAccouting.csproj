@@ -155,6 +155,7 @@
     <Compile Include="UIClass\AppConfig.cs" />
     <Compile Include="CoreClass\Transaction.cs" />
     <Compile Include="CoreClass\ZaifAPI.cs" />
+    <Compile Include="CoreClass\Transactions.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\btc.png" />

@@ -1,50 +1,85 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace CryptoAccouting
 {
-    public static class ExchangeAPI
+    public class ExchangeAPI
     {
-        private static HttpClient http;
-        private static string apikey, apisecret;
+        private HttpClient http;
+        private string apikey, apisecret;
 
-        public static Task<Price> FetchPriceAsync(EnuExchangeType exType, Price p){
-            
+        public async Task<Price> FetchPriceAsync(EnuExchangeType exType){
+
+			var p = new Price(new Instrument() { Symbol = "BTC" });
+			p.BaseCurrency = "JPY";
+
             switch (exType) {
-                case EnuExchangeType.Zaif :
-                    getAPIKey(EnuExchangeType.Zaif);
-                    return ZaifAPI.FetchPriceAsync(http, apikey, apisecret, p);
 
-                default:
+                case EnuExchangeType.Zaif :
+
+                    if (p.Coin.Symbol != "BTC") return null; // will add exception statement here
+
+					getAPIKey(EnuExchangeType.Zaif);
+                    var json = await ZaifAPI.FetchPriceAsync(http, apikey, apisecret);
+
+					p.LatestPrice = (double)json.SelectToken("$.last");
+					p.DayVolume = (int)json.SelectToken("$.volume");
+					p.PriceSource = "zaif";
+					p.PriceDate = DateTime.Now;
+					p.UpdateTime = DateTime.Now;
+
+                    //var price = (string)json.SelectToken("$.asks[0][0]");
+                    //var amount = (string)json.SelectToken("$.asks[0][1]");
+                    return p;
+
+				default:
                     return null;
 			} 
         }
-        internal static void FetchPosition(EnuExchangeType exType){
+        internal void FetchPosition(EnuExchangeType exType){
 
 
         }
 
-        internal static void FetchTransaction(EnuExchangeType exType){
-            
+        internal async Task<Transactions> FetchTransaction(EnuExchangeType exType){
+
+            Transactions txs = new Transactions();
+
 			switch (exType)
 			{
 				case EnuExchangeType.Zaif:
 					getAPIKey(EnuExchangeType.Zaif);
-					ZaifAPI.FetchTransaction(http, apikey, apisecret);
-					break;
+					var json = await ZaifAPI.FetchTransaction(http, apikey, apisecret);
+
+                    int status = (int)json.SelectToken("$.success");
+
+                    foreach (JProperty x in (JToken)json["return"])
+                    {
+                        var tx = new Transaction(new Instrument() { Symbol = "BTC" }, new Exchange(EnuExchangeType.Zaif));
+                        tx.txid = x.Name;
+                        tx.BuySell = (string)json["return"][tx.txid]["action"];
+                        tx.Amount = (double)json["return"][tx.txid]["amount"];
+                        tx.TradePrice = (double)json["return"][tx.txid]["price"];
+                        tx.TradeDate = ZaifAPI.FromEpochSeconds(tx.TradeDate,(long)json["return"][tx.txid]["timestamp"]);
+                        txs.AttachTransaction(tx);
+                    }
+
+                    return txs;
+
 				default:
 
-					Console.WriteLine("error");
-					break;
+                    return null;
 			}
         }
 
 
-		private static void getAPIKey(EnuExchangeType exType)
+		private void getAPIKey(EnuExchangeType exType)
 		{
 
 			http = new HttpClient();
