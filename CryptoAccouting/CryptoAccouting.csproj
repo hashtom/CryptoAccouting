@@ -93,10 +93,10 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NBitcoin">
-      <HintPath>..\packages\NBitcoin.4.0.0.5\lib\netstandard1.3\NBitcoin.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="NBitcoin">
+      <HintPath>..\packages\NBitcoin.4.0.0.6\lib\netstandard1.3\NBitcoin.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -123,14 +123,6 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="TradeViewController.cs" />
-    <Compile Include="TradeViewController.designer.cs">
-      <DependentUpon>TradeViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SettingViewController.cs" />
-    <Compile Include="SettingViewController.designer.cs">
-      <DependentUpon>SettingViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="TradeNavigationController.cs" />
     <Compile Include="TradeNavigationController.designer.cs">
       <DependentUpon>TradeNavigationController.cs</DependentUpon>
@@ -156,6 +148,10 @@
     <Compile Include="CoreClass\Transaction.cs" />
     <Compile Include="CoreClass\ZaifAPI.cs" />
     <Compile Include="CoreClass\Transactions.cs" />
+    <Compile Include="TransactionViewController.cs" />
+    <Compile Include="TransactionViewController.designer.cs">
+      <DependentUpon>TransactionViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\btc.png" />

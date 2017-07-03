@@ -11,11 +11,8 @@ using UIKit;
 
 namespace CryptoAccouting
 {
-    [Register ("TradeViewController")]
-    partial class TradeViewController
+    [Register ("TransactionViewController")]
+    partial class TransactionViewController
     {
-        void ReleaseDesignerOutlets ()
-        {
-        }
     }
 }
