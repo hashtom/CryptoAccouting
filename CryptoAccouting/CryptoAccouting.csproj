@@ -97,6 +97,15 @@
     <Reference Include="NBitcoin">
       <HintPath>..\packages\NBitcoin.4.0.0.6\lib\netstandard1.3\NBitcoin.dll</HintPath>
     </Reference>
+    <Reference Include="Syncfusion.Linq.iOS">
+      <HintPath>..\..\..\..\Documents\Syncfusion\15.2.0.40\Xamarin\lib\ios-unified\Syncfusion.Linq.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfDataGrid.iOS">
+      <HintPath>..\..\..\..\Documents\Syncfusion\15.2.0.40\Xamarin\lib\ios-unified\Syncfusion.SfDataGrid.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.GridCommon.Portable">
+      <HintPath>..\..\..\..\Documents\Syncfusion\15.2.0.40\Xamarin\lib\pcl\Syncfusion.GridCommon.Portable.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -148,11 +157,11 @@
     <Compile Include="CoreClass\Transaction.cs" />
     <Compile Include="CoreClass\ZaifAPI.cs" />
     <Compile Include="CoreClass\Transactions.cs" />
+    <Compile Include="UIClass\TransactionTableSource.cs" />
     <Compile Include="TransactionViewController.cs" />
     <Compile Include="TransactionViewController.designer.cs">
       <DependentUpon>TransactionViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="UIClass\TransactionTableSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\btc.png" />

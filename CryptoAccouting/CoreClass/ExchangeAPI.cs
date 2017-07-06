@@ -58,9 +58,12 @@ namespace CryptoAccouting
 					var json = await ZaifAPI.FetchTransaction(http, apikey, apisecret);
 
                     int status = (int)json.SelectToken("$.success");
+					
+                    //int cnt = 0;
 
                     foreach (JProperty x in (JToken)json["return"])
                     {
+                        //cnt++;
                         var tx = new Transaction(new Instrument() { Symbol = "BTC" }, new Exchange(EnuExchangeType.Zaif));
                         tx.txid = x.Name;
                         tx.BuySell = (string)json["return"][tx.txid]["action"];
@@ -68,6 +71,8 @@ namespace CryptoAccouting
                         tx.TradePrice = (double)json["return"][tx.txid]["price"];
                         tx.TradeDate = ZaifAPI.FromEpochSeconds(tx.TradeDate,(long)json["return"][tx.txid]["timestamp"]);
                         txs.AttachTransaction(tx);
+
+                        //if (cnt == 50) break;
                     }
 
                     return txs;

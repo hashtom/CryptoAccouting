@@ -124,7 +124,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue id="12603" destination="6850" kind="relationship" relationship="rootViewController"/>
+                        <segue id="13274" destination="13086" kind="relationship" relationship="rootViewController"/>
                     </connections>
                     <tabBarItem key="tabBarItem" id="1067" title="Trade" image="Trd"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
@@ -133,33 +133,23 @@
             </objects>
             <point key="canvasLocation" x="730" y="388"/>
         </scene>
-        <scene sceneID="6849">
+        <scene sceneID="13085">
             <objects>
-                <tableViewController id="6850" sceneMemberID="viewController" customClass="TransactionViewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="6851">
+                <viewController id="13086" sceneMemberID="viewController" customClass="TransactionViewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="13083"/>
+                        <viewControllerLayoutGuide type="bottom" id="13084"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="13087">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="6854" reuseIdentifier="TransactionCell">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6854" id="6855">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="6850" id="6852"/>
-                            <outlet property="delegate" destination="6850" id="6853"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem id="12602" key="navigationItem" title="Your Transactions"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="6856" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                    </view>
+                    <navigationItem title="My Transaction" id="13273" key="navigationItem"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="13088" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1260" y="386"/>
+            <point key="canvasLocation" x="1256" y="348"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

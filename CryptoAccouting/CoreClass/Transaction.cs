@@ -16,6 +16,16 @@ namespace CryptoAccouting
         public DateTime TradeDate { get; set; }
         public DateTime UpdateTime { get; private set; }
 
+        public string CoinName {
+            get { return Coin.Symbol; }
+            set { this.Coin.Symbol = value; }
+        }
+
+        public double TradeValue
+        {
+            get { return TradePrice * Amount; }
+        }
+
         public Transaction(Instrument coin, Exchange exchange)
         {
 			Coin = coin;
