@@ -149,7 +149,7 @@
     <Compile Include="UIClass\BalanceTableSource.cs" />
     <Compile Include="UIClass\CustomBalanceCell.cs" />
     <Compile Include="CoreClass\Exchange.cs" />
-    <Compile Include="CoreClass\CryptoAccoutingCore.cs" />
+    <Compile Include="CoreClass\ApplicationCore.cs" />
     <Compile Include="CoreClass\ExchangeAPI.cs" />
     <Compile Include="CoreClass\Balance.cs" />
     <Compile Include="CoreClass\Price.cs" />

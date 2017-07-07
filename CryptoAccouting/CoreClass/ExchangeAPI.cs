@@ -47,7 +47,7 @@ namespace CryptoAccouting
 
         }
 
-        internal async Task<Transactions> FetchTransaction(EnuExchangeType exType){
+        internal async Task<Transactions> FetchTransaction(EnuExchangeType exType, bool isAggregateDaily = true){
 
             Transactions txs = new Transactions();
 
@@ -58,31 +58,61 @@ namespace CryptoAccouting
 					var json = await ZaifAPI.FetchTransaction(http, apikey, apisecret);
 
                     int status = (int)json.SelectToken("$.success");
-					
-                    //int cnt = 0;
 
                     foreach (JProperty x in (JToken)json["return"])
                     {
-                        //cnt++;
-                        var tx = new Transaction(new Instrument() { Symbol = "BTC" }, new Exchange(EnuExchangeType.Zaif));
+                        var tx = new Transaction(new Instrument() { Symbol = "BTC" }, EnuExchangeType.Zaif);
                         tx.txid = x.Name;
                         tx.BuySell = (string)json["return"][tx.txid]["action"];
                         tx.Amount = (double)json["return"][tx.txid]["amount"];
                         tx.TradePrice = (double)json["return"][tx.txid]["price"];
                         tx.TradeDate = ZaifAPI.FromEpochSeconds(tx.TradeDate,(long)json["return"][tx.txid]["timestamp"]);
                         txs.AttachTransaction(tx);
-
-                        //if (cnt == 50) break;
                     }
 
-                    return txs;
+                    break;;
 
 				default:
 
-                    return null;
+                    break;
 			}
+            return txs;
+
         }
 
+		internal async Task<Transactions> FetchTransaction2(EnuExchangeType exType, bool isAggregateDaily = true)
+		{
+
+			Transactions txs = new Transactions();
+
+			switch (exType)
+			{
+				case EnuExchangeType.Zaif:
+					getAPIKey(EnuExchangeType.Zaif);
+					var json = await ZaifAPI.FetchTransaction(http, apikey, apisecret);
+
+					int status = (int)json.SelectToken("$.success");
+
+					foreach (JProperty x in (JToken)json["return"])
+					{
+						DateTime tm = DateTime.Now;
+                        txs.AggregateTransaction(ApplicationCore.GetMyInstruments("BTC"),
+												 exType,
+												 (string)json["return"][x.Name]["action"],
+												 (double)json["return"][x.Name]["amount"],
+												 (double)json["return"][x.Name]["price"],
+												 ZaifAPI.FromEpochSeconds(tm, (long)json["return"][x.Name]["timestamp"]));
+					}
+
+					break;
+
+				default:
+
+					break;
+			}
+
+            return txs;
+		}
 
 		private void getAPIKey(EnuExchangeType exType)
 		{

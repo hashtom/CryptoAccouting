@@ -13,10 +13,7 @@ namespace CryptoAccouting
         public TransactionViewController(IntPtr handle) : base(handle)
         {
 			sfGrid = new SfDataGrid();
-			sfGrid.HeaderRowHeight = 45;
-			sfGrid.RowHeight = 45;
-
-			//sfGrid.AutoGeneratingColumn += HandleAutoGeneratingColumn;
+   			//sfGrid.AutoGeneratingColumn += HandleAutoGeneratingColumn;
             sfGrid.AllowSorting = true;
             sfGrid.AutoGenerateColumns = false;
 			//sfGrid.GroupColumnDescriptions.Add(new GroupColumnDescription() { ColumnName = "txid" });
@@ -61,14 +58,15 @@ namespace CryptoAccouting
         
         public async override void ViewDidLoad()
 		{
-			var exg = new ExchangeAPI();
-			var myTxs = await exg.FetchTransaction((EnuExchangeType.Zaif));
-
-            base.ViewDidLoad();			
+			base.ViewDidLoad();
+			
+            var exg = new ExchangeAPI();
+            var myTxs = await exg.FetchTransaction2((EnuExchangeType.Zaif));
 
             sfGrid.ItemsSource = (myTxs.TransactionCollection);
-            this.sfGrid.Frame = new CGRect(0, 30, View.Frame.Width, View.Frame.Height);
-            sfGrid.HeaderRowHeight = 10;
+            this.sfGrid.Frame = new CGRect(0, 70, View.Frame.Width, View.Frame.Height);
+            sfGrid.HeaderRowHeight = 30;
+            sfGrid.RowHeight = 30;
 			View.AddSubview(sfGrid);
 		}
 

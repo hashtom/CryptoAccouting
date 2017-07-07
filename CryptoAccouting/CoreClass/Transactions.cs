@@ -52,6 +52,28 @@ namespace CryptoAccouting
 
         }
 
+        public void AggregateTransaction(Instrument coin, EnuExchangeType exType, string buysell, double amount,
+                                         double tradePrice, DateTime tradeDate, EnuTxAggregateFlag flag = EnuTxAggregateFlag.Daliy ){
+
+            if (txs.Any(t => (t.CoinName == coin.Symbol && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date)))
+            {
+                var tx = txs.Where(t => (t.Coin == coin && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date)).First();
+                tx.Amount += amount;
+                tx.TradePrice = ((amount * tradePrice) + tx.TradeValue) / tx.Amount;
+                tx.UpdateTime = DateTime.Now;
+            }
+            else
+            {
+				var tx = new Transaction(coin, EnuExchangeType.Zaif);
+				tx.txid = (txs.Count + 1).ToString();
+				tx.BuySell = buysell;
+				tx.Amount = amount;
+				tx.TradePrice = tradePrice;
+				tx.TradeDate = tradeDate;
+				this.AttachTransaction(tx);
+            }
+        }
+
         public void AttachTransaction(Transaction tx)
         {
             if (txs.Any(x => x.txid == tx.txid)) DetachPosition(tx);
@@ -81,6 +103,13 @@ namespace CryptoAccouting
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
+		}
+
+		public enum EnuTxAggregateFlag
+		{
+			Daliy,
+			Weekly,
+            Monthly
 		}
     }
 }

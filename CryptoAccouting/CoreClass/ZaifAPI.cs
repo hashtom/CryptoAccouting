@@ -43,16 +43,17 @@ namespace CryptoAccouting
 			http.BaseAddress = new Uri(BaseUrl);
 			Uri path = new Uri("tapi", UriKind.Relative);
 
-            var param = new Dictionary<string, string>
-            {
-                { "currency_pair", "btc_jpy" },
-                { "count", "15"}
+            //var param = new Dictionary<string, string>
+            //{
+                //{ "currency_pair", "btc_jpy" },
+                //{ "count", "15"}
                 //{ "action", "bid" },
                 //{ "price", "100000" },
                 //{ "amount", "0.01" },
-            };
+            //};
 
-            return await SendAsync(http, path, "trade_history",param);
+            //return await SendAsync(http, path, "trade_history",param);
+            return await SendAsync(http, path, "trade_history");
 
 		}
 

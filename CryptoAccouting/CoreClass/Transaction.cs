@@ -8,13 +8,13 @@ namespace CryptoAccouting
     {
         public string txid { get; set; }
         public Instrument Coin { get; }
-        public Exchange TradeExchange { get; }
+        public EnuExchangeType TradeExchange { get; }
         public string BuySell { get; set; }
         public double Amount { get; set; }
         public double TradePrice { get; set; }
         public bool IsMargin { get; set; }
         public DateTime TradeDate { get; set; }
-        public DateTime UpdateTime { get; private set; }
+        public DateTime UpdateTime { get; set; }
 
         public string CoinName {
             get { return Coin.Symbol; }
@@ -26,7 +26,7 @@ namespace CryptoAccouting
             get { return TradePrice * Amount; }
         }
 
-        public Transaction(Instrument coin, Exchange exchange)
+        public Transaction(Instrument coin, EnuExchangeType exchange)
         {
 			Coin = coin;
             TradeExchange = exchange;
