@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
-namespace CryptoAccouting
+namespace CryptoAccouting.CoreClass
 {
     public static class ZaifAPI
     {
@@ -43,17 +43,18 @@ namespace CryptoAccouting
 			http.BaseAddress = new Uri(BaseUrl);
 			Uri path = new Uri("tapi", UriKind.Relative);
 
-            //var param = new Dictionary<string, string>
-            //{
-                //{ "currency_pair", "btc_jpy" },
+            var param = new Dictionary<string, string>
+            {
+                { "currency_pair", "btc_jpy" },
                 //{ "count", "15"}
                 //{ "action", "bid" },
                 //{ "price", "100000" },
                 //{ "amount", "0.01" },
-            //};
+                {"order", "ASC"}
+            };
 
-            //return await SendAsync(http, path, "trade_history",param);
-            return await SendAsync(http, path, "trade_history");
+            return await SendAsync(http, path, "trade_history",param);
+            //return await SendAsync(http, path, "trade_history");
 
 		}
 

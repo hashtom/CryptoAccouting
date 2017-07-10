@@ -4,7 +4,13 @@ namespace CryptoAccouting
 {
     public static class AppConfig
     {
-        public static string BaseCurrency { get; set; }
-
+        public static EnuBaseCCY BaseCurrency { get; set; }
     }
+
+
+	public enum EnuBaseCCY
+	{
+		JPY,
+		USD
+	}
 }

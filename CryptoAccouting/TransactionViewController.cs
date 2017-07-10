@@ -3,6 +3,7 @@ using System;
 using UIKit;
 using CoreGraphics;
 using Syncfusion.SfDataGrid;
+using CryptoAccouting.CoreClass;
 
 namespace CryptoAccouting
 {
@@ -19,15 +20,15 @@ namespace CryptoAccouting
 			//sfGrid.GroupColumnDescriptions.Add(new GroupColumnDescription() { ColumnName = "txid" });
 
 			GridTextColumn txIdColumn = new GridTextColumn();
-			txIdColumn.MappingName = "txid";
-			txIdColumn.HeaderText = "txID";
+			txIdColumn.MappingName = "TxId";
+			txIdColumn.HeaderText = "tx";
 
 			GridTextColumn coinColumn = new GridTextColumn();
 			coinColumn.MappingName = "CoinName";
 			coinColumn.HeaderText = "Coin";
 
 			GridTextColumn buysellColumn = new GridTextColumn();
-			buysellColumn.MappingName = "BuySell";
+			buysellColumn.MappingName = "Side";
             buysellColumn.HeaderText = "BuySell";
 
 			GridTextColumn amountColumn = new GridTextColumn();
@@ -63,11 +64,27 @@ namespace CryptoAccouting
             var exg = new ExchangeAPI();
             var myTxs = await exg.FetchTransaction2((EnuExchangeType.Zaif));
 
+            //Show Summary
+            myTxs.ReEvaluate();
+            this.LabelBougtAmount.Text = Math.Round(myTxs.TotalAmountBougt,0).ToString();
+            this.LabelSoldAmount.Text = Math.Round(myTxs.TotalAmountSold,0).ToString();
+            this.LabelOutstandingAmount.Text = Math.Round(myTxs.TotalAmountOutstanding,0).ToString();
+            //this.LabelBougtPrice.Text = myTxs.BookPrice.ToString();
+            //this.LabelSoldPrice.Text = myTxs..ToString();
+            this.LabelOutstandingPrice.Text = Math.Round(myTxs.BookPrice,2).ToString();
+            this.LabelRealizedPL.Text = Math.Round(myTxs.RealizedPL()/1000000,2).ToString();
+            this.LabelUnrealizedPL.Text = Math.Round(myTxs.UnrealizedPL()/1000000,2).ToString();
+
+            //Show Grid View
             sfGrid.ItemsSource = (myTxs.TransactionCollection);
-            this.sfGrid.Frame = new CGRect(0, 70, View.Frame.Width, View.Frame.Height);
+            this.sfGrid.Frame = new CGRect(0,
+                                           0, //TransactionSummaryView.Frame.Height + 60,
+                                           TransactionHistoryView.Frame.Width,
+                                           TransactionHistoryView.Frame.Height); // - TransactionSummaryView.Frame.Height - 70);
             sfGrid.HeaderRowHeight = 30;
             sfGrid.RowHeight = 30;
-			View.AddSubview(sfGrid);
+			//View.AddSubview(sfGrid);
+            TransactionHistoryView.AddSubview(sfGrid);
 		}
 
 		//void HandleAutoGeneratingColumn(object sender, AutoGeneratingColumnArgs e)

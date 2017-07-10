@@ -1,5 +1,5 @@
 ﻿using System;
-namespace CryptoAccouting
+namespace CryptoAccouting.CoreClass
 {
     public class Price
     {

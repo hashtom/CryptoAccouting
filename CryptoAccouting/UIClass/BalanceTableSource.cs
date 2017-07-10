@@ -1,6 +1,7 @@
 ﻿using System;
 using Foundation;
 using UIKit;
+using CryptoAccouting.CoreClass;
 
 namespace CryptoAccouting
 {

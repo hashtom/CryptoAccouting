@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CryptoAccouting
+namespace CryptoAccouting.CoreClass
 {
     public class Balance : IEnumerable<Position>
     {

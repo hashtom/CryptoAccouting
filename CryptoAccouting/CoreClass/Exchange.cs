@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CryptoAccouting
+namespace CryptoAccouting.CoreClass
 {
     public class Exchange
     {

@@ -94,9 +94,6 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="NBitcoin">
-      <HintPath>..\packages\NBitcoin.4.0.0.6\lib\netstandard1.3\NBitcoin.dll</HintPath>
-    </Reference>
     <Reference Include="Syncfusion.Linq.iOS">
       <HintPath>..\..\..\..\Documents\Syncfusion\15.2.0.40\Xamarin\lib\ios-unified\Syncfusion.Linq.iOS.dll</HintPath>
     </Reference>
@@ -105,6 +102,9 @@
     </Reference>
     <Reference Include="Syncfusion.GridCommon.Portable">
       <HintPath>..\..\..\..\Documents\Syncfusion\15.2.0.40\Xamarin\lib\pcl\Syncfusion.GridCommon.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="NBitcoin">
+      <HintPath>..\packages\NBitcoin.4.0.0.8\lib\netstandard1.3\NBitcoin.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +162,7 @@
     <Compile Include="TransactionViewController.designer.cs">
       <DependentUpon>TransactionViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="CoreClass\RealizedPL.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\btc.png" />

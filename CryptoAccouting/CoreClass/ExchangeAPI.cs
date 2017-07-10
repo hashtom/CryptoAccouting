@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
-namespace CryptoAccouting
+namespace CryptoAccouting.CoreClass
 {
     public class ExchangeAPI
     {
@@ -62,11 +62,11 @@ namespace CryptoAccouting
                     foreach (JProperty x in (JToken)json["return"])
                     {
                         var tx = new Transaction(new Instrument() { Symbol = "BTC" }, EnuExchangeType.Zaif);
-                        tx.txid = x.Name;
-                        tx.BuySell = (string)json["return"][tx.txid]["action"];
-                        tx.Amount = (double)json["return"][tx.txid]["amount"];
-                        tx.TradePrice = (double)json["return"][tx.txid]["price"];
-                        tx.TradeDate = ZaifAPI.FromEpochSeconds(tx.TradeDate,(long)json["return"][tx.txid]["timestamp"]);
+                        tx.TxId = x.Name;
+                        tx.BuySell = (string)json["return"][x.Name]["action"] == "bid" ? EnuBuySell.Buy : EnuBuySell.Sell;
+                        tx.Amount = (double)json["return"][tx.TxId]["amount"];
+                        tx.TradePrice = (double)json["return"][tx.TxId]["price"];
+                        tx.TradeDate = ZaifAPI.FromEpochSeconds(tx.TradeDate,(long)json["return"][tx.TxId]["timestamp"]);
                         txs.AttachTransaction(tx);
                     }
 
@@ -93,15 +93,32 @@ namespace CryptoAccouting
 
 					int status = (int)json.SelectToken("$.success");
 
-					foreach (JProperty x in (JToken)json["return"])
-					{
-						DateTime tm = DateTime.Now;
+                    foreach (JProperty x in (JToken)json["return"])
+                    {
+                        DateTime tm = DateTime.Now;
+
+                        //Transaction Date Order must be ascending by design...
+                        EnuBuySell ebuysell;
+
+                        switch ((string)json["return"][x.Name]["action"])
+                        {
+                            case "bid":
+                                ebuysell = EnuBuySell.Buy;
+                                break;
+                            case "ask":
+                                ebuysell = EnuBuySell.Sell;
+                                break;
+                            default:
+                                ebuysell = EnuBuySell.Check;
+                                break;
+                        }
+                                
                         txs.AggregateTransaction(ApplicationCore.GetMyInstruments("BTC"),
-												 exType,
-												 (string)json["return"][x.Name]["action"],
-												 (double)json["return"][x.Name]["amount"],
-												 (double)json["return"][x.Name]["price"],
-												 ZaifAPI.FromEpochSeconds(tm, (long)json["return"][x.Name]["timestamp"]));
+                                                 exType,
+                                                 ebuysell,
+                                                 (double)json["return"][x.Name]["amount"],
+                                                 (double)json["return"][x.Name]["price"],
+                                                 ZaifAPI.FromEpochSeconds(tm, (long)json["return"][x.Name]["timestamp"]));
 					}
 
 					break;
