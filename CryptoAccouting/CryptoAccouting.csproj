@@ -157,12 +157,11 @@
     <Compile Include="CoreClass\Transaction.cs" />
     <Compile Include="CoreClass\ZaifAPI.cs" />
     <Compile Include="CoreClass\Transactions.cs" />
-    <Compile Include="UIClass\TransactionTableSource.cs" />
     <Compile Include="TransactionViewController.cs" />
     <Compile Include="TransactionViewController.designer.cs">
       <DependentUpon>TransactionViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="CoreClass\RealizedPL.cs" />
+    <Compile Include="CoreClass\ProfitLoss.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\btc.png" />

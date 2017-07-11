@@ -29,8 +29,8 @@ namespace CryptoAccouting
             
             cell.UpdateCell(balanceViewItems.GetPositionByIndex(indexPath.Row).Coin.Symbol
                             , balanceViewItems.GetPositionByIndex(indexPath.Row).Amount.ToString()
-                            , balanceViewItems.GetPositionByIndex(indexPath.Row).PriceData.LatestPrice.ToString()
-                            , balanceViewItems.GetPositionByIndex(indexPath.Row).PriceData.DayVolume.ToString()
+                            , balanceViewItems.GetPositionByIndex(indexPath.Row).MarketPrice().ToString()
+                            , balanceViewItems.GetPositionByIndex(indexPath.Row).MarketDayVolume().ToString()
                             , UIImage.FromFile(balanceViewItems.GetPositionByIndex(indexPath.Row).Coin.LogoFileName));
 
 			return cell;

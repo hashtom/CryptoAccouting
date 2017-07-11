@@ -4,9 +4,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Linq;
 
 namespace CryptoAccouting.CoreClass
 {
@@ -16,7 +13,7 @@ namespace CryptoAccouting.CoreClass
         private static string _apiKey;
         private static string _apiSecret;
 
-        public static async Task<JObject> FetchPriceAsync(HttpClient http, string apikey, string secret){
+        public static async Task<string> FetchPriceAsync(HttpClient http, string apikey, string secret){
             
             _apiKey = apikey;
             _apiSecret = secret;
@@ -25,7 +22,6 @@ namespace CryptoAccouting.CoreClass
             Uri path = new Uri("api/1/ticker/btc_jpy", UriKind.Relative);
 
             return await SendAsync(http, path, "ticker");
-
 		}
 
         public static DateTime FromEpochSeconds(this DateTime date, long EpochSeconds)
@@ -35,7 +31,7 @@ namespace CryptoAccouting.CoreClass
 
 		}
 
-        public static async Task<JObject> FetchTransaction(HttpClient http, string apikey, string secret)
+        public static async Task<string> FetchTransactionAsync(HttpClient http, string apikey, string secret)
 		{
 			_apiKey = apikey;
 			_apiSecret = secret;
@@ -54,12 +50,11 @@ namespace CryptoAccouting.CoreClass
             };
 
             return await SendAsync(http, path, "trade_history",param);
-            //return await SendAsync(http, path, "trade_history");
 
 		}
 
 
-        private static async Task<JObject> SendAsync(HttpClient http, Uri path, string method, Dictionary<string, string> parameters = null)
+        private static async Task<string> SendAsync(HttpClient http, Uri path, string method, Dictionary<string, string> parameters = null)
 		{
 
             // nonceにunixtimeを用いる。整数だと1秒に一回しかAPIを呼べない。
@@ -87,7 +82,7 @@ namespace CryptoAccouting.CoreClass
 			http.DefaultRequestHeaders.Add("Sign", sign);
 
 			HttpResponseMessage res = await http.PostAsync(path, content);
-            var json = JObject.Parse(await res.Content.ReadAsStringAsync());
+            var json = await res.Content.ReadAsStringAsync();
 
 			//通信上の失敗
 			if (!res.IsSuccessStatusCode)

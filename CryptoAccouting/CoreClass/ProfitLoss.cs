@@ -2,16 +2,17 @@
 
 namespace CryptoAccouting.CoreClass
 {
-    public class RealizedPL
+    public class ProfitLoss
     {
-        private Transaction tx;
         public double BookPrice { get; set; }
-        //public double RelizedPLValue { get; set; }
         public EnuBaseCCY BaseCCY { get; set; }
+        //public double Fee { get; set; }
 
-        public RealizedPL(Transaction transaction)
+		private Transaction tx;
+
+        public ProfitLoss(Transaction transaction)
         {
-            if (tx.BuySell == EnuBuySell.Sell) tx = transaction;
+            if (transaction.BuySell == EnuBuySell.Sell) tx = transaction;
         }
 
         public DateTime TradeDate(){
@@ -22,8 +23,8 @@ namespace CryptoAccouting.CoreClass
             return tx.TxId;
         }
 
-        public double PLValue(){
-            return (tx.TradePrice - BookPrice) * tx.Amount;
+        public double RealizedPL(){
+            return (tx.TradePrice - BookPrice) * tx.Quantity - tx.Fee;
         }
 
     }

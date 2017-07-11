@@ -10,32 +10,32 @@ namespace CryptoAccouting.CoreClass
         public Instrument Coin { get; }
         public EnuExchangeType TradeExchange { get; }
         public EnuBuySell BuySell { get; set; }
-        public string Side
-        {
-            get { return BuySell == EnuBuySell.Buy ? "Buy" : "Sell"; }
-        }
-        public double Amount { get; set; }
+        public double Quantity { get; set; }
         public double TradePrice { get; set; }
         public int Fee { get; set; }
         public bool IsMargin { get; set; }
         public DateTime TradeDate { get; set; }
-        public DateTime UpdateTime { get; set; }
+        //public DateTime UpdateTime { get; set; }
 
-        public string CoinName {
+        public string Symbol {
             get { return Coin.Symbol; }
-            set { this.Coin.Symbol = value; }
         }
+
+		public string Side
+		{
+			get { return BuySell == EnuBuySell.Buy ? "Buy" : "Sell"; }
+		}
 
         public double TradeValue
         {
-            get { return TradePrice * Amount; }
+            get { return TradePrice * Quantity; }
         }
 
         public Transaction(Instrument coin, EnuExchangeType exchange)
         {
 			Coin = coin;
             TradeExchange = exchange;
-			UpdateTime = DateTime.Now;
+			//UpdateTime = DateTime.Now;
         }
     }
 

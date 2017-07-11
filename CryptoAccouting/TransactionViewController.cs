@@ -23,38 +23,39 @@ namespace CryptoAccouting
 			txIdColumn.MappingName = "TxId";
 			txIdColumn.HeaderText = "tx";
 
-			GridTextColumn coinColumn = new GridTextColumn();
-			coinColumn.MappingName = "CoinName";
-			coinColumn.HeaderText = "Coin";
+			//GridTextColumn coinColumn = new GridTextColumn();
+			//coinColumn.MappingName = "Symbol";
+			//coinColumn.HeaderText = "Coin";
 
 			GridTextColumn buysellColumn = new GridTextColumn();
 			buysellColumn.MappingName = "Side";
             buysellColumn.HeaderText = "BuySell";
 
 			GridTextColumn amountColumn = new GridTextColumn();
-			amountColumn.MappingName = "Amount";
-            amountColumn.HeaderText = "Amount";
+			amountColumn.MappingName = "Quantity";
+            amountColumn.HeaderText = "Qty";
 
 			GridTextColumn priceColumn = new GridTextColumn();
 			priceColumn.MappingName = "TradePrice";
 			priceColumn.HeaderText = "Price";
 
-			GridTextColumn valueColumn = new GridTextColumn();
-			valueColumn.MappingName = "TradeValue";
-            valueColumn.HeaderText = "Value";
+			//GridTextColumn valueColumn = new GridTextColumn();
+			//valueColumn.MappingName = "TradeValue";
+            //valueColumn.HeaderText = "Value";
 
 			GridTextColumn dateColumn = new GridTextColumn();
 			dateColumn.MappingName = "TradeDate";
-            dateColumn.HeaderText = "TradeDate";
+            dateColumn.HeaderText = "TDate";
 
 
 			sfGrid.Columns.Add(txIdColumn);
-			sfGrid.Columns.Add(coinColumn);
+			sfGrid.Columns.Add(dateColumn);
+            //sfGrid.Columns.Add(coinColumn);
             sfGrid.Columns.Add(buysellColumn);
 			sfGrid.Columns.Add(amountColumn);
 			sfGrid.Columns.Add(priceColumn);
-            sfGrid.Columns.Add(valueColumn);
-            sfGrid.Columns.Add(dateColumn);
+            //sfGrid.Columns.Add(valueColumn);
+
 		}
         
         public async override void ViewDidLoad()
@@ -62,7 +63,7 @@ namespace CryptoAccouting
 			base.ViewDidLoad();
 			
             var exg = new ExchangeAPI();
-            var myTxs = await exg.FetchTransaction2((EnuExchangeType.Zaif));
+            var myTxs = await exg.FetchTransactionAsync((EnuExchangeType.Zaif), true, true);
 
             //Show Summary
             myTxs.ReEvaluate();
@@ -72,8 +73,8 @@ namespace CryptoAccouting
             //this.LabelBougtPrice.Text = myTxs.BookPrice.ToString();
             //this.LabelSoldPrice.Text = myTxs..ToString();
             this.LabelOutstandingPrice.Text = Math.Round(myTxs.BookPrice,2).ToString();
-            this.LabelRealizedPL.Text = Math.Round(myTxs.RealizedPL()/1000000,2).ToString();
-            this.LabelUnrealizedPL.Text = Math.Round(myTxs.UnrealizedPL()/1000000,2).ToString();
+            this.LabelRealizedPL.Text = Math.Round(myTxs.RealizedPL()/1000,2).ToString();
+            this.LabelUnrealizedPL.Text = Math.Round(myTxs.UnrealizedPL()/1000,2).ToString();
 
             //Show Grid View
             sfGrid.ItemsSource = (myTxs.TransactionCollection);

@@ -8,14 +8,14 @@ namespace CryptoAccouting.CoreClass
     public class Balance : IEnumerable<Position>
     {
         public string BalanceName { get; set; }
-        public Exchange ExchangeTraded { get; }
+        public EnuExchangeType ExchangeTraded { get; }
         private List<Position> positions;
-        public DateTime UpdateTime { get; private set; }
+        //public DateTime UpdateTime { get; private set; }
 
-        public Balance(Exchange exchange_traded)
+        public Balance(EnuExchangeType exchange_traded)
         {
             ExchangeTraded = exchange_traded;
-			UpdateTime = DateTime.Now;
+			//UpdateTime = DateTime.Now;
             positions = new List<Position>();
         }
 

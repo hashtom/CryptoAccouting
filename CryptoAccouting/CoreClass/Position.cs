@@ -10,7 +10,7 @@ namespace CryptoAccouting.CoreClass
 		public DateTime BalanceDate { get; set; }
         public double Amount { get; set; }
         public double BookPrice { get; set; }
-        public Price PriceData { get; private set; }
+        //public Price PriceData { get; private set; }
         public Transaction Tx { get; private set; }
         public DateTime UpdateTime { get; private set; }
 
@@ -20,23 +20,28 @@ namespace CryptoAccouting.CoreClass
             Id = positionId;
         }
 
-        public void AttachPriceData(Price p){
-           PriceData = p;
+        //public double ProfitLoss(){
+        //    return MarketValuePrevClose() - BookValue();
+        //}
+
+        public double MarketPrice(){
+            return Coin.PriceValue == null ? 0 : Coin.PriceValue.LatestPrice;
         }
 
-        public double ProfitLoss(){
-            return MarketValuePrevClose() - BookValue();
-        }
+		public double MarketDayVolume()
+		{
+            return Coin.PriceValue == null ? 0 : Coin.PriceValue.DayVolume;
+		}
 
 		public double BookValue()
 		{
 			return Amount * BookPrice;
 		}
 
-        public double MarketValuePrevClose()
-		{
-			return Amount * Amount * PriceData.PrevClose;
-		}
+  //      public double MarketValuePrevClose()
+		//{
+		//	return Amount * Amount * PriceData.PrevClose;
+		//}
 
 	}
 }
