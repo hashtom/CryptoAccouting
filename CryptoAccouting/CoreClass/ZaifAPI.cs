@@ -13,10 +13,11 @@ namespace CryptoAccouting.CoreClass
         private static string _apiKey;
         private static string _apiSecret;
 
-        public static async Task<string> FetchPriceAsync(HttpClient http, string apikey, string secret){
+        public static async Task<string> FetchPriceAsync(string apikey, string secret){
             
             _apiKey = apikey;
             _apiSecret = secret;
+            var http = new HttpClient();
 
             http.BaseAddress = new Uri(BaseUrl);
             Uri path = new Uri("api/1/ticker/btc_jpy", UriKind.Relative);
@@ -31,10 +32,11 @@ namespace CryptoAccouting.CoreClass
 
 		}
 
-        public static async Task<string> FetchTransactionAsync(HttpClient http, string apikey, string secret)
+        public static async Task<string> FetchTransactionAsync(string apikey, string secret)
 		{
 			_apiKey = apikey;
 			_apiSecret = secret;
+            var http = new HttpClient();
 
 			http.BaseAddress = new Uri(BaseUrl);
 			Uri path = new Uri("tapi", UriKind.Relative);

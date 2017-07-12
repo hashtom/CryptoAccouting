@@ -11,7 +11,7 @@ namespace CryptoAccouting.CoreClass
 {
     public class ExchangeAPI
     {
-        private HttpClient http;
+        //private HttpClient http; // 削除できる？？
         private string apikey, apisecret;
 
         public async Task<Price> FetchBTCPriceAsyncTest(EnuExchangeType exType){
@@ -29,7 +29,7 @@ namespace CryptoAccouting.CoreClass
                     if (p.Coin.Symbol != "BTC") return null; // will add exception statement here
 
                     GetAPIKey(EnuExchangeType.Zaif);
-                    var rawjson = await ZaifAPI.FetchPriceAsync(http, apikey, apisecret);
+                    var rawjson = await ZaifAPI.FetchPriceAsync(apikey, apisecret);
                     var json = JObject.Parse(rawjson);
 
                     p.LatestPrice = (double)json.SelectToken("$.last");
@@ -101,7 +101,7 @@ namespace CryptoAccouting.CoreClass
                     else
                     {
                         GetAPIKey(EnuExchangeType.Zaif);
-                        rawjson = await ZaifAPI.FetchTransactionAsync(http, apikey, apisecret);
+                        rawjson = await ZaifAPI.FetchTransactionAsync(apikey, apisecret);
     
                     }
 
@@ -169,8 +169,6 @@ namespace CryptoAccouting.CoreClass
 
         private void GetAPIKey(EnuExchangeType exType)
         {
-
-            http = new HttpClient();
 
             switch (exType)
             {

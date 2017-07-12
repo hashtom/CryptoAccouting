@@ -162,6 +162,7 @@
       <DependentUpon>TransactionViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="CoreClass\ProfitLoss.cs" />
+    <Compile Include="CoreClass\MarketDataAPI.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\btc.png" />
