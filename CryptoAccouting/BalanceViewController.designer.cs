@@ -20,15 +20,15 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UITableView BalanceTableView { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIView BalanceTopView { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel labelCurrency { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelPercent { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -41,6 +41,11 @@ namespace CryptoAccouting
                 AddCoinButton = null;
             }
 
+            if (BalanceTableView != null) {
+                BalanceTableView.Dispose ();
+                BalanceTableView = null;
+            }
+
             if (BalanceTopView != null) {
                 BalanceTopView.Dispose ();
                 BalanceTopView = null;
@@ -49,11 +54,6 @@ namespace CryptoAccouting
             if (labelCurrency != null) {
                 labelCurrency.Dispose ();
                 labelCurrency = null;
-            }
-
-            if (labelPercent != null) {
-                labelPercent.Dispose ();
-                labelPercent = null;
             }
 
             if (labelTotalAsset != null) {

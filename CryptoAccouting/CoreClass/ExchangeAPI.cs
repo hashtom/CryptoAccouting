@@ -18,9 +18,9 @@ namespace CryptoAccouting.CoreClass
 
             var coin = ApplicationCore.GetInstrument("BTC");
             var p = new Price(coin);
-            coin.PriceValue = p;
 
             p.BaseCurrency = EnuBaseCCY.JPY;
+            coin.PriceValue = p;
 
             switch (exType) {
 
@@ -38,13 +38,12 @@ namespace CryptoAccouting.CoreClass
                     p.PriceDate = DateTime.Now;
                     //p.UpdateTime = DateTime.Now;
 
-                    //var price = (string)json.SelectToken("$.asks[0][0]");
-                    //var amount = (string)json.SelectToken("$.asks[0][1]");
                     return p;
 
                 default:
                     return null;
-            } 
+            }
+
         }
         internal void FetchPosition(EnuExchangeType exType){
 

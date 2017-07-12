@@ -91,6 +91,7 @@
                         <outlet property="labelTotalAsset" destination="2284" id="name-outlet-2284"/>
                         <outlet property="BalanceTopView" destination="2282" id="name-outlet-2282"/>
                         <outlet property="labelCurrency" destination="2283" id="name-outlet-2283"/>
+                        <outlet property="BalanceTableView" destination="712" id="name-outlet-712"/>
                     </connections>
                     <toolbarItems/>
                 </tableViewController>
