@@ -5,19 +5,16 @@ namespace CryptoAccouting.CoreClass
 {
     public class Instrument
     {
-
         public string Symbol { get; }
         public string Name { get; set; }
         public InstrumentType Type { get; set; }
         public DateTime ListedDate { get; set; }
-		public Price PriceValue { get; set; }
+		public Price MarketPrice { get; set; }
         public string LogoFileName { get; set; }
 
         public Instrument(string symbol)
         {
             Symbol = symbol;
-            //Exchanges = new List<Exchange>();
-            // PriceValue = fetchPrice() //todo
         }
     }
 

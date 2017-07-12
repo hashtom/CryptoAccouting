@@ -1,7 +1,38 @@
-﻿using System; using System.Collections.Generic; using System.Linq; using System.Threading.Tasks;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         private static Balance myBalance;         private static List<Instrument> instruments;         //private static List<Exchange> Exchanges;          public static void LoadInstruments(){              instruments = new List<Instrument>();
+﻿using System; using System.Collections.Generic; using System.Linq; //using System.Threading.Tasks; using System.IO;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         private static Balance myBalance;         private static List<Instrument> instruments;         //private static List<Exchange> Exchanges;          public static void LoadInstruments(){              instruments = new List<Instrument>();
             instruments.Add(new Instrument("BTC") { Type = InstrumentType.Crypto, LogoFileName = "Images/btc.png" });             instruments.Add(new Instrument("ETH") { Type = InstrumentType.Crypto, LogoFileName = "Images/eth.png" });             instruments.Add(new Instrument("REP") { Type = InstrumentType.Crypto, LogoFileName = "Images/rep.png" });          }          public static Balance GetTestBalance(){
 
             // Test Data
-            AppConfig.BaseCurrency = EnuBaseCCY.JPY;             Balance mybal;              LoadInstruments();              mybal = new Balance(EnuExchangeType.Zaif);              // Test Data Creation             var coin1 = instruments.Where(i=>i.Symbol =="BTC").First();             var coin2 = instruments.Where(i => i.Symbol == "ETH").First();             var coin3 = instruments.Where(i => i.Symbol == "REP").First();             var pos1 = new Position(coin1, "1") { Amount = 850 };             var pos2 = new Position(coin2, "2") { Amount = 1000 };             var pos3 = new Position(coin3, "3") { Amount = 25000 };             coin1.Name = "BitCoin";              mybal.AttachPosition(pos1);             mybal.AttachPosition(pos2);             mybal.AttachPosition(pos3);              myBalance = mybal;              return myBalance;         }          public static Balance GetMyBalance(){             return myBalance;         }          public static Instrument GetInstrument(string symbol){             return instruments.Where(i => i.Symbol == symbol).First();         } 
+            AppConfig.BaseCurrency = EnuBaseCCY.JPY;             Balance mybal;              LoadInstruments();              mybal = new Balance(EnuExchangeType.Zaif);              // Test Data Creation             var coin1 = instruments.Where(i=>i.Symbol =="BTC").First();             var coin2 = instruments.Where(i => i.Symbol == "ETH").First();             var coin3 = instruments.Where(i => i.Symbol == "REP").First();             var pos1 = new Position(coin1, "1") { Amount = 850 };             var pos2 = new Position(coin2, "2") { Amount = 1000 };             var pos3 = new Position(coin3, "3") { Amount = 25000 };             coin1.Name = "BitCoin";              mybal.AttachPosition(pos1);             mybal.AttachPosition(pos2);             mybal.AttachPosition(pos3);              myBalance = mybal;              return myBalance;         }          public static Balance GetMyBalance(){             return myBalance;         }          public static Instrument GetInstrument(string symbol){             return instruments.Where(i => i.Symbol == symbol).First();         }
+
+        public static List<Instrument> GetInstrumentAll()
+		{
+			return instruments;
+		} 
         public static void AttachMyBalance(Balance bal)         {
-            myBalance = bal;         }      } } 
+            myBalance = bal;         }
+
+        public static void SaveJsonFile(string json, string fileName)
+		{
+
+			var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+			var path = Path.Combine(documents, fileName);
+			File.WriteAllText(path, json);
+
+		}
+
+
+        public static string LoadFromJsonFile(string fileName)
+		{
+
+			var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+			var path = Path.Combine(documents, fileName);
+			return File.ReadAllText(path);
+		}
+
+
+		public static DateTime FromEpochSeconds(this DateTime date, long EpochSeconds)
+		{
+			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+			return epoch.AddSeconds(EpochSeconds);
+
+		}      } } 

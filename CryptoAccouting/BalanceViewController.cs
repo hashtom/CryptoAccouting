@@ -5,8 +5,8 @@
         {
             base.ViewWillAppear(animated); 
             //test
-            var exg = new ExchangeAPI();             var p = await exg.FetchBTCPriceAsyncTest(EnuExchangeType.Zaif);
-            labelTotalAsset.Text = p.LatestPrice.ToString();             BalanceTableView.ReloadData();         }          public override void ViewDidAppear(bool animated)
+            //var exg = new ExchangeAPI();             //var p = await exg.FetchBTCPriceAsyncTest(EnuExchangeType.Zaif);
+            //labelTotalAsset.Text = p.LatestPrice.ToString();             await MarketDataAPI.FetchCoinMarketData(ApplicationCore.GetInstrumentAll());             BalanceTableView.ReloadData();          }          public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
         }     } }

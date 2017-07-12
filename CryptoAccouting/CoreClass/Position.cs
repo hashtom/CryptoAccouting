@@ -25,12 +25,12 @@ namespace CryptoAccouting.CoreClass
         //}
 
         public double MarketPrice(){
-            return Coin.PriceValue == null ? 0 : Coin.PriceValue.LatestPrice;
+            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPrice;
         }
 
 		public double MarketDayVolume()
 		{
-            return Coin.PriceValue == null ? 0 : Coin.PriceValue.DayVolume;
+            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.DayVolume;
 		}
 
 		public double BookValue()

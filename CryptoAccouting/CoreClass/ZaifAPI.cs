@@ -25,13 +25,6 @@ namespace CryptoAccouting.CoreClass
             return await SendAsync(http, path, "ticker");
 		}
 
-        public static DateTime FromEpochSeconds(this DateTime date, long EpochSeconds)
-		{
-			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-			return epoch.AddSeconds(EpochSeconds);
-
-		}
-
         public static async Task<string> FetchTransactionAsync(string apikey, string secret)
 		{
 			_apiKey = apikey;

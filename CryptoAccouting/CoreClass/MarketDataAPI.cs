@@ -1,37 +1,44 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace CryptoAccouting.CoreClass
 {
     public static class MarketDataAPI
     {
-
-
-		private static async Task<string> SendAsync(string method)
+        
+        public static async Task FetchCoinMarketData(List<Instrument> instrments)
 		{
 
             const string BaseUrl = "https://api.coinmarketcap.com/v1/ticker/";
-            HttpClient http = new HttpClient();
+            string rawjson;
+            using(var http = new HttpClient()){
+                //http.MaxResponseContentBufferSize = 256000;
+                rawjson = await http.GetStringAsync(BaseUrl);
+            }
 
-			// POSTするメッセージを作成
-			var content = new FormUrlEncodedContent(null);
-			string message = await content.ReadAsStringAsync();
+            var jarray = await Task.Run(() => JArray.Parse(rawjson));
 
+            //Parse Market Data 
+            foreach (Instrument ins in instrments)
+            {
+                if (ins.MarketPrice == null)
+                {
+                    var p = new Price(ins);
+                    p.BaseCurrency = EnuBaseCCY.JPY;
+                    ins.MarketPrice = p;
+                }
 
-			// HTTPヘッダをセット
-			//http.DefaultRequestHeaders.Clear();
+                ins.MarketPrice.LatestPrice = (double)jarray.SelectToken("[?(@.symbol == '" + ins.Symbol + "')]")["price_btc"];
+                ins.Name = (string)jarray.SelectToken("[?(@.symbol == '" + ins.Symbol + "')]")["name"];
+                ins.MarketPrice.DayVolume = (double)jarray.SelectToken("[?(@.symbol == '" + ins.Symbol + "')]")["24h_volume_usd"];
+                //ins.MarketPrice.PriceDate = (DateTime)jarray.SelectToken("[?(@.symbol == '" + ins.Symbol + "')]")["last_updated"];
+                //ApplicationCore.FromEpochSeconds(DateTime.Now(), (long)json["return"][x.Name]["timestamp"]).Date,
+            }
 
-
-            HttpResponseMessage res = await http.PostAsync(BaseUrl, content);
-			var json = await res.Content.ReadAsStringAsync();
-
-			//通信上の失敗
-			if (!res.IsSuccessStatusCode)
-				return null;
-
-			return json;
 		}
     }
 }

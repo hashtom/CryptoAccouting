@@ -3,7 +3,6 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
@@ -20,7 +19,7 @@ namespace CryptoAccouting.CoreClass
             var p = new Price(coin);
 
             p.BaseCurrency = EnuBaseCCY.JPY;
-            coin.PriceValue = p;
+            coin.MarketPrice = p;
 
             switch (exType) {
 
@@ -96,7 +95,7 @@ namespace CryptoAccouting.CoreClass
 
                     if (ReadFromFile)
                     {
-                        rawjson = LoadFromJsonFile("zaifTransaction.json");
+                        rawjson = ApplicationCore.LoadFromJsonFile("zaifTransaction.json");
                     }
                     else
                     {
@@ -110,13 +109,13 @@ namespace CryptoAccouting.CoreClass
 
                     foreach (JProperty x in (JToken)json["return"])
                     {
-                        DateTime tm = DateTime.Now;
+                       // DateTime tm = DateTime.Now;
 
                         //Transaction Date Order must be ascending by design...
                         EnuBuySell ebuysell;
 
                         switch ((string)json["return"][x.Name]["your_action"])
-                        {
+                        {   
                             case "bid":
                                 ebuysell = EnuBuySell.Buy;
                                 break;
@@ -133,12 +132,12 @@ namespace CryptoAccouting.CoreClass
                                                  ebuysell,
                                                  (double)json["return"][x.Name]["amount"],
                                                  (double)json["return"][x.Name]["price"],
-                                                 ZaifAPI.FromEpochSeconds(tm, (long)json["return"][x.Name]["timestamp"]).Date,
+                                                 ApplicationCore.FromEpochSeconds(DateTime.Now, (long)json["return"][x.Name]["timestamp"]).Date,
                                                  (int)json["return"][x.Name]["fee"]);
                     }
 
                     // Save Json file
-                    SaveJsonFile(rawjson, "zaifTransaction.json");
+                    ApplicationCore.SaveJsonFile(rawjson, "zaifTransaction.json");
 
                     break;
 
@@ -150,22 +149,6 @@ namespace CryptoAccouting.CoreClass
             return txs;
         }
 
-        private void SaveJsonFile(string json, string fileName){
-
-            var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var path = Path.Combine(documents, fileName);
-            File.WriteAllText(path, json);
-
-        }
-
-
-        private string LoadFromJsonFile(string fileName)
-        {
-
-            var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var path = Path.Combine(documents, fileName);
-            return File.ReadAllText(path);
-        }
 
         private void GetAPIKey(EnuExchangeType exType)
         {
