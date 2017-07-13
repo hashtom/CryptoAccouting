@@ -28,6 +28,10 @@ namespace CryptoAccouting.CoreClass
             return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPrice;
         }
 
+        public double Pct1d(){
+            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.Pct1d;
+        }
+
 		public double MarketDayVolume()
 		{
             return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.DayVolume;

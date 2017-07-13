@@ -132,7 +132,7 @@ namespace CryptoAccouting.CoreClass
                                                  ebuysell,
                                                  (double)json["return"][x.Name]["amount"],
                                                  (double)json["return"][x.Name]["price"],
-                                                 ApplicationCore.FromEpochSeconds(DateTime.Now, (long)json["return"][x.Name]["timestamp"]).Date,
+                                                 ApplicationCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
                                                  (int)json["return"][x.Name]["fee"]);
                     }
 

@@ -5,6 +5,7 @@ namespace CryptoAccouting.CoreClass
 {
     public class Instrument
     {
+        public string Id { get; } //CoinMarketCap ID
         public string Symbol { get; }
         public string Name { get; set; }
         public InstrumentType Type { get; set; }
@@ -12,8 +13,9 @@ namespace CryptoAccouting.CoreClass
 		public Price MarketPrice { get; set; }
         public string LogoFileName { get; set; }
 
-        public Instrument(string symbol)
+        public Instrument(string id, string symbol)
         {
+            Id = id;
             Symbol = symbol;
         }
     }
