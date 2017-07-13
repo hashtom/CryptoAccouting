@@ -8,9 +8,9 @@ namespace CryptoAccouting.CoreClass
         public string PriceSource { get; set; }
 		public double LatestPrice { get; set; }
         public double DayVolume { get; set; }
-        public double Pct1h { get; set; }
-        public double Pct1d { get; set; }
-        public double Pct7d { get; set; }
+        public double? Pct1h { get; set; }
+        public double? Pct1d { get; set; }
+        public double? Pct7d { get; set; }
         //public double PrevClose { get; set; }
 		public DateTime PriceDate { get; set; }
 		//public DateTime UpdateTime { get; set; }

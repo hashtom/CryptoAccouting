@@ -3,7 +3,7 @@ using System;
 using UIKit;
 using CoreGraphics;
 
-namespace CryptoAccouting
+namespace CryptoAccouting.UIClass
 {
     
     public class CustomBalanceCell : UITableViewCell

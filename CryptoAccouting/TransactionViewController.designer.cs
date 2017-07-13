@@ -58,6 +58,10 @@ namespace CryptoAccouting
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIView TransactionSummaryView { get; set; }
 
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIView TransactionView { get; set; }
+
         void ReleaseDesignerOutlets ()
         {
             if (LabelBougtAmount != null) {
@@ -113,6 +117,11 @@ namespace CryptoAccouting
             if (TransactionSummaryView != null) {
                 TransactionSummaryView.Dispose ();
                 TransactionSummaryView = null;
+            }
+
+            if (TransactionView != null) {
+                TransactionView.Dispose ();
+                TransactionView = null;
             }
         }
     }

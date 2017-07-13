@@ -88,6 +88,16 @@ namespace CryptoAccouting
             TransactionHistoryView.AddSubview(sfGrid);
 		}
 
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+        }
+
 		//void HandleAutoGeneratingColumn(object sender, AutoGeneratingColumnArgs e)
 		//{
 		//	if (e.Column.MappingName == "txid")

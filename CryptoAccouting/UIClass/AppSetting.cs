@@ -2,20 +2,12 @@
 using System.Collections.Generic;
 using CryptoAccouting.CoreClass;
 
-namespace CryptoAccouting
+namespace CryptoAccouting.UIClass
 {
-    public static class AppConfig
+    public static class AppSetting
     {
         public static EnuBaseCCY BaseCurrency { get; set; }
         public static string Setting1 { get; set; }
     }
-
-
-	public enum EnuBaseCCY
-	{
-		JPY,
-		USD
-	}
-
 
 }

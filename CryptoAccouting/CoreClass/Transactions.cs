@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using CryptoAccouting.UIClass;
 //using System.Collections.ObjectModel;
 
 namespace CryptoAccouting.CoreClass
@@ -85,7 +86,7 @@ namespace CryptoAccouting.CoreClass
                     if (!RealizedPLHistory.Where(p => p.TxID() == tx.TxId).Any())//重複PLオブジェクトがないか事前にチェック！
                     {
                         var pl = new ProfitLoss(tx);
-                        pl.BaseCCY = AppConfig.BaseCurrency;
+                        pl.BaseCCY = AppSetting.BaseCurrency;
                         pl.BookPrice = cur_bookprice;
                         RealizedPLHistory.Add(pl);
                     }

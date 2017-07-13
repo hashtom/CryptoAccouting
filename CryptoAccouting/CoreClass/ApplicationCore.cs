@@ -1,8 +1,8 @@
-﻿using System; using System.Collections.Generic; using System.Linq; //using System.Threading.Tasks; using System.IO;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         private static Balance myBalance;         private static List<Instrument> instruments;         //private static List<Exchange> Exchanges;          public static void LoadInstruments(){              instruments = new List<Instrument>();
+﻿using System; using System.Collections.Generic; using System.Linq; //using System.Threading.Tasks; using System.IO; using UIKit; using CryptoAccouting.UIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         private static Balance myBalance;         private static List<Instrument> instruments;         private static NavigationDrawer navigation;         //private static List<Exchange> Exchanges;          public static NavigationDrawer InitializeSlideMenu(UIView thisview){             navigation = new NavigationDrawer(thisview);             navigation.AddView(thisview);             return navigation;         }          public static void LoadInstruments(){              instruments = new List<Instrument>();
             instruments.Add(new Instrument("bitcoin", "BTC") { Type = InstrumentType.Crypto, LogoFileName = "Images/btc.png" });             instruments.Add(new Instrument("ethereum", "ETH") { Type = InstrumentType.Crypto, LogoFileName = "Images/eth.png" });             instruments.Add(new Instrument("augur", "REP") { Type = InstrumentType.Crypto, LogoFileName = "Images/rep.png" });          }          public static Balance GetTestBalance(){
 
             // Test Data
-            AppConfig.BaseCurrency = EnuBaseCCY.JPY;             Balance mybal;              LoadInstruments();              mybal = new Balance(EnuExchangeType.Zaif);              // Test Data Creation             var coin1 = instruments.Where(i=>i.Symbol =="BTC").First();             var coin2 = instruments.Where(i => i.Symbol == "ETH").First();             var coin3 = instruments.Where(i => i.Symbol == "REP").First();             var pos1 = new Position(coin1, "1") { Amount = 850 };             var pos2 = new Position(coin2, "2") { Amount = 1000 };             var pos3 = new Position(coin3, "3") { Amount = 25000 };              mybal.AttachPosition(pos1);             mybal.AttachPosition(pos2);             mybal.AttachPosition(pos3);              myBalance = mybal;              return myBalance;         }          public static Balance GetMyBalance(){             return myBalance;         }          public static Instrument GetInstrument(string symbol){             return instruments.Where(i => i.Symbol == symbol).First();         }
+            AppSetting.BaseCurrency = EnuBaseCCY.JPY;             Balance mybal;              LoadInstruments();              mybal = new Balance(EnuExchangeType.Zaif);              // Test Data Creation             var coin1 = instruments.Where(i=>i.Symbol =="BTC").First();             var coin2 = instruments.Where(i => i.Symbol == "ETH").First();             var coin3 = instruments.Where(i => i.Symbol == "REP").First();             var pos1 = new Position(coin1, "1") { Amount = 850 };             var pos2 = new Position(coin2, "2") { Amount = 1000 };             var pos3 = new Position(coin3, "3") { Amount = 25000 };              mybal.AttachPosition(pos1);             mybal.AttachPosition(pos2);             mybal.AttachPosition(pos3);              myBalance = mybal;              return myBalance;         }          public static Balance GetMyBalance(){             return myBalance;         }          public static Instrument GetInstrument(string symbol){             return instruments.Where(i => i.Symbol == symbol).First();         }
 
         public static List<Instrument> GetInstrumentAll()
 		{
@@ -35,4 +35,10 @@
 			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			return epoch.AddSeconds(EpochSeconds);
 
-		}      } } 
+		}      }
+
+	public enum EnuBaseCCY
+	{
+		JPY,
+		USD
+	}  } 

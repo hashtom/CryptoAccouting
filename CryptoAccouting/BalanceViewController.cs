@@ -1,7 +1,6 @@
-﻿using Foundation; using System; using UIKit; using System.Collections.Generic; using System.Threading.Tasks; using CryptoAccouting.CoreClass;  namespace CryptoAccouting {     public partial class BalanceViewController : UITableViewController     {         private Balance myBalance;          public BalanceViewController(IntPtr handle) : base(handle)         {             AppConfig.BaseCurrency = EnuBaseCCY.JPY;
+﻿using Foundation; using System; using UIKit; //using System.Collections.Generic; //using System.Threading.Tasks; using CryptoAccouting.CoreClass; using CryptoAccouting.UIClass; //using Syncfusion.SfNavigationDrawer.iOS; //using CoreGraphics;  namespace CryptoAccouting {     public partial class BalanceViewController : UITableViewController     {         private Balance myBalance;          public BalanceViewController(IntPtr handle) : base(handle)         {             AppSetting.BaseCurrency = EnuBaseCCY.JPY;
 			myBalance = ApplicationCore.GetTestBalance();
-		}          public override void ViewDidLoad()         {
-			BalanceTableView.Source = new BalanceTableSource(myBalance);         }          public async override void ViewWillAppear(bool animated)
+		}           public override void ViewDidLoad()         {             var menu = ApplicationCore.InitializeSlideMenu(BalanceTableView);             menu.Navigation.ToggleDrawer(); // Test             BalanceTableView.Source = new BalanceTableSource(myBalance);         }          public async override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated); 
             //test

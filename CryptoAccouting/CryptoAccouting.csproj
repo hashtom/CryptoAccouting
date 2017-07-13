@@ -106,6 +106,9 @@
     <Reference Include="NBitcoin">
       <HintPath>..\packages\NBitcoin.4.0.0.8\lib\netstandard1.3\NBitcoin.dll</HintPath>
     </Reference>
+    <Reference Include="Syncfusion.SfNavigationDrawer.iOS">
+      <HintPath>..\..\..\..\Documents\Syncfusion\15.2.0.40\Xamarin\lib\ios-unified\Syncfusion.SfNavigationDrawer.iOS.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -153,7 +156,7 @@
     <Compile Include="CoreClass\ExchangeAPI.cs" />
     <Compile Include="CoreClass\Balance.cs" />
     <Compile Include="CoreClass\Price.cs" />
-    <Compile Include="UIClass\AppConfig.cs" />
+    <Compile Include="UIClass\AppSetting.cs" />
     <Compile Include="CoreClass\Transaction.cs" />
     <Compile Include="CoreClass\ZaifAPI.cs" />
     <Compile Include="CoreClass\Transactions.cs" />
@@ -163,6 +166,7 @@
     </Compile>
     <Compile Include="CoreClass\ProfitLoss.cs" />
     <Compile Include="CoreClass\MarketDataAPI.cs" />
+    <Compile Include="UIClass\NavigationDrawer.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\btc.png" />

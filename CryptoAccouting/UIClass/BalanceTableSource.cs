@@ -3,7 +3,7 @@ using Foundation;
 using UIKit;
 using CryptoAccouting.CoreClass;
 
-namespace CryptoAccouting
+namespace CryptoAccouting.UIClass
 {
 	public class BalanceTableSource : UITableViewSource
 	{
