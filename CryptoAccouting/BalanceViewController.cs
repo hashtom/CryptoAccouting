@@ -28,4 +28,9 @@
         }          public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
             //base.RowSelected(tableView, indexPath);             //var cell = tableView.CellAt(indexPath);             //BalanceTableView.DeselectRow(indexPath, animated: true);              PerformSegue("PositionSegue", this); 
-        }      } }
+        }
+
+        partial void MenuBar_Activated(UIBarButtonItem sender)
+        {
+            menu.Navigation.ToggleDrawer();
+        }         } }
