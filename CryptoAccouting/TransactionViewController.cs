@@ -4,12 +4,14 @@ using UIKit;
 using CoreGraphics;
 using Syncfusion.SfDataGrid;
 using CryptoAccouting.CoreClass;
+using CryptoAccouting.UIClass;
 
 namespace CryptoAccouting
 {
     public partial class TransactionViewController : UIViewController
     {
 		SfDataGrid sfGrid;
+        private NavigationDrawer menu;
 
         public TransactionViewController(IntPtr handle) : base(handle)
         {
@@ -61,7 +63,8 @@ namespace CryptoAccouting
         public async override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
-			
+			menu = ApplicationCore.Navigation;
+
             var exg = new ExchangeAPI();
             var myTxs = await exg.FetchTransactionAsync((EnuExchangeType.Zaif), true, true);
 
@@ -98,14 +101,18 @@ namespace CryptoAccouting
             base.ViewDidAppear(animated);
         }
 
-		//void HandleAutoGeneratingColumn(object sender, AutoGeneratingColumnArgs e)
-		//{
-		//	if (e.Column.MappingName == "txid")
-		//	{
-		//		e.Column.TextMargin = 1;
-		//		e.Column.TextAlignment = UITextAlignment.Left;
-		//	}
-		//}
+        //void HandleAutoGeneratingColumn(object sender, AutoGeneratingColumnArgs e)
+        //{
+        //	if (e.Column.MappingName == "txid")
+        //	{
+        //		e.Column.TextMargin = 1;
+        //		e.Column.TextAlignment = UITextAlignment.Left;
+        //	}
+        //}
 
+        partial void MenuBar_Activated(UIBarButtonItem sender)
+        {
+            menu.Navigation.ToggleDrawer();
+        }
     }
 }

@@ -39,6 +39,13 @@ namespace CryptoAccouting.UIClass
 		{
             return balanceViewItems.GetPositionByIndex(id);
 		}
+
+        public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
+        {
+            base.RowSelected(tableView, indexPath);
+
+
+        }
 	}
 
 }

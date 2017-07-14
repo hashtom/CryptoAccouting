@@ -16,10 +16,6 @@ namespace CryptoAccouting
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIBarButtonItem AddCoinButton { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITableView BalanceTableView { get; set; }
 
         [Outlet]
@@ -34,13 +30,16 @@ namespace CryptoAccouting
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel labelTotalAsset { get; set; }
 
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIBarButtonItem MenuBar { get; set; }
+
+        [Action ("MenuBar_Activated:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void MenuBar_Activated (UIKit.UIBarButtonItem sender);
+
         void ReleaseDesignerOutlets ()
         {
-            if (AddCoinButton != null) {
-                AddCoinButton.Dispose ();
-                AddCoinButton = null;
-            }
-
             if (BalanceTableView != null) {
                 BalanceTableView.Dispose ();
                 BalanceTableView = null;
@@ -59,6 +58,11 @@ namespace CryptoAccouting
             if (labelTotalAsset != null) {
                 labelTotalAsset.Dispose ();
                 labelTotalAsset = null;
+            }
+
+            if (MenuBar != null) {
+                MenuBar.Dispose ();
+                MenuBar = null;
             }
         }
     }

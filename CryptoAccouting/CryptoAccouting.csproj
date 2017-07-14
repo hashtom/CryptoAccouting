@@ -135,10 +135,6 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="TradeNavigationController.cs" />
-    <Compile Include="TradeNavigationController.designer.cs">
-      <DependentUpon>TradeNavigationController.cs</DependentUpon>
-    </Compile>
     <Compile Include="BalanceNavigationController.cs" />
     <Compile Include="BalanceNavigationController.designer.cs">
       <DependentUpon>BalanceNavigationController.cs</DependentUpon>
@@ -167,6 +163,10 @@
     <Compile Include="CoreClass\ProfitLoss.cs" />
     <Compile Include="CoreClass\MarketDataAPI.cs" />
     <Compile Include="UIClass\NavigationDrawer.cs" />
+    <Compile Include="PositionDetailViewController.cs" />
+    <Compile Include="PositionDetailViewController.designer.cs">
+      <DependentUpon>PositionDetailViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\btc.png" />
