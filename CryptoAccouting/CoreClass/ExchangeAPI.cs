@@ -31,7 +31,7 @@ namespace CryptoAccouting.CoreClass
                     var rawjson = await ZaifAPI.FetchPriceAsync(apikey, apisecret);
                     var json = JObject.Parse(rawjson);
 
-                    p.LatestPrice = (double)json.SelectToken("$.last");
+                    p.LatestPriceBTC = (double)json.SelectToken("$.last");
                     p.DayVolume = (int)json.SelectToken("$.volume");
                     p.PriceSource = "zaif";
                     p.PriceDate = DateTime.Now;

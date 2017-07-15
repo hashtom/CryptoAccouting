@@ -25,7 +25,7 @@ namespace CryptoAccouting.CoreClass
         //}
 
         public double MarketPrice(){
-            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPrice;
+            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPriceBTC;
         }
 
         public double? Pct1d(){

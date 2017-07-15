@@ -16,10 +16,6 @@ namespace CryptoAccouting
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITableView BalanceTableView { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIView BalanceTopView { get; set; }
 
         [Outlet]
@@ -40,11 +36,6 @@ namespace CryptoAccouting
 
         void ReleaseDesignerOutlets ()
         {
-            if (BalanceTableView != null) {
-                BalanceTableView.Dispose ();
-                BalanceTableView = null;
-            }
-
             if (BalanceTopView != null) {
                 BalanceTopView.Dispose ();
                 BalanceTopView = null;

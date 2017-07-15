@@ -1,12 +1,13 @@
-﻿using Foundation; using System; using UIKit; //using System.Collections.Generic; //using System.Threading.Tasks; using CryptoAccouting.CoreClass; using CryptoAccouting.UIClass; //using Syncfusion.SfNavigationDrawer.iOS; //using CoreGraphics;  namespace CryptoAccouting {     public partial class BalanceViewController : UITableViewController     {         private Balance myBalance;         private NavigationDrawer menu;          public BalanceViewController(IntPtr handle) : base(handle)         {             AppSetting.BaseCurrency = EnuBaseCCY.JPY;
+﻿using Foundation; using System; using UIKit; //using System.Collections.Generic; //using System.Threading.Tasks; using CryptoAccouting.CoreClass; using CryptoAccouting.UIClass;   namespace CryptoAccouting {     public partial class BalanceViewController : UITableViewController     {         private Balance myBalance;         private NavigationDrawer menu;         static NSString MyCellId = new NSString("BalanceCell");          public BalanceViewController(IntPtr handle) : base(handle)         {             AppSetting.BaseCurrency = EnuBaseCCY.JPY;
             myBalance = ApplicationCore.GetTestBalance();
-        }           public override void ViewDidLoad()         {             base.ViewDidLoad();
-            menu = ApplicationCore.InitializeSlideMenu(BalanceTableView);             NavigationItem.RightBarButtonItem = EditButtonItem; //test             BalanceTableView.Source = new BalanceTableSource(myBalance);         }          public async override void ViewWillAppear(bool animated)
+        }           public override void ViewDidLoad()         {             base.ViewDidLoad();             TableView.Source = new BalanceTableSource(myBalance, this);             TableView.RegisterClassForCellReuse(typeof(CustomBalanceCell), MyCellId);
+			//TableView.AllowsSelection = true;
+			menu = ApplicationCore.InitializeSlideMenu(TableView);
+			NavigationItem.RightBarButtonItem = EditButtonItem; //test
+		}          public async override void ViewWillAppear(bool animated)
         {
-            base.ViewWillAppear(animated); 
-            //test
-            //var exg = new ExchangeAPI();             //var p = await exg.FetchBTCPriceAsyncTest(EnuExchangeType.Zaif);
-            //labelTotalAsset.Text = p.LatestPrice.ToString();             await MarketDataAPI.FetchCoinMarketData(ApplicationCore.GetInstrumentAll());             BalanceTableView.ReloadData();          }          public override void ViewDidAppear(bool animated)
+            base.ViewWillAppear(animated);
+             await MarketDataAPI.FetchCoinMarketData(ApplicationCore.GetInstrumentAll());             TableView.ReloadData();             labelTotalAsset.Text = ApplicationCore.GetInstrument("BTC").MarketPrice.LatestPrice.ToString();         }          public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
         }
@@ -19,18 +20,18 @@
                 var navctlr = segue.DestinationViewController as PositionDetailViewController;
                 if (navctlr != null)
                 {
-                    var source = BalanceTableView.Source as BalanceTableSource;
-                    var rowPath = BalanceTableView.IndexPathForSelectedRow;
+                    var source = TableView.Source as BalanceTableSource;
+                    var rowPath = TableView.IndexPathForSelectedRow;
+                    //var rowPath = TableView.IndexPathsForVisibleRows[0];
                     var item = source.GetItem(rowPath.Row);
                     navctlr.SetItem(this, item);
                 }
             } 
-        }          public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
-        {
-            //base.RowSelected(tableView, indexPath);             //var cell = tableView.CellAt(indexPath);             //BalanceTableView.DeselectRow(indexPath, animated: true);              PerformSegue("PositionSegue", this); 
         }
 
         partial void MenuBar_Activated(UIBarButtonItem sender)
         {
             menu.Navigation.ToggleDrawer();
-        }         } }
+			//PerformSegue("PositionSegue", this);
+
+		}          } }

@@ -29,7 +29,7 @@
         <scene sceneID="709">
             <objects>
                 <tableViewController id="710" sceneMemberID="viewController" customClass="BalanceViewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="712" sectionIndexMinimumDisplayRowCount="2" allowsSelection="NO" separatorStyle="none">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="712" sectionIndexMinimumDisplayRowCount="2" separatorStyle="none">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -42,14 +42,14 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" colorSpace="calibratedRGB" red="0.8" green="0.32941176470588235" blue="0.22745098039215686" alpha="1"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2283" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" text="JPY">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2283" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" text="USD">
                                     <rect key="frame" x="16" y="45" width="42" height="21"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2284" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" text="1000">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2284" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" text="3,000">
                                     <rect key="frame" x="76" y="32" width="283" height="58"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="36"/>
@@ -69,7 +69,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue id="15601" destination="13385" kind="show"/>
+                                    <segue id="15601" destination="13385" kind="show" identifier="PositionSegue"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -86,7 +86,6 @@
                         <outlet property="labelTotalAsset" destination="2284" id="name-outlet-2284"/>
                         <outlet property="BalanceTopView" destination="2282" id="name-outlet-2282"/>
                         <outlet property="labelCurrency" destination="2283" id="name-outlet-2283"/>
-                        <outlet property="BalanceTableView" destination="712" id="name-outlet-712"/>
                         <outlet property="MenuBar" destination="14719" id="name-outlet-14719"/>
                     </connections>
                     <toolbarItems/>
@@ -290,7 +289,7 @@
         </scene>
         <scene sceneID="13384">
             <objects>
-                <viewController id="13385" sceneMemberID="viewController" customClass="PositionDetailViewController">
+                <viewController id="13385" sceneMemberID="viewController" customClass="PositionDetailViewController" storyboardIdentifier="positionDetail">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="13382"/>
                         <viewControllerLayoutGuide type="bottom" id="13383"/>
@@ -319,7 +318,7 @@
         </scene>
         <scene sceneID="15205">
             <objects>
-                <tableViewController id="15206" sceneMemberID="viewController">
+                <tableViewController id="15206" sceneMemberID="viewController" customClass="SettingTableViewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="15207">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -342,6 +341,9 @@
                             <outlet property="delegate" destination="15206" id="15209"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <outlet property="SettingTableView" destination="15207" id="name-outlet-15207"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="15212" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

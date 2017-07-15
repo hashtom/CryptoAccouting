@@ -5,15 +5,18 @@ using CoreGraphics;
 
 namespace CryptoAccouting.UIClass
 {
-    
+
     public class CustomBalanceCell : UITableViewCell
     {
         UILabel codeLabel, amountLabel, priceLabel, pctLabel;
         UIImageView imageView;
-        public CustomBalanceCell(NSString cellId) : base(UITableViewCellStyle.Default, cellId)
-	{
+
+        //public CustomBalanceCell(NSString cellId) : base(UITableViewCellStyle.Default, cellId) // Old way
+        public CustomBalanceCell(IntPtr p) : base(p)
+        {
             SelectionStyle = UITableViewCellSelectionStyle.Gray;
             ContentView.BackgroundColor = UIColor.FromRGB(218, 255, 127);
+            this.UserInteractionEnabled = true; // test to Delete
 
             imageView = new UIImageView();
 
@@ -33,25 +36,26 @@ namespace CryptoAccouting.UIClass
                 BackgroundColor = UIColor.Clear
             };
 
-			priceLabel = new UILabel()
+            priceLabel = new UILabel()
             {
                 Font = UIFont.FromName("ArialMT", 12f),
                 TextColor = UIColor.Black,
                 TextAlignment = UITextAlignment.Left,
-				BackgroundColor = UIColor.Clear
-			};
+                BackgroundColor = UIColor.Clear
+            };
 
-			pctLabel = new UILabel()
+            pctLabel = new UILabel()
             {
                 Font = UIFont.FromName("ArialMT", 12f),
                 TextColor = UIColor.Black,
                 TextAlignment = UITextAlignment.Left,
-				BackgroundColor = UIColor.Clear
-			};
+                BackgroundColor = UIColor.Clear
+            };
 
             ContentView.AddSubviews(new UIView[] { imageView, codeLabel, amountLabel, priceLabel, pctLabel });
 
         }
+
         public void UpdateCell(string code, string amount, string price, string volume, UIImage image)
         {
             imageView.Image = image;
@@ -60,6 +64,7 @@ namespace CryptoAccouting.UIClass
             priceLabel.Text = price;
             pctLabel.Text = volume;
         }
+
         public override void LayoutSubviews()
         {
             base.LayoutSubviews();

@@ -167,6 +167,10 @@
     <Compile Include="PositionDetailViewController.designer.cs">
       <DependentUpon>PositionDetailViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingTableViewController.cs" />
+    <Compile Include="SettingTableViewController.designer.cs">
+      <DependentUpon>SettingTableViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\btc.png" />
