@@ -11,9 +11,9 @@ namespace CryptoAccouting.UIClass
 	{
         Balance balanceViewItems;   
         NSString cellIdentifier = new NSString("BalanceCell"); // set in the Storyboard
-        BalanceViewController owner;
+        UITableViewController owner;
 
-        public BalanceTableSource(Balance myBalance, BalanceViewController owner )
+        public BalanceTableSource(Balance myBalance, UITableViewController owner )
 		{
 			balanceViewItems = myBalance;
             this.owner = owner;
@@ -50,13 +50,15 @@ namespace CryptoAccouting.UIClass
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            UIAlertController okAlertController = UIAlertController.Create("Row Selected", balanceViewItems.GetPositionByIndex(indexPath.Row).Coin.Name, UIAlertControllerStyle.Alert);
-			okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+            //UIAlertController okAlertController = UIAlertController.Create("Row Selected", balanceViewItems.GetPositionByIndex(indexPath.Row).Coin.Name, UIAlertControllerStyle.Alert);
+			//okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+            //owner.PresentViewController(okAlertController, true, null);
 
-            owner.PresentViewController(okAlertController, true, null);
+            owner.PerformSegue("PositionSegue",owner);
             tableView.DeselectRow(indexPath, true); 
 
 		}
+
 	}
 
 }

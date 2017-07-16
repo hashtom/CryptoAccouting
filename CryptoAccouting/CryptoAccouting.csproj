@@ -135,10 +135,6 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="BalanceNavigationController.cs" />
-    <Compile Include="BalanceNavigationController.designer.cs">
-      <DependentUpon>BalanceNavigationController.cs</DependentUpon>
-    </Compile>
     <Compile Include="BalanceViewController.cs" />
     <Compile Include="BalanceViewController.designer.cs">
       <DependentUpon>BalanceViewController.cs</DependentUpon>

@@ -10,21 +10,24 @@ namespace CryptoAccouting.UIClass
     public class NavigationDrawer
     {
 
-        private SFNavigationDrawer navigation;
+        SFNavigationDrawer navigation;
+        UITableViewController owner;
+
         public SfNavigationDrawer Navigation
         {
             get { return navigation; }
         }
 
-        public NavigationDrawer(UIView thisview)
+        public NavigationDrawer(UITableViewController owner)
         {
             navigation = new SFNavigationDrawer();
+            this.owner = owner;
 
-			navigation.Frame = new CGRect(0, 0, thisview.Frame.Width, thisview.Frame.Height);
+            navigation.Frame = new CGRect(0, 0, 100, 200);//Thisview.Frame.Width, Thisview.Frame.Height);
 			navigation.DrawerHeaderHeight = 100;
 			navigation.DrawerWidth = 150;
 
-            UIView contentView = new UIView(new CGRect(0, 0, thisview.Frame.Width, thisview.Frame.Height));
+            UIView contentView = new UIView(); //new CGRect(0, 0, Thisview.Frame.Width, Thisview.Frame.Height));
             //UIView contentView = new UIView(new CGRect(0, 0, 150, 160));
             navigation.ContentView = contentView;
         }
@@ -37,7 +40,7 @@ namespace CryptoAccouting.UIClass
 
 			UIView HeaderView = new UIView();
 			HeaderView.Frame = new CGRect(0, 0, navigation.DrawerWidth, 100);
-			HeaderView.BackgroundColor = UIColor.FromRGB(49, 173, 225);
+			HeaderView.BackgroundColor = UIColor.FromRGB(231, 231, 235);
 
 			UILabel appnameLabel = new UILabel();
 			appnameLabel.Frame = new CGRect(0, 70, navigation.DrawerWidth, 30);
@@ -62,8 +65,11 @@ namespace CryptoAccouting.UIClass
 			settingButton.HorizontalAlignment = UIControlContentHorizontalAlignment.Center;
 			settingButton.Layer.CornerRadius = 0;
 			settingButton.Layer.BorderWidth = 1;
-			settingButton.Layer.BorderColor = UIColor.FromRGB(0, 0, 0).CGColor;
+			settingButton.Layer.BorderColor = UIColor.FromRGB(231, 231, 235).CGColor;
 			centerview.AddSubview(settingButton);
+            settingButton.TouchUpInside += (sender, e) => {
+                owner.PerformSegue("PositionSegue", owner);
+            };
 
 			UIButton aboutButton = new UIButton(new CGRect(0, 30, navigation.DrawerWidth, 30));
 			aboutButton.SetTitle("About", UIControlState.Normal);
@@ -71,7 +77,7 @@ namespace CryptoAccouting.UIClass
 			aboutButton.HorizontalAlignment = UIControlContentHorizontalAlignment.Center;
 			aboutButton.Layer.CornerRadius = 0;
 			aboutButton.Layer.BorderWidth = 1;
-			aboutButton.Layer.BorderColor = UIColor.FromRGB(0, 0, 0).CGColor;
+			aboutButton.Layer.BorderColor = UIColor.FromRGB(231, 231, 235).CGColor;
 			centerview.AddSubview(aboutButton);
 
 			drawerContentView.AddSubview(centerview);
