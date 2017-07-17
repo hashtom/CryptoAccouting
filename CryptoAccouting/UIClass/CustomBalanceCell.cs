@@ -14,8 +14,8 @@ namespace CryptoAccouting.UIClass
         //public CustomBalanceCell(NSString cellId) : base(UITableViewCellStyle.Default, cellId) // Old way
         public CustomBalanceCell(IntPtr p) : base(p)
         {
-            //SelectionStyle = UITableViewCellSelectionStyle.Gray;
-            //ContentView.BackgroundColor = UIColor.FromRGB(218, 255, 127);
+            SelectionStyle = UITableViewCellSelectionStyle.Gray;
+            ContentView.BackgroundColor = UIColor.FromRGB(168, 216, 185);
             //this.UserInteractionEnabled = true; // test to Delete
 
             imageView = new UIImageView();

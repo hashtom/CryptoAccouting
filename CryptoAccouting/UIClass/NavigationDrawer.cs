@@ -11,24 +11,27 @@ namespace CryptoAccouting.UIClass
     {
 
         SFNavigationDrawer navigation;
-        UITableViewController owner;
+        UITableViewController posViewC;
+        UIViewController transViewC, settingViewC;
 
         public SfNavigationDrawer Navigation
         {
             get { return navigation; }
         }
 
-        public NavigationDrawer(UITableViewController owner)
+        public NavigationDrawer(UITableViewController PositionViewC, UIViewController TransactionViewC, UIViewController SettingViewC)
         {
             navigation = new SFNavigationDrawer();
-            this.owner = owner;
+            this.posViewC = PositionViewC;
+            this.transViewC = TransactionViewC;
+            this.settingViewC = SettingViewC;
 
-            navigation.Frame = new CGRect(0, 0, 100, 200);//Thisview.Frame.Width, Thisview.Frame.Height);
+            navigation.Frame = new CGRect(0, 0, 200, 400);//Thisview.Frame.Width, Thisview.Frame.Height);
 			navigation.DrawerHeaderHeight = 100;
-			navigation.DrawerWidth = 150;
+            navigation.DrawerWidth = 150;
 
-            UIView contentView = new UIView(); //new CGRect(0, 0, Thisview.Frame.Width, Thisview.Frame.Height));
-            //UIView contentView = new UIView(new CGRect(0, 0, 150, 160));
+            //UIView contentView = new UIView(); //new CGRect(0, 0, Thisview.Frame.Width, Thisview.Frame.Height));
+            UIView contentView = new UIView(new CGRect(0, 0, navigation.DrawerWidth, 300));
             navigation.ContentView = contentView;
         }
 
@@ -36,54 +39,79 @@ namespace CryptoAccouting.UIClass
 
 
 			//DrawerView
-			UIView headerView = new UIView(new CGRect(0, 0, 70, 100));
+			//UIView HeaderView = new UIView(new CGRect(0, 0, 70, 100));
 
-			UIView HeaderView = new UIView();
-			HeaderView.Frame = new CGRect(0, 0, navigation.DrawerWidth, 100);
-			HeaderView.BackgroundColor = UIColor.FromRGB(231, 231, 235);
+			UIView innerHeaderView = new UIView();
+			innerHeaderView.Frame = new CGRect(0, 0, navigation.DrawerWidth, 100);
+            innerHeaderView.BackgroundColor = UIColor.White;
 
 			UILabel appnameLabel = new UILabel();
 			appnameLabel.Frame = new CGRect(0, 70, navigation.DrawerWidth, 30);
 			appnameLabel.Text = (NSString)"暗号通貨手帳";
-			appnameLabel.TextColor = UIColor.White;
+            appnameLabel.TextColor = UIColor.Black;
 			appnameLabel.TextAlignment = UITextAlignment.Center;
-			HeaderView.AddSubview(appnameLabel);
+			innerHeaderView.AddSubview(appnameLabel);
 			UIImageView userImg = new UIImageView();
 			userImg.Frame = new CGRect((navigation.DrawerWidth / 2) - 25, 15, 50, 50);
 			userImg.Image = new UIImage("Images/btc.png");
-			HeaderView.AddSubview(userImg);
-			headerView.AddSubview(HeaderView);
+			innerHeaderView.AddSubview(userImg);
+			//HeaderView.AddSubview(innerHeaderView);
 
-			UIView drawerContentView = new UIView(new CGRect(0, 0, navigation.DrawerWidth, 30));
-
+			UIView drawerContentView = new UIView(new CGRect(0, 0, navigation.DrawerWidth, 200));
 			UIView centerview = new UIView();
-			centerview.Frame = new CGRect(0, 0, navigation.DrawerWidth, 30);
+            centerview.Frame = new CGRect(0, 0, drawerContentView.Frame.Width, drawerContentView.Frame.Height);
 
-			UIButton settingButton = new UIButton(new CGRect(0, 0, navigation.DrawerWidth, 30));
-			settingButton.SetTitle("Setting", UIControlState.Normal);
+			UIButton TxButton = new UIButton(new CGRect(0, 0, navigation.DrawerWidth, 30));
+			TxButton.SetTitle("取引履歴", UIControlState.Normal);
+			TxButton.SetTitleColor(UIColor.Black, UIControlState.Normal);
+			TxButton.HorizontalAlignment = UIControlContentHorizontalAlignment.Center;
+			TxButton.Layer.CornerRadius = 0;
+			TxButton.Layer.BorderWidth = 1;
+			TxButton.Layer.BorderColor = UIColor.FromRGB(231, 231, 235).CGColor;
+            TxButton.Layer.BackgroundColor = UIColor.White.CGColor;
+			TxButton.TouchUpInside += (sender, e) =>
+			{
+                posViewC.NavigationController.PushViewController(transViewC, true);
+                //posViewC.NavigationController.PushViewController(settingViewC, true);
+				navigation.ToggleDrawer();
+			};
+
+			UIButton settingButton = new UIButton(new CGRect(0, 30, navigation.DrawerWidth, 30));
+			settingButton.SetTitle("設定", UIControlState.Normal);
 			settingButton.SetTitleColor(UIColor.Black, UIControlState.Normal);
 			settingButton.HorizontalAlignment = UIControlContentHorizontalAlignment.Center;
 			settingButton.Layer.CornerRadius = 0;
 			settingButton.Layer.BorderWidth = 1;
 			settingButton.Layer.BorderColor = UIColor.FromRGB(231, 231, 235).CGColor;
-			centerview.AddSubview(settingButton);
-            settingButton.TouchUpInside += (sender, e) => {
-                owner.PerformSegue("PositionSegue", owner);
+            settingButton.Layer.BackgroundColor = UIColor.White.CGColor;
+            settingButton.TouchUpInside += (sender, e) =>
+            {
+                posViewC.NavigationController.PushViewController(settingViewC, true);
+                navigation.ToggleDrawer();
             };
 
-			UIButton aboutButton = new UIButton(new CGRect(0, 30, navigation.DrawerWidth, 30));
+			UIButton aboutButton = new UIButton(new CGRect(0, 60, navigation.DrawerWidth, 30));
 			aboutButton.SetTitle("About", UIControlState.Normal);
 			aboutButton.SetTitleColor(UIColor.Black, UIControlState.Normal);
 			aboutButton.HorizontalAlignment = UIControlContentHorizontalAlignment.Center;
 			aboutButton.Layer.CornerRadius = 0;
 			aboutButton.Layer.BorderWidth = 1;
 			aboutButton.Layer.BorderColor = UIColor.FromRGB(231, 231, 235).CGColor;
-			centerview.AddSubview(aboutButton);
+            aboutButton.Layer.BackgroundColor = UIColor.White.CGColor;
+            aboutButton.TouchUpInside += (sender, e) =>
+            {
+                posViewC.NavigationController.PushViewController(settingViewC, true);
+                navigation.ToggleDrawer();
+            };
+			
 
+            centerview.AddSubview(TxButton);
+            centerview.AddSubview(settingButton);
+            centerview.AddSubview(aboutButton);
 			drawerContentView.AddSubview(centerview);
 
 			navigation.DrawerContentView = drawerContentView;
-			navigation.DrawerHeaderView = headerView;
+            navigation.DrawerHeaderView = innerHeaderView; //HeaderView;
 			thisview.AddSubview(navigation);
         }
 

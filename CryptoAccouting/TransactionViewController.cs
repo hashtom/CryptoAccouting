@@ -19,6 +19,7 @@ namespace CryptoAccouting
    			//sfGrid.AutoGeneratingColumn += HandleAutoGeneratingColumn;
             sfGrid.AllowSorting = true;
             sfGrid.AutoGenerateColumns = false;
+            sfGrid.BackgroundColor = UIColor.FromRGB(236, 184, 138);
 			//sfGrid.GroupColumnDescriptions.Add(new GroupColumnDescription() { ColumnName = "txid" });
 
 			GridTextColumn txIdColumn = new GridTextColumn();
@@ -110,9 +111,5 @@ namespace CryptoAccouting
         //	}
         //}
 
-        partial void MenuBar_Activated(UIBarButtonItem sender)
-        {
-            menu.Navigation.ToggleDrawer();
-        }
     }
 }
