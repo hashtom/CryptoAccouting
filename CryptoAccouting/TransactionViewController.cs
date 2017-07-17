@@ -67,7 +67,7 @@ namespace CryptoAccouting
 			menu = ApplicationCore.Navigation;
 
             var exg = new ExchangeAPI();
-            var myTxs = await exg.FetchTransactionAsync((EnuExchangeType.Zaif), true, true);
+            var myTxs = await exg.FetchTransactionAsync((EnuExchangeType.Zaif), true, false);
 
             //Show Summary
             myTxs.ReEvaluate();

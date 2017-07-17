@@ -11,14 +11,15 @@ namespace CryptoAccouting.CoreClass
         public double Amount { get; set; }
         public double BookPrice { get; set; }
         //public Price PriceData { get; private set; }
-        public Transaction Tx { get; private set; }
-        public DateTime UpdateTime { get; private set; }
+        //public Transaction Tx { get; private set; } //XML Serialize error
+        //public DateTime UpdateTime { get; private set; }
 
 		public Position(Instrument coin, string positionId)
         {
             Coin = coin;
             Id = positionId;
         }
+        public Position() { }
 
         //public double ProfitLoss(){
         //    return MarketValuePrevClose() - BookValue();
@@ -41,11 +42,6 @@ namespace CryptoAccouting.CoreClass
 		{
 			return Amount * BookPrice;
 		}
-
-  //      public double MarketValuePrevClose()
-		//{
-		//	return Amount * Amount * PriceData.PrevClose;
-		//}
 
 	}
 }

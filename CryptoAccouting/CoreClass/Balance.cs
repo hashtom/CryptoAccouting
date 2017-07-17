@@ -36,6 +36,14 @@ namespace CryptoAccouting.CoreClass
             return positions[indexNumber];
         }
 
+        public List<Position> GetPositionList(){
+            return positions;
+        }
+   //     public void Add(Position position){
+			//if (positions.Any(x => x.Id == position.Id)) DetachPosition(position);
+			//positions.Add(position);
+        //}
+
         public int Count()
 		{
 			return positions.Count;

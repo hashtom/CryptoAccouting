@@ -2,7 +2,7 @@
             myBalance = ApplicationCore.GetTestBalance();
         }           public override void ViewDidLoad()         {             base.ViewDidLoad();             TableView.Source = new BalanceTableSource(myBalance, this);             TableView.RegisterClassForCellReuse(typeof(CustomBalanceCell), MyCellId);             TransactionViewController transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;
             SettingTableViewController settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, settingViewC);
-            NavigationItem.RightBarButtonItem = EditButtonItem; //test
+            NavigationItem.RightBarButtonItem = EditButtonItem; //test             ApplicationCore.SaveBalanceXML(myBalance, "mybalance.xml");
         }          public async override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
