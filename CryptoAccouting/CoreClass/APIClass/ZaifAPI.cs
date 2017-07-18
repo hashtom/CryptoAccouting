@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 
-namespace CryptoAccouting.CoreClass
+namespace CryptoAccouting.CoreClass.APIClass
 {
     public static class ZaifAPI
     {

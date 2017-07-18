@@ -19,6 +19,8 @@ namespace CryptoAccouting.CoreClass
         public Price(Instrument coin)
         {
             Coin = coin;
+            LatestPriceBTC = 0;
+            LatestPrice = 0;
         }
 
         //public double DayReturn(){

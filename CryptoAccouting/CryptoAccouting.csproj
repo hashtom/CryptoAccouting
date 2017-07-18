@@ -121,6 +121,7 @@
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="TestData\" />
+    <Folder Include="CoreClass\APIClass\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -145,20 +146,16 @@
     <Compile Include="UIClass\BalanceTableSource.cs" />
     <Compile Include="UIClass\CustomBalanceCell.cs" />
     <Compile Include="CoreClass\Exchange.cs" />
-    <Compile Include="CoreClass\ApplicationCore.cs" />
-    <Compile Include="CoreClass\ExchangeAPI.cs" />
     <Compile Include="CoreClass\Balance.cs" />
     <Compile Include="CoreClass\Price.cs" />
     <Compile Include="UIClass\AppSetting.cs" />
     <Compile Include="CoreClass\Transaction.cs" />
-    <Compile Include="CoreClass\ZaifAPI.cs" />
     <Compile Include="CoreClass\Transactions.cs" />
     <Compile Include="TransactionViewController.cs" />
     <Compile Include="TransactionViewController.designer.cs">
       <DependentUpon>TransactionViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="CoreClass\ProfitLoss.cs" />
-    <Compile Include="CoreClass\MarketDataAPI.cs" />
     <Compile Include="UIClass\NavigationDrawer.cs" />
     <Compile Include="PositionDetailViewController.cs" />
     <Compile Include="PositionDetailViewController.designer.cs">
@@ -180,6 +177,11 @@
     <Compile Include="PLViewController.designer.cs">
       <DependentUpon>PLViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="CoreClass\APIClass\MarketDataAPI.cs" />
+    <Compile Include="CoreClass\APIClass\StorageAPI.cs" />
+    <Compile Include="CoreClass\APIClass\ZaifAPI.cs" />
+    <Compile Include="CoreClass\ApplicationCore.cs" />
+    <Compile Include="CoreClass\APIClass\ExchangeAPI.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\btc.png" />

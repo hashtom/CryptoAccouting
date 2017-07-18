@@ -6,7 +6,7 @@ using System.Xml.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
-namespace CryptoAccouting.CoreClass
+namespace CryptoAccouting.CoreClass.APIClass
 {
     public class ExchangeAPI
     {
@@ -95,7 +95,7 @@ namespace CryptoAccouting.CoreClass
 
                     if (ReadFromFile)
                     {
-                        rawjson = ApplicationCore.LoadFromJsonFile("zaifTransaction.json");
+                        rawjson = StorageAPI.LoadFromJsonFile("zaifTransaction.json");
                     }
                     else
                     {
@@ -137,7 +137,7 @@ namespace CryptoAccouting.CoreClass
                     }
 
                     // Save Json file
-                    ApplicationCore.SaveJsonFile(rawjson, "zaifTransaction.json");
+                    StorageAPI.SaveJsonFile(rawjson, "zaifTransaction.json");
 
                     break;
 

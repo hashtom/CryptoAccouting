@@ -7,16 +7,17 @@ namespace CryptoAccouting.CoreClass
     {
         public string Id { get; } //CoinMarketCap ID
         public string Symbol { get; }
-        public string Name { get; set; }
+        public string Name { get; }
         public InstrumentType Type { get; set; }
-        public DateTime ListedDate { get; set; }
+        //public DateTime ListedDate { get; set; }
 		public Price MarketPrice { get; set; }
         public string LogoFileName { get; set; }
 
-        public Instrument(string id, string symbol)
+        public Instrument(string id, string symbol, string name)
         {
             Id = id;
             Symbol = symbol;
+            Name = name;
         }
     }
 
