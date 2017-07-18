@@ -16,7 +16,6 @@ namespace CryptoAccouting.UIClass
         {
             SelectionStyle = UITableViewCellSelectionStyle.Gray;
             ContentView.BackgroundColor = UIColor.FromRGB(168, 216, 185);
-            //this.UserInteractionEnabled = true; // test to Delete
 
             imageView = new UIImageView();
 

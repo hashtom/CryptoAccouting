@@ -26,6 +26,10 @@ namespace CryptoAccouting
 			txIdColumn.MappingName = "TxId";
 			txIdColumn.HeaderText = "tx";
 
+			GridTextColumn dateColumn = new GridTextColumn();
+			dateColumn.MappingName = "TradeDate";
+			dateColumn.HeaderText = "TDate";
+
 			//GridTextColumn coinColumn = new GridTextColumn();
 			//coinColumn.MappingName = "Symbol";
 			//coinColumn.HeaderText = "Coin";
@@ -42,13 +46,9 @@ namespace CryptoAccouting
 			priceColumn.MappingName = "TradePrice";
 			priceColumn.HeaderText = "Price";
 
-			//GridTextColumn valueColumn = new GridTextColumn();
-			//valueColumn.MappingName = "TradeValue";
-            //valueColumn.HeaderText = "Value";
-
-			GridTextColumn dateColumn = new GridTextColumn();
-			dateColumn.MappingName = "TradeDate";
-            dateColumn.HeaderText = "TDate";
+			GridTextColumn valueColumn = new GridTextColumn();
+			valueColumn.MappingName = "TradeValue";
+            valueColumn.HeaderText = "Value";
 
 
 			sfGrid.Columns.Add(txIdColumn);
@@ -57,17 +57,18 @@ namespace CryptoAccouting
             sfGrid.Columns.Add(buysellColumn);
 			sfGrid.Columns.Add(amountColumn);
 			sfGrid.Columns.Add(priceColumn);
-            //sfGrid.Columns.Add(valueColumn);
+            sfGrid.Columns.Add(valueColumn);
 
 		}
         
         public async override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
+            NavigationItem.RightBarButtonItem = EditButtonItem;
 			menu = ApplicationCore.Navigation;
 
             var exg = new ExchangeAPI();
-            var myTxs = await exg.FetchTransactionAsync((EnuExchangeType.Zaif), true, false);
+            var myTxs = await exg.FetchTransactionAsync((EnuExchangeType.Zaif), true, true);
 
             //Show Summary
             myTxs.ReEvaluate();

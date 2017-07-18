@@ -16,10 +16,19 @@ namespace CryptoAccouting
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UITableViewCell rowBaseCurrency { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITableView SettingTableView { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
+            if (rowBaseCurrency != null) {
+                rowBaseCurrency.Dispose ();
+                rowBaseCurrency = null;
+            }
+
             if (SettingTableView != null) {
                 SettingTableView.Dispose ();
                 SettingTableView = null;

@@ -168,12 +168,27 @@
     <Compile Include="SettingTableViewController.designer.cs">
       <DependentUpon>SettingTableViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingDetailController.cs" />
+    <Compile Include="SettingDetailController.designer.cs">
+      <DependentUpon>SettingDetailController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PerfomViewController.cs" />
+    <Compile Include="PerfomViewController.designer.cs">
+      <DependentUpon>PerfomViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PLViewController.cs" />
+    <Compile Include="PLViewController.designer.cs">
+      <DependentUpon>PLViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\btc.png" />
     <BundleResource Include="Images\rep.png" />
     <BundleResource Include="Images\eth.png" />
     <BundleResource Include="TestData\apikey.xml" />
+    <BundleResource Include="Images\jpy.png" />
+    <BundleResource Include="Images\exchange.png" />
+    <BundleResource Include="Images\key.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
