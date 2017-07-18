@@ -133,6 +133,7 @@
     <None Include="Entitlements.plist" />
     <None Include="packages.config" />
     <None Include="TestData\BalanceData.xml" />
+    <None Include="TestData\instrumentsData.xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
