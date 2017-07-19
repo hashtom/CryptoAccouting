@@ -8,12 +8,12 @@ using Newtonsoft.Json.Linq;
 
 namespace CryptoAccouting.CoreClass.APIClass
 {
-    public class ExchangeAPI
+    public static class ExchangeAPI
     {
         //private HttpClient http; // 削除できる？？
-        private string apikey, apisecret;
+        private static string apikey, apisecret;
 
-        public async Task<Price> FetchBTCPriceAsyncTest(EnuExchangeType exType){
+        public static async Task<Price> FetchBTCPriceAsyncTest(EnuExchangeType exType){
 
             var coin = ApplicationCore.GetInstrument("BTC");
             var p = new Price(coin);
@@ -44,7 +44,8 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
 
         }
-        internal void FetchPosition(EnuExchangeType exType){
+
+        internal static void FetchPosition(EnuExchangeType exType){
 
 
         }
@@ -82,10 +83,10 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         //}
 
-        internal async Task<Transactions> FetchTransactionAsync(EnuExchangeType exType, bool isAggregateDaily = true, bool ReadFromFile = false)
+        internal static async Task<TradeList> FetchTransactionAsync(EnuExchangeType exType, bool isAggregateDaily = true, bool ReadFromFile = false)
         {
 
-            Transactions txs = new Transactions();
+            TradeList txs = new TradeList();
             string rawjson;
 
             switch (exType)
@@ -150,7 +151,7 @@ namespace CryptoAccouting.CoreClass.APIClass
         }
 
 
-        private void GetAPIKey(EnuExchangeType exType)
+        internal static void GetAPIKey(EnuExchangeType exType)
         {
 
             switch (exType)

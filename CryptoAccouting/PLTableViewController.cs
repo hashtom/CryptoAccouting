@@ -19,6 +19,21 @@ namespace CryptoAccouting
 
         }
 
+
+        partial void ButtonPickExchange_TouchUpInside(UIButton sender)
+        {
+
+        }
+
+        partial void ButtonFiatCurrency_TouchUpInside(UIButton sender)
+        {
+            
+        }
+
+        partial void ButtonCryptCurrency_TouchUpInside(UIButton sender)
+        {
+           
+        }
     }
 
 }

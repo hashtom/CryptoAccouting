@@ -21,7 +21,8 @@
         public static List<Instrument> GetInstrumentAll()
 		{
 			return instruments;
-		} 
+		}          public static async Task<Balance> GetBalance(EnuExchangeType extype, bool isAggregatedDaily, bool readfromFile)
+        {              var myBal = await ExchangeAPI.FetchTransactionAsync(extype, true, readfromFile);               return myBal;         } 
         public static void AttachMyBalance(Balance bal)         {
             myBalance = bal;         }
 

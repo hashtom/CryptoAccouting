@@ -151,7 +151,7 @@
     <Compile Include="CoreClass\Price.cs" />
     <Compile Include="UIClass\AppSetting.cs" />
     <Compile Include="CoreClass\Transaction.cs" />
-    <Compile Include="CoreClass\Transactions.cs" />
+    <Compile Include="CoreClass\TradeList.cs" />
     <Compile Include="TransactionViewController.cs" />
     <Compile Include="TransactionViewController.designer.cs">
       <DependentUpon>TransactionViewController.cs</DependentUpon>

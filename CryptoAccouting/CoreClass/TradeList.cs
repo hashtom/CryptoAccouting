@@ -7,7 +7,7 @@ using CryptoAccouting.UIClass;
 
 namespace CryptoAccouting.CoreClass
 {
-    public class Transactions : IEnumerable<Transaction>
+    public class TradeList : IEnumerable<Transaction>
     {
 		public double TotalAmountBougt { get; set; }
 		public double TotalAmountSold { get; set; }
@@ -24,7 +24,7 @@ namespace CryptoAccouting.CoreClass
 			set { this.txs = value; }
 		}
 
-        public Transactions()
+        public TradeList()
         {
             txs = new List<Transaction>();
             RealizedPLHistory = new List<CoreClass.ProfitLoss>();
