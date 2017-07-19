@@ -9,6 +9,7 @@ namespace CryptoAccouting.CoreClass
 {
     public class TradeList : IEnumerable<Transaction>
     {
+        public string TradeYear { get; set; }
 		public double TotalQtyBuy { get; set; }
 		public double TotalQtySell { get; set; }
         public double BookPrice { get; set; } 

@@ -791,9 +791,15 @@
                                                 <constraint id="19758" firstItem="18330" firstAttribute="centerX" secondItem="19737" secondAttribute="centerX" constant="23">
                                                     <variation key="heightClass=regular-widthClass=compact" constant="1"/>
                                                 </constraint>
-                                                <constraint id="19779" firstItem="19736" firstAttribute="top" secondItem="18330" secondAttribute="top" constant="10"/>
-                                                <constraint id="19780" firstItem="19737" firstAttribute="top" secondItem="18330" secondAttribute="top" constant="10"/>
-                                                <constraint id="19781" firstItem="19750" firstAttribute="top" secondItem="18330" secondAttribute="top" constant="10"/>
+                                                <constraint id="19779" firstItem="19736" firstAttribute="top" secondItem="18330" secondAttribute="top" constant="10">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="15"/>
+                                                </constraint>
+                                                <constraint id="19780" firstItem="19737" firstAttribute="top" secondItem="18330" secondAttribute="top" constant="10">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="15"/>
+                                                </constraint>
+                                                <constraint id="19781" firstItem="19750" firstAttribute="top" secondItem="18330" secondAttribute="top" constant="10">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="15"/>
+                                                </constraint>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -844,7 +850,6 @@
                                                     <exclude reference="19757"/>
                                                     <exclude reference="19782"/>
                                                     <exclude reference="19783"/>
-                                                    <exclude reference="19784"/>
                                                     <exclude reference="19785"/>
                                                 </mask>
                                             </variation>
@@ -861,7 +866,6 @@
                                                     <include reference="19757"/>
                                                     <include reference="19782"/>
                                                     <include reference="19783"/>
-                                                    <include reference="19784"/>
                                                     <include reference="19785"/>
                                                 </mask>
                                             </variation>
@@ -873,10 +877,15 @@
                                                 <constraint id="19757" firstItem="18332" firstAttribute="trailing" secondItem="19756" secondAttribute="trailing" constant="22">
                                                     <variation key="heightClass=regular-widthClass=compact" constant="25"/>
                                                 </constraint>
-                                                <constraint id="19782" firstItem="19756" firstAttribute="top" secondItem="18332" secondAttribute="top" constant="10"/>
-                                                <constraint id="19783" firstItem="19754" firstAttribute="top" secondItem="18332" secondAttribute="top" constant="10"/>
-                                                <constraint id="19784" firstItem="19752" firstAttribute="centerY" secondItem="18332" secondAttribute="centerY"/>
-                                                <constraint id="19785" firstItem="19752" firstAttribute="top" secondItem="18332" secondAttribute="top" constant="10"/>
+                                                <constraint id="19782" firstItem="19756" firstAttribute="top" secondItem="18332" secondAttribute="top" constant="10">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="15"/>
+                                                </constraint>
+                                                <constraint id="19783" firstItem="19754" firstAttribute="top" secondItem="18332" secondAttribute="top" constant="10">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="15"/>
+                                                </constraint>
+                                                <constraint id="19785" firstItem="19752" firstAttribute="top" secondItem="18332" secondAttribute="top" constant="10">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="15"/>
+                                                </constraint>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -1046,7 +1055,9 @@
                                                 <constraint id="19717" firstItem="18263" firstAttribute="trailing" secondItem="18287" secondAttribute="trailing" constant="60">
                                                     <variation key="heightClass=regular-widthClass=compact" constant="20"/>
                                                 </constraint>
-                                                <constraint id="19786" firstItem="18287" firstAttribute="top" secondItem="18263" secondAttribute="top" constant="12"/>
+                                                <constraint id="19786" firstItem="18287" firstAttribute="top" secondItem="18263" secondAttribute="top" constant="12">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="15"/>
+                                                </constraint>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -1098,7 +1109,9 @@
                                                 <constraint id="19718" firstItem="18285" firstAttribute="trailing" secondItem="18283" secondAttribute="trailing" constant="35">
                                                     <variation key="heightClass=regular-widthClass=compact" constant="20"/>
                                                 </constraint>
-                                                <constraint id="19787" firstItem="18283" firstAttribute="top" secondItem="18285" secondAttribute="top" constant="12"/>
+                                                <constraint id="19787" firstItem="18283" firstAttribute="top" secondItem="18285" secondAttribute="top" constant="12">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="15"/>
+                                                </constraint>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -1150,7 +1163,9 @@
                                                 <constraint id="19719" firstItem="18296" firstAttribute="trailing" secondItem="18291" secondAttribute="trailing" constant="16">
                                                     <variation key="heightClass=regular-widthClass=compact" constant="20"/>
                                                 </constraint>
-                                                <constraint id="19788" firstItem="18291" firstAttribute="top" secondItem="18296" secondAttribute="top" constant="12"/>
+                                                <constraint id="19788" firstItem="18291" firstAttribute="top" secondItem="18296" secondAttribute="top" constant="12">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="15"/>
+                                                </constraint>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
