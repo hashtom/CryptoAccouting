@@ -603,7 +603,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="取引数" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="18333" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="取引日数" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="18333" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                                     <rect key="frame" x="15" y="23" width="51" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -617,10 +617,11 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="18335" translatesAutoresizingMaskIntoConstraints="NO" text="買">
-                                                    <rect key="frame" x="162" y="0.0" width="29" height="15"/>
+                                                    <rect key="frame" x="129" y="0.0" width="62" height="15"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="合計" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="19623" translatesAutoresizingMaskIntoConstraints="NO">
                                                     <rect key="frame" x="259" y="0.0" width="29" height="17"/>
@@ -635,10 +636,11 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="19691" translatesAutoresizingMaskIntoConstraints="NO">
-                                                    <rect key="frame" x="156" y="23" width="40" height="15"/>
+                                                    <rect key="frame" x="145" y="23" width="73" height="15"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="19692" translatesAutoresizingMaskIntoConstraints="NO">
                                                     <rect key="frame" x="218" y="23" width="77" height="15"/>
@@ -662,8 +664,11 @@
                                                     <exclude reference="19690"/>
                                                     <exclude reference="19706"/>
                                                     <exclude reference="19710"/>
-                                                    <exclude reference="19723"/>
-                                                    <exclude reference="19724"/>
+                                                    <exclude reference="19742"/>
+                                                    <exclude reference="19761"/>
+                                                    <exclude reference="19770"/>
+                                                    <exclude reference="19771"/>
+                                                    <exclude reference="19772"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact">
@@ -681,8 +686,11 @@
                                                     <include reference="19690"/>
                                                     <include reference="19706"/>
                                                     <include reference="19710"/>
-                                                    <include reference="19723"/>
-                                                    <include reference="19724"/>
+                                                    <include reference="19742"/>
+                                                    <include reference="19761"/>
+                                                    <include reference="19770"/>
+                                                    <include reference="19771"/>
+                                                    <include reference="19772"/>
                                                 </mask>
                                             </variation>
                                             <constraints>
@@ -696,8 +704,13 @@
                                                     <variation key="heightClass=regular-widthClass=compact" constant="90"/>
                                                 </constraint>
                                                 <constraint id="19710" firstItem="18328" firstAttribute="trailing" secondItem="19692" secondAttribute="trailing" constant="25"/>
-                                                <constraint id="19723" firstItem="18328" firstAttribute="centerX" secondItem="18335" secondAttribute="centerX" constant="11"/>
-                                                <constraint id="19724" firstItem="18328" firstAttribute="centerX" secondItem="19691" secondAttribute="centerX" constant="11"/>
+                                                <constraint id="19742" firstItem="18335" firstAttribute="centerX" secondItem="18328" secondAttribute="centerX"/>
+                                                <constraint id="19761" firstItem="18328" firstAttribute="centerX" secondItem="19691" secondAttribute="centerX" constant="6">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="1"/>
+                                                </constraint>
+                                                <constraint id="19770" firstItem="19692" firstAttribute="top" secondItem="19623" secondAttribute="centerY" constant="15"/>
+                                                <constraint id="19771" firstItem="19691" firstAttribute="top" secondItem="18335" secondAttribute="centerY" constant="15"/>
+                                                <constraint id="19772" firstItem="19650" firstAttribute="top" secondItem="18334" secondAttribute="centerY" constant="15"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -709,7 +722,27 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="19628" translatesAutoresizingMaskIntoConstraints="NO" text="数量" fixedFrame="YES">
-                                                    <rect key="frame" x="16" y="11" width="42" height="21"/>
+                                                    <rect key="frame" x="16" y="10" width="42" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="19736" translatesAutoresizingMaskIntoConstraints="NO">
+                                                    <rect key="frame" x="90" y="10" width="8" height="15"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="19737" translatesAutoresizingMaskIntoConstraints="NO">
+                                                    <rect key="frame" x="106" y="10" width="62" height="15"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="19750" translatesAutoresizingMaskIntoConstraints="NO">
+                                                    <rect key="frame" x="262" y="10" width="42" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
@@ -719,13 +752,49 @@
                                             <variation key="default">
                                                 <mask key="subviews">
                                                     <exclude reference="19628"/>
+                                                    <exclude reference="19736"/>
+                                                    <exclude reference="19737"/>
+                                                    <exclude reference="19750"/>
+                                                </mask>
+                                                <mask key="constraints">
+                                                    <exclude reference="19738"/>
+                                                    <exclude reference="19751"/>
+                                                    <exclude reference="19758"/>
+                                                    <exclude reference="19779"/>
+                                                    <exclude reference="19780"/>
+                                                    <exclude reference="19781"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact">
                                                 <mask key="subviews">
                                                     <include reference="19628"/>
+                                                    <include reference="19736"/>
+                                                    <include reference="19737"/>
+                                                    <include reference="19750"/>
+                                                </mask>
+                                                <mask key="constraints">
+                                                    <include reference="19738"/>
+                                                    <include reference="19751"/>
+                                                    <include reference="19758"/>
+                                                    <include reference="19779"/>
+                                                    <include reference="19780"/>
+                                                    <include reference="19781"/>
                                                 </mask>
                                             </variation>
+                                            <constraints>
+                                                <constraint id="19738" firstItem="19736" firstAttribute="leading" secondItem="18330" secondAttribute="leading" constant="73">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="90"/>
+                                                </constraint>
+                                                <constraint id="19751" firstItem="18330" firstAttribute="trailing" secondItem="19750" secondAttribute="trailing" constant="16">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="25"/>
+                                                </constraint>
+                                                <constraint id="19758" firstItem="18330" firstAttribute="centerX" secondItem="19737" secondAttribute="centerX" constant="23">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="1"/>
+                                                </constraint>
+                                                <constraint id="19779" firstItem="19736" firstAttribute="top" secondItem="18330" secondAttribute="top" constant="10"/>
+                                                <constraint id="19780" firstItem="19737" firstAttribute="top" secondItem="18330" secondAttribute="top" constant="10"/>
+                                                <constraint id="19781" firstItem="19750" firstAttribute="top" secondItem="18330" secondAttribute="top" constant="10"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="18331" rowHeight="35">
@@ -736,8 +805,27 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="金額" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="19629" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                                    <rect key="frame" x="16" y="11" width="72" height="21"/>
+                                                    <rect key="frame" x="16" y="10" width="72" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="19752" translatesAutoresizingMaskIntoConstraints="NO">
+                                                    <rect key="frame" x="90" y="10" width="8" height="15"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="19754" translatesAutoresizingMaskIntoConstraints="NO">
+                                                    <rect key="frame" x="139" y="10" width="42" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="19756" translatesAutoresizingMaskIntoConstraints="NO">
+                                                    <rect key="frame" x="287" y="10" width="8" height="15"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -746,13 +834,50 @@
                                             <variation key="default">
                                                 <mask key="subviews">
                                                     <exclude reference="19629"/>
+                                                    <exclude reference="19752"/>
+                                                    <exclude reference="19754"/>
+                                                    <exclude reference="19756"/>
+                                                </mask>
+                                                <mask key="constraints">
+                                                    <exclude reference="19753"/>
+                                                    <exclude reference="19755"/>
+                                                    <exclude reference="19757"/>
+                                                    <exclude reference="19782"/>
+                                                    <exclude reference="19783"/>
+                                                    <exclude reference="19784"/>
+                                                    <exclude reference="19785"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact">
                                                 <mask key="subviews">
                                                     <include reference="19629"/>
+                                                    <include reference="19752"/>
+                                                    <include reference="19754"/>
+                                                    <include reference="19756"/>
+                                                </mask>
+                                                <mask key="constraints">
+                                                    <include reference="19753"/>
+                                                    <include reference="19755"/>
+                                                    <include reference="19757"/>
+                                                    <include reference="19782"/>
+                                                    <include reference="19783"/>
+                                                    <include reference="19784"/>
+                                                    <include reference="19785"/>
                                                 </mask>
                                             </variation>
+                                            <constraints>
+                                                <constraint id="19753" firstItem="19752" firstAttribute="leading" secondItem="18332" secondAttribute="leading" constant="71">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="90"/>
+                                                </constraint>
+                                                <constraint id="19755" firstItem="19754" firstAttribute="centerX" secondItem="18332" secondAttribute="centerX"/>
+                                                <constraint id="19757" firstItem="18332" firstAttribute="trailing" secondItem="19756" secondAttribute="trailing" constant="22">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="25"/>
+                                                </constraint>
+                                                <constraint id="19782" firstItem="19756" firstAttribute="top" secondItem="18332" secondAttribute="top" constant="10"/>
+                                                <constraint id="19783" firstItem="19754" firstAttribute="top" secondItem="18332" secondAttribute="top" constant="10"/>
+                                                <constraint id="19784" firstItem="19752" firstAttribute="centerY" secondItem="18332" secondAttribute="centerY"/>
+                                                <constraint id="19785" firstItem="19752" firstAttribute="top" secondItem="18332" secondAttribute="top" constant="10"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="19624" rowHeight="35">
@@ -838,6 +963,8 @@
                                                     <exclude reference="19716"/>
                                                     <exclude reference="19720"/>
                                                     <exclude reference="19721"/>
+                                                    <exclude reference="19775"/>
+                                                    <exclude reference="19776"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact">
@@ -853,6 +980,8 @@
                                                     <include reference="19716"/>
                                                     <include reference="19720"/>
                                                     <include reference="19721"/>
+                                                    <include reference="19775"/>
+                                                    <include reference="19776"/>
                                                 </mask>
                                             </variation>
                                             <constraints>
@@ -864,6 +993,8 @@
                                                 </constraint>
                                                 <constraint id="19720" firstItem="18281" firstAttribute="leading" secondItem="18280" secondAttribute="trailing" constant="64"/>
                                                 <constraint id="19721" firstItem="18279" firstAttribute="centerX" secondItem="18278" secondAttribute="trailing" constant="150"/>
+                                                <constraint id="19775" firstItem="18278" firstAttribute="top" secondItem="18280" secondAttribute="centerY" constant="17"/>
+                                                <constraint id="19776" firstItem="18279" firstAttribute="top" secondItem="18281" secondAttribute="centerY" constant="16"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -898,6 +1029,7 @@
                                                 </mask>
                                                 <mask key="constraints">
                                                     <exclude reference="19717"/>
+                                                    <exclude reference="19786"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact">
@@ -907,12 +1039,14 @@
                                                 </mask>
                                                 <mask key="constraints">
                                                     <include reference="19717"/>
+                                                    <include reference="19786"/>
                                                 </mask>
                                             </variation>
                                             <constraints>
                                                 <constraint id="19717" firstItem="18263" firstAttribute="trailing" secondItem="18287" secondAttribute="trailing" constant="60">
                                                     <variation key="heightClass=regular-widthClass=compact" constant="20"/>
                                                 </constraint>
+                                                <constraint id="19786" firstItem="18287" firstAttribute="top" secondItem="18263" secondAttribute="top" constant="12"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -947,6 +1081,7 @@
                                                 </mask>
                                                 <mask key="constraints">
                                                     <exclude reference="19718"/>
+                                                    <exclude reference="19787"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact">
@@ -956,12 +1091,14 @@
                                                 </mask>
                                                 <mask key="constraints">
                                                     <include reference="19718"/>
+                                                    <include reference="19787"/>
                                                 </mask>
                                             </variation>
                                             <constraints>
                                                 <constraint id="19718" firstItem="18285" firstAttribute="trailing" secondItem="18283" secondAttribute="trailing" constant="35">
                                                     <variation key="heightClass=regular-widthClass=compact" constant="20"/>
                                                 </constraint>
+                                                <constraint id="19787" firstItem="18283" firstAttribute="top" secondItem="18285" secondAttribute="top" constant="12"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -996,6 +1133,7 @@
                                                 </mask>
                                                 <mask key="constraints">
                                                     <exclude reference="19719"/>
+                                                    <exclude reference="19788"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact">
@@ -1005,12 +1143,14 @@
                                                 </mask>
                                                 <mask key="constraints">
                                                     <include reference="19719"/>
+                                                    <include reference="19788"/>
                                                 </mask>
                                             </variation>
                                             <constraints>
                                                 <constraint id="19719" firstItem="18296" firstAttribute="trailing" secondItem="18291" secondAttribute="trailing" constant="16">
                                                     <variation key="heightClass=regular-widthClass=compact" constant="20"/>
                                                 </constraint>
+                                                <constraint id="19788" firstItem="18291" firstAttribute="top" secondItem="18296" secondAttribute="top" constant="12"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -1027,7 +1167,7 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="19635" translatesAutoresizingMaskIntoConstraints="NO">
                                                     <rect key="frame" x="308" y="6" width="51" height="31"/>
                                                 </switch>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="19636" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" text="基軸通貨建の売却で損益計算">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="19636" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" text="基軸通貨建の売却を損益とする">
                                                     <rect key="frame" x="16" y="8" width="284" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <nil key="textColor"/>
@@ -1068,11 +1208,20 @@
                         <outlet property="ButtonFiatCurrency" destination="18257" id="name-outlet-18257"/>
                         <outlet property="ButtonCryptCurrency" destination="18294" id="name-outlet-18294"/>
                         <outlet property="TextPeriod" destination="18270" id="name-outlet-18270"/>
-                        <outlet property="LabelSoldAmount" destination="18278" id="name-outlet-18278"/>
-                        <outlet property="LabelSoldValue" destination="18279" id="name-outlet-18279"/>
+                        <outlet property="LabelQtySell2" destination="18278" id="name-outlet-18278"/>
+                        <outlet property="LabelSellValue2" destination="18279" id="name-outlet-18279"/>
                         <outlet property="LabelAvgBookValue" destination="18287" id="name-outlet-18287"/>
                         <outlet property="LabelRealizedPL" destination="18283" id="name-outlet-18283"/>
                         <outlet property="LabelAvgBookPrice" destination="18291" id="name-outlet-18291"/>
+                        <outlet property="LabelTxsSell" destination="19650" id="name-outlet-19650"/>
+                        <outlet property="LabelTxsBuy" destination="19691" id="name-outlet-19691"/>
+                        <outlet property="LabelTxsTotal" destination="19692" id="name-outlet-19692"/>
+                        <outlet property="LabelQtySell" destination="19736" id="name-outlet-19736"/>
+                        <outlet property="LabelQtyBuy" destination="19737" id="name-outlet-19737"/>
+                        <outlet property="LabelGrossQty" destination="19750" id="name-outlet-19750"/>
+                        <outlet property="LabelSellValue" destination="19752" id="name-outlet-19752"/>
+                        <outlet property="LabelBuyValue" destination="19754" id="name-outlet-19754"/>
+                        <outlet property="LabelTotalValue" destination="19756" id="name-outlet-19756"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="17634" userLabel="First Responder" sceneMemberID="firstResponder"/>

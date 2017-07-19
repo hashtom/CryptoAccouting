@@ -131,7 +131,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                         txs.AggregateTransaction(ApplicationCore.GetInstrument("BTC"),
                                                  exType,
                                                  ebuysell,
-                                                 (double)json["return"][x.Name]["amount"],
+                                                 (int)json["return"][x.Name]["amount"],
                                                  (double)json["return"][x.Name]["price"],
                                                  ApplicationCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
                                                  (int)json["return"][x.Name]["fee"]);

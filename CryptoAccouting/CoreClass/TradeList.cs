@@ -9,10 +9,13 @@ namespace CryptoAccouting.CoreClass
 {
     public class TradeList : IEnumerable<Transaction>
     {
-		public double TotalAmountBougt { get; set; }
-		public double TotalAmountSold { get; set; }
-		public double TotalAmountOutstanding { get; set; }
+		public double TotalQtyBuy { get; set; }
+		public double TotalQtySell { get; set; }
         public double BookPrice { get; set; } 
+        public int TxCountBuy { get; set; }
+        public int TxCountSell { get; set; }
+        public double TotalValueBuy { get; set;}
+        public double TotalValueSell { get; set; }
         public EnuExchangeType TradedExchange { get; set; }
 		
         private List<Transaction> txs;
@@ -33,13 +36,16 @@ namespace CryptoAccouting.CoreClass
 
 		public void ReEvaluate()
 		{
-            TotalAmountBougt = txs.Where(t => t.BuySell == EnuBuySell.Buy).Sum(t => t.Quantity);
-            TotalAmountSold = txs.Where(t => t.BuySell == EnuBuySell.Sell).Sum(t => t.Quantity);
-            TotalAmountOutstanding = TotalAmountBougt - TotalAmountSold;
+            TotalQtyBuy = txs.Where(t => t.BuySell == EnuBuySell.Buy).Sum(t => t.Quantity);
+            TotalQtySell = txs.Where(t => t.BuySell == EnuBuySell.Sell).Sum(t => t.Quantity);
+            TxCountBuy = txs.Where(t => t.BuySell == EnuBuySell.Buy).Count();
+            TxCountSell = txs.Where(t => t.BuySell == EnuBuySell.Sell).Count();
+            TotalValueBuy = txs.Where(t => t.BuySell == EnuBuySell.Buy).Sum(t => t.Quantity * t.TradePrice);
+            TotalValueSell = txs.Where(t => t.BuySell == EnuBuySell.Sell).Sum(t => t.Quantity * t.TradePrice);
             calculatePL();
 		}
 
-        public void AggregateTransaction(Instrument coin, EnuExchangeType exType, EnuBuySell buysell, double qty, double tradePrice,
+        public void AggregateTransaction(Instrument coin, EnuExchangeType exType, EnuBuySell buysell, int qty, double tradePrice,
                                          DateTime tradeDate, int fee, EnuTxAggregateFlag flag = EnuTxAggregateFlag.Daliy)
         {
             Transaction tx;
@@ -48,7 +54,7 @@ namespace CryptoAccouting.CoreClass
             {
                 tx = txs.Where(t => (t.Symbol == coin.Symbol && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date)).First();
 
-                double newqty;
+                int newqty;
                 newqty = tx.Quantity + qty;
 
                 tx.TradePrice = (tx.TradePrice * tx.Quantity + tradePrice * qty) / newqty;
@@ -142,8 +148,33 @@ namespace CryptoAccouting.CoreClass
 
         public double UnrealizedPL(){
 
-            return TotalAmountOutstanding * (2900000 - BookPrice);
+            return (TotalQtyBuy + TotalQtySell) * (2900000 - BookPrice);
         }
+
+  //      public int CountBuy(){
+
+  //          return txs.Where(t => t.BuySell == EnuBuySell.Buy).Count();
+  //      }
+
+		//public int CountSell()
+		//{
+  //          return txs.Where(t => t.BuySell == EnuBuySell.Sell).Count();
+		//}
+
+		//public int QtyBuy()
+		//{
+  //          return txs.Where(t => t.BuySell == EnuBuySell.Buy).Sum(t=>t.Quantity);
+		//}
+
+		//public int QtySell()
+		//{
+  //          return txs.Where(t => t.BuySell == EnuBuySell.Sell).Sum(t => t.Quantity);
+		//}
+
+		//public int Qty()
+		//{
+		//	return txs.Sum(t => t.Quantity);
+		//}
 
         public void AttachTransaction(Transaction tx)
         {

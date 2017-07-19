@@ -10,7 +10,7 @@ namespace CryptoAccouting.CoreClass
         public Instrument Coin { get; }
         public EnuExchangeType TradeExchange { get; }
         public EnuBuySell BuySell { get; set; }
-        public double Quantity { get; set; }
+        public int Quantity { get; set; }
         public double TradePrice { get; set; }
         public int Fee { get; set; }
         public bool IsMargin { get; set; }

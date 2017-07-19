@@ -74,9 +74,9 @@ namespace CryptoAccouting
 
             //Show Summary
             myTradeList.ReEvaluate();
-            this.LabelBougtAmount.Text = Math.Round(myTradeList.TotalAmountBougt,0).ToString();
-            this.LabelSoldAmount.Text = Math.Round(myTradeList.TotalAmountSold,0).ToString();
-            this.LabelOutstandingAmount.Text = Math.Round(myTradeList.TotalAmountOutstanding,0).ToString();
+            this.LabelBougtAmount.Text = Math.Round(myTradeList.TotalQtyBuy,0).ToString();
+            this.LabelSoldAmount.Text = Math.Round(myTradeList.TotalQtySell,0).ToString();
+            this.LabelOutstandingAmount.Text = Math.Round(myTradeList.TotalQtyBuy + myTradeList.TotalQtySell,0).ToString();
             //this.LabelBougtPrice.Text = myTxs.BookPrice.ToString();
             //this.LabelSoldPrice.Text = myTxs..ToString();
             this.LabelOutstandingPrice.Text = Math.Round(myTradeList.BookPrice,2).ToString();

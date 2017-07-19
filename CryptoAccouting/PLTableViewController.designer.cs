@@ -36,15 +36,51 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel LabelBuyValue { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel LabelGrossQty { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel LabelQtyBuy { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel LabelQtySell { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel LabelQtySell2 { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel LabelRealizedPL { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel LabelSoldAmount { get; set; }
+        UIKit.UILabel LabelSellValue { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel LabelSoldValue { get; set; }
+        UIKit.UILabel LabelSellValue2 { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel LabelTotalValue { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel LabelTxsBuy { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel LabelTxsSell { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel LabelTxsTotal { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -89,19 +125,64 @@ namespace CryptoAccouting
                 LabelAvgBookValue = null;
             }
 
+            if (LabelBuyValue != null) {
+                LabelBuyValue.Dispose ();
+                LabelBuyValue = null;
+            }
+
+            if (LabelGrossQty != null) {
+                LabelGrossQty.Dispose ();
+                LabelGrossQty = null;
+            }
+
+            if (LabelQtyBuy != null) {
+                LabelQtyBuy.Dispose ();
+                LabelQtyBuy = null;
+            }
+
+            if (LabelQtySell != null) {
+                LabelQtySell.Dispose ();
+                LabelQtySell = null;
+            }
+
+            if (LabelQtySell2 != null) {
+                LabelQtySell2.Dispose ();
+                LabelQtySell2 = null;
+            }
+
             if (LabelRealizedPL != null) {
                 LabelRealizedPL.Dispose ();
                 LabelRealizedPL = null;
             }
 
-            if (LabelSoldAmount != null) {
-                LabelSoldAmount.Dispose ();
-                LabelSoldAmount = null;
+            if (LabelSellValue != null) {
+                LabelSellValue.Dispose ();
+                LabelSellValue = null;
             }
 
-            if (LabelSoldValue != null) {
-                LabelSoldValue.Dispose ();
-                LabelSoldValue = null;
+            if (LabelSellValue2 != null) {
+                LabelSellValue2.Dispose ();
+                LabelSellValue2 = null;
+            }
+
+            if (LabelTotalValue != null) {
+                LabelTotalValue.Dispose ();
+                LabelTotalValue = null;
+            }
+
+            if (LabelTxsBuy != null) {
+                LabelTxsBuy.Dispose ();
+                LabelTxsBuy = null;
+            }
+
+            if (LabelTxsSell != null) {
+                LabelTxsSell.Dispose ();
+                LabelTxsSell = null;
+            }
+
+            if (LabelTxsTotal != null) {
+                LabelTxsTotal.Dispose ();
+                LabelTxsTotal = null;
             }
 
             if (TextPeriod != null) {
