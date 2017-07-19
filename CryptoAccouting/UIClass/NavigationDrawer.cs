@@ -11,9 +11,8 @@ namespace CryptoAccouting.UIClass
     {
 
         SFNavigationDrawer navigation;
-        UITableViewController posViewC;
-        UIViewController transViewC, plViewC, settingViewC;
-        UIPageViewController perfViewC;
+        UITableViewController posViewC, plViewC;
+        UIViewController transViewC, perfViewC, settingViewC;
 
         public SfNavigationDrawer Navigation
         {
@@ -23,8 +22,8 @@ namespace CryptoAccouting.UIClass
         public NavigationDrawer(nfloat Viewwidth, nfloat Viewheight, 
                                 UITableViewController PositionViewC,
                                 UIViewController TransactionViewC,
-                                UIViewController PLViewC,
-                                UIPageViewController PerfViewC,
+                                UITableViewController PLViewC,
+                                UIViewController PerfViewC,
                                 UIViewController SettingViewC)
         {
             navigation = new SFNavigationDrawer();

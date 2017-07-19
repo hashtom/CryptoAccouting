@@ -170,19 +170,19 @@
     <Compile Include="SettingDetailController.designer.cs">
       <DependentUpon>SettingDetailController.cs</DependentUpon>
     </Compile>
-    <Compile Include="PerfomViewController.cs" />
-    <Compile Include="PerfomViewController.designer.cs">
-      <DependentUpon>PerfomViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PLViewController.cs" />
-    <Compile Include="PLViewController.designer.cs">
-      <DependentUpon>PLViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="CoreClass\APIClass\MarketDataAPI.cs" />
     <Compile Include="CoreClass\APIClass\StorageAPI.cs" />
     <Compile Include="CoreClass\APIClass\ZaifAPI.cs" />
     <Compile Include="CoreClass\ApplicationCore.cs" />
     <Compile Include="CoreClass\APIClass\ExchangeAPI.cs" />
+    <Compile Include="PLTableViewController.cs" />
+    <Compile Include="PLTableViewController.designer.cs">
+      <DependentUpon>PLTableViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PerfomViewController.cs" />
+    <Compile Include="PerfomViewController.designer.cs">
+      <DependentUpon>PerfomViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\btc.png" />
