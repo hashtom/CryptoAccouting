@@ -36,10 +36,6 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel LabelEstTaxValue { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel LabelRealizedPL { get; set; }
 
         [Outlet]
@@ -91,11 +87,6 @@ namespace CryptoAccouting
             if (LabelAvgBookValue != null) {
                 LabelAvgBookValue.Dispose ();
                 LabelAvgBookValue = null;
-            }
-
-            if (LabelEstTaxValue != null) {
-                LabelEstTaxValue.Dispose ();
-                LabelEstTaxValue = null;
             }
 
             if (LabelRealizedPL != null) {

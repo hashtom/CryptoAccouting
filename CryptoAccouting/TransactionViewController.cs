@@ -13,6 +13,7 @@ namespace CryptoAccouting
     {
 		SfDataGrid sfGrid;
         private NavigationDrawer menu;
+        TradeList myTradeList;
 
         public TransactionViewController(IntPtr handle) : base(handle)
         {
@@ -68,21 +69,22 @@ namespace CryptoAccouting
             NavigationItem.RightBarButtonItem = EditButtonItem;
 			menu = ApplicationCore.Navigation;
 
-            var myTxs = await ExchangeAPI.FetchTransactionAsync((EnuExchangeType.Zaif), true, false);
+            //var myTxs = await ExchangeAPI.FetchTransactionAsync((EnuExchangeType.Zaif), true, false);
+            myTradeList = await ApplicationCore.GetTradeListAsync((EnuExchangeType.Zaif), true, false);
 
             //Show Summary
-            myTxs.ReEvaluate();
-            this.LabelBougtAmount.Text = Math.Round(myTxs.TotalAmountBougt,0).ToString();
-            this.LabelSoldAmount.Text = Math.Round(myTxs.TotalAmountSold,0).ToString();
-            this.LabelOutstandingAmount.Text = Math.Round(myTxs.TotalAmountOutstanding,0).ToString();
+            myTradeList.ReEvaluate();
+            this.LabelBougtAmount.Text = Math.Round(myTradeList.TotalAmountBougt,0).ToString();
+            this.LabelSoldAmount.Text = Math.Round(myTradeList.TotalAmountSold,0).ToString();
+            this.LabelOutstandingAmount.Text = Math.Round(myTradeList.TotalAmountOutstanding,0).ToString();
             //this.LabelBougtPrice.Text = myTxs.BookPrice.ToString();
             //this.LabelSoldPrice.Text = myTxs..ToString();
-            this.LabelOutstandingPrice.Text = Math.Round(myTxs.BookPrice,2).ToString();
-            this.LabelRealizedPL.Text = Math.Round(myTxs.RealizedPL()/1000,2).ToString();
-            this.LabelUnrealizedPL.Text = Math.Round(myTxs.UnrealizedPL()/1000,2).ToString();
+            this.LabelOutstandingPrice.Text = Math.Round(myTradeList.BookPrice,2).ToString();
+            this.LabelRealizedPL.Text = Math.Round(myTradeList.RealizedPL()/1000,2).ToString();
+            this.LabelUnrealizedPL.Text = Math.Round(myTradeList.UnrealizedPL()/1000,2).ToString();
 
             //Show Grid View
-            sfGrid.ItemsSource = (myTxs.TransactionCollection);
+            sfGrid.ItemsSource = (myTradeList.TransactionCollection);
             this.sfGrid.Frame = new CGRect(0,
                                            0, //TransactionSummaryView.Frame.Height + 60,
                                            TransactionHistoryView.Frame.Width,
