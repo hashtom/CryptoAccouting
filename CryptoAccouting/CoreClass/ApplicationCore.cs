@@ -34,11 +34,11 @@
         public static List<Instrument> GetInstrumentAll()
 		{
 			return myInstruments;
-		}          public static async Task< TradeList> LoadTradeListAsync(EnuExchangeType extype, bool isAggregatedDaily = true, bool readfromFile = false)
+		}          public static async Task LoadTradeListsAsync(EnuExchangeType extype, bool isAggregatedDaily = true, bool readfromFile = false)
         {
-            var exchange = GetExchange(extype);             exchange.TradeList = await ExchangeAPI.FetchTransactionAsync(exchange.ExchangeType, isAggregatedDaily, readfromFile);             ExchangeList.AttachExchange(exchange);              return exchange.TradeList;         }          public static Exchange GetExchange(EnuExchangeType extype)
-        {             return ExchangeList.GetExchange(extype);         }          public static TradeList GetExchangeTradeList(EnuExchangeType extype)
-        {             return ExchangeList.GetTradelist(extype);
+            var exchange = GetExchange(extype);             exchange.TradeLists = await ExchangeAPI.FetchTradeListsAsync(exchange.ExchangeType, isAggregatedDaily, readfromFile);             ExchangeList.AttachExchange(exchange);              //return exchange.TradeLists;         }          public static Exchange GetExchange(EnuExchangeType extype)
+        {             return ExchangeList.GetExchange(extype);         }          public static TradeList GetExchangeTradeList(EnuExchangeType extype, string symbol)
+        {             return ExchangeList.GetTradelist(extype,symbol);
         }
 
 		public static void AttachMyBalance(Balance bal)         {
@@ -52,9 +52,8 @@
 		}          public static async Task FetchMarketData()
         {             await MarketDataAPI.FetchMarketDataFromBalance(myBalance);         }      }
 
-	public enum EnuCCY
-	{
-		JPY,
-		USD,         EUR,         BTC
-	}
+    public enum EnuCCY
+    {         //Fiat Only at the moment
+        JPY,
+        USD,         EUR     }
       public enum EnuAppStatus{         Success,         Failure     }  } 

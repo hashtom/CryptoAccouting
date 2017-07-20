@@ -15,11 +15,11 @@ namespace CryptoAccouting.CoreClass
             exchanges = new List<Exchange>();
         }
 
-        public TradeList GetTradelist(EnuExchangeType extype)
+        public TradeList GetTradelist(EnuExchangeType extype, string symbol)
         {
             if (exchanges == null ? false : exchanges.Where(x => x.ExchangeType == extype).Any())
             {
-                return exchanges.Where(x => x.ExchangeType == extype).First().TradeList;
+                return this.First(x => x.ExchangeType == extype).GetTradeList(symbol);
             }
             else
             {
@@ -31,7 +31,7 @@ namespace CryptoAccouting.CoreClass
         {
             if (exchanges == null ? false : exchanges.Where(x => x.ExchangeType == extype).Any())
             {
-                return exchanges.Where(x => x.ExchangeType == extype).First();
+                return exchanges.First(x => x.ExchangeType == extype);
             }
             else
             {
@@ -50,7 +50,7 @@ namespace CryptoAccouting.CoreClass
             exchanges.RemoveAll(x => x.ExchangeType == exc.ExchangeType);
 		}
 
-        public Exchange GetTransactionByIndex(int indexNumber)
+        public Exchange GetExchangeByIndex(int indexNumber)
 		{
 			return exchanges[indexNumber];
 		}

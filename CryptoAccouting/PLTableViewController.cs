@@ -11,8 +11,6 @@ namespace CryptoAccouting
     public partial class PLTableViewController : UITableViewController
     {
 
-        TradeList myTradeList;
-
         public PLTableViewController(IntPtr handle) : base(handle)
         {
         }
@@ -23,8 +21,9 @@ namespace CryptoAccouting
 
             //var exchange = await ApplicationCore.LoadTradeListAsync(new Exchange(EnuExchangeType.Zaif), true, true);
             //myTradeList = exchange.TradeList;
-            myTradeList = await ApplicationCore.LoadTradeListAsync(EnuExchangeType.Zaif, true, true);
-			myTradeList.ReEvaluate();
+            await ApplicationCore.LoadTradeListsAsync(EnuExchangeType.Zaif, true, false);
+            var myTradeList = ApplicationCore.GetExchange(EnuExchangeType.Zaif).GetTradeList("BTC");
+            myTradeList.ReEvaluate();
 
             this.LabelTxsBuy.Text = myTradeList.TxCountBuy.ToString();
             this.LabelQtySell.Text = myTradeList.TxCountSell.ToString();

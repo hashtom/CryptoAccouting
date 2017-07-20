@@ -9,8 +9,9 @@ namespace CryptoAccouting.CoreClass
 {
     public class TradeList : IEnumerable<Transaction>
     {
+        public Instrument TradedCoin { get; set; } // Per single coin
         public string TradeYear { get; set; }
-        public EnuCCY CCY_Valution { get; set; } // JPY but could be BTC
+        public EnuCCY CCY_Valution { get; set; } // Fiat Only
 		public double TotalQtyBuy { get; set; }
 		public double TotalQtySell { get; set; }
         public int TxCountBuy { get; set; }
@@ -28,10 +29,11 @@ namespace CryptoAccouting.CoreClass
 			set { this.txs = value; }
 		}
 
-        public TradeList(EnuCCY cur_valuation)
+        public TradeList(EnuCCY cur_valuation, string symbol)
         {
             txs = new List<Transaction>();
             this.CCY_Valution = cur_valuation;
+            this.TradedCoin = ApplicationCore.GetInstrument(symbol);
         }
 
         public void ReEvaluate()

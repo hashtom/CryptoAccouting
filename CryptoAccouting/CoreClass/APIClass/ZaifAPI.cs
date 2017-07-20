@@ -36,7 +36,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             var param = new Dictionary<string, string>
             {
-                { "currency_pair", "btc_jpy" },
+                //{ "currency_pair", "btc_jpy" },
                 //{ "count", "15"}
                 //{ "action", "bid" },
                 //{ "price", "100000" },

@@ -10,7 +10,6 @@ namespace CryptoAccouting.CoreClass.APIClass
 {
     public static class ExchangeAPI
     {
-        //private HttpClient http; // 削除できる？？
         private static string apikey, apisecret;
 
         public static async Task<Price> FetchBTCPriceAsyncTest(EnuExchangeType exType){
@@ -83,16 +82,18 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         //}
 
-        internal static async Task<TradeList> FetchTransactionAsync(EnuExchangeType exType, bool isAggregateDaily = true, bool ReadFromFile = false)
+        internal static async Task<List<TradeList>> FetchTradeListsAsync(EnuExchangeType exType, bool isAggregateDaily = true, bool ReadFromFile = false)
         {
 
-            TradeList txs = new TradeList(ApplicationCore.BaseCurrency);
+            var tradelists = new List<TradeList>();
+
             string rawjson;
 
             switch (exType)
             {
                 case EnuExchangeType.Zaif:
                     
+                    //tl = new TradeList(ApplicationCore.BaseCurrency, "BTC");
 
                     if (ReadFromFile)
                     {
@@ -128,18 +129,29 @@ namespace CryptoAccouting.CoreClass.APIClass
                                 break;
                         }
 
-                        txs.AggregateTransaction(ApplicationCore.GetInstrument("BTC"),
+
+                        var symbol = (string)json["return"][x.Name]["currency_pair"];
+                        symbol = symbol.Replace("_jpy","").Replace("_btc","").ToUpper();
+
+                        var tl = tradelists.Any(t => t.TradedCoin.Symbol == symbol) ?
+                                           tradelists.First(t => t.TradedCoin.Symbol == symbol) :
+                                           new TradeList(ApplicationCore.BaseCurrency, symbol);
+
+
+                        tl.AggregateTransaction(ApplicationCore.GetInstrument(symbol),
                                                  exType,
                                                  ebuysell,
                                                  (int)json["return"][x.Name]["amount"],
                                                  (double)json["return"][x.Name]["price"],
                                                  ApplicationCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
                                                  (int)json["return"][x.Name]["fee"]);
+
+                        if (!tradelists.Any(t => t.TradedCoin.Symbol == symbol))
+                            tradelists.Add(tl);
                     }
 
                     // Save Json file
                     StorageAPI.SaveJsonFile(rawjson, "zaifTransaction.json");
-
                     break;
 
                 default:
@@ -147,7 +159,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     break;
             }
 
-            return txs;
+            return tradelists;
         }
 
 
