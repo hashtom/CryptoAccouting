@@ -11,16 +11,16 @@ namespace CryptoAccouting.CoreClass
     {
         public string TradeYear { get; set; }
         public EnuCCY BaseCurrency { get; set; }
-        public EnuCrypto BaseCrypt { get; set; }
+        public EnuCrypto BaseCrypto { get; set; }
 		public double TotalQtyBuy { get; set; }
 		public double TotalQtySell { get; set; }
         public int TxCountBuy { get; set; }
         public int TxCountSell { get; set; }
         public double TotalValueBuy { get; set;}
         public double TotalValueSell { get; set; }
-		public double LatestBookPrice { get; set; }
+		public double LatestBookCost { get; set; }
 		public EnuExchangeType TradedExchange { get; set; }
-		
+
         private List<Transaction> txs;
         //private List<ProfitLoss> RealizedPLHistory;
 
@@ -30,14 +30,14 @@ namespace CryptoAccouting.CoreClass
 			set { this.txs = value; }
 		}
 
-        public TradeList()
+        public TradeList(EnuCCY baseCurrency, EnuCrypto baseCrypto)
         {
             txs = new List<Transaction>();
-            //RealizedPLHistory = new List<CoreClass.ProfitLoss>();
+            BaseCurrency = baseCurrency;
+            BaseCrypto = baseCrypto;
         }
 
-
-        public void ReEvaluate(EnuCCY baseFiat = EnuCCY.JPY, EnuCrypto baseCrypt = EnuCrypto.BTC)
+        public void ReEvaluate()
 		{
             TotalQtyBuy = txs.Where(t => t.BuySell == EnuBuySell.Buy).Sum(t => t.Quantity);
             TotalQtySell = txs.Where(t => t.BuySell == EnuBuySell.Sell).Sum(t => t.Quantity);
@@ -67,7 +67,7 @@ namespace CryptoAccouting.CoreClass
             }
             else
             {
-                tx = new Transaction(coin, EnuExchangeType.Zaif);
+                tx = new Transaction(coin,ApplicationCore.GetExchange(exType));
                 tx.TxId = (txs.Count + 1).ToString();
                 tx.BuySell = buysell;
                 tx.Quantity = qty;
@@ -104,19 +104,20 @@ namespace CryptoAccouting.CoreClass
 
             }
 
-            this.LatestBookPrice = current_bookprice; //直近のBookPrice
+            this.LatestBookCost = current_bookprice; //直近のBookPrice
 
         }
 
         public double RealizedPL()
         {
-            return txs.Where(x => x.BuySell == EnuBuySell.Sell).Count() == 0 ? 0 : txs.Sum(x => x.RealizedPLBaseCCY);
-
+			// calculate Realized PL when one side of trase is Base Fiat Currency
+			// ignore trades both sides are Crypto for Realized PL calculation 
+			return txs.Where(x => x.BuySell == EnuBuySell.Sell).Count() == 0 ? 0 : txs.Sum(x => x.RealizedPLBase);
         }
 
         public double UnrealizedPL(){
 
-            return (TotalQtyBuy - TotalQtySell) * (2300000 - LatestBookPrice);
+            return (TotalQtyBuy - TotalQtySell) * (2300000 - LatestBookCost);
         }
 
         public void AttachTransaction(Transaction tx)

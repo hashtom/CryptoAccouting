@@ -69,17 +69,16 @@ namespace CryptoAccouting
             NavigationItem.RightBarButtonItem = EditButtonItem;
 			menu = ApplicationCore.Navigation;
 
-			var exchange = await ApplicationCore.LoadTradeListAsync(new Exchange(EnuExchangeType.Zaif), true, true);
-			myTradeList = exchange.TradeList;
+            myTradeList = await ApplicationCore.LoadTradeListAsync(EnuExchangeType.Zaif, true, true);
+			myTradeList.ReEvaluate();
 
             //Show Summary
-            myTradeList.ReEvaluate();
             this.LabelBougtAmount.Text = Math.Round(myTradeList.TotalQtyBuy,0).ToString();
             this.LabelSoldAmount.Text = Math.Round(myTradeList.TotalQtySell,0).ToString();
             this.LabelOutstandingAmount.Text = Math.Round(myTradeList.TotalQtyBuy + myTradeList.TotalQtySell,0).ToString();
             //this.LabelBougtPrice.Text = myTxs.BookPrice.ToString();
             //this.LabelSoldPrice.Text = myTxs..ToString();
-            this.LabelOutstandingPrice.Text = Math.Round(myTradeList.LatestBookPrice,2).ToString();
+            this.LabelOutstandingPrice.Text = Math.Round(myTradeList.LatestBookCost,2).ToString();
             this.LabelRealizedPL.Text = Math.Round(myTradeList.RealizedPL()/1000,2).ToString();
             this.LabelUnrealizedPL.Text = Math.Round(myTradeList.UnrealizedPL()/1000,2).ToString();
 

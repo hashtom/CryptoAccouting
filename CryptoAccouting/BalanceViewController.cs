@@ -1,7 +1,7 @@
 ﻿using Foundation; using System; using UIKit; using CryptoAccouting.CoreClass; using CryptoAccouting.UIClass; using System.Threading.Tasks;  namespace CryptoAccouting {     public partial class BalanceViewController : UITableViewController     {         //private Balance myBalance;         private NavigationDrawer menu;         static NSString MyCellId = new NSString("BalanceCell");          public BalanceViewController(IntPtr handle) : base(handle)         {             AppSetting.BaseCurrency = EnuCCY.JPY;             NavigationItem.RightBarButtonItem = EditButtonItem; //test
         }           public override void ViewDidLoad()         {             base.ViewDidLoad();                                      // Instantiate Controllers             TransactionViewController transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             PLTableViewController plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             PerfomViewController perfViewC = this.Storyboard.InstantiateViewController("PerfViewC") as PerfomViewController;             SettingTableViewController settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);
-    
-            ApplicationCore.LoadInstruments();
+
+            ApplicationCore.InitializeCore(false);             //ApplicationCore.LoadInstruments(false);
             TableView.Source = new BalanceTableSource(ApplicationCore.GetMyBalance(), this);
             TableView.RegisterClassForCellReuse(typeof(CustomBalanceCell), MyCellId);
         }          public async override void ViewWillAppear(bool animated)

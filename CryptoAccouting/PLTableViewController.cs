@@ -21,9 +21,9 @@ namespace CryptoAccouting
         {
             base.ViewDidLoad();
 
-            var exchange = await ApplicationCore.LoadTradeListAsync(new Exchange(EnuExchangeType.Zaif), true, true);
-            myTradeList = exchange.TradeList;
-
+            //var exchange = await ApplicationCore.LoadTradeListAsync(new Exchange(EnuExchangeType.Zaif), true, true);
+            //myTradeList = exchange.TradeList;
+            myTradeList = await ApplicationCore.LoadTradeListAsync(EnuExchangeType.Zaif, true, true);
 			myTradeList.ReEvaluate();
 
             this.LabelTxsBuy.Text = myTradeList.TxCountBuy.ToString();
@@ -41,7 +41,7 @@ namespace CryptoAccouting
             this.LabelTotalValue.Text = Math.Round(myTradeList.TotalValueBuy + myTradeList.TotalValueSell / 1000, 0).ToString();
 
             //this.LabelSoldValue.Text = Math.Round(myTradeList., 0).ToString();
-            this.LabelAvgBookPrice.Text = Math.Round(myTradeList.LatestBookPrice, 0).ToString();
+            this.LabelAvgBookPrice.Text = Math.Round(myTradeList.LatestBookCost, 0).ToString();
             //this.LabelAvgBookValue = Math.Round(myTradeList., 0).ToString();
             this.LabelRealizedPL.Text = Math.Round(myTradeList.RealizedPL()).ToString();
             //this.LabelEstTaxValue

@@ -12,44 +12,48 @@ namespace CryptoAccouting.CoreClass.APIClass
     {
 
         //Obtain market data from coinmarketcap API
-        public static async Task FetchCoinMarketData(Balance mybal)
-		{
+        public static async Task FetchCoinMarketDataAsync(Instrument coin)
+        {
 
             const string BaseUrl = "https://api.coinmarketcap.com/v1/ticker/";
             string rawjson;
 
             //Parse Market Data 
+            if (coin.MarketPrice == null)
+            {
+                var p = new Price(coin);
+                coin.MarketPrice = p;
+            }
+
+            using (var http = new HttpClient())
+            {
+                //http.MaxResponseContentBufferSize = 256000;
+                rawjson = await http.GetStringAsync(BaseUrl + coin.Id);
+            }
+
+            var jarray = await Task.Run(() => JArray.Parse(rawjson));
+
+            coin.MarketPrice.LatestPriceBTC = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["price_btc"];
+            coin.MarketPrice.LatestPrice = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["price_usd"];
+            coin.MarketPrice.BaseCurrency = EnuCCY.USD; //hardcoded
+                                                     //c.Name = (string)jarray.SelectToken("[?(@.symbol == '" + ins.Symbol + "')]")["name"];
+            coin.MarketPrice.DayVolume = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["24h_volume_usd"] / coin.MarketPrice.LatestPriceBTC;
+            coin.MarketPrice.PriceDate = ApplicationCore.FromEpochSeconds((long)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["last_updated"]).Date;
+            coin.MarketPrice.Pct1h = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["percent_change_1h"];
+            //ins.MarketPrice.Pct1d = (double)jarray.SelectToken("[?(@.symbol == '" + ins.Symbol + "')]")["percent_change_24h"];
+            coin.MarketPrice.Pct7d = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["percent_change_7d"];
+            //ins.MarketPrice.Pct1h = pct1h.GetType() == typeof(double) ? 0 : pct1h;
+            //ins.MarketPrice.Pct1d = pct1d.GetType() == typeof(double) ? 0 : (double)pct1d;
+            //ins.MarketPrice.Pct7d = pct7d.GetType() == typeof(double) ? 0 : pct7d;
+
+        }
+    
+
+        public static async Task FetchMarketDataFromBalance(Balance mybal)
+		{
             foreach (var pos in mybal)
             {
-                if (pos.Coin.MarketPrice == null)
-                {
-                    var p = new Price(pos.Coin);
-                    //p.BaseCurrency = AppSetting.BaseCurrency;
-                    pos.Coin.MarketPrice = p;
-                }
-
-                var c = pos.Coin;
-
-                using (var http = new HttpClient())
-                {
-                    //http.MaxResponseContentBufferSize = 256000;
-                    rawjson = await http.GetStringAsync(BaseUrl + c.Id);
-                }
-
-                var jarray = await Task.Run(() => JArray.Parse(rawjson));
-
-                c.MarketPrice.LatestPriceBTC = (double)jarray.SelectToken("[?(@.symbol == '" + c.Symbol + "')]")["price_btc"];
-                c.MarketPrice.LatestPrice = (double)jarray.SelectToken("[?(@.symbol == '" + c.Symbol + "')]")["price_usd"];
-                c.MarketPrice.BaseCurrency = EnuCCY.USD; //hardcoded
-                //c.Name = (string)jarray.SelectToken("[?(@.symbol == '" + ins.Symbol + "')]")["name"];
-                c.MarketPrice.DayVolume = (double)jarray.SelectToken("[?(@.symbol == '" + c.Symbol + "')]")["24h_volume_usd"] / c.MarketPrice.LatestPriceBTC;
-                c.MarketPrice.PriceDate = ApplicationCore.FromEpochSeconds((long)jarray.SelectToken("[?(@.symbol == '" + c.Symbol + "')]")["last_updated"]).Date;
-                c.MarketPrice.Pct1h = (double)jarray.SelectToken("[?(@.symbol == '" + c.Symbol + "')]")["percent_change_1h"];
-                //ins.MarketPrice.Pct1d = (double)jarray.SelectToken("[?(@.symbol == '" + ins.Symbol + "')]")["percent_change_24h"];
-                c.MarketPrice.Pct7d = (double)jarray.SelectToken("[?(@.symbol == '" + c.Symbol + "')]")["percent_change_7d"];
-                //ins.MarketPrice.Pct1h = pct1h.GetType() == typeof(double) ? 0 : pct1h;
-                //ins.MarketPrice.Pct1d = pct1d.GetType() == typeof(double) ? 0 : (double)pct1d;
-                //ins.MarketPrice.Pct7d = pct7d.GetType() == typeof(double) ? 0 : pct7d;
+                await FetchCoinMarketDataAsync(pos.Coin);
             }
 		}
 

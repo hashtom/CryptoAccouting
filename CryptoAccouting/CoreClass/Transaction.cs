@@ -9,10 +9,10 @@ namespace CryptoAccouting.CoreClass
         public string TxId { get; set; }
         public Instrument Coin { get; }
 		public DateTime TradeDate { get; set; }
-        public EnuExchangeType TradeExchange { get; } // to be changed to exchange type
+        public Exchange TradeExchange { get; }
         public EnuBuySell BuySell { get; set; }
-        public EnuCCY BaseCurrency { get; set; }
-        public EnuCrypto BaseCrypto { get; set; }
+        public EnuCCY BaseCCY { get; set; }
+        public EnuCrypto TradedCCY { get; set; } //Always Crypto
         public int Quantity { get; set; }
         public double TradePrice { get; set; }
         public int Fee { get; set; }
@@ -29,17 +29,31 @@ namespace CryptoAccouting.CoreClass
 			get { return BuySell == EnuBuySell.Buy ? "Buy" : "Sell"; }
 		}
 
-        public double TradeValueBaseCCY
+        public double TradeValueBase
         {
             get { return TradePrice * Quantity; }
         }
 
-        public double RealizedPLBaseCCY
+        public double TradeValue(EnuCCY baseFiatCCY)
         {
-            get { return (BookPrice != 0) ? (TradePrice - BookPrice) * Quantity : 0; }
+            // JPY<->MONA
+            // BTC<->REP
+            return 0;
         }
 
-        public Transaction(Instrument coin, EnuExchangeType exchange)
+        public double RealizedPLBase
+        {
+            // calculate Realized PL when one side of trase is Base Fiat Currency
+            // ignore trades both sides are Crypto for Realized PL calculation 
+            get { return (BuySell == EnuBuySell.Sell) ? (TradePrice - BookPrice) * Quantity : 0; }
+        }
+
+        public double RelizedPL(EnuCCY baseFiatCCY)
+        {
+            return 0;
+        }
+
+        public Transaction(Instrument coin, Exchange exchange)
         {
             Coin = coin;
             TradeExchange = exchange;

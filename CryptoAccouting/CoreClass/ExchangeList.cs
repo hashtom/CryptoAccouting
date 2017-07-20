@@ -15,17 +15,27 @@ namespace CryptoAccouting.CoreClass
             exchanges = new List<Exchange>();
         }
 
-        public TradeList GetTradelist(EnuExchangeType exc)
+        public TradeList GetTradelist(EnuExchangeType extype)
         {
-
-            if (exchanges == null ? false : exchanges.Where(x => x.ExchangeType == exc).Any())
+            if (exchanges == null ? false : exchanges.Where(x => x.ExchangeType == extype).Any())
             {
-
-                return exchanges.Where(x => x.ExchangeType == exc).First().TradeList;
+                return exchanges.Where(x => x.ExchangeType == extype).First().TradeList;
             }
             else
             {
                 return null;
+            }
+        }
+
+        public Exchange GetExchange(EnuExchangeType extype)
+        {
+            if (exchanges == null ? false : exchanges.Where(x => x.ExchangeType == extype).Any())
+            {
+                return exchanges.Where(x => x.ExchangeType == extype).First();
+            }
+            else
+            {
+                return new Exchange(extype);
             }
         }
 
