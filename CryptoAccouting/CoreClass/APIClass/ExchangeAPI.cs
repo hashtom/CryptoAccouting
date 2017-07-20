@@ -86,7 +86,7 @@ namespace CryptoAccouting.CoreClass.APIClass
         internal static async Task<TradeList> FetchTransactionAsync(EnuExchangeType exType, bool isAggregateDaily = true, bool ReadFromFile = false)
         {
 
-            TradeList txs = new TradeList(ApplicationCore.BaseCurrency, ApplicationCore.BaseCryptoCurrency);
+            TradeList txs = new TradeList(ApplicationCore.BaseCurrency);
             string rawjson;
 
             switch (exType)

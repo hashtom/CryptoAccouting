@@ -1,12 +1,12 @@
 ﻿﻿using System; using System.Collections.Generic; using System.Linq;
-//using System.Xml.Serialization; using System.Threading.Tasks; using UIKit; using CryptoAccouting.UIClass; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         public static EnuCCY BaseCurrency { get; set; }         public static EnuCrypto BaseCryptoCurrency { get; set; }         private static Balance myBalance;         private static List<Instrument> myInstruments;         //private static TradeList myTradeList;
+//using System.Xml.Serialization; using System.Threading.Tasks; using UIKit; using CryptoAccouting.UIClass; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         public static EnuCCY BaseCurrency { get; set; }  // Fiats or BTC         private static Balance myBalance;         private static List<Instrument> myInstruments;         //private static TradeList myTradeList;
         private static ExchangeList ExchangeList;         public static NavigationDrawer Navigation { get; set; }
 
         public static NavigationDrawer InitializeSlideMenu(UIView BalanceTableView,                                                            UITableViewController PositionViewC,                                                            UIViewController TransactionViewC,                                                            UITableViewController PLViewC,                                                            UIViewController PerfViewC,
                                                            UIViewController SettingViewC)
         {             Navigation = new NavigationDrawer(BalanceTableView.Frame.Width, BalanceTableView.Frame.Height,                                               PositionViewC,
                                               TransactionViewC,                                               PLViewC,                                               PerfViewC,                                               SettingViewC);             Navigation.AddView(BalanceTableView);             return Navigation;         }          public static void InitializeCore(bool forceRefresh = true)
-        {             LoadExchangeList();             LoadInstruments(forceRefresh);             BaseCurrency = EnuCCY.JPY;             BaseCryptoCurrency = EnuCrypto.BTC;         }          public static void LoadExchangeList()
+        {             LoadExchangeList();             LoadInstruments(forceRefresh);             BaseCurrency = EnuCCY.JPY;         }          public static void LoadExchangeList()
         {
             if (ExchangeList is null) ExchangeList = new ExchangeList();         }          public static void LoadInstruments(bool forceRefresh = true)
         {             if (forceRefresh)
@@ -55,10 +55,6 @@
 	public enum EnuCCY
 	{
 		JPY,
-		USD
+		USD,         EUR,         BTC
 	}
-
-	public enum EnuCrypto
-	{
-		BTC,         LTC,         MONA,         RIPPLE
-	}      public enum EnuAppStatus{         Success,         Failure     }  } 
+      public enum EnuAppStatus{         Success,         Failure     }  } 

@@ -10,8 +10,7 @@ namespace CryptoAccouting.CoreClass
     public class TradeList : IEnumerable<Transaction>
     {
         public string TradeYear { get; set; }
-        public EnuCCY BaseCurrency { get; set; }
-        public EnuCrypto BaseCrypto { get; set; }
+        public EnuCCY CCY_Valution { get; set; } // JPY but could be BTC
 		public double TotalQtyBuy { get; set; }
 		public double TotalQtySell { get; set; }
         public int TxCountBuy { get; set; }
@@ -22,7 +21,6 @@ namespace CryptoAccouting.CoreClass
 		public EnuExchangeType TradedExchange { get; set; }
 
         private List<Transaction> txs;
-        //private List<ProfitLoss> RealizedPLHistory;
 
 		public List<Transaction> TransactionCollection
 		{
@@ -30,11 +28,10 @@ namespace CryptoAccouting.CoreClass
 			set { this.txs = value; }
 		}
 
-        public TradeList(EnuCCY baseCurrency, EnuCrypto baseCrypto)
+        public TradeList(EnuCCY cur_valuation)
         {
             txs = new List<Transaction>();
-            BaseCurrency = baseCurrency;
-            BaseCrypto = baseCrypto;
+            this.CCY_Valution = cur_valuation;
         }
 
         public void ReEvaluate()
@@ -112,7 +109,7 @@ namespace CryptoAccouting.CoreClass
         {
 			// calculate Realized PL when one side of trase is Base Fiat Currency
 			// ignore trades both sides are Crypto for Realized PL calculation 
-			return txs.Where(x => x.BuySell == EnuBuySell.Sell).Count() == 0 ? 0 : txs.Sum(x => x.RealizedPLBase);
+			return txs.Where(x => x.BuySell == EnuBuySell.Sell).Count() == 0 ? 0 : txs.Sum(x => x.RealizedPL);
         }
 
         public double UnrealizedPL(){
