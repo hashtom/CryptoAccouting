@@ -11,18 +11,18 @@ namespace CryptoAccouting.CoreClass
     {
         public string TradeYear { get; set; }
         public EnuCCY BaseCurrency { get; set; }
-        public EnuCrypt BaseCrypt { get; set; }
+        public EnuCrypto BaseCrypt { get; set; }
 		public double TotalQtyBuy { get; set; }
 		public double TotalQtySell { get; set; }
         public int TxCountBuy { get; set; }
         public int TxCountSell { get; set; }
         public double TotalValueBuy { get; set;}
         public double TotalValueSell { get; set; }
-		public double BookPrice { get; set; }
+		public double LatestBookPrice { get; set; }
 		public EnuExchangeType TradedExchange { get; set; }
 		
         private List<Transaction> txs;
-        private List<ProfitLoss> RealizedPLHistory;
+        //private List<ProfitLoss> RealizedPLHistory;
 
 		public List<Transaction> TransactionCollection
 		{
@@ -33,11 +33,11 @@ namespace CryptoAccouting.CoreClass
         public TradeList()
         {
             txs = new List<Transaction>();
-            RealizedPLHistory = new List<CoreClass.ProfitLoss>();
+            //RealizedPLHistory = new List<CoreClass.ProfitLoss>();
         }
 
 
-        public void ReEvaluate(EnuCCY baseFiat = EnuCCY.JPY, EnuCrypt baseCrypt = EnuCrypt.BTC)
+        public void ReEvaluate(EnuCCY baseFiat = EnuCCY.JPY, EnuCrypto baseCrypt = EnuCrypto.BTC)
 		{
             TotalQtyBuy = txs.Where(t => t.BuySell == EnuBuySell.Buy).Sum(t => t.Quantity);
             TotalQtySell = txs.Where(t => t.BuySell == EnuBuySell.Sell).Sum(t => t.Quantity);
@@ -84,108 +84,48 @@ namespace CryptoAccouting.CoreClass
 
         private void calculatePL()
         {
-            double cur_bookprice = 0;
-            double out_amount = 0;
+			double accumulated_value = 0;
+			double current_bookprice = 0;
 
             foreach (var tx in txs.OrderBy(t=>t.TradeDate))
             {
+
                 if (tx.BuySell == EnuBuySell.Sell)
                 {
-                    // SELL: attach PL instanse 
-                    if (!RealizedPLHistory.Where(p => p.TxID() == tx.TxId).Any())//重複PLオブジェクトがないか事前にチェック！
-                    {
-                        var pl = new ProfitLoss(tx);
-                        pl.BaseCCY = AppSetting.BaseCurrency;
-                        pl.BookPrice = cur_bookprice;
-                        RealizedPLHistory.Add(pl);
-                    }
+                    //Sell : Reduce Accumulated trade value
+                    accumulated_value -= (tx.Quantity * tx.TradePrice + tx.Fee);
                 }
                 else if (tx.BuySell == EnuBuySell.Buy)
                 {
-                    //BUY: Update Average Book Price
-                    var newqty = out_amount + tx.Quantity;
-                    cur_bookprice = (out_amount * cur_bookprice + (tx.Quantity * tx.TradePrice - tx.Fee)) / newqty;
-                    out_amount = newqty;
+                    current_bookprice = (accumulated_value + (tx.Quantity * tx.TradePrice - tx.Fee)) / accumulated_value * current_bookprice;
+					tx.BookPrice = current_bookprice;
+                    accumulated_value += (tx.Quantity * tx.TradePrice - tx.Fee);
                 }
 
             }
 
-            this.BookPrice = cur_bookprice; //直近のBookPrice
+            this.LatestBookPrice = current_bookprice; //直近のBookPrice
 
         }
 
-  //      public double OutstandingAmountToToDate(Transaction tx){
-  //          if (txs.Count == 0) {
-  //              return 0;
-  //          }
-  //          else
-  //          {
-  //              return txs.Where(t => (t.TradeDate < tx.TradeDate) && t.BuySell == EnuBuySell.Buy).Sum(t => t.Quantity) -
-  //                         txs.Where(t => (t.TradeDate < tx.TradeDate) && t.BuySell == EnuBuySell.Sell).Sum(t => t.Quantity);
-  //          }
-  //      }
+        public double RealizedPL()
+        {
+            return txs.Where(x => x.BuySell == EnuBuySell.Sell).Count() == 0 ? 0 : txs.Sum(x => x.RealizedPLBaseCCY);
 
-  //      private double BookPriceToToDate(Transaction tx){
-  //          if (RealizedPLHistory.Count == 0)
-  //          {
-  //              return tx.TradePrice;
-  //          }
-  //          else
-  //          {
-  //              RealizedPLHistory.Where(p => (p.TradeDate() <= tx.TradeDate)).OrderBy(p => p.TradeDate());
-  //              var maxdate = RealizedPLHistory.Where(p => (p.TradeDate() <= tx.TradeDate)).Max(t=>t.TradeDate());
-  //              return RealizedPLHistory.Where(p => p.TradeDate() == maxdate).First().BookPrice;
-  //          }
-		//}
-
-        public double RealizedPL(){
-            if (RealizedPLHistory.Count == 0)
-            {
-                return 0;
-            }
-            else
-            {
-                return RealizedPLHistory.Sum(p => p.RealizedPL());
-            }
         }
 
         public double UnrealizedPL(){
 
-            return (TotalQtyBuy + TotalQtySell) * (2900000 - BookPrice);
+            return (TotalQtyBuy - TotalQtySell) * (2300000 - LatestBookPrice);
         }
-
-  //      public int CountBuy(){
-
-  //          return txs.Where(t => t.BuySell == EnuBuySell.Buy).Count();
-  //      }
-
-		//public int CountSell()
-		//{
-  //          return txs.Where(t => t.BuySell == EnuBuySell.Sell).Count();
-		//}
-
-		//public int QtyBuy()
-		//{
-  //          return txs.Where(t => t.BuySell == EnuBuySell.Buy).Sum(t=>t.Quantity);
-		//}
-
-		//public int QtySell()
-		//{
-  //          return txs.Where(t => t.BuySell == EnuBuySell.Sell).Sum(t => t.Quantity);
-		//}
-
-		//public int Qty()
-		//{
-		//	return txs.Sum(t => t.Quantity);
-		//}
 
         public void AttachTransaction(Transaction tx)
         {
-            if (txs.Any(x => x.TxId == tx.TxId)) DetachPosition(tx);
+            if (txs.Any(x => x.TxId == tx.TxId)) DetachTransaction(tx);
             txs.Add(tx);
         }
 
-        public void DetachPosition(Transaction tx)
+        public void DetachTransaction(Transaction tx)
         {
             txs.RemoveAll(x => x.TxId == tx.TxId);
         }

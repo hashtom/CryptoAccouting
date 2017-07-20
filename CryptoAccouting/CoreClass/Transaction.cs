@@ -8,16 +8,19 @@ namespace CryptoAccouting.CoreClass
     {
         public string TxId { get; set; }
         public Instrument Coin { get; }
-        public EnuExchangeType TradeExchange { get; }
+		public DateTime TradeDate { get; set; }
+        public EnuExchangeType TradeExchange { get; } // to be changed to exchange type
         public EnuBuySell BuySell { get; set; }
+        public EnuCCY BaseCurrency { get; set; }
+        public EnuCrypto BaseCrypto { get; set; }
         public int Quantity { get; set; }
         public double TradePrice { get; set; }
         public int Fee { get; set; }
-        public bool IsMargin { get; set; }
-        public DateTime TradeDate { get; set; }
-        //public DateTime UpdateTime { get; set; }
+		public double BookPrice { get; set; }
+		//public bool IsMargin { get; set; }
+		//public DateTime UpdateTime { get; set; }
 
-        public string Symbol {
+		public string Symbol {
             get { return Coin.Symbol; }
         }
 
@@ -26,17 +29,23 @@ namespace CryptoAccouting.CoreClass
 			get { return BuySell == EnuBuySell.Buy ? "Buy" : "Sell"; }
 		}
 
-        public double TradeValue
+        public double TradeValueBaseCCY
         {
             get { return TradePrice * Quantity; }
         }
 
+        public double RealizedPLBaseCCY
+        {
+            get { return (BookPrice != 0) ? (TradePrice - BookPrice) * Quantity : 0; }
+        }
+
         public Transaction(Instrument coin, EnuExchangeType exchange)
         {
-			Coin = coin;
+            Coin = coin;
             TradeExchange = exchange;
-			//UpdateTime = DateTime.Now;
+            BookPrice = 0;
         }
+
     }
 
 	public enum EnuBuySell

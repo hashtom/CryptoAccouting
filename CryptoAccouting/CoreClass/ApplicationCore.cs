@@ -41,7 +41,7 @@
 		USD
 	}
 
-	public enum EnuCrypt
+	public enum EnuCrypto
 	{
 		BTC,         LTC,         MONA,         RIPPLE
 	}      public enum EnuAppStatus{         Success,         Failure     }  } 
