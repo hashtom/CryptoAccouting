@@ -183,6 +183,7 @@
     <Compile Include="PerfomViewController.designer.cs">
       <DependentUpon>PerfomViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="CoreClass\ExchangeList.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\btc.png" />

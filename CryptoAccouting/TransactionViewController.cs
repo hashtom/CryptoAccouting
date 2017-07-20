@@ -69,8 +69,8 @@ namespace CryptoAccouting
             NavigationItem.RightBarButtonItem = EditButtonItem;
 			menu = ApplicationCore.Navigation;
 
-            //var myTxs = await ExchangeAPI.FetchTransactionAsync((EnuExchangeType.Zaif), true, false);
-            myTradeList = await ApplicationCore.GetTradeListAsync((EnuExchangeType.Zaif), true, false);
+			var exchange = await ApplicationCore.LoadTradeListAsync(new Exchange(EnuExchangeType.Zaif), true, true);
+			myTradeList = exchange.TradeList;
 
             //Show Summary
             myTradeList.ReEvaluate();

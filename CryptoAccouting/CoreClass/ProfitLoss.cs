@@ -5,7 +5,7 @@ namespace CryptoAccouting.CoreClass
     public class ProfitLoss
     {
         public double BookPrice { get; set; }
-        public EnuBaseCCY BaseCCY { get; set; }
+        public EnuCCY BaseCCY { get; set; }
         //public double Fee { get; set; }
 
 		private Transaction tx;

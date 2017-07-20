@@ -40,7 +40,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 c.MarketPrice.LatestPriceBTC = (double)jarray.SelectToken("[?(@.symbol == '" + c.Symbol + "')]")["price_btc"];
                 c.MarketPrice.LatestPrice = (double)jarray.SelectToken("[?(@.symbol == '" + c.Symbol + "')]")["price_usd"];
-                c.MarketPrice.BaseCurrency = EnuBaseCCY.USD; //hardcoded
+                c.MarketPrice.BaseCurrency = EnuCCY.USD; //hardcoded
                 //c.Name = (string)jarray.SelectToken("[?(@.symbol == '" + ins.Symbol + "')]")["name"];
                 c.MarketPrice.DayVolume = (double)jarray.SelectToken("[?(@.symbol == '" + c.Symbol + "')]")["24h_volume_usd"] / c.MarketPrice.LatestPriceBTC;
                 c.MarketPrice.PriceDate = ApplicationCore.FromEpochSeconds((long)jarray.SelectToken("[?(@.symbol == '" + c.Symbol + "')]")["last_updated"]).Date;

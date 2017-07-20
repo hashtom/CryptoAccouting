@@ -1,6 +1,6 @@
 ﻿﻿using System; using System.Collections.Generic; using System.Linq;
-//using System.Xml.Serialization; using System.Threading.Tasks; using UIKit; using CryptoAccouting.UIClass; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         private static Balance myBalance;         private static List<Instrument> myInstruments;         private static TradeList myTradeList;         public static NavigationDrawer Navigation { get; set; }
-        //private static List<Exchange> Exchanges;
+//using System.Xml.Serialization; using System.Threading.Tasks; using UIKit; using CryptoAccouting.UIClass; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         private static Balance myBalance;         private static List<Instrument> myInstruments;         //private static TradeList myTradeList;
+		private static List<Exchange> Exchanges;         public static NavigationDrawer Navigation { get; set; }
 
         public static NavigationDrawer InitializeSlideMenu(UIView BalanceTableView,                                                            UITableViewController PositionViewC,                                                            UIViewController TransactionViewC,                                                            UITableViewController PLViewC,                                                            UIViewController PerfViewC,
                                                            UIViewController SettingViewC)
@@ -21,11 +21,10 @@
         public static List<Instrument> GetInstrumentAll()
 		{
 			return myInstruments;
-		}          public static async Task<TradeList> GetTradeListAsync(EnuExchangeType extype, bool isAggregatedDaily, bool readfromFile)
-        {             if (myTradeList is null)
-            {
-                myTradeList = await ExchangeAPI.FetchTransactionAsync(extype, true, readfromFile);             }              return myTradeList;         } 
-        public static void AttachMyBalance(Balance bal)         {
+		}          public static async Task<Exchange> LoadTradeListAsync(Exchange exchange, bool isAggregatedDaily, bool readfromFile ){
+            if (exchange.TradeList is null)             {                 exchange.TradeList = await ExchangeAPI.FetchTransactionAsync(exchange.ExchangeType, isAggregatedDaily, readfromFile);             }              return exchange;         }
+
+		public static void AttachMyBalance(Balance bal)         {
             myBalance = bal;         }
 
 		public static DateTime FromEpochSeconds(long EpochSeconds)
@@ -36,8 +35,13 @@
 		}          public static async Task FetchMarketData()
         {             await MarketDataAPI.FetchCoinMarketData(myBalance);         }      }
 
-	public enum EnuBaseCCY
+	public enum EnuCCY
 	{
 		JPY,
 		USD
+	}
+
+	public enum EnuCrypt
+	{
+		BTC,         LTC,         MONA,         RIPPLE
 	}      public enum EnuAppStatus{         Success,         Failure     }  } 

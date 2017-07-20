@@ -20,7 +20,9 @@ namespace CryptoAccouting
         public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            myTradeList = await ApplicationCore.GetTradeListAsync(EnuExchangeType.Zaif, true, true);
+
+            var exchange = await ApplicationCore.LoadTradeListAsync(new Exchange(EnuExchangeType.Zaif), true, true);
+            myTradeList = exchange.TradeList;
 
 			myTradeList.ReEvaluate();
 

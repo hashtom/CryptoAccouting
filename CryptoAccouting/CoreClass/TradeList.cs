@@ -10,14 +10,16 @@ namespace CryptoAccouting.CoreClass
     public class TradeList : IEnumerable<Transaction>
     {
         public string TradeYear { get; set; }
+        public EnuCCY BaseCurrency { get; set; }
+        public EnuCrypt BaseCrypt { get; set; }
 		public double TotalQtyBuy { get; set; }
 		public double TotalQtySell { get; set; }
-        public double BookPrice { get; set; } 
         public int TxCountBuy { get; set; }
         public int TxCountSell { get; set; }
         public double TotalValueBuy { get; set;}
         public double TotalValueSell { get; set; }
-        public EnuExchangeType TradedExchange { get; set; }
+		public double BookPrice { get; set; }
+		public EnuExchangeType TradedExchange { get; set; }
 		
         private List<Transaction> txs;
         private List<ProfitLoss> RealizedPLHistory;
@@ -35,7 +37,7 @@ namespace CryptoAccouting.CoreClass
         }
 
 
-		public void ReEvaluate()
+        public void ReEvaluate(EnuCCY baseFiat = EnuCCY.JPY, EnuCrypt baseCrypt = EnuCrypt.BTC)
 		{
             TotalQtyBuy = txs.Where(t => t.BuySell == EnuBuySell.Buy).Sum(t => t.Quantity);
             TotalQtySell = txs.Where(t => t.BuySell == EnuBuySell.Sell).Sum(t => t.Quantity);

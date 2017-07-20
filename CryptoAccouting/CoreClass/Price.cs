@@ -7,7 +7,7 @@ namespace CryptoAccouting.CoreClass
         public string PriceSource { get; set; }
 		public double LatestPriceBTC { get; set; }
         public double LatestPrice { get; set; }
-		public EnuBaseCCY BaseCurrency { get; set; }
+		public EnuCCY BaseCurrency { get; set; }
         public double DayVolume { get; set; }
         public double? Pct1h { get; set; }
         public double? Pct1d { get; set; }
