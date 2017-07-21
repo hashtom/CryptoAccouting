@@ -23,6 +23,16 @@ namespace CryptoAccouting.CoreClass
             return TradeLists.Count == 0 ? null : TradeLists.Where(x => x.TradedCoin.Symbol == symbol).First();
         }
 
+        public string CoinNames()
+        {
+            string coinnames = "";
+            foreach (var coinname in this.TradeLists.Where(x=>x.TxCountTradeYear() > 0).Select(x => x.TradedCoin.Name))
+            {
+                coinnames += coinname + " ";
+            }
+            return coinnames;
+        }
+
     }
 
 	public enum EnuExchangeType

@@ -10,7 +10,7 @@ namespace CryptoAccouting.CoreClass
     public class TradeList : IEnumerable<Transaction>
     {
         public Instrument TradedCoin { get; set; } // Per single coin
-        public string TradeYear { get; set; }
+        public int TradeYear { get; private set; }
         public EnuCCY CCY_Valution { get; set; } // Fiat Only
 		public double TotalQtyBuy { get; set; }
 		public double TotalQtySell { get; set; }
@@ -36,18 +36,19 @@ namespace CryptoAccouting.CoreClass
             transactions = new List<Transaction>();
             this.CCY_Valution = cur_valuation;
             this.TradedCoin = ApplicationCore.GetInstrument(symbol);
+            this.TradeYear = DateTime.Now.Year;
         }
 
         public void ReEvaluate()
-		{
-            TotalQtyBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy).Sum(t => t.Quantity);
-            TotalQtySell = transactions.Where(t => t.BuySell == EnuBuySell.Sell).Sum(t => t.Quantity);
-            TxCountBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy).Count();
-            TxCountSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell).Count();
-            TotalValueBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy).Sum(t => t.TradeValue);
-            TotalValueSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell).Sum(t => t.TradeValue);
+        {
+            TotalQtyBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear).Sum(t => t.Quantity);
+            TotalQtySell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear).Sum(t => t.Quantity);
+            TxCountBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear).Count();
+            TxCountSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear).Count();
+            TotalValueBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear).Sum(t => t.TradeValue);
+            TotalValueSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear).Sum(t => t.TradeValue);
             CalculatePL();
-		}
+        }
 
         public void AggregateTransaction(Instrument coin, EnuExchangeType exType, EnuBuySell buysell, double qty, double tradePrice,
                                          DateTime tradeDate, int fee, EnuTxAggregateFlag flag = EnuTxAggregateFlag.Daliy)
@@ -89,7 +90,6 @@ namespace CryptoAccouting.CoreClass
 
             foreach (var tx in transactions.OrderBy(t=>t.TradeDate))
             {
-
                 if (tx.BuySell == EnuBuySell.Buy)
 				{
 					//Buy : Update Bookcost
@@ -112,11 +112,20 @@ namespace CryptoAccouting.CoreClass
 
         }
 
+        public void SwitchTrdeYear(int year){
+            this.TradeYear = year;
+            ReEvaluate();
+        }
+
+        public int TxCountTradeYear(){
+            return transactions.Where(x => x.TradeDate.Year == this.TradeYear).Count();
+        }
+
         public double RealizedPL()
         {
 			// calculate Realized PL when one side of trase is Base Fiat Currency
 			// ignore trades both sides are Crypto for Realized PL calculation 
-			return transactions.Where(x => x.BuySell == EnuBuySell.Sell).Count() == 0 ? 0 : transactions.Sum(x => x.RealizedPL);
+            return transactions.Where(x=>x.TradeDate.Year == this.TradeYear).Sum(x => x.RealizedPL);
         }
 
         public double UnrealizedPL(){
