@@ -19,7 +19,7 @@ namespace CryptoAccouting.CoreClass
         {
             if (exchanges == null ? false : exchanges.Where(x => x.ExchangeType == extype).Any())
             {
-                return this.First(x => x.ExchangeType == extype).GetTradeList(symbol);
+                return this.First(x => x.ExchangeType == extype).TradeList;
             }
             else
             {

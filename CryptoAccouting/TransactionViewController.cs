@@ -74,8 +74,8 @@ namespace CryptoAccouting
 			menu = ApplicationCore.Navigation;
 
             await ApplicationCore.LoadTradeListsAsync(EnuExchangeType.Zaif, true, true);
-			myTradeList = ApplicationCore.GetExchange(EnuExchangeType.Zaif).GetTradeList("BTC");
-            myTradeList.ReEvaluate();
+            myTradeList = ApplicationCore.GetExchange(EnuExchangeType.Zaif).TradeList;
+            myTradeList.CalculateTotalValue(DateTime.Now.Year,"BTC");
 
             //Show Summary
             this.LabelBougtAmount.Text = Math.Round(myTradeList.TotalQtyBuy,0).ToString();

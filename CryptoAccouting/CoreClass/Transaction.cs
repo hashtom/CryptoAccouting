@@ -38,6 +38,11 @@ namespace CryptoAccouting.CoreClass
             get { return BuySell == EnuBuySell.Buy ? TradePrice * Quantity - Fee : TradePrice * Quantity + Fee; }
 		}
 
+        public double RealizedBookValue
+        {
+            get { return BuySell == EnuBuySell.Sell ? BookPrice * Quantity : 0; }
+        }
+
         public double TradeValueConvert(EnuCCY baseCCY)
         {
             // JPY<->MONA

@@ -32,10 +32,6 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel LabelAvgBookValue { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel LabelBuyValue { get; set; }
 
         [Outlet]
@@ -53,6 +49,10 @@ namespace CryptoAccouting
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel LabelQtySell2 { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel LabelRealizedCost { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -124,11 +124,6 @@ namespace CryptoAccouting
                 LabelAvgBookPrice = null;
             }
 
-            if (LabelAvgBookValue != null) {
-                LabelAvgBookValue.Dispose ();
-                LabelAvgBookValue = null;
-            }
-
             if (LabelBuyValue != null) {
                 LabelBuyValue.Dispose ();
                 LabelBuyValue = null;
@@ -152,6 +147,11 @@ namespace CryptoAccouting
             if (LabelQtySell2 != null) {
                 LabelQtySell2.Dispose ();
                 LabelQtySell2 = null;
+            }
+
+            if (LabelRealizedCost != null) {
+                LabelRealizedCost.Dispose ();
+                LabelRealizedCost = null;
             }
 
             if (LabelRealizedPL != null) {

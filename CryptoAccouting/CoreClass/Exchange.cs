@@ -8,30 +8,21 @@ namespace CryptoAccouting.CoreClass
     {
         public string ExchangeName { get; set; }
         public EnuExchangeType ExchangeType { get; }
-        public List<TradeList> TradeLists;
+        //public List<TradeList> TradeLists;
+        public TradeList TradeList { get; set; }
 
         public DateTime UpdateTime { get; private set; }
 
         public Exchange(EnuExchangeType excType)
         {
             ExchangeType = excType;
-            TradeLists = new List<TradeList>();
+            //TradeLists = new List<TradeList>();
         }
 
-        public TradeList GetTradeList(string symbol)
-        {
-            return TradeLists.Count == 0 ? null : TradeLists.Where(x => x.TradedCoin.Symbol == symbol).First();
-        }
-
-        public string CoinNames()
-        {
-            string coinnames = "";
-            foreach (var coinname in this.TradeLists.Where(x=>x.TxCountTradeYear() > 0).Select(x => x.TradedCoin.Name))
-            {
-                coinnames += coinname + " ";
-            }
-            return coinnames;
-        }
+        //public TradeList GetTradeList(string symbol)
+        //{
+        //    return TradeLists.Count == 0 ? null : TradeLists.Where(x => x.TradedCoin.Symbol == symbol).First();
+        //}
 
     }
 

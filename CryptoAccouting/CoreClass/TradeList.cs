@@ -9,8 +9,9 @@ namespace CryptoAccouting.CoreClass
 {
     public class TradeList : IEnumerable<Transaction>
     {
-        public Instrument TradedCoin { get; set; } // Per single coin
+        public List<string> TradedCoin { get; private set; } 
         public int TradeYear { get; private set; }
+        public string TradedCoinString { get; set; }
         public EnuCCY CCY_Valution { get; set; } // Fiat Only
 		public double TotalQtyBuy { get; set; }
 		public double TotalQtySell { get; set; }
@@ -31,33 +32,50 @@ namespace CryptoAccouting.CoreClass
 			set { this.transactions = value; }
 		}
 
-        public TradeList(EnuCCY cur_valuation, string symbol)
+        public TradeList(EnuCCY cur_valuation)
         {
             transactions = new List<Transaction>();
             this.CCY_Valution = cur_valuation;
-            this.TradedCoin = ApplicationCore.GetInstrument(symbol);
-            this.TradeYear = DateTime.Now.Year;
         }
 
-        public void ReEvaluate()
+        public void CalculateTotalValue(int TradeYear, string Symbol = "ALL")
         {
-            TotalQtyBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear).Sum(t => t.Quantity);
-            TotalQtySell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear).Sum(t => t.Quantity);
-            TxCountBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear).Count();
-            TxCountSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear).Count();
-            TotalValueBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear).Sum(t => t.TradeValue);
-            TotalValueSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear).Sum(t => t.TradeValue);
+            this.TradeYear = TradeYear;
+
+            if (Symbol is "ALL")
+            {
+                TotalQtyBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear).Sum(t => t.Quantity);
+                TotalQtySell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear).Sum(t => t.Quantity);
+                TxCountBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear).Count();
+                TxCountSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear).Count();
+                TotalValueBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear).Sum(t => t.TradeValue);
+                TotalValueSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear).Sum(t => t.TradeValue);
+                RealizedBookValue = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear).Sum(t => t.RealizedBookValue);
+                AverageBookPrice = 0;
+            }
+            else
+			{
+                TotalQtyBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Sum(t => t.Quantity);
+				TotalQtySell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Sum(t => t.Quantity);
+				TxCountBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Count();
+				TxCountSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Count();
+				TotalValueBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Sum(t => t.TradeValue);
+				TotalValueSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Sum(t => t.TradeValue);
+                RealizedBookValue = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Sum(t => t.RealizedBookValue);
+                AverageBookPrice = transactions.Single(t => t.TradeDate == transactions.Max(tt => tt.TradeDate)).BookPrice;
+            }
+
             CalculatePL();
         }
 
-        public void AggregateTransaction(Instrument coin, EnuExchangeType exType, EnuBuySell buysell, double qty, double tradePrice,
+        public void AggregateTransaction(Instrument tradedCoin, EnuExchangeType exType, EnuBuySell buysell, double qty, double tradePrice,
                                          DateTime tradeDate, int fee, EnuTxAggregateFlag flag = EnuTxAggregateFlag.Daliy)
         {
             Transaction tx;
 
-            if (transactions.Any(t => (t.TradecCoinSymbol == coin.Symbol && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date)))
+            if (transactions.Any(t => (t.TradecCoinSymbol == tradedCoin.Symbol && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date)))
             {
-                tx = transactions.Single(t => (t.TradecCoinSymbol == coin.Symbol && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date));
+                tx = transactions.Single(t => (t.TradecCoinSymbol == tradedCoin.Symbol && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date));
 
                 double newqty;
                 newqty = tx.Quantity + qty;
@@ -68,7 +86,7 @@ namespace CryptoAccouting.CoreClass
             }
             else
             {
-                tx = new Transaction(coin,ApplicationCore.GetExchange(exType));
+                tx = new Transaction(tradedCoin,ApplicationCore.GetExchange(exType));
                 tx.TxId = (transactions.Count + 1).ToString();
                 tx.BuySell = buysell;
                 tx.Quantity = qty;
@@ -82,44 +100,49 @@ namespace CryptoAccouting.CoreClass
 
         private void CalculatePL()
         {
-			double accumulated_value = 0;
-            double accumulated_qty = 0;
-			double current_bookprice = 0;
-            RealizedBookValue = 0;
-            UnrealizedBookValue = 0;
+			TradedCoin = new List<string>();
+            TradedCoinString = "";
 
-            foreach (var tx in transactions.OrderBy(t=>t.TradeDate))
+            foreach (var s in transactions.Select(x => x.TradecCoinSymbol).Distinct())
             {
-                if (tx.BuySell == EnuBuySell.Buy)
-				{
-					//Buy : Update Bookcost
-					current_bookprice = (accumulated_value + tx.TradeValueGrossCost) / (accumulated_qty + tx.Quantity);
-					tx.BookPrice = current_bookprice;
-					accumulated_value += tx.TradeValueGrossCost;
-                    accumulated_qty += tx.Quantity;
-				}
-                else if (tx.BuySell == EnuBuySell.Sell)
+                string symbol = s;
+                double accumulated_value = 0;
+                double accumulated_qty = 0;
+                double current_bookprice = 0;
+                //UnrealizedBookValue = 0;
+
+                TradedCoin.Add(symbol);
+                TradedCoinString += symbol + " ";
+
+                foreach (var tx in transactions.Where(t => t.TradecCoinSymbol == symbol).OrderBy(t => t.TradeDate))
                 {
-                    //Sell : Reduce Accumulated value
-                    accumulated_value -= tx.TradeValueGrossCost;
-                    accumulated_qty -= tx.Quantity;
-                    tx.BookPrice = current_bookprice;
-                    RealizedBookValue += (tx.Quantity * tx.BookPrice);
+                    if (tx.BuySell == EnuBuySell.Buy)
+                    {
+                        //Buy : Update Bookcost
+                        current_bookprice = (accumulated_value + tx.TradeValueGrossCost) / (accumulated_qty + tx.Quantity);
+                        tx.BookPrice = current_bookprice;
+                        accumulated_value += tx.TradeValueGrossCost;
+                        accumulated_qty += tx.Quantity;
+                    }
+                    else if (tx.BuySell == EnuBuySell.Sell)
+                    {
+                        //Sell : Reduce Accumulated value
+                        accumulated_value -= tx.TradeValueGrossCost;
+                        accumulated_qty -= tx.Quantity;
+                        tx.BookPrice = current_bookprice;
+                    }
                 }
-
             }
-            this.AverageBookPrice = current_bookprice;
-
         }
 
-        public void SwitchTrdeYear(int year){
-            this.TradeYear = year;
-            ReEvaluate();
+        public void SwitchTrdeYear(int year)
+        {
+            CalculateTotalValue(year);
         }
 
-        public int TxCountTradeYear(){
-            return transactions.Where(x => x.TradeDate.Year == this.TradeYear).Count();
-        }
+        //public int TxCountTradeYear(){
+        //    return transactions.Where(x => x.TradeDate.Year == this.TradeYear).Count();
+        //}
 
         public double RealizedPL()
         {

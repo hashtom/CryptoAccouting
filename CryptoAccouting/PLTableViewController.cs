@@ -24,8 +24,8 @@ namespace CryptoAccouting
             //var exchange = await ApplicationCore.LoadTradeListAsync(new Exchange(EnuExchangeType.Zaif), true, true);
             //myTradeList = exchange.TradeList;
             await ApplicationCore.LoadTradeListsAsync(EnuExchangeType.Zaif, true, true);
-            myTradeList = ApplicationCore.GetExchange(EnuExchangeType.Zaif).GetTradeList("XEM");
-            myTradeList.ReEvaluate();
+            myTradeList = ApplicationCore.GetExchange(EnuExchangeType.Zaif).TradeList;
+            myTradeList.CalculateTotalValue(DateTime.Now.Year);
 
             DrawScreen();
         }
@@ -72,14 +72,14 @@ namespace CryptoAccouting
 			this.LabelSellValue2.Text = String.Format("{0:n0}", myTradeList.TotalValueSell);
 			this.LabelTotalValue.Text = String.Format("{0:n0}", (myTradeList.TotalValueBuy + myTradeList.TotalValueSell));
 
-            this.LabelTradedCoins.Text = ApplicationCore.GetExchange(EnuExchangeType.Zaif).CoinNames();
+            this.LabelTradedCoins.Text = ApplicationCore.GetExchange(EnuExchangeType.Zaif).TradeList.TradedCoinString;
 			//foreach (var coinname in ApplicationCore.GetExchange(EnuExchangeType.Zaif).TradeLists.Select(x => x.TradedCoin.Name))
 			//{
 			//	this.LabelTradedCoins.Text += coinname + " ";
 			//}
 
 			//this.LabelSoldValue.Text = Math.Round(myTradeList., 0).ToString();
-			this.LabelAvgBookValue.Text = String.Format("{0:n0}", myTradeList.RealizedBookValue);
+            this.LabelRealizedCost.Text = String.Format("{0:n0}", myTradeList.RealizedBookValue);
 			this.LabelRealizedPL.Text = String.Format("{0:n0}", myTradeList.RealizedPL());
 			this.LabelAvgBookPrice.Text = String.Format("{0:n0}", myTradeList.AverageBookPrice);
 			//this.LabelEstTaxValue

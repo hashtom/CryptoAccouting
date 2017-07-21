@@ -49,124 +49,187 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         }
 
-   //     internal async Task<Transactions> FetchTransaction(EnuExchangeType exType, bool isAggregateDaily = true){
+		//     internal async Task<Transactions> FetchTransaction(EnuExchangeType exType, bool isAggregateDaily = true){
 
-   //         Transactions txs = new Transactions();
+		//         Transactions txs = new Transactions();
 
-            //switch (exType)
-            //{
-            //    case EnuExchangeType.Zaif:
-            //        getAPIKey(EnuExchangeType.Zaif);
-            //        var json = await ZaifAPI.FetchTransaction(http, apikey, apisecret);
+		//switch (exType)
+		//{
+		//    case EnuExchangeType.Zaif:
+		//        getAPIKey(EnuExchangeType.Zaif);
+		//        var json = await ZaifAPI.FetchTransaction(http, apikey, apisecret);
 
-   //                 int status = (int)json.SelectToken("$.success");
+		//                 int status = (int)json.SelectToken("$.success");
 
-   //                 foreach (JProperty x in (JToken)json["return"])
-   //                 {
-   //                     var tx = new Transaction(new Instrument() { Symbol = "BTC" }, EnuExchangeType.Zaif);
-   //                     tx.TxId = x.Name;
-   //                     tx.BuySell = (string)json["return"][x.Name]["action"] == "bid" ? EnuBuySell.Buy : EnuBuySell.Sell;
-   //                     tx.Amount = (double)json["return"][tx.TxId]["amount"];
-   //                     tx.TradePrice = (double)json["return"][tx.TxId]["price"];
-   //                     tx.TradeDate = ZaifAPI.FromEpochSeconds(tx.TradeDate,(long)json["return"][tx.TxId]["timestamp"]);
-   //                     txs.AttachTransaction(tx);
-   //                 }
+		//                 foreach (JProperty x in (JToken)json["return"])
+		//                 {
+		//                     var tx = new Transaction(new Instrument() { Symbol = "BTC" }, EnuExchangeType.Zaif);
+		//                     tx.TxId = x.Name;
+		//                     tx.BuySell = (string)json["return"][x.Name]["action"] == "bid" ? EnuBuySell.Buy : EnuBuySell.Sell;
+		//                     tx.Amount = (double)json["return"][tx.TxId]["amount"];
+		//                     tx.TradePrice = (double)json["return"][tx.TxId]["price"];
+		//                     tx.TradeDate = ZaifAPI.FromEpochSeconds(tx.TradeDate,(long)json["return"][tx.TxId]["timestamp"]);
+		//                     txs.AttachTransaction(tx);
+		//                 }
 
-   //                 break;;
+		//                 break;;
 
-            //    default:
+		//    default:
 
-   //                 break;
-            //}
-        //    return txs;
+		//                 break;
+		//}
+		//    return txs;
 
-        //}
+		//}
 
-        internal static async Task<List<TradeList>> FetchTradeListsAsync(EnuExchangeType exType, bool isAggregateDaily = true, bool ReadFromFile = false)
-        {
+		internal static async Task<TradeList> FetchTradeListAsync(EnuExchangeType exType, bool isAggregateDaily = true, bool ReadFromFile = false)
+		{
 
-            var tradelists = new List<TradeList>();
+            TradeList tradelist = new TradeList(ApplicationCore.BaseCurrency);
+			string rawjson;
 
-            string rawjson;
+			switch (exType)
+			{
+				case EnuExchangeType.Zaif:
 
-            switch (exType)
-            {
-                case EnuExchangeType.Zaif:
+					if (ReadFromFile)
+					{
+						rawjson = StorageAPI.LoadFromJsonFile("zaifTransaction.json");
+					}
+					else
+					{
+						GetAPIKey(EnuExchangeType.Zaif);
+						rawjson = await ZaifAPI.FetchTransactionAsync(apikey, apisecret);
+
+					}
+
+					var json = JObject.Parse(rawjson);
+					int status = (int)json.SelectToken("$.success");
+
+					foreach (JProperty x in (JToken)json["return"])
+					{
+						//Transaction Date Order must be ascending by design...
+						EnuBuySell ebuysell;
+
+						switch ((string)json["return"][x.Name]["your_action"])
+						{
+							case "bid":
+								ebuysell = EnuBuySell.Buy;
+								break;
+							case "ask":
+								ebuysell = EnuBuySell.Sell;
+								break;
+							default:
+								ebuysell = EnuBuySell.Check;
+								break;
+						}
+
+
+						var symbol = (string)json["return"][x.Name]["currency_pair"];
+						symbol = symbol.Replace("_jpy", "").Replace("_btc", "").ToUpper();
+
+						tradelist.AggregateTransaction(ApplicationCore.GetInstrument(symbol),
+												 exType,
+												 ebuysell,
+												 (double)json["return"][x.Name]["amount"],
+												 (double)json["return"][x.Name]["price"],
+												 ApplicationCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
+												 (int)json["return"][x.Name]["fee"]);
+                        
+
+					}
+
+					// Save Json file
+					StorageAPI.SaveJsonFile(rawjson, "zaifTransaction.json");
+					break;
+
+				default:
+					break;
+			}
+
+			return tradelist;
+		}
+
+        //internal static async Task<List<TradeList>> FetchTradeListsAsync(EnuExchangeType exType, bool isAggregateDaily = true, bool ReadFromFile = false)
+        //{
+
+        //    var tradelists = new List<TradeList>();
+
+        //    string rawjson;
+
+        //    switch (exType)
+        //    {
+        //        case EnuExchangeType.Zaif:
                     
-                    //tl = new TradeList(ApplicationCore.BaseCurrency, "BTC");
+        //            //tl = new TradeList(ApplicationCore.BaseCurrency, "BTC");
 
-                    if (ReadFromFile)
-                    {
-                        rawjson = StorageAPI.LoadFromJsonFile("zaifTransaction.json");
-                    }
-                    else
-                    {
-                        GetAPIKey(EnuExchangeType.Zaif);
-                        rawjson = await ZaifAPI.FetchTransactionAsync(apikey, apisecret);
+        //            if (ReadFromFile)
+        //            {
+        //                rawjson = StorageAPI.LoadFromJsonFile("zaifTransaction.json");
+        //            }
+        //            else
+        //            {
+        //                GetAPIKey(EnuExchangeType.Zaif);
+        //                rawjson = await ZaifAPI.FetchTransactionAsync(apikey, apisecret);
     
-                    }
+        //            }
 
-                    var json = JObject.Parse(rawjson);
-                    int status = (int)json.SelectToken("$.success");
+        //            var json = JObject.Parse(rawjson);
+        //            int status = (int)json.SelectToken("$.success");
 
-                    foreach (JProperty x in (JToken)json["return"])
-                    {
-                       // DateTime tm = DateTime.Now;
+        //            foreach (JProperty x in (JToken)json["return"])
+        //            {
+        //               // DateTime tm = DateTime.Now;
 
-                        //Transaction Date Order must be ascending by design...
-                        EnuBuySell ebuysell;
+        //                //Transaction Date Order must be ascending by design...
+        //                EnuBuySell ebuysell;
 
-                        switch ((string)json["return"][x.Name]["your_action"])
-                        {   
-                            case "bid":
-                                ebuysell = EnuBuySell.Buy;
-                                break;
-                            case "ask":
-                                ebuysell = EnuBuySell.Sell;
-                                break;
-                            default:
-                                ebuysell = EnuBuySell.Check;
-                                break;
-                        }
-
-
-                        var symbol = (string)json["return"][x.Name]["currency_pair"];
-                        symbol = symbol.Replace("_jpy","").Replace("_btc","").ToUpper();
-
-                        var tl = tradelists.Any(t => t.TradedCoin.Symbol == symbol) ?
-                                           tradelists.First(t => t.TradedCoin.Symbol == symbol) :
-                                           new TradeList(ApplicationCore.BaseCurrency, symbol);
+        //                switch ((string)json["return"][x.Name]["your_action"])
+        //                {   
+        //                    case "bid":
+        //                        ebuysell = EnuBuySell.Buy;
+        //                        break;
+        //                    case "ask":
+        //                        ebuysell = EnuBuySell.Sell;
+        //                        break;
+        //                    default:
+        //                        ebuysell = EnuBuySell.Check;
+        //                        break;
+        //                }
 
 
-                        tl.AggregateTransaction(ApplicationCore.GetInstrument(symbol),
-                                                 exType,
-                                                 ebuysell,
-                                                 (double)json["return"][x.Name]["amount"],
-                                                 (double)json["return"][x.Name]["price"],
-                                                 ApplicationCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
-                                                 (int)json["return"][x.Name]["fee"]);
+        //                var symbol = (string)json["return"][x.Name]["currency_pair"];
+        //                symbol = symbol.Replace("_jpy","").Replace("_btc","").ToUpper();
 
-                        if (!tradelists.Any(t => t.TradedCoin.Symbol == symbol))
-                            tradelists.Add(tl);
+        //                var tl = tradelists.Any(t => t.TradedCoin.Symbol == symbol) ?
+        //                                   tradelists.First(t => t.TradedCoin.Symbol == symbol) :
+        //                                   new TradeList(ApplicationCore.BaseCurrency, symbol);
 
-                        if ((double)json["return"][x.Name]["amount"]==0)
-                        {
-                            Console.WriteLine("");
-                        }
 
-                    }
+        //                tl.AggregateTransaction(ApplicationCore.GetInstrument(symbol),
+        //                                         exType,
+        //                                         ebuysell,
+        //                                         (double)json["return"][x.Name]["amount"],
+        //                                         (double)json["return"][x.Name]["price"],
+        //                                         ApplicationCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
+        //                                         (int)json["return"][x.Name]["fee"]);
 
-                    // Save Json file
-                    StorageAPI.SaveJsonFile(rawjson, "zaifTransaction.json");
-                    break;
+        //                if (!tradelists.Any(t => t.TradedCoin.Symbol == symbol))
+        //                    tradelists.Add(tl);
 
-                default:
+        //            }
 
-                    break;
-            }
+        //            // Save Json file
+        //            StorageAPI.SaveJsonFile(rawjson, "zaifTransaction.json");
+        //            break;
 
-            return tradelists;
-        }
+        //        default:
+
+        //            break;
+        //    }
+
+        //    return tradelists;
+        //}
 
 
         internal static void GetAPIKey(EnuExchangeType exType)

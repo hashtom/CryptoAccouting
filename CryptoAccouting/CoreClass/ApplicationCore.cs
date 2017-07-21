@@ -36,7 +36,7 @@
 			return myInstruments;
 		}          public static async Task LoadTradeListsAsync(EnuExchangeType extype, bool isAggregatedDaily = true, bool readfromFile = false)
         {
-            var exchange = GetExchange(extype);             exchange.TradeLists = await ExchangeAPI.FetchTradeListsAsync(exchange.ExchangeType, isAggregatedDaily, readfromFile);             ExchangeList.AttachExchange(exchange);              //return exchange.TradeLists;         }          public static Exchange GetExchange(EnuExchangeType extype)
+            var exchange = GetExchange(extype);             exchange.TradeList = await ExchangeAPI.FetchTradeListAsync(exchange.ExchangeType, isAggregatedDaily, readfromFile);             ExchangeList.AttachExchange(exchange);              //return exchange.TradeLists;         }          public static Exchange GetExchange(EnuExchangeType extype)
         {             return ExchangeList.GetExchange(extype);         }          public static TradeList GetExchangeTradeList(EnuExchangeType extype, string symbol)
         {             return ExchangeList.GetTradelist(extype,symbol);
         }

@@ -1284,7 +1284,7 @@
                         <outlet property="TextPeriod" destination="18270" id="name-outlet-18270"/>
                         <outlet property="LabelQtySell2" destination="18278" id="name-outlet-18278"/>
                         <outlet property="LabelSellValue2" destination="18279" id="name-outlet-18279"/>
-                        <outlet property="LabelAvgBookValue" destination="18287" id="name-outlet-18287"/>
+                        <outlet property="LabelRealizedCost" destination="18287" id="name-outlet-18287"/>
                         <outlet property="LabelRealizedPL" destination="18283" id="name-outlet-18283"/>
                         <outlet property="LabelAvgBookPrice" destination="18291" id="name-outlet-18291"/>
                         <outlet property="LabelTxsSell" destination="19650" id="name-outlet-19650"/>
