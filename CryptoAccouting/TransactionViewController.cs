@@ -52,6 +52,9 @@ namespace CryptoAccouting
 			valueColumn.MappingName = "TradeValue";
             valueColumn.HeaderText = "Value";
 
+			GridTextColumn bookColumn = new GridTextColumn();
+			bookColumn.MappingName = "BookPrice";
+			bookColumn.HeaderText = "Book";
 
 			sfGrid.Columns.Add(txIdColumn);
 			sfGrid.Columns.Add(dateColumn);
@@ -60,6 +63,7 @@ namespace CryptoAccouting
 			sfGrid.Columns.Add(amountColumn);
 			sfGrid.Columns.Add(priceColumn);
             sfGrid.Columns.Add(valueColumn);
+            sfGrid.Columns.Add(bookColumn);
 
 		}
         
@@ -79,7 +83,7 @@ namespace CryptoAccouting
             this.LabelOutstandingAmount.Text = Math.Round(myTradeList.TotalQtyBuy + myTradeList.TotalQtySell,0).ToString();
             //this.LabelBougtPrice.Text = myTxs.BookPrice.ToString();
             //this.LabelSoldPrice.Text = myTxs..ToString();
-            this.LabelOutstandingPrice.Text = Math.Round(myTradeList.LatestBookCost,2).ToString();
+            this.LabelOutstandingPrice.Text = Math.Round(myTradeList.UnrealizedBookValue,2).ToString();
             this.LabelRealizedPL.Text = Math.Round(myTradeList.RealizedPL()/1000,2).ToString();
             this.LabelUnrealizedPL.Text = Math.Round(myTradeList.UnrealizedPL()/1000,2).ToString();
 

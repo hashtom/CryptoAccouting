@@ -141,13 +141,19 @@ namespace CryptoAccouting.CoreClass.APIClass
                         tl.AggregateTransaction(ApplicationCore.GetInstrument(symbol),
                                                  exType,
                                                  ebuysell,
-                                                 (int)json["return"][x.Name]["amount"],
+                                                 (double)json["return"][x.Name]["amount"],
                                                  (double)json["return"][x.Name]["price"],
                                                  ApplicationCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
                                                  (int)json["return"][x.Name]["fee"]);
 
                         if (!tradelists.Any(t => t.TradedCoin.Symbol == symbol))
                             tradelists.Add(tl);
+
+                        if ((double)json["return"][x.Name]["amount"]==0)
+                        {
+                            Console.WriteLine("");
+                        }
+
                     }
 
                     // Save Json file

@@ -455,7 +455,7 @@
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="18257" translatesAutoresizingMaskIntoConstraints="NO">
                                                     <rect key="frame" x="265" y="4" width="30" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <state key="normal" title="JPY">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
@@ -549,15 +549,16 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                 </textField>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="18292" translatesAutoresizingMaskIntoConstraints="NO" text="TBD">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="18292" translatesAutoresizingMaskIntoConstraints="NO" text="取引コイン">
                                                     <rect key="frame" x="214" y="12" width="26" height="16"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="18294" translatesAutoresizingMaskIntoConstraints="NO">
                                                     <rect key="frame" x="265" y="5" width="30" height="30"/>
-                                                    <state key="normal" title="TBD">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <state key="normal" title="ALL">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <connections>
@@ -925,17 +926,45 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="19875" translatesAutoresizingMaskIntoConstraints="NO" text="ABC">
+                                                    <rect key="frame" x="102" y="10" width="31" height="15"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <variation key="default">
                                                 <mask key="subviews">
                                                     <exclude reference="18336"/>
+                                                    <exclude reference="19875"/>
+                                                </mask>
+                                                <mask key="constraints">
+                                                    <exclude reference="19876"/>
+                                                    <exclude reference="19877"/>
+                                                    <exclude reference="19907"/>
+                                                    <exclude reference="19910"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact">
                                                 <mask key="subviews">
                                                     <include reference="18336"/>
+                                                    <include reference="19875"/>
+                                                </mask>
+                                                <mask key="constraints">
+                                                    <include reference="19876"/>
+                                                    <include reference="19877"/>
+                                                    <include reference="19907"/>
+                                                    <include reference="19910"/>
                                                 </mask>
                                             </variation>
+                                            <constraints>
+                                                <constraint id="19876" firstItem="19875" firstAttribute="leading" secondItem="19625" secondAttribute="leading" constant="103"/>
+                                                <constraint id="19877" firstItem="19875" firstAttribute="top" secondItem="19625" secondAttribute="top" constant="6">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="10"/>
+                                                </constraint>
+                                                <constraint id="19907" firstItem="18336" firstAttribute="top" secondItem="19625" secondAttribute="top" constant="11"/>
+                                                <constraint id="19910" firstItem="18336" firstAttribute="leading" secondItem="19625" secondAttribute="leading" constant="16"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
@@ -967,13 +996,13 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="18280" translatesAutoresizingMaskIntoConstraints="NO" text="数量(BTC)">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="18280" translatesAutoresizingMaskIntoConstraints="NO" text="数量">
                                                     <rect key="frame" x="100" y="6" width="101" height="21"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="金額(Mil, JPY)" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="18281" translatesAutoresizingMaskIntoConstraints="NO">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="金額" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="18281" translatesAutoresizingMaskIntoConstraints="NO">
                                                     <rect key="frame" x="193" y="6" width="138" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
@@ -1025,8 +1054,12 @@
                                                 <constraint id="19716" firstItem="18261" firstAttribute="trailing" secondItem="18279" secondAttribute="trailing" constant="57">
                                                     <variation key="heightClass=regular-widthClass=compact" constant="20"/>
                                                 </constraint>
-                                                <constraint id="19720" firstItem="18281" firstAttribute="leading" secondItem="18280" secondAttribute="trailing" constant="64"/>
-                                                <constraint id="19721" firstItem="18279" firstAttribute="centerX" secondItem="18278" secondAttribute="trailing" constant="150"/>
+                                                <constraint id="19720" firstItem="18281" firstAttribute="leading" secondItem="18280" secondAttribute="trailing" constant="64">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="110"/>
+                                                </constraint>
+                                                <constraint id="19721" firstItem="18279" firstAttribute="centerX" secondItem="18278" secondAttribute="trailing" constant="150">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="110"/>
+                                                </constraint>
                                                 <constraint id="19775" firstItem="18278" firstAttribute="top" secondItem="18280" secondAttribute="centerY" constant="17"/>
                                                 <constraint id="19776" firstItem="18279" firstAttribute="top" secondItem="18281" secondAttribute="centerY" constant="16"/>
                                                 <constraint id="19824" firstItem="18266" firstAttribute="top" secondItem="18261" secondAttribute="top" constant="30"/>
@@ -1264,6 +1297,7 @@
                         <outlet property="LabelSellValue" destination="19752" id="name-outlet-19752"/>
                         <outlet property="LabelBuyValue" destination="19754" id="name-outlet-19754"/>
                         <outlet property="LabelTotalValue" destination="19756" id="name-outlet-19756"/>
+                        <outlet property="LabelTradedCoins" destination="19875" id="name-outlet-19875"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="17634" userLabel="First Responder" sceneMemberID="firstResponder"/>

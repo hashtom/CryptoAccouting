@@ -12,14 +12,14 @@ namespace CryptoAccouting.CoreClass
         public DateTime TradeDate { get; set; }
         public Exchange TradeExchange { get; }
         public EnuBuySell BuySell { get; set; }
-        public int Quantity { get; set; }
+        public double Quantity { get; set; }
         public double TradePrice { get; set; }
         public int Fee { get; set; }
         public double BookPrice { get; set; }
         //public bool IsMargin { get; set; }
         //public DateTime UpdateTime { get; set; }
 
-        public string Symbol {
+        public string TradecCoinSymbol {
             get { return TradedCoin.Symbol; }
         }
 
@@ -32,6 +32,11 @@ namespace CryptoAccouting.CoreClass
         {
             get { return TradePrice * Quantity; }
         }
+
+		public double TradeValueGrossCost
+		{
+            get { return BuySell == EnuBuySell.Buy ? TradePrice * Quantity - Fee : TradePrice * Quantity + Fee; }
+		}
 
         public double TradeValueConvert(EnuCCY baseCCY)
         {

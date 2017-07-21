@@ -18,56 +18,57 @@ namespace CryptoAccouting.CoreClass
         public int TxCountSell { get; set; }
         public double TotalValueBuy { get; set;}
         public double TotalValueSell { get; set; }
-		public double LatestBookCost { get; set; }
+		public double RealizedBookValue { get; set; }
+        public double UnrealizedBookValue { get; set; } 
+        public double AverageBookPrice { get; set; }
 		public EnuExchangeType TradedExchange { get; set; }
 
-        private List<Transaction> txs;
+        private List<Transaction> transactions;
 
 		public List<Transaction> TransactionCollection
 		{
-			get { return txs; }
-			set { this.txs = value; }
+			get { return transactions; }
+			set { this.transactions = value; }
 		}
 
         public TradeList(EnuCCY cur_valuation, string symbol)
         {
-            txs = new List<Transaction>();
+            transactions = new List<Transaction>();
             this.CCY_Valution = cur_valuation;
             this.TradedCoin = ApplicationCore.GetInstrument(symbol);
         }
 
         public void ReEvaluate()
 		{
-            TotalQtyBuy = txs.Where(t => t.BuySell == EnuBuySell.Buy).Sum(t => t.Quantity);
-            TotalQtySell = txs.Where(t => t.BuySell == EnuBuySell.Sell).Sum(t => t.Quantity);
-            TxCountBuy = txs.Where(t => t.BuySell == EnuBuySell.Buy).Count();
-            TxCountSell = txs.Where(t => t.BuySell == EnuBuySell.Sell).Count();
-            TotalValueBuy = txs.Where(t => t.BuySell == EnuBuySell.Buy).Sum(t => t.Quantity * t.TradePrice);
-            TotalValueSell = txs.Where(t => t.BuySell == EnuBuySell.Sell).Sum(t => t.Quantity * t.TradePrice);
-            calculatePL();
+            TotalQtyBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy).Sum(t => t.Quantity);
+            TotalQtySell = transactions.Where(t => t.BuySell == EnuBuySell.Sell).Sum(t => t.Quantity);
+            TxCountBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy).Count();
+            TxCountSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell).Count();
+            TotalValueBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy).Sum(t => t.TradeValue);
+            TotalValueSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell).Sum(t => t.TradeValue);
+            CalculatePL();
 		}
 
-        public void AggregateTransaction(Instrument coin, EnuExchangeType exType, EnuBuySell buysell, int qty, double tradePrice,
+        public void AggregateTransaction(Instrument coin, EnuExchangeType exType, EnuBuySell buysell, double qty, double tradePrice,
                                          DateTime tradeDate, int fee, EnuTxAggregateFlag flag = EnuTxAggregateFlag.Daliy)
         {
             Transaction tx;
 
-            if (txs.Any(t => (t.Symbol == coin.Symbol && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date)))
+            if (transactions.Any(t => (t.TradecCoinSymbol == coin.Symbol && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date)))
             {
-                tx = txs.Where(t => (t.Symbol == coin.Symbol && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date)).First();
+                tx = transactions.Single(t => (t.TradecCoinSymbol == coin.Symbol && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date));
 
-                int newqty;
+                double newqty;
                 newqty = tx.Quantity + qty;
 
                 tx.TradePrice = (tx.TradePrice * tx.Quantity + tradePrice * qty) / newqty;
                 tx.Quantity = newqty;
                 tx.Fee += fee;
-                //tx.UpdateTime = DateTime.Now;
             }
             else
             {
                 tx = new Transaction(coin,ApplicationCore.GetExchange(exType));
-                tx.TxId = (txs.Count + 1).ToString();
+                tx.TxId = (transactions.Count + 1).ToString();
                 tx.BuySell = buysell;
                 tx.Quantity = qty;
                 tx.TradePrice = tradePrice;
@@ -76,34 +77,38 @@ namespace CryptoAccouting.CoreClass
                 this.AttachTransaction(tx);
             }
 
-            //昇順（過去->現在）への順番で取引がコールされる前提
-            //this.updatePL(tx);
-
         }
 
-        private void calculatePL()
+        private void CalculatePL()
         {
 			double accumulated_value = 0;
+            double accumulated_qty = 0;
 			double current_bookprice = 0;
+            RealizedBookValue = 0;
+            UnrealizedBookValue = 0;
 
-            foreach (var tx in txs.OrderBy(t=>t.TradeDate))
+            foreach (var tx in transactions.OrderBy(t=>t.TradeDate))
             {
 
-                if (tx.BuySell == EnuBuySell.Sell)
-                {
-                    //Sell : Reduce Accumulated trade value
-                    accumulated_value -= (tx.Quantity * tx.TradePrice + tx.Fee);
-                }
-                else if (tx.BuySell == EnuBuySell.Buy)
-                {
-                    current_bookprice = (accumulated_value + (tx.Quantity * tx.TradePrice - tx.Fee)) / accumulated_value * current_bookprice;
+                if (tx.BuySell == EnuBuySell.Buy)
+				{
+					//Buy : Update Bookcost
+					current_bookprice = (accumulated_value + tx.TradeValueGrossCost) / (accumulated_qty + tx.Quantity);
 					tx.BookPrice = current_bookprice;
-                    accumulated_value += (tx.Quantity * tx.TradePrice - tx.Fee);
+					accumulated_value += tx.TradeValueGrossCost;
+                    accumulated_qty += tx.Quantity;
+				}
+                else if (tx.BuySell == EnuBuySell.Sell)
+                {
+                    //Sell : Reduce Accumulated value
+                    accumulated_value -= tx.TradeValueGrossCost;
+                    accumulated_qty -= tx.Quantity;
+                    tx.BookPrice = current_bookprice;
+                    RealizedBookValue += (tx.Quantity * tx.BookPrice);
                 }
 
             }
-
-            this.LatestBookCost = current_bookprice; //直近のBookPrice
+            this.AverageBookPrice = current_bookprice;
 
         }
 
@@ -111,38 +116,38 @@ namespace CryptoAccouting.CoreClass
         {
 			// calculate Realized PL when one side of trase is Base Fiat Currency
 			// ignore trades both sides are Crypto for Realized PL calculation 
-			return txs.Where(x => x.BuySell == EnuBuySell.Sell).Count() == 0 ? 0 : txs.Sum(x => x.RealizedPL);
+			return transactions.Where(x => x.BuySell == EnuBuySell.Sell).Count() == 0 ? 0 : transactions.Sum(x => x.RealizedPL);
         }
 
         public double UnrealizedPL(){
-
-            return (TotalQtyBuy - TotalQtySell) * (2300000 - LatestBookCost);
+            return 0;
+            //return (TotalQtyBuy - TotalQtySell) * (2300000 - LatestBookCost);
         }
 
         public void AttachTransaction(Transaction tx)
         {
-            if (txs.Any(x => x.TxId == tx.TxId)) DetachTransaction(tx);
-            txs.Add(tx);
+            if (transactions.Any(x => x.TxId == tx.TxId)) DetachTransaction(tx);
+            transactions.Add(tx);
         }
 
         public void DetachTransaction(Transaction tx)
         {
-            txs.RemoveAll(x => x.TxId == tx.TxId);
+            transactions.RemoveAll(x => x.TxId == tx.TxId);
         }
 
         public Transaction GetTransactionByIndex(int indexNumber)
         {
-            return txs[indexNumber];
+            return transactions[indexNumber];
         }
 
         public int Count()
         {
-            return txs.Count;
+            return transactions.Count;
         }
 
 		public IEnumerator<Transaction> GetEnumerator()
 		{
-			for (int i = 0; i <= txs.Count - 1; i++) yield return txs[i];
+			for (int i = 0; i <= transactions.Count - 1; i++) yield return transactions[i];
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

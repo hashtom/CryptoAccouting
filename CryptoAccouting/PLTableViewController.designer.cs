@@ -72,6 +72,10 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel LabelTradedCoins { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel LabelTxsBuy { get; set; }
 
         [Outlet]
@@ -168,6 +172,11 @@ namespace CryptoAccouting
             if (LabelTotalValue != null) {
                 LabelTotalValue.Dispose ();
                 LabelTotalValue = null;
+            }
+
+            if (LabelTradedCoins != null) {
+                LabelTradedCoins.Dispose ();
+                LabelTradedCoins = null;
             }
 
             if (LabelTxsBuy != null) {
