@@ -2,6 +2,7 @@
 using CoreGraphics;
 using Foundation;
 using UIKit;
+using CryptoAccouting.CoreClass;
 
 namespace CryptoAccouting.UIClass
 {
@@ -22,24 +23,24 @@ namespace CryptoAccouting.UIClass
             // Note: this .ctor should not contain any initialization logic.
         }
 
-		public void UpdateCell(string code, string amount, string price, string pct1d, UIImage image)
+        public void UpdateCell(Position pos)
 		{
-			imageView.Image = image;
-            labelSymbol.Text = code;
-            labelHoldings.Text = amount;
-            labelPrice.Text = price;
-            labelPct.Text = pct1d;
+            var logo = pos.Coin.LogoFileName;
+
+            imageView.Image = logo == null ? null : UIImage.FromFile(logo);
+            labelSymbol.Text = pos.Coin.Symbol;
+			labelHoldings.Text = String.Format("{0:n0}", pos.Amount);
+            labelHoldingBTC.Text = String.Format("{0:n0}", pos.AmountBTC());
+            labelFiatValue.Text = String.Format("{0:n0}", pos.LatestFiatValue());
+			labelPct.Text = String.Format("{0:n2}", pos.Pct1d()) + " %";
+            if (pos.Coin.Symbol is "BTC"){
+				labelPrice.Text = String.Format("{0:n0}", pos.MarketPrice());
+                labelHoldings.Text = "";
+            }else{
+                labelPrice.Text = String.Format("{0:n6}", pos.MarketPriceBTC());
+            }
+
 		}
 
-		//public override void LayoutSubviews()
-		//{
-		//	base.LayoutSubviews();
-		//	//imageView.Frame = new CGRect(ContentView.Bounds.Width - 63, 5, 33, 33);
-		//	imageView.Frame = new CGRect(5, 5, 33, 33);
-		//	codeLabel.Frame = new CGRect(50, 10, 100, 25);
-		//	amountLabel.Frame = new CGRect(100, 10, 100, 25);
-		//	priceLabel.Frame = new CGRect(200, 10, 100, 25);
-		//	pctLabel.Frame = new CGRect(300, 10, 100, 25);
-		//}
     }
 }

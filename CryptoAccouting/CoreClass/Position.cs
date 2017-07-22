@@ -10,9 +10,7 @@ namespace CryptoAccouting.CoreClass
 		public DateTime BalanceDate { get; set; }
         public double Amount { get; set; }
         public double BookPrice { get; set; }
-        //public Price PriceData { get; private set; }
-        //public Transaction Tx { get; private set; } //XML Serialize error
-        //public DateTime UpdateTime { get; private set; }
+       //public DateTime UpdateTime { get; private set; }
 
 		public Position(Instrument coin, string positionId)
         {
@@ -21,13 +19,19 @@ namespace CryptoAccouting.CoreClass
         }
         public Position() { }
 
-        //public double ProfitLoss(){
-        //    return MarketValuePrevClose() - BookValue();
-        //}
+		public double AmountBTC()
+		{
+            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPriceBTC * this.Amount;
+		}
 
-        public double MarketPrice(){
+        public double MarketPriceBTC(){
             return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPriceBTC;
         }
+
+		public double MarketPrice()
+		{
+            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPrice;
+		}
 
         public double? Pct1d(){
             return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.Pct1d;
@@ -38,10 +42,14 @@ namespace CryptoAccouting.CoreClass
             return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.DayVolume;
 		}
 
+        public double LatestFiatValue()
+        {
+            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPrice * this.Amount;
+        }
+
 		public double BookValue()
 		{
 			return Amount * BookPrice;
 		}
-
 	}
 }

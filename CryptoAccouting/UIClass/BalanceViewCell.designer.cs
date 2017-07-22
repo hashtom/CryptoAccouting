@@ -19,6 +19,10 @@ namespace CryptoAccouting.UIClass
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelFiatValue { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel labelHoldingBTC { get; set; }
 
         [Outlet]
@@ -42,6 +46,11 @@ namespace CryptoAccouting.UIClass
             if (imageView != null) {
                 imageView.Dispose ();
                 imageView = null;
+            }
+
+            if (labelFiatValue != null) {
+                labelFiatValue.Dispose ();
+                labelFiatValue = null;
             }
 
             if (labelHoldingBTC != null) {

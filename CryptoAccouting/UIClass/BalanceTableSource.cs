@@ -32,15 +32,9 @@ namespace CryptoAccouting.UIClass
             //var cell = tableView.DequeueReusableCell(cellIdentifier) as CustomBalanceCell;
 			//if (cell == null)
                 //cell = new CustomBalanceCell (cellIdentifier);
-            var cell = (BalanceViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
-            var logo = balanceViewItems.GetPositionByIndex(indexPath.Row).Coin.LogoFileName;
 
-            cell.UpdateCell(balanceViewItems.GetPositionByIndex(indexPath.Row).Coin.Symbol
-                            , balanceViewItems.GetPositionByIndex(indexPath.Row).Amount.ToString()
-                            , balanceViewItems.GetPositionByIndex(indexPath.Row).MarketPrice().ToString()
-                            , balanceViewItems.GetPositionByIndex(indexPath.Row).Pct1d().ToString() + "%"
-                            , logo == null ? null : UIImage.FromFile(logo));
-            cell.UserInteractionEnabled = true; //test to delete
+            var cell = (BalanceViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
+            cell.UpdateCell(balanceViewItems.GetPositionByIndex(indexPath.Row));
 
 			return cell;
 		}

@@ -14,36 +14,42 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="2" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                        <rect key="frame" x="10" y="7" width="36" height="24"/>
+                        <rect key="frame" x="5" y="8" width="25" height="25"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BTC" textAlignment="center" lineBreakMode="tailTruncation" id="3" translatesAutoresizingMaskIntoConstraints="NO" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" fixedFrame="YES">
-                        <rect key="frame" x="54" y="11" width="33" height="21"/>
+                        <rect key="frame" x="38" y="11" width="33" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="4" translatesAutoresizingMaskIntoConstraints="NO" minimumScaleFactor="0.5" text="0" fixedFrame="YES">
-                        <rect key="frame" x="95" y="0.0" width="90" height="20"/>
+                        <rect key="frame" x="71" y="2" width="84" height="20"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="5" translatesAutoresizingMaskIntoConstraints="NO" minimumScaleFactor="0.5" fixedFrame="YES">
-                        <rect key="frame" x="95" y="22" width="90" height="20"/>
+                        <rect key="frame" x="71" y="22" width="84" height="20"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="6" translatesAutoresizingMaskIntoConstraints="NO" text="0" minimumScaleFactor="0.5" fixedFrame="YES">
-                        <rect key="frame" x="187" y="11" width="51" height="21"/>
+                        <rect key="frame" x="180" y="2" width="65" height="20"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="7" translatesAutoresizingMaskIntoConstraints="NO" minimumScaleFactor="0.5" fixedFrame="YES">
-                        <rect key="frame" x="246" y="11" width="42" height="21"/>
+                        <rect key="frame" x="267" y="2" width="40" height="20"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <color key="textColor" colorSpace="calibratedRGB" red="0" green="0" blue="1" alpha="1"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="10" translatesAutoresizingMaskIntoConstraints="NO" minimumScaleFactor="0.5" fixedFrame="YES">
+                        <rect key="frame" x="180" y="22" width="65" height="20"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
@@ -55,6 +61,7 @@
                         <exclude reference="5"/>
                         <exclude reference="6"/>
                         <exclude reference="7"/>
+                        <exclude reference="10"/>
                     </mask>
                 </variation>
                 <variation key="heightClass=regular-widthClass=compact">
@@ -65,6 +72,7 @@
                         <include reference="5"/>
                         <include reference="6"/>
                         <include reference="7"/>
+                        <include reference="10"/>
                     </mask>
                     <color key="backgroundColor" colorSpace="calibratedRGB" red="1" green="1" blue="1" alpha="1"/>
                 </variation>
@@ -77,6 +85,7 @@
                 <outlet property="labelHoldingBTC" destination="5" id="name-outlet-5"/>
                 <outlet property="labelPrice" destination="6" id="name-outlet-6"/>
                 <outlet property="labelPct" destination="7" id="name-outlet-7"/>
+                <outlet property="labelFiatValue" destination="10" id="name-outlet-10"/>
             </connections>
         </tableViewCell>
     </objects>

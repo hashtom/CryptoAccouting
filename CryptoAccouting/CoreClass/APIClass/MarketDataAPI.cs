@@ -36,15 +36,11 @@ namespace CryptoAccouting.CoreClass.APIClass
             coin.MarketPrice.LatestPriceBTC = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["price_btc"];
             coin.MarketPrice.LatestPrice = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["price_usd"];
             coin.MarketPrice.BaseCurrency = EnuCCY.USD; //hardcoded
-                                                     //c.Name = (string)jarray.SelectToken("[?(@.symbol == '" + ins.Symbol + "')]")["name"];
             coin.MarketPrice.DayVolume = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["24h_volume_usd"] / coin.MarketPrice.LatestPriceBTC;
             coin.MarketPrice.PriceDate = ApplicationCore.FromEpochSeconds((long)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["last_updated"]).Date;
             coin.MarketPrice.Pct1h = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["percent_change_1h"];
-            //ins.MarketPrice.Pct1d = (double)jarray.SelectToken("[?(@.symbol == '" + ins.Symbol + "')]")["percent_change_24h"];
+            coin.MarketPrice.Pct1d = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["percent_change_24h"];
             coin.MarketPrice.Pct7d = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["percent_change_7d"];
-            //ins.MarketPrice.Pct1h = pct1h.GetType() == typeof(double) ? 0 : pct1h;
-            //ins.MarketPrice.Pct1d = pct1d.GetType() == typeof(double) ? 0 : (double)pct1d;
-            //ins.MarketPrice.Pct7d = pct7d.GetType() == typeof(double) ? 0 : pct7d;
 
         }
     
