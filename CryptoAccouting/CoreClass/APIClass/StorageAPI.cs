@@ -43,7 +43,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 if (instruments.Where(i => i.Symbol == elem.Descendants("symbol").Select(x => x.Value).First()).Any())
                 {
                     coin = instruments.Where(i => i.Symbol == elem.Descendants("symbol").Select(x => x.Value).First()).First();
-                    var pos = new Position(coin, (string)elem.Attribute("id").Value) { Amount = double.Parse(elem.Descendants("amount").Select(x => x.Value).First()) };
+                    var pos = new Position(coin, int.Parse(elem.Attribute("id").Value)) { Amount = double.Parse(elem.Descendants("amount").Select(x => x.Value).First()) };
                     mybal.AttachPosition(pos);
                 }
 

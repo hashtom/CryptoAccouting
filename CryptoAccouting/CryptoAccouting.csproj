@@ -156,7 +156,6 @@
     <Compile Include="TransactionViewController.designer.cs">
       <DependentUpon>TransactionViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="CoreClass\ProfitLoss.cs" />
     <Compile Include="UIClass\NavigationDrawer.cs" />
     <Compile Include="PositionDetailViewController.cs" />
     <Compile Include="PositionDetailViewController.designer.cs">
@@ -184,10 +183,6 @@
       <DependentUpon>PerfomViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="CoreClass\ExchangeList.cs" />
-    <Compile Include="BalanceViewController2.cs" />
-    <Compile Include="BalanceViewController2.designer.cs">
-      <DependentUpon>BalanceViewController2.cs</DependentUpon>
-    </Compile>
     <Compile Include="UIClass\BalanceViewCell.cs" />
     <Compile Include="UIClass\BalanceViewCell.designer.cs">
       <DependentUpon>BalanceViewCell.cs</DependentUpon>

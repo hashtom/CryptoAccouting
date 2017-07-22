@@ -31,8 +31,6 @@ namespace CryptoAccouting.CoreClass
 		}
 
         public Position GetPositionByIndex(int indexNumber){
-            //Position[] pos = positions.ToArray();
-            //return pos[indexNumber];
             return positions[indexNumber];
         }
 

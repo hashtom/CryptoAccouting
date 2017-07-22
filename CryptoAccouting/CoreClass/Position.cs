@@ -5,14 +5,14 @@ namespace CryptoAccouting.CoreClass
 {
     public class Position
     {
-        public string Id { get; }
+        public int Id { get; }
         public Instrument Coin { get; }
 		public DateTime BalanceDate { get; set; }
         public double Amount { get; set; }
         public double BookPrice { get; set; }
        //public DateTime UpdateTime { get; private set; }
 
-		public Position(Instrument coin, string positionId)
+		public Position(Instrument coin, int positionId)
         {
             Coin = coin;
             Id = positionId;

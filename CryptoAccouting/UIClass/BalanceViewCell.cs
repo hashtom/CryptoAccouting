@@ -43,4 +43,5 @@ namespace CryptoAccouting.UIClass
 		}
 
     }
+
 }

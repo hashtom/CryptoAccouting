@@ -54,6 +54,13 @@ namespace CryptoAccouting.UIClass
 
 		}
 
+        //public void AddRowHeader()
+        //{
+        //    var coinheader = new Instrument("RowHeader", "Symbol", "Coin Name");
+        //    balanceViewItems.AttachPosition(new Position(coinheader, 0));
+        //    balanceViewItems.OrderBy(x => x.Id);
+        //}
+
 	}
 
 }
