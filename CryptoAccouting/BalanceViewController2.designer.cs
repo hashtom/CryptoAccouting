@@ -11,8 +11,8 @@ using UIKit;
 
 namespace CryptoAccouting
 {
-    [Register ("SettingDetailController")]
-    partial class SettingDetailController
+    [Register ("BalanceViewController2")]
+    partial class BalanceViewController2
     {
         void ReleaseDesignerOutlets ()
         {

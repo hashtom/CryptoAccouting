@@ -28,11 +28,19 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelTotalAssetPct { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIBarButtonItem MenuBar { get; set; }
 
         [Action ("MenuBar_Activated:")]
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void MenuBar_Activated (UIKit.UIBarButtonItem sender);
+
+        [Action ("UIBarButtonItem19986_Activated:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void UIBarButtonItem19986_Activated (UIKit.UIBarButtonItem sender);
 
         void ReleaseDesignerOutlets ()
         {
@@ -49,6 +57,11 @@ namespace CryptoAccouting
             if (labelTotalAsset != null) {
                 labelTotalAsset.Dispose ();
                 labelTotalAsset = null;
+            }
+
+            if (labelTotalAssetPct != null) {
+                labelTotalAssetPct.Dispose ();
+                labelTotalAssetPct = null;
             }
 
             if (MenuBar != null) {

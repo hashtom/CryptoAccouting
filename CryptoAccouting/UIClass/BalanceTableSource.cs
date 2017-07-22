@@ -10,7 +10,7 @@ namespace CryptoAccouting.UIClass
 	public class BalanceTableSource : UITableViewSource
 	{
         Balance balanceViewItems;   
-        NSString cellIdentifier = new NSString("BalanceCell"); // set in the Storyboard
+        NSString cellIdentifier = new NSString("BalanceViewCell"); // set in the Storyboard
         UITableViewController owner;
 
         public BalanceTableSource(Balance myBalance, UITableViewController owner )
@@ -32,7 +32,7 @@ namespace CryptoAccouting.UIClass
             //var cell = tableView.DequeueReusableCell(cellIdentifier) as CustomBalanceCell;
 			//if (cell == null)
                 //cell = new CustomBalanceCell (cellIdentifier);
-            var cell = (CustomBalanceCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
+            var cell = (BalanceViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
             var logo = balanceViewItems.GetPositionByIndex(indexPath.Row).Coin.LogoFileName;
 
             cell.UpdateCell(balanceViewItems.GetPositionByIndex(indexPath.Row).Coin.Symbol

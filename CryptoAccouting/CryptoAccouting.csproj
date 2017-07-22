@@ -126,6 +126,7 @@
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="Main.storyboard" />
+    <InterfaceDefinition Include="UIClass\BalanceViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -145,7 +146,6 @@
     <Compile Include="CoreClass\Instrument.cs" />
     <Compile Include="CoreClass\Position.cs" />
     <Compile Include="UIClass\BalanceTableSource.cs" />
-    <Compile Include="UIClass\CustomBalanceCell.cs" />
     <Compile Include="CoreClass\Exchange.cs" />
     <Compile Include="CoreClass\Balance.cs" />
     <Compile Include="CoreClass\Price.cs" />
@@ -184,6 +184,14 @@
       <DependentUpon>PerfomViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="CoreClass\ExchangeList.cs" />
+    <Compile Include="BalanceViewController2.cs" />
+    <Compile Include="BalanceViewController2.designer.cs">
+      <DependentUpon>BalanceViewController2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UIClass\BalanceViewCell.cs" />
+    <Compile Include="UIClass\BalanceViewCell.designer.cs">
+      <DependentUpon>BalanceViewCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\btc.png" />
