@@ -11,18 +11,18 @@ using UIKit;
 
 namespace CryptoAccouting
 {
-    [Register ("PositionDetailViewController")]
-    partial class PositionDetailViewController
+    [Register ("TxInputTableViewController")]
+    partial class TxInputTableViewController
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel LabelCoinDetail { get; set; }
+        UIKit.UILabel labelCoinName { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
-            if (LabelCoinDetail != null) {
-                LabelCoinDetail.Dispose ();
-                LabelCoinDetail = null;
+            if (labelCoinName != null) {
+                labelCoinName.Dispose ();
+                labelCoinName = null;
             }
         }
     }

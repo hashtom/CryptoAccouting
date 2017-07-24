@@ -16,7 +16,7 @@ namespace CryptoAccouting
 
 			if (segue.Identifier == "SettingDetailSegue")
 			{
-				var navctlr = segue.DestinationViewController as PositionDetailViewController;
+                var navctlr = segue.DestinationViewController as SettingTableViewController;
 				if (navctlr != null)
 				{
 

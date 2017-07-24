@@ -7,7 +7,7 @@
         {
             base.ViewWillAppear(animated);             await ApplicationCore.FetchMarketData();
 			TableView.ReloadData();
-			labelTotalAsset.Text = ApplicationCore.GetInstrument("BTC").MarketPrice.LatestPrice.ToString();         }          public override void ViewDidAppear(bool animated)
+            labelTotalAsset.Text = ApplicationCore.GetInstrument("BTC").MarketPrice.LatestPrice.ToString();         }          public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
         }
@@ -17,7 +17,7 @@
 
             if (segue.Identifier == "PositionSegue")
             {
-                var navctlr = segue.DestinationViewController as PositionDetailViewController;
+                var navctlr = segue.DestinationViewController as TxInputTableViewController;
                 if (navctlr != null)
                 {
                     var source = TableView.Source as BalanceTableSource;
