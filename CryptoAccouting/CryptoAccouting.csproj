@@ -127,6 +127,7 @@
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="Main.storyboard" />
     <InterfaceDefinition Include="UIClass\BalanceViewCell.xib" />
+    <InterfaceDefinition Include="UIClass\ExchangeViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -183,9 +184,18 @@
     <Compile Include="UIClass\BalanceViewCell.designer.cs">
       <DependentUpon>BalanceViewCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="TxInputTableViewController.cs" />
-    <Compile Include="TxInputTableViewController.designer.cs">
-      <DependentUpon>TxInputTableViewController.cs</DependentUpon>
+    <Compile Include="UIClass\ExchangeTableSource.cs" />
+    <Compile Include="UIClass\ExchangeViewCell.cs" />
+    <Compile Include="UIClass\ExchangeViewCell.designer.cs">
+      <DependentUpon>ExchangeViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BalanceEditViewController.cs" />
+    <Compile Include="BalanceEditViewController.designer.cs">
+      <DependentUpon>BalanceEditViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SymbolSelectionViewConroller.cs" />
+    <Compile Include="SymbolSelectionViewConroller.designer.cs">
+      <DependentUpon>SymbolSelectionViewConroller.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

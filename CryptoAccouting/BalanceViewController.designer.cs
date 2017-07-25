@@ -20,6 +20,14 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIBarButtonItem buttonAddNew { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton ButtonSwitch { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel labelCurrency { get; set; }
 
         [Outlet]
@@ -32,11 +40,15 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIBarButtonItem MenuBar { get; set; }
+        UIKit.UILabel labelViewTitle { get; set; }
 
-        [Action ("MenuBar_Activated:")]
+        [Action ("ButtonAddNew_Activated:")]
         [GeneratedCode ("iOS Designer", "1.0")]
-        partial void MenuBar_Activated (UIKit.UIBarButtonItem sender);
+        partial void ButtonAddNew_Activated (UIKit.UIBarButtonItem sender);
+
+        [Action ("ButtonSwitch_TouchUpInside:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void ButtonSwitch_TouchUpInside (UIKit.UIButton sender);
 
         [Action ("UIBarButtonItem19986_Activated:")]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -47,6 +59,16 @@ namespace CryptoAccouting
             if (BalanceTopView != null) {
                 BalanceTopView.Dispose ();
                 BalanceTopView = null;
+            }
+
+            if (buttonAddNew != null) {
+                buttonAddNew.Dispose ();
+                buttonAddNew = null;
+            }
+
+            if (ButtonSwitch != null) {
+                ButtonSwitch.Dispose ();
+                ButtonSwitch = null;
             }
 
             if (labelCurrency != null) {
@@ -64,9 +86,9 @@ namespace CryptoAccouting
                 labelTotalAssetPct = null;
             }
 
-            if (MenuBar != null) {
-                MenuBar.Dispose ();
-                MenuBar = null;
+            if (labelViewTitle != null) {
+                labelViewTitle.Dispose ();
+                labelViewTitle = null;
             }
         }
     }

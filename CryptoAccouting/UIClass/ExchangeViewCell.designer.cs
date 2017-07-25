@@ -7,22 +7,21 @@
 using Foundation;
 using System;
 using System.CodeDom.Compiler;
-using UIKit;
 
-namespace CryptoAccouting
+namespace CryptoAccouting.UIClass
 {
-    [Register ("TxInputTableViewController")]
-    partial class TxInputTableViewController
+    [Register ("ExchangeViewCell")]
+    partial class ExchangeViewCell
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelCoinName { get; set; }
+        UIKit.UILabel labelExchange { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
-            if (labelCoinName != null) {
-                labelCoinName.Dispose ();
-                labelCoinName = null;
+            if (labelExchange != null) {
+                labelExchange.Dispose ();
+                labelExchange = null;
             }
         }
     }
