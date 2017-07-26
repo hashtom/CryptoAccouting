@@ -6,9 +6,20 @@
                                                            UIViewController SettingViewC)
         {             Navigation = new NavigationDrawer(BalanceTableView.Frame.Width, BalanceTableView.Frame.Height,                                               PositionViewC,
                                               TransactionViewC,                                               PLViewC,                                               PerfViewC,                                               SettingViewC);             Navigation.AddView(BalanceTableView);             return Navigation;         }          public static void InitializeCore(bool forceRefresh = true)
-        {             LoadExchangeList();             LoadInstruments(forceRefresh);             BaseCurrency = EnuCCY.JPY;         }          public static void LoadExchangeList()
         {
-            if (ExchangeList is null) ExchangeList = new ExchangeList();         }          public static void LoadInstruments(bool forceRefresh = true)
+			BaseCurrency = EnuCCY.JPY;             LoadInstruments(forceRefresh);             LoadExchangeList();         }          public static void LoadExchangeList()
+        {
+            if (ExchangeList is null) ExchangeList = new ExchangeList();              var zaif = new Exchange(EnuExchangeType.Zaif) { ExchangeName = "Zaif" };             zaif.AttachListedCoin(GetInstrument("BTC"));             zaif.AttachListedCoin(GetInstrument("MONA"));             zaif.AttachListedCoin(GetInstrument("XEM"));             var kraken = new Exchange(EnuExchangeType.Kraken){ ExchangeName = "Kraken" };
+			kraken.AttachListedCoin(GetInstrument("BTC"));             kraken.AttachListedCoin(GetInstrument("ETH"));             kraken.AttachListedCoin(GetInstrument("REP"));             var coincheck = new Exchange(EnuExchangeType.CoinCheck){ ExchangeName = "CoinCheck" };             coincheck.AttachListedCoin(GetInstrument("BTC"));
+            coincheck.AttachListedCoin(GetInstrument("REP"));                                  var bitflyer = new Exchange(EnuExchangeType.BitFlyer){ ExchangeName = "BitFlyer" };
+            bitflyer.AttachListedCoin(GetInstrument("BTC"));
+            bitflyer.AttachListedCoin(GetInstrument("ETH"));
+            var bitbank = new Exchange(EnuExchangeType.BitBank){ ExchangeName = "BitBank" };
+            bitbank.AttachListedCoin(GetInstrument("BTC"));             ExchangeList.AttachExchange(zaif);
+            ExchangeList.AttachExchange(kraken);
+            ExchangeList.AttachExchange(coincheck);
+            ExchangeList.AttachExchange(bitbank);
+            ExchangeList.AttachExchange(bitflyer);          }          public static void LoadInstruments(bool forceRefresh = true)
         {             if (forceRefresh)
             {                 myInstruments = new List<Instrument>();
                 MarketDataAPI.FetchAllCoinData(myInstruments);                 myInstruments.Where(i => i.Symbol == "BTC").First().LogoFileName = "Images/btc.png";                 myInstruments.Where(i => i.Symbol == "ETH").First().LogoFileName = "Images/eth.png";                 myInstruments.Where(i => i.Symbol == "REP").First().LogoFileName = "Images/rep.png";                 StorageAPI.SaveInstrumentXML(myInstruments, "instruments.xml"); 
@@ -37,7 +48,12 @@
 		}          public static async Task LoadTradeListsAsync(EnuExchangeType extype, bool isAggregatedDaily = true, bool readfromFile = false)
         {
             var exchange = GetExchange(extype);             exchange.TradeList = await ExchangeAPI.FetchTradeListAsync(exchange.ExchangeType, isAggregatedDaily, readfromFile);             ExchangeList.AttachExchange(exchange);              //return exchange.TradeLists;         }          public static Exchange GetExchange(EnuExchangeType extype)
-        {             return ExchangeList.GetExchange(extype);         }          public static TradeList GetExchangeTradeList(EnuExchangeType extype, string symbol)
+        {             return ExchangeList.GetExchange(extype);         }
+
+        public static ExchangeList GetExchangesBySymbol(string symbol)
+        {
+            return ExchangeList.GetExchangesBySymbol(symbol);
+        }          public static TradeList GetExchangeTradeList(EnuExchangeType extype, string symbol)
         {             return ExchangeList.GetTradelist(extype,symbol);
         }
 

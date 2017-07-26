@@ -10,19 +10,19 @@ namespace CryptoAccouting.UIClass
 {
 	public class BalanceTableSource : UITableViewSource
 	{
-        Balance balanceViewItems;   
+        Balance myBalance;   
         NSString cellIdentifier = new NSString("BalanceViewCell"); // set in the Storyboard
         UITableViewController owner;
 
         public BalanceTableSource(Balance myBalance, UITableViewController owner )
 		{
-			balanceViewItems = myBalance;
+			this.myBalance = myBalance;
             this.owner = owner;
 		}
 
         public override nint RowsInSection(UITableView tableview, nint section)
         {
-            return balanceViewItems.Count();
+            return myBalance.Count();
 
         }
 
@@ -35,13 +35,13 @@ namespace CryptoAccouting.UIClass
                 //cell = new CustomBalanceCell (cellIdentifier);
 
             var cell = (BalanceViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
-            cell.UpdateCell(balanceViewItems.GetPositionByIndex(indexPath.Row));
+            cell.UpdateCell(myBalance.GetPositionByIndex(indexPath.Row));
 
 			return cell;
 		}
 		public Position GetItem(int id)
 		{
-            return balanceViewItems.GetPositionByIndex(id);
+            return myBalance.GetPositionByIndex(id);
 		}
 
 		public override nint NumberOfSections(UITableView tableView)
@@ -118,13 +118,12 @@ namespace CryptoAccouting.UIClass
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            //UIAlertController okAlertController = UIAlertController.Create("Row Selected", balanceViewItems.GetPositionByIndex(indexPath.Row).Coin.Name, UIAlertControllerStyle.Alert);
+   //         UIAlertController okAlertController = UIAlertController.Create("Row Selected", balanceViewItems.GetPositionByIndex(indexPath.Row).Coin.Name, UIAlertControllerStyle.Alert);
 			//okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
             //owner.PresentViewController(okAlertController, true, null);
 
             owner.PerformSegue("PositionSegue",owner);
             tableView.DeselectRow(indexPath, true); 
-
 		}
 
 	}

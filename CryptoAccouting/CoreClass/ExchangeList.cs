@@ -39,6 +39,17 @@ namespace CryptoAccouting.CoreClass
             }
         }
 
+        public ExchangeList GetExchangesBySymbol(string symbol){
+
+            var exchanged_applied = new ExchangeList();
+            foreach (var exc in exchanges)
+            {
+                if (exc.ListedCoin.Any(x => x.Symbol == symbol)) exchanged_applied.AttachExchange(exc);
+            }
+            return exchanged_applied;
+
+        }
+
         public void AttachExchange(Exchange exc)
 		{
             if (exchanges.Any(x => x.ExchangeType == exc.ExchangeType)) DetachExchange(exc);

@@ -24,7 +24,11 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelExchange { get; set; }
+        UIKit.UITextField textExchange { get; set; }
+
+        [Action ("ButtonExchange_TouchUpInside:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void ButtonExchange_TouchUpInside (UIKit.UIButton sender);
 
         void ReleaseDesignerOutlets ()
         {
@@ -38,9 +42,9 @@ namespace CryptoAccouting
                 labelCoinSymbol = null;
             }
 
-            if (labelExchange != null) {
-                labelExchange.Dispose ();
-                labelExchange = null;
+            if (textExchange != null) {
+                textExchange.Dispose ();
+                textExchange = null;
             }
         }
     }

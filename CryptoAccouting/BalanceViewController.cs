@@ -23,7 +23,7 @@
                     var source = TableView.Source as BalanceTableSource;
                     var rowPath = TableView.IndexPathForSelectedRow;
                     var item = source.GetItem(rowPath.Row);
-                    navctlr.SetPosition(this, item);
+                    navctlr.SetPosition(item);
                 }             }
         }
 
@@ -40,8 +40,7 @@
         partial void ButtonAddNew_Activated(UIBarButtonItem sender)
         {
             CreateNewPosition();
-        }          private void CreateNewPosition(){
-             var BalanceEditViewC = Storyboard.InstantiateViewController("BalanceEditViewC") as BalanceEditViewController;             BalanceEditViewC.SetPosition(this, null);             NavigationController.PushViewController(BalanceEditViewC, true);         }
+        }          private void CreateNewPosition(){             var SymbolSelectionViewC = Storyboard.InstantiateViewController("SymbolSelectionViewC") as SymbolSelectionViewConroller;             NavigationController.PushViewController(SymbolSelectionViewC, true);         }
 
         public void SaveItem(Position pos)
 		{
