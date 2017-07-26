@@ -24,6 +24,10 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIBarButtonItem buttonRefresh { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton ButtonSwitch { get; set; }
 
         [Outlet]
@@ -64,6 +68,11 @@ namespace CryptoAccouting
             if (buttonAddNew != null) {
                 buttonAddNew.Dispose ();
                 buttonAddNew = null;
+            }
+
+            if (buttonRefresh != null) {
+                buttonRefresh.Dispose ();
+                buttonRefresh = null;
             }
 
             if (ButtonSwitch != null) {

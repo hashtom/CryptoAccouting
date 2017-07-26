@@ -5,17 +5,18 @@ namespace CryptoAccouting.CoreClass
 {
     public class Position
     {
-        public int Id { get; }
+        public int Id { get; set; }
         public Instrument Coin { get; }
 		public DateTime BalanceDate { get; set; }
         public double Amount { get; set; }
         public double BookPrice { get; set; }
+        public EnuExchangeType TradedExchange { get; set; }
        //public DateTime UpdateTime { get; private set; }
 
-		public Position(Instrument coin, int positionId)
+		public Position(Instrument coin)
         {
             Coin = coin;
-            Id = positionId;
+            //Id = positionId;
         }
         public Position() { }
 

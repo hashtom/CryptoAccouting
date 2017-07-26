@@ -8,20 +8,28 @@ namespace CryptoAccouting.CoreClass
     public class Balance : IEnumerable<Position>
     {
         public string BalanceName { get; set; }
-        public EnuExchangeType ExchangeTraded { get; }
         private List<Position> positions;
-        //public DateTime UpdateTime { get; private set; }
+		//public EnuExchangeType ExchangeTraded { get; }
+		//public DateTime UpdateTime { get; private set; }
 
-        public Balance(EnuExchangeType exchange_traded)
+		public Balance()
         {
-            ExchangeTraded = exchange_traded;
+            //ExchangeTraded = exchange_traded;
 			//UpdateTime = DateTime.Now;
             positions = new List<Position>();
         }
 
         public void AttachPosition(Position position)
 		{
-            if (positions.Any(x => x.Id == position.Id)) DetachPosition(position);
+            if (positions.Any(x => x.Id == position.Id))
+            {
+                DetachPosition(position);
+            }
+            else
+            {
+                position.Id = positions.Count == 0 ? 1 : positions.Max(x => x.Id) + 1;
+            }
+
 			positions.Add(position);
 		}
 

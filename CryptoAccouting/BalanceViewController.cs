@@ -23,7 +23,7 @@
                     var source = TableView.Source as BalanceTableSource;
                     var rowPath = TableView.IndexPathForSelectedRow;
                     var item = source.GetItem(rowPath.Row);
-                    navctlr.SetPosition(item);
+                    navctlr.SetPosition(this,item);
                 }             }
         }
 
@@ -44,12 +44,12 @@
 
         public void SaveItem(Position pos)
 		{
-            myBalance.AttachPosition(pos);
+            myBalance.AttachPosition(pos);             TableView.ReloadData();
 			NavigationController.PopViewController(true);
 		}
 
 		public void DeleteItem(Position pos)
 		{
-            myBalance.DetachPosition(pos);
+            myBalance.DetachPosition(pos);             TableView.ReloadData();
 			NavigationController.PopViewController(true);
 		}     } }

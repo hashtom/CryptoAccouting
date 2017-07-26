@@ -35,7 +35,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             var balanceXML = File.ReadAllText(path);
 
             var mybalXE = XElement.Parse(balanceXML).Descendants("position");
-            var mybal = new Balance(EnuExchangeType.Zaif);
+            var mybal = new Balance();
 
             foreach (var elem in mybalXE)
             {
@@ -43,7 +43,12 @@ namespace CryptoAccouting.CoreClass.APIClass
                 if (instruments.Where(i => i.Symbol == elem.Descendants("symbol").Select(x => x.Value).First()).Any())
                 {
                     coin = instruments.Where(i => i.Symbol == elem.Descendants("symbol").Select(x => x.Value).First()).First();
-                    var pos = new Position(coin, int.Parse(elem.Attribute("id").Value)) { Amount = double.Parse(elem.Descendants("amount").Select(x => x.Value).First()) };
+                    var pos = new Position(coin)
+                    {
+                        Id = int.Parse(elem.Attribute("id").Value),
+                        Amount = double.Parse(elem.Descendants("amount").Select(x => x.Value).First())
+                        //TradedExchange = 
+                    };
                     mybal.AttachPosition(pos);
                 }
 
@@ -60,19 +65,20 @@ namespace CryptoAccouting.CoreClass.APIClass
 
 			XElement application = new XElement("application",
 												new XAttribute("name", ApplicationCore.AppName));
-			XElement balance = new XElement("balance",
-											new XAttribute("exchange", myBalance.ExchangeTraded.ToString()));
+            XElement balance = new XElement("balance");
+											//,new XAttribute("exchange", myBalance.ExchangeTraded.ToString()));
 			application.Add(balance);
 
 			foreach (var pos in myBalance)
 			{
-				XElement position = new XElement("position",
-												 new XAttribute("id", pos.Id.ToString()),
-												 new XElement("symbol", pos.Coin.Symbol),
-												 new XElement("date", pos.BalanceDate),
-												 new XElement("amount", pos.Amount.ToString()),
-												 new XElement("book", pos.BookPrice.ToString())
-												);
+                XElement position = new XElement("position",
+                                                 new XAttribute("id", pos.Id.ToString()),
+                                                 new XElement("symbol", pos.Coin.Symbol),
+                                                 new XElement("date", pos.BalanceDate),
+                                                 new XElement("amount", pos.Amount.ToString()),
+                                                 new XElement("book", pos.BookPrice.ToString()),
+                                                 new XElement("exchange", pos.TradedExchange.ToString())
+                                                );
 				balance.Add(position);
 			}
 

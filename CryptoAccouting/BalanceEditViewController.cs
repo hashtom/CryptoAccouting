@@ -12,7 +12,7 @@ namespace CryptoAccouting
 	public partial class BalanceEditViewController : UITableViewController
 	{
 		public Position PositionDetail;
-		//public BalanceViewController AppDel { get; set; }
+		public BalanceViewController AppDel { get; set; }
         string symbol;
         public ExchangeList exchangesListed;
 
@@ -20,9 +20,9 @@ namespace CryptoAccouting
 		{
 		}
 
-		public void SetPosition(Position pos)
+        public void SetPosition(BalanceViewController d, Position pos)
 		{
-			//AppDel = d;
+			AppDel = d;
 			PositionDetail = pos;
             exchangesListed = ApplicationCore.GetExchangesBySymbol(pos.Coin.Symbol);
 		}
@@ -60,12 +60,27 @@ namespace CryptoAccouting
             else
             {
                 labelCoinSymbol.Text = PositionDetail.Coin.Symbol;
+                var imagelogo = PositionDetail.Coin.LogoFileName;
+                imageCoin.Image = imagelogo == null ? null : UIImage.FromFile(imagelogo);
+
+                labelCurrentPrice.Text = PositionDetail.MarketPrice().ToString();
+                textQuantity.Text = PositionDetail.Amount.ToString();
+                textTradePrice.Text = PositionDetail.MarketPrice().ToString();
             }
 
             if (buttonExchange.TitleLabel.Text is null)
             {
                 buttonExchange.SetTitle(exchangesListed.First().ExchangeName,UIControlState.Normal);
             }
+        }
+
+        private Position CreatePosition(){
+
+            if (PositionDetail is null) PositionDetail = new Position(ApplicationCore.GetInstrument(symbol));
+
+            PositionDetail.Amount = double.Parse(textQuantity.Text);
+            //PositionDetail.TradedExchange = (EnuExchangeType)int.Parse(buttonExchange.TitleLabel.Text);
+            return PositionDetail;
         }
 
         partial void ButtonExchange_TouchUpInside(UIButton sender)
@@ -86,6 +101,12 @@ namespace CryptoAccouting
             }
             this.PresentViewController(okAlertController, true, null);
 		}
+
+        partial void ButtonSave_Activated(UIBarButtonItem sender)
+        {
+            AppDel.SaveItem(PositionDetail);
+        }
+
     }
 
 }

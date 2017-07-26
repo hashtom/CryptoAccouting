@@ -14,5 +14,8 @@ namespace CryptoAccouting
     [Register ("SymbolSelectionViewConroller")]
     partial class SymbolSelectionViewConroller
     {
+        void ReleaseDesignerOutlets ()
+        {
+        }
     }
 }

@@ -16,7 +16,19 @@ namespace CryptoAccouting
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIBarButtonItem buttonCancel { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton buttonExchange { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIBarButtonItem buttonSave { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIImageView imageCoin { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -24,17 +36,44 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITextField textExchange { get; set; }
+        UIKit.UILabel labelCurrentPrice { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UITextField textQuantity { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UITextField textTradePrice { get; set; }
 
         [Action ("ButtonExchange_TouchUpInside:")]
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void ButtonExchange_TouchUpInside (UIKit.UIButton sender);
 
+        [Action ("ButtonSave_Activated:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void ButtonSave_Activated (UIKit.UIBarButtonItem sender);
+
         void ReleaseDesignerOutlets ()
         {
+            if (buttonCancel != null) {
+                buttonCancel.Dispose ();
+                buttonCancel = null;
+            }
+
             if (buttonExchange != null) {
                 buttonExchange.Dispose ();
                 buttonExchange = null;
+            }
+
+            if (buttonSave != null) {
+                buttonSave.Dispose ();
+                buttonSave = null;
+            }
+
+            if (imageCoin != null) {
+                imageCoin.Dispose ();
+                imageCoin = null;
             }
 
             if (labelCoinSymbol != null) {
@@ -42,9 +81,19 @@ namespace CryptoAccouting
                 labelCoinSymbol = null;
             }
 
-            if (textExchange != null) {
-                textExchange.Dispose ();
-                textExchange = null;
+            if (labelCurrentPrice != null) {
+                labelCurrentPrice.Dispose ();
+                labelCurrentPrice = null;
+            }
+
+            if (textQuantity != null) {
+                textQuantity.Dispose ();
+                textQuantity = null;
+            }
+
+            if (textTradePrice != null) {
+                textTradePrice.Dispose ();
+                textTradePrice = null;
             }
         }
     }

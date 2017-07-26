@@ -103,11 +103,11 @@
     <Reference Include="Syncfusion.GridCommon.Portable">
       <HintPath>..\..\..\..\Documents\Syncfusion\15.2.0.40\Xamarin\lib\pcl\Syncfusion.GridCommon.Portable.dll</HintPath>
     </Reference>
-    <Reference Include="NBitcoin">
-      <HintPath>..\packages\NBitcoin.4.0.0.8\lib\netstandard1.3\NBitcoin.dll</HintPath>
-    </Reference>
     <Reference Include="Syncfusion.SfNavigationDrawer.iOS">
       <HintPath>..\..\..\..\Documents\Syncfusion\15.2.0.40\Xamarin\lib\ios-unified\Syncfusion.SfNavigationDrawer.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="NBitcoin">
+      <HintPath>..\packages\NBitcoin.4.0.0.11\lib\netstandard1.3\NBitcoin.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
