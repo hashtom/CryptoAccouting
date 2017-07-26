@@ -74,13 +74,13 @@ namespace CryptoAccouting
             }
         }
 
-        private Position CreatePosition(){
+        private void CreatePosition(){
 
             if (PositionDetail is null) PositionDetail = new Position(ApplicationCore.GetInstrument(symbol));
 
             PositionDetail.Amount = double.Parse(textQuantity.Text);
             //PositionDetail.TradedExchange = (EnuExchangeType)int.Parse(buttonExchange.TitleLabel.Text);
-            return PositionDetail;
+
         }
 
         partial void ButtonExchange_TouchUpInside(UIButton sender)
@@ -104,6 +104,7 @@ namespace CryptoAccouting
 
         partial void ButtonSave_Activated(UIBarButtonItem sender)
         {
+            CreatePosition();
             AppDel.SaveItem(PositionDetail);
         }
 

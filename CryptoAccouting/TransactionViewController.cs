@@ -12,7 +12,7 @@ namespace CryptoAccouting
     public partial class TransactionViewController : UIViewController
     {
 		SfDataGrid sfGrid;
-        private NavigationDrawer menu;
+        //private NavigationDrawer menu;
         TradeList myTradeList;
 
         public TransactionViewController(IntPtr handle) : base(handle)
@@ -71,7 +71,7 @@ namespace CryptoAccouting
 		{
 			base.ViewDidLoad();
             NavigationItem.RightBarButtonItem = EditButtonItem;
-			menu = ApplicationCore.Navigation;
+			//menu = ApplicationCore.Navigation;
 
             await ApplicationCore.LoadTradeListsAsync(EnuExchangeType.Zaif, true, true);
             myTradeList = ApplicationCore.GetExchange(EnuExchangeType.Zaif).TradeList;

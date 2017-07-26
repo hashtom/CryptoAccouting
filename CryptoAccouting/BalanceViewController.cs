@@ -44,7 +44,7 @@
 
         public void SaveItem(Position pos)
 		{
-            myBalance.AttachPosition(pos);             TableView.ReloadData();
+            myBalance.AttachPosition(pos);             TableView.ReloadData();             ApplicationCore.SaveMyBalance(myBalance);
 			NavigationController.PopViewController(true);
 		}
 
