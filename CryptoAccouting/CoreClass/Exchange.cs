@@ -31,6 +31,8 @@ namespace CryptoAccouting.CoreClass
 		BitFlyer = 2,
 		Kraken = 3,
 		CoinCheck = 4,
-		BitBank = 5
+		BitBank = 5,
+        Poloniex = 6,
+        Bittrex = 7
 	}
 }

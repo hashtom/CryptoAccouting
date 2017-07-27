@@ -29,15 +29,15 @@ namespace CryptoAccouting.UIClass
 
             imageView.Image = logo == null ? null : UIImage.FromFile(logo);
             labelSymbol.Text = pos.Coin.Symbol;
-			labelHoldings.Text = String.Format("{0:n0}", pos.Amount);
-            labelHoldingBTC.Text = String.Format("{0:n0}", pos.AmountBTC());
-            labelFiatValue.Text = String.Format("{0:n0}", pos.LatestFiatValue());
+			labelHoldings.Text = String.Format("{0:n2}", pos.Amount);
+            labelHoldingBTC.Text = "B" + String.Format("{0:n4}", pos.AmountBTC());
+            labelFiatValue.Text = "$" + String.Format("{0:n0}", pos.LatestFiatValue());
 			labelPct.Text = String.Format("{0:n2}", pos.Pct1d()) + " %";
             if (pos.Coin.Symbol is "BTC"){
-				labelPrice.Text = String.Format("{0:n0}", pos.MarketPrice());
+				labelPrice.Text = "$" + String.Format("{0:n2}", pos.MarketPrice());
                 labelHoldings.Text = "";
             }else{
-                labelPrice.Text = String.Format("{0:n6}", pos.MarketPriceBTC());
+                labelPrice.Text = String.Format("{0:n8}", pos.MarketPriceBTC());
             }
 
 		}

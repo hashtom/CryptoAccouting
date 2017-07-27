@@ -12,9 +12,9 @@ namespace CryptoAccouting.UIClass
 	{
         Balance myBalance;   
         NSString cellIdentifier = new NSString("BalanceViewCell"); // set in the Storyboard
-        UITableViewController owner;
+        BalanceViewController owner;
 
-        public BalanceTableSource(Balance myBalance, UITableViewController owner )
+        public BalanceTableSource(Balance myBalance, BalanceViewController owner )
 		{
 			this.myBalance = myBalance;
             this.owner = owner;
@@ -126,6 +126,23 @@ namespace CryptoAccouting.UIClass
             tableView.DeselectRow(indexPath, true); 
 		}
 
+		public override void CommitEditingStyle(UITableView tableView, UITableViewCellEditingStyle editingStyle, Foundation.NSIndexPath indexPath)
+		{
+			switch (editingStyle)
+			{
+				case UITableViewCellEditingStyle.Delete:
+					//tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
+                    owner.DeleteItem(myBalance.GetPositionByIndex(indexPath.Row));
+                    break;
+				case UITableViewCellEditingStyle.None:
+					Console.WriteLine("CommitEditingStyle:None called");
+					break;
+			}
+		}
+		public override bool CanEditRow(UITableView tableView, NSIndexPath indexPath)
+		{
+			return true; // return false if you wish to disable editing for a specific indexPath or for all rows
+		}
 	}
 
 }

@@ -16,7 +16,7 @@ namespace CryptoAccouting
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIBarButtonItem buttonCancel { get; set; }
+        UIKit.UIBarButtonItem buttonEdit { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -54,6 +54,10 @@ namespace CryptoAccouting
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void ButtonCancel_Activated (UIKit.UIBarButtonItem sender);
 
+        [Action ("ButtonEdit_Activated:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void ButtonEdit_Activated (UIKit.UIBarButtonItem sender);
+
         [Action ("ButtonExchange_TouchUpInside:")]
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void ButtonExchange_TouchUpInside (UIKit.UIButton sender);
@@ -64,9 +68,9 @@ namespace CryptoAccouting
 
         void ReleaseDesignerOutlets ()
         {
-            if (buttonCancel != null) {
-                buttonCancel.Dispose ();
-                buttonCancel = null;
+            if (buttonEdit != null) {
+                buttonEdit.Dispose ();
+                buttonEdit = null;
             }
 
             if (buttonExchange != null) {

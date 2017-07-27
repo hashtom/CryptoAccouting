@@ -4,8 +4,8 @@
 
             ApplicationCore.InitializeCore(false);             myBalance = ApplicationCore.GetMyBalance();             TableView.RegisterNibForCellReuse(BalanceViewCell.Nib, "BalanceViewCell");             TableView.Source = new BalanceTableSource(myBalance, this);
         }          public async override void ViewWillAppear(bool animated)         {
-            base.ViewWillAppear(animated);             await ApplicationCore.FetchMarketData(); 			TableView.ReloadData();
-            labelTotalAsset.Text = ApplicationCore.GetInstrument("BTC").MarketPrice.LatestPrice.ToString();         }          public override void ViewDidAppear(bool animated)
+            base.ViewWillAppear(animated);             await ApplicationCore.FetchMarketDataFromBalance(); 			TableView.ReloadData();
+            labelTotalAsset.Text = "$" + String.Format("{0:n2}", myBalance.LatestFiatValue());         }          public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
         }
@@ -21,7 +21,7 @@
                     var source = TableView.Source as BalanceTableSource;
                     var rowPath = TableView.IndexPathForSelectedRow;
                     var item = source.GetItem(rowPath.Row);
-                    navctlr.SetPosition(this,item);
+                    navctlr.SetPosition(item);
                 }             }
         }
 
@@ -38,7 +38,12 @@
         partial void ButtonAddNew_Activated(UIBarButtonItem sender)
         {
             CreateNewPosition();
-        }          private void CreateNewPosition(){
+        }
+
+        partial void ButtonRefresh_Activated(UIBarButtonItem sender)
+		{
+            ViewWillAppear(true);
+		}          private void CreateNewPosition(){
             var SymbolSelectionViewC = Storyboard.InstantiateViewController("SymbolSelectionViewC") as SymbolSelectionViewConroller;
             NavigationController.PushViewController(SymbolSelectionViewC, false);          }
 
@@ -50,6 +55,6 @@
 
 		public void DeleteItem(Position pos)
 		{
-            myBalance.DetachPosition(pos);             TableView.ReloadData();
-			//NavigationController.PopViewController(true);             NavigationController.PopToRootViewController(true);
+            myBalance.DetachPosition(pos);             TableView.ReloadData();             ApplicationCore.SaveMyBalance(myBalance);
+			//NavigationController.PopViewController(true);             //NavigationController.PopToRootViewController(true);
 		}     } }

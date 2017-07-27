@@ -19,6 +19,15 @@ namespace CryptoAccouting.CoreClass
             positions = new List<Position>();
         }
 
+        public double LatestFiatValue(){
+            return positions.Sum(x => x.LatestFiatValue());
+        }
+
+		public double LatestBTCValue()
+		{
+            return positions.Sum(x => x.LatestBTCValue());
+		}
+
         public void AttachPosition(Position position)
 		{
             if (positions.Any(x => x.Id == position.Id))

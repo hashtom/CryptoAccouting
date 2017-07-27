@@ -10,16 +10,21 @@
 			BaseCurrency = EnuCCY.JPY;             LoadInstruments(forceRefresh);             LoadExchangeList();         }          public static void LoadExchangeList()
         {
             if (ExchangeList is null) ExchangeList = new ExchangeList();              var zaif = new Exchange(EnuExchangeType.Zaif) { ExchangeName = "Zaif" };             zaif.AttachListedCoin(GetInstrument("BTC"));             zaif.AttachListedCoin(GetInstrument("MONA"));             zaif.AttachListedCoin(GetInstrument("XEM"));             var kraken = new Exchange(EnuExchangeType.Kraken){ ExchangeName = "Kraken" };
-			kraken.AttachListedCoin(GetInstrument("BTC"));             kraken.AttachListedCoin(GetInstrument("ETH"));             kraken.AttachListedCoin(GetInstrument("REP"));             var coincheck = new Exchange(EnuExchangeType.CoinCheck){ ExchangeName = "CoinCheck" };             coincheck.AttachListedCoin(GetInstrument("BTC"));
+			kraken.AttachListedCoin(GetInstrument("BTC"));             kraken.AttachListedCoin(GetInstrument("ETH"));             kraken.AttachListedCoin(GetInstrument("REP"));             kraken.AttachListedCoin(GetInstrument("XLM"));             var coincheck = new Exchange(EnuExchangeType.CoinCheck){ ExchangeName = "CoinCheck" };             coincheck.AttachListedCoin(GetInstrument("BTC"));
             coincheck.AttachListedCoin(GetInstrument("REP"));                                  var bitflyer = new Exchange(EnuExchangeType.BitFlyer){ ExchangeName = "BitFlyer" };
             bitflyer.AttachListedCoin(GetInstrument("BTC"));
             bitflyer.AttachListedCoin(GetInstrument("ETH"));
             var bitbank = new Exchange(EnuExchangeType.BitBank){ ExchangeName = "BitBank" };
-            bitbank.AttachListedCoin(GetInstrument("BTC"));             ExchangeList.AttachExchange(zaif);
+            bitbank.AttachListedCoin(GetInstrument("BTC"));              var poloniex = new Exchange(EnuExchangeType.Poloniex) { ExchangeName = "Poloniex" };             poloniex.AttachListedCoin(GetInstrument("XLM"));
+			poloniex.AttachListedCoin(GetInstrument("ETH"));
+			poloniex.AttachListedCoin(GetInstrument("REP")); 
+            var bittrex = new Exchange(EnuExchangeType.Bittrex) { ExchangeName = "Bittrex" };
+			bittrex.AttachListedCoin(GetInstrument("XLM"));             bittrex.AttachListedCoin(GetInstrument("ETH"));             bittrex.AttachListedCoin(GetInstrument("MONA"));
+			bittrex.AttachListedCoin(GetInstrument("GBYTE"));              ExchangeList.AttachExchange(zaif);
             ExchangeList.AttachExchange(kraken);
             ExchangeList.AttachExchange(coincheck);
             ExchangeList.AttachExchange(bitbank);
-            ExchangeList.AttachExchange(bitflyer);          }          public static void LoadInstruments(bool forceRefresh = true)
+            ExchangeList.AttachExchange(bitflyer);             ExchangeList.AttachExchange(poloniex);             ExchangeList.AttachExchange(bittrex);          }          public static void LoadInstruments(bool forceRefresh = true)
         {             if (forceRefresh)
             {                 myInstruments = new List<Instrument>();
                 MarketDataAPI.FetchAllCoinData(myInstruments);                 myInstruments.Where(i => i.Symbol == "BTC").First().LogoFileName = "Images/btc.png";                 myInstruments.Where(i => i.Symbol == "ETH").First().LogoFileName = "Images/eth.png";                 myInstruments.Where(i => i.Symbol == "REP").First().LogoFileName = "Images/rep.png";                 StorageAPI.SaveInstrumentXML(myInstruments, "instruments.xml"); 
@@ -68,7 +73,7 @@
 			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			return epoch.AddSeconds(EpochSeconds);
 
-		}          public static async Task FetchMarketData()         {             await MarketDataAPI.FetchMarketDataFromBalance(myBalance);         }      }
+		}          public static async Task FetchMarketDataFromBalance()         {             await MarketDataAPI.FetchMarketDataFromBalance(myBalance);         }      }
 
     public enum EnuCCY
     {         //Fiat Only at the moment

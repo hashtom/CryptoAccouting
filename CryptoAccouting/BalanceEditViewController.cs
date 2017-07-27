@@ -13,9 +13,10 @@ namespace CryptoAccouting
 	public partial class BalanceEditViewController : UITableViewController
 	{
 		Position PositionDetail;
-		BalanceViewController AppDel { get; set; }
+		//BalanceViewController AppDel { get; set; }
         ExchangeList exchangesListed;
 
+        bool editmode = true;
 		Instrument thisCoin;
         DateTime thisBalanceDate;
         EnuExchangeType thisExchangeType;
@@ -24,25 +25,28 @@ namespace CryptoAccouting
 		{
 		}
 
-        public void SetPosition(BalanceViewController d, Position pos)
+        public void SetPosition(Position pos)
 		{
-			AppDel = d;
+			//AppDel = d;
 			PositionDetail = pos;
             thisCoin = pos.Coin;
 			exchangesListed = ApplicationCore.GetExchangesBySymbol(pos.Coin.Symbol);
+            editmode = false;
 		}
 
-        public void CoinSelected(string symbol)
+        public void NewCoinSelected(string symbol)
         {
             thisCoin = ApplicationCore.GetInstrument(symbol);
             exchangesListed = ApplicationCore.GetExchangesBySymbol(symbol);
             this.NavigationItem.HidesBackButton = true;
+            editmode = true;
         }
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
             PrepareDatePicker();
+			InitializeUserInteractionStates();
         }
 
         public async override void ViewWillAppear(bool animated)
@@ -89,7 +93,27 @@ namespace CryptoAccouting
             };
         }
 
-        public void ReDrawScreen(){
+        private void InitializeUserInteractionStates()
+        {
+            if (editmode)
+            {
+				buttonSave.Enabled = true;
+				buttonEdit.Enabled = false;
+				buttonExchange.UserInteractionEnabled = true;
+				textQuantity.UserInteractionEnabled = true;
+				textBookPrice.UserInteractionEnabled = true;
+				textBalanceDate.UserInteractionEnabled = true;
+            }else{
+				buttonSave.Enabled = false;
+				buttonEdit.Enabled = true;
+				buttonExchange.UserInteractionEnabled = false;
+				textQuantity.UserInteractionEnabled = false;
+				textBookPrice.UserInteractionEnabled = false;
+				textBalanceDate.UserInteractionEnabled = false;
+            }
+        }
+
+        private void ReDrawScreen(){
 
             if (PositionDetail is null) // new balance
             {
@@ -160,6 +184,12 @@ namespace CryptoAccouting
         partial void ButtonCancel_Activated(UIBarButtonItem sender)
         {
             NavigationController.PopToRootViewController(true);
+        }
+
+        partial void ButtonEdit_Activated(UIBarButtonItem sender)
+        {
+            editmode = true;
+            InitializeUserInteractionStates();
         }
     }
 

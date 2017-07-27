@@ -56,6 +56,11 @@ namespace CryptoAccouting.CoreClass
             return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPrice * this.Amount;
         }
 
+		public double LatestBTCValue()
+		{
+            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPriceBTC * this.Amount;
+		}
+
 		public double BookValue()
 		{
 			return Amount * BookPrice;

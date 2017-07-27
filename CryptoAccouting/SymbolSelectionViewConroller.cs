@@ -24,7 +24,7 @@ namespace CryptoAccouting
         {
             base.ViewDidLoad();
             TableView.Source = new TableSource(instruments, this);
-            this.NavigationItem.HidesBackButton = true;
+            //this.NavigationItem.HidesBackButton = true;
 
             searchResultsController = new ResultsTableController(Handle);
             searchResultsController.FilteredInstruments = instruments;
@@ -96,7 +96,7 @@ namespace CryptoAccouting
 
         public TableSource(List<Instrument> instruments, UITableViewController owner)
         {
-            this.instruments = instruments;
+            this.instruments = instruments.OrderBy(x=>x.Symbol).ToList();
             this.owner = owner;
         }
 
@@ -120,7 +120,7 @@ namespace CryptoAccouting
             //owner.PresentViewController(okAlertController, true, null);
 
             var BalanceEditViewC = owner.Storyboard.InstantiateViewController("BalanceEditViewC") as BalanceEditViewController;
-            BalanceEditViewC.CoinSelected(instruments[indexPath.Row].Symbol);
+            BalanceEditViewC.NewCoinSelected(instruments[indexPath.Row].Symbol);
             owner.NavigationController.PushViewController(BalanceEditViewC, false);
         }
 

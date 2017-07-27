@@ -50,13 +50,13 @@ namespace CryptoAccouting
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void ButtonAddNew_Activated (UIKit.UIBarButtonItem sender);
 
+        [Action ("ButtonRefresh_Activated:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void ButtonRefresh_Activated (UIKit.UIBarButtonItem sender);
+
         [Action ("ButtonSwitch_TouchUpInside:")]
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void ButtonSwitch_TouchUpInside (UIKit.UIButton sender);
-
-        [Action ("UIBarButtonItem19986_Activated:")]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        partial void UIBarButtonItem19986_Activated (UIKit.UIBarButtonItem sender);
 
         void ReleaseDesignerOutlets ()
         {
