@@ -200,13 +200,23 @@
     <Compile Include="UIClass\CustomPickerModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Images\btc.png" />
-    <BundleResource Include="Images\rep.png" />
-    <BundleResource Include="Images\eth.png" />
     <BundleResource Include="TestData\apikey.xml" />
     <BundleResource Include="Images\jpy.png" />
     <BundleResource Include="Images\exchange.png" />
     <BundleResource Include="Images\key.png" />
+    <BundleResource Include="Images\augur.png" />
+    <BundleResource Include="Images\bitcoin.png" />
+    <BundleResource Include="Images\ethereum.png" />
+    <BundleResource Include="Images\factom.png" />
+    <BundleResource Include="Images\lisk.png" />
+    <BundleResource Include="Images\litecoin.png" />
+    <BundleResource Include="Images\monacoin.png" />
+    <BundleResource Include="Images\monero.png" />
+    <BundleResource Include="Images\nem.png" />
+    <BundleResource Include="Images\ripple.png" />
+    <BundleResource Include="Images\zcash.png" />
+    <BundleResource Include="Images\stellar lumens.png" />
+    <BundleResource Include="Images\byteball.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

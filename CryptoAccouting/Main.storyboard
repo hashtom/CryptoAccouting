@@ -1852,9 +1852,19 @@
         <image name="Images/exchange.png" width="592" height="546"/>
         <image name="Images/jpy.png" width="598" height="554"/>
         <image name="Images/key.png" width="922" height="808"/>
-        <image name="Images/btc.png" width="16" height="16"/>
-        <image name="Images/rep.png" width="16" height="16"/>
-        <image name="Images/eth.png" width="16" height="16"/>
+        <image name="Images/augur.png" width="32" height="32"/>
+        <image name="Images/bitcoin.png" width="32" height="32"/>
+        <image name="Images/ethereum.png" width="32" height="32"/>
+        <image name="Images/factom.png" width="32" height="32"/>
+        <image name="Images/lisk.png" width="32" height="32"/>
+        <image name="Images/litecoin.png" width="32" height="32"/>
+        <image name="Images/monacoin.png" width="64" height="64"/>
+        <image name="Images/monero.png" width="32" height="32"/>
+        <image name="Images/nem.png" width="32" height="32"/>
+        <image name="Images/ripple.png" width="32" height="32"/>
+        <image name="Images/zcash.png" width="32" height="32"/>
+        <image name="Images/byteball.png" width="64" height="64"/>
+        <image name="Images/stellar lumens.png" width="64" height="64"/>
     </resources>
     <inferredMetricsTieBreakers/>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

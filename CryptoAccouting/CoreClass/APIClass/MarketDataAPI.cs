@@ -69,7 +69,8 @@ namespace CryptoAccouting.CoreClass.APIClass
             //Parse Market Data 
             foreach (var elem in jarray){
                 var coin = new Instrument((string)elem["id"], (string)elem["symbol"], (string)elem["name"]);
-				var p = new Price(coin);
+                coin.LogoFileName = "Images/" + (string)elem["name"] + ".png";
+                var p = new Price(coin);
                 p.BaseCurrency = AppSetting.BaseCurrency;
 				coin.MarketPrice = p;
                 instruments.Add(coin);

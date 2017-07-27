@@ -9,25 +9,25 @@
         {
 			BaseCurrency = EnuCCY.JPY;             LoadInstruments(forceRefresh);             LoadExchangeList();         }          public static void LoadExchangeList()
         {
-            if (ExchangeList is null) ExchangeList = new ExchangeList();              var zaif = new Exchange(EnuExchangeType.Zaif) { ExchangeName = "Zaif" };             zaif.AttachListedCoin(GetInstrument("BTC"));             zaif.AttachListedCoin(GetInstrument("MONA"));             zaif.AttachListedCoin(GetInstrument("XEM"));             var kraken = new Exchange(EnuExchangeType.Kraken){ ExchangeName = "Kraken" };
-			kraken.AttachListedCoin(GetInstrument("BTC"));             kraken.AttachListedCoin(GetInstrument("ETH"));             kraken.AttachListedCoin(GetInstrument("REP"));             kraken.AttachListedCoin(GetInstrument("XLM"));             var coincheck = new Exchange(EnuExchangeType.CoinCheck){ ExchangeName = "CoinCheck" };             coincheck.AttachListedCoin(GetInstrument("BTC"));
-            coincheck.AttachListedCoin(GetInstrument("REP"));                                  var bitflyer = new Exchange(EnuExchangeType.BitFlyer){ ExchangeName = "BitFlyer" };
-            bitflyer.AttachListedCoin(GetInstrument("BTC"));
-            bitflyer.AttachListedCoin(GetInstrument("ETH"));
+            if (ExchangeList is null) ExchangeList = new ExchangeList();              var btc = GetInstrument("BTC");             var mona = GetInstrument("MONA");             var xem = GetInstrument("XEM");             var eth = GetInstrument("ETH");             var rep = GetInstrument("REP");             var xlm = GetInstrument("XLM");             var gbyte = GetInstrument("GBYTE");               btc.IsActive = true;             mona.IsActive = true;             xem.IsActive = true;             eth.IsActive = true;             rep.IsActive = true;             xlm.IsActive = true;             gbyte.IsActive = true;              var zaif = new Exchange(EnuExchangeType.Zaif) { ExchangeName = "Zaif" };             zaif.AttachListedCoin(btc);             zaif.AttachListedCoin(mona);             zaif.AttachListedCoin(xem);             var kraken = new Exchange(EnuExchangeType.Kraken){ ExchangeName = "Kraken" };
+			kraken.AttachListedCoin(btc);             kraken.AttachListedCoin(eth);             kraken.AttachListedCoin(rep);             kraken.AttachListedCoin(xlm);             var coincheck = new Exchange(EnuExchangeType.CoinCheck){ ExchangeName = "CoinCheck" };             coincheck.AttachListedCoin(btc);
+            coincheck.AttachListedCoin(rep);                                  var bitflyer = new Exchange(EnuExchangeType.BitFlyer){ ExchangeName = "BitFlyer" };
+            bitflyer.AttachListedCoin(btc);
+            bitflyer.AttachListedCoin(eth);
             var bitbank = new Exchange(EnuExchangeType.BitBank){ ExchangeName = "BitBank" };
-            bitbank.AttachListedCoin(GetInstrument("BTC"));              var poloniex = new Exchange(EnuExchangeType.Poloniex) { ExchangeName = "Poloniex" };             poloniex.AttachListedCoin(GetInstrument("XLM"));
-			poloniex.AttachListedCoin(GetInstrument("ETH"));
-			poloniex.AttachListedCoin(GetInstrument("REP")); 
+            bitbank.AttachListedCoin(btc);              var poloniex = new Exchange(EnuExchangeType.Poloniex) { ExchangeName = "Poloniex" };             poloniex.AttachListedCoin(xlm);
+			poloniex.AttachListedCoin(eth);
+			poloniex.AttachListedCoin(rep); 
             var bittrex = new Exchange(EnuExchangeType.Bittrex) { ExchangeName = "Bittrex" };
-			bittrex.AttachListedCoin(GetInstrument("XLM"));             bittrex.AttachListedCoin(GetInstrument("ETH"));             bittrex.AttachListedCoin(GetInstrument("MONA"));
-			bittrex.AttachListedCoin(GetInstrument("GBYTE"));              ExchangeList.AttachExchange(zaif);
+			bittrex.AttachListedCoin(xlm);             bittrex.AttachListedCoin(eth);             bittrex.AttachListedCoin(mona);
+			bittrex.AttachListedCoin(gbyte);              ExchangeList.AttachExchange(zaif);
             ExchangeList.AttachExchange(kraken);
             ExchangeList.AttachExchange(coincheck);
             ExchangeList.AttachExchange(bitbank);
             ExchangeList.AttachExchange(bitflyer);             ExchangeList.AttachExchange(poloniex);             ExchangeList.AttachExchange(bittrex);          }          public static void LoadInstruments(bool forceRefresh = true)
         {             if (forceRefresh)
             {                 myInstruments = new List<Instrument>();
-                MarketDataAPI.FetchAllCoinData(myInstruments);                 myInstruments.Where(i => i.Symbol == "BTC").First().LogoFileName = "Images/btc.png";                 myInstruments.Where(i => i.Symbol == "ETH").First().LogoFileName = "Images/eth.png";                 myInstruments.Where(i => i.Symbol == "REP").First().LogoFileName = "Images/rep.png";                 StorageAPI.SaveInstrumentXML(myInstruments, "instruments.xml"); 
+                MarketDataAPI.FetchAllCoinData(myInstruments);                 //myInstruments.Where(i => i.Symbol == "BTC").First().LogoFileName = "Images/bitcoin.png";                 //myInstruments.Where(i => i.Symbol == "ETH").First().LogoFileName = "Images/eth.png";                 //myInstruments.Where(i => i.Symbol == "REP").First().LogoFileName = "Images/rep.png";                 StorageAPI.SaveInstrumentXML(myInstruments, "instruments.xml"); 
             }
             else
             {                 myInstruments = StorageAPI.LoadInstrumentXML("instruments.xml");             }          }          //public static Balance GetTestBalance(){
@@ -50,9 +50,9 @@
             await MarketDataAPI.FetchCoinMarketDataAsync(coin);
         }
 
-        public static List<Instrument> GetInstrumentAll()
+        public static List<Instrument> GetInstrumentAll(bool OnlyActive = true)
 		{
-			return myInstruments;
+            return !OnlyActive ? myInstruments : myInstruments.Where(x => x.IsActive is true).ToList();
 		}          public static async Task LoadTradeListsAsync(EnuExchangeType extype, bool isAggregatedDaily = true, bool readfromFile = false)
         {
             var exchange = GetExchange(extype);             exchange.TradeList = await ExchangeAPI.FetchTradeListAsync(exchange.ExchangeType, isAggregatedDaily, readfromFile);             ExchangeList.AttachExchange(exchange);              //return exchange.TradeLists;         }          public static Exchange GetExchange(EnuExchangeType extype)

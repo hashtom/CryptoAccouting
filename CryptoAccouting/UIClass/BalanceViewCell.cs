@@ -10,8 +10,6 @@ namespace CryptoAccouting.UIClass
     {
         public static readonly NSString Key = new NSString("BalanceViewCell");
         public static readonly UINib Nib;
-		//UIImageView imageView;
-		//UILabel codeLabel, amountLabel, priceLabel, pctLabel;
 
         static BalanceViewCell()
         {

@@ -17,7 +17,7 @@ namespace CryptoAccouting
 
         public SymbolSelectionViewConroller(IntPtr handle) : base(handle)
         {
-            instruments = ApplicationCore.GetInstrumentAll();
+            instruments = ApplicationCore.GetInstrumentAll(true);
         }
 
         public override void ViewDidLoad()
