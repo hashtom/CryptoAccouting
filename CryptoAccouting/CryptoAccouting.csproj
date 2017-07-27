@@ -197,6 +197,7 @@
     <Compile Include="SymbolSelectionViewConroller.designer.cs">
       <DependentUpon>SymbolSelectionViewConroller.cs</DependentUpon>
     </Compile>
+    <Compile Include="UIClass\CustomPickerModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\btc.png" />

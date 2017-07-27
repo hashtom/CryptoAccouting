@@ -14,7 +14,7 @@ namespace CryptoAccouting.CoreClass
         public double? Pct7d { get; set; }
         //public double PrevClose { get; set; }
 		public DateTime PriceDate { get; set; }
-		//public DateTime UpdateTime { get; set; }
+        //public DateTime UpdateTime { get; set; }
 
         public Price(Instrument coin)
         {
@@ -22,6 +22,11 @@ namespace CryptoAccouting.CoreClass
             LatestPriceBTC = 0;
             LatestPrice = 0;
         }
+
+        public double LatestMainPrice(){
+            return Coin.Symbol is "BTC" ? LatestPrice : LatestPriceBTC;
+        }
+
 
         //public double DayReturn(){
         //    return LatestPrice.Equals((double)0) ? 0 : PrevClose / LatestPrice - 1;

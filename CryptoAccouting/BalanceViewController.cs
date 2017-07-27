@@ -1,12 +1,10 @@
 ﻿using Foundation; using System; using UIKit; using CryptoAccouting.CoreClass; using CryptoAccouting.UIClass; using System.Threading.Tasks;  namespace CryptoAccouting {     public partial class BalanceViewController : UITableViewController     {
         //private NavigationDrawer menu;         private int viewposition = 0;         private Balance myBalance;          public BalanceViewController(IntPtr handle) : base(handle)         {             AppSetting.BaseCurrency = EnuCCY.JPY;
-        }           public override void ViewDidLoad()         {             base.ViewDidLoad();              // Instantiate Controllers             TransactionViewController transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             PLTableViewController plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             PerfomViewController perfViewC = this.Storyboard.InstantiateViewController("PerfViewC") as PerfomViewController;             SettingTableViewController settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             //menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);
+        }           public override void ViewDidLoad()         {             base.ViewDidLoad();              // Instantiate Controllers             AppSetting.balanceViewC = this;             AppSetting.transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             AppSetting.plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             AppSetting.perfViewC = this.Storyboard.InstantiateViewController("PerfViewC") as PerfomViewController;             AppSetting.settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             //menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);
 
             ApplicationCore.InitializeCore(false);             myBalance = ApplicationCore.GetMyBalance();             TableView.RegisterNibForCellReuse(BalanceViewCell.Nib, "BalanceViewCell");             TableView.Source = new BalanceTableSource(myBalance, this);
-        }          public async override void ViewWillAppear(bool animated)
-        {
-            base.ViewWillAppear(animated);             await ApplicationCore.FetchMarketData();
-			TableView.ReloadData();
+        }          public async override void ViewWillAppear(bool animated)         {
+            base.ViewWillAppear(animated);             await ApplicationCore.FetchMarketData(); 			TableView.ReloadData();
             labelTotalAsset.Text = ApplicationCore.GetInstrument("BTC").MarketPrice.LatestPrice.ToString();         }          public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
@@ -40,16 +38,18 @@
         partial void ButtonAddNew_Activated(UIBarButtonItem sender)
         {
             CreateNewPosition();
-        }          private void CreateNewPosition(){             var SymbolSelectionViewC = Storyboard.InstantiateViewController("SymbolSelectionViewC") as SymbolSelectionViewConroller;             NavigationController.PushViewController(SymbolSelectionViewC, true);         }
+        }          private void CreateNewPosition(){
+            var SymbolSelectionViewC = Storyboard.InstantiateViewController("SymbolSelectionViewC") as SymbolSelectionViewConroller;
+            NavigationController.PushViewController(SymbolSelectionViewC, false);          }
 
         public void SaveItem(Position pos)
 		{
             myBalance.AttachPosition(pos);             TableView.ReloadData();             ApplicationCore.SaveMyBalance(myBalance);
-			NavigationController.PopViewController(true);
+			//NavigationController.PopViewController(true);             NavigationController.PopToRootViewController(true);
 		}
 
 		public void DeleteItem(Position pos)
 		{
             myBalance.DetachPosition(pos);             TableView.ReloadData();
-			NavigationController.PopViewController(true);
+			//NavigationController.PopViewController(true);             NavigationController.PopToRootViewController(true);
 		}     } }

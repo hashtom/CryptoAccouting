@@ -8,6 +8,13 @@ namespace CryptoAccouting.UIClass
     {
         public static EnuCCY BaseCurrency { get; set; }
         public static string Setting1 { get; set; }
-    }
+
+        public static BalanceViewController balanceViewC { get; set; }
+        public static TransactionViewController transViewC  { get; set; }
+        public static PLTableViewController plViewC { get; set; }
+        public static PerfomViewController perfViewC { get; set; }
+        public static SettingTableViewController settingViewC { get; set; }
+
+	}
 
 }

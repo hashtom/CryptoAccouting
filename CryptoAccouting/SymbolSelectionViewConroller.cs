@@ -11,43 +11,107 @@ namespace CryptoAccouting
 {
     public partial class SymbolSelectionViewConroller : UITableViewController
     {
-        public SymbolSelectionViewConroller (IntPtr handle) : base (handle)
+        ResultsTableController searchResultsController;
+
+        List<Instrument> instruments;
+
+        public SymbolSelectionViewConroller(IntPtr handle) : base(handle)
         {
+            instruments = ApplicationCore.GetInstrumentAll();
         }
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            TableView.Source = new TableSource(ApplicationCore.GetInstrumentAll(), this);
+            TableView.Source = new TableSource(instruments, this);
             this.NavigationItem.HidesBackButton = true;
+
+            searchResultsController = new ResultsTableController(Handle);
+            searchResultsController.FilteredInstruments = instruments;
+
+			var searchUpdater = new SearchResultsUpdator();
+			searchUpdater.UpdateSearchResults += searchResultsController.Search;
+
+			//add the search controller
+			var searchController = new UISearchController(searchResultsController)
+			{
+				SearchResultsUpdater = searchUpdater
+			};
+
+			//format the search bar
+			searchController.SearchBar.SizeToFit();
+			searchController.SearchBar.SearchBarStyle = UISearchBarStyle.Minimal;
+			searchController.SearchBar.Placeholder = "Enter a search query";
+
+			//the search bar is contained in the navigation bar, so it should be visible
+			searchController.HidesNavigationBarDuringPresentation = false;
+
+			//Ensure the searchResultsController is presented in the current View Controller 
+			DefinesPresentationContext = true;
+
+			//Set the search bar
+			//NavigationItem.TitleView = searchController.SearchBar;
+            TableView.TableHeaderView = searchController.SearchBar;
+		}
+
+    }
+
+    public class ResultsTableController : SymbolSelectionViewConroller
+    {
+        public List<Instrument> FilteredInstruments { get; set; }
+
+        public ResultsTableController(IntPtr handle) : base(handle)
+        {
+
+        }
+
+        public override void ViewDidLoad()
+        {
+            TableView.Source = new TableSource(FilteredInstruments, this);
+        }
+
+        public void Search(string forSearchString)
+        {
+            FilteredInstruments = FilteredInstruments.Where(x => x.Symbol.Contains(forSearchString)).ToList();
+            this.TableView.ReloadData();
         }
 
     }
 
-    class TableSource : UITableViewSource
+	public class SearchResultsUpdator : UISearchResultsUpdating
 	{
+		public event Action<string> UpdateSearchResults = delegate { };
+
+		public override void UpdateSearchResultsForSearchController(UISearchController searchController)
+		{
+			this.UpdateSearchResults(searchController.SearchBar.Text);
+		}
+	}
+
+    class TableSource : UITableViewSource
+    {
         UITableViewController owner;
         List<Instrument> instruments;
-		string CellIdentifier = "SymbolListCell";
+        string CellIdentifier = "SymbolListCell";
 
-		public TableSource(List<Instrument> instruments, UITableViewController owner)
-		{
+        public TableSource(List<Instrument> instruments, UITableViewController owner)
+        {
             this.instruments = instruments;
             this.owner = owner;
-		}
+        }
 
-		public override nint RowsInSection(UITableView tableview, nint section)
-		{
+        public override nint RowsInSection(UITableView tableview, nint section)
+        {
             return instruments.Count;
-		}
+        }
 
-		public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
-		{
-			var cell = tableView.DequeueReusableCell(CellIdentifier, indexPath);
-			cell.TextLabel.Text = instruments[indexPath.Row].Symbol;
+        public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
+        {
+            var cell = tableView.DequeueReusableCell(CellIdentifier, indexPath);
+            cell.TextLabel.Text = instruments[indexPath.Row].Symbol;
             cell.DetailTextLabel.Text = instruments[indexPath.Row].Name;
-			return cell;
-		}
+            return cell;
+        }
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
@@ -57,8 +121,9 @@ namespace CryptoAccouting
 
             var BalanceEditViewC = owner.Storyboard.InstantiateViewController("BalanceEditViewC") as BalanceEditViewController;
             BalanceEditViewC.CoinSelected(instruments[indexPath.Row].Symbol);
-            owner.NavigationController.PushViewController(BalanceEditViewC, true);
+            owner.NavigationController.PushViewController(BalanceEditViewC, false);
+        }
 
-		}
-	}
+    }
+
 }

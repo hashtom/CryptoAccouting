@@ -2,6 +2,7 @@ using Foundation;
 using System;
 using UIKit;
 using CryptoAccouting.CoreClass;
+using CryptoAccouting.UIClass;
 using System.Collections.Generic;
 //using CoreGraphics;
 //using System.Drawing;
@@ -11,10 +12,13 @@ namespace CryptoAccouting
 {
 	public partial class BalanceEditViewController : UITableViewController
 	{
-		public Position PositionDetail;
-		public BalanceViewController AppDel { get; set; }
-        string symbol;
-        public ExchangeList exchangesListed;
+		Position PositionDetail;
+		BalanceViewController AppDel { get; set; }
+        ExchangeList exchangesListed;
+
+		Instrument thisCoin;
+        DateTime thisBalanceDate;
+        EnuExchangeType thisExchangeType;
 
 		public BalanceEditViewController(IntPtr handle) : base(handle)
 		{
@@ -24,25 +28,27 @@ namespace CryptoAccouting
 		{
 			AppDel = d;
 			PositionDetail = pos;
-            exchangesListed = ApplicationCore.GetExchangesBySymbol(pos.Coin.Symbol);
+            thisCoin = pos.Coin;
+			exchangesListed = ApplicationCore.GetExchangesBySymbol(pos.Coin.Symbol);
 		}
 
         public void CoinSelected(string symbol)
         {
-            this.symbol = symbol;
+            thisCoin = ApplicationCore.GetInstrument(symbol);
             exchangesListed = ApplicationCore.GetExchangesBySymbol(symbol);
             this.NavigationItem.HidesBackButton = true;
         }
 
-		public override void ViewDidLoad()
+        public override void ViewDidLoad()
         {
-			base.ViewDidLoad();
+            base.ViewDidLoad();
+            PrepareDatePicker();
+        }
 
-		}
-
-		public override void ViewWillAppear(bool animated)
+        public async override void ViewWillAppear(bool animated)
 		{
 			base.ViewWillAppear(animated);
+            await ApplicationCore.RefreshMarketDataAsync(thisCoin);
             ReDrawScreen();
 		}
 
@@ -51,22 +57,60 @@ namespace CryptoAccouting
 			base.ViewDidAppear(animated);
 		}
 
+        private void PrepareDatePicker()
+        {
+
+            var modalPicker = new ModalPickerViewController(ModalPickerType.Date, "Select A Date", this)
+            {
+                HeaderBackgroundColor = UIColor.Red,
+                HeaderTextColor = UIColor.White,
+                TransitioningDelegate = new ModalPickerTransitionDelegate(),
+                ModalPresentationStyle = UIModalPresentationStyle.Custom
+            };
+
+            modalPicker.DatePicker.Mode = UIDatePickerMode.Date;
+
+            modalPicker.OnModalPickerDismissed += (s, ea) =>
+            {
+                var dateFormatter = new NSDateFormatter()
+                {
+                    DateStyle = NSDateFormatterStyle.Medium
+                };
+
+                textBalanceDate.Text = dateFormatter.ToString(modalPicker.DatePicker.Date);
+                thisBalanceDate = (DateTime)modalPicker.DatePicker.Date;
+            };
+
+
+            //Events description
+            textBalanceDate.EditingDidBegin += (sender, e) =>
+            {
+                PresentViewController(modalPicker, true, null);
+            };
+        }
+
         public void ReDrawScreen(){
 
-            if (PositionDetail is null) // new add
+            if (PositionDetail is null) // new balance
             {
-                labelCoinSymbol.Text = symbol;
-            }
+                labelCoinSymbol.Text = thisCoin.Symbol;
+                labelCurrentPrice.Text = String.Format("{0:n0}", thisCoin.MarketPrice.LatestMainPrice());
+                //textBookPrice.Text = PositionDetail.MarketPrice().ToString();
+				textBalanceDate.Text = DateTime.Now.Date.ToShortDateString();
+
+			}
             else
             {
                 labelCoinSymbol.Text = PositionDetail.Coin.Symbol;
                 var imagelogo = PositionDetail.Coin.LogoFileName;
                 imageCoin.Image = imagelogo == null ? null : UIImage.FromFile(imagelogo);
 
-                labelCurrentPrice.Text = PositionDetail.MarketPrice().ToString();
+                labelCurrentPrice.Text = String.Format("{0:n0}", PositionDetail.LatestMainPrice());
                 textQuantity.Text = PositionDetail.Amount.ToString();
-                textTradePrice.Text = PositionDetail.MarketPrice().ToString();
-            }
+				textBookPrice.Text = PositionDetail.BookPrice < 0 ? textBookPrice.Text = PositionDetail.MarketPrice().ToString() : PositionDetail.BookPrice.ToString();
+				textBalanceDate.Text = PositionDetail.BalanceDate.Date.ToShortDateString();
+
+			}
 
             if (buttonExchange.TitleLabel.Text is null)
             {
@@ -76,38 +120,47 @@ namespace CryptoAccouting
 
         private void CreatePosition(){
 
-            if (PositionDetail is null) PositionDetail = new Position(ApplicationCore.GetInstrument(symbol));
+            if (PositionDetail is null) PositionDetail = new Position(thisCoin);
 
             PositionDetail.Amount = double.Parse(textQuantity.Text);
-            //PositionDetail.TradedExchange = (EnuExchangeType)int.Parse(buttonExchange.TitleLabel.Text);
-
+            PositionDetail.BookPrice = textBookPrice.Text is "" ? 0 : double.Parse(textBookPrice.Text);
+            PositionDetail.TradedExchange = thisExchangeType;
+            PositionDetail.BalanceDate = thisBalanceDate;
         }
 
         partial void ButtonExchange_TouchUpInside(UIButton sender)
         {
 
-            UIAlertController okAlertController = UIAlertController.Create("Exchange","Choose Exchange", UIAlertControllerStyle.ActionSheet);
-            okAlertController.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
+            UIAlertController exchangeAlert = UIAlertController.Create("Exchange","Choose Exchange", UIAlertControllerStyle.ActionSheet);
+            exchangeAlert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
+
+            //exchangeAlert.AddChildViewController();
 
             foreach (var exc in exchangesListed)
             {
-                okAlertController.AddAction(UIAlertAction.Create(exc.ExchangeName,
+                exchangeAlert.AddAction(UIAlertAction.Create(exc.ExchangeName,
                                                                  UIAlertActionStyle.Default,
                                                                  (obj) =>
                                                                  {
                                                                      buttonExchange.SetTitle(exc.ExchangeType.ToString(), UIControlState.Normal);
+                                                                     thisExchangeType = exc.ExchangeType;
                                                                  }
                                                                 ));
             }
-            this.PresentViewController(okAlertController, true, null);
+            this.PresentViewController(exchangeAlert, true, null);
 		}
 
         partial void ButtonSave_Activated(UIBarButtonItem sender)
         {
             CreatePosition();
-            AppDel.SaveItem(PositionDetail);
+            AppSetting.balanceViewC.SaveItem(PositionDetail);
+
         }
 
+        partial void ButtonCancel_Activated(UIBarButtonItem sender)
+        {
+            NavigationController.PopToRootViewController(true);
+        }
     }
 
 }

@@ -16,6 +16,9 @@ namespace CryptoAccouting.CoreClass
 		public Position(Instrument coin)
         {
             Coin = coin;
+            BalanceDate = DateTime.Now.Date;
+            Amount = 0;
+            BookPrice = -99999999;
             //Id = positionId;
         }
         public Position() { }
@@ -32,6 +35,11 @@ namespace CryptoAccouting.CoreClass
 		public double MarketPrice()
 		{
             return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPrice;
+		}
+
+		public double LatestMainPrice()
+		{
+            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestMainPrice();
 		}
 
         public double? Pct1d(){

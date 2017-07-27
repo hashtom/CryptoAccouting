@@ -40,11 +40,19 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITextField textQuantity { get; set; }
+        UIKit.UITextField textBalanceDate { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITextField textTradePrice { get; set; }
+        UIKit.UITextField textBookPrice { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UITextField textQuantity { get; set; }
+
+        [Action ("ButtonCancel_Activated:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void ButtonCancel_Activated (UIKit.UIBarButtonItem sender);
 
         [Action ("ButtonExchange_TouchUpInside:")]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -86,14 +94,19 @@ namespace CryptoAccouting
                 labelCurrentPrice = null;
             }
 
+            if (textBalanceDate != null) {
+                textBalanceDate.Dispose ();
+                textBalanceDate = null;
+            }
+
+            if (textBookPrice != null) {
+                textBookPrice.Dispose ();
+                textBookPrice = null;
+            }
+
             if (textQuantity != null) {
                 textQuantity.Dispose ();
                 textQuantity = null;
-            }
-
-            if (textTradePrice != null) {
-                textTradePrice.Dispose ();
-                textTradePrice = null;
             }
         }
     }

@@ -30,17 +30,20 @@
         //    // Test Data
         //    AppSetting.BaseCurrency = EnuBaseCCY.JPY;         //    Balance mybal;          //    LoadInstruments();          //    mybal = new Balance(EnuExchangeType.Zaif){BalanceName="Tomoaki"};          //    // Test Data Creation         //    var coin1 = instruments.Where(i=>i.Symbol =="BTC").First();         //    var coin2 = instruments.Where(i => i.Symbol == "ETH").First();         //    var coin3 = instruments.Where(i => i.Symbol == "REP").First();         //    var pos1 = new Position(coin1, "1") { Amount = 850 };         //    var pos2 = new Position(coin2, "2") { Amount = 1000 };         //    var pos3 = new Position(coin3, "3") { Amount = 25000 };          //    mybal.AttachPosition(pos1);         //    mybal.AttachPosition(pos2);         //    mybal.AttachPosition(pos3);          //    myBalance = mybal;          //    return myBalance;         //}          public static Balance GetMyBalance(){              if (myBalance is null)
             {
-                myBalance = StorageAPI.LoadBalanceXML("mybalance.xml", myInstruments);             }              return myBalance;         }          public static void SaveMyBalance(Balance myBalance){              StorageAPI.SaveBalanceXML(myBalance, "mybalance.xml");         }          public static Instrument GetInstrument(string symbol, bool ForcePriceRefresh = false)
-        { 
-            if (myInstruments.Where(i => i.Symbol == symbol).Any())
+                myBalance = StorageAPI.LoadBalanceXML("mybalance.xml", myInstruments);             }              return myBalance;         }          public static void SaveMyBalance(Balance myBalance){              StorageAPI.SaveBalanceXML(myBalance, "mybalance.xml");         }          public static Instrument GetInstrument(string symbol)
+        {
+            if (myInstruments.Any(i => i.Symbol == symbol))
             {
-                var coin = myInstruments.Where(i => i.Symbol == symbol).First();
-				if (ForcePriceRefresh)
-				{
-					MarketDataAPI.FetchCoinMarketDataAsync(coin).Wait();
-				}                 return coin;
-            }else{                 return null;             }
+                return myInstruments.First(i => i.Symbol == symbol);
+            }
+            else
+            {                 return null;             }
          }
+
+        public static async Task RefreshMarketDataAsync(Instrument coin)
+        {
+            await MarketDataAPI.FetchCoinMarketDataAsync(coin);
+        }
 
         public static List<Instrument> GetInstrumentAll()
 		{
@@ -65,8 +68,7 @@
 			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			return epoch.AddSeconds(EpochSeconds);
 
-		}          public static async Task FetchMarketData()
-        {             await MarketDataAPI.FetchMarketDataFromBalance(myBalance);         }      }
+		}          public static async Task FetchMarketData()         {             await MarketDataAPI.FetchMarketDataFromBalance(myBalance);         }      }
 
     public enum EnuCCY
     {         //Fiat Only at the moment
