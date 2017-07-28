@@ -28,15 +28,7 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton ButtonSwitch { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel labelCurrency { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelTotalAsset { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -44,7 +36,15 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelViewTitle { get; set; }
+        UIKit.UILabel labelTotalBTC { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelTotalFiat { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UISegmentedControl SegmentBalance { get; set; }
 
         [Action ("ButtonAddNew_Activated:")]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -53,10 +53,6 @@ namespace CryptoAccouting
         [Action ("ButtonRefresh_Activated:")]
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void ButtonRefresh_Activated (UIKit.UIBarButtonItem sender);
-
-        [Action ("ButtonSwitch_TouchUpInside:")]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        partial void ButtonSwitch_TouchUpInside (UIKit.UIButton sender);
 
         void ReleaseDesignerOutlets ()
         {
@@ -75,19 +71,9 @@ namespace CryptoAccouting
                 buttonRefresh = null;
             }
 
-            if (ButtonSwitch != null) {
-                ButtonSwitch.Dispose ();
-                ButtonSwitch = null;
-            }
-
             if (labelCurrency != null) {
                 labelCurrency.Dispose ();
                 labelCurrency = null;
-            }
-
-            if (labelTotalAsset != null) {
-                labelTotalAsset.Dispose ();
-                labelTotalAsset = null;
             }
 
             if (labelTotalAssetPct != null) {
@@ -95,9 +81,19 @@ namespace CryptoAccouting
                 labelTotalAssetPct = null;
             }
 
-            if (labelViewTitle != null) {
-                labelViewTitle.Dispose ();
-                labelViewTitle = null;
+            if (labelTotalBTC != null) {
+                labelTotalBTC.Dispose ();
+                labelTotalBTC = null;
+            }
+
+            if (labelTotalFiat != null) {
+                labelTotalFiat.Dispose ();
+                labelTotalFiat = null;
+            }
+
+            if (SegmentBalance != null) {
+                SegmentBalance.Dispose ();
+                SegmentBalance = null;
             }
         }
     }

@@ -43,7 +43,7 @@ namespace CryptoAccouting.CoreClass
 		}
 
         public double? Pct1d(){
-            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.Pct1d;
+            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.FiatPct1d;
         }
 
 		public double MarketDayVolume()

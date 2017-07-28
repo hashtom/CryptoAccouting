@@ -32,13 +32,16 @@ namespace CryptoAccouting
             thisCoin = pos.Coin;
 			exchangesListed = ApplicationCore.GetExchangesBySymbol(pos.Coin.Symbol);
             editmode = false;
+            //buttonCancel.Enabled = false;
+            //this.NavigationItem.HidesBackButton = false;
+
 		}
 
         public void NewCoinSelected(string symbol)
         {
             thisCoin = ApplicationCore.GetInstrument(symbol);
             exchangesListed = ApplicationCore.GetExchangesBySymbol(symbol);
-            this.NavigationItem.HidesBackButton = true;
+            //this.NavigationItem.HidesBackButton = true;
             editmode = true;
         }
 
@@ -66,8 +69,8 @@ namespace CryptoAccouting
 
             var modalPicker = new ModalPickerViewController(ModalPickerType.Date, "Select A Date", this)
             {
-                HeaderBackgroundColor = UIColor.Red,
-                HeaderTextColor = UIColor.White,
+                HeaderBackgroundColor = UIColor.Gray,
+                HeaderTextColor = UIColor.Blue,
                 TransitioningDelegate = new ModalPickerTransitionDelegate(),
                 ModalPresentationStyle = UIModalPresentationStyle.Custom
             };
@@ -97,41 +100,62 @@ namespace CryptoAccouting
         {
             if (editmode)
             {
-				buttonSave.Enabled = true;
-				buttonEdit.Enabled = false;
-				buttonExchange.UserInteractionEnabled = true;
-				textQuantity.UserInteractionEnabled = true;
-				textBookPrice.UserInteractionEnabled = true;
-				textBalanceDate.UserInteractionEnabled = true;
-            }else{
-				buttonSave.Enabled = false;
-				buttonEdit.Enabled = true;
-				buttonExchange.UserInteractionEnabled = false;
-				textQuantity.UserInteractionEnabled = false;
-				textBookPrice.UserInteractionEnabled = false;
-				textBalanceDate.UserInteractionEnabled = false;
+                buttonDone.Enabled = true;
+                buttonEdit.Enabled = false;
+                //buttonDone.SetTitleTextAttributes(new UITextAttributes() { TextColor = UIColor.Blue }, UIControlState.Normal);
+                buttonExchange.SetTitleColor(UIColor.Blue, UIControlState.Normal);
+                buttonExchange.UserInteractionEnabled = true;
+                textQuantity.UserInteractionEnabled = true;
+                textBookPrice.UserInteractionEnabled = true;
+                textBalanceDate.UserInteractionEnabled = true;
+                textQuantity.TextColor = UIColor.Blue;
+                textBookPrice.TextColor = UIColor.Blue;
+                textBalanceDate.TextColor = UIColor.Blue;
+            }
+            else
+            {
+                buttonDone.Enabled = false;
+                buttonExchange.UserInteractionEnabled = false;
+                //buttonDone.SetTitleTextAttributes(new UITextAttributes() { TextColor = UIColor.Black }, UIControlState.Disabled);
+                buttonExchange.SetTitleColor(UIColor.Black, UIControlState.Disabled);
+                textQuantity.UserInteractionEnabled = false;
+                textBookPrice.UserInteractionEnabled = false;
+                textBalanceDate.UserInteractionEnabled = false;
+                textQuantity.TextColor = UIColor.Black;
+                textBookPrice.TextColor = UIColor.Black;
+                textBalanceDate.TextColor = UIColor.Black;
             }
         }
 
         private void ReDrawScreen(){
 
+            labelCoinSymbol.Text = thisCoin.Symbol;
+            labelCoinName.Text = thisCoin.Name;
+
+            labelBTCPrice.Text = thisCoin.Symbol == "BTC" ?
+                "" :
+                "B " + String.Format("{0:n8}", thisCoin.MarketPrice.LatestPriceBTC);
+            labelFiatPrice.Text = thisCoin.Symbol == "BTC" ?
+                "$" + String.Format("{0:n2}", thisCoin.MarketPrice.LatestMainPrice()) :
+                "$" + String.Format("{0:n6}", thisCoin.MarketPrice.LatestMainPrice());
+            labelFiat1dRet.Text = String.Format("{0:n2}", thisCoin.MarketPrice.FiatPct1d) + "%";
+            //labelBTCRet.Text
+            labelVolume.Text = String.Format("{0:n0}", thisCoin.MarketPrice.DayVolume);
+            labelMarketCap.Text = "$" + String.Format("{0:n0}", thisCoin.MarketPrice.MarketCap);
+
             if (PositionDetail is null) // new balance
             {
-                labelCoinSymbol.Text = thisCoin.Symbol;
-                labelCurrentPrice.Text = String.Format("{0:n0}", thisCoin.MarketPrice.LatestMainPrice());
-                //textBookPrice.Text = PositionDetail.MarketPrice().ToString();
 				textBalanceDate.Text = DateTime.Now.Date.ToShortDateString();
-
 			}
             else
             {
-                labelCoinSymbol.Text = PositionDetail.Coin.Symbol;
+                //labelCoinSymbol.Text = PositionDetail.Coin.Symbol;
                 var imagelogo = PositionDetail.Coin.LogoFileName;
                 imageCoin.Image = imagelogo == null ? null : UIImage.FromFile(imagelogo);
 
-                labelCurrentPrice.Text = String.Format("{0:n0}", PositionDetail.LatestMainPrice());
-                textQuantity.Text = PositionDetail.Amount.ToString();
-				textBookPrice.Text = PositionDetail.BookPrice < 0 ? textBookPrice.Text = PositionDetail.MarketPrice().ToString() : PositionDetail.BookPrice.ToString();
+                //labelFiatPrice.Text = String.Format("{0:n0}", PositionDetail.LatestMainPrice());
+                textQuantity.Text = String.Format("{0:n0}", PositionDetail.Amount);
+                textBookPrice.Text = PositionDetail.BookPrice < 0 ? String.Format("{0:n2}", PositionDetail.MarketPrice()) : String.Format("{0:n2}", PositionDetail.BookPrice);
 				textBalanceDate.Text = PositionDetail.BalanceDate.Date.ToShortDateString();
 
 			}
@@ -158,8 +182,6 @@ namespace CryptoAccouting
             UIAlertController exchangeAlert = UIAlertController.Create("Exchange","Choose Exchange", UIAlertControllerStyle.ActionSheet);
             exchangeAlert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
 
-            //exchangeAlert.AddChildViewController();
-
             foreach (var exc in exchangesListed)
             {
                 exchangeAlert.AddAction(UIAlertAction.Create(exc.ExchangeName,
@@ -174,11 +196,10 @@ namespace CryptoAccouting
             this.PresentViewController(exchangeAlert, true, null);
 		}
 
-        partial void ButtonSave_Activated(UIBarButtonItem sender)
+        partial void ButtonEdit_Activated(UIBarButtonItem sender)
         {
-            CreatePosition();
-            AppSetting.balanceViewC.SaveItem(PositionDetail);
-
+            editmode = true;
+            InitializeUserInteractionStates();
         }
 
         partial void ButtonCancel_Activated(UIBarButtonItem sender)
@@ -186,10 +207,10 @@ namespace CryptoAccouting
             NavigationController.PopToRootViewController(true);
         }
 
-        partial void ButtonEdit_Activated(UIBarButtonItem sender)
+        partial void ButtonDone_Activated(UIBarButtonItem sender)
         {
-            editmode = true;
-            InitializeUserInteractionStates();
+			CreatePosition();
+			AppSetting.balanceViewC.SaveItem(PositionDetail);
         }
     }
 

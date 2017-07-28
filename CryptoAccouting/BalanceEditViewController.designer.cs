@@ -16,6 +16,14 @@ namespace CryptoAccouting
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIBarButtonItem buttonCancel { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIBarButtonItem buttonDone { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIBarButtonItem buttonEdit { get; set; }
 
         [Outlet]
@@ -24,11 +32,19 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIBarButtonItem buttonSave { get; set; }
+        UIKit.UIImageView imageCoin { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIImageView imageCoin { get; set; }
+        UIKit.UILabel labelBTCPrice { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelBTCRet { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelCoinName { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -36,7 +52,23 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelCurrentPrice { get; set; }
+        UIKit.UILabel labelFiat1dRet { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelFiatPrice { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelMarketCap { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelMemo { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelVolume { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -54,6 +86,10 @@ namespace CryptoAccouting
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void ButtonCancel_Activated (UIKit.UIBarButtonItem sender);
 
+        [Action ("ButtonDone_Activated:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void ButtonDone_Activated (UIKit.UIBarButtonItem sender);
+
         [Action ("ButtonEdit_Activated:")]
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void ButtonEdit_Activated (UIKit.UIBarButtonItem sender);
@@ -62,12 +98,18 @@ namespace CryptoAccouting
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void ButtonExchange_TouchUpInside (UIKit.UIButton sender);
 
-        [Action ("ButtonSave_Activated:")]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        partial void ButtonSave_Activated (UIKit.UIBarButtonItem sender);
-
         void ReleaseDesignerOutlets ()
         {
+            if (buttonCancel != null) {
+                buttonCancel.Dispose ();
+                buttonCancel = null;
+            }
+
+            if (buttonDone != null) {
+                buttonDone.Dispose ();
+                buttonDone = null;
+            }
+
             if (buttonEdit != null) {
                 buttonEdit.Dispose ();
                 buttonEdit = null;
@@ -78,14 +120,24 @@ namespace CryptoAccouting
                 buttonExchange = null;
             }
 
-            if (buttonSave != null) {
-                buttonSave.Dispose ();
-                buttonSave = null;
-            }
-
             if (imageCoin != null) {
                 imageCoin.Dispose ();
                 imageCoin = null;
+            }
+
+            if (labelBTCPrice != null) {
+                labelBTCPrice.Dispose ();
+                labelBTCPrice = null;
+            }
+
+            if (labelBTCRet != null) {
+                labelBTCRet.Dispose ();
+                labelBTCRet = null;
+            }
+
+            if (labelCoinName != null) {
+                labelCoinName.Dispose ();
+                labelCoinName = null;
             }
 
             if (labelCoinSymbol != null) {
@@ -93,9 +145,29 @@ namespace CryptoAccouting
                 labelCoinSymbol = null;
             }
 
-            if (labelCurrentPrice != null) {
-                labelCurrentPrice.Dispose ();
-                labelCurrentPrice = null;
+            if (labelFiat1dRet != null) {
+                labelFiat1dRet.Dispose ();
+                labelFiat1dRet = null;
+            }
+
+            if (labelFiatPrice != null) {
+                labelFiatPrice.Dispose ();
+                labelFiatPrice = null;
+            }
+
+            if (labelMarketCap != null) {
+                labelMarketCap.Dispose ();
+                labelMarketCap = null;
+            }
+
+            if (labelMemo != null) {
+                labelMemo.Dispose ();
+                labelMemo = null;
+            }
+
+            if (labelVolume != null) {
+                labelVolume.Dispose ();
+                labelVolume = null;
             }
 
             if (textBalanceDate != null) {

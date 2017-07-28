@@ -27,7 +27,7 @@
             ExchangeList.AttachExchange(bitflyer);             ExchangeList.AttachExchange(poloniex);             ExchangeList.AttachExchange(bittrex);          }          public static void LoadInstruments(bool forceRefresh = true)
         {             if (forceRefresh)
             {                 myInstruments = new List<Instrument>();
-                MarketDataAPI.FetchAllCoinData(myInstruments);                 //myInstruments.Where(i => i.Symbol == "BTC").First().LogoFileName = "Images/bitcoin.png";                 //myInstruments.Where(i => i.Symbol == "ETH").First().LogoFileName = "Images/eth.png";                 //myInstruments.Where(i => i.Symbol == "REP").First().LogoFileName = "Images/rep.png";                 StorageAPI.SaveInstrumentXML(myInstruments, "instruments.xml"); 
+                MarketDataAPI.FetchAllCoinData(myInstruments);                 StorageAPI.SaveInstrumentXML(myInstruments, "instruments.xml"); 
             }
             else
             {                 myInstruments = StorageAPI.LoadInstrumentXML("instruments.xml");             }          }          //public static Balance GetTestBalance(){

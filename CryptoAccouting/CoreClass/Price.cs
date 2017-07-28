@@ -9,9 +9,10 @@ namespace CryptoAccouting.CoreClass
         public double LatestPrice { get; set; }
 		public EnuCCY BaseCurrency { get; set; }
         public double DayVolume { get; set; }
-        public double? Pct1h { get; set; }
-        public double? Pct1d { get; set; }
-        public double? Pct7d { get; set; }
+        public double MarketCap { get; set; }
+        public double? FiatPct1h { get; set; }
+        public double? FiatPct1d { get; set; }
+        public double? FiatPct7d { get; set; }
         //public double PrevClose { get; set; }
 		public DateTime PriceDate { get; set; }
         //public DateTime UpdateTime { get; set; }

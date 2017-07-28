@@ -28,6 +28,17 @@ namespace CryptoAccouting.CoreClass
             return positions.Sum(x => x.LatestBTCValue());
 		}
 
+        public void SortPositionByHolding(){
+
+            int i = 1;
+            positions = positions.OrderByDescending(x => x.AmountBTC()).ToList();
+
+            foreach (var p in positions){
+                p.Id = i;
+                i++;
+            }
+        }
+
         public void AttachPosition(Position position)
 		{
             if (positions.Any(x => x.Id == position.Id))
