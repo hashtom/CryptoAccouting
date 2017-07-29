@@ -117,6 +117,16 @@
     <ImageAsset Include="Assets.xcassets\Second.imageset\Contents.json" />
     <ImageAsset Include="Assets.xcassets\Second.imageset\vector.pdf" />
     <ImageAsset Include="Assets.xcassets\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\LaunchImage.launchimage\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone App Icon iOS 5,6.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone App Icon iOS 5,6%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone App Icon iOS 7,9%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone App Icon iOS 7,9%403x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone Spotlight iOS 5,6 &amp; Settings.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone Spotlight iOS 5,6 &amp; Settings%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone Spotlight iOS 5,6 &amp; Settings%403x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone Spotlight iOS 7,9%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone Spotlight iOS 7,9%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />

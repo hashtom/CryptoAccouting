@@ -18,6 +18,12 @@ namespace CryptoAccouting
         public SymbolSelectionViewConroller(IntPtr handle) : base(handle)
         {
             instruments = ApplicationCore.GetInstrumentAll(true);
+            NavigationItem.HidesBackButton = true;
+            NavigationItem.SetLeftBarButtonItem(new UIBarButtonItem(UIBarButtonSystemItem.Cancel, (sender, e) =>
+             {
+                 NavigationController.PopToRootViewController(true);
+             }
+                                                                    ), true);
         }
 
         public override void ViewDidLoad()
@@ -110,6 +116,9 @@ namespace CryptoAccouting
             var cell = tableView.DequeueReusableCell(CellIdentifier, indexPath);
             cell.TextLabel.Text = instruments[indexPath.Row].Symbol;
             cell.DetailTextLabel.Text = instruments[indexPath.Row].Name;
+			var logo = instruments[indexPath.Row].LogoFileName;
+            cell.ImageView.Image = logo == null ? null : UIImage.FromFile(logo);
+                
             return cell;
         }
 

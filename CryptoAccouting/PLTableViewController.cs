@@ -23,7 +23,7 @@ namespace CryptoAccouting
 
             //var exchange = await ApplicationCore.LoadTradeListAsync(new Exchange(EnuExchangeType.Zaif), true, true);
             //myTradeList = exchange.TradeList;
-            await ApplicationCore.LoadTradeListsAsync(EnuExchangeType.Zaif, true, true);
+            await ApplicationCore.LoadTradeListsAsync(EnuExchangeType.Zaif, true, false);
             myTradeList = ApplicationCore.GetExchange(EnuExchangeType.Zaif).TradeList;
             myTradeList.CalculateTotalValue(DateTime.Now.Year);
 

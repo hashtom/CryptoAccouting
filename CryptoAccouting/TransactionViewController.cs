@@ -73,7 +73,7 @@ namespace CryptoAccouting
             NavigationItem.RightBarButtonItem = EditButtonItem;
 			//menu = ApplicationCore.Navigation;
 
-            await ApplicationCore.LoadTradeListsAsync(EnuExchangeType.Zaif, true, true);
+            await ApplicationCore.LoadTradeListsAsync(EnuExchangeType.Zaif, true, false);
             myTradeList = ApplicationCore.GetExchange(EnuExchangeType.Zaif).TradeList;
             myTradeList.CalculateTotalValue(DateTime.Now.Year,"BTC");
 

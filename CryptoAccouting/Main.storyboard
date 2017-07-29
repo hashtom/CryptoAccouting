@@ -24,51 +24,51 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="USD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2283">
-                                    <rect key="frame" x="16" y="-58" width="35" height="21"/>
+                                    <rect key="frame" x="16" y="16" width="35" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2284">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2284">
                                     <rect key="frame" x="85" y="15" width="150" height="25"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="19942">
-                                    <rect key="frame" x="280" y="16" width="10" height="15"/>
+                                    <rect key="frame" x="317" y="15" width="10" height="15"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="19943">
-                                    <rect key="frame" x="271" y="17" width="8" height="15"/>
+                                    <rect key="frame" x="308" y="16" width="8" height="15"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="24928" fixedFrame="YES">
-                                    <rect key="frame" x="0.0" y="76" width="320" height="29"/>
+                                <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="24928">
+                                    <rect key="frame" x="0.0" y="76" width="375" height="29"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                     <segments>
                                         <segment title="Coin"/>
                                         <segment title="Exchange"/>
                                         <segment title="TBA"/>
                                     </segments>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 </segmentedControl>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BTC" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="25072" translatesAutoresizingMaskIntoConstraints="NO">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="BTC" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="25072">
                                     <rect key="frame" x="16" y="42" width="42" height="21"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <color key="textColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="25073" translatesAutoresizingMaskIntoConstraints="NO">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="25073">
                                     <rect key="frame" x="85" y="42" width="150" height="25"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                    <color key="textColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
@@ -135,10 +135,10 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue id="20679" destination="20419" kind="show" identifier="PositionSegue"/>
+                                    <segue destination="20419" kind="show" identifier="PositionSegue" id="20679"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="23927" reuseIdentifier="ExchangeViewCell">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ExchangeViewCell" id="23927">
                                 <rect key="frame" x="0.0" y="177" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="23927" id="23928">
@@ -170,23 +170,25 @@
                     </navigationItem>
                     <connections>
                         <outlet property="BalanceTopView" destination="2282" id="name-outlet-2282"/>
-                        <outlet property="labelCurrency" destination="2283" id="name-outlet-2283"/>
-                        <outlet property="labelTotalFiat" destination="2284" id="name-outlet-2284"/>
-                        <outlet property="labelTotalAssetPct" destination="19943" id="name-outlet-19943"/>
+                        <outlet property="SegmentBalance" destination="24928" id="name-outlet-24928"/>
                         <outlet property="buttonAddNew" destination="19987" id="name-outlet-19987"/>
                         <outlet property="buttonRefresh" destination="19986" id="name-outlet-19986"/>
-                        <outlet property="SegmentBalance" destination="24928" id="name-outlet-24928"/>
+                        <outlet property="labelCurrency" destination="2283" id="name-outlet-2283"/>
+                        <outlet property="labelTotalAssetPct" destination="19943" id="name-outlet-19943"/>
                         <outlet property="labelTotalBTC" destination="25073" id="name-outlet-25073"/>
+                        <outlet property="labelTotalFiat" destination="2284" id="name-outlet-2284"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="717" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1424" y="-207"/>
+            <point key="canvasLocation" x="1068" y="-177"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--残高-->
         <scene sceneID="718">
             <objects>
                 <navigationController id="719" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="残高" id="21285"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="721">
                         <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -195,13 +197,11 @@
                     <connections>
                         <segue destination="710" kind="relationship" relationship="rootViewController" id="720"/>
                     </connections>
-                    <tabBarItem key="tabBarItem" id="21285" title="残高"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="722" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationItem title="Balance View" id="858"/>
             </objects>
-            <point key="canvasLocation" x="979" y="-215"/>
+            <point key="canvasLocation" x="97" y="-176"/>
         </scene>
         <!--取引-->
         <scene sceneID="13085">
@@ -216,11 +216,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="13293">
-                                <rect key="frame" x="0.0" y="65" width="320" height="149"/>
+                                <rect key="frame" x="0.0" y="65" width="375" height="149"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Zaif" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="13300">
-                                        <rect key="frame" x="195" y="8" width="51" height="21"/>
+                                        <rect key="frame" x="235" y="8" width="51" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -337,13 +337,15 @@
                                 <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="13357">
-                                <rect key="frame" x="0.0" y="214" width="320" height="304"/>
+                                <rect key="frame" x="0.0" y="214" width="375" height="403"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.59999999999999998" green="0.81960784313725488" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
-                                <autoresizingMask key="autoresizingMask" heightSizable="YES" widthSizable="YES"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="取引" id="21501"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="LabelBougtAmount" destination="13315" id="name-outlet-13315"/>
                         <outlet property="LabelBougtPrice" destination="13317" id="name-outlet-13317"/>
@@ -358,15 +360,12 @@
                         <outlet property="TransactionSummaryView" destination="13293" id="name-outlet-13293"/>
                         <outlet property="TransactionView" destination="13087" id="name-outlet-13087"/>
                     </connections>
-                    <tabBarItem key="tabBarItem" id="21501" title="取引"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="13088" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="961" y="622"/>
+            <point key="canvasLocation" x="57" y="519"/>
         </scene>
-        <!--Position Detail View Controller-->
-        <!--設定-->
+        <!--Title-->
         <scene sceneID="15205">
             <objects>
                 <tableViewController storyboardIdentifier="SettingTableViewC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="15206" customClass="SettingTableViewController" sceneMemberID="viewController">
@@ -481,15 +480,15 @@
                         </connections>
                     </tableView>
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Title" id="22424"/>
                     <connections>
                         <outlet property="SettingTableView" destination="15207" id="name-outlet-15207"/>
                         <outlet property="rowBaseCurrency" destination="15648" id="name-outlet-15648"/>
                     </connections>
-                    <navigationItem title="Title" id="22424" key="navigationItem"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="15212" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1410" y="2152"/>
+            <point key="canvasLocation" x="961" y="1985"/>
         </scene>
         <!--Setting Detail Controller-->
         <scene sceneID="15216">
@@ -507,9 +506,9 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="15219" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1808" y="2149"/>
+            <point key="canvasLocation" x="1921" y="1985"/>
         </scene>
-        <!--損益レポート-->
+        <!--Title-->
         <scene sceneID="17627">
             <objects>
                 <tableViewController storyboardIdentifier="PLViewC" id="17628" customClass="PLTableViewController" sceneMemberID="viewController">
@@ -789,15 +788,15 @@
                                                     <exclude reference="19692"/>
                                                 </mask>
                                                 <mask key="constraints">
+                                                    <exclude reference="19689"/>
                                                     <exclude reference="19706"/>
                                                     <exclude reference="19772"/>
-                                                    <exclude reference="19689"/>
                                                     <exclude reference="19742"/>
                                                     <exclude reference="19761"/>
                                                     <exclude reference="19771"/>
+                                                    <exclude reference="19690"/>
                                                     <exclude reference="19710"/>
                                                     <exclude reference="19770"/>
-                                                    <exclude reference="19690"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact">
@@ -811,15 +810,15 @@
                                                     <include reference="19692"/>
                                                 </mask>
                                                 <mask key="constraints">
+                                                    <include reference="19689"/>
                                                     <include reference="19706"/>
                                                     <include reference="19772"/>
-                                                    <include reference="19689"/>
                                                     <include reference="19742"/>
                                                     <include reference="19761"/>
                                                     <include reference="19771"/>
+                                                    <include reference="19690"/>
                                                     <include reference="19710"/>
                                                     <include reference="19770"/>
-                                                    <include reference="19690"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
@@ -1203,7 +1202,6 @@
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
-                                        <connections/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="35" id="18284">
                                         <rect key="frame" x="0.0" y="711" width="320" height="35"/>
@@ -1255,7 +1253,6 @@
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
-                                        <connections/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="35" id="18295">
                                         <rect key="frame" x="0.0" y="746" width="320" height="35"/>
@@ -1307,7 +1304,6 @@
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
-                                        <connections/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="35" id="19632">
                                         <rect key="frame" x="0.0" y="781" width="320" height="35"/>
@@ -1358,6 +1354,7 @@
                             <outlet property="delegate" destination="17628" id="17631"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Title" id="22929"/>
                     <connections>
                         <outlet property="ButtonCryptCurrency" destination="18294" id="name-outlet-18294"/>
                         <outlet property="ButtonFiatCurrency" destination="18257" id="name-outlet-18257"/>
@@ -1379,11 +1376,10 @@
                         <outlet property="LabelTxsTotal" destination="19692" id="name-outlet-19692"/>
                         <outlet property="TextPeriod" destination="18270" id="name-outlet-18270"/>
                     </connections>
-                    <navigationItem title="Title" id="22929" key="navigationItem"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="17634" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1381" y="1327"/>
+            <point key="canvasLocation" x="960.8" y="1250.825"/>
         </scene>
         <!--収益率レポート-->
         <scene sceneID="17969">
@@ -1398,14 +1394,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="収益率レポート" id="18241"/>
                     <tabBarItem key="tabBarItem" title="収益率" id="24152"/>
+                    <navigationItem key="navigationItem" title="収益率レポート" id="18241"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
-                    <connections/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="17972" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="935" y="2795"/>
+            <point key="canvasLocation" x="14" y="2717"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="18321">
@@ -1456,53 +1451,49 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="18324" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1827" y="1329"/>
+            <point key="canvasLocation" x="1865" y="1251"/>
         </scene>
+        <!--Asset-->
         <scene sceneID="20418">
             <objects>
-                <tableViewController id="20419" sceneMemberID="viewController" customClass="BalanceEditViewController" storyboardIdentifier="BalanceEditViewC">
+                <tableViewController storyboardIdentifier="BalanceEditViewC" id="20419" customClass="BalanceEditViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="20420">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <connections>
-                            <outlet property="dataSource" destination="20419" id="20421"/>
-                            <outlet property="delegate" destination="20419" id="20422"/>
-                        </connections>
                         <sections>
-                            <tableViewSection id="20681" headerTitle="Market Detail">
+                            <tableViewSection headerTitle="Market Detail" id="20681">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="20682" rowHeight="60">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="60" id="20682">
                                         <rect key="frame" x="0.0" y="28" width="320" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="20682" id="20683">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="59"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="20710" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" minimumScaleFactor="0.5" text="Asset Name">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Asset Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="20710">
                                                     <rect key="frame" x="89" y="10" width="68" height="15"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="24374" translatesAutoresizingMaskIntoConstraints="NO" text="BTC" fixedFrame="YES" minimumScaleFactor="0.5">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="BTC" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24374">
                                                     <rect key="frame" x="89" y="33" width="47" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="24727" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                                    <rect key="frame" x="16" y="10" width="40" height="40"/>
-                                                    <autoresizingMask key="autoresizingMask" heightSizable="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="24727">
+                                                    <rect key="frame" x="16" y="10" width="47" height="40"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" id="24995" translatesAutoresizingMaskIntoConstraints="NO" numberOfLines="2" usesAttributedText="YES" minimumScaleFactor="0.5" adjustsLetterSpacingToFitWidth="NO" baselineAdjustment="alignBaselines" fixedFrame="YES">
-                                                    <rect key="frame" x="188" y="0.0" width="116" height="59"/>
-                                                    <autoresizingMask key="autoresizingMask" heightSizable="YES" widthSizable="YES" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24995">
+                                                    <rect key="frame" x="222" y="0.0" width="137" height="59"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                     <attributedString key="attributedText"/>
+                                                    <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <variation key="default">
@@ -1520,55 +1511,75 @@
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
-                                        <connections/>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="20684" rowHeight="50">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="50" id="20684">
                                         <rect key="frame" x="0.0" y="88" width="320" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="20684" id="20685">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="24981" translatesAutoresizingMaskIntoConstraints="NO" text="Price" fixedFrame="YES">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Price" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="24981">
                                                     <rect key="frame" x="16" y="5" width="50" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="24717" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" minimumScaleFactor="0.5">
-                                                    <rect key="frame" x="259" y="30" width="16" height="15"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24717">
+                                                    <rect key="frame" x="304" y="30" width="16" height="15"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+0%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="24982" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" minimumScaleFactor="0.5">
-                                                    <rect key="frame" x="279" y="30" width="21" height="12"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+0%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24982">
+                                                    <rect key="frame" x="334" y="30" width="21" height="12"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                                    <color key="textColor" colorSpace="calibratedRGB" red="1" green="0" blue="0" alpha="1"/>
+                                                    <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+50%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="24983" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+50%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="24983" fixedFrame="YES">
                                                     <rect key="frame" x="159" y="25" width="30" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                                    <color key="textColor" colorSpace="calibratedRGB" red="1" green="0" blue="0" alpha="1"/>
+                                                    <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="24984" translatesAutoresizingMaskIntoConstraints="NO" text="B 0" fixedFrame="YES" minimumScaleFactor="0.5">
-                                                    <rect key="frame" x="186" y="4" width="93" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="B 0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24984">
+                                                    <rect key="frame" x="301" y="5" width="19" height="15"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="24985" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" minimumScaleFactor="0.5">
-                                                    <rect key="frame" x="283" y="5" width="21" height="12"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24985">
+                                                    <rect key="frame" x="347" y="5" width="8" height="12"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                                    <color key="textColor" colorSpace="calibratedRGB" red="1" green="0" blue="0" alpha="1"/>
+                                                    <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="24985" secondAttribute="trailing" constant="6" id="25022">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="20"/>
+                                                </constraint>
+                                                <constraint firstItem="24985" firstAttribute="top" secondItem="20685" secondAttribute="top" constant="4" id="25023">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="5"/>
+                                                </constraint>
+                                                <constraint firstItem="24984" firstAttribute="top" secondItem="20685" secondAttribute="top" constant="4" id="25024">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="5"/>
+                                                </constraint>
+                                                <constraint firstAttribute="trailing" secondItem="24984" secondAttribute="trailing" constant="115" id="25025">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="55"/>
+                                                </constraint>
+                                                <constraint firstAttribute="trailing" secondItem="24982" secondAttribute="trailing" constant="15" id="25056">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="20"/>
+                                                </constraint>
+                                                <constraint firstAttribute="trailing" secondItem="24717" secondAttribute="trailing" constant="49" id="25057">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="55"/>
+                                                </constraint>
+                                                <constraint firstItem="24717" firstAttribute="top" secondItem="20685" secondAttribute="top" constant="30" id="25060"/>
+                                                <constraint firstItem="24982" firstAttribute="top" secondItem="20685" secondAttribute="top" constant="30" id="25061"/>
+                                            </constraints>
                                             <variation key="default">
                                                 <mask key="subviews">
                                                     <exclude reference="24981"/>
@@ -1579,14 +1590,14 @@
                                                     <exclude reference="24985"/>
                                                 </mask>
                                                 <mask key="constraints">
-                                                    <exclude reference="25022"/>
-                                                    <exclude reference="25023"/>
                                                     <exclude reference="25024"/>
                                                     <exclude reference="25025"/>
-                                                    <exclude reference="25056"/>
                                                     <exclude reference="25057"/>
                                                     <exclude reference="25060"/>
+                                                    <exclude reference="25056"/>
                                                     <exclude reference="25061"/>
+                                                    <exclude reference="25022"/>
+                                                    <exclude reference="25023"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact">
@@ -1598,62 +1609,45 @@
                                                     <include reference="24985"/>
                                                 </mask>
                                                 <mask key="constraints">
-                                                    <include reference="25022"/>
-                                                    <include reference="25023"/>
                                                     <include reference="25024"/>
                                                     <include reference="25025"/>
-                                                    <include reference="25056"/>
                                                     <include reference="25057"/>
                                                     <include reference="25060"/>
+                                                    <include reference="25056"/>
                                                     <include reference="25061"/>
+                                                    <include reference="25022"/>
+                                                    <include reference="25023"/>
                                                 </mask>
                                             </variation>
-                                            <constraints>
-                                                <constraint id="25022" firstItem="20685" firstAttribute="trailing" secondItem="24985" secondAttribute="trailing" constant="6">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="20"/>
-                                                </constraint>
-                                                <constraint id="25023" firstItem="24985" firstAttribute="top" secondItem="20685" secondAttribute="top" constant="4">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="5"/>
-                                                </constraint>
-                                                <constraint id="25024" firstItem="24984" firstAttribute="top" secondItem="20685" secondAttribute="top" constant="4">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="5"/>
-                                                </constraint>
-                                                <constraint id="25025" firstItem="20685" firstAttribute="trailing" secondItem="24984" secondAttribute="trailing" constant="115">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="55"/>
-                                                </constraint>
-                                                <constraint id="25056" firstItem="20685" firstAttribute="trailing" secondItem="24982" secondAttribute="trailing" constant="15">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="20"/>
-                                                </constraint>
-                                                <constraint id="25057" firstItem="20685" firstAttribute="trailing" secondItem="24717" secondAttribute="trailing" constant="49">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="55"/>
-                                                </constraint>
-                                                <constraint id="25060" firstItem="24717" firstAttribute="top" secondItem="20685" secondAttribute="top" constant="30"/>
-                                                <constraint id="25061" firstItem="24982" firstAttribute="top" secondItem="20685" secondAttribute="top" constant="30"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="24829" rowHeight="30">
-                                        <rect key="frame" x="0.0" y="118" width="320" height="30"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="30" id="24829">
+                                        <rect key="frame" x="0.0" y="138" width="320" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="24829" id="24830">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="29"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="24h Volume(BTC)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="24986" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="24h Volume(BTC)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="24986">
                                                     <rect key="frame" x="16" y="5" width="109" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="24987" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                                    <rect key="frame" x="134" y="5" width="170" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="24987">
+                                                    <rect key="frame" x="340" y="5" width="15" height="15"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="24987" secondAttribute="trailing" constant="16" id="25016">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="20"/>
+                                                </constraint>
+                                                <constraint firstItem="24987" firstAttribute="top" secondItem="24830" secondAttribute="top" constant="5" id="25021"/>
+                                            </constraints>
                                             <variation key="default">
                                                 <mask key="subviews">
                                                     <exclude reference="24986"/>
@@ -1674,35 +1668,35 @@
                                                     <include reference="25021"/>
                                                 </mask>
                                             </variation>
-                                            <constraints>
-                                                <constraint id="25016" firstItem="24830" firstAttribute="trailing" secondItem="24987" secondAttribute="trailing" constant="16">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="20"/>
-                                                </constraint>
-                                                <constraint id="25021" firstItem="24987" firstAttribute="top" secondItem="24830" secondAttribute="top" constant="5"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="24831" rowHeight="30">
-                                        <rect key="frame" x="0.0" y="148" width="320" height="30"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="30" id="24831">
+                                        <rect key="frame" x="0.0" y="168" width="320" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="24831" id="24832">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="29"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Market Cap" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="24715" translatesAutoresizingMaskIntoConstraints="NO" minimumScaleFactor="0.5" fixedFrame="YES">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Market Cap" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24715">
                                                     <rect key="frame" x="16" y="5" width="90" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="24988" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                                    <rect key="frame" x="289" y="5" width="16" height="15"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="24988">
+                                                    <rect key="frame" x="339" y="5" width="16" height="15"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="24988" secondAttribute="trailing" constant="16" id="25017">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="20"/>
+                                                </constraint>
+                                                <constraint firstItem="24988" firstAttribute="top" secondItem="24832" secondAttribute="top" constant="5" id="25020"/>
+                                            </constraints>
                                             <variation key="default">
                                                 <mask key="subviews">
                                                     <exclude reference="24715"/>
@@ -1723,12 +1717,6 @@
                                                     <include reference="25020"/>
                                                 </mask>
                                             </variation>
-                                            <constraints>
-                                                <constraint id="25017" firstItem="24832" firstAttribute="trailing" secondItem="24988" secondAttribute="trailing" constant="16">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="20"/>
-                                                </constraint>
-                                                <constraint id="25020" firstItem="24988" firstAttribute="top" secondItem="24832" secondAttribute="top" constant="5"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
@@ -1736,32 +1724,39 @@
                             <tableViewSection headerTitle="Booking Detail" id="24962">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="24963">
-                                        <rect key="frame" x="0.0" y="384" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="424" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="24963" id="24964">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exchange" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="20711" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" minimumScaleFactor="0.5">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Exchange" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="20711">
                                                     <rect key="frame" x="16" y="11" width="68" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="23160" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                                    <rect key="frame" x="184" y="6" width="120" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="23160">
+                                                    <rect key="frame" x="325" y="5" width="30" height="29"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <state key="normal">
-                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                         <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="ButtonExchange_TouchUpInside:" destination="20419" id="24652" eventType="touchUpInside"/>
+                                                        <action selector="ButtonExchange_TouchUpInside:" destination="20419" eventType="touchUpInside" id="24652"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="23160" secondAttribute="trailing" constant="16" id="25041">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="20"/>
+                                                </constraint>
+                                                <constraint firstItem="23160" firstAttribute="top" secondItem="24964" secondAttribute="top" constant="6" id="25042">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="5"/>
+                                                </constraint>
+                                            </constraints>
                                             <variation key="default">
                                                 <mask key="subviews">
                                                     <exclude reference="20711"/>
@@ -1782,38 +1777,37 @@
                                                     <include reference="25042"/>
                                                 </mask>
                                             </variation>
-                                            <constraints>
-                                                <constraint id="25041" firstItem="24964" firstAttribute="trailing" secondItem="23160" secondAttribute="trailing" constant="16">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="20"/>
-                                                </constraint>
-                                                <constraint id="25042" firstItem="23160" firstAttribute="top" secondItem="24964" secondAttribute="top" constant="6">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="5"/>
-                                                </constraint>
-                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="24965">
-                                        <rect key="frame" x="0.0" y="428" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="468" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="24965" id="24966">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="24714" translatesAutoresizingMaskIntoConstraints="NO" text="Quantity" minimumScaleFactor="0.5" fixedFrame="YES">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Quantity" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24714">
                                                     <rect key="frame" x="16" y="11" width="109" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="24722" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="right" fixedFrame="YES" clearButtonMode="whileEditing" placeholder="Quantity">
-                                                    <rect key="frame" x="182" y="6" width="120" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Quantity" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="24722">
+                                                    <rect key="frame" x="279" y="5" width="76" height="30"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
-                                                    <color key="textColor" colorSpace="calibratedRGB" red="0" green="0" blue="1" alpha="1"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
                                                 </textField>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="24722" secondAttribute="trailing" constant="18" id="25030">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="20"/>
+                                                </constraint>
+                                                <constraint firstItem="24722" firstAttribute="top" secondItem="24966" secondAttribute="top" constant="6" id="25031">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="5"/>
+                                                </constraint>
+                                            </constraints>
                                             <variation key="default">
                                                 <mask key="subviews">
                                                     <exclude reference="24714"/>
@@ -1834,38 +1828,37 @@
                                                     <include reference="25031"/>
                                                 </mask>
                                             </variation>
-                                            <constraints>
-                                                <constraint id="25030" firstItem="24966" firstAttribute="trailing" secondItem="24722" secondAttribute="trailing" constant="18">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="20"/>
-                                                </constraint>
-                                                <constraint id="25031" firstItem="24722" firstAttribute="top" secondItem="24966" secondAttribute="top" constant="6">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="5"/>
-                                                </constraint>
-                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="24967">
-                                        <rect key="frame" x="0.0" y="472" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="512" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="24967" id="24968">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Book Price" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="24716" translatesAutoresizingMaskIntoConstraints="NO" minimumScaleFactor="0.5" fixedFrame="YES">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Book Price" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24716">
                                                     <rect key="frame" x="16" y="11" width="119" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="24726" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="right" fixedFrame="YES" clearButtonMode="whileEditing" placeholder="Enter Book Price">
-                                                    <rect key="frame" x="183" y="6" width="120" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Book Price" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="24726">
+                                                    <rect key="frame" x="227" y="5" width="128" height="30"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" keyboardType="numberPad" enablesReturnKeyAutomatically="YES"/>
-                                                    <color key="textColor" colorSpace="calibratedRGB" red="0" green="0" blue="1" alpha="1"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" enablesReturnKeyAutomatically="YES"/>
                                                 </textField>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="24726" secondAttribute="trailing" constant="17" id="25032">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="20"/>
+                                                </constraint>
+                                                <constraint firstItem="24726" firstAttribute="top" secondItem="24968" secondAttribute="top" constant="6" id="25033">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="5"/>
+                                                </constraint>
+                                            </constraints>
                                             <variation key="default">
                                                 <mask key="subviews">
                                                     <exclude reference="24716"/>
@@ -1886,38 +1879,37 @@
                                                     <include reference="25033"/>
                                                 </mask>
                                             </variation>
-                                            <constraints>
-                                                <constraint id="25032" firstItem="24968" firstAttribute="trailing" secondItem="24726" secondAttribute="trailing" constant="17">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="20"/>
-                                                </constraint>
-                                                <constraint id="25033" firstItem="24726" firstAttribute="top" secondItem="24968" secondAttribute="top" constant="6">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="5"/>
-                                                </constraint>
-                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="24969">
-                                        <rect key="frame" x="0.0" y="516" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="556" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="24969" id="24970">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Trade Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="24721" translatesAutoresizingMaskIntoConstraints="NO" minimumScaleFactor="0.5" fixedFrame="YES">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Trade Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24721">
                                                     <rect key="frame" x="16" y="11" width="89" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="24807" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="right" placeholder="Enter Date" fixedFrame="YES">
-                                                    <rect key="frame" x="177" y="6" width="120" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Date" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="24807">
+                                                    <rect key="frame" x="266" y="5" width="89" height="30"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
-                                                    <color key="textColor" colorSpace="calibratedRGB" red="0" green="0" blue="1" alpha="1"/>
                                                 </textField>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="24807" secondAttribute="trailing" constant="23" id="25034">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="20"/>
+                                                </constraint>
+                                                <constraint firstItem="24807" firstAttribute="top" secondItem="24970" secondAttribute="top" constant="6" id="25035">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="5"/>
+                                                </constraint>
+                                            </constraints>
                                             <variation key="default">
                                                 <mask key="subviews">
                                                     <exclude reference="24721"/>
@@ -1938,63 +1930,54 @@
                                                     <include reference="25035"/>
                                                 </mask>
                                             </variation>
-                                            <constraints>
-                                                <constraint id="25034" firstItem="24970" firstAttribute="trailing" secondItem="24807" secondAttribute="trailing" constant="23">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="20"/>
-                                                </constraint>
-                                                <constraint id="25035" firstItem="24807" firstAttribute="top" secondItem="24970" secondAttribute="top" constant="6">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="5"/>
-                                                </constraint>
-                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="20419" id="20421"/>
+                            <outlet property="delegate" destination="20419" id="20422"/>
+                        </connections>
                     </tableView>
-                    <connections>
-                        <outlet property="labelCoinSymbol" destination="24374" id="name-outlet-24374"/>
-                        <outlet property="buttonDone" destination="24682" id="name-outlet-24682"/>
-                        <outlet property="imageCoin" destination="24727" id="name-outlet-24727"/>
-                        <outlet property="buttonEdit" destination="24848" id="name-outlet-24848"/>
-                        <outlet property="buttonCancel" destination="24756" id="name-outlet-24756"/>
-                        <outlet property="labelCoinName" destination="20710" id="name-outlet-20710"/>
-                        <outlet property="buttonExchange" destination="23160" id="name-outlet-23160"/>
-                        <outlet property="textQuantity" destination="24722" id="name-outlet-24722"/>
-                        <outlet property="textBookPrice" destination="24726" id="name-outlet-24726"/>
-                        <outlet property="textBalanceDate" destination="24807" id="name-outlet-24807"/>
-                        <outlet property="labelFiatPrice" destination="24717" id="name-outlet-24717"/>
-                        <outlet property="labelFiat1dRet" destination="24982" id="name-outlet-24982"/>
-                        <outlet property="labelBTCPrice" destination="24984" id="name-outlet-24984"/>
-                        <outlet property="labelVolume" destination="24987" id="name-outlet-24987"/>
-                        <outlet property="labelMemo" destination="24995" id="name-outlet-24995"/>
-                        <outlet property="labelBTCRet" destination="24985" id="name-outlet-24985"/>
-                        <outlet property="labelMarketCap" destination="24988" id="name-outlet-24988"/>
-                    </connections>
-                    <navigationItem title="Asset" id="24618" key="navigationItem">
+                    <navigationItem key="navigationItem" title="Asset" id="24618">
                         <rightBarButtonItems>
-                            <barButtonItem id="24682" systemItem="done" enabled="NO">
+                            <barButtonItem enabled="NO" systemItem="done" id="24682">
                                 <connections>
                                     <action selector="ButtonDone_Activated:" destination="20419" id="25036"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem id="24848" systemItem="edit">
+                            <barButtonItem systemItem="edit" id="24848">
                                 <connections>
                                     <action selector="ButtonEdit_Activated:" destination="20419" id="24849"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
-                        <barButtonItem key="leftBarButtonItem" id="24756" systemItem="pageCurl">
-                            <connections>
-                                <action selector="ButtonCancel_Activated:" destination="20419" id="24916"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="buttonDone" destination="24682" id="name-outlet-24682"/>
+                        <outlet property="buttonEdit" destination="24848" id="name-outlet-24848"/>
+                        <outlet property="buttonExchange" destination="23160" id="name-outlet-23160"/>
+                        <outlet property="imageCoin" destination="24727" id="name-outlet-24727"/>
+                        <outlet property="labelBTCPrice" destination="24984" id="name-outlet-24984"/>
+                        <outlet property="labelBTCRet" destination="24985" id="name-outlet-24985"/>
+                        <outlet property="labelCoinName" destination="20710" id="name-outlet-20710"/>
+                        <outlet property="labelCoinSymbol" destination="24374" id="name-outlet-24374"/>
+                        <outlet property="labelFiat1dRet" destination="24982" id="name-outlet-24982"/>
+                        <outlet property="labelFiatPrice" destination="24717" id="name-outlet-24717"/>
+                        <outlet property="labelMarketCap" destination="24988" id="name-outlet-24988"/>
+                        <outlet property="labelMemo" destination="24995" id="name-outlet-24995"/>
+                        <outlet property="labelVolume" destination="24987" id="name-outlet-24987"/>
+                        <outlet property="textBalanceDate" destination="24807" id="name-outlet-24807"/>
+                        <outlet property="textBookPrice" destination="24726" id="name-outlet-24726"/>
+                        <outlet property="textQuantity" destination="24722" id="name-outlet-24722"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="20425" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1865" y="-207"/>
+            <point key="canvasLocation" x="1865" y="-178"/>
         </scene>
+        <!--Tab Bar Controller-->
         <scene sceneID="20726">
             <objects>
                 <tabBarController id="20727" sceneMemberID="viewController">
@@ -2004,61 +1987,63 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue id="21286" destination="719" kind="relationship" relationship="viewControllers"/>
-                        <segue id="21502" destination="13086" kind="relationship" relationship="viewControllers"/>
-                        <segue id="23126" destination="22509" kind="relationship" relationship="viewControllers"/>
-                        <segue id="24153" destination="17970" kind="relationship" relationship="viewControllers"/>
-                        <segue id="24366" destination="22123" kind="relationship" relationship="viewControllers"/>
+                        <segue destination="719" kind="relationship" relationship="viewControllers" id="21286"/>
+                        <segue destination="13086" kind="relationship" relationship="viewControllers" id="21502"/>
+                        <segue destination="22509" kind="relationship" relationship="viewControllers" id="23126"/>
+                        <segue destination="17970" kind="relationship" relationship="viewControllers" id="24153"/>
+                        <segue destination="22123" kind="relationship" relationship="viewControllers" id="24366"/>
                     </connections>
-                    <keyCommands/>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="20731" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="410" y="640"/>
+            <point key="canvasLocation" x="-873" y="520"/>
         </scene>
+        <!--設定-->
         <scene sceneID="22122">
             <objects>
                 <navigationController id="22123" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="設定" id="22496"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="22125">
                         <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue id="22425" destination="15206" kind="relationship" relationship="rootViewController"/>
+                        <segue destination="15206" kind="relationship" relationship="rootViewController" id="22425"/>
                     </connections>
-                    <tabBarItem key="tabBarItem" id="22496" title="設定"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="22126" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="954" y="2147"/>
+            <point key="canvasLocation" x="14" y="1985"/>
         </scene>
+        <!--損益-->
         <scene sceneID="22508">
             <objects>
                 <navigationController id="22509" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="損益" id="23125"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="22511">
                         <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue id="22930" destination="17628" kind="relationship" relationship="rootViewController"/>
+                        <segue destination="17628" kind="relationship" relationship="rootViewController" id="22930"/>
                     </connections>
-                    <tabBarItem key="tabBarItem" id="23125" title="損益"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="22512" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="946" y="1318"/>
+            <point key="canvasLocation" x="58" y="1251"/>
         </scene>
+        <!--Symbol Selection View Conroller-->
         <scene sceneID="24375">
             <objects>
-                <tableViewController id="24376" sceneMemberID="viewController" customClass="SymbolSelectionViewConroller" storyboardIdentifier="SymbolSelectionViewC">
+                <tableViewController storyboardIdentifier="SymbolSelectionViewC" id="24376" customClass="SymbolSelectionViewConroller" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="24377">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="24380" style="IBUITableViewCellStyleValue1" textLabel="24640" detailTextLabel="24641" reuseIdentifier="SymbolListCell">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SymbolListCell" textLabel="24640" detailTextLabel="24641" style="IBUITableViewCellStyleValue1" id="24380">
                                 <rect key="frame" x="0.0" y="28" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="24380" id="24381">
@@ -2081,7 +2066,6 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
-                                <connections/>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -2094,7 +2078,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="24382" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2254" y="-210"/>
+            <point key="canvasLocation" x="2716" y="-179"/>
         </scene>
     </scenes>
     <resources>
@@ -2112,10 +2096,9 @@
         <image name="Images/nem.png" width="32" height="32"/>
         <image name="Images/ripple.png" width="32" height="32"/>
         <image name="Images/zcash.png" width="32" height="32"/>
-        <image name="Images/byteball.png" width="64" height="64"/>
         <image name="Images/stellar lumens.png" width="64" height="64"/>
+        <image name="Images/byteball.png" width="64" height="64"/>
     </resources>
-    <inferredMetricsTieBreakers/>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>

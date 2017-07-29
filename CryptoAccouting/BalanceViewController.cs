@@ -82,7 +82,7 @@
             RefreshBalanceTable();
 		}          private void CreateNewPosition(){
             var SymbolSelectionViewC = Storyboard.InstantiateViewController("SymbolSelectionViewC") as SymbolSelectionViewConroller;
-            NavigationController.PushViewController(SymbolSelectionViewC, false);          }
+            NavigationController.PushViewController(SymbolSelectionViewC, true);          }
 
         public void SaveItem(Position pos)
 		{

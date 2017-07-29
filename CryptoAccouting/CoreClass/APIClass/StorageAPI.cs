@@ -30,29 +30,49 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static Balance LoadBalanceXML(string fileName, List<Instrument> instruments)
         {
-            var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var path = Path.Combine(documents, fileName);
-            var balanceXML = File.ReadAllText(path);
+            Balance mybal;
 
-            var mybalXE = XElement.Parse(balanceXML).Descendants("position");
-            var mybal = new Balance();
+			//try
+			//{
+			var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+			var path = Path.Combine(documents, fileName);
 
-            foreach (var elem in mybalXE)
+            if (File.Exists(path))
             {
-                Instrument coin;
-                if (instruments.Where(i => i.Symbol == elem.Descendants("symbol").Select(x => x.Value).First()).Any())
+                var balanceXML = File.ReadAllText(path);
+
+                var mybalXE = XElement.Parse(balanceXML).Descendants("position");
+                mybal = new Balance();
+
+                foreach (var elem in mybalXE)
                 {
-                    coin = instruments.Where(i => i.Symbol == elem.Descendants("symbol").Select(x => x.Value).First()).First();
-                    var pos = new Position(coin)
+                    Instrument coin;
+                    if (instruments.Where(i => i.Symbol == elem.Descendants("symbol").Select(x => x.Value).First()).Any())
                     {
-                        Id = int.Parse(elem.Attribute("id").Value),
-                        Amount = double.Parse(elem.Descendants("amount").Select(x => x.Value).First())
-                        //TradedExchange = 
-                    };
-                    mybal.AttachPosition(pos);
+                        coin = instruments.Where(i => i.Symbol == elem.Descendants("symbol").Select(x => x.Value).First()).First();
+                        var pos = new Position(coin)
+                        {
+                            Id = int.Parse(elem.Attribute("id").Value),
+                            Amount = double.Parse(elem.Descendants("amount").Select(x => x.Value).First())
+                            //TradedExchange = 
+                        };
+                        mybal.AttachPosition(pos);
+                    }
+
                 }
 
             }
+            else
+            {
+                mybal = new Balance();
+            }
+            //}catch(IOException e){
+            //    Console.WriteLine(e.ToString());
+            //}catch(Exception e){
+            //    Console.WriteLine(e.ToString());
+            //}finally{
+            //    mybal = new Balance();
+            //}
 
 			return mybal;
 
