@@ -58,7 +58,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static async Task FetchMarketDataFromBalance(Balance mybal)
 		{
-            foreach (var pos in mybal)
+            foreach (var pos in mybal.positions)
             {
                 await FetchCoinMarketDataAsync(pos.Coin);
             }

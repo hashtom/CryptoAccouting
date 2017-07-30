@@ -89,7 +89,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 											//,new XAttribute("exchange", myBalance.ExchangeTraded.ToString()));
 			application.Add(balance);
 
-			foreach (var pos in myBalance)
+            foreach (var pos in myBalance.positions)
 			{
                 XElement position = new XElement("position",
                                                  new XAttribute("id", pos.Id.ToString()),

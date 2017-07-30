@@ -202,11 +202,6 @@ namespace CryptoAccouting
             InitializeUserInteractionStates();
         }
 
-        partial void ButtonCancel_Activated(UIBarButtonItem sender)
-        {
-            NavigationController.PopToRootViewController(true);
-        }
-
         partial void ButtonDone_Activated(UIBarButtonItem sender)
         {
 			CreatePosition();

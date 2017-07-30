@@ -19,9 +19,13 @@ namespace CryptoAccouting.CoreClass
             BalanceDate = DateTime.Now.Date;
             Amount = 0;
             BookPrice = -99999999;
-            //Id = positionId;
         }
-        public Position() { }
+        public Position()
+        {
+            BalanceDate = DateTime.Now.Date;
+            Amount = 0;
+            BookPrice = -99999999;
+        }
 
 		public double AmountBTC()
 		{

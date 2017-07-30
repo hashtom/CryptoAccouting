@@ -8,21 +8,21 @@ using CoreGraphics;
 
 namespace CryptoAccouting.UIClass
 {
-	public class BalanceTableSource : UITableViewSource
+    public class BalanceTableSource : UITableViewSource
 	{
-        Balance myBalance;   
+        List<Position> myBalance;   
         NSString cellIdentifier = new NSString("BalanceViewCell"); // set in the Storyboard
         BalanceViewController owner;
 
         public BalanceTableSource(Balance myBalance, BalanceViewController owner )
 		{
-			this.myBalance = myBalance;
+            this.myBalance = myBalance.positions;
             this.owner = owner;
 		}
 
         public override nint RowsInSection(UITableView tableview, nint section)
         {
-            return myBalance.Count();
+            return myBalance.Count;
 
         }
 
@@ -35,13 +35,13 @@ namespace CryptoAccouting.UIClass
                 //cell = new CustomBalanceCell (cellIdentifier);
 
             var cell = (BalanceViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
-            cell.UpdateCell(myBalance.GetPositionByIndex(indexPath.Row));
+            cell.UpdateCell(myBalance[indexPath.Row]);
 
 			return cell;
 		}
 		public Position GetItem(int id)
 		{
-            return myBalance.GetPositionByIndex(id);
+            return myBalance[id];
 		}
 
 		public override nint NumberOfSections(UITableView tableView)
@@ -132,7 +132,7 @@ namespace CryptoAccouting.UIClass
 			{
 				case UITableViewCellEditingStyle.Delete:
 					//tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
-                    owner.DeleteItem(myBalance.GetPositionByIndex(indexPath.Row));
+                    owner.DeleteItem(myBalance[indexPath.Row]);
                     break;
 				case UITableViewCellEditingStyle.None:
 					Console.WriteLine("CommitEditingStyle:None called");

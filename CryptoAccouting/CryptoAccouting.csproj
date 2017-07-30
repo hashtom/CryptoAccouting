@@ -209,6 +209,10 @@
     </Compile>
     <Compile Include="UIClass\CustomPickerModel.cs" />
     <Compile Include="CoreClass\APIClass\Reachability.cs" />
+    <Compile Include="BalanceDetailViewConrtoller.cs" />
+    <Compile Include="BalanceDetailViewConrtoller.designer.cs">
+      <DependentUpon>BalanceDetailViewConrtoller.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="TestData\apikey.xml" />

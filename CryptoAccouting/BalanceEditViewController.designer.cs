@@ -16,10 +16,6 @@ namespace CryptoAccouting
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIBarButtonItem buttonCancel { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIBarButtonItem buttonDone { get; set; }
 
         [Outlet]
@@ -82,10 +78,6 @@ namespace CryptoAccouting
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITextField textQuantity { get; set; }
 
-        [Action ("ButtonCancel_Activated:")]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        partial void ButtonCancel_Activated (UIKit.UIBarButtonItem sender);
-
         [Action ("ButtonDone_Activated:")]
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void ButtonDone_Activated (UIKit.UIBarButtonItem sender);
@@ -100,11 +92,6 @@ namespace CryptoAccouting
 
         void ReleaseDesignerOutlets ()
         {
-            if (buttonCancel != null) {
-                buttonCancel.Dispose ();
-                buttonCancel = null;
-            }
-
             if (buttonDone != null) {
                 buttonDone.Dispose ();
                 buttonDone = null;

@@ -10,18 +10,18 @@ namespace CryptoAccouting.UIClass
 {
     public class ExchangeTableSource : UITableViewSource
     {
-        Balance balanceViewItems;
+        List<Position> balanceViewItems;
         NSString cellIdentifier = new NSString("ExchangeViewCell"); // set in the Storyboard
         UITableViewController owner;
 
         public ExchangeTableSource(Balance myBalance, UITableViewController owner)
         {
-            balanceViewItems = myBalance;
+            balanceViewItems = myBalance.positions;
             this.owner = owner;
         }
         public override nint RowsInSection(UITableView tableview, nint section)
         {
-            return balanceViewItems.Count();
+            return balanceViewItems.Count;
 
         }
 
@@ -34,13 +34,13 @@ namespace CryptoAccouting.UIClass
             //cell = new CustomBalanceCell (cellIdentifier);
 
             var cell = (ExchangeViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
-            cell.UpdateCell(balanceViewItems.GetPositionByIndex(indexPath.Row));
+            cell.UpdateCell(balanceViewItems[indexPath.Row]);
 
             return cell;
         }
         public Position GetItem(int id)
         {
-            return balanceViewItems.GetPositionByIndex(id);
+            return balanceViewItems[id];
         }
 
         public override nint NumberOfSections(UITableView tableView)
