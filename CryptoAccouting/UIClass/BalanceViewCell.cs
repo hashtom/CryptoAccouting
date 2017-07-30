@@ -23,10 +23,12 @@ namespace CryptoAccouting.UIClass
 
         public void UpdateCell(Position pos)
 		{
-            var logo = pos.Coin.LogoFileName;
-
+            var logo = pos.Coin == null ? null : pos.Coin.LogoFileName;
             imageView.Image = logo == null ? null : UIImage.FromFile(logo);
+
+
             labelSymbol.Text = pos.Coin.Symbol;
+
 			labelHoldings.Text = String.Format("{0:n2}", pos.Amount);
             labelHoldingBTC.Text = "B" + String.Format("{0:n4}", pos.AmountBTC());
             labelFiatValue.Text = "$" + String.Format("{0:n0}", pos.LatestFiatValue());

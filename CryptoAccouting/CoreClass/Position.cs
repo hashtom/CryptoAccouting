@@ -22,6 +22,7 @@ namespace CryptoAccouting.CoreClass
         }
         public Position()
         {
+            Coin = new Instrument("N/A","N/A","N/A");
             BalanceDate = DateTime.Now.Date;
             Amount = 0;
             BookPrice = -99999999;

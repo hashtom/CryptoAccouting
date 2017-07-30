@@ -103,6 +103,18 @@ namespace CryptoAccouting.CoreClass
             if (CalcSummary) RecalculatePositionSummary();
 		}
 
+		public void DetachPositionByCoin(Position position)
+		{
+            positions.RemoveAll(x => x.Coin.Symbol == position.Coin.Symbol);
+            RecalculatePositionSummary();
+		}
+
+		public void DetachPositionByExchange(Position position)
+		{
+            positions.RemoveAll(x => x.TradedExchange == position.TradedExchange);
+			RecalculatePositionSummary();
+		}
+
         public Position GetPositionByIndex(int indexNumber){
             return positions[indexNumber];
         }
