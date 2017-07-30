@@ -142,8 +142,8 @@ namespace CryptoAccouting.UIClass
 					break;
 			}
 
+			ApplicationCore.SaveMyBalanceXML();
             owner.CellItemUpdated();
-            ApplicationCore.SaveMyBalanceXML();
 
 		}
 		public override bool CanEditRow(UITableView tableView, NSIndexPath indexPath)

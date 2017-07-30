@@ -60,7 +60,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 		{
             foreach (var pos in mybal.positions)
             {
-                await FetchCoinMarketDataAsync(pos.Coin);
+                if (pos.Coin != null) await FetchCoinMarketDataAsync(pos.Coin);
             }
 		}
 

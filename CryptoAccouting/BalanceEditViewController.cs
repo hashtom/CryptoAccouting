@@ -25,18 +25,6 @@ namespace CryptoAccouting
 		{
 		}
 
-        public void SetPosition(Position pos)
-		{
-			//AppDel = d;
-			PositionDetail = pos;
-            thisCoin = pos.Coin;
-			exchangesListed = ApplicationCore.GetExchangesBySymbol(pos.Coin.Symbol);
-            editmode = false;
-            //buttonCancel.Enabled = false;
-            //this.NavigationItem.HidesBackButton = false;
-
-		}
-
         public void NewCoinSelected(string symbol)
         {
             thisCoin = ApplicationCore.GetInstrument(symbol);
@@ -211,6 +199,18 @@ namespace CryptoAccouting
 			CreatePosition();
             AppSetting.balanceMainViewC.CellItemUpdated();
         }
+
+		public void SetPosition(Position pos)
+		{
+			//AppDel = d;
+			PositionDetail = pos;
+			thisCoin = pos.Coin;
+			exchangesListed = ApplicationCore.GetExchangesBySymbol(pos.Coin.Symbol);
+			editmode = false;
+			//buttonCancel.Enabled = false;
+			//this.NavigationItem.HidesBackButton = false;
+
+		}
     }
 
 }

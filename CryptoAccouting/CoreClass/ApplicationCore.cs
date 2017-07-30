@@ -85,7 +85,9 @@
 			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			return epoch.AddSeconds(EpochSeconds);
 
-		}          public static async Task FetchMarketDataFromBalance()         {             await MarketDataAPI.FetchMarketDataFromBalance(Balance);         }      }
+		}          public static async Task FetchMarketDataFromBalance()         {             if (Balance != null)
+            {
+                await MarketDataAPI.FetchMarketDataFromBalance(Balance);             }         }      }
 
     public enum EnuCCY
     {         //Fiat Only at the moment
