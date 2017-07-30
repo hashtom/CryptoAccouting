@@ -11,8 +11,8 @@ using UIKit;
 
 namespace CryptoAccouting
 {
-    [Register ("BalanceViewController")]
-    partial class BalanceViewController
+    [Register ("BalanceMainViewController")]
+    partial class BalanceMainViewController
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]

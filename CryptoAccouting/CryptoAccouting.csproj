@@ -150,9 +150,9 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="BalanceViewController.cs" />
-    <Compile Include="BalanceViewController.designer.cs">
-      <DependentUpon>BalanceViewController.cs</DependentUpon>
+    <Compile Include="BalanceMainViewController.cs" />
+    <Compile Include="BalanceMainViewController.designer.cs">
+      <DependentUpon>BalanceMainViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="CoreClass\Instrument.cs" />
     <Compile Include="CoreClass\Position.cs" />
@@ -213,6 +213,7 @@
     <Compile Include="BalanceDetailViewConrtoller.designer.cs">
       <DependentUpon>BalanceDetailViewConrtoller.cs</DependentUpon>
     </Compile>
+    <Compile Include="BalanceTableViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="TestData\apikey.xml" />

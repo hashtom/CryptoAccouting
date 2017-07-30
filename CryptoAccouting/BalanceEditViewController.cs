@@ -174,6 +174,9 @@ namespace CryptoAccouting
             PositionDetail.BookPrice = textBookPrice.Text is "" ? 0 : double.Parse(textBookPrice.Text);
             PositionDetail.TradedExchange = thisExchangeType;
             PositionDetail.BalanceDate = thisBalanceDate;
+
+            ApplicationCore.Balance.AttachPosition(PositionDetail);
+			ApplicationCore.SaveMyBalanceXML();
         }
 
         partial void ButtonExchange_TouchUpInside(UIButton sender)
@@ -202,10 +205,11 @@ namespace CryptoAccouting
             InitializeUserInteractionStates();
         }
 
+
         partial void ButtonDone_Activated(UIBarButtonItem sender)
         {
 			CreatePosition();
-			AppSetting.balanceViewC.SaveItem(PositionDetail);
+            AppSetting.balanceMainViewC.CellItemUpdated();
         }
     }
 

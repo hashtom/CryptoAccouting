@@ -56,7 +56,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                             Amount = double.Parse(elem.Descendants("amount").Select(x => x.Value).First())
                             //TradedExchange = 
                         };
-                        mybal.AttachPosition(pos);
+                        mybal.AttachPosition(pos, false);
                     }
 
                 }
@@ -74,6 +74,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             //    mybal = new Balance();
             //}
 
+            mybal.RecalculatePositionSummary();
 			return mybal;
 
         }

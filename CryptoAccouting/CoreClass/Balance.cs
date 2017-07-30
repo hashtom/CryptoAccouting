@@ -44,7 +44,7 @@ namespace CryptoAccouting.CoreClass
             }
         }
 
-        private void RecalculatePositionSummary()
+        public void RecalculatePositionSummary()
         {
             int id = 0;
             positionsByCoin = new List<Position>();

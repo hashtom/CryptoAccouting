@@ -1,5 +1,11 @@
 ﻿﻿using System; using System.Collections.Generic; using System.Linq;
-//using System.Xml.Serialization; using System.Threading.Tasks; using UIKit; using CryptoAccouting.UIClass; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         public static EnuCCY BaseCurrency { get; set; }  // Fiats or BTC         private static Balance myBalance;         private static List<Instrument> myInstruments;         //private static TradeList myTradeList;
+//using System.Xml.Serialization; using System.Threading.Tasks; using UIKit; using CryptoAccouting.UIClass; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         public static EnuCCY BaseCurrency { get; set; }  // Fiats or BTC          public static Balance Balance { get; private set; }
+        //{
+        //    get { return myBalance != null ? myBalance : StorageAPI.LoadBalanceXML("mybalance.xml", myInstruments); }
+        //    private set { myBalance = value; }
+        //}
+
+        //private static Balance myBalance;         private static List<Instrument> myInstruments;         //private static TradeList myTradeList;
         private static ExchangeList ExchangeList;         //public static NavigationDrawer Navigation { get; set; }
 
         //public static NavigationDrawer InitializeSlideMenu(UIView BalanceTableView,         //                                                   UITableViewController PositionViewC,         //                                                   UIViewController TransactionViewC,         //                                                   UITableViewController PLViewC,         //                                                   UIViewController PerfViewC,
@@ -7,9 +13,9 @@
         //{         //    Navigation = new NavigationDrawer(BalanceTableView.Frame.Width, BalanceTableView.Frame.Height,         //                                      PositionViewC,
         //                                      TransactionViewC,         //                                      PLViewC,         //                                      PerfViewC,         //                                      SettingViewC);         //    Navigation.AddView(BalanceTableView);         //    return Navigation;         //}          public static EnuAppStatus InitializeCore(bool forceRefresh = true)
         {
-			BaseCurrency = EnuCCY.JPY;              if (LoadInstruments(forceRefresh) is EnuAppStatus.Success)
+			BaseCurrency = EnuCCY.JPY;                              if (LoadInstruments(forceRefresh) is EnuAppStatus.Success)
             {
-                LoadExchangeList();                 return EnuAppStatus.Success;             }             else{                 return EnuAppStatus.FailureNetwork;             }         }          public static void LoadExchangeList()
+                LoadExchangeList();                 Balance = StorageAPI.LoadBalanceXML("mybalance.xml", myInstruments);                 return EnuAppStatus.Success;             }             else{                 return EnuAppStatus.FailureNetwork;             }          }          public static void LoadExchangeList()
         {
             if (ExchangeList is null) ExchangeList = new ExchangeList();              var btc = GetInstrument("BTC");             var mona = GetInstrument("MONA");             var xem = GetInstrument("XEM");             var eth = GetInstrument("ETH");             var rep = GetInstrument("REP");             var xlm = GetInstrument("XLM");             var gbyte = GetInstrument("GBYTE");               btc.IsActive = true;             mona.IsActive = true;             xem.IsActive = true;             eth.IsActive = true;             rep.IsActive = true;             xlm.IsActive = true;             gbyte.IsActive = true;              var zaif = new Exchange(EnuExchangeType.Zaif) { ExchangeName = "Zaif" };             zaif.AttachListedCoin(btc);             zaif.AttachListedCoin(mona);             zaif.AttachListedCoin(xem);             var kraken = new Exchange(EnuExchangeType.Kraken){ ExchangeName = "Kraken" };
 			kraken.AttachListedCoin(btc);             kraken.AttachListedCoin(eth);             kraken.AttachListedCoin(rep);             kraken.AttachListedCoin(xlm);             var coincheck = new Exchange(EnuExchangeType.CoinCheck){ ExchangeName = "CoinCheck" };             coincheck.AttachListedCoin(btc);
@@ -39,9 +45,9 @@
             {                 myInstruments = StorageAPI.LoadInstrumentXML("instruments.xml");                 return myInstruments is null ? EnuAppStatus.FailureStorage : EnuAppStatus.Success;             }          }          //public static Balance GetTestBalance(){
 
         //    // Test Data
-        //    AppSetting.BaseCurrency = EnuBaseCCY.JPY;         //    Balance mybal;          //    LoadInstruments();          //    mybal = new Balance(EnuExchangeType.Zaif){BalanceName="Tomoaki"};          //    // Test Data Creation         //    var coin1 = instruments.Where(i=>i.Symbol =="BTC").First();         //    var coin2 = instruments.Where(i => i.Symbol == "ETH").First();         //    var coin3 = instruments.Where(i => i.Symbol == "REP").First();         //    var pos1 = new Position(coin1, "1") { Amount = 850 };         //    var pos2 = new Position(coin2, "2") { Amount = 1000 };         //    var pos3 = new Position(coin3, "3") { Amount = 25000 };          //    mybal.AttachPosition(pos1);         //    mybal.AttachPosition(pos2);         //    mybal.AttachPosition(pos3);          //    myBalance = mybal;          //    return myBalance;         //}          public static Balance GetMyBalance(){              if (myBalance is null)
-            {
-                myBalance = StorageAPI.LoadBalanceXML("mybalance.xml", myInstruments);             }              return myBalance;         }          public static void SaveMyBalance(Balance myBalance){              StorageAPI.SaveBalanceXML(myBalance, "mybalance.xml");         }          public static Instrument GetInstrument(string symbol)
+        //    AppSetting.BaseCurrency = EnuBaseCCY.JPY;         //    Balance mybal;          //    LoadInstruments();          //    mybal = new Balance(EnuExchangeType.Zaif){BalanceName="Tomoaki"};          //    // Test Data Creation         //    var coin1 = instruments.Where(i=>i.Symbol =="BTC").First();         //    var coin2 = instruments.Where(i => i.Symbol == "ETH").First();         //    var coin3 = instruments.Where(i => i.Symbol == "REP").First();         //    var pos1 = new Position(coin1, "1") { Amount = 850 };         //    var pos2 = new Position(coin2, "2") { Amount = 1000 };         //    var pos3 = new Position(coin3, "3") { Amount = 25000 };          //    mybal.AttachPosition(pos1);         //    mybal.AttachPosition(pos2);         //    mybal.AttachPosition(pos3);          //    myBalance = mybal;          //    return myBalance;         //}          //public static Balance GetMyBalance(){          //    if (myBalance is null)
+        //    {
+        //        myBalance = StorageAPI.LoadBalanceXML("mybalance.xml", myInstruments);         //    }          //    return myBalance;         //}          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, "mybalance.xml");         }          public static Instrument GetInstrument(string symbol)
         {
             if (myInstruments.Any(i => i.Symbol == symbol))
             {
@@ -71,15 +77,15 @@
         {             return ExchangeList.GetTradelist(extype,symbol);
         }
 
-		public static void AttachMyBalance(Balance bal)         {
-            myBalance = bal;         }
+		//public static void AttachMyBalance(Balance bal)         //{
+        //    myBalance = bal;         //}
 
 		public static DateTime FromEpochSeconds(long EpochSeconds)
 		{
 			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			return epoch.AddSeconds(EpochSeconds);
 
-		}          public static async Task FetchMarketDataFromBalance()         {             await MarketDataAPI.FetchMarketDataFromBalance(myBalance);         }      }
+		}          public static async Task FetchMarketDataFromBalance()         {             await MarketDataAPI.FetchMarketDataFromBalance(Balance);         }      }
 
     public enum EnuCCY
     {         //Fiat Only at the moment

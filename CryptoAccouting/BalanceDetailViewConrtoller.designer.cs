@@ -14,16 +14,5 @@ namespace CryptoAccouting
     [Register ("BalanceDetailViewConrtoller")]
     partial class BalanceDetailViewConrtoller
     {
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITableView DetailTableView { get; set; }
-
-        void ReleaseDesignerOutlets ()
-        {
-            if (DetailTableView != null) {
-                DetailTableView.Dispose ();
-                DetailTableView = null;
-            }
-        }
     }
 }

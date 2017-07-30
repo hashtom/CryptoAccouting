@@ -10,19 +10,21 @@ namespace CryptoAccouting.UIClass
 {
     public class BalanceTableSource : UITableViewSource
 	{
-        List<Position> myBalance;   
+        Balance myBalance;
+        //List<Position> myPositions;
         NSString cellIdentifier = new NSString("BalanceViewCell"); // set in the Storyboard
-        BalanceViewController owner;
+        BalanceTableViewController owner;
 
-        public BalanceTableSource(Balance myBalance, BalanceViewController owner )
+        public BalanceTableSource(Balance myBalance, BalanceTableViewController owner )
 		{
-            this.myBalance = myBalance.positions;
+            //this.myPositions = myBalance.positions;
+            this.myBalance = myBalance;
             this.owner = owner;
 		}
 
         public override nint RowsInSection(UITableView tableview, nint section)
         {
-            return myBalance.Count;
+            return myBalance.positions.Count;
 
         }
 
@@ -35,13 +37,13 @@ namespace CryptoAccouting.UIClass
                 //cell = new CustomBalanceCell (cellIdentifier);
 
             var cell = (BalanceViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
-            cell.UpdateCell(myBalance[indexPath.Row]);
+            cell.UpdateCell(myBalance.positions[indexPath.Row]);
 
 			return cell;
 		}
 		public Position GetItem(int id)
 		{
-            return myBalance[id];
+            return myBalance.positions[id];
 		}
 
 		public override nint NumberOfSections(UITableView tableView)
@@ -132,12 +134,17 @@ namespace CryptoAccouting.UIClass
 			{
 				case UITableViewCellEditingStyle.Delete:
 					//tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
-                    owner.DeleteItem(myBalance[indexPath.Row]);
+                    myBalance.DetachPosition(myBalance.positions[indexPath.Row]);
+                    //owner.DeleteItem(myBalance.positions[indexPath.Row]);
                     break;
 				case UITableViewCellEditingStyle.None:
 					Console.WriteLine("CommitEditingStyle:None called");
 					break;
 			}
+
+            owner.CellItemUpdated();
+            ApplicationCore.SaveMyBalanceXML();
+
 		}
 		public override bool CanEditRow(UITableView tableView, NSIndexPath indexPath)
 		{
