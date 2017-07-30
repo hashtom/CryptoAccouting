@@ -208,6 +208,7 @@
       <DependentUpon>SymbolSelectionViewConroller.cs</DependentUpon>
     </Compile>
     <Compile Include="UIClass\CustomPickerModel.cs" />
+    <Compile Include="CoreClass\APIClass\Reachability.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="TestData\apikey.xml" />

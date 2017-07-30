@@ -50,41 +50,49 @@ namespace CryptoAccouting.CoreClass.APIClass
 
 
         private static async Task<string> SendAsync(HttpClient http, Uri path, string method, Dictionary<string, string> parameters = null)
-		{
+        {
 
-            // nonceにunixtimeを用いる。整数だと1秒に一回しかAPIを呼べない。
-			double nonce = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
+            string json;
+            double nonce = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
 
-			//パラメータなしの場合
-			if (parameters == null)
-				parameters = new Dictionary<string, string>();
+            if (!Reachability.IsHostReachable(BaseUrl))
+            {
+                json = null;
+            }
+            else
+            {
+                //パラメータなしの場合
+                if (parameters == null)
+                    parameters = new Dictionary<string, string>();
 
-			//ノンスとメソッドを追加
-			parameters.Add("nonce", nonce.ToString());
-			parameters.Add("method", method);
+                //ノンスとメソッドを追加
+                parameters.Add("nonce", nonce.ToString());
+                parameters.Add("method", method);
 
-			// POSTするメッセージを作成
-			var content = new FormUrlEncodedContent(parameters);
-			string message = await content.ReadAsStringAsync();
+                // POSTするメッセージを作成
+                var content = new FormUrlEncodedContent(parameters);
+                string message = await content.ReadAsStringAsync();
 
-			// メッセージをHMACSHA512で署名
-            byte[] hash = new HMACSHA512(Encoding.UTF8.GetBytes(_apiSecret)).ComputeHash(Encoding.UTF8.GetBytes(message));
-			string sign = BitConverter.ToString(hash).ToLower().Replace("-", "");
+                // メッセージをHMACSHA512で署名
+                byte[] hash = new HMACSHA512(Encoding.UTF8.GetBytes(_apiSecret)).ComputeHash(Encoding.UTF8.GetBytes(message));
+                string sign = BitConverter.ToString(hash).ToLower().Replace("-", "");
 
-			// HTTPヘッダをセット
-			http.DefaultRequestHeaders.Clear();
-            http.DefaultRequestHeaders.Add("key", _apiKey);
-			http.DefaultRequestHeaders.Add("Sign", sign);
+                // HTTPヘッダをセット
+                http.DefaultRequestHeaders.Clear();
+                http.DefaultRequestHeaders.Add("key", _apiKey);
+                http.DefaultRequestHeaders.Add("Sign", sign);
 
-			HttpResponseMessage res = await http.PostAsync(path, content);
-            var json = await res.Content.ReadAsStringAsync();
+                HttpResponseMessage res = await http.PostAsync(path, content);
+                json = await res.Content.ReadAsStringAsync();
 
-			//通信上の失敗
-			if (!res.IsSuccessStatusCode)
-                return null;
+                //通信上の失敗
+                if (!res.IsSuccessStatusCode)
+                    json = null;
+
+            }
 
             return json;
-		}
+        }
 
     }
 

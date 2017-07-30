@@ -134,24 +134,33 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static List<Instrument> LoadInstrumentXML(string fileName)
 		{
+            List<Instrument> instruments;
 			var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 			var path = Path.Combine(documents, fileName);
-			var balanceXML = File.ReadAllText(path);
 
-			var mybalXE = XElement.Parse(balanceXML).Descendants("instrument");
-			var instruments = new List<Instrument>();
-
-            foreach (var elem in mybalXE)
+            if (File.Exists(path))
             {
-                var coin = new Instrument((string)elem.Attribute("id").Value,
-                                          (string)elem.Descendants("symbol").Select(x => x.Value).First(),
-                                          (string)elem.Descendants("name").Select(x => x.Value).First());
-                if (elem.Descendants("logofile").Select(x => x.Value).Any())
+                var balanceXML = File.ReadAllText(path);
+
+                var mybalXE = XElement.Parse(balanceXML).Descendants("instrument");
+                instruments = new List<Instrument>();
+
+                foreach (var elem in mybalXE)
                 {
-                    coin.LogoFileName = (string)elem.Descendants("logofile").Select(x => x.Value).First();
+                    var coin = new Instrument((string)elem.Attribute("id").Value,
+                                              (string)elem.Descendants("symbol").Select(x => x.Value).First(),
+                                              (string)elem.Descendants("name").Select(x => x.Value).First());
+                    if (elem.Descendants("logofile").Select(x => x.Value).Any())
+                    {
+                        coin.LogoFileName = (string)elem.Descendants("logofile").Select(x => x.Value).First();
+                    }
+                    coin.IsActive = bool.Parse((string)elem.Descendants("isactive").Select(x => x.Value).First());
+                    instruments.Add(coin);
                 }
-                coin.IsActive = bool.Parse((string)elem.Descendants("isactive").Select(x => x.Value).First());
-                instruments.Add(coin);
+            }
+            else
+            {
+                instruments = new List<Instrument>();
             }
 
 			return instruments;
