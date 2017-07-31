@@ -20,7 +20,7 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelBTCPct { get; set; }
+        UIKit.UILabel labelBTC1dRet { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -28,7 +28,11 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel LabelFiatPct { get; set; }
+        UIKit.UILabel labelCoinName { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelFiat1dRet { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -61,9 +65,9 @@ namespace CryptoAccouting
                 imageCoin = null;
             }
 
-            if (labelBTCPct != null) {
-                labelBTCPct.Dispose ();
-                labelBTCPct = null;
+            if (labelBTC1dRet != null) {
+                labelBTC1dRet.Dispose ();
+                labelBTC1dRet = null;
             }
 
             if (labelBTCPrice != null) {
@@ -71,9 +75,14 @@ namespace CryptoAccouting
                 labelBTCPrice = null;
             }
 
-            if (LabelFiatPct != null) {
-                LabelFiatPct.Dispose ();
-                LabelFiatPct = null;
+            if (labelCoinName != null) {
+                labelCoinName.Dispose ();
+                labelCoinName = null;
+            }
+
+            if (labelFiat1dRet != null) {
+                labelFiat1dRet.Dispose ();
+                labelFiat1dRet = null;
             }
 
             if (labelFiatPrice != null) {

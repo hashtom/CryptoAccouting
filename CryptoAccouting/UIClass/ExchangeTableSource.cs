@@ -14,9 +14,9 @@ namespace CryptoAccouting.UIClass
         NSString cellIdentifier = new NSString("ExchangeViewCell"); // set in the Storyboard
         BalanceTableViewController owner;
 
-        public ExchangeTableSource(Balance myBalance, BalanceTableViewController owner)
+        public ExchangeTableSource(BalanceTableViewController owner)
         {
-            this.myBalance = myBalance;
+            this.myBalance = ApplicationCore.Balance;
             this.owner = owner;
         }
         public override nint RowsInSection(UITableView tableview, nint section)

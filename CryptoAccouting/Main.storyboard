@@ -1994,7 +1994,7 @@
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" id="26269" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                    <rect key="frame" x="228" y="10" width="0.0" height="0.0"/>
+                                    <rect key="frame" x="228" y="10" width="82" height="15"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="26268" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                             <rect key="frame" x="-228" y="-10" width="0.0" height="15"/>
@@ -2119,7 +2119,7 @@
                                     </variation>
                                 </view>
                                 <stackView opaque="NO" contentMode="scaleToFill" id="26287" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                    <rect key="frame" x="228" y="27" width="0.0" height="0.0"/>
+                                    <rect key="frame" x="228" y="27" width="82" height="15"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="B0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="26283" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                             <rect key="frame" x="-228" y="-27" width="0.0" height="15"/>
@@ -2129,7 +2129,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+00.00%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="26286" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                            <rect key="frame" x="-228" y="-27" width="0.0" height="15"/>
+                                            <rect key="frame" x="31" y="0.0" width="51" height="15"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <nil key="textColor"/>
@@ -2225,7 +2225,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue id="26223" destination="20419" kind="show"/>
+                                    <segue id="26223" destination="20419" kind="show" identifier="PositionEditSegue"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -2237,14 +2237,15 @@
                     <connections>
                         <outlet property="imageCoin" destination="26275" id="name-outlet-26275"/>
                         <outlet property="labelFiatPrice" destination="26268" id="name-outlet-26268"/>
-                        <outlet property="LabelFiatPct" destination="26284" id="name-outlet-26284"/>
+                        <outlet property="labelFiat1dRet" destination="26284" id="name-outlet-26284"/>
                         <outlet property="labelBTCPrice" destination="26283" id="name-outlet-26283"/>
-                        <outlet property="labelBTCPct" destination="26286" id="name-outlet-26286"/>
+                        <outlet property="labelBTC1dRet" destination="26286" id="name-outlet-26286"/>
                         <outlet property="labelVolume" destination="26288" id="name-outlet-26288"/>
                         <outlet property="labelMarketCap" destination="26289" id="name-outlet-26289"/>
                         <outlet property="labelTotalBookCost" destination="26299" id="name-outlet-26299"/>
                         <outlet property="labelTotalQty" destination="26298" id="name-outlet-26298"/>
                         <outlet property="labelMarketValue" destination="26297" id="name-outlet-26297"/>
+                        <outlet property="labelCoinName" destination="26276" id="name-outlet-26276"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xoW-MD-Wjn" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -1,7 +1,7 @@
 ﻿using Foundation; using System; using UIKit; using CryptoAccouting.CoreClass; using CryptoAccouting.UIClass; using System.Threading.Tasks;  namespace CryptoAccouting {     public partial class BalanceMainViewController : BalanceTableViewController     {
         //private NavigationDrawer menu;          public BalanceMainViewController(IntPtr handle) : base(handle)         {             AppSetting.BaseCurrency = EnuCCY.JPY;
         }           public override void ViewDidLoad()         {             base.ViewDidLoad();              // Instantiate Controllers             AppSetting.balanceMainViewC = this;             //AppSetting.BalanceDetailViewC = this.Storyboard.InstantiateViewController("BalanceDetailViewC") as BalanceDetailViewConrtoller;             AppSetting.transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             AppSetting.plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             AppSetting.perfViewC = this.Storyboard.InstantiateViewController("PerfViewC") as PerfomViewController;             AppSetting.settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             //menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);
-             if (ApplicationCore.InitializeCore() != EnuAppStatus.Success){                 this.PopUpWarning("some issue!!");             }              // Configure Segmented control             ConfigureSegmentButton();              // Configure Table source             TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");             TableView.Source = new CoinTableSource(ApplicationCore.Balance, this);
+             if (ApplicationCore.InitializeCore() != EnuAppStatus.Success){                 this.PopUpWarning("some issue!!");             }              // Configure Segmented control             ConfigureSegmentButton();              // Configure Table source             TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");             TableView.Source = new CoinTableSource(this);
         }          public async override void ViewWillAppear(bool animated)         {
             base.ViewWillAppear(animated);             await ApplicationCore.FetchMarketDataFromBalance();             RefreshBalanceTable();         }          public override void ViewDidAppear(bool animated)
         {
@@ -33,15 +33,15 @@
                 {
                     case 0:
                         TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");
-                        TableView.Source = new CoinTableSource(ApplicationCore.Balance, this);
+                        TableView.Source = new CoinTableSource(this);
                         break;
                     case 1:
                         TableView.RegisterNibForCellReuse(ExchangeViewCell.Nib, "ExchangeViewCell");
-                        TableView.Source = new ExchangeTableSource(ApplicationCore.Balance, this);
+                        TableView.Source = new ExchangeTableSource(this);
                         break;
                     case 2:
                         TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");
-                        TableView.Source = new CoinTableSource(ApplicationCore.Balance, this);
+                        TableView.Source = new CoinTableSource(this);
                         break;
                     default:
                         break;
