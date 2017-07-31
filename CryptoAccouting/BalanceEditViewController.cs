@@ -126,7 +126,7 @@ namespace CryptoAccouting
             labelFiatPrice.Text = thisCoin.Symbol == "BTC" ?
                 "$" + String.Format("{0:n2}", thisCoin.MarketPrice.LatestPrice) :
                 "$" + String.Format("{0:n6}", thisCoin.MarketPrice.LatestPriceBTC);
-            labelFiat1dRet.Text = String.Format("{0:n2}", thisCoin.MarketPrice.FiatPct1d) + "%";
+            labelFiat1dRet.Text = String.Format("{0:n2}", thisCoin.MarketPrice.SourceRet1d) + "%";
             //labelBTCRet.Text
             //labelVolume.Text = String.Format("{0:n0}", thisCoin.MarketPrice.DayVolume);
             //labelMarketCap.Text = "$" + String.Format("{0:n0}", thisCoin.MarketPrice.MarketCap);

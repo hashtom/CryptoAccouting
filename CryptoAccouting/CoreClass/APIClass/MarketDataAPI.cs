@@ -38,49 +38,50 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 var jarray = await Task.Run(() => JArray.Parse(rawjson));
 
-                //coin.MarketPrice.LatestPriceBTC = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["price_btc"];
+                coin.MarketPrice.LatestPriceBTC = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["price_btc"];
                 coin.MarketPrice.LatestPrice = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["price_usd"];
                 coin.MarketPrice.SourceCurrency = coin.Symbol == "BTC" ? EnuCCY.USD : EnuCCY.BTC;
-                //coin.MarketPrice.DayVolume = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["24h_volume_usd"] / coin.MarketPrice.LatestPriceBTC;
+                coin.MarketPrice.DayVolume = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["24h_volume_usd"] / coin.MarketPrice.LatestPriceBTC;
                 coin.MarketPrice.MarketCap = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["market_cap_usd"];
-                //coin.MarketPrice.PriceDate = ApplicationCore.FromEpochSeconds((long)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["last_updated"]).Date;
-                coin.MarketPrice.FiatPct1h = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["percent_change_1h"];
-                coin.MarketPrice.FiatPct1d = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["percent_change_24h"];
-                coin.MarketPrice.FiatPct7d = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["percent_change_7d"];
+                coin.MarketPrice.PriceDate = ApplicationCore.FromEpochSeconds((long)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["last_updated"]).Date;
+                coin.MarketPrice.SourceRet1h = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["percent_change_1h"];
+                coin.MarketPrice.SourceRet1d = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["percent_change_24h"];
+                coin.MarketPrice.SourceRet7d = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["percent_change_7d"];
+                coin.MarketPrice.PriceBefore24h = coin.MarketPrice.LatestPrice / (coin.MarketPrice.SourceRet1d / 100 + 1);
 
-            }
+			}
 
-			string CoinChartsUrl = "http://api.cryptocoincharts.info/tradingPair/";
+			//string CoinChartsUrl = "http://api.cryptocoincharts.info/tradingPair/";
 
-            if (!Reachability.IsHostReachable(CoinChartsUrl))
-            {
-                return EnuAppStatus.FailureNetwork;
-            }
-            else
-            {
+            //if (!Reachability.IsHostReachable(CoinChartsUrl))
+            //{
+            //    return EnuAppStatus.FailureNetwork;
+            //}
+            //else
+            //{
 
-                //Parse Market Data 
-                if (coin.MarketPrice == null)
-                {
-                    var p = new Price(coin);
-                    coin.MarketPrice = p;
-                }
+            //    //Parse Market Data 
+            //    if (coin.MarketPrice == null)
+            //    {
+            //        var p = new Price(coin);
+            //        coin.MarketPrice = p;
+            //    }
 
-                CoinChartsUrl = (coin.Symbol == "BTC") ? CoinChartsUrl + "btc_usd" : CoinChartsUrl + coin.Symbol.ToLower() + "_btc";
+            //    CoinChartsUrl = (coin.Symbol == "BTC") ? CoinChartsUrl + "btc_usd" : CoinChartsUrl + coin.Symbol.ToLower() + "_btc";
 
-                using (var http = new HttpClient())
-                {
-                    rawjson = await http.GetStringAsync(CoinChartsUrl);
-                }
+            //    using (var http = new HttpClient())
+            //    {
+            //        rawjson = await http.GetStringAsync(CoinChartsUrl);
+            //    }
 
-                var json = await Task.Run(() => JObject.Parse(rawjson));
+            //    var json = await Task.Run(() => JObject.Parse(rawjson));
 
-                coin.MarketPrice.LatestPriceBTC = coin.Symbol == "BTC" ? 1 : (double)json["price"];
-                coin.MarketPrice.PriceBefore24h = (double)json["price_before_24h"];
-                coin.MarketPrice.DayVolume = (double)json["volume_btc"];
-                coin.MarketPrice.PriceDate = DateTime.Now;
+            //    coin.MarketPrice.LatestPriceBTC = coin.Symbol == "BTC" ? 1 : (double)json["price"];
+            //    coin.MarketPrice.PriceBefore24h = (double)json["price_before_24h"];
+            //    coin.MarketPrice.DayVolume = (double)json["volume_btc"];
+            //    coin.MarketPrice.PriceDate = DateTime.Now;
 
-            }
+            //}
 
             return EnuAppStatus.Success;
         }
