@@ -56,15 +56,7 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelMarketCap { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel labelMemo { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelVolume { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -142,19 +134,9 @@ namespace CryptoAccouting
                 labelFiatPrice = null;
             }
 
-            if (labelMarketCap != null) {
-                labelMarketCap.Dispose ();
-                labelMarketCap = null;
-            }
-
             if (labelMemo != null) {
                 labelMemo.Dispose ();
                 labelMemo = null;
-            }
-
-            if (labelVolume != null) {
-                labelVolume.Dispose ();
-                labelVolume = null;
             }
 
             if (textBalanceDate != null) {

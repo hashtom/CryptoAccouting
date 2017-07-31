@@ -10,19 +10,18 @@ namespace CryptoAccouting.UIClass
 {
     public class ExchangeTableSource : UITableViewSource
     {
-        List<Position> balanceViewItems;
+        Balance myBalance;
         NSString cellIdentifier = new NSString("ExchangeViewCell"); // set in the Storyboard
-        UITableViewController owner;
+        BalanceTableViewController owner;
 
-        public ExchangeTableSource(Balance myBalance, UITableViewController owner)
+        public ExchangeTableSource(Balance myBalance, BalanceTableViewController owner)
         {
-            balanceViewItems = myBalance.positions;
+            this.myBalance = myBalance;
             this.owner = owner;
         }
         public override nint RowsInSection(UITableView tableview, nint section)
         {
-            return balanceViewItems.Count;
-
+            return myBalance.positionsByExchange.Count;
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
@@ -34,13 +33,24 @@ namespace CryptoAccouting.UIClass
             //cell = new CustomBalanceCell (cellIdentifier);
 
             var cell = (ExchangeViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
-            cell.UpdateCell(balanceViewItems[indexPath.Row]);
+            cell.UpdateCell(myBalance.positionsByExchange[indexPath.Row]);
 
             return cell;
         }
+
         public Position GetItem(int id)
         {
-            return balanceViewItems[id];
+            return myBalance.positionsByExchange[id];
+        }
+
+		public override bool CanMoveRow(UITableView tableView, NSIndexPath indexPath)
+		{
+			return true;
+		}
+
+        public override bool CanEditRow(UITableView tableView, NSIndexPath indexPath)
+        {
+            return true; // return false if you wish to disable editing for a specific indexPath or for all rows
         }
 
         public override nint NumberOfSections(UITableView tableView)
@@ -57,6 +67,31 @@ namespace CryptoAccouting.UIClass
         {
             return 20;
         }
+
+		public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
+		{
+			owner.PerformSegue("PositionSegue", owner);
+			tableView.DeselectRow(indexPath, true);
+		}
+
+		public override void CommitEditingStyle(UITableView tableView, UITableViewCellEditingStyle editingStyle, Foundation.NSIndexPath indexPath)
+		{
+            switch (editingStyle)
+            {
+                case UITableViewCellEditingStyle.Delete:
+                    //tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
+                    myBalance.DetachPositionByExchange(myBalance.positionsByExchange[indexPath.Row]);
+                    break;
+
+                case UITableViewCellEditingStyle.None:
+                    Console.WriteLine("CommitEditingStyle:None called");
+                    break;
+            }
+
+			ApplicationCore.SaveMyBalanceXML();
+			owner.CellItemUpdated();
+
+		}
 
         public static UIView BuidBlanceViewHeader(UITableView tv)
         {
@@ -110,15 +145,5 @@ namespace CryptoAccouting.UIClass
             return view;
         }
 
-        public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
-        {
-            //UIAlertController okAlertController = UIAlertController.Create("Row Selected", balanceViewItems.GetPositionByIndex(indexPath.Row).Coin.Name, UIAlertControllerStyle.Alert);
-            //okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
-            //owner.PresentViewController(okAlertController, true, null);
-
-            owner.PerformSegue("PositionSegue", owner);
-            tableView.DeselectRow(indexPath, true);
-
-        }
     }
 }

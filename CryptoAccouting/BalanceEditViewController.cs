@@ -128,8 +128,8 @@ namespace CryptoAccouting
                 "$" + String.Format("{0:n6}", thisCoin.MarketPrice.LatestMainPrice());
             labelFiat1dRet.Text = String.Format("{0:n2}", thisCoin.MarketPrice.FiatPct1d) + "%";
             //labelBTCRet.Text
-            labelVolume.Text = String.Format("{0:n0}", thisCoin.MarketPrice.DayVolume);
-            labelMarketCap.Text = "$" + String.Format("{0:n0}", thisCoin.MarketPrice.MarketCap);
+            //labelVolume.Text = String.Format("{0:n0}", thisCoin.MarketPrice.DayVolume);
+            //labelMarketCap.Text = "$" + String.Format("{0:n0}", thisCoin.MarketPrice.MarketCap);
 
             if (PositionDetail is null) // new balance
             {

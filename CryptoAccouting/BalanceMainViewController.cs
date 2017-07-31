@@ -1,7 +1,7 @@
 ﻿using Foundation; using System; using UIKit; using CryptoAccouting.CoreClass; using CryptoAccouting.UIClass; using System.Threading.Tasks;  namespace CryptoAccouting {     public partial class BalanceMainViewController : BalanceTableViewController     {
         //private NavigationDrawer menu;          public BalanceMainViewController(IntPtr handle) : base(handle)         {             AppSetting.BaseCurrency = EnuCCY.JPY;
-        }           public override void ViewDidLoad()         {             base.ViewDidLoad();              // Instantiate Controllers             AppSetting.balanceMainViewC = this;             AppSetting.transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             AppSetting.plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             AppSetting.perfViewC = this.Storyboard.InstantiateViewController("PerfViewC") as PerfomViewController;             AppSetting.settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             //menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);
-             if (ApplicationCore.InitializeCore() != EnuAppStatus.Success){                 this.PopUpWarning("some issue!!");             }              // Configure Segmented control             ConfigureSegmentButton();              // Configure Table source             TableView.RegisterNibForCellReuse(BalanceViewCell.Nib, "BalanceViewCell");             TableView.Source = new BalanceTableSource(ApplicationCore.Balance,enuBalanceViewMode.enuDetail, this);
+        }           public override void ViewDidLoad()         {             base.ViewDidLoad();              // Instantiate Controllers             AppSetting.balanceMainViewC = this;             //AppSetting.BalanceDetailViewC = this.Storyboard.InstantiateViewController("BalanceDetailViewC") as BalanceDetailViewConrtoller;             AppSetting.transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             AppSetting.plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             AppSetting.perfViewC = this.Storyboard.InstantiateViewController("PerfViewC") as PerfomViewController;             AppSetting.settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             //menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);
+             if (ApplicationCore.InitializeCore() != EnuAppStatus.Success){                 this.PopUpWarning("some issue!!");             }              // Configure Segmented control             ConfigureSegmentButton();              // Configure Table source             TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");             TableView.Source = new CoinTableSource(ApplicationCore.Balance, this);
         }          public async override void ViewWillAppear(bool animated)         {
             base.ViewWillAppear(animated);             await ApplicationCore.FetchMarketDataFromBalance();             RefreshBalanceTable();         }          public override void ViewDidAppear(bool animated)
         {
@@ -13,13 +13,13 @@
 
             if (segue.Identifier == "PositionSegue")
             {
-                var navctlr = segue.DestinationViewController as BalanceEditViewController;
+                var navctlr = segue.DestinationViewController as BalanceDetailViewConrtoller;
                 if (navctlr != null)
                 {
-                    var source = TableView.Source as BalanceTableSource;
+                    var source = TableView.Source as CoinTableSource;
                     var rowPath = TableView.IndexPathForSelectedRow;
                     var item = source.GetItem(rowPath.Row);
-                    navctlr.SetPosition(item);
+                    navctlr.SetSymbol(item.Coin.Symbol);
                 }             }
         }
          private void ConfigureSegmentButton()
@@ -32,16 +32,16 @@
                 switch (selectedSegmentId)
                 {
                     case 0:
-                        TableView.RegisterNibForCellReuse(BalanceViewCell.Nib, "BalanceViewCell");
-                        TableView.Source = new BalanceTableSource(ApplicationCore.Balance, enuBalanceViewMode.enuCoinView, this);
+                        TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");
+                        TableView.Source = new CoinTableSource(ApplicationCore.Balance, this);
                         break;
                     case 1:
-                        //TableView.RegisterNibForCellReuse(ExchangeViewCell.Nib, "ExchangeViewCell");
-                        //TableView.Source = new ExchangeTableSource(ApplicationCore.Balance, this);                         TableView.RegisterNibForCellReuse(BalanceViewCell.Nib, "BalanceViewCell");                         TableView.Source = new BalanceTableSource(ApplicationCore.Balance, enuBalanceViewMode.enuExchangeView, this);
+                        TableView.RegisterNibForCellReuse(ExchangeViewCell.Nib, "ExchangeViewCell");
+                        TableView.Source = new ExchangeTableSource(ApplicationCore.Balance, this);
                         break;
                     case 2:
-                        TableView.RegisterNibForCellReuse(BalanceViewCell.Nib, "BalanceViewCell");
-                        TableView.Source = new BalanceTableSource(ApplicationCore.Balance, enuBalanceViewMode.enuDetail, this);
+                        TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");
+                        TableView.Source = new CoinTableSource(ApplicationCore.Balance, this);
                         break;
                     default:
                         break;

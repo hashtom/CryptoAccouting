@@ -6,17 +6,17 @@ using CryptoAccouting.CoreClass;
 
 namespace CryptoAccouting.UIClass
 {
-    public partial class BalanceViewCell : UITableViewCell
+    public partial class CoinViewCell : UITableViewCell
     {
-        public static readonly NSString Key = new NSString("BalanceViewCell");
+        public static readonly NSString Key = new NSString("CoinViewCell");
         public static readonly UINib Nib;
 
-        static BalanceViewCell()
+        static CoinViewCell()
         {
-            Nib = UINib.FromName("BalanceViewCell", NSBundle.MainBundle);
+            Nib = UINib.FromName("CoinViewCell", NSBundle.MainBundle);
         }
 
-        protected BalanceViewCell(IntPtr handle) : base(handle)
+        protected CoinViewCell(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
         }

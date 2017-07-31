@@ -10,8 +10,8 @@ using System.CodeDom.Compiler;
 
 namespace CryptoAccouting.UIClass
 {
-    [Register ("BalanceViewCell")]
-    partial class BalanceViewCell
+    [Register ("CoinViewCell")]
+    partial class CoinViewCell
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
