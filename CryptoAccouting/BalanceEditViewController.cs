@@ -124,8 +124,8 @@ namespace CryptoAccouting
                 "" :
                 "B " + String.Format("{0:n8}", thisCoin.MarketPrice.LatestPriceBTC);
             labelFiatPrice.Text = thisCoin.Symbol == "BTC" ?
-                "$" + String.Format("{0:n2}", thisCoin.MarketPrice.LatestMainPrice()) :
-                "$" + String.Format("{0:n6}", thisCoin.MarketPrice.LatestMainPrice());
+                "$" + String.Format("{0:n2}", thisCoin.MarketPrice.LatestPrice) :
+                "$" + String.Format("{0:n6}", thisCoin.MarketPrice.LatestPriceBTC);
             labelFiat1dRet.Text = String.Format("{0:n2}", thisCoin.MarketPrice.FiatPct1d) + "%";
             //labelBTCRet.Text
             //labelVolume.Text = String.Format("{0:n0}", thisCoin.MarketPrice.DayVolume);
@@ -143,7 +143,7 @@ namespace CryptoAccouting
 
                 //labelFiatPrice.Text = String.Format("{0:n0}", PositionDetail.LatestMainPrice());
                 textQuantity.Text = String.Format("{0:n0}", PositionDetail.Amount);
-                textBookPrice.Text = PositionDetail.BookPrice < 0 ? String.Format("{0:n2}", PositionDetail.MarketPrice()) : String.Format("{0:n2}", PositionDetail.BookPrice);
+                textBookPrice.Text = PositionDetail.BookPrice < 0 ? String.Format("{0:n2}", PositionDetail.LatestPrice()) : String.Format("{0:n2}", PositionDetail.BookPrice);
 				textBalanceDate.Text = PositionDetail.BalanceDate.Date.ToShortDateString();
 
 			}

@@ -30,21 +30,21 @@ namespace CryptoAccouting.CoreClass
 
 		public double AmountBTC()
 		{
-            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPriceBTC * this.Amount;
+            return Coin.MarketPrice == null ? 0 :  Coin.MarketPrice.LatestPriceBTC * this.Amount;
 		}
 
-        public double MarketPriceBTC(){
-            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPriceBTC;
-        }
+        //public double MarketPriceBTC(){
+        //    return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPriceBTC;
+        //}
 
-		public double MarketPrice()
+		public double LatestPrice()
 		{
             return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPrice;
 		}
 
-		public double LatestMainPrice()
+		public double LatestPriceBTC()
 		{
-            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestMainPrice();
+            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPriceBTC;
 		}
 
         public double? Pct1d(){

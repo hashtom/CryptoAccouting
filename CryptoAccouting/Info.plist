@@ -34,6 +34,6 @@
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>CFBundleName</key>
-	<string>コイン管理簿</string>
+	<string>Coin Tracker</string>
 </dict>
 </plist>

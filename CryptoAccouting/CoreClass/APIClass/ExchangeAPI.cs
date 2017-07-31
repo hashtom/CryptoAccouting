@@ -17,7 +17,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             var coin = ApplicationCore.GetInstrument("BTC");
             var p = new Price(coin);
 
-            p.BaseCurrency = EnuCCY.JPY;
+            p.SourceCurrency = EnuCCY.JPY;
             coin.MarketPrice = p;
 
             switch (exType) {

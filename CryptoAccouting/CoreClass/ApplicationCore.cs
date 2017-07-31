@@ -1,21 +1,15 @@
 ﻿﻿using System; using System.Collections.Generic; using System.Linq;
-//using System.Xml.Serialization; using System.Threading.Tasks; using UIKit; using CryptoAccouting.UIClass; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         public static EnuCCY BaseCurrency { get; set; }  // Fiats or BTC          public static Balance Balance { get; private set; }
-        //{
-        //    get { return myBalance != null ? myBalance : StorageAPI.LoadBalanceXML("mybalance.xml", myInstruments); }
-        //    private set { myBalance = value; }
-        //}
-
-        //private static Balance myBalance;         private static List<Instrument> myInstruments;         //private static TradeList myTradeList;
+//using System.Xml.Serialization; using System.Threading.Tasks; using UIKit; using CryptoAccouting.UIClass; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         public static EnuCCY BaseCurrency { get; set; }  // Fiats or BTC         public static Balance Balance { get; private set; }         private static List<Instrument> myInstruments;
         private static ExchangeList ExchangeList;         //public static NavigationDrawer Navigation { get; set; }
 
         //public static NavigationDrawer InitializeSlideMenu(UIView BalanceTableView,         //                                                   UITableViewController PositionViewC,         //                                                   UIViewController TransactionViewC,         //                                                   UITableViewController PLViewC,         //                                                   UIViewController PerfViewC,
         //                                                   UIViewController SettingViewC)
         //{         //    Navigation = new NavigationDrawer(BalanceTableView.Frame.Width, BalanceTableView.Frame.Height,         //                                      PositionViewC,
         //                                      TransactionViewC,         //                                      PLViewC,         //                                      PerfViewC,         //                                      SettingViewC);         //    Navigation.AddView(BalanceTableView);         //    return Navigation;         //}          public static EnuAppStatus InitializeCore(bool forceRefresh = true)
-        {
-			BaseCurrency = EnuCCY.JPY;                              if (LoadInstruments(forceRefresh) is EnuAppStatus.Success)
+        {             BaseCurrency = AppSetting.BaseCurrency; 
+            if (LoadInstruments(forceRefresh) is EnuAppStatus.Success)
             {
-                LoadExchangeList();                 Balance = StorageAPI.LoadBalanceXML("mybalance.xml", myInstruments);                 return EnuAppStatus.Success;             }             else{                 return EnuAppStatus.FailureNetwork;             }          }          public static void LoadExchangeList()
+                LoadExchangeList();                 Balance = StorageAPI.LoadBalanceXML("mybalance.xml", myInstruments);                 return EnuAppStatus.Success;             }             else{                 return EnuAppStatus.FailureNetwork;             }         }          public static void LoadExchangeList()
         {
             if (ExchangeList is null) ExchangeList = new ExchangeList();              var btc = GetInstrument("BTC");             var mona = GetInstrument("MONA");             var xem = GetInstrument("XEM");             var eth = GetInstrument("ETH");             var rep = GetInstrument("REP");             var xlm = GetInstrument("XLM");             var gbyte = GetInstrument("GBYTE");               btc.IsActive = true;             mona.IsActive = true;             xem.IsActive = true;             eth.IsActive = true;             rep.IsActive = true;             xlm.IsActive = true;             gbyte.IsActive = true;              var zaif = new Exchange(EnuExchangeType.Zaif) { ExchangeName = "Zaif" };             zaif.AttachListedCoin(btc);             zaif.AttachListedCoin(mona);             zaif.AttachListedCoin(xem);             var kraken = new Exchange(EnuExchangeType.Kraken){ ExchangeName = "Kraken" };
 			kraken.AttachListedCoin(btc);             kraken.AttachListedCoin(eth);             kraken.AttachListedCoin(rep);             kraken.AttachListedCoin(xlm);             var coincheck = new Exchange(EnuExchangeType.CoinCheck){ ExchangeName = "CoinCheck" };             coincheck.AttachListedCoin(btc);
@@ -92,5 +86,5 @@
     public enum EnuCCY
     {         //Fiat Only at the moment
         JPY,
-        USD,         EUR     }
+        USD,         EUR,         BTC     }
       public enum EnuAppStatus{         Success,         SuccessButOffline,         FailureNetwork,         FailureStorage     }  } 

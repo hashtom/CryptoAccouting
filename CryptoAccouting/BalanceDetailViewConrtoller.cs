@@ -45,8 +45,8 @@ namespace CryptoAccouting
 				"" :
 				"B " + String.Format("{0:n8}", thisCoin.MarketPrice.LatestPriceBTC);
             labelFiatPrice.Text = thisCoin.Symbol == "BTC" ?
-                "$" + String.Format("{0:n2}", thisCoin.MarketPrice.LatestMainPrice()) :
-                "$" + String.Format("{0:n6}", thisCoin.MarketPrice.LatestMainPrice());
+                "$" + String.Format("{0:n2}", thisCoin.MarketPrice.LatestPrice) :
+                "$" + String.Format("{0:n6}", thisCoin.MarketPrice.LatestPriceBTC);
 			labelFiat1dRet.Text = String.Format("{0:n2}", thisCoin.MarketPrice.FiatPct1d) + "%";
             //labelBTC1dRet.Text
 			labelVolume.Text = String.Format("{0:n0}", thisCoin.MarketPrice.DayVolume);
@@ -80,6 +80,7 @@ namespace CryptoAccouting
                     navctlr.SetPosition(item);
 				}
 			}
+
 		}
     }
 }

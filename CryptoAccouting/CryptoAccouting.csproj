@@ -107,7 +107,7 @@
       <HintPath>..\..\..\..\Documents\Syncfusion\15.2.0.40\Xamarin\lib\ios-unified\Syncfusion.SfNavigationDrawer.iOS.dll</HintPath>
     </Reference>
     <Reference Include="NBitcoin">
-      <HintPath>..\packages\NBitcoin.4.0.0.11\lib\netstandard1.3\NBitcoin.dll</HintPath>
+      <HintPath>..\packages\NBitcoin.4.0.0.13\lib\netstandard1.3\NBitcoin.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -215,6 +215,7 @@
     </Compile>
     <Compile Include="BalanceTableViewController.cs" />
     <Compile Include="UIClass\BookingTableSource.cs" />
+    <Compile Include="CoreClass\FXRate.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="TestData\apikey.xml" />

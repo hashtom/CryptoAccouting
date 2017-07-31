@@ -34,10 +34,10 @@ namespace CryptoAccouting.UIClass
             labelFiatValue.Text = "$" + String.Format("{0:n0}", pos.LatestFiatValue());
 			labelPct.Text = String.Format("{0:n2}", pos.Pct1d()) + " %";
             if (pos.Coin.Symbol is "BTC"){
-				labelPrice.Text = "$" + String.Format("{0:n2}", pos.MarketPrice());
+				labelPrice.Text = "$" + String.Format("{0:n2}", pos.LatestPrice());
                 labelHoldings.Text = "";
             }else{
-                labelPrice.Text = String.Format("{0:n8}", pos.MarketPriceBTC());
+                labelPrice.Text = String.Format("{0:n8}", pos.LatestPriceBTC());
             }
 
 		}

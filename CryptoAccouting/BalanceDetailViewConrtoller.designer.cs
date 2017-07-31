@@ -16,6 +16,10 @@ namespace CryptoAccouting
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIView DetailTopView { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIImageView imageCoin { get; set; }
 
         [Outlet]
@@ -48,6 +52,10 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelProfit { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel labelTotalBookCost { get; set; }
 
         [Outlet]
@@ -60,6 +68,11 @@ namespace CryptoAccouting
 
         void ReleaseDesignerOutlets ()
         {
+            if (DetailTopView != null) {
+                DetailTopView.Dispose ();
+                DetailTopView = null;
+            }
+
             if (imageCoin != null) {
                 imageCoin.Dispose ();
                 imageCoin = null;
@@ -98,6 +111,11 @@ namespace CryptoAccouting
             if (labelMarketValue != null) {
                 labelMarketValue.Dispose ();
                 labelMarketValue = null;
+            }
+
+            if (labelProfit != null) {
+                labelProfit.Dispose ();
+                labelProfit = null;
             }
 
             if (labelTotalBookCost != null) {
