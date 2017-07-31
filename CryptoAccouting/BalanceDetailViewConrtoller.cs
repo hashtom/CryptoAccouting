@@ -24,8 +24,9 @@ namespace CryptoAccouting
             base.ViewDidAppear(animated);
 
 			// Configure Table source
-			TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "BookingViewCell");
             TableView.Source = new BookingTableSource(symbol_selected, booking_positions, this);
+            TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "BookingViewCell");
+            //TableView.Source = new BookingTableSource(symbol_selected, booking_positions, this);
 		}
 
         public override void ViewWillAppear(bool animated)
