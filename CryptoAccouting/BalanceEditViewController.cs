@@ -43,7 +43,7 @@ namespace CryptoAccouting
         public async override void ViewWillAppear(bool animated)
 		{
 			base.ViewWillAppear(animated);
-            await ApplicationCore.RefreshMarketDataAsync(thisCoin);
+            await ApplicationCore.FetchMarketDataAsync(thisCoin);
             ReDrawScreen();
 		}
 
@@ -126,8 +126,8 @@ namespace CryptoAccouting
             labelFiatPrice.Text = thisCoin.Symbol == "BTC" ?
                 "$" + String.Format("{0:n2}", thisCoin.MarketPrice.LatestPrice) :
                 "$" + String.Format("{0:n6}", thisCoin.MarketPrice.LatestPriceBTC);
-            labelFiat1dRet.Text = String.Format("{0:n2}", thisCoin.MarketPrice.SourceRet1d) + "%";
-            //labelBTCRet.Text
+            labelFiat1dRet.Text = String.Format("{0:n2}", thisCoin.MarketPrice.SourceRet1d()) + "%";
+            labelBTCRet.Text = String.Format("{0:n2}", thisCoin.MarketPrice.BTCRet1d()) + "%";
             //labelVolume.Text = String.Format("{0:n0}", thisCoin.MarketPrice.DayVolume);
             //labelMarketCap.Text = "$" + String.Format("{0:n0}", thisCoin.MarketPrice.MarketCap);
 

@@ -51,11 +51,6 @@
             {                 return null;             }
          }
 
-        public static async Task RefreshMarketDataAsync(Instrument coin)
-        {
-            await MarketDataAPI.FetchCoinMarketDataAsync(coin);
-        }
-
         public static List<Instrument> GetInstrumentAll(bool OnlyActive = true)
 		{
             return !OnlyActive ? myInstruments : myInstruments.Where(x => x.IsActive is true).ToList();
@@ -81,10 +76,15 @@
 
 		}          public static async Task FetchMarketDataFromBalance()         {             if (Balance != null)
             {
-                await MarketDataAPI.FetchMarketDataFromBalance(Balance);             }         }      }
+                await MarketDataAPI.FetchMarketDataFromBalance(Balance);             }         }
+
+		public static async Task FetchMarketDataAsync(Instrument coin)
+		{
+			await MarketDataAPI.FetchCoinMarketDataAsync(coin);
+		}      }
 
     public enum EnuCCY
     {         //Fiat Only at the moment
         JPY,
         USD,         EUR,         BTC     }
-      public enum EnuAppStatus{         Success,         SuccessButOffline,         FailureNetwork,         FailureStorage     }  } 
+      public enum EnuAppStatus{         Success,         SuccessButOffline,         FailureNetwork,         FailureStorage,         FailureParameter     }  } 

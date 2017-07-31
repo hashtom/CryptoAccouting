@@ -19,6 +19,10 @@ namespace CryptoAccouting.UIClass
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelBTCRet { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel labelFiatValue { get; set; }
 
         [Outlet]
@@ -28,10 +32,6 @@ namespace CryptoAccouting.UIClass
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel labelHoldings { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelPct { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -48,6 +48,11 @@ namespace CryptoAccouting.UIClass
                 imageView = null;
             }
 
+            if (labelBTCRet != null) {
+                labelBTCRet.Dispose ();
+                labelBTCRet = null;
+            }
+
             if (labelFiatValue != null) {
                 labelFiatValue.Dispose ();
                 labelFiatValue = null;
@@ -61,11 +66,6 @@ namespace CryptoAccouting.UIClass
             if (labelHoldings != null) {
                 labelHoldings.Dispose ();
                 labelHoldings = null;
-            }
-
-            if (labelPct != null) {
-                labelPct.Dispose ();
-                labelPct = null;
             }
 
             if (labelPrice != null) {

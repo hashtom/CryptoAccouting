@@ -13,9 +13,9 @@ namespace CryptoAccouting.CoreClass
 		public EnuCCY SourceCurrency { get; set; }
         public double DayVolume { get; set; }
         public double MarketCap { get; set; }
-        public double SourceRet1h { get; set; }
-        public double SourceRet1d { get; set; }
-        public double SourceRet7d { get; set; }
+        //public double SourceRet1h { get; set; }
+        //public double SourceRet1d { get; set; }
+        //public double SourceRet7d { get; set; }
         //public double PrevClose { get; set; }
 		public DateTime PriceDate { get; set; }
         public FXRate SourceToBaseCurrency { get; set; }
@@ -30,12 +30,16 @@ namespace CryptoAccouting.CoreClass
 
         public double BaseCurrencyRet1d()
         {
-            return SourceToBaseCurrency is null ? 0 : (LatestPrice * SourceToBaseCurrency.Rate) / (PriceBefore24h * SourceToBaseCurrency.RateBefore24h) - 1;
+            return SourceToBaseCurrency is null ? 0 : ((LatestPrice * SourceToBaseCurrency.Rate) / (PriceBefore24h * SourceToBaseCurrency.RateBefore24h) - 1) * 100;
+        }
+
+        public double SourceRet1d(){
+            return (LatestPrice / PriceBefore24h - 1) * 100;
         }
 
 		public double BTCRet1d()
 		{
-            return LatestPriceBTC / PriceBTCBefore24h - 1;
+            return (LatestPriceBTC / PriceBTCBefore24h - 1) * 100;
 		}
 
         //public double DayReturn(){

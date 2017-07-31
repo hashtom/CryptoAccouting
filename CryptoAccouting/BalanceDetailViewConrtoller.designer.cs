@@ -24,11 +24,11 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelBTC1dRet { get; set; }
+        UIKit.UILabel labelBTCPrice { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelBTCPrice { get; set; }
+        UIKit.UILabel labelBTCRet1d { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -36,11 +36,11 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelFiat1dRet { get; set; }
+        UIKit.UILabel labelFiatPrice { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelFiatPrice { get; set; }
+        UIKit.UILabel labelFiatRet1d { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -78,14 +78,14 @@ namespace CryptoAccouting
                 imageCoin = null;
             }
 
-            if (labelBTC1dRet != null) {
-                labelBTC1dRet.Dispose ();
-                labelBTC1dRet = null;
-            }
-
             if (labelBTCPrice != null) {
                 labelBTCPrice.Dispose ();
                 labelBTCPrice = null;
+            }
+
+            if (labelBTCRet1d != null) {
+                labelBTCRet1d.Dispose ();
+                labelBTCRet1d = null;
             }
 
             if (labelCoinName != null) {
@@ -93,14 +93,14 @@ namespace CryptoAccouting
                 labelCoinName = null;
             }
 
-            if (labelFiat1dRet != null) {
-                labelFiat1dRet.Dispose ();
-                labelFiat1dRet = null;
-            }
-
             if (labelFiatPrice != null) {
                 labelFiatPrice.Dispose ();
                 labelFiatPrice = null;
+            }
+
+            if (labelFiatRet1d != null) {
+                labelFiatRet1d.Dispose ();
+                labelFiatRet1d = null;
             }
 
             if (labelMarketCap != null) {

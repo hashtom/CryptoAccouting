@@ -47,9 +47,14 @@ namespace CryptoAccouting.CoreClass
             return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPriceBTC;
 		}
 
-        public double? Pct1d(){
-            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.SourceRet1d;
+        public double SourceRet1d(){
+            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.SourceRet1d();
         }
+
+		public double BTCRet1d()
+		{
+            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.BTCRet1d();
+		}
 
 		public double MarketDayVolume()
 		{

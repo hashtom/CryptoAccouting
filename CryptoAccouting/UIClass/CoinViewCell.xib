@@ -84,7 +84,7 @@
                 <outlet property="labelHoldings" destination="4" id="name-outlet-4"/>
                 <outlet property="labelHoldingBTC" destination="5" id="name-outlet-5"/>
                 <outlet property="labelPrice" destination="6" id="name-outlet-6"/>
-                <outlet property="labelPct" destination="7" id="name-outlet-7"/>
+                <outlet property="labelBTCRet" destination="7" id="name-outlet-7"/>
                 <outlet property="labelFiatValue" destination="10" id="name-outlet-10"/>
             </connections>
         </tableViewCell>

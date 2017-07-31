@@ -2254,9 +2254,9 @@
                         <outlet property="labelCoinName" destination="26276" id="name-outlet-26276"/>
                         <outlet property="DetailTopView" destination="qOJ-HG-G4x" id="name-outlet-qOJ-HG-G4x"/>
                         <outlet property="labelProfit" destination="26703" id="name-outlet-26703"/>
-                        <outlet property="labelFiat1dRet" destination="26284" id="name-outlet-26284"/>
+                        <outlet property="labelFiatRet1d" destination="26284" id="name-outlet-26284"/>
                         <outlet property="labelFiatPrice" destination="26268" id="name-outlet-26268"/>
-                        <outlet property="labelBTC1dRet" destination="26286" id="name-outlet-26286"/>
+                        <outlet property="labelBTCRet1d" destination="26286" id="name-outlet-26286"/>
                         <outlet property="labelBTCPrice" destination="26283" id="name-outlet-26283"/>
                     </connections>
                 </tableViewController>
