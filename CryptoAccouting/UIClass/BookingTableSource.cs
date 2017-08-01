@@ -11,20 +11,26 @@ namespace CryptoAccouting.UIClass
 	public class BookingTableSource : UITableViewSource
 	{
 		Balance myBalance;
+        string symbol_selected;
 		NSString cellIdentifier = new NSString("BookingViewCell");
 		BalanceTableViewController owner;
-		List<Position> bookingPositions;
+		//List<Position> bookingPositions;
 
-        public BookingTableSource(string symbol, List<Position> bookingPositions, BalanceTableViewController owner)
+        public BookingTableSource(string symbol, BalanceTableViewController owner)
         {
             this.myBalance = ApplicationCore.Balance;
             this.owner = owner;
-            this.bookingPositions = bookingPositions; //= myBalance.positions.Where(x => x.Coin.Symbol == symbol).ToList();
+            symbol_selected = symbol;
+        }
+
+        private List<Position> BookingPositions()
+        {
+            return myBalance.positions.Where(x => x.Coin.Symbol == symbol_selected).ToList();
         }
 
 		public override nint RowsInSection(UITableView tableview, nint section)
 		{
-			return bookingPositions.Count;
+            return BookingPositions().Count;
 		}
 
 		public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
@@ -33,7 +39,7 @@ namespace CryptoAccouting.UIClass
 			//var cell = tableView.DequeueReusableCell(cellIdentifier) as CustomBalanceCell;
 			//if (cell == null)
             var cell = (CoinViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
-			cell.UpdateCell(bookingPositions[indexPath.Row]);
+			cell.UpdateCell(BookingPositions()[indexPath.Row]);
 			
             return cell;
 
@@ -41,7 +47,7 @@ namespace CryptoAccouting.UIClass
 
 		public Position GetItem(int id)
 		{
-			return bookingPositions[id];
+			return BookingPositions()[id];
 		}
 
         public override bool CanMoveRow(UITableView tableView, NSIndexPath indexPath)
@@ -81,7 +87,7 @@ namespace CryptoAccouting.UIClass
             {
                 case UITableViewCellEditingStyle.Delete:
                     //tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
-                    myBalance.DetachPosition(bookingPositions[indexPath.Row]);
+                    myBalance.DetachPosition(BookingPositions()[indexPath.Row], true);
                     break;
 
                 case UITableViewCellEditingStyle.None:
@@ -90,7 +96,7 @@ namespace CryptoAccouting.UIClass
             }
 
 			ApplicationCore.SaveMyBalanceXML();
-			owner.CellItemUpdated();
+            owner.CellItemUpdated(false);
 
 		}
 
@@ -129,7 +135,7 @@ namespace CryptoAccouting.UIClass
 				TextAlignment = UITextAlignment.Left,
 				Frame = new System.Drawing.RectangleF(200, 0, 60, 20),
 				BackgroundColor = UIColor.Clear,
-				Text = "Price"
+				Text = "Book"
 			};
 
 			pctLabel = new UILabel()
@@ -137,9 +143,9 @@ namespace CryptoAccouting.UIClass
 				Font = UIFont.FromName("ArialMT", 12f),
 				TextColor = UIColor.White,
 				TextAlignment = UITextAlignment.Left,
-				Frame = new System.Drawing.RectangleF(300, 0, 40, 20),
+				Frame = new System.Drawing.RectangleF(300, 0, 60, 20),
 				BackgroundColor = UIColor.Clear,
-				Text = "Return"
+				Text = "Exchange"
 			};
 
 			view.AddSubviews(new UIView[] { codeLabel, amountLabel, priceLabel, pctLabel });

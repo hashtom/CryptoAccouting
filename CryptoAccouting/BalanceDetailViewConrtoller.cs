@@ -13,7 +13,7 @@ namespace CryptoAccouting
     {
 
         string symbol_selected;
-        List<Position> booking_positions;
+        //List<Position> booking_positions;
 
         public BalanceDetailViewConrtoller (IntPtr handle) : base (handle)
         {
@@ -25,7 +25,7 @@ namespace CryptoAccouting
 
 			// Configure Table source
 			this.TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "BookingViewCell");
-			this.TableView.Source = new BookingTableSource(symbol_selected, booking_positions, this);
+			this.TableView.Source = new BookingTableSource(symbol_selected,this);
         }
 
         public override void ViewWillAppear(bool animated)
@@ -42,9 +42,11 @@ namespace CryptoAccouting
 
 		private void ReDrawScreen()
 		{
+            var booking_positions = ApplicationCore.Balance.positions.Where(x => x.Coin.Symbol == symbol_selected).ToList();
             var thisCoin = ApplicationCore.GetInstrument(symbol_selected);
             var imagelogo = thisCoin.LogoFileName;
-			imageCoin.Image = imagelogo == null ? null : UIImage.FromFile(imagelogo);
+			
+            imageCoin.Image = imagelogo == null ? null : UIImage.FromFile(imagelogo);
             labelCoinName.Text = thisCoin.Name;
 
 			labelBTCPrice.Text = thisCoin.Symbol == "BTC" ?
@@ -68,7 +70,7 @@ namespace CryptoAccouting
         public void SetSymbol(string symbol)
         {
             symbol_selected = symbol;
-            this.booking_positions = ApplicationCore.Balance.positions.Where(x => x.Coin.Symbol == symbol_selected).ToList();
+            //this.booking_positions = ApplicationCore.Balance.positions.Where(x => x.Coin.Symbol == symbol_selected).ToList();
         }
 
 

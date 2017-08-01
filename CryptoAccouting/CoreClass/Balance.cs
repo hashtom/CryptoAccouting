@@ -90,7 +90,7 @@ namespace CryptoAccouting.CoreClass
 
 		}
 
-		public void DetachPosition(Position position, bool CalcSummary = true)
+		public void DetachPosition(Position position, bool CalcSummary)
 		{
 			positions.RemoveAll(x => x.Id == position.Id);
 

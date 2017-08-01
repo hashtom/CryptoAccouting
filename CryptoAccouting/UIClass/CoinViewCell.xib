@@ -22,7 +22,7 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="4" translatesAutoresizingMaskIntoConstraints="NO" minimumScaleFactor="0.5" text="฿123,456.78" fixedFrame="YES">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="4" translatesAutoresizingMaskIntoConstraints="NO" minimumScaleFactor="0.5" fixedFrame="YES" text="0">
                         <rect key="frame" x="71" y="2" width="84" height="20"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <nil key="textColor"/>
@@ -74,11 +74,11 @@
             <connections>
                 <outlet property="imageView" destination="2" id="name-outlet-2"/>
                 <outlet property="labelSymbol" destination="3" id="name-outlet-3"/>
-                <outlet property="labelHoldingBTC" destination="4" id="name-outlet-4"/>
                 <outlet property="labelPrice" destination="6" id="name-outlet-6"/>
-                <outlet property="labelBTCRet" destination="7" id="name-outlet-7"/>
+                <outlet property="labelMemo" destination="7" id="name-outlet-7"/>
                 <outlet property="labelValue" destination="10" id="name-outlet-10"/>
-                <outlet property="labelHolding" destination="5" id="name-outlet-5"/>
+                <outlet property="labelHoldingBTC" destination="5" id="name-outlet-5"/>
+                <outlet property="labelHolding" destination="4" id="name-outlet-4"/>
             </connections>
         </tableViewCell>
     </objects>

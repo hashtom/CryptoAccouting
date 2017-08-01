@@ -93,7 +93,7 @@ namespace CryptoAccouting.UIClass
             }
 
             ApplicationCore.SaveMyBalanceXML();
-            owner.CellItemUpdated();
+            owner.CellItemUpdated(false);
 
         }
 

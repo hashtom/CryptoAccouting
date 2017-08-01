@@ -1918,7 +1918,7 @@
                                     <rect key="frame" x="0.0" y="131" width="320" height="72"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                        <color key="backgroundColor" colorSpace="calibratedRGB" red="0.8" green="1" blue="0.4" alpha="1"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
                                         <mask key="subviews">
                                             <include reference="26279"/>
                                             <include reference="26294"/>
@@ -1933,13 +1933,10 @@
                                     </variation>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Holding Details" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="26279" translatesAutoresizingMaskIntoConstraints="NO" minimumScaleFactor="0.5" fixedFrame="YES">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="20"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="118" height="20"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                                             <nil key="highlightedColor"/>
-                                            <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                                <color key="backgroundColor" colorSpace="calibratedRGB" red="0" green="0.50196078431372548" blue="0" alpha="1"/>
-                                            </variation>
+                                            <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Quantity" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="26294" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="right" fixedFrame="YES">
@@ -1990,7 +1987,7 @@
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$12.345M" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="26703" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$0.00M" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="26703" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                             <rect key="frame" x="249" y="45" width="60" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
@@ -2000,13 +1997,6 @@
                                     </subviews>
                                     <variation key="default">
                                         <mask key="subviews">
-                                            <exclude reference="26294"/>
-                                            <exclude reference="26295"/>
-                                            <exclude reference="26296"/>
-                                            <exclude reference="26297"/>
-                                            <exclude reference="26298"/>
-                                            <exclude reference="26299"/>
-                                            <exclude reference="26702"/>
                                             <exclude reference="26703"/>
                                         </mask>
                                     </variation>
@@ -2050,11 +2040,8 @@
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Market Details" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="26695" translatesAutoresizingMaskIntoConstraints="NO" minimumScaleFactor="0.5" fixedFrame="YES">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="20"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                    <color key="textColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                                     <nil key="highlightedColor"/>
-                                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                        <color key="backgroundColor" colorSpace="calibratedRGB" red="0" green="0.50196078431372548" blue="0" alpha="1"/>
-                                    </variation>
+                                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+00.00%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="26284" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
@@ -2086,22 +2073,6 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <variation key="default">
-                                <mask key="subviews">
-                                    <exclude reference="26275"/>
-                                    <exclude reference="26276"/>
-                                    <exclude reference="26235"/>
-                                    <exclude reference="24715"/>
-                                    <exclude reference="24986"/>
-                                    <exclude reference="26288"/>
-                                    <exclude reference="26289"/>
-                                    <exclude reference="26695"/>
-                                    <exclude reference="26284"/>
-                                    <exclude reference="26268"/>
-                                    <exclude reference="26286"/>
-                                    <exclude reference="26283"/>
-                                </mask>
-                            </variation>
                             <variation key="heightClass=regular-widthClass=compact">
                                 <mask key="subviews">
                                     <include reference="26275"/>

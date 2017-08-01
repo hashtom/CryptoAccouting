@@ -28,7 +28,7 @@ namespace CryptoAccouting.CoreClass
 
 	public enum EnuExchangeType
 	{
-        NotDefined = 0,
+        NotSelected = 0,
 		Zaif = 1,
 		BitFlyer = 2,
 		Kraken = 3,

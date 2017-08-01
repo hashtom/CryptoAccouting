@@ -94,7 +94,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 			return EnuAppStatus.Success;
         }
 
-        public static async Task FetchMarketDataFromBalance(Balance mybal)
+        public static async Task FetchMarketDataFromBalanceAsync(Balance mybal)
 		{
             Instrument bitcoin;
 

@@ -24,10 +24,10 @@ namespace CryptoAccouting
 
         //public virtual void DeleteItem(Position pos){}
 
-        public void CellItemUpdated()
+        public void CellItemUpdated(bool PopToRoot = true)
         {
             TableView.ReloadData();
-			NavigationController.PopToRootViewController(true);
+            if (PopToRoot) NavigationController.PopToRootViewController(true);
         }
 
         //public virtual void RefreshBalanceTable(){}

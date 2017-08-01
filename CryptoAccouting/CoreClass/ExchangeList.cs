@@ -41,6 +41,8 @@ namespace CryptoAccouting.CoreClass
         public ExchangeList GetExchangesBySymbol(string symbol){
 
             var exchanged_applied = new ExchangeList();
+            exchanged_applied.AttachExchange(new Exchange(EnuExchangeType.NotSelected){ExchangeName="Not Selected"});
+
             foreach (var exc in exchanges)
             {
                 if (exc.ListedCoin.Any(x => x.Symbol == symbol)) exchanged_applied.AttachExchange(exc);

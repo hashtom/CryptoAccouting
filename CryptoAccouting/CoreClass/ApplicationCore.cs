@@ -73,9 +73,9 @@
 			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			return epoch.AddSeconds(EpochSeconds);
 
-		}          public static async Task FetchMarketDataFromBalance()         {             if (Balance != null)
+		}          public async static Task FetchMarketDataFromBalance()         {             if (Balance != null)
             {
-                await MarketDataAPI.FetchMarketDataFromBalance(Balance);             }         }
+                await MarketDataAPI.FetchMarketDataFromBalanceAsync(Balance);             }         }
 
 		public static async Task FetchMarketDataAsync(Instrument coin)
 		{

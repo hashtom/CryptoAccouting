@@ -27,16 +27,26 @@ namespace CryptoAccouting.UIClass
             imageView.Image = logo == null ? null : UIImage.FromFile(logo);
 
             labelSymbol.Text = pos.Coin.Symbol;
-            labelHoldingBTC.Text = "฿" + String.Format("{0:n4}", pos.AmountBTC());
-            labelValue.Text = "฿" + String.Format("{0:n2}", pos.AmountBTC());
+
             if (pos.Coin.Symbol is "BTC"){
-                labelBTCRet.Text = String.Format("{0:n2}", pos.SourceRet1d()) + " %";
 				labelPrice.Text = "$" + String.Format("{0:n2}", pos.LatestPrice());
                 labelHolding.Text = "";
+                labelHoldingBTC.Text = "฿" + String.Format("{0:n4}", pos.AmountBTC());
+                labelMemo.Text = String.Format("{0:n2}", pos.SourceRet1d()) + " %";
             }else{
-                labelBTCRet.Text = String.Format("{0:n2}", pos.BTCRet1d()) + " %";
                 labelPrice.Text = "฿" + String.Format("{0:n8}", pos.LatestPriceBTC());
                 labelHolding.Text = String.Format("{0:n2}", pos.Amount);
+                labelHoldingBTC.Text = "(฿" + String.Format("{0:n4}", pos.AmountBTC()) +")";
+                labelMemo.Text = String.Format("{0:n2}", pos.BTCRet1d()) + " %";
+            }
+
+            if (pos.PositionType is EnuPositionType.Detail)
+            {
+                labelPrice.Text = "$" + String.Format("{0:n2}", pos.BookPrice);
+                labelValue.Text = "$" + String.Format("{0:n0}", pos.BookValue());
+                labelMemo.Text = pos.TradedExchange.ToString();
+            }else{
+				labelValue.Text = "฿" + String.Format("{0:n2}", pos.AmountBTC());
             }
 
 		}
