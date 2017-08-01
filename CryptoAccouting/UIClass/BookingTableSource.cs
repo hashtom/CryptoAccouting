@@ -32,8 +32,7 @@ namespace CryptoAccouting.UIClass
 			// OLD method
 			//var cell = tableView.DequeueReusableCell(cellIdentifier) as CustomBalanceCell;
 			//if (cell == null)
-			//cell = new CustomBalanceCell (cellIdentifier);
-			var cell = (CoinViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
+            var cell = (CoinViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
 			cell.UpdateCell(bookingPositions[indexPath.Row]);
 			
             return cell;
@@ -55,20 +54,20 @@ namespace CryptoAccouting.UIClass
 			return true; // return false if you wish to disable editing for a specific indexPath or for all rows
 		}
 
-		//public override nint NumberOfSections(UITableView tableView)
-		//{
-		//	return 1;
-		//}
+		public override nint NumberOfSections(UITableView tableView)
+		{
+			return 1;
+		}
 
-		//public override UIView GetViewForHeader(UITableView tableView, nint section)
-		//{
-		//	return BuidBlanceViewHeader(tableView);
-		//}
+		public override UIView GetViewForHeader(UITableView tableView, nint section)
+		{
+			return BuidBlanceViewHeader(tableView);
+		}
 
-		//public override nfloat GetHeightForHeader(UITableView tableView, nint section)
-		//{
-		//	return 20;
-		//}
+		public override nfloat GetHeightForHeader(UITableView tableView, nint section)
+		{
+			return 20;
+		}
 
 		public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
 		{
@@ -95,57 +94,57 @@ namespace CryptoAccouting.UIClass
 
 		}
 
-		//public static UIView BuidBlanceViewHeader(UITableView tv)
-		//{
+		public static UIView BuidBlanceViewHeader(UITableView tv)
+		{
 
-		//	UILabel codeLabel, amountLabel, priceLabel, pctLabel;
+			UILabel codeLabel, amountLabel, priceLabel, pctLabel;
 
-		//	UIView view = new UIView(new System.Drawing.RectangleF(0, 0, (float)tv.Frame.Width, 20));
-		//	view.BackgroundColor = UIColor.Gray;
+			UIView view = new UIView(new System.Drawing.RectangleF(0, 0, (float)tv.Frame.Width, 20));
+			view.BackgroundColor = UIColor.Gray;
 
-		//	codeLabel = new UILabel()
-		//	{
-		//		Font = UIFont.FromName("ArialMT", 12f),
-		//		TextColor = UIColor.White,
-		//		TextAlignment = UITextAlignment.Left,
-		//		Frame = new System.Drawing.RectangleF(20, 0, 40, 20),
-		//		BackgroundColor = UIColor.Clear,
-		//		Text = "Coin"
-		//	};
+			codeLabel = new UILabel()
+			{
+				Font = UIFont.FromName("ArialMT", 12f),
+				TextColor = UIColor.White,
+				TextAlignment = UITextAlignment.Left,
+				Frame = new System.Drawing.RectangleF(20, 0, 40, 20),
+				BackgroundColor = UIColor.Clear,
+				Text = "Coin"
+			};
 
-		//	amountLabel = new UILabel()
-		//	{
-		//		Font = UIFont.FromName("ArialMT", 12f),
-		//		TextColor = UIColor.White,
-		//		TextAlignment = UITextAlignment.Left,
-		//		Frame = new System.Drawing.RectangleF(100, 0, 60, 20),
-		//		BackgroundColor = UIColor.Clear,
-		//		Text = "Holdings"
-		//	};
+			amountLabel = new UILabel()
+			{
+				Font = UIFont.FromName("ArialMT", 12f),
+				TextColor = UIColor.White,
+				TextAlignment = UITextAlignment.Left,
+				Frame = new System.Drawing.RectangleF(100, 0, 60, 20),
+				BackgroundColor = UIColor.Clear,
+				Text = "Holdings"
+			};
 
-		//	priceLabel = new UILabel()
-		//	{
-		//		Font = UIFont.FromName("ArialMT", 12f),
-		//		TextColor = UIColor.White,
-		//		TextAlignment = UITextAlignment.Left,
-		//		Frame = new System.Drawing.RectangleF(200, 0, 60, 20),
-		//		BackgroundColor = UIColor.Clear,
-		//		Text = "Price"
-		//	};
+			priceLabel = new UILabel()
+			{
+				Font = UIFont.FromName("ArialMT", 12f),
+				TextColor = UIColor.White,
+				TextAlignment = UITextAlignment.Left,
+				Frame = new System.Drawing.RectangleF(200, 0, 60, 20),
+				BackgroundColor = UIColor.Clear,
+				Text = "Price"
+			};
 
-		//	pctLabel = new UILabel()
-		//	{
-		//		Font = UIFont.FromName("ArialMT", 12f),
-		//		TextColor = UIColor.White,
-		//		TextAlignment = UITextAlignment.Left,
-		//		Frame = new System.Drawing.RectangleF(300, 0, 40, 20),
-		//		BackgroundColor = UIColor.Clear,
-		//		Text = "Return"
-		//	};
+			pctLabel = new UILabel()
+			{
+				Font = UIFont.FromName("ArialMT", 12f),
+				TextColor = UIColor.White,
+				TextAlignment = UITextAlignment.Left,
+				Frame = new System.Drawing.RectangleF(300, 0, 40, 20),
+				BackgroundColor = UIColor.Clear,
+				Text = "Return"
+			};
 
-		//	view.AddSubviews(new UIView[] { codeLabel, amountLabel, priceLabel, pctLabel });
-		//	return view;
-		//}
+			view.AddSubviews(new UIView[] { codeLabel, amountLabel, priceLabel, pctLabel });
+			return view;
+		}
 	}
 
 

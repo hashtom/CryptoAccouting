@@ -96,7 +96,7 @@ namespace CryptoAccouting
                 buttonDone.Enabled = false;
                 buttonExchange.UserInteractionEnabled = false;
                 //buttonDone.SetTitleTextAttributes(new UITextAttributes() { TextColor = UIColor.Black }, UIControlState.Disabled);
-                buttonExchange.SetTitleColor(UIColor.Black, UIControlState.Disabled);
+                buttonExchange.SetTitleColor(UIColor.Black, UIControlState.Normal);
                 textQuantity.UserInteractionEnabled = false;
                 textBookPrice.UserInteractionEnabled = false;
                 textBalanceDate.UserInteractionEnabled = false;
@@ -124,8 +124,10 @@ namespace CryptoAccouting
 
             if (PositionDetail is null) // new balance
             {
+                textBookPrice.Text = "0";
                 thisBalanceDate = DateTime.Now.Date;
 				textBalanceDate.Text = thisBalanceDate.ToShortDateString();
+                //buttonExchange.SetTitle("Not Selected", UIControlState.Normal);
 			}
             else
             {
@@ -138,13 +140,12 @@ namespace CryptoAccouting
                 textBookPrice.Text = PositionDetail.BookPrice < 0 ? String.Format("{0:n2}", PositionDetail.LatestPrice()) : String.Format("{0:n2}", PositionDetail.BookPrice);
                 thisBalanceDate = PositionDetail.BalanceDate;
                 textBalanceDate.Text = PositionDetail.BalanceDate.Date.ToShortDateString();
-
+                var exname = PositionDetail.TradedExchange is 0 ?
+                                           "Not Selected" :
+                                           PositionDetail.TradedExchange.ToString();
+                buttonExchange.SetTitle(exname, UIControlState.Normal);
 			}
 
-            if (buttonExchange.TitleLabel.Text is null)
-            {
-                buttonExchange.SetTitle(exchangesListed.First().ExchangeName,UIControlState.Normal);
-            }
         }
 
         private void CreatePosition(){

@@ -22,7 +22,7 @@ namespace CryptoAccouting.UIClass
 
 		public void UpdateCell(Position pos)
 		{
-            labelExchange.Text = pos.Coin.Symbol;
+            labelExchange.Text = pos.TradedExchange.ToString();
             labelHoldingBTC.Text = "฿" + String.Format("{0:n2}", pos.AmountBTC());
             labelValueK.Text = String.Format("{0:n2}", pos.LatestFiatValue());
             labelRet.Text = "%";

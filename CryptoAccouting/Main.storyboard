@@ -35,18 +35,6 @@
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="19942">
-                                    <rect key="frame" x="262" y="15" width="10" height="15"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="19943">
-                                    <rect key="frame" x="253" y="16" width="8" height="15"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
                                 <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="24928">
                                     <rect key="frame" x="0.0" y="76" width="320" height="29"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -75,51 +63,20 @@
                             <constraints>
                                 <constraint firstItem="2283" firstAttribute="top" secondItem="2282" secondAttribute="top" constant="16" id="19938"/>
                                 <constraint firstItem="2283" firstAttribute="leading" secondItem="2282" secondAttribute="leading" constant="16" id="19939"/>
-                                <constraint firstItem="19943" firstAttribute="top" secondItem="2282" secondAttribute="top" constant="16" id="19944"/>
-                                <constraint firstItem="19942" firstAttribute="top" secondItem="2282" secondAttribute="top" constant="16" id="19945">
-                                    <variation key="heightClass=regular-widthClass=compact" constant="15"/>
-                                </constraint>
-                                <constraint firstItem="19942" firstAttribute="leading" secondItem="19943" secondAttribute="centerX" constant="53" id="19946">
-                                    <variation key="heightClass=regular-widthClass=compact" constant="5"/>
-                                </constraint>
-                                <constraint firstAttribute="trailing" secondItem="19942" secondAttribute="trailing" constant="48" id="19979"/>
-                                <constraint firstAttribute="trailing" secondItem="19943" secondAttribute="trailing" constant="59" id="19980"/>
-                                <constraint firstAttribute="trailing" secondItem="19943" secondAttribute="trailing" constant="59" id="19983"/>
                             </constraints>
                             <variation key="default">
-                                <mask key="subviews">
-                                    <exclude reference="19942"/>
-                                    <exclude reference="19943"/>
-                                    <exclude reference="24928"/>
-                                    <exclude reference="25072"/>
-                                    <exclude reference="25073"/>
-                                </mask>
                                 <mask key="constraints">
-                                    <exclude reference="19944"/>
-                                    <exclude reference="19980"/>
-                                    <exclude reference="19983"/>
-                                    <exclude reference="19945"/>
-                                    <exclude reference="19946"/>
-                                    <exclude reference="19979"/>
                                     <exclude reference="19938"/>
                                     <exclude reference="19939"/>
                                 </mask>
                             </variation>
                             <variation key="heightClass=regular-widthClass=compact">
                                 <mask key="subviews">
-                                    <include reference="19942"/>
-                                    <include reference="19943"/>
                                     <include reference="24928"/>
                                     <include reference="25072"/>
                                     <include reference="25073"/>
                                 </mask>
                                 <mask key="constraints">
-                                    <include reference="19944"/>
-                                    <include reference="19980"/>
-                                    <include reference="19983"/>
-                                    <include reference="19945"/>
-                                    <include reference="19946"/>
-                                    <include reference="19979"/>
                                     <include reference="19938"/>
                                     <include reference="19939"/>
                                 </mask>
@@ -134,7 +91,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue id="25943" destination="4PD-G1-6DB" kind="show" identifier="PositionSegue"/>
+                                    <segue id="27361" destination="4PD-G1-6DB" kind="show" identifier="PositionDetailsSegue"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ExchangeViewCell" id="23927">
@@ -144,17 +101,18 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue id="27959" destination="4PD-G1-6DB" kind="show" identifier="ExchangeDetailsSegue"/>
+                                </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="26353" reuseIdentifier="BookingViewCell">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="26353">
                                 <rect key="frame" x="0.0" y="221" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="26353" id="26354">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
-                                <connections>
-                                    <segue id="26683" destination="20419" kind="show" identifier="PositionEditSegue"/>
-                                </connections>
+                                <connections/>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -187,7 +145,6 @@
                         <outlet property="buttonAddNew" destination="19987" id="name-outlet-19987"/>
                         <outlet property="buttonRefresh" destination="19986" id="name-outlet-19986"/>
                         <outlet property="labelCurrency" destination="2283" id="name-outlet-2283"/>
-                        <outlet property="labelTotalAssetPct" destination="19943" id="name-outlet-19943"/>
                         <outlet property="labelTotalBTC" destination="25073" id="name-outlet-25073"/>
                         <outlet property="labelTotalFiat" destination="2284" id="name-outlet-2284"/>
                     </connections>
@@ -1502,28 +1459,28 @@
                                                     <rect key="frame" x="16" y="10" width="35" height="35"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+00.00%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24985">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+00.00%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24985" fixedFrame="YES">
                                                     <rect key="frame" x="265" y="16" width="45" height="12"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                     <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+00.00%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24982">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+00.00%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24982" fixedFrame="YES">
                                                     <rect key="frame" x="265" y="35" width="45" height="12"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                     <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24717">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24717" fixedFrame="YES">
                                                     <rect key="frame" x="170" y="35" width="80" height="15"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="B 0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24984">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="B 0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24984" fixedFrame="YES">
                                                     <rect key="frame" x="170" y="16" width="80" height="15"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
@@ -1596,7 +1553,7 @@
                                                 <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="23160">
                                                     <rect key="frame" x="270" y="5" width="30" height="29"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <state key="normal">
+                                                    <state key="normal" title="Not Selected">
                                                         <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
@@ -2043,7 +2000,6 @@
                                     </subviews>
                                     <variation key="default">
                                         <mask key="subviews">
-                                            <exclude reference="26279"/>
                                             <exclude reference="26294"/>
                                             <exclude reference="26295"/>
                                             <exclude reference="26296"/>
@@ -2134,7 +2090,6 @@
                                 <mask key="subviews">
                                     <exclude reference="26275"/>
                                     <exclude reference="26276"/>
-                                    <exclude reference="26278"/>
                                     <exclude reference="26235"/>
                                     <exclude reference="24715"/>
                                     <exclude reference="24986"/>
@@ -2175,7 +2130,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue id="26223" destination="20419" kind="show" identifier="PositionEditSegue"/>
+                                    <segue id="27751" destination="20419" kind="show" identifier="PositionEditSegue"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -2225,5 +2180,6 @@
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina4"/>
+        <simulatedOrientationMetrics key="orientation"/>
     </simulatedMetricsContainer>
 </document>

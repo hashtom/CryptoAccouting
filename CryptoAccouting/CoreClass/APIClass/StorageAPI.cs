@@ -50,11 +50,13 @@ namespace CryptoAccouting.CoreClass.APIClass
                     if (instruments.Where(i => i.Symbol == elem.Descendants("symbol").Select(x => x.Value).First()).Any())
                     {
                         coin = instruments.Where(i => i.Symbol == elem.Descendants("symbol").Select(x => x.Value).First()).First();
-                        var pos = new Position(coin,EnuPositionType.Detail)
+                        var pos = new Position(coin, EnuPositionType.Detail)
                         {
                             Id = int.Parse(elem.Attribute("id").Value),
-                            Amount = double.Parse(elem.Descendants("amount").Select(x => x.Value).First())
-                            //TradedExchange = 
+                            Amount = double.Parse(elem.Descendants("amount").Select(x => x.Value).First()),
+                            BookPrice = double.Parse(elem.Descendants("book").Select(x => x.Value).First()),
+                            BalanceDate = DateTime.Parse(elem.Descendants("date").Select(x => x.Value).First()),
+                            TradedExchange = (EnuExchangeType)Enum.Parse(typeof(EnuExchangeType), elem.Descendants("exchange").Select(x => x.Value).First())
                         };
                         mybal.AttachPosition(pos, false);
                     }

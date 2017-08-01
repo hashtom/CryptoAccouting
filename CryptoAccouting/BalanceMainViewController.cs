@@ -11,7 +11,7 @@
         {
             base.PrepareForSegue(segue, sender);
 
-            if (segue.Identifier == "PositionSegue")
+            if (segue.Identifier == "PositionDetailsSegue")
             {
                 var navctlr = segue.DestinationViewController as BalanceDetailViewConrtoller;
                 if (navctlr != null)
@@ -20,15 +20,15 @@
                     var rowPath = TableView.IndexPathForSelectedRow;
                     var item = source.GetItem(rowPath.Row);
                     navctlr.SetSymbol(item.Coin.Symbol);
-                }             }else if (segue.Identifier == "PositionEditSegue")             {
-				var navctlr = segue.DestinationViewController as BalanceEditViewController;
-				if (navctlr != null)
-				{
-                    var source = TableView.Source as BookingTableSource;
-					var rowPath = TableView.IndexPathForSelectedRow;
-					var item = source.GetItem(rowPath.Row);
-					navctlr.SetPosition(item);
-				}             }
+                }              }else if (segue.Identifier == "ExchangeDetailsSegue")             {
+				//var navctlr = segue.DestinationViewController as BalanceDetailViewConrtoller;
+				//if (navctlr != null)
+				//{
+    //                var source = TableView.Source as ExchangeTableSource;
+				//	var rowPath = TableView.IndexPathForSelectedRow;
+				//	var item = source.GetItem(rowPath.Row);
+				//	navctlr.SetPosition(item);
+				//}             }
         }
          private void ConfigureSegmentButton()
         {
@@ -48,9 +48,9 @@
                         TableView.Source = new ExchangeTableSource(this);
                         break;
                     case 2:
-                        TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "BookingViewCell");
-                        TableView.Source = new BookingTableSource("ETH",
-                                                                  ApplicationCore.Balance.positions.Where(x => x.Coin.Symbol == "ETH").ToList(),                                                                   this);
+                        //TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "BookingTestViewCell");
+                        //TableView.Source = new BookingTableSource("ETH",
+                        //                                          ApplicationCore.Balance.positions.Where(x => x.Coin.Symbol == "ETH").ToList(),                         //                                          this);
                         break;
                     default:
                         break;

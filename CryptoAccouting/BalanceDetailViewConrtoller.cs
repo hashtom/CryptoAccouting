@@ -19,19 +19,25 @@ namespace CryptoAccouting
         {
         }
 
-        public override void ViewDidAppear(bool animated)
+        public override void ViewDidLoad()
         {
-            base.ViewDidAppear(animated);
+            base.ViewDidLoad();
 
 			// Configure Table source
-            this.TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "BookingViewCell");
-            this.TableView.Source = new BookingTableSource(symbol_selected, booking_positions, this);
-		}
+			this.TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "BookingViewCell");
+			this.TableView.Source = new BookingTableSource(symbol_selected, booking_positions, this);
+        }
 
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
             ReDrawScreen();
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
         }
 
 		private void ReDrawScreen()
@@ -65,6 +71,7 @@ namespace CryptoAccouting
             this.booking_positions = ApplicationCore.Balance.positions.Where(x => x.Coin.Symbol == symbol_selected).ToList();
         }
 
+
 		public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
 		{
 			base.PrepareForSegue(segue, sender);
@@ -74,7 +81,7 @@ namespace CryptoAccouting
                 var navctlr = segue.DestinationViewController as BalanceEditViewController;
 				if (navctlr != null)
 				{
-					var source = TableView.Source as CoinTableSource;
+					var source = TableView.Source as BookingTableSource;
 					var rowPath = TableView.IndexPathForSelectedRow;
 					var item = source.GetItem(rowPath.Row);
                     navctlr.SetPosition(item);

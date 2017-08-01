@@ -23,7 +23,7 @@ namespace CryptoAccouting.CoreClass
             Amount = 0;
             BookPrice = 0;
             PositionType = positoinType;
-            this.SourceCurrency = coin.MarketPrice.SourceCurrency;
+            //this.SourceCurrency = coin.MarketPrice.SourceCurrency; //todo network issue = marketprice is null
         }
         public Position(EnuPositionType positoinType)
         {

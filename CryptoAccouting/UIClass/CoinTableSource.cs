@@ -22,7 +22,7 @@ namespace CryptoAccouting.UIClass
 
         public override nint RowsInSection(UITableView tableview, nint section)
         {
-            return myBalance.positionsByCoin.Count;
+            return myBalance is null ? 0 : myBalance.positionsByCoin.Count;
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
@@ -74,7 +74,7 @@ namespace CryptoAccouting.UIClass
             //okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
             //owner.PresentViewController(okAlertController, true, null);
 
-            owner.PerformSegue("PositionSegue", owner);
+            owner.PerformSegue("PositionDetailsSegue", owner);
             tableView.DeselectRow(indexPath, true);
         }
 

@@ -70,7 +70,7 @@ namespace CryptoAccouting.UIClass
 
 		public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
 		{
-			owner.PerformSegue("PositionSegue", owner);
+			//owner.PerformSegue("PositionSegue", owner);
 			tableView.DeselectRow(indexPath, true);
 		}
 

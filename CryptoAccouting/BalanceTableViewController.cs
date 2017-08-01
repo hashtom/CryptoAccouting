@@ -26,8 +26,10 @@ namespace CryptoAccouting
 
         public void CellItemUpdated()
         {
-			TableView.ReloadData();
+            TableView.ReloadData();
 			NavigationController.PopToRootViewController(true);
         }
+
+        //public virtual void RefreshBalanceTable(){}
     }
 }

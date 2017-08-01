@@ -32,10 +32,6 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelTotalAssetPct { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel labelTotalBTC { get; set; }
 
         [Outlet]
@@ -74,11 +70,6 @@ namespace CryptoAccouting
             if (labelCurrency != null) {
                 labelCurrency.Dispose ();
                 labelCurrency = null;
-            }
-
-            if (labelTotalAssetPct != null) {
-                labelTotalAssetPct.Dispose ();
-                labelTotalAssetPct = null;
             }
 
             if (labelTotalBTC != null) {
