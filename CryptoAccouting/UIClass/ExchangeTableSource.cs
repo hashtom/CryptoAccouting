@@ -96,7 +96,7 @@ namespace CryptoAccouting.UIClass
         public static UIView BuidBlanceViewHeader(UITableView tv)
         {
 
-            UILabel codeLabel, amountLabel, priceLabel, pctLabel;
+            UILabel codeLabel, amountLabel, valueLabel, pctLabel;
 
             UIView view = new UIView(new System.Drawing.RectangleF(0, 0, (float)tv.Frame.Width, 20));
             view.BackgroundColor = UIColor.Gray;
@@ -118,17 +118,17 @@ namespace CryptoAccouting.UIClass
                 TextAlignment = UITextAlignment.Left,
                 Frame = new System.Drawing.RectangleF(100, 0, 60, 20),
                 BackgroundColor = UIColor.Clear,
-                Text = "Holdings"
+                Text = "Holding"
             };
 
-            priceLabel = new UILabel()
+            valueLabel = new UILabel()
             {
                 Font = UIFont.FromName("ArialMT", 12f),
                 TextColor = UIColor.White,
                 TextAlignment = UITextAlignment.Left,
                 Frame = new System.Drawing.RectangleF(200, 0, 60, 20),
                 BackgroundColor = UIColor.Clear,
-                Text = "Price"
+                Text = "Value"
             };
 
             pctLabel = new UILabel()
@@ -141,7 +141,7 @@ namespace CryptoAccouting.UIClass
                 Text = "Return"
             };
 
-            view.AddSubviews(new UIView[] { codeLabel, amountLabel, priceLabel, pctLabel });
+            view.AddSubviews(new UIView[] { codeLabel, amountLabel, valueLabel, pctLabel });
             return view;
         }
 

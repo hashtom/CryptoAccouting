@@ -43,7 +43,7 @@ namespace CryptoAccouting
 
 			labelBTCPrice.Text = thisCoin.Symbol == "BTC" ?
 				"" :
-				"B " + String.Format("{0:n8}", thisCoin.MarketPrice.LatestPriceBTC);
+				"฿" + String.Format("{0:n8}", thisCoin.MarketPrice.LatestPriceBTC);
             labelFiatPrice.Text = thisCoin.Symbol == "BTC" ?
                 "$" + String.Format("{0:n2}", thisCoin.MarketPrice.LatestPrice) :
                 "$" + String.Format("{0:n6}", thisCoin.MarketPrice.LatestPriceBTC);

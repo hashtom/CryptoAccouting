@@ -12,25 +12,18 @@ namespace CryptoAccouting.CoreClass
         public List<Position> positionsByCoin { get; private set; }
         public List<Position> positionsByExchange { get; private set; }
 
-		//public EnuExchangeType ExchangeTraded { get; }
-		//public DateTime UpdateTime { get; private set; }
-
 		public Balance()
         {
-            //ExchangeTraded = exchange_traded;
-			//UpdateTime = DateTime.Now;
             positions = new List<Position>();
-            //positionsByCoin = new List<Position>();
-            //positionsByExchange = new List<Position>();
         }
 
         public double LatestFiatValue(){
             return positions.Sum(x => x.LatestFiatValue());
         }
 
-		public double LatestBTCValue()
+		public double AmountBTC()
 		{
-            return positions.Sum(x => x.LatestBTCValue());
+            return positions.Sum(x => x.AmountBTC());
 		}
 
         public void SortPositionByHolding(){
@@ -53,7 +46,7 @@ namespace CryptoAccouting.CoreClass
             foreach (var symbol in positions.Select(x => x.Coin.Symbol).Distinct())
             {
 
-                Position posbycoin = new Position(ApplicationCore.GetInstrument(symbol))
+                Position posbycoin = new Position(ApplicationCore.GetInstrument(symbol),EnuPositionType.CoinLevel)
                 {
                     Id = id,
                     Amount = positions.Where(x => x.Coin.Symbol == symbol).Sum(x => x.Amount),
@@ -66,11 +59,12 @@ namespace CryptoAccouting.CoreClass
             id = 0;
             foreach (var ex in positions.Select(x => x.TradedExchange).Distinct())
             {
-                Position posbyexchange = new Position()
+                Position posbyexchange = new Position( EnuPositionType.ExchangeLevel)
                 {
                     Id = id,
                     TradedExchange = ex,
-                    Amount = positions.Where(x => x.TradedExchange == ex).Sum(x => x.Amount),
+                    Amount = positions.Where(x => x.TradedExchange == ex).Sum(x => x.AmountBTC()),
+                    FiatValueTotalExchange = positions.Where(x => x.TradedExchange == ex).Sum(x => x.LatestFiatValue()), //todo take multiple currencies into account
                     BookPrice = positions.Where(x => x.TradedExchange == ex).Average(x => (x.Amount * x.BookPrice) / x.Amount)
                 };
                 id++;
@@ -83,7 +77,7 @@ namespace CryptoAccouting.CoreClass
 		{
             if (positions.Any(x => x.Id == position.Id))
             {
-                DetachPosition(position);
+                DetachPosition(position, false);
             }
             else
             {
@@ -119,27 +113,5 @@ namespace CryptoAccouting.CoreClass
             return positions[indexNumber];
         }
 
-        //public List<Position> GetPositionList(){
-        //    return positions;
-        //}
-   //     public void Add(Position position){
-			//if (positions.Any(x => x.Id == position.Id)) DetachPosition(position);
-			//positions.Add(position);
-        //}
-
-  //      public int Count()
-		//{
-		//	return positions.Count;
-		//}
-
-  //      public IEnumerator<Position> GetEnumerator()
-		//{
-  //          for (int i = 0; i <= positions.Count - 1; i++) yield return positions[i];
-		//}
-
-		//IEnumerator IEnumerable.GetEnumerator()
-		//{
-		//	return GetEnumerator();
-		//}
     }
 }

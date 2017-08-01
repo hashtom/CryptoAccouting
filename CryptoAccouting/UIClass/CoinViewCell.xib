@@ -22,7 +22,7 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="4" translatesAutoresizingMaskIntoConstraints="NO" minimumScaleFactor="0.5" text="0" fixedFrame="YES">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="4" translatesAutoresizingMaskIntoConstraints="NO" minimumScaleFactor="0.5" text="฿123,456.78" fixedFrame="YES">
                         <rect key="frame" x="71" y="2" width="84" height="20"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <nil key="textColor"/>
@@ -35,35 +35,24 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="6" translatesAutoresizingMaskIntoConstraints="NO" text="0" minimumScaleFactor="0.5" fixedFrame="YES">
-                        <rect key="frame" x="180" y="2" width="65" height="20"/>
+                        <rect key="frame" x="175" y="2" width="75" height="20"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="7" translatesAutoresizingMaskIntoConstraints="NO" minimumScaleFactor="0.5" fixedFrame="YES">
-                        <rect key="frame" x="267" y="2" width="40" height="20"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+00.00%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="7" translatesAutoresizingMaskIntoConstraints="NO" minimumScaleFactor="0.5" misplaced="YES">
+                        <rect key="frame" x="264" y="12" width="45" height="20"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
                         <color key="textColor" colorSpace="calibratedRGB" red="0" green="0" blue="1" alpha="1"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="10" translatesAutoresizingMaskIntoConstraints="NO" minimumScaleFactor="0.5" fixedFrame="YES">
-                        <rect key="frame" x="180" y="22" width="65" height="20"/>
+                        <rect key="frame" x="175" y="22" width="75" height="20"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
-                <variation key="default">
-                    <mask key="subviews">
-                        <exclude reference="2"/>
-                        <exclude reference="3"/>
-                        <exclude reference="4"/>
-                        <exclude reference="5"/>
-                        <exclude reference="6"/>
-                        <exclude reference="7"/>
-                        <exclude reference="10"/>
-                    </mask>
-                </variation>
                 <variation key="heightClass=regular-widthClass=compact">
                     <mask key="subviews">
                         <include reference="2"/>
@@ -76,16 +65,20 @@
                     </mask>
                     <color key="backgroundColor" colorSpace="calibratedRGB" red="1" green="1" blue="1" alpha="1"/>
                 </variation>
+                <constraints>
+                    <constraint id="19" firstItem="YTl-1W-gDM" firstAttribute="trailing" secondItem="7" secondAttribute="trailing" constant="20"/>
+                    <constraint id="20" firstItem="7" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="5"/>
+                </constraints>
             </tableViewCellContentView>
             <point key="canvasLocation" x="108" y="0.0"/>
             <connections>
                 <outlet property="imageView" destination="2" id="name-outlet-2"/>
                 <outlet property="labelSymbol" destination="3" id="name-outlet-3"/>
-                <outlet property="labelHoldings" destination="4" id="name-outlet-4"/>
-                <outlet property="labelHoldingBTC" destination="5" id="name-outlet-5"/>
+                <outlet property="labelHoldingBTC" destination="4" id="name-outlet-4"/>
                 <outlet property="labelPrice" destination="6" id="name-outlet-6"/>
                 <outlet property="labelBTCRet" destination="7" id="name-outlet-7"/>
-                <outlet property="labelFiatValue" destination="10" id="name-outlet-10"/>
+                <outlet property="labelValue" destination="10" id="name-outlet-10"/>
+                <outlet property="labelHolding" destination="5" id="name-outlet-5"/>
             </connections>
         </tableViewCell>
     </objects>
@@ -107,7 +100,4 @@
         <image name="Images/stellar lumens.png" width="64" height="64"/>
         <image name="Images/byteball.png" width="64" height="64"/>
     </resources>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
 </document>

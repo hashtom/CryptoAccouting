@@ -1485,15 +1485,15 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Asset Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="20710">
-                                                    <rect key="frame" x="89" y="10" width="68" height="15"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <rect key="frame" x="70" y="10" width="90" height="15"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="BTC" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24374">
-                                                    <rect key="frame" x="89" y="33" width="47" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <rect key="frame" x="72" y="30" width="64" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -1502,25 +1502,53 @@
                                                     <rect key="frame" x="16" y="10" width="35" height="35"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24995">
-                                                    <rect key="frame" x="183" y="-5" width="137" height="60"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                                    <attributedString key="attributedText"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+00.00%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24985">
+                                                    <rect key="frame" x="265" y="16" width="45" height="12"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                                    <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+00.00%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24982">
+                                                    <rect key="frame" x="265" y="35" width="45" height="12"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                                    <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24717">
+                                                    <rect key="frame" x="170" y="35" width="80" height="15"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="B 0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24984">
+                                                    <rect key="frame" x="170" y="16" width="80" height="15"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                 </label>
                                             </subviews>
                                             <variation key="default">
                                                 <mask key="subviews">
                                                     <exclude reference="24374"/>
                                                     <exclude reference="24727"/>
-                                                    <exclude reference="24995"/>
+                                                    <exclude reference="24985"/>
+                                                    <exclude reference="24982"/>
+                                                    <exclude reference="24717"/>
+                                                    <exclude reference="24984"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact">
                                                 <mask key="subviews">
                                                     <include reference="24374"/>
                                                     <include reference="24727"/>
-                                                    <include reference="24995"/>
+                                                    <include reference="24985"/>
+                                                    <include reference="24982"/>
+                                                    <include reference="24717"/>
+                                                    <include reference="24984"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
@@ -1532,25 +1560,6 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Price" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="24981">
-                                                    <rect key="frame" x="16" y="5" width="50" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24717">
-                                                    <rect key="frame" x="249" y="30" width="16" height="15"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+0%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24982">
-                                                    <rect key="frame" x="279" y="30" width="21" height="12"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                                    <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+50%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="24983" fixedFrame="YES">
                                                     <rect key="frame" x="159" y="25" width="30" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1558,78 +1567,10 @@
                                                     <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="B 0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24984">
-                                                    <rect key="frame" x="246" y="5" width="19" height="15"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24985">
-                                                    <rect key="frame" x="292" y="5" width="8" height="12"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                                    <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                             </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="24985" secondAttribute="trailing" constant="6" id="25022">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="20"/>
-                                                </constraint>
-                                                <constraint firstItem="24985" firstAttribute="top" secondItem="20685" secondAttribute="top" constant="4" id="25023">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="5"/>
-                                                </constraint>
-                                                <constraint firstItem="24984" firstAttribute="top" secondItem="20685" secondAttribute="top" constant="4" id="25024">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="5"/>
-                                                </constraint>
-                                                <constraint firstAttribute="trailing" secondItem="24984" secondAttribute="trailing" constant="115" id="25025">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="55"/>
-                                                </constraint>
-                                                <constraint firstAttribute="trailing" secondItem="24982" secondAttribute="trailing" constant="15" id="25056">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="20"/>
-                                                </constraint>
-                                                <constraint firstAttribute="trailing" secondItem="24717" secondAttribute="trailing" constant="49" id="25057">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="55"/>
-                                                </constraint>
-                                                <constraint firstItem="24717" firstAttribute="top" secondItem="20685" secondAttribute="top" constant="30" id="25060"/>
-                                                <constraint firstItem="24982" firstAttribute="top" secondItem="20685" secondAttribute="top" constant="30" id="25061"/>
-                                            </constraints>
                                             <variation key="default">
                                                 <mask key="subviews">
-                                                    <exclude reference="24981"/>
-                                                    <exclude reference="24717"/>
-                                                    <exclude reference="24982"/>
                                                     <exclude reference="24983"/>
-                                                    <exclude reference="24984"/>
-                                                    <exclude reference="24985"/>
-                                                </mask>
-                                                <mask key="constraints">
-                                                    <exclude reference="25024"/>
-                                                    <exclude reference="25025"/>
-                                                    <exclude reference="25057"/>
-                                                    <exclude reference="25060"/>
-                                                    <exclude reference="25056"/>
-                                                    <exclude reference="25061"/>
-                                                    <exclude reference="25022"/>
-                                                    <exclude reference="25023"/>
-                                                </mask>
-                                            </variation>
-                                            <variation key="heightClass=regular-widthClass=compact">
-                                                <mask key="subviews">
-                                                    <include reference="24981"/>
-                                                    <include reference="24717"/>
-                                                    <include reference="24982"/>
-                                                    <include reference="24984"/>
-                                                    <include reference="24985"/>
-                                                </mask>
-                                                <mask key="constraints">
-                                                    <include reference="25024"/>
-                                                    <include reference="25025"/>
-                                                    <include reference="25057"/>
-                                                    <include reference="25060"/>
-                                                    <include reference="25056"/>
-                                                    <include reference="25061"/>
-                                                    <include reference="25022"/>
-                                                    <include reference="25023"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
@@ -1874,16 +1815,15 @@
                         <outlet property="buttonEdit" destination="24848" id="name-outlet-24848"/>
                         <outlet property="buttonExchange" destination="23160" id="name-outlet-23160"/>
                         <outlet property="imageCoin" destination="24727" id="name-outlet-24727"/>
-                        <outlet property="labelBTCPrice" destination="24984" id="name-outlet-24984"/>
-                        <outlet property="labelBTCRet" destination="24985" id="name-outlet-24985"/>
                         <outlet property="labelCoinName" destination="20710" id="name-outlet-20710"/>
                         <outlet property="labelCoinSymbol" destination="24374" id="name-outlet-24374"/>
-                        <outlet property="labelFiat1dRet" destination="24982" id="name-outlet-24982"/>
-                        <outlet property="labelFiatPrice" destination="24717" id="name-outlet-24717"/>
-                        <outlet property="labelMemo" destination="24995" id="name-outlet-24995"/>
                         <outlet property="textBalanceDate" destination="24807" id="name-outlet-24807"/>
                         <outlet property="textBookPrice" destination="24726" id="name-outlet-24726"/>
                         <outlet property="textQuantity" destination="24722" id="name-outlet-24722"/>
+                        <outlet property="labelBTCRet" destination="24985" id="name-outlet-24985"/>
+                        <outlet property="labelFiat1dRet" destination="24982" id="name-outlet-24982"/>
+                        <outlet property="labelFiatPrice" destination="24717" id="name-outlet-24717"/>
+                        <outlet property="labelBTCPrice" destination="24984" id="name-outlet-24984"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="20425" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2010,7 +1950,7 @@
                                     <rect key="frame" x="10" y="22" width="30" height="30"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="coin name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="26276" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Asset Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="26276" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                     <rect key="frame" x="10" y="62" width="127" height="21"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>

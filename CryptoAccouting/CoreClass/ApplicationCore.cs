@@ -84,7 +84,7 @@
 		}      }
 
     public enum EnuCCY
-    {         //Fiat Only at the moment
+    {
         JPY,
         USD,         EUR,         BTC     }
       public enum EnuAppStatus{         Success,         SuccessButOffline,         FailureNetwork,         FailureStorage,         FailureParameter     }  } 

@@ -13,7 +13,6 @@ namespace CryptoAccouting
 	public partial class BalanceEditViewController : UITableViewController
 	{
 		Position PositionDetail;
-		//BalanceViewController AppDel { get; set; }
         ExchangeList exchangesListed;
 
         bool editmode = true;
@@ -24,14 +23,6 @@ namespace CryptoAccouting
 		public BalanceEditViewController(IntPtr handle) : base(handle)
 		{
 		}
-
-        public void NewCoinSelected(string symbol)
-        {
-            thisCoin = ApplicationCore.GetInstrument(symbol);
-            exchangesListed = ApplicationCore.GetExchangesBySymbol(symbol);
-            //this.NavigationItem.HidesBackButton = true;
-            editmode = true;
-        }
 
         public override void ViewDidLoad()
         {
@@ -122,7 +113,7 @@ namespace CryptoAccouting
 
             labelBTCPrice.Text = thisCoin.Symbol == "BTC" ?
                 "" :
-                "B " + String.Format("{0:n8}", thisCoin.MarketPrice.LatestPriceBTC);
+                "฿" + String.Format("{0:n8}", thisCoin.MarketPrice.LatestPriceBTC);
             labelFiatPrice.Text = thisCoin.Symbol == "BTC" ?
                 "$" + String.Format("{0:n2}", thisCoin.MarketPrice.LatestPrice) :
                 "$" + String.Format("{0:n6}", thisCoin.MarketPrice.LatestPriceBTC);
@@ -133,7 +124,8 @@ namespace CryptoAccouting
 
             if (PositionDetail is null) // new balance
             {
-				textBalanceDate.Text = DateTime.Now.Date.ToShortDateString();
+                thisBalanceDate = DateTime.Now.Date;
+				textBalanceDate.Text = thisBalanceDate.ToShortDateString();
 			}
             else
             {
@@ -144,7 +136,8 @@ namespace CryptoAccouting
                 //labelFiatPrice.Text = String.Format("{0:n0}", PositionDetail.LatestMainPrice());
                 textQuantity.Text = String.Format("{0:n0}", PositionDetail.Amount);
                 textBookPrice.Text = PositionDetail.BookPrice < 0 ? String.Format("{0:n2}", PositionDetail.LatestPrice()) : String.Format("{0:n2}", PositionDetail.BookPrice);
-				textBalanceDate.Text = PositionDetail.BalanceDate.Date.ToShortDateString();
+                thisBalanceDate = PositionDetail.BalanceDate;
+                textBalanceDate.Text = PositionDetail.BalanceDate.Date.ToShortDateString();
 
 			}
 
@@ -156,7 +149,7 @@ namespace CryptoAccouting
 
         private void CreatePosition(){
 
-            if (PositionDetail is null) PositionDetail = new Position(thisCoin);
+            if (PositionDetail is null) PositionDetail = new Position(thisCoin,EnuPositionType.Detail);
 
             PositionDetail.Amount = double.Parse(textQuantity.Text);
             PositionDetail.BookPrice = textBookPrice.Text is "" ? 0 : double.Parse(textBookPrice.Text);
@@ -202,15 +195,20 @@ namespace CryptoAccouting
 
 		public void SetPosition(Position pos)
 		{
-			//AppDel = d;
 			PositionDetail = pos;
 			thisCoin = pos.Coin;
 			exchangesListed = ApplicationCore.GetExchangesBySymbol(pos.Coin.Symbol);
 			editmode = false;
-			//buttonCancel.Enabled = false;
-			//this.NavigationItem.HidesBackButton = false;
-
 		}
+
+
+        public void SetPositionForNewCoin(string symbol)
+        {
+            thisCoin = ApplicationCore.GetInstrument(symbol);
+            exchangesListed = ApplicationCore.GetExchangesBySymbol(symbol);
+            thisExchangeType = exchangesListed.First().ExchangeType;
+            editmode = true;
+        }
     }
 
 }

@@ -10,7 +10,8 @@ namespace CryptoAccouting.CoreClass
         public EnuExchangeType ExchangeType { get; }
         public List<Instrument> ListedCoin { get; set; }
         public TradeList TradeList { get; set; } //If needed?
-        public Balance Balance { get; set; }     // If needed?
+        //public Balance Balance { get; set; }     // If needed?
+        public string LogoFileName { get; set; }
         public DateTime UpdateTime { get; private set; }
 
         public Exchange(EnuExchangeType excType)

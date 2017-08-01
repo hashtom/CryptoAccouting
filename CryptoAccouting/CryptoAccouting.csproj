@@ -216,6 +216,7 @@
     <Compile Include="BalanceTableViewController.cs" />
     <Compile Include="UIClass\BookingTableSource.cs" />
     <Compile Include="CoreClass\FXRate.cs" />
+    <Compile Include="UIClass\CustomExchangeViewCell.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="TestData\apikey.xml" />

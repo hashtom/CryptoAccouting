@@ -62,7 +62,7 @@
         {
             TableView.ReloadData();
 			labelTotalFiat.Text = "$" + String.Format("{0:n2}", ApplicationCore.Balance.LatestFiatValue());
-			labelTotalBTC.Text = String.Format("{0:n2}", ApplicationCore.Balance.LatestBTCValue());
+            labelTotalBTC.Text = String.Format("{0:n2}", ApplicationCore.Balance.AmountBTC());
 		} 
         partial void ButtonAddNew_Activated(UIBarButtonItem sender)
         {

@@ -129,7 +129,7 @@ namespace CryptoAccouting
             //owner.PresentViewController(okAlertController, true, null);
 
             var BalanceEditViewC = owner.Storyboard.InstantiateViewController("BalanceEditViewC") as BalanceEditViewController;
-            BalanceEditViewC.NewCoinSelected(instruments[indexPath.Row].Symbol);
+            BalanceEditViewC.SetPositionForNewCoin(instruments[indexPath.Row].Symbol);
             owner.NavigationController.PushViewController(BalanceEditViewC, false);
         }
 

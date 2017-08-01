@@ -122,7 +122,7 @@ namespace CryptoAccouting.UIClass
 				TextAlignment = UITextAlignment.Left,
 				Frame = new System.Drawing.RectangleF(100, 0, 60, 20),
 				BackgroundColor = UIColor.Clear,
-				Text = "Holdings"
+				Text = "Holding"
 			};
 
 			priceLabel = new UILabel()
@@ -132,7 +132,7 @@ namespace CryptoAccouting.UIClass
 				TextAlignment = UITextAlignment.Left,
 				Frame = new System.Drawing.RectangleF(200, 0, 60, 20),
 				BackgroundColor = UIColor.Clear,
-				Text = "Price"
+				Text = "Value"
 			};
 
 			pctLabel = new UILabel()

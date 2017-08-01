@@ -56,10 +56,6 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelMemo { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITextField textBalanceDate { get; set; }
 
         [Outlet]
@@ -132,11 +128,6 @@ namespace CryptoAccouting
             if (labelFiatPrice != null) {
                 labelFiatPrice.Dispose ();
                 labelFiatPrice = null;
-            }
-
-            if (labelMemo != null) {
-                labelMemo.Dispose ();
-                labelMemo = null;
             }
 
             if (textBalanceDate != null) {
