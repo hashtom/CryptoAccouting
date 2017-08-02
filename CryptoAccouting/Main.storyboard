@@ -104,15 +104,6 @@
                                     <segue id="27959" destination="4PD-G1-6DB" kind="show" identifier="ExchangeDetailsSegue"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="26353">
-                                <rect key="frame" x="0.0" y="221" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="26353" id="26354">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                                <connections/>
-                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="710" id="713"/>
@@ -1853,7 +1844,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SymbolListCell" textLabel="24640" detailTextLabel="24641" style="IBUITableViewCellStyleValue1" id="24380">
-                                <rect key="frame" x="0.0" y="28" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="72" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="24380" id="24381">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -1881,6 +1872,13 @@
                             <outlet property="dataSource" destination="24376" id="24378"/>
                             <outlet property="delegate" destination="24376" id="24379"/>
                         </connections>
+                        <navigationBar contentMode="scaleToFill" id="27998" key="tableHeaderView">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <items>
+                                <navigationItem title="Title" id="27999"/>
+                            </items>
+                        </navigationBar>
                     </tableView>
                     <nil key="simulatedTopBarMetrics"/>
                 </tableViewController>

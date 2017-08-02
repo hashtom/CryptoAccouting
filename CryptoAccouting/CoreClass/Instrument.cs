@@ -6,6 +6,7 @@ namespace CryptoAccouting.CoreClass
     public class Instrument
     {
         public string Id { get; } //CoinMarketCap ID
+        public int rank { get; set; }
         public string Symbol { get; }
         public string Name { get; }
         public InstrumentType Type { get; set; }
@@ -19,7 +20,7 @@ namespace CryptoAccouting.CoreClass
             Id = id;
             Symbol = symbol;
             Name = name;
-            IsActive = false;
+            IsActive = true;
         }
     }
 

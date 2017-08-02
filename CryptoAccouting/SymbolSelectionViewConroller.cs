@@ -11,98 +11,144 @@ namespace CryptoAccouting
 {
     public partial class SymbolSelectionViewConroller : UITableViewController
     {
-        ResultsTableController searchResultsController;
+        //static NSString MyCellId = new NSString("SymbolListCell");
+		ResultsTableController resultsTableController;
+		UISearchController searchController;
 
+		bool searchControllerWasActive;
+		bool searchControllerSearchFieldWasFirstResponder;
         List<Instrument> instruments;
 
-        public SymbolSelectionViewConroller(IntPtr handle) : base(handle)
+        public SymbolSelectionViewConroller(IntPtr handle) : base (handle)
         {
+
             instruments = ApplicationCore.GetInstrumentAll(true);
             NavigationItem.HidesBackButton = true;
             NavigationItem.SetLeftBarButtonItem(new UIBarButtonItem(UIBarButtonSystemItem.Cancel, (sender, e) =>
              {
                  NavigationController.PopToRootViewController(true);
-             }
-                                                                    ), true);
+             }), true);
         }
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
             TableView.Source = new TableSource(instruments, this);
-            //this.NavigationItem.HidesBackButton = true;
 
-            searchResultsController = new ResultsTableController(Handle);
-            searchResultsController.FilteredInstruments = instruments;
+            resultsTableController = new ResultsTableController()
+            {
+                FilteredInstruments = new List<Instrument>()
+            };
 
-			var searchUpdater = new SearchResultsUpdator();
-			searchUpdater.UpdateSearchResults += searchResultsController.Search;
 
-			//add the search controller
-			var searchController = new UISearchController(searchResultsController)
+			searchController = new UISearchController(resultsTableController)
 			{
-				SearchResultsUpdater = searchUpdater
+				WeakDelegate = this,
+				DimsBackgroundDuringPresentation = false,
+				WeakSearchResultsUpdater = this
 			};
 
-			//format the search bar
 			searchController.SearchBar.SizeToFit();
-			searchController.SearchBar.SearchBarStyle = UISearchBarStyle.Minimal;
-			searchController.SearchBar.Placeholder = "Enter a search query";
+			TableView.TableHeaderView = searchController.SearchBar;
 
-			//the search bar is contained in the navigation bar, so it should be visible
-			searchController.HidesNavigationBarDuringPresentation = false;
+			resultsTableController.TableView.WeakDelegate = this;
+			searchController.SearchBar.WeakDelegate = this;
 
-			//Ensure the searchResultsController is presented in the current View Controller 
-			DefinesPresentationContext = true;
+            DefinesPresentationContext = true;
 
-			//Set the search bar
-			//NavigationItem.TitleView = searchController.SearchBar;
-            TableView.TableHeaderView = searchController.SearchBar;
+			if (searchControllerWasActive)
+			{
+				searchController.Active = searchControllerWasActive;
+				searchControllerWasActive = false;
+
+				if (searchControllerSearchFieldWasFirstResponder)
+				{
+					searchController.SearchBar.BecomeFirstResponder();
+					searchControllerSearchFieldWasFirstResponder = false;
+				}
+			}
+		}
+
+		[Export("searchBarSearchButtonClicked:")]
+		public virtual void SearchButtonClicked(UISearchBar searchBar)
+		{
+			searchBar.ResignFirstResponder();
+		}
+
+		[Export("updateSearchResultsForSearchController:")]
+		public virtual void UpdateSearchResultsForSearchController(UISearchController searchController)
+		{
+			var tableController = (ResultsTableController)searchController.SearchResultsController;
+            tableController.FilteredInstruments = PerformSearch(searchController.SearchBar.Text);
+            tableController.TableView.Source = new TableSource(tableController.FilteredInstruments, this);
+            tableController.TableView.ReloadData();
+		}
+
+        List<Instrument> PerformSearch(string searchString)
+		{
+			searchString = searchString.Trim();
+			string[] searchItems = string.IsNullOrEmpty(searchString)
+				? new string[0]
+				: searchString.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var filteredCoins = new List<Instrument>();
+
+			foreach (var item in searchItems)
+			{
+				//int year = Int32.MinValue;
+				//Int32.TryParse(item, out year);
+
+				//double price = Double.MinValue;
+				//Double.TryParse(item, out price);
+
+                IEnumerable<Instrument> query =
+                    from p in instruments
+                        where p.Symbol.IndexOf(item, StringComparison.OrdinalIgnoreCase) >= 0
+					//|| p.IntroPrice == price
+					//|| p.YearIntroduced == year
+					orderby p.Symbol
+					select p;
+
+				filteredCoins.AddRange(query);
+			}
+
+			return filteredCoins.Distinct().ToList();
 		}
 
     }
 
-    public class ResultsTableController : SymbolSelectionViewConroller
+
+    public class ResultsTableController : UITableViewController
     {
+        //static NSString MyCellId = new NSString("SymbolListCell");
         public List<Instrument> FilteredInstruments { get; set; }
-
-        public ResultsTableController(IntPtr handle) : base(handle)
-        {
-
-        }
 
         public override void ViewDidLoad()
         {
+            base.ViewDidLoad();
+            //TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");
+            //TableView.RegisterClassForCellReuse(typeof(UITableViewCell), MyCellId);
             TableView.Source = new TableSource(FilteredInstruments, this);
         }
 
-        public void Search(string forSearchString)
-        {
-            FilteredInstruments = FilteredInstruments.Where(x => x.Symbol.Contains(forSearchString)).ToList();
-            this.TableView.ReloadData();
-        }
+        //public override void ViewWillAppear(bool animated)
+        //{
+        //    base.ViewWillAppear(animated);
+        //    //TableView.Source = new TableSource(FilteredInstruments, this);
+        //}
 
     }
 
-	public class SearchResultsUpdator : UISearchResultsUpdating
-	{
-		public event Action<string> UpdateSearchResults = delegate { };
-
-		public override void UpdateSearchResultsForSearchController(UISearchController searchController)
-		{
-			this.UpdateSearchResults(searchController.SearchBar.Text);
-		}
-	}
 
     class TableSource : UITableViewSource
     {
         UITableViewController owner;
         List<Instrument> instruments;
-        string CellIdentifier = "SymbolListCell";
+        string cellIdentifier = "SymbolListCell";
 
         public TableSource(List<Instrument> instruments, UITableViewController owner)
         {
-            this.instruments = instruments.OrderBy(x=>x.Symbol).ToList();
+            this.instruments = instruments.OrderBy(x=>x.rank).ToList();
             this.owner = owner;
         }
 
@@ -113,21 +159,20 @@ namespace CryptoAccouting
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            var cell = tableView.DequeueReusableCell(CellIdentifier, indexPath);
+            //UITableViewCell cell = tableView.DequeueReusableCell(cellIdentifier, indexPath);
+            //if (cell == null) 
+            var cell = new UITableViewCell(UITableViewCellStyle.Subtitle, cellIdentifier);
+
             cell.TextLabel.Text = instruments[indexPath.Row].Symbol;
             cell.DetailTextLabel.Text = instruments[indexPath.Row].Name;
-			var logo = instruments[indexPath.Row].LogoFileName;
+            var logo = instruments[indexPath.Row].LogoFileName;
             cell.ImageView.Image = logo == null ? null : UIImage.FromFile(logo);
-                
+
             return cell;
         }
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            //UIAlertController okAlertController = UIAlertController.Create("Row Selected", instruments[indexPath.Row].Symbol, UIAlertControllerStyle.Alert);
-            //okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
-            //owner.PresentViewController(okAlertController, true, null);
-
             var BalanceEditViewC = owner.Storyboard.InstantiateViewController("BalanceEditViewC") as BalanceEditViewController;
             BalanceEditViewC.SetPositionForNewCoin(instruments[indexPath.Row].Symbol);
             owner.NavigationController.PushViewController(BalanceEditViewC, false);

@@ -137,6 +137,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 foreach (var elem in jarray)
                 {
                     var coin = new Instrument((string)elem["id"], (string)elem["symbol"], (string)elem["name"]);
+                    coin.rank = int.Parse((string)elem["rank"]);
                     coin.LogoFileName = "Images/" + (string)elem["name"] + ".png";
                     var p = new Price(coin);
                     p.SourceCurrency = ApplicationCore.BaseCurrency;
