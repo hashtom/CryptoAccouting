@@ -10,7 +10,8 @@
             if (status is EnuAppStatus.Success) LoadExchangeList(); 
 			Balance = StorageAPI.LoadBalanceXML("mybalance.xml", myInstruments);             return status;          }          public static void LoadExchangeList()
         {
-            if (ExchangeList is null) ExchangeList = new ExchangeList();              var btc = GetInstrument("BTC");             var mona = GetInstrument("MONA");             var xem = GetInstrument("XEM");             var eth = GetInstrument("ETH");             var rep = GetInstrument("REP");             var xlm = GetInstrument("XLM");             var gbyte = GetInstrument("GBYTE");               btc.IsActive = true;             mona.IsActive = true;             xem.IsActive = true;             eth.IsActive = true;             rep.IsActive = true;             xlm.IsActive = true;             gbyte.IsActive = true;              var zaif = new Exchange(EnuExchangeType.Zaif) { ExchangeName = "Zaif" };             zaif.AttachListedCoin(btc);             zaif.AttachListedCoin(mona);             zaif.AttachListedCoin(xem);             var kraken = new Exchange(EnuExchangeType.Kraken){ ExchangeName = "Kraken" };
+            if (ExchangeList is null) ExchangeList = new ExchangeList();              var btc = GetInstrument("BTC");             var mona = GetInstrument("MONA");             var xem = GetInstrument("XEM");             var eth = GetInstrument("ETH");             var rep = GetInstrument("REP");             var xlm = GetInstrument("XLM");             var gbyte = GetInstrument("GBYTE");
+            var bch = GetInstrument("BCH");              btc.IsActive = true;             mona.IsActive = true;             xem.IsActive = true;             eth.IsActive = true;             rep.IsActive = true;             xlm.IsActive = true;             gbyte.IsActive = true;             bch.IsActive = true;              var zaif = new Exchange(EnuExchangeType.Zaif) { ExchangeName = "Zaif" };             zaif.AttachListedCoin(btc);             zaif.AttachListedCoin(mona);             zaif.AttachListedCoin(xem);             var kraken = new Exchange(EnuExchangeType.Kraken){ ExchangeName = "Kraken" };
 			kraken.AttachListedCoin(btc);             kraken.AttachListedCoin(eth);             kraken.AttachListedCoin(rep);             kraken.AttachListedCoin(xlm);             var coincheck = new Exchange(EnuExchangeType.CoinCheck){ ExchangeName = "CoinCheck" };             coincheck.AttachListedCoin(btc);
             coincheck.AttachListedCoin(rep);                                  var bitflyer = new Exchange(EnuExchangeType.BitFlyer){ ExchangeName = "BitFlyer" };
             bitflyer.AttachListedCoin(btc);
@@ -21,7 +22,7 @@
 			poloniex.AttachListedCoin(rep); 
             var bittrex = new Exchange(EnuExchangeType.Bittrex) { ExchangeName = "Bittrex" };
 			bittrex.AttachListedCoin(xlm);             bittrex.AttachListedCoin(eth);             bittrex.AttachListedCoin(mona);
-			bittrex.AttachListedCoin(gbyte);              ExchangeList.AttachExchange(zaif);
+			bittrex.AttachListedCoin(gbyte);             bittrex.AttachListedCoin(bch);              ExchangeList.AttachExchange(zaif);
             ExchangeList.AttachExchange(kraken);
             ExchangeList.AttachExchange(coincheck);
             ExchangeList.AttachExchange(bitbank);
@@ -75,7 +76,7 @@
 
 		}          public async static Task FetchMarketDataFromBalance()         {             if (Balance != null)
             {
-                await MarketDataAPI.FetchMarketDataFromBalanceAsync(Balance);             }         }
+                await MarketDataAPI.FetchMarketDataFromBalanceAsync(Balance);                 await MarketDataAPI.FetchCoinLogoAsync("ethereum");             }         }
 
 		public static async Task FetchMarketDataAsync(Instrument coin)
 		{

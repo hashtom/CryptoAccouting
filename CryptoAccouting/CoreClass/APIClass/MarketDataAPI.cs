@@ -1,4 +1,5 @@
 ﻿﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace CryptoAccouting.CoreClass.APIClass
     public static class MarketDataAPI
     {
         //Obtain market data from coinmarketcap API
-        public static async Task<EnuAppStatus> FetchCoinMarketDataAsync(Instrument coin, Instrument bitcoin = null)
+        public static async Task<EnuAppStatus> FetchCoinMarketDataAsync(Instrument coin, Instrument bitcoin=null )
         {
 
             string rawjson;
@@ -57,7 +58,8 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             if (coin.Symbol != "BTC" && bitcoin is null)
             {
-                return EnuAppStatus.FailureParameter;
+                bitcoin = new Instrument("Bitcoin", "BTC", "BitCoin");
+                await FetchCoinMarketDataAsync(bitcoin);
             }
 
 			if (!Reachability.IsHostReachable(CoinChartsUrl))
@@ -145,5 +147,30 @@ namespace CryptoAccouting.CoreClass.APIClass
                 return EnuAppStatus.Success;
             }
 		}
+
+        public static async Task FetchCoinLogoAsync(string InstrumentName)
+        {
+            var fileName = InstrumentName + ".png";
+            string TargetUri = "https://files.coinmarketcap.com/static/img/coins/64x64/" + fileName;
+
+            var client = new HttpClient();
+            HttpResponseMessage res = await client.GetAsync(TargetUri, HttpCompletionOption.ResponseContentRead);
+
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            path = Path.Combine(path, "Images");
+
+            if (!File.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            path = Path.Combine(path, fileName);
+
+            using (var fileStream = File.Create(path))
+            using (var httpStream = await res.Content.ReadAsStreamAsync())
+                httpStream.CopyTo(fileStream);
+
+
+        }
     }
 }
