@@ -5,13 +5,13 @@
         //public static NavigationDrawer InitializeSlideMenu(UIView BalanceTableView,         //                                                   UITableViewController PositionViewC,         //                                                   UIViewController TransactionViewC,         //                                                   UITableViewController PLViewC,         //                                                   UIViewController PerfViewC,
         //                                                   UIViewController SettingViewC)
         //{         //    Navigation = new NavigationDrawer(BalanceTableView.Frame.Width, BalanceTableView.Frame.Height,         //                                      PositionViewC,
-        //                                      TransactionViewC,         //                                      PLViewC,         //                                      PerfViewC,         //                                      SettingViewC);         //    Navigation.AddView(BalanceTableView);         //    return Navigation;         //}          public static EnuAppStatus InitializeCore(bool forceRefresh = true)
-        {             BaseCurrency = AppSetting.BaseCurrency;             EnuAppStatus status;              status = LoadInstruments(forceRefresh);
+        //                                      TransactionViewC,         //                                      PLViewC,         //                                      PerfViewC,         //                                      SettingViewC);         //    Navigation.AddView(BalanceTableView);         //    return Navigation;         //}          public static EnuAppStatus InitializeCore()
+        {             BaseCurrency = AppSetting.BaseCurrency;             EnuAppStatus status;              status = LoadInstruments(false);
             if (status is EnuAppStatus.Success) LoadExchangeList(); 
 			Balance = StorageAPI.LoadBalanceXML("mybalance.xml", myInstruments);             return status;          }          public static void LoadExchangeList()
         {
             if (ExchangeList is null) ExchangeList = new ExchangeList();              var btc = GetInstrument("BTC");             var mona = GetInstrument("MONA");             var xem = GetInstrument("XEM");             var eth = GetInstrument("ETH");             var rep = GetInstrument("REP");             var xlm = GetInstrument("XLM");             var gbyte = GetInstrument("GBYTE");
-            var bch = GetInstrument("BCH");              btc.IsActive = true;             mona.IsActive = true;             xem.IsActive = true;             eth.IsActive = true;             rep.IsActive = true;             xlm.IsActive = true;             gbyte.IsActive = true;             bch.IsActive = true;              var zaif = new Exchange(EnuExchangeType.Zaif) { ExchangeName = "Zaif" };             zaif.AttachListedCoin(btc);             zaif.AttachListedCoin(mona);             zaif.AttachListedCoin(xem);             var kraken = new Exchange(EnuExchangeType.Kraken){ ExchangeName = "Kraken" };
+            var bch = GetInstrument("BCH");              //btc.IsActive = true;             //mona.IsActive = true;             //xem.IsActive = true;             //eth.IsActive = true;             //rep.IsActive = true;             //xlm.IsActive = true;             //gbyte.IsActive = true;             //bch.IsActive = true;              var zaif = new Exchange(EnuExchangeType.Zaif) { ExchangeName = "Zaif" };             zaif.AttachListedCoin(btc);             zaif.AttachListedCoin(mona);             zaif.AttachListedCoin(xem);             var kraken = new Exchange(EnuExchangeType.Kraken){ ExchangeName = "Kraken" };
 			kraken.AttachListedCoin(btc);             kraken.AttachListedCoin(eth);             kraken.AttachListedCoin(rep);             kraken.AttachListedCoin(xlm);             var coincheck = new Exchange(EnuExchangeType.CoinCheck){ ExchangeName = "CoinCheck" };             coincheck.AttachListedCoin(btc);
             coincheck.AttachListedCoin(rep);                                  var bitflyer = new Exchange(EnuExchangeType.BitFlyer){ ExchangeName = "BitFlyer" };
             bitflyer.AttachListedCoin(btc);
@@ -26,22 +26,18 @@
             ExchangeList.AttachExchange(kraken);
             ExchangeList.AttachExchange(coincheck);
             ExchangeList.AttachExchange(bitbank);
-            ExchangeList.AttachExchange(bitflyer);             ExchangeList.AttachExchange(poloniex);             ExchangeList.AttachExchange(bittrex);          }          public static EnuAppStatus LoadInstruments(bool forceRefresh = true)
+            ExchangeList.AttachExchange(bitflyer);             ExchangeList.AttachExchange(poloniex);             ExchangeList.AttachExchange(bittrex);          }          public static EnuAppStatus LoadInstruments(bool forceRefresh)
         {             if (forceRefresh)
             {                 myInstruments = new List<Instrument>();
                  if (MarketDataAPI.FetchAllCoinData(myInstruments) == EnuAppStatus.Success)
                 {
-					StorageAPI.SaveInstrumentXML(myInstruments, "instruments.xml");
+					SaveInstrumentXML();
                     return EnuAppStatus.Success;
                 }else{                     myInstruments = StorageAPI.LoadInstrumentXML("instruments.xml");                     return myInstruments is null ? EnuAppStatus.FailureStorage : EnuAppStatus.SuccessButOffline;                 }
             }
             else
-            {                 myInstruments = StorageAPI.LoadInstrumentXML("instruments.xml");                 return myInstruments is null ? EnuAppStatus.FailureStorage : EnuAppStatus.Success;             }          }          //public static Balance GetTestBalance(){
-
-        //    // Test Data
-        //    AppSetting.BaseCurrency = EnuBaseCCY.JPY;         //    Balance mybal;          //    LoadInstruments();          //    mybal = new Balance(EnuExchangeType.Zaif){BalanceName="Tomoaki"};          //    // Test Data Creation         //    var coin1 = instruments.Where(i=>i.Symbol =="BTC").First();         //    var coin2 = instruments.Where(i => i.Symbol == "ETH").First();         //    var coin3 = instruments.Where(i => i.Symbol == "REP").First();         //    var pos1 = new Position(coin1, "1") { Amount = 850 };         //    var pos2 = new Position(coin2, "2") { Amount = 1000 };         //    var pos3 = new Position(coin3, "3") { Amount = 25000 };          //    mybal.AttachPosition(pos1);         //    mybal.AttachPosition(pos2);         //    mybal.AttachPosition(pos3);          //    myBalance = mybal;          //    return myBalance;         //}          //public static Balance GetMyBalance(){          //    if (myBalance is null)
-        //    {
-        //        myBalance = StorageAPI.LoadBalanceXML("mybalance.xml", myInstruments);         //    }          //    return myBalance;         //}          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, "mybalance.xml");         }          public static Instrument GetInstrument(string symbol)
+            {                 myInstruments = StorageAPI.LoadInstrumentXML("instruments.xml");                 return myInstruments is null ? EnuAppStatus.FailureStorage : EnuAppStatus.Success;             }          }          public static void SaveInstrumentXML()
+        {             StorageAPI.SaveInstrumentXML(myInstruments, "instruments.xml");         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, "mybalance.xml");         }          public static Instrument GetInstrument(string symbol)
         {
             if (myInstruments.Any(i => i.Symbol == symbol))
             {
@@ -74,14 +70,47 @@
 			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			return epoch.AddSeconds(EpochSeconds);
 
-		}          public async static Task FetchMarketDataFromBalance()         {             if (Balance != null)
+		} 
+
+		public static async Task FetchMarketDataFromBalanceAsync()
+		{
+			Instrument bitcoin;
+
+            if (Balance != null)
             {
-                await MarketDataAPI.FetchMarketDataFromBalanceAsync(Balance);                 await MarketDataAPI.FetchCoinLogoAsync("ethereum");             }         }
+                if (Balance.positions.Any(x => x.Coin.Symbol == "BTC"))
+                {
+                    bitcoin = Balance.positions.Where(x => x.Coin.Symbol == "BTC").Select(x => x.Coin).First();
+                }
+                else
+                {
+                    bitcoin = new Instrument("Bitcoin", "BTC", "Bitcoin");
+                }
+
+                await MarketDataAPI.FetchCoinMarketDataAsync(bitcoin);
+
+                foreach (var pos in Balance.positions.Where(x => x.Coin.Symbol != "BTC"))
+                {
+                    if (pos.Coin != null) await MarketDataAPI.FetchCoinMarketDataAsync(pos.Coin, bitcoin);
+                }             }
+		}
+
+		public static void LoadMarketDataXML()
+		{
+            myInstruments = StorageAPI.LoadMarketDataXML("marketdata.xml");
+		}
+
+		public static void SaveMarketDataXML()
+		{
+
+                StorageAPI.SaveMarketDataXML("marketdata.xml");
+
+		}
 
 		public static async Task FetchMarketDataAsync(Instrument coin)
 		{
 			await MarketDataAPI.FetchCoinMarketDataAsync(coin);
-		}      }
+		}        }
 
     public enum EnuCCY
     {

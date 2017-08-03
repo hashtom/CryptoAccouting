@@ -169,5 +169,17 @@ namespace CryptoAccouting.CoreClass.APIClass
 			return instruments;
 
 		}
+
+        public static List<Instrument> LoadMarketDataXML(string fileName)
+        {
+            List<Instrument> instruments = new List<Instrument>();
+
+            return instruments;
+        }
+
+        public static void SaveMarketDataXML(string fileName)
+        {
+
+        }
     }
 }

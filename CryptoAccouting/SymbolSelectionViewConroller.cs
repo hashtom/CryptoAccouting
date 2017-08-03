@@ -1,5 +1,6 @@
 using Foundation;
 using System;
+using System.IO;
 using UIKit;
 using CryptoAccouting.CoreClass;
 using CryptoAccouting.UIClass;
@@ -95,19 +96,12 @@ namespace CryptoAccouting
 
 			foreach (var item in searchItems)
 			{
-				//int year = Int32.MinValue;
-				//Int32.TryParse(item, out year);
-
-				//double price = Double.MinValue;
-				//Double.TryParse(item, out price);
-
                 IEnumerable<Instrument> query =
-                    from p in instruments
-                        where p.Symbol.IndexOf(item, StringComparison.OrdinalIgnoreCase) >= 0
-					//|| p.IntroPrice == price
-					//|| p.YearIntroduced == year
-					orderby p.Symbol
-					select p;
+                    from ins in instruments
+                    where ins.Symbol.IndexOf(item, StringComparison.OrdinalIgnoreCase) >= 0
+                             || ins.Name.IndexOf(item, StringComparison.OrdinalIgnoreCase) >= 0
+                    orderby ins.Symbol
+                    select ins;
 
 				filteredCoins.AddRange(query);
 			}
@@ -130,12 +124,6 @@ namespace CryptoAccouting
             //TableView.RegisterClassForCellReuse(typeof(UITableViewCell), MyCellId);
             TableView.Source = new TableSource(FilteredInstruments, this);
         }
-
-        //public override void ViewWillAppear(bool animated)
-        //{
-        //    base.ViewWillAppear(animated);
-        //    //TableView.Source = new TableSource(FilteredInstruments, this);
-        //}
 
     }
 
@@ -165,7 +153,9 @@ namespace CryptoAccouting
 
             cell.TextLabel.Text = instruments[indexPath.Row].Symbol;
             cell.DetailTextLabel.Text = instruments[indexPath.Row].Name;
-            var logo = instruments[indexPath.Row].LogoFileName;
+			
+            var logo = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            logo = Path.Combine(logo, "Images", instruments[indexPath.Row].LogoFileName);
             cell.ImageView.Image = logo == null ? null : UIImage.FromFile(logo);
 
             return cell;

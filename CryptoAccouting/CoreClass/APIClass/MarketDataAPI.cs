@@ -96,28 +96,10 @@ namespace CryptoAccouting.CoreClass.APIClass
 			return EnuAppStatus.Success;
         }
 
-        public static async Task FetchMarketDataFromBalanceAsync(Balance mybal)
-		{
-            Instrument bitcoin;
-
-            if (mybal.positions.Any(x=>x.Coin.Symbol == "BTC")){
-                bitcoin = mybal.positions.Where(x => x.Coin.Symbol == "BTC").Select(x => x.Coin).First();
-            }else{
-                bitcoin = new Instrument("Bitcoin", "BTC", "Bitcoin");
-            }
-                
-            await FetchCoinMarketDataAsync(bitcoin);
-
-            foreach (var pos in mybal.positions.Where(x => x.Coin.Symbol != "BTC"))
-            {
-                if (pos.Coin != null) await FetchCoinMarketDataAsync(pos.Coin, bitcoin);
-            }
-		}
-
         public static EnuAppStatus FetchAllCoinData(List<Instrument> instruments)
 		{
 
-			const string BaseUrl = "https://api.coinmarketcap.com/v1/ticker/";
+			const string BaseUrl = "https://api.coinmarketcap.com/v1/ticker/?limit=100";
 			string rawjson;
 
             if (!Reachability.IsHostReachable(BaseUrl))
@@ -138,24 +120,22 @@ namespace CryptoAccouting.CoreClass.APIClass
                 {
                     var coin = new Instrument((string)elem["id"], (string)elem["symbol"], (string)elem["name"]);
                     coin.rank = int.Parse((string)elem["rank"]);
-                    coin.LogoFileName = "Images/" + (string)elem["name"] + ".png";
+                    coin.LogoFileName = ((string)elem["name"] + ".png").Split()[0].ToLower();
                     var p = new Price(coin);
                     p.SourceCurrency = ApplicationCore.BaseCurrency;
                     coin.MarketPrice = p;
                     instruments.Add(coin);
+                    FetchCoinLogo(coin.Name, false);
                 }
 
                 return EnuAppStatus.Success;
             }
 		}
 
-        public static async Task FetchCoinLogoAsync(string InstrumentName)
+        private static void FetchCoinLogo(string InstrumentName, bool ForceRefresh)
         {
-            var fileName = InstrumentName + ".png";
+            var fileName = InstrumentName.Split()[0].ToLower() + ".png";
             string TargetUri = "https://files.coinmarketcap.com/static/img/coins/64x64/" + fileName;
-
-            var client = new HttpClient();
-            HttpResponseMessage res = await client.GetAsync(TargetUri, HttpCompletionOption.ResponseContentRead);
 
             var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             path = Path.Combine(path, "Images");
@@ -167,11 +147,16 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             path = Path.Combine(path, fileName);
 
-            using (var fileStream = File.Create(path))
-            using (var httpStream = await res.Content.ReadAsStreamAsync())
-                httpStream.CopyTo(fileStream);
+            if (!File.Exists(path) || ForceRefresh)
+            {
+                var client = new HttpClient();
+                HttpResponseMessage res = client.GetAsync(TargetUri, HttpCompletionOption.ResponseContentRead).Result;
 
+                using (var fileStream = File.Create(path))
+                using (var httpStream = res.Content.ReadAsStreamAsync().Result)
+                    httpStream.CopyTo(fileStream);
 
+            }
         }
     }
 }
