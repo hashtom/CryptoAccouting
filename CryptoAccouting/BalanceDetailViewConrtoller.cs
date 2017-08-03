@@ -41,33 +41,37 @@ namespace CryptoAccouting
 
         }
 
-		private void ReDrawScreen()
-		{
+        private void ReDrawScreen()
+        {
             var booking_positions = ApplicationCore.Balance.positions.Where(x => x.Coin.Symbol == symbol_selected).ToList();
             var thisCoin = ApplicationCore.GetInstrument(symbol_selected);
-			var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-									"Images", thisCoin.Id + ".png");
-			
+            var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                                    "Images", thisCoin.Id + ".png");
+
             imageCoin.Image = logo == null ? null : UIImage.FromFile(logo);
             labelCoinName.Text = thisCoin.Name;
 
-			labelBTCPrice.Text = thisCoin.Symbol == "BTC" ?
-				"" :
-				"฿" + String.Format("{0:n8}", thisCoin.MarketPrice.LatestPriceBTC);
-            labelFiatPrice.Text = thisCoin.Symbol == "BTC" ?
-                "$" + String.Format("{0:n2}", thisCoin.MarketPrice.LatestPrice) :
-                "$" + String.Format("{0:n6}", thisCoin.MarketPrice.LatestPriceBTC);
-            labelFiatRet1d.Text = String.Format("{0:n2}", thisCoin.MarketPrice.SourceRet1d()) + "%";
-            labelBTCRet1d.Text = thisCoin.Symbol == "BTC" ? "" : String.Format("{0:n2}", thisCoin.MarketPrice.BTCRet1d()) + "%";
-			labelVolume.Text = String.Format("{0:n0}", thisCoin.MarketPrice.DayVolume);
-			labelMarketCap.Text = "$" + String.Format("{0:n0}", thisCoin.MarketPrice.MarketCap);
+            if (thisCoin.MarketPrice != null)
+            {
+                labelBTCPrice.Text = thisCoin.Symbol == "BTC" ?
+                    "" :
+                    "฿" + String.Format("{0:n8}", thisCoin.MarketPrice.LatestPriceBTC);
+                labelFiatPrice.Text = thisCoin.Symbol == "BTC" ?
+                    "$" + String.Format("{0:n2}", thisCoin.MarketPrice.LatestPrice) :
+                    "$" + String.Format("{0:n6}", thisCoin.MarketPrice.LatestPriceBTC);
+                labelFiatRet1d.Text = String.Format("{0:n2}", thisCoin.MarketPrice.SourceRet1d()) + "%";
+                labelBTCRet1d.Text = thisCoin.Symbol == "BTC" ? "" : String.Format("{0:n2}", thisCoin.MarketPrice.BTCRet1d()) + "%";
+                labelVolume.Text = String.Format("{0:n0}", thisCoin.MarketPrice.DayVolume);
+                labelMarketCap.Text = "$" + String.Format("{0:n0}", thisCoin.MarketPrice.MarketCap);
+            }
 
             labelMarketValue.Text = "$" + String.Format("{0:n0}", booking_positions.Sum(x => x.LatestFiatValue()));
             labelTotalQty.Text = String.Format("{0:n0}", booking_positions.Sum(x => x.AmountBTC()));
             labelTotalBookCost.Text = "$" + String.Format("{0:n0}", booking_positions.Sum(x => x.BookValue()));
-			TableView.ReloadData();
 
-		}
+            TableView.ReloadData();
+
+        }
 
         public void SetSymbol(string symbol)
         {
