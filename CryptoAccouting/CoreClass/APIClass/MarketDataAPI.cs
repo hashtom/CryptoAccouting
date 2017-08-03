@@ -120,32 +120,31 @@ namespace CryptoAccouting.CoreClass.APIClass
                 {
                     var coin = new Instrument((string)elem["id"], (string)elem["symbol"], (string)elem["name"]);
                     coin.rank = int.Parse((string)elem["rank"]);
-                    coin.LogoFileName = ((string)elem["name"] + ".png").Split()[0].ToLower();
+                    //coin.LogoFileName = ((string)elem["id"] + ".png");
                     var p = new Price(coin);
                     p.SourceCurrency = ApplicationCore.BaseCurrency;
                     coin.MarketPrice = p;
                     instruments.Add(coin);
-                    FetchCoinLogo(coin.Name, false);
+                    FetchCoinLogo(coin.Id, false);
                 }
 
                 return EnuAppStatus.Success;
             }
 		}
 
-        private static void FetchCoinLogo(string InstrumentName, bool ForceRefresh)
+        private static void FetchCoinLogo(string InstrumentID, bool ForceRefresh)
         {
-            var fileName = InstrumentName.Split()[0].ToLower() + ".png";
-            string TargetUri = "https://files.coinmarketcap.com/static/img/coins/64x64/" + fileName;
+            var filename = InstrumentID + ".png";
+            string TargetUri = "https://files.coinmarketcap.com/static/img/coins/32x32/" + filename;
 
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            path = Path.Combine(path, "Images");
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Images");
 
             if (!File.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
 
-            path = Path.Combine(path, fileName);
+            path = Path.Combine(path, filename);
 
             if (!File.Exists(path) || ForceRefresh)
             {

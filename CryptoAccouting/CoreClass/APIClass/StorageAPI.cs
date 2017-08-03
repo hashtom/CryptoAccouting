@@ -126,7 +126,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                                                           new XElement("symbol", coin.Symbol),
                                                           new XElement("name", coin.Name),
                                                           new XElement("type", coin.Type.ToString()),
-                                                          new XElement("logofile", coin.LogoFileName),
+                                                          //new XElement("logofile", coin.LogoFileName),
                                                           new XElement("isactive", coin.IsActive.ToString())
                                                   );
 				instruments.Add(instrument);
@@ -153,10 +153,10 @@ namespace CryptoAccouting.CoreClass.APIClass
                     var coin = new Instrument((string)elem.Attribute("id").Value,
                                               (string)elem.Descendants("symbol").Select(x => x.Value).First(),
                                               (string)elem.Descendants("name").Select(x => x.Value).First());
-                    if (elem.Descendants("logofile").Select(x => x.Value).Any())
-                    {
-                        coin.LogoFileName = (string)elem.Descendants("logofile").Select(x => x.Value).First();
-                    }
+                    //if (elem.Descendants("logofile").Select(x => x.Value).Any())
+                    //{
+                    //    coin.LogoFileName = (string)elem.Descendants("logofile").Select(x => x.Value).First();
+                    //}
                     coin.IsActive = bool.Parse((string)elem.Descendants("isactive").Select(x => x.Value).First());
                     instruments.Add(coin);
                 }

@@ -1,10 +1,11 @@
 using Foundation;
 using System;
+using System.IO;
 using UIKit;
 using CryptoAccouting.CoreClass;
 using CryptoAccouting.UIClass;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+//using System.Threading.Tasks;
+//using System.Collections.Generic;
 using System.Linq;
 
 namespace CryptoAccouting
@@ -44,9 +45,10 @@ namespace CryptoAccouting
 		{
             var booking_positions = ApplicationCore.Balance.positions.Where(x => x.Coin.Symbol == symbol_selected).ToList();
             var thisCoin = ApplicationCore.GetInstrument(symbol_selected);
-            var imagelogo = thisCoin.LogoFileName;
+			var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+									"Images", thisCoin.Id + ".png");
 			
-            imageCoin.Image = imagelogo == null ? null : UIImage.FromFile(imagelogo);
+            imageCoin.Image = logo == null ? null : UIImage.FromFile(logo);
             labelCoinName.Text = thisCoin.Name;
 
 			labelBTCPrice.Text = thisCoin.Symbol == "BTC" ?

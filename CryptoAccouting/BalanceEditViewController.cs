@@ -1,5 +1,6 @@
 using Foundation;
 using System;
+using System.IO;
 using UIKit;
 using CryptoAccouting.CoreClass;
 using CryptoAccouting.UIClass;
@@ -132,8 +133,9 @@ namespace CryptoAccouting
             else
             {
                 //labelCoinSymbol.Text = PositionDetail.Coin.Symbol;
-                var imagelogo = PositionDetail.Coin.LogoFileName;
-                imageCoin.Image = imagelogo == null ? null : UIImage.FromFile(imagelogo);
+				var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+									"Images", thisCoin.Id + ".png");
+                imageCoin.Image = logo == null ? null : UIImage.FromFile(logo);
 
                 //labelFiatPrice.Text = String.Format("{0:n0}", PositionDetail.LatestMainPrice());
                 textQuantity.Text = String.Format("{0:n0}", PositionDetail.Amount);

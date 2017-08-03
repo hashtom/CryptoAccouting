@@ -153,9 +153,9 @@ namespace CryptoAccouting
 
             cell.TextLabel.Text = instruments[indexPath.Row].Symbol;
             cell.DetailTextLabel.Text = instruments[indexPath.Row].Name;
-			
-            var logo = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            logo = Path.Combine(logo, "Images", instruments[indexPath.Row].LogoFileName);
+
+            var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), 
+                                    "Images", instruments[indexPath.Row].Id + ".png" );
             cell.ImageView.Image = logo == null ? null : UIImage.FromFile(logo);
 
             return cell;

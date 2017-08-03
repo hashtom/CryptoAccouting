@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using CoreGraphics;
 using Foundation;
 using UIKit;
@@ -23,8 +24,9 @@ namespace CryptoAccouting.UIClass
 
         public void UpdateCell(Position pos)
 		{
-            var logo = pos.Coin == null ? null : pos.Coin.LogoFileName;
-            imageView.Image = logo == null ? null : UIImage.FromFile(logo);
+			var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                                    "Images", pos.Coin.Id + ".png");
+			ImageView.Image = logo == null ? null : UIImage.FromFile(logo);
 
             labelSymbol.Text = pos.Coin.Symbol;
 

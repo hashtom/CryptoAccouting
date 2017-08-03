@@ -12,7 +12,7 @@ namespace CryptoAccouting.CoreClass
         public InstrumentType Type { get; set; }
         //public DateTime ListedDate { get; set; }
 		public Price MarketPrice { get; set; }
-        public string LogoFileName { get; set; }
+        //public string LogoFileName { get; set; }
         public bool IsActive { get; set; }
 
         public Instrument(string id, string symbol, string name)
