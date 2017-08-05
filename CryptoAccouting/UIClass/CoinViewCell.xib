@@ -86,8 +86,6 @@
         <image name="Images/jpy.png" width="598" height="554"/>
         <image name="Images/exchange.png" width="592" height="546"/>
         <image name="Images/key.png" width="922" height="808"/>
-        <image name="Images/ethereum.png" width="32" height="32"/>
-        <image name="Images/factom.png" width="32" height="32"/>
         <image name="Images/lisk.png" width="32" height="32"/>
         <image name="Images/litecoin.png" width="32" height="32"/>
         <image name="Images/monacoin.png" width="64" height="64"/>

@@ -48,7 +48,7 @@ namespace CryptoAccouting.UIClass
                 labelValue.Text = "$" + String.Format("{0:n0}", pos.BookValue());
                 labelMemo.Text = pos.TradedExchange.ToString();
             }else{
-				labelValue.Text = "฿" + String.Format("{0:n2}", pos.AmountBTC());
+                labelValue.Text = "$" + String.Format("{0:n2}", pos.LatestFiatValue());
             }
 
 		}

@@ -82,25 +82,25 @@
 
 		public static async Task FetchMarketDataFromBalanceAsync()
 		{
-			Instrument bitcoin;
+			//Instrument bitcoin;
 
             if (Balance != null)
-            {
-                if (Balance.positions.Any(x => x.Coin.Symbol == "BTC"))
-                {
-                    bitcoin = Balance.positions.Where(x => x.Coin.Symbol == "BTC").Select(x => x.Coin).First();
-                }
-                else
-                {
-                    bitcoin = new Instrument("Bitcoin", "BTC", "Bitcoin");
-                }
+            {                 var mycoins = Balance.positionsByCoin.Select(x => x.Coin).ToList();                 await MarketDataAPI.FetchCoinMarketDataAsync(mycoins); 
+                //if (Balance.positions.Any(x => x.Coin.Symbol == "BTC"))
+                //{
+                //    bitcoin = Balance.positions.Where(x => x.Coin.Symbol == "BTC").Select(x => x.Coin).First();
+                //}
+                //else
+                //{
+                //    bitcoin = new Instrument("Bitcoin", "BTC", "Bitcoin");
+                //}
 
-                await MarketDataAPI.FetchCoinMarketDataAsync(bitcoin);
+                //await MarketDataAPI.FetchCoinMarketDataAsync(bitcoin);
 
-                foreach (var pos in Balance.positions.Where(x => x.Coin.Symbol != "BTC"))
-                {
-                    if (pos.Coin != null) await MarketDataAPI.FetchCoinMarketDataAsync(pos.Coin, bitcoin);
-                }             }
+                //foreach (var pos in Balance.positions.Where(x => x.Coin.Symbol != "BTC"))
+                //{
+                //    if (pos.Coin != null) await MarketDataAPI.FetchCoinMarketDataAsync(pos.Coin, bitcoin);
+                //}             }
 		}
 
 		public static void LoadMarketDataXML()

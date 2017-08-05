@@ -12,6 +12,80 @@ namespace CryptoAccouting.CoreClass.APIClass
     public static class MarketDataAPI
     {
         //Obtain market data from coinmarketcap API
+
+        public static async Task<EnuAppStatus> FetchCoinMarketDataAsync(List<Instrument> coins)
+        {
+            const string BaseUrl = "http://api.cryptocoincharts.info/";
+            string rawjson;
+
+            var pairs = "btc_usd";
+
+            if (!Reachability.IsHostReachable(BaseUrl))
+            {
+                return EnuAppStatus.FailureNetwork;
+            }
+            else
+            {
+                if (coins.Any(x => x.Symbol == "BTC"))
+                {
+                    var bitcoin = coins.Where(x => x.Symbol == "BTC").First();
+                    coins.Remove(bitcoin);
+                    coins.Insert(0, bitcoin);
+                }
+                else{
+                    coins.Insert(0, ApplicationCore.GetInstrument("BTC"));
+                }
+
+                foreach (var paircoin in coins.Where(x=>x.Symbol!="BTC"))
+				{
+                    pairs = pairs + "," + paircoin.Symbol.ToLower() + "_btc";
+				}
+
+				var parameters = new Dictionary<string, string>();
+				parameters.Add("pairs", pairs);
+
+                using (var http = new HttpClient())
+                {
+                    http.BaseAddress = new Uri(BaseUrl);
+                    Uri path = new Uri("tradingPairs", UriKind.Relative);
+
+                    var content = new FormUrlEncodedContent(parameters);
+
+                    HttpResponseMessage res = await http.PostAsync(path, content);
+                    rawjson = await res.Content.ReadAsStringAsync();
+
+                    if (!res.IsSuccessStatusCode)
+                        return EnuAppStatus.FailureNetwork;
+                }
+
+                int i = 0;
+                foreach (var coin in coins)
+                {
+
+                    if (coin.MarketPrice == null)
+                    {
+                        var p = new Price(coin);
+                        coin.MarketPrice = p;
+                    }
+
+                    var jarray = await Task.Run(() => JArray.Parse(rawjson));
+
+                    coin.MarketPrice.SourceCurrency = coin.Symbol == "BTC" ? EnuCCY.USD : EnuCCY.BTC;
+                    coin.MarketPrice.LatestPriceBTC = coin.Symbol == "BTC" ? 1 : (double)jarray[i]["price"];
+                    coin.MarketPrice.PriceBTCBefore24h = coin.Symbol == "BTC" ? 1 : (double)jarray[i]["price_before_24h"];
+                    coin.MarketPrice.LatestPrice = coin.Symbol == "BTC" ? (double)jarray[i]["price"] : (double)jarray[i]["price"] * (double)jarray[0]["price"];
+                    coin.MarketPrice.PriceBefore24h = coin.Symbol == "BTC" ? (double)jarray[i]["price_before_24h"] : (double)jarray[i]["price_before_24h"] * (double)jarray[0]["price_before_24h"];
+                    coin.MarketPrice.DayVolume = (double)jarray[i]["volume_btc"];
+                    coin.MarketPrice.PriceDate = DateTime.Now;
+
+                    i++;
+                }
+            }
+
+            return EnuAppStatus.Success;
+
+        }
+
         public static async Task<EnuAppStatus> FetchCoinMarketDataAsync(Instrument coin, Instrument bitcoin=null )
         {
 
