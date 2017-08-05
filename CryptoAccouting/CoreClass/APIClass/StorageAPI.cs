@@ -9,7 +9,6 @@ namespace CryptoAccouting.CoreClass.APIClass
     public static class StorageAPI
     {
 
-
         public static void SaveJsonFile(string json, string fileName)
         {
 
@@ -47,20 +46,20 @@ namespace CryptoAccouting.CoreClass.APIClass
                 foreach (var elem in mybalXE)
                 {
                     Instrument coin;
-                    if (instruments.Where(i => i.Symbol == elem.Descendants("symbol").Select(x => x.Value).First()).Any())
+                    if (instruments.Where(i => i.Symbol == elem.Element("symbol").Value).Any())
                     {
-                        coin = instruments.Where(i => i.Symbol == elem.Descendants("symbol").Select(x => x.Value).First()).First();
+                        coin = instruments.Where(i => i.Symbol == elem.Element("symbol").Value).First();
 
                         EnuExchangeType tradedexchange;
-                        if(!Enum.TryParse(elem.Descendants("exchange").Select(x => x.Value).First(), out tradedexchange))
+                        if(!Enum.TryParse(elem.Element("exchange").Value, out tradedexchange))
                             tradedexchange = EnuExchangeType.NotSelected;
 
                         var pos = new Position(coin, EnuPositionType.Detail)
                         {
                             Id = int.Parse(elem.Attribute("id").Value),
-                            Amount = double.Parse(elem.Descendants("amount").Select(x => x.Value).First()),
-                            BookPrice = double.Parse(elem.Descendants("book").Select(x => x.Value).First()),
-                            BalanceDate = DateTime.Parse(elem.Descendants("date").Select(x => x.Value).First()),
+                            Amount = double.Parse(elem.Element("amount").Value),
+                            BookPrice = double.Parse(elem.Element("book").Value),
+                            BalanceDate = DateTime.Parse(elem.Element("date").Value),
                             TradedExchange = tradedexchange //(EnuExchangeType)Enum.Parse(typeof(EnuExchangeType), elem.Descendants("exchange").Select(x => x.Value).First())
                         };
                         mybal.AttachPosition(pos, false);
@@ -155,9 +154,9 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 foreach (var elem in mybalXE)
                 {
-                    var coin = new Instrument((string)elem.Attribute("id").Value,
-                                              (string)elem.Descendants("symbol").Select(x => x.Value).First(),
-                                              (string)elem.Descendants("name").Select(x => x.Value).First());
+                    var coin = new Instrument(elem.Attribute("id").Value,
+                                              elem.Element("symbol").Value,
+                                              elem.Element("name").Value);
                     //if (elem.Descendants("logofile").Select(x => x.Value).Any())
                     //{
                     //    coin.LogoFileName = (string)elem.Descendants("logofile").Select(x => x.Value).First();
@@ -186,5 +185,80 @@ namespace CryptoAccouting.CoreClass.APIClass
         {
 
         }
+
+        public static EnuAppStatus LoadAppSettingXML(string fileName)
+        {
+            //ApplicationCore.APIKeys = new List<APIKey>();
+            //var apikeys = ApplicationCore.APIKeys;
+            var basecurrency = ApplicationCore.BaseCurrency;
+			var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+			var path = Path.Combine(documents, fileName);
+
+
+
+            if (File.Exists(path))
+            {
+                var xmldoc = File.ReadAllText(path);
+
+                if (!Enum.TryParse(XElement.Parse(xmldoc).Element("basecurrency").Value, out basecurrency))
+                    basecurrency = EnuCCY.USD;
+
+                var apikeysXE = XElement.Parse(xmldoc).Descendants("exchange");
+
+                foreach (var elem in apikeysXE)
+                {
+                    EnuExchangeType exchange;
+                    if (!Enum.TryParse((string)elem.Attribute("name").Value, out exchange))
+                        exchange = EnuExchangeType.NotSelected;
+
+                    var apikey = new APIKey(exchange,
+                                            elem.Element("key").Value,
+                                            elem.Element("secret").Value);
+
+                    ApplicationCore.AttatchAPIKey(apikey);
+
+                }
+
+                return EnuAppStatus.Success;
+
+            }else{
+                
+                return EnuAppStatus.FailureStorage;
+            }
+
+
+        }
+
+        public static EnuAppStatus SaveAppSettingXML(string fileName, string AppName, EnuCCY BaseCurrency, List<APIKey> APIKeys)
+		{
+			var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+			var path = Path.Combine(mydocuments, fileName);
+
+			XElement application = new XElement("application",
+												new XAttribute("name", AppName));
+			
+
+            XElement basecurrency = new XElement("basecurrency", BaseCurrency);
+			application.Add(basecurrency);
+
+            XElement apikeys = new XElement("apikeys");
+            application.Add(apikeys); 
+
+            foreach (var apikey in APIKeys)
+			{
+                XElement key = new XElement("exchange",
+                                            new XAttribute("name", apikey.ExchangeType),
+                                            new XElement("key", apikey.Key),
+                                            new XElement("secret", apikey.Secret)
+                                           );
+				apikeys.Add(key);
+			}
+
+			File.WriteAllText(path, application.ToString());
+
+            return EnuAppStatus.Success; //todo
+
+		}
+
     }
 }

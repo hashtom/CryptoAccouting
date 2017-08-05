@@ -21,8 +21,14 @@ namespace CryptoAccouting
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            labelBaseCurrency.Text = AppSetting.BaseCurrency.ToString();
+            labelBaseCurrency.Text = ApplicationCore.BaseCurrency.ToString();
         }
+
+		public override void ViewDidDisappear(bool animated)
+		{
+			base.ViewDidDisappear(animated);
+			//ApplicationCore.SaveAppSetting();
+		}
 
 		public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
 		{
@@ -101,8 +107,9 @@ namespace CryptoAccouting
             //base.SetSearchSelectionItem(searchitem1);
             EnuCCY baseccy;
             if (!Enum.TryParse(searchitem1, out baseccy)) baseccy = EnuCCY.USD;
-            AppSetting.BaseCurrency = baseccy;
+            ApplicationCore.BaseCurrency = baseccy;
             labelBaseCurrency.Text = baseccy.ToString();
+            ApplicationCore.SaveAppSetting();
         }
         
     }

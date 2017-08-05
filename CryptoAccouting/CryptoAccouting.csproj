@@ -146,6 +146,7 @@
     <None Include="packages.config" />
     <None Include="TestData\BalanceData.xml" />
     <None Include="TestData\instrumentsData.xml" />
+    <None Include="TestData\AppSetting.xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -160,7 +161,6 @@
     <Compile Include="CoreClass\Exchange.cs" />
     <Compile Include="CoreClass\Balance.cs" />
     <Compile Include="CoreClass\Price.cs" />
-    <Compile Include="UIClass\AppSetting.cs" />
     <Compile Include="CoreClass\Transaction.cs" />
     <Compile Include="CoreClass\TradeList.cs" />
     <Compile Include="TransactionViewController.cs" />
@@ -217,9 +217,9 @@
     <Compile Include="UIClass\BookingTableSource.cs" />
     <Compile Include="CoreClass\FXRate.cs" />
     <Compile Include="UIClass\CustomExchangeViewCell.cs" />
+    <Compile Include="UIClass\AppSetting.cs" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="TestData\apikey.xml" />
     <BundleResource Include="Images\jpy.png" />
     <BundleResource Include="Images\exchange.png" />
     <BundleResource Include="Images\key.png" />
