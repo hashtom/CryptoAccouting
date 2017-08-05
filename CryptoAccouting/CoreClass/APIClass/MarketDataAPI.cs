@@ -98,9 +98,11 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static EnuAppStatus FetchAllCoinData(List<Instrument> instruments)
 		{
-
+            
 			const string BaseUrl = "https://api.coinmarketcap.com/v1/ticker/?limit=100";
 			string rawjson;
+
+            if (instruments is null) instruments = new List<Instrument>();
 
             if (!Reachability.IsHostReachable(BaseUrl))
             {

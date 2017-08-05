@@ -16,6 +16,10 @@ namespace CryptoAccouting
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelBaseCurrency { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITableViewCell rowBaseCurrency { get; set; }
 
         [Outlet]
@@ -24,6 +28,11 @@ namespace CryptoAccouting
 
         void ReleaseDesignerOutlets ()
         {
+            if (labelBaseCurrency != null) {
+                labelBaseCurrency.Dispose ();
+                labelBaseCurrency = null;
+            }
+
             if (rowBaseCurrency != null) {
                 rowBaseCurrency.Dispose ();
                 rowBaseCurrency = null;

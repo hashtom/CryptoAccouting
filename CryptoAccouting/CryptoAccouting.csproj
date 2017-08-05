@@ -213,7 +213,7 @@
     <Compile Include="BalanceDetailViewConrtoller.designer.cs">
       <DependentUpon>BalanceDetailViewConrtoller.cs</DependentUpon>
     </Compile>
-    <Compile Include="BalanceTableViewController.cs" />
+    <Compile Include="CryptoTableViewController.cs" />
     <Compile Include="UIClass\BookingTableSource.cs" />
     <Compile Include="CoreClass\FXRate.cs" />
     <Compile Include="UIClass\CustomExchangeViewCell.cs" />

@@ -18,12 +18,11 @@ namespace CryptoAccouting
 
 		bool searchControllerWasActive;
 		bool searchControllerSearchFieldWasFirstResponder;
-        List<Instrument> instruments;
+        public List<SelectionSearchItem> SelectionItems { get; set; }
+        public string DestinationID { get; set; }
 
         public SymbolSelectionViewConroller(IntPtr handle) : base (handle)
         {
-
-            instruments = ApplicationCore.GetInstrumentAll(true);
             NavigationItem.HidesBackButton = true;
             NavigationItem.SetLeftBarButtonItem(new UIBarButtonItem(UIBarButtonSystemItem.Cancel, (sender, e) =>
              {
@@ -34,11 +33,12 @@ namespace CryptoAccouting
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            TableView.Source = new TableSource(instruments, this);
+            if (SelectionItems is null) SelectionItems = new List<SelectionSearchItem>();
+            TableView.Source = new TableSource(SelectionItems, this, DestinationID);
 
             resultsTableController = new ResultsTableController()
             {
-                FilteredInstruments = new List<Instrument>()
+                SearhItems = new List<SelectionSearchItem>()
             };
 
 
@@ -80,33 +80,33 @@ namespace CryptoAccouting
 		public virtual void UpdateSearchResultsForSearchController(UISearchController searchController)
 		{
 			var tableController = (ResultsTableController)searchController.SearchResultsController;
-            tableController.FilteredInstruments = PerformSearch(searchController.SearchBar.Text);
-            tableController.TableView.Source = new TableSource(tableController.FilteredInstruments, this);
+            tableController.SearhItems = PerformSearch(searchController.SearchBar.Text);
+            tableController.TableView.Source = new TableSource(tableController.SearhItems, this, DestinationID);
             tableController.TableView.ReloadData();
 		}
 
-        List<Instrument> PerformSearch(string searchString)
+        List<SelectionSearchItem> PerformSearch(string searchString)
 		{
 			searchString = searchString.Trim();
 			string[] searchItems = string.IsNullOrEmpty(searchString)
 				? new string[0]
 				: searchString.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-            var filteredCoins = new List<Instrument>();
+            var filteredItems = new List<SelectionSearchItem>();
 
 			foreach (var item in searchItems)
 			{
-                IEnumerable<Instrument> query =
-                    from ins in instruments
-                    where ins.Symbol.IndexOf(item, StringComparison.OrdinalIgnoreCase) >= 0
-                             || ins.Name.IndexOf(item, StringComparison.OrdinalIgnoreCase) >= 0
-                    orderby ins.Symbol
-                    select ins;
+                IEnumerable<SelectionSearchItem> query =
+                    from x in SelectionItems
+                    where x.SearchItem1.IndexOf(item, StringComparison.OrdinalIgnoreCase) >= 0
+                             || x.SearchItem2.IndexOf(item, StringComparison.OrdinalIgnoreCase) >= 0
+                    orderby x.SearchItem1
+                    select x;
 
-				filteredCoins.AddRange(query);
+				filteredItems.AddRange(query);
 			}
 
-			return filteredCoins.Distinct().ToList();
+			return filteredItems.Distinct().ToList();
 		}
 
     }
@@ -115,14 +115,15 @@ namespace CryptoAccouting
     public class ResultsTableController : UITableViewController
     {
         //static NSString MyCellId = new NSString("SymbolListCell");
-        public List<Instrument> FilteredInstruments { get; set; }
+        public List<SelectionSearchItem> SearhItems { get; set; }
+        public string DestinationID { get; set; }
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
             //TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");
             //TableView.RegisterClassForCellReuse(typeof(UITableViewCell), MyCellId);
-            TableView.Source = new TableSource(FilteredInstruments, this);
+            TableView.Source = new TableSource(SearhItems, this, DestinationID);
         }
 
     }
@@ -131,18 +132,20 @@ namespace CryptoAccouting
     class TableSource : UITableViewSource
     {
         UITableViewController owner;
-        List<Instrument> instruments;
+        string destinationid;
+        List<SelectionSearchItem> searchitems;
         string cellIdentifier = "SymbolListCell";
 
-        public TableSource(List<Instrument> instruments, UITableViewController owner)
+        public TableSource(List<SelectionSearchItem> searchitems, UITableViewController owner, string destinationid)
         {
-            this.instruments = instruments.OrderBy(x=>x.rank).ToList();
+            this.searchitems = searchitems.OrderBy(x=>x.SortOrder).ToList();
             this.owner = owner;
+            this.destinationid = destinationid;
         }
 
         public override nint RowsInSection(UITableView tableview, nint section)
         {
-            return instruments.Count;
+            return searchitems.Count;
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
@@ -151,23 +154,41 @@ namespace CryptoAccouting
             //if (cell == null) 
             var cell = new UITableViewCell(UITableViewCellStyle.Subtitle, cellIdentifier);
 
-            cell.TextLabel.Text = instruments[indexPath.Row].Symbol;
-            cell.DetailTextLabel.Text = instruments[indexPath.Row].Name;
+            cell.TextLabel.Text = searchitems[indexPath.Row].SearchItem1;
+            cell.DetailTextLabel.Text = searchitems[indexPath.Row].SearchItem2;
 
-            var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), 
-                                    "Images", instruments[indexPath.Row].Id + ".png" );
-            cell.ImageView.Image = logo == null ? null : UIImage.FromFile(logo);
+            if (searchitems[indexPath.Row].ImageFile != null)
+            {
+                var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                                        "Images", searchitems[indexPath.Row].ImageFile);
+                cell.ImageView.Image = logo == null ? null : UIImage.FromFile(logo);
+            }
 
             return cell;
         }
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            var BalanceEditViewC = owner.Storyboard.InstantiateViewController("BalanceEditViewC") as BalanceEditViewController;
-            BalanceEditViewC.SetPositionForNewCoin(instruments[indexPath.Row].Symbol);
-            owner.NavigationController.PushViewController(BalanceEditViewC, false);
+            if (destinationid is null)
+            {
+                CryptoTableViewController root = owner.NavigationController.ViewControllers[0] as CryptoTableViewController;
+                root.SetSearchSelectionItem(searchitems[indexPath.Row].SearchItem1);
+                owner.NavigationController.PopToRootViewController(true);
+            }else{
+				var DestinationViewC = owner.Storyboard.InstantiateViewController(destinationid) as BalanceEditViewController;
+				DestinationViewC.SetSearchSelectionItem(searchitems[indexPath.Row].SearchItem1);
+				owner.NavigationController.PushViewController(DestinationViewC, false);
+            }
         }
 
     }
 
+    public class SelectionSearchItem
+    {
+        public string SearchItem1 { get; set; }
+        public string SearchItem2 { get; set; }
+        public string ImageFile { get; set; }
+        public int SortOrder { get; set; }
+
+    }
 }

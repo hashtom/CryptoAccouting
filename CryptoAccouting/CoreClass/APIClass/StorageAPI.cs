@@ -165,13 +165,13 @@ namespace CryptoAccouting.CoreClass.APIClass
                     coin.IsActive = bool.Parse((string)elem.Descendants("isactive").Select(x => x.Value).First());
                     instruments.Add(coin);
                 }
+
+                return instruments;
             }
             else
             {
-                instruments = new List<Instrument>();
+                return null;
             }
-
-			return instruments;
 
 		}
 

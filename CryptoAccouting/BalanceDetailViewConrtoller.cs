@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace CryptoAccouting
 {
-    public partial class BalanceDetailViewConrtoller : BalanceTableViewController
+    public partial class BalanceDetailViewConrtoller : CryptoTableViewController
     {
 
         string symbol_selected;

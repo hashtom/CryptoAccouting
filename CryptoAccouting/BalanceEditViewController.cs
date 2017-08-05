@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace CryptoAccouting
 {
-	public partial class BalanceEditViewController : UITableViewController
+    public partial class BalanceEditViewController : CryptoTableViewController
 	{
 		Position PositionDetail;
         ExchangeList exchangesListed;
@@ -205,10 +205,10 @@ namespace CryptoAccouting
 		}
 
 
-        public void SetPositionForNewCoin(string symbol)
+        public override void SetSearchSelectionItem(string searchitem1)
         {
-            thisCoin = ApplicationCore.GetInstrument(symbol);
-            exchangesListed = ApplicationCore.GetExchangesBySymbol(symbol);
+            thisCoin = ApplicationCore.GetInstrument(searchitem1);
+            exchangesListed = ApplicationCore.GetExchangesBySymbol(searchitem1);
             thisExchangeType = exchangesListed.First().ExchangeType;
             editmode = true;
         }

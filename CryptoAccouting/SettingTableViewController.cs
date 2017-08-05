@@ -2,13 +2,26 @@ using Foundation;
 using System;
 using UIKit;
 using CryptoAccouting.CoreClass;
+using CryptoAccouting.UIClass;
+using System.Collections.Generic;
 
 namespace CryptoAccouting
 {
-    public partial class SettingTableViewController : UITableViewController
+    public partial class SettingTableViewController : CryptoTableViewController
     {
         public SettingTableViewController (IntPtr handle) : base (handle)
         {
+        }
+
+        public override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+        }
+
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+            labelBaseCurrency.Text = AppSetting.BaseCurrency.ToString();
         }
 
 		public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
@@ -32,25 +45,64 @@ namespace CryptoAccouting
 
             switch (cell.ReuseIdentifier)
             {
+                case "CurrencyCell":
+                    PushSelectionView();
+                    tableView.DeselectRow(indexPath, true);
+                    break;
                 case "RefreshCoinCell":
-                    if (ApplicationCore.LoadInstruments(true) == EnuAppStatus.Success)
-                    {
-                        UIAlertController okAlertController = UIAlertController.Create("Update Coin List", "Successfully Updated", UIAlertControllerStyle.Alert);
-                        okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
-                        this.PresentViewController(okAlertController, true, null);
-                        ApplicationCore.SaveInstrumentXML();
-
-                    }else{
-						UIAlertController okAlertController = UIAlertController.Create("Update COin List", "ERROR!!", UIAlertControllerStyle.Alert);
-						okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
-						this.PresentViewController(okAlertController, true, null); 
-                    }
+                    ReloadCoinData();
                     tableView.DeselectRow(indexPath, true);
 					break;
                 default:
                     tableView.DeselectRow(indexPath, true);
                     break;
             }
+        }
+
+		private void PushSelectionView()
+		{
+			List<SelectionSearchItem> searchitems = new List<SelectionSearchItem>();
+            foreach (var item in Enum.GetValues(typeof(EnuCCY)))
+			{
+				SelectionSearchItem searchitem = new SelectionSearchItem()
+				{
+                    SearchItem1 = item.ToString(),
+					SearchItem2 = "",
+					SortOrder = (int)item
+				};
+				searchitems.Add(searchitem);
+			}
+
+			var SymbolSelectionViewC = Storyboard.InstantiateViewController("SymbolSelectionViewC") as SymbolSelectionViewConroller;
+			SymbolSelectionViewC.SelectionItems = searchitems;
+			NavigationController.PushViewController(SymbolSelectionViewC, true);
+		}
+
+        private void ReloadCoinData()
+        {
+            if (ApplicationCore.LoadInstruments(true) == EnuAppStatus.Success)
+            {
+                UIAlertController okAlertController = UIAlertController.Create("Update Coin List", "Successfully Updated", UIAlertControllerStyle.Alert);
+                okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+                this.PresentViewController(okAlertController, true, null);
+                ApplicationCore.SaveInstrumentXML();
+
+            }
+            else
+            {
+                UIAlertController okAlertController = UIAlertController.Create("Update COin List", "ERROR!!", UIAlertControllerStyle.Alert);
+                okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
+                this.PresentViewController(okAlertController, true, null);
+            }
+        }
+
+        public override void SetSearchSelectionItem(string searchitem1)
+        {
+            //base.SetSearchSelectionItem(searchitem1);
+            EnuCCY baseccy;
+            if (!Enum.TryParse(searchitem1, out baseccy)) baseccy = EnuCCY.USD;
+            AppSetting.BaseCurrency = baseccy;
+            labelBaseCurrency.Text = baseccy.ToString();
         }
         
     }

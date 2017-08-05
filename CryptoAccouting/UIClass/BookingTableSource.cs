@@ -13,10 +13,10 @@ namespace CryptoAccouting.UIClass
 		Balance myBalance;
         string symbol_selected;
 		NSString cellIdentifier = new NSString("BookingViewCell");
-		BalanceTableViewController owner;
+		CryptoTableViewController owner;
 		//List<Position> bookingPositions;
 
-        public BookingTableSource(string symbol, BalanceTableViewController owner)
+        public BookingTableSource(string symbol, CryptoTableViewController owner)
         {
             this.myBalance = ApplicationCore.Balance;
             this.owner = owner;

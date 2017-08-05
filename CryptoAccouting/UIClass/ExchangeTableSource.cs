@@ -12,9 +12,9 @@ namespace CryptoAccouting.UIClass
     {
         Balance myBalance;
         NSString cellIdentifier = new NSString("ExchangeViewCell"); // set in the Storyboard
-        BalanceTableViewController owner;
+        CryptoTableViewController owner;
 
-        public ExchangeTableSource(BalanceTableViewController owner)
+        public ExchangeTableSource(CryptoTableViewController owner)
         {
             this.myBalance = ApplicationCore.Balance;
             this.owner = owner;

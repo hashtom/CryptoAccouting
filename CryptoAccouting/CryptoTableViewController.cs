@@ -6,10 +6,10 @@ using CryptoAccouting.UIClass;
 
 namespace CryptoAccouting
 {
-    public abstract class BalanceTableViewController : UITableViewController
+    public abstract class CryptoTableViewController : UITableViewController
     {
         
-        public BalanceTableViewController(IntPtr handle) : base(handle)
+        public CryptoTableViewController(IntPtr handle) : base(handle)
         {
         }
 
@@ -30,6 +30,11 @@ namespace CryptoAccouting
             if (PopToRoot) NavigationController.PopToRootViewController(true);
         }
 
-        //public virtual void RefreshBalanceTable(){}
+		//public virtual void RefreshBalanceTable(){}
+
+        public virtual void SetSearchSelectionItem(string searchitem1)
+		{
+
+		}
     }
 }

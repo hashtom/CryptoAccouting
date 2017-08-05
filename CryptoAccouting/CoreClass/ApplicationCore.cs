@@ -28,15 +28,21 @@
             ExchangeList.AttachExchange(bitbank);
             ExchangeList.AttachExchange(bitflyer);             ExchangeList.AttachExchange(poloniex);             ExchangeList.AttachExchange(bittrex);          }          public static EnuAppStatus LoadInstruments(bool forceRefresh)
         {             if (forceRefresh)
-            {                 myInstruments = new List<Instrument>();
-                 if (MarketDataAPI.FetchAllCoinData(myInstruments) == EnuAppStatus.Success)
-                {
-					SaveInstrumentXML();
-                    return EnuAppStatus.Success;
-                }else{                     myInstruments = StorageAPI.LoadInstrumentXML("instruments.xml");                     return myInstruments is null ? EnuAppStatus.FailureStorage : EnuAppStatus.SuccessButOffline;                 }
+            {                 var status = MarketDataAPI.FetchAllCoinData(myInstruments);                 if ( status == EnuAppStatus.Success)
+                {                     SaveInstrumentXML();
+                }
+                 return status;
             }
             else
-            {                 myInstruments = StorageAPI.LoadInstrumentXML("instruments.xml");                 return myInstruments is null ? EnuAppStatus.FailureStorage : EnuAppStatus.Success;             }          }          public static void SaveInstrumentXML()
+            {                 myInstruments = StorageAPI.LoadInstrumentXML("instruments.xml");                 if (myInstruments == null)
+                {
+                    myInstruments = new List<Instrument>();
+                    return LoadInstruments(true);                 }
+                else
+                {
+                    return EnuAppStatus.Success;
+                }
+            }          }          public static void SaveInstrumentXML()
         {             StorageAPI.SaveInstrumentXML(myInstruments, "instruments.xml");         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, "mybalance.xml");         }          public static Instrument GetInstrument(string symbol)
         {
             if (myInstruments.Any(i => i.Symbol == symbol))
