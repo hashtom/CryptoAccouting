@@ -112,16 +112,19 @@ namespace CryptoAccouting
             labelCoinSymbol.Text = thisCoin.Symbol;
             labelCoinName.Text = thisCoin.Name;
 
-            labelBTCPrice.Text = thisCoin.Symbol == "BTC" ?
-                "" :
-                "฿" + String.Format("{0:n8}", thisCoin.MarketPrice.LatestPriceBTC);
-            labelFiatPrice.Text = thisCoin.Symbol == "BTC" ?
-                "$" + String.Format("{0:n2}", thisCoin.MarketPrice.LatestPrice) :
-                "$" + String.Format("{0:n6}", thisCoin.MarketPrice.LatestPriceBTC);
-            labelFiat1dRet.Text = String.Format("{0:n2}", thisCoin.MarketPrice.SourceRet1d()) + "%";
-            labelBTCRet.Text = String.Format("{0:n2}", thisCoin.MarketPrice.BTCRet1d()) + "%";
-            //labelVolume.Text = String.Format("{0:n0}", thisCoin.MarketPrice.DayVolume);
-            //labelMarketCap.Text = "$" + String.Format("{0:n0}", thisCoin.MarketPrice.MarketCap);
+            if (thisCoin.MarketPrice != null)
+            {
+                labelBTCPrice.Text = thisCoin.Symbol == "BTC" ?
+                    "" :
+                    "฿" + String.Format("{0:n8}", thisCoin.MarketPrice.LatestPriceBTC);
+                labelFiatPrice.Text = thisCoin.Symbol == "BTC" ?
+                    "$" + String.Format("{0:n2}", thisCoin.MarketPrice.LatestPrice) :
+                    "$" + String.Format("{0:n6}", thisCoin.MarketPrice.LatestPriceBTC);
+                labelFiat1dRet.Text = String.Format("{0:n2}", thisCoin.MarketPrice.SourceRet1d()) + "%";
+                labelBTCRet.Text = String.Format("{0:n2}", thisCoin.MarketPrice.BTCRet1d()) + "%";
+                //labelVolume.Text = String.Format("{0:n0}", thisCoin.MarketPrice.DayVolume);
+                //labelMarketCap.Text = "$" + String.Format("{0:n0}", thisCoin.MarketPrice.MarketCap);
+            }
 
             if (PositionDetail is null) // new balance
             {

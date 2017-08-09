@@ -10,9 +10,8 @@ namespace CryptoAccouting.CoreClass.APIClass
 {
     public static class ExchangeAPI
     {
-        //private static string apikey, apisecret;
-
-        public static async Task<Price> FetchBTCPriceAsyncTest(APIKey ApiKey, string apikey, string apisecret){
+        
+        public static async Task<Price> FetchBTCPriceAsyncTest(Exchange exchange, string apikey, string apisecret){
 
             var coin = ApplicationCore.GetInstrument("BTC");
             var p = new Price(coin);
@@ -20,14 +19,14 @@ namespace CryptoAccouting.CoreClass.APIClass
             p.SourceCurrency = EnuCCY.JPY;
             coin.MarketPrice = p;
 
-            switch (ApiKey.ExchangeType) {
+            switch (exchange.ExchangeType) {
 
                 case EnuExchangeType.Zaif :
 
                     if (p.Coin.Symbol != "BTC") return null; // will add exception statement here
 
                     //GetAPIKey(EnuExchangeType.Zaif);
-                    var rawjson = await ZaifAPI.FetchPriceAsync(ApiKey.Key, ApiKey.Secret);
+                    var rawjson = await ZaifAPI.FetchPriceAsync(exchange.Key, exchange.Secret);
                     var json = JObject.Parse(rawjson);
 
                     p.LatestPriceBTC = (double)json.SelectToken("$.last");
@@ -82,13 +81,13 @@ namespace CryptoAccouting.CoreClass.APIClass
 
 		//}
 
-		internal static async Task<TradeList> FetchTradeListAsync(APIKey ApiKey, bool isAggregateDaily = true, bool ReadFromFile = false)
+        internal static async Task<TradeList> FetchTradeListAsync(Exchange exchange, bool isAggregateDaily = true, bool ReadFromFile = false)
 		{
 
             TradeList tradelist = new TradeList(ApplicationCore.BaseCurrency);
 			string rawjson;
 
-            switch (ApiKey.ExchangeType)
+            switch (exchange.ExchangeType)
 			{
 				case EnuExchangeType.Zaif:
 
@@ -99,7 +98,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 					else
 					{
 						//GetAPIKey(EnuExchangeType.Zaif);
-                        rawjson = await ZaifAPI.FetchTransactionAsync(ApiKey.Key, ApiKey.Secret);
+                        rawjson = await ZaifAPI.FetchTransactionAsync(exchange.Key, exchange.Secret);
 
 					}
 
@@ -129,7 +128,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                         symbol = symbol.Replace("_jpy", "").Replace("_btc", "").ToUpper();
 
                         tradelist.AggregateTransaction(ApplicationCore.GetInstrument(symbol),
-                                                      ApiKey.ExchangeType,
+                                                      exchange.ExchangeType,
                                                       ebuysell,
                                                       (double)json["return"][x.Name]["amount"],
                                                       (double)json["return"][x.Name]["price"],
@@ -151,47 +150,6 @@ namespace CryptoAccouting.CoreClass.APIClass
 			return tradelist;
 		}
 
-        //public static string[] GetAPIKey(EnuExchangeType exType)
-        //{
-
-        //    switch (exType)
-        //    {
-        //        case EnuExchangeType.Zaif:
-
-        //            var xmldoc = File.ReadAllText("TestData/apikey.xml");
-        //            //Console.WriteLine(xmldoc);
-
-        //            //var doc = XElement.Parse("TestData/apikey.xml").Descendants("broker").Where(n => n.Attribute("name").Value == "Zaif");
-        //            var doc = XElement.Parse(xmldoc).Descendants("broker").Where(n => n.Attribute("name").Value == "Zaif");
-        //            apikey = doc.Descendants("key").Select(x => x.Value).First();
-        //            apisecret = doc.Descendants("secret").Select(x => x.Value).First();
-
-        //            var key = new APIKey(EnuExchangeType.Zaif, apikey, apisecret);
-        //            ApplicationCore.AttatchAPIKey(key);
-        //            break;
-        //        default:
-        //            break;
-        //    }
-
-        //    return new string[2]{apikey,apisecret};
-
-        //}
-
     }
-
-
-	public class APIKey
-	{
-		public EnuExchangeType ExchangeType { get; private set; }
-		public string Key { get; private set; }
-		public string Secret { get; private set; }
-
-        public APIKey(EnuExchangeType ExchangeType, string Key, string Secret)
-        {
-            this.ExchangeType = ExchangeType;
-            this.Key = Key;
-            this.Secret = Secret;
-        }
-	}
 
 }

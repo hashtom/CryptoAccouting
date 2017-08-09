@@ -188,8 +188,6 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static EnuAppStatus LoadAppSettingXML(string fileName)
         {
-            //ApplicationCore.APIKeys = new List<APIKey>();
-            //var apikeys = ApplicationCore.APIKeys;
             var basecurrency = ApplicationCore.BaseCurrency;
 			var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 			var path = Path.Combine(documents, fileName);
@@ -207,16 +205,17 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 foreach (var elem in apikeysXE)
                 {
-                    EnuExchangeType exchange;
-                    if (!Enum.TryParse((string)elem.Attribute("name").Value, out exchange))
-                        exchange = EnuExchangeType.NotSelected;
-
-                    var apikey = new APIKey(exchange,
-                                            elem.Element("key").Value,
-                                            elem.Element("secret").Value);
-
-                    ApplicationCore.AttatchAPIKey(apikey);
-
+                    EnuExchangeType extype;
+                    if (!Enum.TryParse((string)elem.Attribute("name").Value, out extype))
+                    {
+                        extype = EnuExchangeType.NotSelected;
+                    }
+                    else
+                    {
+                        var exchange = ApplicationCore.GetExchange(extype);
+                        exchange.Key = elem.Element("key").Value;
+                        exchange.Secret = elem.Element("secret").Value;
+                    }
                 }
 
                 return EnuAppStatus.Success;
@@ -229,7 +228,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         }
 
-        public static EnuAppStatus SaveAppSettingXML(string fileName, string AppName, EnuCCY BaseCurrency, List<APIKey> APIKeys)
+        public static EnuAppStatus SaveAppSettingXML(string fileName, string AppName, EnuCCY BaseCurrency, ExchangeList exList)
 		{
 			var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 			var path = Path.Combine(mydocuments, fileName);
@@ -244,12 +243,12 @@ namespace CryptoAccouting.CoreClass.APIClass
             XElement apikeys = new XElement("apikeys");
             application.Add(apikeys); 
 
-            foreach (var apikey in APIKeys)
+            foreach (var exchange in exList)
 			{
                 XElement key = new XElement("exchange",
-                                            new XAttribute("name", apikey.ExchangeType),
-                                            new XElement("key", apikey.Key),
-                                            new XElement("secret", apikey.Secret)
+                                            new XAttribute("name", exchange.ExchangeType),
+                                            new XElement("key", exchange.Key),
+                                            new XElement("secret", exchange.Secret)
                                            );
 				apikeys.Add(key);
 			}
@@ -259,6 +258,42 @@ namespace CryptoAccouting.CoreClass.APIClass
             return EnuAppStatus.Success; //todo
 
 		}
+
+  //      public static EnuAppStatus SaveExchangeListXMLTemp(ExchangeList exList, string fileName)
+		//{
+		//	var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+		//	var path = Path.Combine(mydocuments, fileName);
+
+		//	XElement application = new XElement("application",
+  //                                              new XAttribute("name", ApplicationCore.AppName));
+
+		//	XElement exchanges = new XElement("exchanges");
+		//	application.Add(exchanges);
+
+  //          foreach (var ex in exList)
+		//	{
+  //              var coins = new XElement("coins");
+  //              foreach (var coin in ex.ListedCoin)
+  //              {
+  //                  var listing = new XElement("listing",
+  //                                                  new XAttribute("symbol", coin.Symbol));
+  //                  coins.Add(listing);
+  //              }
+
+		//		XElement exchange = new XElement("exchange",
+  //                                          new XAttribute("type", ex.ExchangeType),
+  //                                          new XElement("name", ex.ExchangeName),
+  //                                          coins
+		//								   );
+
+  //              exchanges.Add(exchange);
+		//	}
+
+		//	File.WriteAllText(path, application.ToString());
+
+		//	return EnuAppStatus.Success;
+
+		//}
 
     }
 }

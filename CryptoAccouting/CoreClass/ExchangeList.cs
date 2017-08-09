@@ -28,15 +28,35 @@ namespace CryptoAccouting.CoreClass
 
         public Exchange GetExchange(EnuExchangeType extype)
         {
-            if (exchanges == null ? false : exchanges.Where(x => x.ExchangeType == extype).Any())
-            {
-                return exchanges.First(x => x.ExchangeType == extype);
+            //if (exchanges == null ? false : exchanges.Where(x => x.ExchangeType == extype).Any())
+            //{
+            //    return exchanges.First(x => x.ExchangeType == extype);
+            //}
+            //else
+            //{
+            //    var exc = new Exchange(extype);
+            //    this.AttachExchange(exc);
+            //    return exc;
+            //}
+
+            if (exchanges.Where(x => x.ExchangeType == extype).Any() == false){
+                this.AttachExchange(new Exchange(extype));
             }
-            else
-            {
-                return new Exchange(extype);
-            }
+
+            return exchanges.First(x => x.ExchangeType == extype);
         }
+
+  //      public Exchange GetExchange(string ExchangeName)
+		//{
+  //          if (exchanges == null ? false : exchanges.Where(x => x.ExchangeName == ExchangeName).Any())
+		//	{
+		//		return exchanges.First(x => x.ExchangeName == ExchangeName);
+		//	}
+		//	else
+		//	{
+		//		return null;
+		//	}
+		//}
 
         public ExchangeList GetExchangesBySymbol(string symbol){
 

@@ -132,6 +132,7 @@
     <Folder Include="Resources\" />
     <Folder Include="TestData\" />
     <Folder Include="CoreClass\APIClass\" />
+    <Folder Include="Json\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -171,10 +172,6 @@
     <Compile Include="SettingTableViewController.cs" />
     <Compile Include="SettingTableViewController.designer.cs">
       <DependentUpon>SettingTableViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SettingDetailController.cs" />
-    <Compile Include="SettingDetailController.designer.cs">
-      <DependentUpon>SettingDetailController.cs</DependentUpon>
     </Compile>
     <Compile Include="CoreClass\APIClass\MarketDataAPI.cs" />
     <Compile Include="CoreClass\APIClass\StorageAPI.cs" />
@@ -223,6 +220,7 @@
     <BundleResource Include="Images\jpy.png" />
     <BundleResource Include="Images\exchange.png" />
     <BundleResource Include="Images\key.png" />
+    <BundleResource Include="Json\ExchangeList.json" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
