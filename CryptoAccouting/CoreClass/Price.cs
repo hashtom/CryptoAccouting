@@ -18,7 +18,7 @@ namespace CryptoAccouting.CoreClass
         //public double SourceRet7d { get; set; }
         //public double PrevClose { get; set; }
 		public DateTime PriceDate { get; set; }
-        public FXRate SourceToBaseCurrency { get; set; }
+        public USDCrossRate SourceToBaseCurrency { get; set; }
         //public DateTime UpdateTime { get; set; }
 
         public Price(Instrument coin)
@@ -42,8 +42,5 @@ namespace CryptoAccouting.CoreClass
             return (LatestPriceBTC / PriceBTCBefore24h - 1) * 100;
 		}
 
-        //public double DayReturn(){
-        //    return LatestPrice.Equals((double)0) ? 0 : PrevClose / LatestPrice - 1;
-        //}
     }
 }

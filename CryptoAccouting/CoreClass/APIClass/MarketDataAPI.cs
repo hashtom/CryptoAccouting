@@ -238,7 +238,6 @@ namespace CryptoAccouting.CoreClass.APIClass
 		{
 
 			string rawjson;
-
 			string BaseUri = "http://bridgeplace.sakura.ne.jp/cryptoticker/ExchangeList.json";
 
 			if (!Reachability.IsHostReachable(BaseUri))
@@ -283,13 +282,10 @@ namespace CryptoAccouting.CoreClass.APIClass
 			return EnuAppStatus.Success;
 		}
 
-
-        public static EnuAppStatus FetchExchangeListTemp(Instrument coin, ExchangeList exlist)
+        public static EnuAppStatus FetchUSDCrossRate(List<USDCrossRate> CrossRates)
 		{
-
 			string rawjson;
-
-			string BaseUri = "https://api.cryptonator.com/api/full/";
+            const string BaseUri = "https://finance.yahoo.com/webservice/v1/symbols/allcurrencies/quote?format=json";
 
 			if (!Reachability.IsHostReachable(BaseUri))
 			{
@@ -298,41 +294,81 @@ namespace CryptoAccouting.CoreClass.APIClass
 			else
 			{
 
-				BaseUri = (coin.Symbol == "BTC") ? BaseUri + "btc-usd" : BaseUri + coin.Symbol.ToLower() + "-btc";
-
-                using (var http = new HttpClient())
-                {
-                    HttpResponseMessage response = http.GetAsync(BaseUri).Result;
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        return EnuAppStatus.FailureNetwork;
-                    }
-                    rawjson = response.Content.ReadAsStringAsync().Result;
-                }
+				using (var http = new HttpClient())
+				{
+					HttpResponseMessage response = http.GetAsync(BaseUri).Result;
+					if (!response.IsSuccessStatusCode)
+					{
+						return EnuAppStatus.FailureNetwork;
+					}
+					rawjson = response.Content.ReadAsStringAsync().Result;
+				}
 
 				var json = JObject.Parse(rawjson);
 
-                if (!(bool)json["success"]) return EnuAppStatus.FailureParameter;
-
-                foreach (var market in (JArray)json["ticker"]["markets"])
-                {
-                    var name = (string)market["market"];
-
-                    EnuExchangeType tradedexchange;
-                    if (!Enum.TryParse(name.Replace("-","").Replace(".","").Replace(" ",""), out tradedexchange))
-                        tradedexchange = EnuExchangeType.NotSelected;
-
-                    if (tradedexchange != EnuExchangeType.NotSelected)
-                    {
-                        var exchange = exlist.GetExchange(tradedexchange);
-                        exchange.AttachListedCoin(coin);
-                    }
-                }
+                foreach (var ccy in (JArray)json["list"]["resources"])
+				{
+                    var crossrate = new USDCrossRate((string)ccy["resource"]["fields"]["symbol"],
+                                                     (double)ccy["resource"]["fields"]["price"],
+                                                     DateTime.Now.Date);
+                    CrossRates.Add(crossrate);
+				}
 
 			}
 
 			return EnuAppStatus.Success;
 		}
+
+
+  //      public static EnuAppStatus FetchExchangeListTemp(Instrument coin, ExchangeList exlist)
+		//{
+
+		//	string rawjson;
+
+		//	string BaseUri = "https://api.cryptonator.com/api/full/";
+
+		//	if (!Reachability.IsHostReachable(BaseUri))
+     	//	{
+		//		return EnuAppStatus.FailureNetwork;
+		//	}
+		//	else
+		//	{
+
+		//		BaseUri = (coin.Symbol == "BTC") ? BaseUri + "btc-usd" : BaseUri + coin.Symbol.ToLower() + "-btc";
+
+  //              using (var http = new HttpClient())
+  //              {
+  //                  HttpResponseMessage response = http.GetAsync(BaseUri).Result;
+  //                  if (!response.IsSuccessStatusCode)
+  //                  {
+  //                      return EnuAppStatus.FailureNetwork;
+  //                  }
+  //                  rawjson = response.Content.ReadAsStringAsync().Result;
+  //              }
+
+		//		var json = JObject.Parse(rawjson);
+
+  //              if (!(bool)json["success"]) return EnuAppStatus.FailureParameter;
+
+  //              foreach (var market in (JArray)json["ticker"]["markets"])
+  //              {
+  //                  var name = (string)market["market"];
+
+  //                  EnuExchangeType tradedexchange;
+  //                  if (!Enum.TryParse(name.Replace("-","").Replace(".","").Replace(" ",""), out tradedexchange))
+  //                      tradedexchange = EnuExchangeType.NotSelected;
+
+  //                  if (tradedexchange != EnuExchangeType.NotSelected)
+  //                  {
+  //                      var exchange = exlist.GetExchange(tradedexchange);
+  //                      exchange.AttachListedCoin(coin);
+  //                  }
+  //              }
+
+		//	}
+
+		//	return EnuAppStatus.Success;
+		//}
 
     }
 }

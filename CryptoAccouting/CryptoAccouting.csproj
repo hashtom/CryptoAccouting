@@ -147,7 +147,6 @@
     <None Include="packages.config" />
     <None Include="TestData\BalanceData.xml" />
     <None Include="TestData\instrumentsData.xml" />
-    <None Include="TestData\AppSetting.xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -212,7 +211,7 @@
     </Compile>
     <Compile Include="CryptoTableViewController.cs" />
     <Compile Include="UIClass\BookingTableSource.cs" />
-    <Compile Include="CoreClass\FXRate.cs" />
+    <Compile Include="CoreClass\USDCrossRate.cs" />
     <Compile Include="UIClass\CustomExchangeViewCell.cs" />
     <Compile Include="UIClass\AppSetting.cs" />
   </ItemGroup>
