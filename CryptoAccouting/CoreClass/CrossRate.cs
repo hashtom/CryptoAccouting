@@ -3,17 +3,17 @@
 
 namespace CryptoAccouting.CoreClass
 {
-    public class USDCrossRate
+    public class CrossRate
     {
         public EnuCCY Currency { get; set; }
-        public string Code { get; set; }
+        //public string Code { get; set; }
         public double Rate { get; set; }
         public double RateBefore24h { get; set; }
 		public DateTime PriceDate { get; set; }
 
-        public USDCrossRate(string code, double rate, DateTime pricedate)
+        public CrossRate(EnuCCY currency, double rate, DateTime pricedate)
         {
-            this.Code = code;
+            this.Currency = currency;
             this.Rate = rate;
             this.PriceDate = pricedate;
         }

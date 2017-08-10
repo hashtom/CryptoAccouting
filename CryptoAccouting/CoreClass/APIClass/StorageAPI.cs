@@ -188,19 +188,17 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static EnuAppStatus LoadAppSettingXML(string fileName)
         {
-            var basecurrency = ApplicationCore.BaseCurrency;
+            EnuCCY baseccy;
 			var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 			var path = Path.Combine(documents, fileName);
-
-
 
             if (File.Exists(path))
             {
                 var xmldoc = File.ReadAllText(path);
 
-                if (!Enum.TryParse(XElement.Parse(xmldoc).Element("basecurrency").Value, out basecurrency))
-                    basecurrency = EnuCCY.USD;
-
+                if (!Enum.TryParse(XElement.Parse(xmldoc).Element("basecurrency").Value, out baseccy))
+                    baseccy = EnuCCY.USD;
+                
                 var apikeysXE = XElement.Parse(xmldoc).Descendants("exchange");
 
                 foreach (var elem in apikeysXE)
@@ -217,6 +215,8 @@ namespace CryptoAccouting.CoreClass.APIClass
                         exchange.Secret = elem.Element("secret").Value;
                     }
                 }
+
+                ApplicationCore.BaseCurrency = baseccy;
 
                 return EnuAppStatus.Success;
 

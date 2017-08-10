@@ -11,37 +11,37 @@ namespace CryptoAccouting.CoreClass.APIClass
     public static class ExchangeAPI
     {
         
-        public static async Task<Price> FetchBTCPriceAsyncTest(Exchange exchange, string apikey, string apisecret){
+        //public static async Task<Price> FetchBTCPriceAsyncTest(Exchange exchange, string apikey, string apisecret){
 
-            var coin = ApplicationCore.GetInstrument("BTC");
-            var p = new Price(coin);
+        //    var coin = ApplicationCore.GetInstrument("BTC");
+        //    var p = new Price(coin);
 
-            p.SourceCurrency = EnuCCY.JPY;
-            coin.MarketPrice = p;
+        //    p.SourceCurrency = EnuCCY.JPY;
+        //    coin.MarketPrice = p;
 
-            switch (exchange.ExchangeType) {
+        //    switch (exchange.ExchangeType) {
 
-                case EnuExchangeType.Zaif :
+        //        case EnuExchangeType.Zaif :
 
-                    if (p.Coin.Symbol != "BTC") return null; // will add exception statement here
+        //            if (p.Coin.Symbol != "BTC") return null; // will add exception statement here
 
-                    //GetAPIKey(EnuExchangeType.Zaif);
-                    var rawjson = await ZaifAPI.FetchPriceAsync(exchange.Key, exchange.Secret);
-                    var json = JObject.Parse(rawjson);
+        //            //GetAPIKey(EnuExchangeType.Zaif);
+        //            var rawjson = await ZaifAPI.FetchPriceAsync(exchange.Key, exchange.Secret);
+        //            var json = JObject.Parse(rawjson);
 
-                    p.LatestPriceBTC = (double)json.SelectToken("$.last");
-                    p.DayVolume = (int)json.SelectToken("$.volume");
-                    p.PriceSource = "zaif";
-                    p.PriceDate = DateTime.Now;
-                    //p.UpdateTime = DateTime.Now;
+        //            p.LatestPriceBTC = (double)json.SelectToken("$.last");
+        //            p.DayVolume = (int)json.SelectToken("$.volume");
+        //            p.PriceSource = "zaif";
+        //            p.PriceDate = DateTime.Now;
+        //            //p.UpdateTime = DateTime.Now;
 
-                    return p;
+        //            return p;
 
-                default:
-                    return null;
-            }
+        //        default:
+        //            return null;
+        //    }
 
-        }
+        //}
 
         internal static void FetchPosition(EnuExchangeType exType){
 

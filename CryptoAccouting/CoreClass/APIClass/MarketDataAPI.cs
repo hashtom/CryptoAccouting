@@ -70,11 +70,11 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                     var jarray = await Task.Run(() => JArray.Parse(rawjson));
 
-                    coin.MarketPrice.SourceCurrency = coin.Symbol == "BTC" ? EnuCCY.USD : EnuCCY.BTC;
+                    //coin.MarketPrice.SourceCurrency = coin.Symbol == "BTC" ? EnuCCY.USD : EnuCCY.BTC;
                     coin.MarketPrice.LatestPriceBTC = coin.Symbol == "BTC" ? 1 : (double)jarray[i]["price"];
                     coin.MarketPrice.PriceBTCBefore24h = coin.Symbol == "BTC" ? 1 : (double)jarray[i]["price_before_24h"];
-                    coin.MarketPrice.LatestPrice = coin.Symbol == "BTC" ? (double)jarray[i]["price"] : (double)jarray[i]["price"] * (double)jarray[0]["price"];
-                    coin.MarketPrice.PriceBefore24h = coin.Symbol == "BTC" ? (double)jarray[i]["price_before_24h"] : (double)jarray[i]["price_before_24h"] * (double)jarray[0]["price_before_24h"];
+                    coin.MarketPrice.LatestPriceUSD = coin.Symbol == "BTC" ? (double)jarray[i]["price"] : (double)jarray[i]["price"] * (double)jarray[0]["price"];
+                    coin.MarketPrice.PriceUSDBefore24h = coin.Symbol == "BTC" ? (double)jarray[i]["price_before_24h"] : (double)jarray[i]["price_before_24h"] * (double)jarray[0]["price_before_24h"];
                     coin.MarketPrice.DayVolume = (double)jarray[i]["volume_btc"];
                     coin.MarketPrice.PriceDate = DateTime.Now;
 
@@ -157,11 +157,11 @@ namespace CryptoAccouting.CoreClass.APIClass
 
 			    json = await Task.Run(() => JObject.Parse(rawjson));
 
-                coin.MarketPrice.SourceCurrency = coin.Symbol == "BTC" ? EnuCCY.USD : EnuCCY.BTC;
+                //coin.MarketPrice.SourceCurrency = coin.Symbol == "BTC" ? EnuCCY.USD : EnuCCY.BTC;
 				coin.MarketPrice.LatestPriceBTC = coin.Symbol == "BTC" ? 1 : (double)json["price"];
 				coin.MarketPrice.PriceBTCBefore24h = coin.Symbol == "BTC" ? 1 : (double)json["price_before_24h"];
-                coin.MarketPrice.LatestPrice = coin.Symbol == "BTC" ? (double)json["price"] : (double)json["price"] * bitcoin.MarketPrice.LatestPrice;
-                coin.MarketPrice.PriceBefore24h = coin.Symbol == "BTC" ? (double)json["price_before_24h"] : (double)json["price_before_24h"] * bitcoin.MarketPrice.PriceBefore24h;
+                coin.MarketPrice.LatestPriceUSD = coin.Symbol == "BTC" ? (double)json["price"] : (double)json["price"] * bitcoin.MarketPrice.LatestPriceUSD;
+                coin.MarketPrice.PriceUSDBefore24h = coin.Symbol == "BTC" ? (double)json["price_before_24h"] : (double)json["price_before_24h"] * bitcoin.MarketPrice.PriceUSDBefore24h;
 				coin.MarketPrice.DayVolume = (double)json["volume_btc"];
 				coin.MarketPrice.PriceDate = DateTime.Now;
 
@@ -198,7 +198,6 @@ namespace CryptoAccouting.CoreClass.APIClass
                     coin.rank = int.Parse((string)elem["rank"]);
                     //coin.LogoFileName = ((string)elem["id"] + ".png");
                     var p = new Price(coin);
-                    p.SourceCurrency = ApplicationCore.BaseCurrency;
                     coin.MarketPrice = p;
                     instruments.Add(coin);
                     FetchCoinLogo(coin.Id, false);
@@ -282,41 +281,50 @@ namespace CryptoAccouting.CoreClass.APIClass
 			return EnuAppStatus.Success;
 		}
 
-        public static EnuAppStatus FetchUSDCrossRate(List<USDCrossRate> CrossRates)
+        public static async Task<CrossRate> FetchUSDCrossRateAsync(EnuCCY BaseCurrency)
 		{
+            CrossRate crossrate = null;
 			string rawjson;
             const string BaseUri = "https://finance.yahoo.com/webservice/v1/symbols/allcurrencies/quote?format=json";
 
 			if (!Reachability.IsHostReachable(BaseUri))
 			{
-				return EnuAppStatus.FailureNetwork;
+                return null;
+                //return EnuAppStatus.FailureNetwork;
 			}
 			else
 			{
-
 				using (var http = new HttpClient())
 				{
-					HttpResponseMessage response = http.GetAsync(BaseUri).Result;
+                    HttpResponseMessage response = await http.GetAsync(BaseUri);
 					if (!response.IsSuccessStatusCode)
 					{
-						return EnuAppStatus.FailureNetwork;
+                        return null;
+                        //return EnuAppStatus.FailureNetwork;
 					}
-					rawjson = response.Content.ReadAsStringAsync().Result;
+                    rawjson = await response.Content.ReadAsStringAsync();
 				}
 
 				var json = JObject.Parse(rawjson);
 
                 foreach (var ccy in (JArray)json["list"]["resources"])
 				{
-                    var crossrate = new USDCrossRate((string)ccy["resource"]["fields"]["symbol"],
-                                                     (double)ccy["resource"]["fields"]["price"],
-                                                     DateTime.Now.Date);
-                    CrossRates.Add(crossrate);
+                    EnuCCY baseccy;
+                    var cursymbol = (string)ccy["resource"]["fields"]["symbol"];
+
+					if (!Enum.TryParse(cursymbol.Replace("=X", ""), out baseccy))
+                        continue;
+
+                    if (baseccy == ApplicationCore.BaseCurrency)
+                    {
+                        crossrate = new CrossRate(baseccy, (double)ccy["resource"]["fields"]["price"], DateTime.Now.Date);
+                        break;
+                    }
 				}
 
 			}
 
-			return EnuAppStatus.Success;
+            return crossrate;
 		}
 
 

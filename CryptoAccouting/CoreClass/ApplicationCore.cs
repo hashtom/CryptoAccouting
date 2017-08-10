@@ -1,14 +1,26 @@
 ﻿﻿using System; using System.Collections.Generic; using System.Linq;
 //using System.Xml.Serialization; using System.Threading.Tasks; using UIKit; using CryptoAccouting.UIClass; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         public static EnuCCY BaseCurrency { get; set; } // AppSetting         public static Balance Balance { get; private set; }         private static List<Instrument> myInstruments;
-        public static ExchangeList ExchangeList;         private static List<USDCrossRate> CrossRates;         //public static NavigationDrawer Navigation { get; set; }
+        public static ExchangeList ExchangeList;         private static CrossRate USDCrossRate;         //public static NavigationDrawer Navigation { get; set; }
 
         //public static NavigationDrawer InitializeSlideMenu(UIView BalanceTableView,         //                                                   UITableViewController PositionViewC,         //                                                   UIViewController TransactionViewC,         //                                                   UITableViewController PLViewC,         //                                                   UIViewController PerfViewC,
         //                                                   UIViewController SettingViewC)
         //{         //    Navigation = new NavigationDrawer(BalanceTableView.Frame.Width, BalanceTableView.Frame.Height,         //                                      PositionViewC,
         //                                      TransactionViewC,         //                                      PLViewC,         //                                      PerfViewC,         //                                      SettingViewC);         //    Navigation.AddView(BalanceTableView);         //    return Navigation;         //}          public static EnuAppStatus InitializeCore()
         {             EnuAppStatus status;              //Load Instruments Data             status = LoadInstruments(false);              //Load Exchange List
-            if (status is EnuAppStatus.Success) LoadExchangeList();              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML("AppSetting.xml") != EnuAppStatus.Success){                 BaseCurrency = EnuCCY.USD; //Default setting             }              //Load Balance Data
-			Balance = StorageAPI.LoadBalanceXML("mybalance.xml", myInstruments);              //Load Latest Snapshot price               //Load FX             CrossRates = new List<USDCrossRate>();             MarketDataAPI.FetchUSDCrossRate(CrossRates);              return status;          }          public static EnuAppStatus SaveAppSetting()
+            if (status is EnuAppStatus.Success) LoadExchangeList();              //Load Balance Data
+			Balance = StorageAPI.LoadBalanceXML("mybalance.xml", myInstruments);              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML("AppSetting.xml") != EnuAppStatus.Success)             {                 BaseCurrency = EnuCCY.USD; //Default setting             }              //Load Latest Snapshot price              return status;          }          public static async Task<EnuAppStatus> LoadCoreDataAsync(){
+            
+            //Load FX
+            USDCrossRate = await MarketDataAPI.FetchUSDCrossRateAsync(BaseCurrency);              return EnuAppStatus.Success;         }
+
+		public static async Task FetchMarketDataFromBalanceAsync()
+		{
+			if (Balance != null)
+			{
+				var mycoins = Balance.positionsByCoin.Select(x => x.Coin).ToList();
+				await MarketDataAPI.FetchCoinMarketDataAsync(mycoins);
+			}
+		}          public static EnuAppStatus SaveAppSetting()
         {             return StorageAPI.SaveAppSettingXML("AppSetting.xml", AppName, BaseCurrency, ExchangeList);         }          private static EnuAppStatus LoadExchangeList()
         {
             if (ExchangeList is null) ExchangeList = new ExchangeList();             return MarketDataAPI.FetchExchangeList(ExchangeList);         }          public static EnuAppStatus LoadInstruments(bool forceRefresh)
@@ -62,30 +74,6 @@
 			return epoch.AddSeconds(EpochSeconds);
 
 		} 
-
-		public static async Task FetchMarketDataFromBalanceAsync()
-		{
-			//Instrument bitcoin;
-
-            if (Balance != null)
-            {                 var mycoins = Balance.positionsByCoin.Select(x => x.Coin).ToList();                 await MarketDataAPI.FetchCoinMarketDataAsync(mycoins); 
-                //if (Balance.positions.Any(x => x.Coin.Symbol == "BTC"))
-                //{
-                //    bitcoin = Balance.positions.Where(x => x.Coin.Symbol == "BTC").Select(x => x.Coin).First();
-                //}
-                //else
-                //{
-                //    bitcoin = new Instrument("Bitcoin", "BTC", "Bitcoin");
-                //}
-
-                //await MarketDataAPI.FetchCoinMarketDataAsync(bitcoin);
-
-                //foreach (var pos in Balance.positions.Where(x => x.Coin.Symbol != "BTC"))
-                //{
-                //    if (pos.Coin != null) await MarketDataAPI.FetchCoinMarketDataAsync(pos.Coin, bitcoin);
-                //}             }
-		}
-
 		public static void LoadMarketDataXML()
 		{
             myInstruments = StorageAPI.LoadMarketDataXML("marketdata.xml");

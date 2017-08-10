@@ -55,7 +55,7 @@ namespace CryptoAccouting.CoreClass
             }
             else
             {
-                return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPrice;
+                return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPriceUSD;
             }
 		}
 
@@ -115,7 +115,7 @@ namespace CryptoAccouting.CoreClass
             }
             else
             {
-                return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPrice * this.Amount;
+                return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPriceUSD * this.Amount;
             }
         }
 

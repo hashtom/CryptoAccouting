@@ -118,7 +118,7 @@ namespace CryptoAccouting
                     "" :
                     "฿" + String.Format("{0:n8}", thisCoin.MarketPrice.LatestPriceBTC);
                 labelFiatPrice.Text = thisCoin.Symbol == "BTC" ?
-                    "$" + String.Format("{0:n2}", thisCoin.MarketPrice.LatestPrice) :
+                    "$" + String.Format("{0:n2}", thisCoin.MarketPrice.LatestPriceUSD) :
                     "$" + String.Format("{0:n6}", thisCoin.MarketPrice.LatestPriceBTC);
                 labelFiat1dRet.Text = String.Format("{0:n2}", thisCoin.MarketPrice.SourceRet1d()) + "%";
                 labelBTCRet.Text = String.Format("{0:n2}", thisCoin.MarketPrice.BTCRet1d()) + "%";
