@@ -18,7 +18,7 @@ namespace CryptoAccouting.CoreClass
         //public double SourceRet7d { get; set; }
         //public double PrevClose { get; set; }
 		public DateTime PriceDate { get; set; }
-        public CrossRate CrossRate { get; set; }
+        //public CrossRate CrossRate { get; set; }
         //public DateTime UpdateTime { get; set; }
 
         public Price(Instrument coin)
@@ -28,9 +28,19 @@ namespace CryptoAccouting.CoreClass
             LatestPriceUSD = 0;
         }
 
-        public double BaseCurrencyRet1d()
+        public double LatestPriceBase(CrossRate CrossRate)
         {
-            return CrossRate is null ? 0 : ((LatestPriceUSD * CrossRate.Rate) / (PriceUSDBefore24h * CrossRate.RateBefore24h) - 1) * 100;
+            return (CrossRate is null) ? 0 : LatestPriceBTC * CrossRate.Rate;
+        }
+
+        public double MarketCapBase(CrossRate CrossRate)
+        {
+            return (CrossRate is null) ? 0 : MarketCap * CrossRate.Rate;
+        }
+
+        public double Ret1dBase(CrossRate CrossRate)
+        {
+            return (CrossRate is null) ? 0 : ((LatestPriceUSD * CrossRate.Rate) / (PriceUSDBefore24h * CrossRate.RateBefore24h) - 1) * 100;
         }
 
         public double SourceRet1d(){

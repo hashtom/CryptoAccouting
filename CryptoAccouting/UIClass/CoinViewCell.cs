@@ -31,7 +31,7 @@ namespace CryptoAccouting.UIClass
             labelSymbol.Text = pos.Coin.Symbol;
 
             if (pos.Coin.Symbol is "BTC"){
-				labelPrice.Text = "$" + String.Format("{0:n2}", pos.LatestPrice());
+                labelPrice.Text = "$" + String.Format("{0:n2}", pos.LatestPriceBase(ApplicationCore.USDCrossRate));
                 labelHolding.Text = "";
                 labelHoldingBTC.Text = "฿" + String.Format("{0:n4}", pos.AmountBTC());
                 labelMemo.Text = String.Format("{0:n2}", pos.SourceRet1d()) + " %";
@@ -39,7 +39,7 @@ namespace CryptoAccouting.UIClass
                 labelPrice.Text = "฿" + String.Format("{0:n8}", pos.LatestPriceBTC());
                 labelHolding.Text = String.Format("{0:n2}", pos.Amount);
                 labelHoldingBTC.Text = "(฿" + String.Format("{0:n4}", pos.AmountBTC()) +")";
-                labelMemo.Text = String.Format("{0:n2}", pos.BTCRet1d()) + " %";
+                labelMemo.Text = String.Format("{0:n2}", pos.BTCRet1d() + " %");
             }
 
             if (pos.PositionType is EnuPositionType.Detail)
@@ -48,7 +48,7 @@ namespace CryptoAccouting.UIClass
                 labelValue.Text = "$" + String.Format("{0:n0}", pos.BookValue());
                 labelMemo.Text = pos.TradedExchange.ToString();
             }else{
-                labelValue.Text = "$" + String.Format("{0:n2}", pos.LatestFiatValue());
+                labelValue.Text = "$" + String.Format("{0:n2}", pos.LatestFiatValueUSD());
             }
 
 		}

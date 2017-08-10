@@ -65,7 +65,7 @@ namespace CryptoAccouting
                 labelMarketCap.Text = "$" + String.Format("{0:n0}", thisCoin.MarketPrice.MarketCap);
             }
 
-            labelMarketValue.Text = "$" + String.Format("{0:n0}", booking_positions.Sum(x => x.LatestFiatValue()));
+            labelMarketValue.Text = "$" + String.Format("{0:n0}", booking_positions.Sum(x => x.LatestFiatValueUSD()));
             labelTotalQty.Text = String.Format("{0:n0}", booking_positions.Sum(x => x.AmountBTC()));
             labelTotalBookCost.Text = "$" + String.Format("{0:n0}", booking_positions.Sum(x => x.BookValue()));
 

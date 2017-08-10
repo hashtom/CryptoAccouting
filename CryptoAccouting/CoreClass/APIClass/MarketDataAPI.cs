@@ -242,6 +242,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 			if (!Reachability.IsHostReachable(BaseUri))
 			{
                 rawjson = File.ReadAllText("Json/ExchangeList.json"); //Bundle file
+                return EnuAppStatus.FailureNetwork;
 			}
 			else
 			{

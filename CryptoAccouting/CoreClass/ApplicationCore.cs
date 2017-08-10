@@ -1,6 +1,6 @@
 ﻿﻿using System; using System.Collections.Generic; using System.Linq;
 //using System.Xml.Serialization; using System.Threading.Tasks; using UIKit; using CryptoAccouting.UIClass; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         public static EnuCCY BaseCurrency { get; set; } // AppSetting         public static Balance Balance { get; private set; }         private static List<Instrument> myInstruments;
-        public static ExchangeList ExchangeList;         private static CrossRate USDCrossRate;         //public static NavigationDrawer Navigation { get; set; }
+        public static ExchangeList ExchangeList;         public static CrossRate USDCrossRate { get; private set; }         //public static NavigationDrawer Navigation { get; set; }
 
         //public static NavigationDrawer InitializeSlideMenu(UIView BalanceTableView,         //                                                   UITableViewController PositionViewC,         //                                                   UIViewController TransactionViewC,         //                                                   UITableViewController PLViewC,         //                                                   UIViewController PerfViewC,
         //                                                   UIViewController SettingViewC)

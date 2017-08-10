@@ -17,9 +17,14 @@ namespace CryptoAccouting.CoreClass
             positions = new List<Position>();
         }
 
-        public double LatestFiatValue(){
-            return positions.Sum(x => x.LatestFiatValue());
+        public double LatestFiatValueUSD(){
+            return positions.Sum(x => x.LatestFiatValueUSD());
         }
+
+		public double LatestFiatValueBase(CrossRate CrossRate)
+		{
+            return positions.Sum(x => x.LatestFiatValueBase(CrossRate));
+		}
 
 		public double AmountBTC()
 		{
@@ -64,7 +69,7 @@ namespace CryptoAccouting.CoreClass
                     Id = id,
                     TradedExchange = ex,
                     Amount = positions.Where(x => x.TradedExchange == ex).Sum(x => x.AmountBTC()),
-                    FiatValueTotalExchange = positions.Where(x => x.TradedExchange == ex).Sum(x => x.LatestFiatValue()), //todo take multiple currencies into account
+                    FiatValueTotalExchange = positions.Where(x => x.TradedExchange == ex).Sum(x => x.LatestFiatValueUSD()), //todo take multiple currencies into account
                     BookPrice = positions.Where(x => x.TradedExchange == ex).Average(x => (x.Amount * x.BookPrice) / x.Amount)
                 };
                 id++;

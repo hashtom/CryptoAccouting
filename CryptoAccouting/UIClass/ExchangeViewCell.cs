@@ -24,7 +24,7 @@ namespace CryptoAccouting.UIClass
 		{
             labelExchange.Text = pos.TradedExchange.ToString();
             labelHoldingBTC.Text = "฿" + String.Format("{0:n2}", pos.AmountBTC());
-            labelValueK.Text = String.Format("{0:n2}", pos.LatestFiatValue());
+            labelValueK.Text = String.Format("{0:n2}", pos.LatestFiatValueUSD());
             labelRet.Text = "%";
 		}
     }
