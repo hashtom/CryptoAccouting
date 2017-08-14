@@ -215,6 +215,10 @@
     <Compile Include="CoreClass\CrossRate.cs" />
     <Compile Include="UIClass\CustomExchangeViewCell.cs" />
     <Compile Include="UIClass\AppSetting.cs" />
+    <Compile Include="APISettingTableViewController.cs" />
+    <Compile Include="APISettingTableViewController.designer.cs">
+      <DependentUpon>APISettingTableViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />
@@ -223,7 +227,6 @@
     <BundleResource Include="Json\ExchangeList.json" />
     <BundleResource Include="Images\settingstab.png" />
     <BundleResource Include="Images\performtab.png" />
-    <BundleResource Include="Images\copy.png" />
     <BundleResource Include="Images\PLtab.png" />
     <BundleResource Include="Images\transactiontab.png" />
     <BundleResource Include="Images\positiontab.png" />

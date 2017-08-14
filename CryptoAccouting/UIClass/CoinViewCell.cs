@@ -34,7 +34,7 @@ namespace CryptoAccouting.UIClass
             }else{
                 labelPrice.Text = "฿" + String.Format("{0:n8}", pos.LatestPriceBTC());
                 labelHolding.Text = String.Format("{0:n2}", pos.Amount);
-                labelHoldingBTC.Text = "(฿" + String.Format("{0:n4}", pos.AmountBTC()) +")";
+                labelHoldingBTC.Text = "฿" + String.Format("{0:n4}", pos.AmountBTC());
                 labelMemo.Text = String.Format("{0:n2}", pos.BTCRet1d()) + " %";
             }
 
@@ -50,7 +50,7 @@ namespace CryptoAccouting.UIClass
                 ImageView.Image = logo == null ? null : UIImage.FromFile(logo);
                 //imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
 
-                labelValue.Text = String.Format("{0:n2}", pos.LatestFiatValueUSD());
+                labelValue.Text = String.Format("{0:n2}", pos.LatestFiatValueBase(ApplicationCore.USDCrossRate));
             }
 
 		}

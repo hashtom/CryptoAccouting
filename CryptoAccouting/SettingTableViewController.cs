@@ -58,7 +58,12 @@ namespace CryptoAccouting
                 case "RefreshCoinCell":
                     ReloadCoinData();
                     tableView.DeselectRow(indexPath, true);
-					break;
+                    break;
+
+                //case "APIKeyCell":
+                    //PushAPISettingView();
+                    //tableView.DeselectRow(indexPath, true);
+                    //break;
                 default:
                     tableView.DeselectRow(indexPath, true);
                     break;
@@ -83,6 +88,12 @@ namespace CryptoAccouting
 			SymbolSelectionViewC.SelectionItems = searchitems;
 			NavigationController.PushViewController(SymbolSelectionViewC, true);
 		}
+
+        private void PushAPISettingView()
+        {
+            var APISettingViewC = Storyboard.InstantiateViewController("APISettingTableViewC") as APISettingTableViewController;
+			NavigationController.PushViewController(APISettingViewC, true);
+        }
 
         private void ReloadCoinData()
         {

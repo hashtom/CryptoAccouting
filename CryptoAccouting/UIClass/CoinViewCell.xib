@@ -77,8 +77,8 @@
                 <outlet property="labelPrice" destination="6" id="name-outlet-6"/>
                 <outlet property="labelMemo" destination="7" id="name-outlet-7"/>
                 <outlet property="labelValue" destination="10" id="name-outlet-10"/>
-                <outlet property="labelHoldingBTC" destination="5" id="name-outlet-5"/>
-                <outlet property="labelHolding" destination="4" id="name-outlet-4"/>
+                <outlet property="labelHolding" destination="5" id="name-outlet-5"/>
+                <outlet property="labelHoldingBTC" destination="4" id="name-outlet-4"/>
             </connections>
         </tableViewCell>
     </objects>
@@ -86,7 +86,6 @@
         <image name="Images/jpy.png" width="598" height="554"/>
         <image name="Images/exchange.png" width="592" height="546"/>
         <image name="Images/key.png" width="922" height="808"/>
-        <image name="Images/nem.png" width="32" height="32"/>
         <image name="Images/ripple.png" width="32" height="32"/>
         <image name="Images/zcash.png" width="32" height="32"/>
         <image name="Images/stellar lumens.png" width="64" height="64"/>

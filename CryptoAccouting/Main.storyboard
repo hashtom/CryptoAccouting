@@ -351,7 +351,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Images/jpy.png" translatesAutoresizingMaskIntoConstraints="NO" id="16396">
-                                                    <rect key="frame" x="16" y="16" width="35" height="30"/>
+                                                    <rect key="frame" x="16" y="16" width="32" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Base fiat currency" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="16397">
@@ -383,7 +383,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Images/exchange.png" translatesAutoresizingMaskIntoConstraints="NO" id="16850">
-                                                    <rect key="frame" x="16" y="16" width="36" height="30"/>
+                                                    <rect key="frame" x="16" y="16" width="32" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Exchanges" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="16851">
@@ -411,13 +411,13 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Images/key.png" translatesAutoresizingMaskIntoConstraints="NO" id="16853">
-                                                    <rect key="frame" x="16" y="16" width="36" height="30"/>
+                                                    <rect key="frame" x="16" y="16" width="32" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue id="28404" destination="28082" kind="show"/>
+                                            <segue id="28851" destination="28082" kind="show"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="60" id="16382" reuseIdentifier="RefreshCoinCell">
@@ -434,6 +434,10 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="28548" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" image="Images/positiontab.png">
+                                                    <rect key="frame" x="16" y="16" width="32" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -1907,7 +1911,7 @@
                             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                             <subviews>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="26275" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                    <rect key="frame" x="26" y="28" width="48" height="48"/>
+                                    <rect key="frame" x="20" y="40" width="48" height="48"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Asset Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="26276" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" minimumScaleFactor="0.5">
@@ -2115,7 +2119,7 @@
         </scene>
         <scene sceneID="28081">
             <objects>
-                <tableViewController id="28082" sceneMemberID="viewController">
+                <tableViewController id="28082" sceneMemberID="viewController" customClass="APISettingTableViewController" storyboardIdentifier="APISettingTableViewC">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="28083">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2141,6 +2145,9 @@
                                                     <state key="normal" title="Select Exchange">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="ButtonExchange_TouchUpInside:" destination="28082" id="28555" eventType="touchUpInside"/>
+                                                    </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exchange" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="28414" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" minimumScaleFactor="0.5">
                                                     <rect key="frame" x="27" y="11" width="74" height="21"/>
@@ -2178,7 +2185,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" borderStyle="roundedRect" minimumFontSize="17" id="28419" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" clearButtonMode="whileEditing" placeholder="Input API Keys">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" borderStyle="roundedRect" minimumFontSize="17" id="28419" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" clearButtonMode="whileEditing" placeholder="Input API Key">
                                                     <rect key="frame" x="16" y="43" width="288" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" heightSizable="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -2201,7 +2208,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" borderStyle="roundedRect" minimumFontSize="17" id="28420" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" clearButtonMode="whileEditing" placeholder="Input API Secrets">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" borderStyle="roundedRect" minimumFontSize="17" id="28420" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" clearButtonMode="whileEditing" placeholder="Input API Secret">
                                                     <rect key="frame" x="16" y="53" width="288" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" heightSizable="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -2214,9 +2221,26 @@
                             </tableViewSection>
                         </sections>
                     </tableView>
-                    <navigationItem title="API Settings" id="28410" key="navigationItem">
-                        <barButtonItem key="rightBarButtonItem" id="28411" systemItem="done"/>
-                        <barButtonItem key="leftBarButtonItem" id="28412" systemItem="cancel"/>
+                    <connections>
+                        <outlet property="buttonExchange" destination="28413" id="name-outlet-28413"/>
+                        <outlet property="textAPIKey" destination="28419" id="name-outlet-28419"/>
+                        <outlet property="textAPISecret" destination="28420" id="name-outlet-28420"/>
+                        <outlet property="buttonDone" destination="28855" id="name-outlet-28855"/>
+                        <outlet property="buttonCancel" destination="28854" id="name-outlet-28854"/>
+                    </connections>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <navigationItem title="API Settings" id="28853" key="navigationItem">
+                        <barButtonItem key="leftBarButtonItem" id="28854" systemItem="cancel">
+                            <connections>
+                                <action selector="ButtonCancel_Activated:" destination="28082" id="28858"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" id="28855" systemItem="done">
+                            <connections>
+                                <action selector="ButtonDone_Activated:" destination="28082" id="28859"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="28088" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2228,7 +2252,6 @@
         <image name="Images/exchange.png" width="592" height="546"/>
         <image name="Images/jpy.png" width="598" height="554"/>
         <image name="Images/key.png" width="922" height="808"/>
-        <image name="Images/copy.png" width="32" height="32"/>
         <image name="Images/performtab.png" width="32" height="32"/>
         <image name="Images/settingstab.png" width="32" height="32"/>
         <image name="Images/transactiontab.png" width="32" height="32"/>

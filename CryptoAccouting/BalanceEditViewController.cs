@@ -108,7 +108,7 @@ namespace CryptoAccouting
             }
         }
 
-        private void ReDrawScreen(){
+        public override void ReDrawScreen(){
 
             labelCoinSymbol.Text = thisCoin.Symbol;
             labelCoinName.Text = thisCoin.Name;
@@ -179,10 +179,10 @@ namespace CryptoAccouting
                                                                  UIAlertActionStyle.Default,
                                                                  (obj) =>
                                                                  {
-                                                                     buttonExchange.SetTitle(exc.ExchangeType.ToString(), UIControlState.Normal);
+                                                                     buttonExchange.SetTitle(exc.ExchangeName, UIControlState.Normal);
                                                                      thisExchangeType = exc.ExchangeType;
                                                                  }
-                                                                ));
+                                                            ));
             }
             this.PresentViewController(exchangeAlert, true, null);
 		}

@@ -243,17 +243,17 @@ namespace CryptoAccouting.CoreClass.APIClass
 			application.Add(basecurrency);
 
             XElement apikeys = new XElement("apikeys");
-            application.Add(apikeys); 
+            application.Add(apikeys);
 
-            foreach (var exchange in exList)
-			{
+            foreach (var exchange in exList.Where(x => x.APIReady == true))
+            {
                 XElement key = new XElement("exchange",
                                             new XAttribute("name", exchange.ExchangeType),
                                             new XElement("key", exchange.Key),
                                             new XElement("secret", exchange.Secret)
                                            );
-				apikeys.Add(key);
-			}
+                apikeys.Add(key);
+            }
 
 			File.WriteAllText(path, application.ToString());
 

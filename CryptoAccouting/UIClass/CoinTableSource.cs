@@ -130,9 +130,9 @@ namespace CryptoAccouting.UIClass
 				Font = UIFont.FromName("ArialMT", 12f),
 				TextColor = UIColor.White,
 				TextAlignment = UITextAlignment.Left,
-				Frame = new System.Drawing.RectangleF(200, 0, 60, 20),
+				Frame = new System.Drawing.RectangleF(200, 0, 70, 20),
 				BackgroundColor = UIColor.Clear,
-				Text = "Value"
+				Text = "Price/Value"
 			};
 
 			pctLabel = new UILabel()

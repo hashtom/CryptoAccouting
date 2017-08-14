@@ -36,16 +36,12 @@
         {             return StorageAPI.SaveAppSettingXML("AppSetting.xml", AppName, BaseCurrency, ExchangeList);         }          private static EnuAppStatus LoadExchangeList()
         {
             if (ExchangeList is null) ExchangeList = new ExchangeList();             return MarketDataAPI.FetchExchangeList(ExchangeList);         }          public static EnuAppStatus LoadInstruments(bool forceRefresh)
-        {             if (forceRefresh)
-            {                 var status = MarketDataAPI.FetchAllCoinData(myInstruments);                 if ( status == EnuAppStatus.Success)
-                {                     SaveInstrumentXML();
-                }
-                 return status;
+        {             myInstruments = new List<Instrument>();             if (forceRefresh)
+            {                 var status = MarketDataAPI.FetchAllCoinData(myInstruments);                 if (status == EnuAppStatus.Success) SaveInstrumentXML();                 return status;
             }
             else
             {                 myInstruments = StorageAPI.LoadInstrumentXML("instruments.xml");                 if (myInstruments == null)
                 {
-                    myInstruments = new List<Instrument>();
                     return LoadInstruments(true);                 }
                 else
                 {

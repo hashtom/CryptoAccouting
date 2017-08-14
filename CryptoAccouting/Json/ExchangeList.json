@@ -3,6 +3,7 @@
     {
       "code": "Zaif",
       "name": "Zaif",
+      "api" :  "true",
       "listing": [
         { "symbol": "BTC" },
         { "symbol": "MONA" },
@@ -13,6 +14,7 @@
     {
       "code": "BitFlyer",
       "name": "BitFlyer",
+      "api": "false",
       "listing": [
         { "symbol": "BTC" },
         { "symbol": "ETH" },
@@ -22,6 +24,7 @@
     {
       "code": "CoinCheck",
       "name": "CoinCheck",
+      "api": "false",
       "listing": [
         { "symbol": "BTC" },
         { "symbol": "ETH" },
@@ -41,11 +44,13 @@
     {
       "code": "Bitstamp",
       "name": "Bitstamp",
+      "api": "false",
       "listing": [ { "symbol": "BTC" } ]
     },
     {
       "code": "Bittrex",
       "name": "Bittrex",
+      "api": "false",
       "listing": [
         { "symbol": "BTC" },
         { "symbol": "BCH" },
@@ -131,6 +136,7 @@
     {
       "code": "CCex",
       "name": "C-Cex",
+      "api": "false",
       "listing": [
         { "symbol": "BTC" },
         { "symbol": "ETH" },
@@ -151,11 +157,13 @@
     {
       "code": "Cexio",
       "name": "Cex.io",
+      "api": "false",
       "listing": [ { "symbol": "BTC" } ]
     },
     {
       "code": "Exmo",
       "name": "Exmo",
+      "api": "false",
       "listing": [
         { "symbol": "BTC" },
         { "symbol": "ETH" },
@@ -169,6 +177,7 @@
     {
       "code": "Hitbtc",
       "name": "Hitbtc",
+      "api": "false",
       "listing": [
         { "symbol": "BTC" },
         { "symbol": "ETH" },
@@ -199,11 +208,13 @@
     {
       "code": "Indacoin",
       "name": "Indacoin",
+      "api": "false",
       "listing": [ { "symbol": "BTC" } ]
     },
     {
       "code": "Kraken",
       "name": "Kraken",
+      "api": "false",
       "listing": [
         { "symbol": "BTC" },
         { "symbol": "BCH" },
@@ -224,6 +235,7 @@
     {
       "code": "Livecoin",
       "name": "Livecoin",
+      "api": "false",
       "listing": [
         { "symbol": "BTC" },
         { "symbol": "ETH" },
@@ -259,6 +271,7 @@
     {
       "code": "Nixe",
       "name": "Nixe",
+      "api": "false",
       "listing": [
         { "symbol": "BTC" },
         { "symbol": "PPC" }
@@ -267,6 +280,7 @@
     {
       "code": "YoBit",
       "name": "YoBit",
+      "api": "false",
       "listing": [
         { "symbol": "BTC" },
         { "symbol": "BCH" },
@@ -303,6 +317,7 @@
     {
       "code": "BitFinex",
       "name": "BitFinex",
+      "api": "false",
       "listing": [
         { "symbol": "ETH" },
         { "symbol": "BCH" },
@@ -319,6 +334,7 @@
     {
       "code": "Bleutrade",
       "name": "Bleutrade",
+      "api": "false",
       "listing": [
         { "symbol": "ETH" },
         { "symbol": "BCH" },
@@ -338,6 +354,7 @@
     {
       "code": "Bter",
       "name": "Bter",
+      "api": "false",
       "listing": [
         { "symbol": "ETH" },
         { "symbol": "BCH" },
@@ -369,6 +386,7 @@
     {
       "code": "Poloniex",
       "name": "Poloniex",
+      "api": "false",
       "listing": [
         { "symbol": "ETH" },
         { "symbol": "XRP" },
