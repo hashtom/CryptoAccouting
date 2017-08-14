@@ -20,66 +20,73 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="2282">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="105"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="USD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2283">
-                                    <rect key="frame" x="16" y="16" width="35" height="21"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2284">
-                                    <rect key="frame" x="85" y="15" width="150" height="25"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="2284" minimumScaleFactor="0.5">
+                                    <rect key="frame" x="38" y="46" width="140" height="25"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="24928">
                                     <rect key="frame" x="68" y="76" width="185" height="29"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinX="YES" flexibleMinY="YES"/>
                                     <segments>
-                                        <segment title="Coin"/>
-                                        <segment title="Exchange"/>
+                                        <segment title="Detail"/>
+                                        <segment title="By Exchange"/>
                                     </segments>
                                 </segmentedControl>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="BTC" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="25072">
-                                    <rect key="frame" x="16" y="42" width="42" height="21"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="25073">
-                                    <rect key="frame" x="85" y="42" width="150" height="25"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="25073" minimumScaleFactor="0.5">
+                                    <rect key="frame" x="38" y="18" width="140" height="25"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="28443" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                                    <rect key="frame" x="202" y="20" width="102" height="21"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total Value" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="28444" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" textAlignment="right">
+                                    <rect key="frame" x="0.0" y="2" width="83" height="21"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                    <color key="textColor" colorSpace="calibratedRGB" red="0" green="0" blue="1" alpha="1"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="24hr Change" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="28445" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                                    <rect key="frame" x="202" y="0.0" width="102" height="21"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                    <color key="textColor" colorSpace="calibratedRGB" red="0" green="0" blue="1" alpha="1"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="฿" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="28454" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                                    <rect key="frame" x="16" y="20" width="14" height="21"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="JPY" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="28455" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" minimumScaleFactor="0.5">
+                                    <rect key="frame" x="9" y="46" width="21" height="18"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                    <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <color key="backgroundColor" red="0.59999999999999998" green="0.81176470588235294" blue="0.6705882352941176" alpha="1" colorSpace="calibratedRGB"/>
-                            <constraints>
-                                <constraint firstItem="2283" firstAttribute="top" secondItem="2282" secondAttribute="top" constant="16" id="19938"/>
-                                <constraint firstItem="2283" firstAttribute="leading" secondItem="2282" secondAttribute="leading" constant="16" id="19939"/>
-                            </constraints>
-                            <variation key="default">
-                                <mask key="constraints">
-                                    <exclude reference="19938"/>
-                                    <exclude reference="19939"/>
-                                </mask>
-                            </variation>
                             <variation key="heightClass=regular-widthClass=compact">
                                 <mask key="subviews">
                                     <include reference="24928"/>
-                                    <include reference="25072"/>
                                     <include reference="25073"/>
                                 </mask>
-                                <mask key="constraints">
-                                    <include reference="19938"/>
-                                    <include reference="19939"/>
-                                </mask>
                             </variation>
+                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CoinViewCell" id="14717">
@@ -114,7 +121,7 @@
                         </variation>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Home" id="859">
+                    <navigationItem key="navigationItem" id="859" title="CoinTicker">
                         <barButtonItem key="backBarButtonItem" title="Back" id="15942"/>
                         <rightBarButtonItems>
                             <barButtonItem systemItem="refresh" id="19986">
@@ -134,9 +141,10 @@
                         <outlet property="SegmentBalance" destination="24928" id="name-outlet-24928"/>
                         <outlet property="buttonAddNew" destination="19987" id="name-outlet-19987"/>
                         <outlet property="buttonRefresh" destination="19986" id="name-outlet-19986"/>
-                        <outlet property="labelCurrency" destination="2283" id="name-outlet-2283"/>
                         <outlet property="labelTotalBTC" destination="25073" id="name-outlet-25073"/>
                         <outlet property="labelTotalFiat" destination="2284" id="name-outlet-2284"/>
+                        <outlet property="label1dPctBTC" destination="28443" id="name-outlet-28443"/>
+                        <outlet property="labelCcy" destination="28455" id="name-outlet-28455"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="717" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -147,7 +155,7 @@
         <scene sceneID="718">
             <objects>
                 <navigationController id="719" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="残高" id="21285"/>
+                    <tabBarItem key="tabBarItem" title="残高" id="21285" image="Images/positiontab.png"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="721">
                         <rect key="frame" x="0.0" y="20" width="320" height="44"/>
@@ -293,18 +301,17 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" red="0.59999999999999998" green="0.81960784313725488" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="13357">
                                 <rect key="frame" x="0.0" y="214" width="320" height="307"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" red="0.59999999999999998" green="0.81960784313725488" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="取引" id="21501"/>
+                    <tabBarItem key="tabBarItem" title="取引" id="21501" image="Images/transactiontab.png"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="LabelBougtAmount" destination="13315" id="name-outlet-13315"/>
@@ -1353,7 +1360,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="収益率" id="24152"/>
+                    <tabBarItem key="tabBarItem" title="収益率" id="24152" image="Images/performtab.png"/>
                     <navigationItem key="navigationItem" title="収益率レポート" id="18241"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                 </viewController>
@@ -1801,7 +1808,7 @@
         <scene sceneID="22122">
             <objects>
                 <navigationController id="22123" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="設定" id="22496"/>
+                    <tabBarItem key="tabBarItem" title="設定" id="22496" image="Images/settingstab.png"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="22125">
                         <rect key="frame" x="0.0" y="20" width="320" height="44"/>
@@ -1819,7 +1826,7 @@
         <scene sceneID="22508">
             <objects>
                 <navigationController id="22509" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="損益" id="23125"/>
+                    <tabBarItem key="tabBarItem" title="損益" id="23125" image="Images/PLtab.png"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="22511">
                         <rect key="frame" x="0.0" y="20" width="320" height="44"/>
@@ -1897,7 +1904,7 @@
                         <view key="tableHeaderView" contentMode="scaleToFill" id="qOJ-HG-G4x">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="202"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                             <subviews>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="26275" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                     <rect key="frame" x="10" y="22" width="30" height="30"/>
@@ -1912,7 +1919,7 @@
                                 </label>
                                 <view contentMode="scaleToFill" id="26278" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                     <rect key="frame" x="0.0" y="131" width="320" height="72"/>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
                                     <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
                                         <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
                                         <mask key="subviews">
@@ -2033,13 +2040,6 @@
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Market Details" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="26695" translatesAutoresizingMaskIntoConstraints="NO" minimumScaleFactor="0.5" fixedFrame="YES">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="20"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                    <nil key="highlightedColor"/>
-                                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+00.00%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="26284" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                     <rect key="frame" x="258" y="28" width="51" height="15"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
@@ -2079,7 +2079,6 @@
                                     <include reference="24986"/>
                                     <include reference="26288"/>
                                     <include reference="26289"/>
-                                    <include reference="26695"/>
                                     <include reference="26284"/>
                                     <include reference="26268"/>
                                     <include reference="26286"/>
@@ -2120,7 +2119,15 @@
                         <outlet property="labelFiatPrice" destination="26268" id="name-outlet-26268"/>
                         <outlet property="labelBTCRet1d" destination="26286" id="name-outlet-26286"/>
                         <outlet property="labelBTCPrice" destination="26283" id="name-outlet-26283"/>
+                        <outlet property="buttonAddNew" destination="28486" id="name-outlet-28486"/>
                     </connections>
+                    <navigationItem id="28485" key="navigationItem" title="CoinTicker">
+                        <barButtonItem key="rightBarButtonItem" id="28486" systemItem="add">
+                            <connections>
+                                <action selector="ButtonAddNew_Activated:" destination="4PD-G1-6DB" id="28487"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xoW-MD-Wjn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -2241,6 +2248,12 @@
         <image name="Images/exchange.png" width="592" height="546"/>
         <image name="Images/jpy.png" width="598" height="554"/>
         <image name="Images/key.png" width="922" height="808"/>
+        <image name="Images/copy.png" width="32" height="32"/>
+        <image name="Images/performtab.png" width="32" height="32"/>
+        <image name="Images/settingstab.png" width="32" height="32"/>
+        <image name="Images/transactiontab.png" width="32" height="32"/>
+        <image name="Images/positiontab.png" width="32" height="32"/>
+        <image name="Images/PLtab.png" width="32" height="32"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina4"/>

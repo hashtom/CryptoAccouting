@@ -97,5 +97,12 @@ namespace CryptoAccouting
 			}
 
 		}
+
+        partial void ButtonAddNew_Activated(UIBarButtonItem sender)
+        {
+			var DestinationViewC = Storyboard.InstantiateViewController("BalanceEditViewC") as BalanceEditViewController;
+            DestinationViewC.SetSearchSelectionItem(symbol_selected);
+            NavigationController.PushViewController(DestinationViewC, true);
+        }
     }
 }

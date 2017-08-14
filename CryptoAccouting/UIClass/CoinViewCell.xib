@@ -13,23 +13,23 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="2" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                        <rect key="frame" x="5" y="8" width="25" height="25"/>
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="2" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                        <rect key="frame" x="0.0" y="8" width="25" height="25"/>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BTC" textAlignment="center" lineBreakMode="tailTruncation" id="3" translatesAutoresizingMaskIntoConstraints="NO" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" fixedFrame="YES">
-                        <rect key="frame" x="38" y="11" width="33" height="25"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BTC" textAlignment="center" lineBreakMode="tailTruncation" id="3" translatesAutoresizingMaskIntoConstraints="NO" baselineAdjustment="alignBaselines" fixedFrame="YES" minimumScaleFactor="0.5">
+                        <rect key="frame" x="47" y="9" width="33" height="25"/>
                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="4" translatesAutoresizingMaskIntoConstraints="NO" minimumScaleFactor="0.5" fixedFrame="YES" text="0">
-                        <rect key="frame" x="71" y="2" width="84" height="20"/>
+                        <rect key="frame" x="79" y="2" width="76" height="20"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="5" translatesAutoresizingMaskIntoConstraints="NO" minimumScaleFactor="0.5" fixedFrame="YES">
-                        <rect key="frame" x="71" y="22" width="84" height="20"/>
+                        <rect key="frame" x="79" y="22" width="76" height="20"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -86,14 +86,16 @@
         <image name="Images/jpy.png" width="598" height="554"/>
         <image name="Images/exchange.png" width="592" height="546"/>
         <image name="Images/key.png" width="922" height="808"/>
-        <image name="Images/lisk.png" width="32" height="32"/>
-        <image name="Images/litecoin.png" width="32" height="32"/>
-        <image name="Images/monacoin.png" width="64" height="64"/>
-        <image name="Images/monero.png" width="32" height="32"/>
         <image name="Images/nem.png" width="32" height="32"/>
         <image name="Images/ripple.png" width="32" height="32"/>
         <image name="Images/zcash.png" width="32" height="32"/>
         <image name="Images/stellar lumens.png" width="64" height="64"/>
         <image name="Images/byteball.png" width="64" height="64"/>
+        <image name="Images/settingstab.png" width="32" height="32"/>
+        <image name="Images/performtab.png" width="32" height="32"/>
+        <image name="Images/copy.png" width="32" height="32"/>
+        <image name="Images/PLtab.png" width="32" height="32"/>
+        <image name="Images/transactiontab.png" width="32" height="32"/>
+        <image name="Images/positiontab.png" width="32" height="32"/>
     </resources>
 </document>

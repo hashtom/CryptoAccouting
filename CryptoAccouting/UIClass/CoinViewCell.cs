@@ -24,14 +24,10 @@ namespace CryptoAccouting.UIClass
 
         public void UpdateCell(Position pos)
 		{
-			var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                                    "Images", pos.Coin.Id + ".png");
-			ImageView.Image = logo == null ? null : UIImage.FromFile(logo);
-
             labelSymbol.Text = pos.Coin.Symbol;
 
             if (pos.Coin.Symbol is "BTC"){
-                labelPrice.Text = "$" + String.Format("{0:n2}", pos.LatestPriceBase(ApplicationCore.USDCrossRate));
+                labelPrice.Text = String.Format("{0:n}", pos.LatestPriceBase(ApplicationCore.USDCrossRate));
                 labelHolding.Text = "";
                 labelHoldingBTC.Text = "฿" + String.Format("{0:n4}", pos.AmountBTC());
                 labelMemo.Text = String.Format("{0:n2}", pos.SourceRet1d()) + " %";
@@ -39,16 +35,22 @@ namespace CryptoAccouting.UIClass
                 labelPrice.Text = "฿" + String.Format("{0:n8}", pos.LatestPriceBTC());
                 labelHolding.Text = String.Format("{0:n2}", pos.Amount);
                 labelHoldingBTC.Text = "(฿" + String.Format("{0:n4}", pos.AmountBTC()) +")";
-                labelMemo.Text = String.Format("{0:n2}", pos.BTCRet1d() + " %");
+                labelMemo.Text = String.Format("{0:n2}", pos.BTCRet1d()) + " %";
             }
 
             if (pos.PositionType is EnuPositionType.Detail)
             {
-                labelPrice.Text = "$" + String.Format("{0:n2}", pos.BookPrice);
-                labelValue.Text = "$" + String.Format("{0:n0}", pos.BookValue());
+                labelPrice.Text = String.Format("{0:n2}", pos.BookPrice);
+                labelValue.Text = String.Format("{0:n0}", pos.BookValue());
                 labelMemo.Text = pos.TradedExchange.ToString();
-            }else{
-                labelValue.Text = "$" + String.Format("{0:n2}", pos.LatestFiatValueUSD());
+            }
+            else
+            {
+                var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Images", pos.Coin.Id + ".png");
+                ImageView.Image = logo == null ? null : UIImage.FromFile(logo);
+                //imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+
+                labelValue.Text = String.Format("{0:n2}", pos.LatestFiatValueUSD());
             }
 
 		}

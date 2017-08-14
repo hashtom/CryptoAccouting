@@ -16,6 +16,10 @@ namespace CryptoAccouting
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIBarButtonItem buttonAddNew { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIView DetailTopView { get; set; }
 
         [Outlet]
@@ -66,8 +70,17 @@ namespace CryptoAccouting
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel labelVolume { get; set; }
 
+        [Action ("ButtonAddNew_Activated:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void ButtonAddNew_Activated (UIKit.UIBarButtonItem sender);
+
         void ReleaseDesignerOutlets ()
         {
+            if (buttonAddNew != null) {
+                buttonAddNew.Dispose ();
+                buttonAddNew = null;
+            }
+
             if (DetailTopView != null) {
                 DetailTopView.Dispose ();
                 DetailTopView = null;

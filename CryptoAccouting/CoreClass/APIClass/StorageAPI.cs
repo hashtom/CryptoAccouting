@@ -118,6 +118,8 @@ namespace CryptoAccouting.CoreClass.APIClass
 			var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 			var path = Path.Combine(mydocuments, fileName);
 
+            if (File.Exists(path)) File.Delete(path);
+
 			XElement application = new XElement("application",
 												new XAttribute("name", ApplicationCore.AppName));
             XElement instruments = new XElement("instruments");
@@ -147,12 +149,12 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             if (File.Exists(path))
             {
-                var balanceXML = File.ReadAllText(path);
+                var instrumentsXML = File.ReadAllText(path);
 
-                var mybalXE = XElement.Parse(balanceXML).Descendants("instrument");
+                var instrumentsXE = XElement.Parse(instrumentsXML).Descendants("instrument");
                 instruments = new List<Instrument>();
 
-                foreach (var elem in mybalXE)
+                foreach (var elem in instrumentsXE)
                 {
                     var coin = new Instrument(elem.Attribute("id").Value,
                                               elem.Element("symbol").Value,

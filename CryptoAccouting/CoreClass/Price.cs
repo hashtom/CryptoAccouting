@@ -30,7 +30,7 @@ namespace CryptoAccouting.CoreClass
 
         public double LatestPriceBase(CrossRate CrossRate)
         {
-            return (CrossRate is null) ? 0 : LatestPriceBTC * CrossRate.Rate;
+            return (CrossRate is null) ? 0 : LatestPriceUSD * CrossRate.Rate;
         }
 
         public double MarketCapBase(CrossRate CrossRate)

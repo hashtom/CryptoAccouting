@@ -28,7 +28,11 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelCurrency { get; set; }
+        UIKit.UILabel label1dPctBTC { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelCcy { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -67,9 +71,14 @@ namespace CryptoAccouting
                 buttonRefresh = null;
             }
 
-            if (labelCurrency != null) {
-                labelCurrency.Dispose ();
-                labelCurrency = null;
+            if (label1dPctBTC != null) {
+                label1dPctBTC.Dispose ();
+                label1dPctBTC = null;
+            }
+
+            if (labelCcy != null) {
+                labelCcy.Dispose ();
+                labelCcy = null;
             }
 
             if (labelTotalBTC != null) {

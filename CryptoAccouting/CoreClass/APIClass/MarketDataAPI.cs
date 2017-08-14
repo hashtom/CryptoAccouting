@@ -58,9 +58,21 @@ namespace CryptoAccouting.CoreClass.APIClass
                         return EnuAppStatus.FailureNetwork;
                 }
 
-                int i = 0;
-                foreach (var coin in coins)
+                var jarray = await Task.Run(() => JArray.Parse(rawjson));
+
+                foreach (var jrow in jarray)
                 {
+                    var symbol = (string)jrow["id"];
+                    if (symbol.Substring(0, 3) == "btc")
+                    {
+                        symbol = "BTC";
+                    }
+                    else
+                    {
+                        symbol = symbol.Replace("btc", "").Replace("/", "").Replace("¥", "").ToUpper();
+                    }
+
+                    var coin = coins.Where(x => x.Symbol == symbol).First();
 
                     if (coin.MarketPrice == null)
                     {
@@ -68,17 +80,14 @@ namespace CryptoAccouting.CoreClass.APIClass
                         coin.MarketPrice = p;
                     }
 
-                    var jarray = await Task.Run(() => JArray.Parse(rawjson));
-
                     //coin.MarketPrice.SourceCurrency = coin.Symbol == "BTC" ? EnuCCY.USD : EnuCCY.BTC;
-                    coin.MarketPrice.LatestPriceBTC = coin.Symbol == "BTC" ? 1 : (double)jarray[i]["price"];
-                    coin.MarketPrice.PriceBTCBefore24h = coin.Symbol == "BTC" ? 1 : (double)jarray[i]["price_before_24h"];
-                    coin.MarketPrice.LatestPriceUSD = coin.Symbol == "BTC" ? (double)jarray[i]["price"] : (double)jarray[i]["price"] * (double)jarray[0]["price"];
-                    coin.MarketPrice.PriceUSDBefore24h = coin.Symbol == "BTC" ? (double)jarray[i]["price_before_24h"] : (double)jarray[i]["price_before_24h"] * (double)jarray[0]["price_before_24h"];
-                    coin.MarketPrice.DayVolume = (double)jarray[i]["volume_btc"];
+                    coin.MarketPrice.LatestPriceBTC = coin.Symbol == "BTC" ? 1 : (double)jrow["price"];
+                    coin.MarketPrice.PriceBTCBefore24h = coin.Symbol == "BTC" ? 1 : (double)jrow["price_before_24h"];
+                    coin.MarketPrice.LatestPriceUSD = coin.Symbol == "BTC" ? (double)jrow["price"] : (double)jrow["price"] * (double)jarray[0]["price"];
+                    coin.MarketPrice.PriceUSDBefore24h = coin.Symbol == "BTC" ? (double)jrow["price_before_24h"] : (double)jrow["price_before_24h"] * (double)jarray[0]["price_before_24h"];
+                    coin.MarketPrice.DayVolume = (double)jrow["volume_btc"];
                     coin.MarketPrice.PriceDate = DateTime.Now;
 
-                    i++;
                 }
             }
 

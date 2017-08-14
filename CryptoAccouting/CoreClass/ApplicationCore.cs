@@ -1,6 +1,14 @@
 ﻿﻿using System; using System.Collections.Generic; using System.Linq;
-//using System.Xml.Serialization; using System.Threading.Tasks; using UIKit; using CryptoAccouting.UIClass; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         public static EnuCCY BaseCurrency { get; set; } // AppSetting         public static Balance Balance { get; private set; }         private static List<Instrument> myInstruments;
-        public static ExchangeList ExchangeList;         public static CrossRate USDCrossRate { get; private set; }         //public static NavigationDrawer Navigation { get; set; }
+//using System.Xml.Serialization; using System.Threading.Tasks; using UIKit; using CryptoAccouting.UIClass; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         public static Balance Balance { get; private set; }         private static EnuCCY baseCurrency;         private static List<Instrument> myInstruments;
+        public static ExchangeList ExchangeList;         public static CrossRate USDCrossRate { get; private set; }         private static bool HasCrossRateUpdated = false;          public static EnuCCY BaseCurrency
+        {             get
+            {
+                return baseCurrency;
+            }             set
+            {
+                baseCurrency = value;
+                HasCrossRateUpdated = false;
+            }         }          //public static NavigationDrawer Navigation { get; set; }
 
         //public static NavigationDrawer InitializeSlideMenu(UIView BalanceTableView,         //                                                   UITableViewController PositionViewC,         //                                                   UIViewController TransactionViewC,         //                                                   UITableViewController PLViewC,         //                                                   UIViewController PerfViewC,
         //                                                   UIViewController SettingViewC)
@@ -9,9 +17,11 @@
         {             EnuAppStatus status;              //Load Instruments Data             status = LoadInstruments(false);              //Load Exchange List
             if (status is EnuAppStatus.Success) LoadExchangeList();              //Load Balance Data
 			Balance = StorageAPI.LoadBalanceXML("mybalance.xml", myInstruments);              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML("AppSetting.xml") != EnuAppStatus.Success)             {                 BaseCurrency = EnuCCY.USD; //Default setting             }              //Load Latest Snapshot price              return status;          }          public static async Task<EnuAppStatus> LoadCoreDataAsync(){
-            
+
             //Load FX
-            USDCrossRate = await MarketDataAPI.FetchUSDCrossRateAsync(BaseCurrency);              return EnuAppStatus.Success;         }
+            if (!HasCrossRateUpdated)
+            {
+                USDCrossRate = await MarketDataAPI.FetchUSDCrossRateAsync(BaseCurrency);                 HasCrossRateUpdated = true;             }              return EnuAppStatus.Success;         }
 
 		public static async Task FetchMarketDataFromBalanceAsync()
 		{
@@ -89,10 +99,4 @@
 		public static async Task FetchMarketDataAsync(Instrument coin)
 		{
 			await MarketDataAPI.FetchCoinMarketDataAsync(coin);
-		}        }
-
-    public enum EnuCCY
-    {
-        JPY,
-        USD,         EUR,         BTC     }
-      public enum EnuAppStatus{         Success,         SuccessButOffline,         FailureNetwork,         FailureStorage,         FailureParameter     }  } 
+		}      }      public enum EnuAppStatus{         Success,         SuccessButOffline,         FailureNetwork,         FailureStorage,         FailureParameter     }  } 

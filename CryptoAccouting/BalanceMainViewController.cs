@@ -4,9 +4,9 @@
              if (ApplicationCore.InitializeCore() != EnuAppStatus.Success){                 this.PopUpWarning("some issue!!");             }              // Configure Segmented control             ConfigureSegmentButton();              // Configure Table source             TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");             TableView.Source = new CoinTableSource(this);             //await ApplicationCore.LoadCoreDataAsync();             //await ApplicationCore.FetchMarketDataFromBalanceAsync();
         }          public async override void ViewWillAppear(bool animated)         {
             base.ViewWillAppear(animated);             await ApplicationCore.LoadCoreDataAsync();             await ApplicationCore.FetchMarketDataFromBalanceAsync();              if (ApplicationCore.Balance != null)
-            {                 labelCurrency.Text = ApplicationCore.BaseCurrency.ToString();
-                labelTotalFiat.Text = "$" + String.Format("{0:n2}", ApplicationCore.Balance.LatestFiatValueBase(ApplicationCore.USDCrossRate));
-                labelTotalBTC.Text = String.Format("{0:n2}", ApplicationCore.Balance.AmountBTC());                 ApplicationCore.Balance.SortPositionByHolding();
+            {                 labelCcy.Text = ApplicationCore.BaseCurrency.ToString();
+                labelTotalFiat.Text = String.Format("{0:n0}", ApplicationCore.Balance.LatestFiatValueBase(ApplicationCore.USDCrossRate));
+                labelTotalBTC.Text = String.Format("{0:n2}", ApplicationCore.Balance.AmountBTC());                 //label1dPctBTC.Text = String.Format("{0:n2}", ApplicationCore.Balance.1dPctBTC();                 ApplicationCore.Balance.SortPositionByHolding();
             }             TableView.ReloadData();
 		}          public override void ViewDidAppear(bool animated)
         {

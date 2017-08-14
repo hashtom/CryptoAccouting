@@ -6,7 +6,6 @@ namespace CryptoAccouting.CoreClass
     public class CrossRate
     {
         public EnuCCY Currency { get; set; }
-        //public string Code { get; set; }
         public double Rate { get; set; }
         public double RateBefore24h { get; set; }
 		public DateTime PriceDate { get; set; }
@@ -18,4 +17,13 @@ namespace CryptoAccouting.CoreClass
             this.PriceDate = pricedate;
         }
     }
+
+
+	public enum EnuCCY
+	{
+		JPY,
+		USD,
+		EUR,
+		BTC
+	}
 }

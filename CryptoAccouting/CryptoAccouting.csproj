@@ -147,6 +147,7 @@
     <None Include="packages.config" />
     <None Include="TestData\BalanceData.xml" />
     <None Include="TestData\instrumentsData.xml" />
+    <None Include="Images\creditmemo.txt" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -220,6 +221,12 @@
     <BundleResource Include="Images\exchange.png" />
     <BundleResource Include="Images\key.png" />
     <BundleResource Include="Json\ExchangeList.json" />
+    <BundleResource Include="Images\settingstab.png" />
+    <BundleResource Include="Images\performtab.png" />
+    <BundleResource Include="Images\copy.png" />
+    <BundleResource Include="Images\PLtab.png" />
+    <BundleResource Include="Images\transactiontab.png" />
+    <BundleResource Include="Images\positiontab.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
