@@ -16,21 +16,23 @@
         //                                      TransactionViewC,         //                                      PLViewC,         //                                      PerfViewC,         //                                      SettingViewC);         //    Navigation.AddView(BalanceTableView);         //    return Navigation;         //}          public static EnuAppStatus InitializeCore()
         {             EnuAppStatus status;              //Load Instruments Data             status = LoadInstruments(false);              //Load Exchange List
             if (status is EnuAppStatus.Success) LoadExchangeList();              //Load Balance Data
-			Balance = StorageAPI.LoadBalanceXML("mybalance.xml", myInstruments);              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML("AppSetting.xml") != EnuAppStatus.Success)             {                 BaseCurrency = EnuCCY.USD; //Default setting             }              //Load Latest Snapshot price              return status;          }          public static async Task<EnuAppStatus> LoadCoreDataAsync(){
+            Balance = StorageAPI.LoadBalanceXML("mybalance.xml", myInstruments);              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML("AppSetting.xml") != EnuAppStatus.Success)             {                 BaseCurrency = EnuCCY.USD; //Default setting             }              //Load Latest Snapshot price              return status;          }          public static async Task<EnuAppStatus> LoadCoreDataAsync(){
 
             //Load FX
             if (!HasCrossRateUpdated)
             {
                 USDCrossRate = await MarketDataAPI.FetchUSDCrossRateAsync(BaseCurrency);                 HasCrossRateUpdated = true;             }              return EnuAppStatus.Success;         }
 
-		public static async Task FetchMarketDataFromBalanceAsync()
-		{
-			if (Balance != null)
-			{
-				var mycoins = Balance.positionsByCoin.Select(x => x.Coin).ToList();
-				await MarketDataAPI.FetchCoinMarketDataAsync(mycoins);
-			}
-		}          public static EnuAppStatus SaveAppSetting()
+        public static async Task<EnuAppStatus> FetchMarketDataFromBalanceAsync()
+        { 
+            if (Balance != null)
+            {
+                var mycoins = Balance.positionsByCoin.Select(x => x.Coin).ToList();
+                return await MarketDataAPI.FetchCoinMarketDataAsync(mycoins);
+            }
+            else
+            {                 return EnuAppStatus.NotAvailable;             }
+        }          public static EnuAppStatus SaveAppSetting()
         {             return StorageAPI.SaveAppSettingXML("AppSetting.xml", AppName, BaseCurrency, ExchangeList);         }          private static EnuAppStatus LoadExchangeList()
         {
             if (ExchangeList is null) ExchangeList = new ExchangeList();             return MarketDataAPI.FetchExchangeList(ExchangeList);         }          public static EnuAppStatus LoadInstruments(bool forceRefresh)
@@ -61,9 +63,9 @@
          }
 
         public static List<Instrument> GetInstrumentAll(bool OnlyActive = true)
-		{
+        {
             return !OnlyActive ? myInstruments : myInstruments.Where(x => x.IsActive is true).ToList();
-		}          public static async Task LoadTradeListsAsync(EnuExchangeType extype, bool isAggregatedDaily = true, bool readfromFile = false)
+        }          public static async Task LoadTradeListsAsync(EnuExchangeType extype, bool isAggregatedDaily = true, bool readfromFile = false)
         {
             var exchange = GetExchange(extype);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              exchange.TradeList = await ExchangeAPI.FetchTradeListAsync(exchange, isAggregatedDaily, readfromFile);             ExchangeList.AttachExchange(exchange);              //return exchange.TradeLists;         }          public static Exchange GetExchange(EnuExchangeType extype)
         {             return ExchangeList.GetExchange(extype);         }
@@ -75,28 +77,28 @@
         {             return ExchangeList.GetTradelist(extype,symbol);
         }
 
-		//public static void AttachMyBalance(Balance bal)         //{
+        //public static void AttachMyBalance(Balance bal)         //{
         //    myBalance = bal;         //}
 
-		public static DateTime FromEpochSeconds(long EpochSeconds)
-		{
-			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-			return epoch.AddSeconds(EpochSeconds);
+        public static DateTime FromEpochSeconds(long EpochSeconds)
+        {
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            return epoch.AddSeconds(EpochSeconds);
 
-		} 
-		public static void LoadMarketDataXML()
-		{
+        } 
+        public static void LoadMarketDataXML()
+        {
             myInstruments = StorageAPI.LoadMarketDataXML("marketdata.xml");
-		}
+        }
 
-		public static void SaveMarketDataXML()
-		{
+        public static void SaveMarketDataXML()
+        {
 
                 StorageAPI.SaveMarketDataXML("marketdata.xml");
 
-		}
+        }
 
-		public static async Task FetchMarketDataAsync(Instrument coin)
-		{
-			await MarketDataAPI.FetchCoinMarketDataAsync(coin);
-		}      }      public enum EnuAppStatus{         Success,         SuccessButOffline,         FailureNetwork,         FailureStorage,         FailureParameter     }  } 
+        public static async Task FetchMarketDataAsync(Instrument coin)
+        {
+            await MarketDataAPI.FetchCoinMarketDataAsync(coin);
+        }      }      public enum EnuAppStatus{         Success,         FailureNetwork,         FailureStorage,         FailureParameter,         NotAvailable     }  } 

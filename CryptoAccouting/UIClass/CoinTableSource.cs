@@ -93,8 +93,8 @@ namespace CryptoAccouting.UIClass
             }
 
             ApplicationCore.SaveMyBalanceXML();
-            owner.CellItemUpdated(false);
-
+            owner.ReDrawScreen();
+            owner.CellItemUpdated(EnuPopTo.None);
         }
 
 		public static UIView BuidBlanceViewHeader(UITableView tv)

@@ -15,6 +15,7 @@ namespace CryptoAccouting
 	{
 		Position PositionDetail;
         ExchangeList exchangesListed;
+        CryptoTableViewController owner;
 
         bool editmode = true;
 		Instrument thisCoin;
@@ -195,8 +196,16 @@ namespace CryptoAccouting
 
         partial void ButtonDone_Activated(UIBarButtonItem sender)
         {
-			CreatePosition();
-            AppSetting.balanceMainViewC.CellItemUpdated();
+            CreatePosition();
+            //AppSetting.balanceMainViewC.CellItemUpdated();
+            if (owner != null)
+            {
+                owner.CellItemUpdated(EnuPopTo.OnePop);
+            }
+            else
+            {
+                AppSetting.balanceMainViewC.CellItemUpdated(EnuPopTo.PopToRoot);
+            }
         }
 
 		public void SetPosition(Position pos)
@@ -205,16 +214,19 @@ namespace CryptoAccouting
 			thisCoin = pos.Coin;
 			exchangesListed = ApplicationCore.GetExchangesBySymbol(pos.Coin.Symbol);
 			editmode = false;
+            //owner = AppSetting.balanceMainViewC;
 		}
 
 
-        public override void SetSearchSelectionItem(string searchitem1)
+        public override void SetSearchSelectionItem(string searchitem1, CryptoTableViewController ControllerToBack= null)
         {
             thisCoin = ApplicationCore.GetInstrument(searchitem1);
             exchangesListed = ApplicationCore.GetExchangesBySymbol(searchitem1);
             thisExchangeType = exchangesListed.First().ExchangeType;
             editmode = true;
+            this.owner = ControllerToBack == null ? null : ControllerToBack;
         }
+
     }
 
 }

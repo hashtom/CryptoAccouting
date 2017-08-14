@@ -24,17 +24,38 @@ namespace CryptoAccouting
 
         //public virtual void DeleteItem(Position pos){}
 
-        public void CellItemUpdated(bool PopToRoot = true)
+        public void CellItemUpdated(EnuPopTo PopTo)
         {
             TableView.ReloadData();
-            if (PopToRoot) NavigationController.PopToRootViewController(true);
+            switch (PopTo)
+            {
+                case EnuPopTo.PopToRoot:
+                    NavigationController.PopToRootViewController(true);
+                    break;
+                case EnuPopTo.OnePop:
+                    NavigationController.PopViewController(true);
+                    break;
+                case EnuPopTo.None:
+                    break;
+                default:
+                    break;
+            }
         }
 
 		//public virtual void RefreshBalanceTable(){}
 
-        public virtual void SetSearchSelectionItem(string searchitem1)
+        public virtual void SetSearchSelectionItem(string searchitem1, CryptoTableViewController ControllerToBack = null)
 		{
 
 		}
+
+        public virtual void ReDrawScreen(){}
+
+    }
+
+    public enum EnuPopTo{
+        PopToRoot,
+        OnePop,
+        None
     }
 }

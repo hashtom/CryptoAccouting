@@ -177,7 +177,7 @@ namespace CryptoAccouting
             }else{
 				var DestinationViewC = owner.Storyboard.InstantiateViewController(destinationid) as BalanceEditViewController;
 				DestinationViewC.SetSearchSelectionItem(searchitems[indexPath.Row].SearchItem1);
-				owner.NavigationController.PushViewController(DestinationViewC, false);
+				owner.NavigationController.PushViewController(DestinationViewC, true);
             }
         }
 

@@ -26,7 +26,7 @@ namespace CryptoAccouting
 
 			// Configure Table source
 			this.TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "BookingViewCell");
-			this.TableView.Source = new BookingTableSource(symbol_selected,this);
+            this.TableView.Source = new BookingTableSource(symbol_selected, this);
         }
 
         public override void ViewWillAppear(bool animated)
@@ -41,7 +41,7 @@ namespace CryptoAccouting
 
         }
 
-        private void ReDrawScreen()
+        public override void ReDrawScreen()
         {
             var booking_positions = ApplicationCore.Balance.positions.Where(x => x.Coin.Symbol == symbol_selected).ToList();
             var thisCoin = ApplicationCore.GetInstrument(symbol_selected);
@@ -101,7 +101,7 @@ namespace CryptoAccouting
         partial void ButtonAddNew_Activated(UIBarButtonItem sender)
         {
 			var DestinationViewC = Storyboard.InstantiateViewController("BalanceEditViewC") as BalanceEditViewController;
-            DestinationViewC.SetSearchSelectionItem(symbol_selected);
+            DestinationViewC.SetSearchSelectionItem(symbol_selected, this);
             NavigationController.PushViewController(DestinationViewC, true);
         }
     }

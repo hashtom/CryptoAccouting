@@ -102,7 +102,7 @@ namespace CryptoAccouting
             }
         }
 
-        public override void SetSearchSelectionItem(string searchitem1)
+        public override void SetSearchSelectionItem(string searchitem1, CryptoTableViewController ControllerToBack)
         {
             //base.SetSearchSelectionItem(searchitem1);
             EnuCCY baseccy;

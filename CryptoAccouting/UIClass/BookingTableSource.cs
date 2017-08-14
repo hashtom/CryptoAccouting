@@ -96,7 +96,7 @@ namespace CryptoAccouting.UIClass
             }
 
 			ApplicationCore.SaveMyBalanceXML();
-            owner.CellItemUpdated(false);
+            owner.CellItemUpdated(EnuPopTo.None);
 
 		}
 
