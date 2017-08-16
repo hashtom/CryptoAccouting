@@ -15,14 +15,15 @@
         //{         //    Navigation = new NavigationDrawer(BalanceTableView.Frame.Width, BalanceTableView.Frame.Height,         //                                      PositionViewC,
         //                                      TransactionViewC,         //                                      PLViewC,         //                                      PerfViewC,         //                                      SettingViewC);         //    Navigation.AddView(BalanceTableView);         //    return Navigation;         //}          public static EnuAppStatus InitializeCore()
         {             EnuAppStatus status;              //Load Instruments Data             status = LoadInstruments(false);              //Load Exchange List
-            if (status is EnuAppStatus.Success) LoadExchangeList();              //Load Balance Data
-            Balance = StorageAPI.LoadBalanceXML("mybalance.xml", myInstruments);              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML("AppSetting.xml") != EnuAppStatus.Success)             {                 BaseCurrency = EnuCCY.USD; //Default setting             }              //Load Latest Snapshot price              return status;          }          public static async Task<EnuAppStatus> LoadCoreDataAsync(){
+            if (status is EnuAppStatus.Success) LoadExchangeList();
+
+			//Load Balance Data
+			Balance = StorageAPI.LoadBalanceXML("mybalance.xml", myInstruments);              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML("AppSetting.xml") != EnuAppStatus.Success)             {                 BaseCurrency = EnuCCY.USD; //Default setting             }              //Load Latest Snapshot price              return status;          }          public static async Task<EnuAppStatus> LoadCoreDataAsync(){
 
             //Load FX
             if (!HasCrossRateUpdated)
             {
-                USDCrossRate = await MarketDataAPI.FetchUSDCrossRateAsync(BaseCurrency);                 HasCrossRateUpdated = true;             }              return EnuAppStatus.Success;         }
-
+                USDCrossRate = await MarketDataAPI.FetchUSDCrossRateAsync(BaseCurrency);                 HasCrossRateUpdated = true;             }              return EnuAppStatus.Success;         } 
         public static async Task<EnuAppStatus> FetchMarketDataFromBalanceAsync()
         { 
             if (Balance != null)
@@ -61,16 +62,16 @@
         public static List<Instrument> GetInstrumentAll(bool OnlyActive = true)
         {
             return !OnlyActive ? myInstruments : myInstruments.Where(x => x.IsActive is true).ToList();
-        }          public static async Task LoadTradeListsAsync(EnuExchangeType extype, bool isAggregatedDaily = true, bool readfromFile = false)
+        }          public static async Task LoadTradeListsAsync(string ExchangeCode, bool isAggregatedDaily = true, bool readfromFile = false)
         {
-            var exchange = GetExchange(extype);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              exchange.TradeList = await ExchangeAPI.FetchTradeListAsync(exchange, isAggregatedDaily, readfromFile);             ExchangeList.AttachExchange(exchange);              //return exchange.TradeLists;         }          public static Exchange GetExchange(EnuExchangeType extype)
-        {             return ExchangeList.GetExchange(extype);         }
+            var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              exchange.TradeList = await ExchangeAPI.FetchTradeListAsync(exchange, isAggregatedDaily, readfromFile);             ExchangeList.AttachExchange(exchange);              //return exchange.TradeLists;         }          public static Exchange GetExchange(string Code)
+        {             return ExchangeList.GetExchange(Code);         }
 
         public static ExchangeList GetExchangesBySymbol(string symbol)
         {
             return ExchangeList.GetExchangesBySymbol(symbol);
-        }          public static TradeList GetExchangeTradeList(EnuExchangeType extype, string symbol)
-        {             return ExchangeList.GetTradelist(extype,symbol);
+        }          public static TradeList GetExchangeTradeList(string exchangeCode)
+        {             return ExchangeList.GetTradelist(exchangeCode);
         }
 
         //public static void AttachMyBalance(Balance bal)         //{

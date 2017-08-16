@@ -21,7 +21,7 @@ namespace CryptoAccouting.CoreClass
 		public double RealizedBookValue { get; set; }
         public double UnrealizedBookValue { get; set; } 
         public double AverageBookPrice { get; set; }
-		public EnuExchangeType TradedExchange { get; set; }
+        public Exchange TradedExchange { get; set; }
 
         private List<Transaction> transactions;
 
@@ -67,7 +67,7 @@ namespace CryptoAccouting.CoreClass
             CalculatePL();
         }
 
-        public void AggregateTransaction(Instrument tradedCoin, EnuExchangeType exType, EnuBuySell buysell, double qty, double tradePrice,
+        public void AggregateTransaction(Instrument tradedCoin, string exchangeCode, EnuBuySell buysell, double qty, double tradePrice,
                                          DateTime tradeDate, int fee, EnuTxAggregateFlag flag = EnuTxAggregateFlag.Daliy)
         {
             Transaction tx;
@@ -85,7 +85,7 @@ namespace CryptoAccouting.CoreClass
             }
             else
             {
-                tx = new Transaction(tradedCoin,ApplicationCore.GetExchange(exType));
+                tx = new Transaction(tradedCoin, ApplicationCore.GetExchange(exchangeCode));
                 tx.TxId = (transactions.Count + 1).ToString();
                 tx.BuySell = buysell;
                 tx.Quantity = qty;

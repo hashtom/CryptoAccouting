@@ -50,17 +50,18 @@ namespace CryptoAccouting.CoreClass.APIClass
                     {
                         coin = instruments.Where(i => i.Symbol == elem.Element("symbol").Value).First();
 
-                        EnuExchangeType tradedexchange;
-                        if(!Enum.TryParse(elem.Element("exchange").Value, out tradedexchange))
-                            tradedexchange = EnuExchangeType.NotSelected;
+                        //EnuExchangeType tradedexchange;
+                        //if(!Enum.TryParse(elem.Element("exchange").Value, out tradedexchange))
+                        //    tradedexchange = EnuExchangeType.NotSpecified;
+                        var tradedexchange = ApplicationCore.GetExchange(elem.Element("exchange").Value);
 
-                        var pos = new Position(coin, EnuPositionType.Detail)
+                        var pos = new Position(coin)
                         {
                             Id = int.Parse(elem.Attribute("id").Value),
                             Amount = double.Parse(elem.Element("amount").Value),
                             BookPrice = double.Parse(elem.Element("book").Value),
                             BalanceDate = DateTime.Parse(elem.Element("date").Value),
-                            TradedExchange = tradedexchange //(EnuExchangeType)Enum.Parse(typeof(EnuExchangeType), elem.Descendants("exchange").Select(x => x.Value).First())
+                            BookedExchange = tradedexchange //(EnuExchangeType)Enum.Parse(typeof(EnuExchangeType), elem.Descendants("exchange").Select(x => x.Value).First())
                         };
                         mybal.AttachPosition(pos, false);
                     }
@@ -104,7 +105,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                                                  new XElement("date", pos.BalanceDate),
                                                  new XElement("amount", pos.Amount.ToString()),
                                                  new XElement("book", pos.BookPrice.ToString()),
-                                                 new XElement("exchange", pos.TradedExchange.ToString())
+                                                 new XElement("exchange", pos.BookedExchange.ToString())
                                                 );
 				balance.Add(position);
 			}
@@ -205,17 +206,17 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 foreach (var elem in apikeysXE)
                 {
-                    EnuExchangeType extype;
-                    if (!Enum.TryParse((string)elem.Attribute("name").Value, out extype))
-                    {
-                        extype = EnuExchangeType.NotSelected;
-                    }
-                    else
-                    {
-                        var exchange = ApplicationCore.GetExchange(extype);
+                    //EnuExchangeType extype;
+                    //if (!Enum.TryParse((string)elem.Attribute("name").Value, out extype))
+                    //{
+                    //    extype = EnuExchangeType.NotSelected;
+                    //}
+                    //else
+                    //{
+                    var exchange = ApplicationCore.GetExchange((string)elem.Attribute("name").Value);
                         exchange.Key = elem.Element("key").Value;
                         exchange.Secret = elem.Element("secret").Value;
-                    }
+                    //}
                 }
 
                 ApplicationCore.BaseCurrency = baseccy;
@@ -248,7 +249,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             foreach (var exchange in exList.Where(x => x.APIReady == true))
             {
                 XElement key = new XElement("exchange",
-                                            new XAttribute("name", exchange.ExchangeType),
+                                            new XAttribute("name", exchange.Code),
                                             new XElement("key", exchange.Key),
                                             new XElement("secret", exchange.Secret)
                                            );
@@ -260,6 +261,8 @@ namespace CryptoAccouting.CoreClass.APIClass
             return EnuAppStatus.Success; //todo
 
 		}
+
+
 
   //      public static EnuAppStatus SaveExchangeListXMLTemp(ExchangeList exList, string fileName)
 		//{

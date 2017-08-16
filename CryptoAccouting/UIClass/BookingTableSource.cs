@@ -39,7 +39,7 @@ namespace CryptoAccouting.UIClass
 			//var cell = tableView.DequeueReusableCell(cellIdentifier) as CustomBalanceCell;
 			//if (cell == null)
             var cell = (CoinViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
-			cell.UpdateCell(BookingPositions()[indexPath.Row]);
+			cell.UpdateCell(BookingPositions()[indexPath.Row], true);
 			
             return cell;
 

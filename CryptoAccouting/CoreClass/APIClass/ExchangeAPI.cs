@@ -10,7 +10,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 {
     public static class ExchangeAPI
     {
-        
+
         //public static async Task<Price> FetchBTCPriceAsyncTest(Exchange exchange, string apikey, string apisecret){
 
         //    var coin = ApplicationCore.GetInstrument("BTC");
@@ -43,10 +43,6 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         //}
 
-        internal static void FetchPosition(EnuExchangeType exType){
-
-
-        }
 
 		//     internal async Task<Transactions> FetchTransaction(EnuExchangeType exType, bool isAggregateDaily = true){
 
@@ -87,9 +83,9 @@ namespace CryptoAccouting.CoreClass.APIClass
             TradeList tradelist = new TradeList(ApplicationCore.BaseCurrency);
 			string rawjson;
 
-            switch (exchange.ExchangeType)
+            switch (exchange.Code)
 			{
-				case EnuExchangeType.Zaif:
+                case "Zaif":
 
 					if (ReadFromFile)
 					{
@@ -128,15 +124,13 @@ namespace CryptoAccouting.CoreClass.APIClass
                         symbol = symbol.Replace("_jpy", "").Replace("_btc", "").ToUpper();
 
                         tradelist.AggregateTransaction(ApplicationCore.GetInstrument(symbol),
-                                                      exchange.ExchangeType,
+                                                       exchange.Code,
                                                       ebuysell,
                                                       (double)json["return"][x.Name]["amount"],
                                                       (double)json["return"][x.Name]["price"],
                                                       ApplicationCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
                                                       (int)json["return"][x.Name]["fee"]
                                                       );
-
-
                     }
 
 					// Save Json file

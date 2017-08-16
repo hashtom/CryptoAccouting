@@ -10,18 +10,20 @@ namespace CryptoAccouting.UIClass
 {
     public class ExchangeTableSource : UITableViewSource
     {
-        Balance myBalance;
+        ExchangeList ExchangeList;
+        //Balance myBalance;
         NSString cellIdentifier = new NSString("ExchangeViewCell"); // set in the Storyboard
         CryptoTableViewController owner;
 
         public ExchangeTableSource(CryptoTableViewController owner)
         {
-            this.myBalance = ApplicationCore.Balance;
+            this.ExchangeList = ApplicationCore.ExchangeList;
             this.owner = owner;
         }
         public override nint RowsInSection(UITableView tableview, nint section)
         {
-            return myBalance.positionsByExchange.Count;
+            return ExchangeList.Count();
+            //return myBalance.positionsByBookingExchange.Count;
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
@@ -33,14 +35,15 @@ namespace CryptoAccouting.UIClass
             //cell = new CustomBalanceCell (cellIdentifier);
 
             var cell = (ExchangeViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
-            cell.UpdateCell(myBalance.positionsByExchange[indexPath.Row]);
-
+            //cell.UpdateCell(myBalance.positionsByBookingExchange[indexPath.Row]);
+            cell.UpdateCell(ExchangeList.GetExchangeByIndex(indexPath.Row));
             return cell;
         }
 
-        public Position GetItem(int id)
+        public Exchange GetItem(int id)
         {
-            return myBalance.positionsByExchange[id];
+            return ExchangeList.GetExchangeByIndex(id);
+            //return myBalance.positionsByBookingExchange[id];
         }
 
 		public override bool CanMoveRow(UITableView tableView, NSIndexPath indexPath)
@@ -80,7 +83,7 @@ namespace CryptoAccouting.UIClass
             {
                 case UITableViewCellEditingStyle.Delete:
                     //tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
-                    myBalance.DetachPositionByExchange(myBalance.positionsByExchange[indexPath.Row]);
+                    //myBalance.DetachPositionByExchange(myBalance.positionsByBookingExchange[indexPath.Row]);
                     break;
 
                 case UITableViewCellEditingStyle.None:

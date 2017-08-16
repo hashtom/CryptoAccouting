@@ -29,11 +29,11 @@ namespace CryptoAccouting
 
             foreach (var exc in ApplicationCore.ExchangeList.Where(x=>x.APIReady == true))
 			{
-                exchangeAlert.AddAction(UIAlertAction.Create(exc.ExchangeName,
+                exchangeAlert.AddAction(UIAlertAction.Create(exc.Name,
                                                                  UIAlertActionStyle.Default,
                                                                  (obj) =>
                                                                  {
-                                                                     buttonExchange.SetTitle(exc.ExchangeName, UIControlState.Normal);
+                                                                     buttonExchange.SetTitle(exc.Name, UIControlState.Normal);
                                                                      thisExchange = exc;
                                                                      textAPIKey.Text = exc.Key == null ? "" : exc.Key;
                                                                      textAPISecret.Text = exc.Secret == null ? "" : exc.Secret;

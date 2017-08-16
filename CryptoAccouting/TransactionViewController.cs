@@ -71,10 +71,10 @@ namespace CryptoAccouting
 		{
 			base.ViewDidLoad();
             NavigationItem.RightBarButtonItem = EditButtonItem;
-			//menu = ApplicationCore.Navigation;
+            //menu = ApplicationCore.Navigation;
 
-            await ApplicationCore.LoadTradeListsAsync(EnuExchangeType.Zaif, true, false);
-            myTradeList = ApplicationCore.GetExchange(EnuExchangeType.Zaif).TradeList;
+            await ApplicationCore.LoadTradeListsAsync("Zaif, ", true, false);
+            myTradeList = ApplicationCore.GetExchangeTradeList("Zaif");
             myTradeList.CalculateTotalValue(DateTime.Now.Year,"BTC");
 
             //Show Summary

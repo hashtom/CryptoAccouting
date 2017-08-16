@@ -267,26 +267,27 @@ namespace CryptoAccouting.CoreClass.APIClass
 
 				var json = JObject.Parse(rawjson);
 
-				foreach (var market in (JArray)json["exchanges"])
-				{
-    
-					EnuExchangeType code;
-					if (!Enum.TryParse((string)market["code"], out code))
-						code = EnuExchangeType.NotSelected;
+                foreach (var market in (JArray)json["exchanges"])
+                {
 
-					if (code != EnuExchangeType.NotSelected)
-					{
-                        var exchange = exlist.GetExchange(code);
-                        exchange.ExchangeName = (string)market["name"];
+                    //EnuExchangeType code;
+                    //if (!Enum.TryParse((string)market["code"], out code))
+                    //	code = EnuExchangeType.NotSelected;
 
-                        foreach (var symbol in (JArray)market["listing"]){
-                            var coin = ApplicationCore.GetInstrument((string)symbol["symbol"]);
-                            if (coin != null) exchange.AttachListedCoin(coin);
-                        }
+                    //if (code != EnuExchangeType.NotSelected)
+                    //{
+                    var exchange = exlist.GetExchange((string)market["code"]);
+                    exchange.Name = (string)market["name"];
 
-                        exchange.APIReady = (bool)market["api"];
-					}
-				}
+                    foreach (var symbol in (JArray)market["listing"])
+                    {
+                        var coin = ApplicationCore.GetInstrument((string)symbol["symbol"]);
+                        if (coin != null) exchange.AttachListedCoin(coin);
+                    }
+
+                    exchange.APIReady = (bool)market["api"];
+                    //}
+                }
 
 			}
 

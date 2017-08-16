@@ -23,8 +23,8 @@ namespace CryptoAccouting
 
             //var exchange = await ApplicationCore.LoadTradeListAsync(new Exchange(EnuExchangeType.Zaif), true, true);
             //myTradeList = exchange.TradeList;
-            await ApplicationCore.LoadTradeListsAsync(EnuExchangeType.Zaif, true, false);
-            myTradeList = ApplicationCore.GetExchange(EnuExchangeType.Zaif).TradeList;
+            await ApplicationCore.LoadTradeListsAsync("Zaif", true, false);
+            myTradeList = ApplicationCore.GetExchangeTradeList("Zaif");
             myTradeList.CalculateTotalValue(DateTime.Now.Year);
 
             DrawScreen();
@@ -72,7 +72,7 @@ namespace CryptoAccouting
 			this.LabelSellValue2.Text = String.Format("{0:n0}", myTradeList.TotalValueSell);
 			this.LabelTotalValue.Text = String.Format("{0:n0}", (myTradeList.TotalValueBuy + myTradeList.TotalValueSell));
 
-            this.LabelTradedCoins.Text = ApplicationCore.GetExchange(EnuExchangeType.Zaif).TradeList.TradedCoinString;
+            this.LabelTradedCoins.Text = ApplicationCore.GetExchangeTradeList("Zaif").TradedCoinString;
 			//foreach (var coinname in ApplicationCore.GetExchange(EnuExchangeType.Zaif).TradeLists.Select(x => x.TradedCoin.Name))
 			//{
 			//	this.LabelTradedCoins.Text += coinname + " ";

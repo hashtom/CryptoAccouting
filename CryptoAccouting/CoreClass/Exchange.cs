@@ -6,21 +6,21 @@ namespace CryptoAccouting.CoreClass
 {
     public class Exchange
     {
-        public string ExchangeName { get; set; }
-        public EnuExchangeType ExchangeType { get; }
+        public string Code { get; set; }
+        public string Name { get; set; }
         public List<Instrument> ListedCoin { get; set; }
-        public TradeList TradeList { get; set; } //If needed?
         public bool APIReady { get; set; }
 		public string Key { get; set; }
 		public string Secret { get; set; }
-        //public Balance Balance { get; set; }     // If needed?
+		public TradeList TradeList { get; set; }
+        public Balance BalanceOnExchange { get; set; } 
         public string LogoFileName { get; set; }
         //public DateTime UpdateTime { get; private set; }
 
 
-        public Exchange(EnuExchangeType excType)
+        public Exchange(string Code)
         {
-            ExchangeType = excType;
+            this.Code = Code;
             ListedCoin = new List<Instrument>();
         }
 
@@ -29,46 +29,58 @@ namespace CryptoAccouting.CoreClass
             if (!ListedCoin.Any(c => c.Symbol == coin.Symbol)) ListedCoin.Add(coin);
 		}
 
-        public bool IsNotSelected()
+        public void AttachPosition(Position pos)
         {
-            return (this.ExchangeType == EnuExchangeType.NotSelected);
+            if (BalanceOnExchange is null) BalanceOnExchange = new Balance();
+            BalanceOnExchange.AttachPosition(pos);
         }
+
+		public void DetachPosition(Position pos)
+		{
+            BalanceOnExchange.DetachPosition(pos, true);
+		}
+
+        //public bool IsNotSelected()
+        //{
+        //    return (this.ExchangeType == EnuExchangeType.NotSelected);
+        //}
     }
 
-	public enum EnuExchangeType
-	{
-        NotSelected = 0,
-		Zaif = 1,
-		BitFlyer = 2,
-		Kraken = 3,
-		CoinCheck = 4,
-		BitBank = 5,
-        Poloniex = 6,
-        Bittrex = 7,
-        CCex = 8,
-        Bter = 9,
-        Livecoin,
-        YoBit,
-        Hitbtc,
-        Bleutrade,
-        Bitstamp,
-        BTCTrade,
-        BitFinex,
-        Korbit,
-        OKCoin,
-        Gemini,
-        GDAX,
-        BTC38,
-        Gatecoin,
-        CEXIO,
-        Quoine,
-        viaBTC,
-        Liqui,
-        itBit,
-        Cexio,
-        Exmo,
-        Indacoin,
-        Nixe,
-        BTCChina
-	}
+	//public enum EnuExchangeType
+	//{
+        //NotSpecified,
+        //Exchange
+		//Zaif = 1,
+		//BitFlyer = 2,
+		//Kraken = 3,
+		//CoinCheck = 4,
+		//BitBank = 5,
+        //Poloniex = 6,
+        //Bittrex = 7,
+        //CCex = 8,
+        //Bter = 9,
+        //Livecoin,
+        //YoBit,
+        //Hitbtc,
+        //Bleutrade,
+        //Bitstamp,
+        //BTCTrade,
+        //BitFinex,
+        //Korbit,
+        //OKCoin,
+        //Gemini,
+        //GDAX,
+        //BTC38,
+        //Gatecoin,
+        //CEXIO,
+        //Quoine,
+        //viaBTC,
+        //Liqui,
+        //itBit,
+        //Cexio,
+        //Exmo,
+        //Indacoin,
+        //Nixe,
+        //BTCChina
+	//}
 }

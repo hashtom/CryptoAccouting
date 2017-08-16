@@ -10,7 +10,7 @@ namespace CryptoAccouting.CoreClass
         public string BalanceName { get; set; }
         public List<Position> positions { get; private set; }
         public List<Position> positionsByCoin { get; private set; }
-        public List<Position> positionsByExchange { get; private set; }
+        //public List<Position> positionsByBookingExchange { get; private set; }
 
 		public Balance()
         {
@@ -42,16 +42,53 @@ namespace CryptoAccouting.CoreClass
             }
         }
 
+        public Balance GetBalanceByExchangeCode(string ExchangeCode)
+        {
+            Balance Bal = new Balance();
+            foreach (var pos in positions.Where(x => x.BookedExchange.Code == ExchangeCode))
+            {
+                Bal.AttachPosition(pos, false);
+            }
+			if (Bal.Count() > 0)
+			{
+				Bal.RecalculatePositionSummary();
+				return Bal;
+			}
+			else
+			{
+				return null;
+			}
+        }
+
+        public Balance GetBalanceByWalletCode(string WalletCode)
+        {
+			Balance Bal = new Balance();
+            foreach (var pos in positions.Where(x => x.Wallet.Code == WalletCode))
+			{
+				Bal.AttachPosition(pos, false);
+			}
+
+            if (Bal.Count() > 0)
+            {
+                Bal.RecalculatePositionSummary();
+                return Bal;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public void RecalculatePositionSummary()
         {
             int id = 0;
             positionsByCoin = new List<Position>();
-            positionsByExchange = new List<Position>();
+            //positionsByBookingExchange = new List<Position>();
 
             foreach (var symbol in positions.Select(x => x.Coin.Symbol).Distinct())
             {
 
-                Position posbycoin = new Position(ApplicationCore.GetInstrument(symbol),EnuPositionType.CoinLevel)
+                Position posbycoin = new Position(ApplicationCore.GetInstrument(symbol))
                 {
                     Id = id,
                     Amount = positions.Where(x => x.Coin.Symbol == symbol).Sum(x => x.Amount),
@@ -61,20 +98,20 @@ namespace CryptoAccouting.CoreClass
                 positionsByCoin.Add(posbycoin);
             }
 
-            id = 0;
-            foreach (var ex in positions.Select(x => x.TradedExchange).Distinct())
-            {
-                Position posbyexchange = new Position( EnuPositionType.ExchangeLevel)
-                {
-                    Id = id,
-                    TradedExchange = ex,
-                    Amount = positions.Where(x => x.TradedExchange == ex).Sum(x => x.AmountBTC()),
-                    FiatValueTotalExchange = positions.Where(x => x.TradedExchange == ex).Sum(x => x.LatestFiatValueUSD()), //todo take multiple currencies into account
-                    BookPrice = positions.Where(x => x.TradedExchange == ex).Average(x => (x.Amount * x.BookPrice) / x.Amount)
-                };
-                id++;
-                positionsByExchange.Add(posbyexchange);
-            }
+            //id = 0;
+            //foreach (var ex in positions.Select(x => x.BookedExchange).Distinct())
+            //{
+            //    Position posbyexchange = new Position( EnuPositionType.ExchangeLevel)
+            //    {
+            //        Id = id,
+            //        BookedExchange = ex,
+            //        Amount = positions.Where(x => x.BookedExchange == ex).Sum(x => x.AmountBTC()),
+            //        FiatValueTotalExchange = positions.Where(x => x.BookedExchange == ex).Sum(x => x.LatestFiatValueUSD()), //todo take multiple currencies into account
+            //        BookPrice = positions.Where(x => x.BookedExchange == ex).Average(x => (x.Amount * x.BookPrice) / x.Amount)
+            //    };
+            //    id++;
+            //    positionsByBookingExchange.Add(posbyexchange);
+            //}
 
         }
 
@@ -91,13 +128,36 @@ namespace CryptoAccouting.CoreClass
 
 			positions.Add(position);
 
-			if (CalcSummary) RecalculatePositionSummary();
+   //         if (position.BookedExchange != null)
+   //         {
+   //             var exchange = ApplicationCore.GetExchange(position.BookedExchange.Code);
+   //             exchange.AttachPosition(position);
+   //         }
+
+   //         if (position.Wallet != null)
+   //         {
+   //             position.Wallet.AttachPosition(position);
+
+   //         }
+			//if (CalcSummary) RecalculatePositionSummary();
 
 		}
 
 		public void DetachPosition(Position position, bool CalcSummary)
 		{
 			positions.RemoveAll(x => x.Id == position.Id);
+
+			//if (position.BookedExchange != null)
+			//{
+			//	var exchange = ApplicationCore.GetExchange(position.BookedExchange.Code);
+   //             exchange.DetachPosition(position);
+			//}
+
+			//if (position.Wallet != null)
+			//{
+   //             position.Wallet.DetachPosition(position);
+
+			//}
 
             if (CalcSummary) RecalculatePositionSummary();
 		}
@@ -108,14 +168,19 @@ namespace CryptoAccouting.CoreClass
             RecalculatePositionSummary();
 		}
 
-		public void DetachPositionByExchange(Position position)
-		{
-            positions.RemoveAll(x => x.TradedExchange == position.TradedExchange);
-			RecalculatePositionSummary();
-		}
+		//public void DetachPositionByExchange(Position position)
+		//{
+  //          positions.RemoveAll(x => x.BookedExchange == position.BookedExchange);
+		//	RecalculatePositionSummary();
+		//}
 
         public Position GetPositionByIndex(int indexNumber){
             return positions[indexNumber];
+        }
+
+        public int Count()
+        {
+            return positions.Count();
         }
 
     }

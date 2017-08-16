@@ -107,7 +107,7 @@
       <HintPath>..\..\..\..\Documents\Syncfusion\15.2.0.40\Xamarin\lib\ios-unified\Syncfusion.SfNavigationDrawer.iOS.dll</HintPath>
     </Reference>
     <Reference Include="NBitcoin">
-      <HintPath>..\packages\NBitcoin.4.0.0.13\lib\netstandard1.3\NBitcoin.dll</HintPath>
+      <HintPath>..\packages\NBitcoin.4.0.0.21\lib\netstandard1.3\NBitcoin.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -219,6 +219,7 @@
     <Compile Include="APISettingTableViewController.designer.cs">
       <DependentUpon>APISettingTableViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="CoreClass\Wallet.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />
@@ -230,6 +231,8 @@
     <BundleResource Include="Images\PLtab.png" />
     <BundleResource Include="Images\transactiontab.png" />
     <BundleResource Include="Images\positiontab.png" />
+    <BundleResource Include="Resources\Default-568h%402x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
+  <Import Project="..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />
 </Project>

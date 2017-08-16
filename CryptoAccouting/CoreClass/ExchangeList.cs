@@ -14,11 +14,11 @@ namespace CryptoAccouting.CoreClass
             exchanges = new List<Exchange>();
         }
 
-        public TradeList GetTradelist(EnuExchangeType extype, string symbol)
+        public TradeList GetTradelist(string exchangeCode)
         {
-            if (exchanges == null ? false : exchanges.Where(x => x.ExchangeType == extype).Any())
+            if (exchanges == null ? false : exchanges.Any(x => x.Code == exchangeCode))
             {
-                return this.First(x => x.ExchangeType == extype).TradeList;
+                return this.First(x => x.Code == exchangeCode).TradeList;
             }
             else
             {
@@ -26,7 +26,7 @@ namespace CryptoAccouting.CoreClass
             }
         }
 
-        public Exchange GetExchange(EnuExchangeType extype)
+        public Exchange GetExchange(string Code)
         {
             //if (exchanges == null ? false : exchanges.Where(x => x.ExchangeType == extype).Any())
             //{
@@ -39,11 +39,12 @@ namespace CryptoAccouting.CoreClass
             //    return exc;
             //}
 
-            if (exchanges.Where(x => x.ExchangeType == extype).Any() == false){
-                this.AttachExchange(new Exchange(extype));
+            if (!exchanges.Any(x => x.Code == Code))
+            {
+                this.AttachExchange(new Exchange(Code));
             }
 
-            return exchanges.First(x => x.ExchangeType == extype);
+            return exchanges.First(x => x.Code == Code);
         }
 
   //      public Exchange GetExchange(string ExchangeName)
@@ -61,7 +62,7 @@ namespace CryptoAccouting.CoreClass
         public ExchangeList GetExchangesBySymbol(string symbol){
 
             var exchanged_applied = new ExchangeList();
-            exchanged_applied.AttachExchange(new Exchange(EnuExchangeType.NotSelected){ExchangeName="Not Selected"});
+            exchanged_applied.AttachExchange(new Exchange("NotSpecified") { Name = "Not Specified" });
 
             foreach (var exc in exchanges)
             {
@@ -73,13 +74,13 @@ namespace CryptoAccouting.CoreClass
 
         public void AttachExchange(Exchange exc)
 		{
-            if (exchanges.Any(x => x.ExchangeType == exc.ExchangeType)) DetachExchange(exc);
+            if (exchanges.Any(x => x.Code == exc.Code)) DetachExchange(exc);
 			exchanges.Add(exc);
 		}
 
         public void DetachExchange(Exchange exc)
 		{
-            exchanges.RemoveAll(x => x.ExchangeType == exc.ExchangeType);
+            exchanges.RemoveAll(x => x.Code == exc.Code);
 		}
 
         public Exchange GetExchangeByIndex(int indexNumber)

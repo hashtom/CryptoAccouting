@@ -22,7 +22,7 @@ namespace CryptoAccouting.UIClass
             // Note: this .ctor should not contain any initialization logic.
         }
 
-        public void UpdateCell(Position pos)
+        public void UpdateCell(Position pos, bool ShowBookingValue)
 		{
             labelSymbol.Text = pos.Coin.Symbol;
 
@@ -38,11 +38,11 @@ namespace CryptoAccouting.UIClass
                 labelMemo.Text = String.Format("{0:n2}", pos.BTCRet1d()) + " %";
             }
 
-            if (pos.PositionType is EnuPositionType.Detail)
+            if (ShowBookingValue)
             {
                 labelPrice.Text = String.Format("{0:n2}", pos.BookPrice);
                 labelValue.Text = String.Format("{0:n0}", pos.BookValue());
-                labelMemo.Text = pos.TradedExchange.ToString();
+                labelMemo.Text = pos.BookedExchange.Name;
             }
             else
             {
