@@ -45,7 +45,7 @@ namespace CryptoAccouting.CoreClass
             Balance Bal = new Balance();
             foreach (var pos in positions.Where(x => x.BookedExchange.Code == ExchangeCode))
             {
-                Bal.AttachPosition(pos);
+                Bal.Attach(pos);
             }
 			if (Bal.Count() > 0)
 			{
@@ -59,10 +59,10 @@ namespace CryptoAccouting.CoreClass
 
         public Balance GetBalanceByStorage(string storagecode)
         {
-			Balance Bal = new Balance();
+            var Bal = new Balance();
             foreach (var pos in positions.Where(x => x.Storage.Code == storagecode))
 			{
-				Bal.AttachPosition(pos);
+				Bal.Attach(pos);
 			}
 
             if (Bal.Count() > 0)
@@ -75,11 +75,22 @@ namespace CryptoAccouting.CoreClass
             }
         }
 
-        public void AttachPosition(Position position) //, bool CalcSummary = true)
+        public CoinStorageList GetStorageList()
+        {
+            var list = new CoinStorageList();
+            foreach (var storage in positions.Select(x => x.Storage).Distinct())
+            {
+                if (storage != null) list.Attach(storage);
+            }
+
+            return list;
+        }
+
+        public void Attach(Position position) //, bool CalcSummary = true)
 		{
             if (positions.Any(x => x.Id == position.Id))
             {
-                DetachPosition(position);
+                Detach(position);
             }
             else
             {
@@ -90,7 +101,7 @@ namespace CryptoAccouting.CoreClass
 
 		}
 
-		public void DetachPosition(Position position)  //, bool CalcSummary = true)
+		public void Detach(Position position)  //, bool CalcSummary = true)
 		{
 			positions.RemoveAll(x => x.Id == position.Id);
 		}
@@ -100,7 +111,7 @@ namespace CryptoAccouting.CoreClass
             positions.RemoveAll(x => x.Coin.Symbol == symbol);
         }
 
-        public Position GetPositionByIndex(int indexNumber){
+        public Position GetByIndex(int indexNumber){
             return positions[indexNumber];
         }
 

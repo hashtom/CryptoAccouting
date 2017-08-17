@@ -68,7 +68,8 @@
            //ApplicationCore.FetchMarketDataFromBalance();
 		}          private void PushSelectionView()
         {
-            List<SelectionSearchItem> searchitems = new List<SelectionSearchItem>();             foreach ( var item in ApplicationCore.GetInstrumentAll()){                 SelectionSearchItem searchitem = new SelectionSearchItem()
+            List<SelectionSearchItem> searchitems = new List<SelectionSearchItem>();             foreach (var item in ApplicationCore.InstrumentListAll(true))
+            {                 SelectionSearchItem searchitem = new SelectionSearchItem()
                 {                     SearchItem1 = item.Symbol,                     SearchItem2 = item.Name,                     ImageFile = item.Id + ".png",                     SortOrder = item.rank                 };                 searchitems.Add(searchitem);             } 
 			var SymbolSelectionViewC = Storyboard.InstantiateViewController("SymbolSelectionViewC") as SymbolSelectionViewConroller;
 			SymbolSelectionViewC.SelectionItems = searchitems;             SymbolSelectionViewC.DestinationID = "BalanceEditViewC";             NavigationController.PushViewController(SymbolSelectionViewC, true);         }      } }

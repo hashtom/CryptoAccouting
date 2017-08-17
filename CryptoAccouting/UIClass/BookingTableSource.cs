@@ -87,7 +87,7 @@ namespace CryptoAccouting.UIClass
             {
                 case UITableViewCellEditingStyle.Delete:
                     //tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
-                    myBalance.DetachPosition(BookingPositions()[indexPath.Row]);
+                    myBalance.Detach(BookingPositions()[indexPath.Row]);
                     break;
 
                 case UITableViewCellEditingStyle.None:

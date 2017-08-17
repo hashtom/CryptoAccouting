@@ -277,12 +277,20 @@ namespace CryptoAccouting.CoreClass.APIClass
                     var exchange = exlist.GetExchange((string)market["code"]);
                     exchange.Name = (string)market["name"];
 
-                    foreach (var symbol in (JArray)market["listing"])
-                    {
-                        var coin = ApplicationCore.GetInstrument((string)symbol["symbol"]);
-                        if (coin != null) exchange.AttachListedCoin(coin);
-                    }
+                    var listing = (JArray)market["listing"];
 
+                    if (listing.ToList().Count() == 0)
+                    {
+                        ApplicationCore.InstrumentListAll(true).ToList().ForEach(x => exchange.AttachListedCoin(x));
+                    }
+                    else
+                    {
+                        foreach (var symbol in listing)
+                        {
+                            var coin = ApplicationCore.GetInstrument((string)symbol["symbol"]);
+                            if (coin != null) exchange.AttachListedCoin(coin);
+                        }
+                    }
                     exchange.APIReady = (bool)market["api"];
                     //}
                 }

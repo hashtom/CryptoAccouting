@@ -17,7 +17,7 @@ namespace CryptoAccouting.UIClass
 
         public CoinStorageTableSource(CryptoTableViewController owner)
         {
-            this.ExchangeList = ApplicationCore.ExchangeList;
+            this.ExchangeList = ApplicationCore.PublicExchangeList;
             this.owner = owner;
         }
         public override nint RowsInSection(UITableView tableview, nint section)

@@ -8,7 +8,8 @@ namespace CryptoAccouting
 {
     public abstract class CryptoTableViewController : UITableViewController
     {
-        
+		public EnuPopTo popto;
+
         public CryptoTableViewController(IntPtr handle) : base(handle)
         {
         }
@@ -42,12 +43,11 @@ namespace CryptoAccouting
             }
         }
 
-		//public virtual void RefreshBalanceTable(){}
+        //public virtual void RefreshBalanceTable(){}
 
-        public virtual void SetSearchSelectionItem(string searchitem1, CryptoTableViewController ControllerToBack = null)
-		{
-
-		}
+        public virtual void SetSearchSelectionItem(string searchitem1) //CryptoTableViewController ControllerToBack = null)
+        {
+        }
 
         public virtual void ReDrawScreen(){}
 

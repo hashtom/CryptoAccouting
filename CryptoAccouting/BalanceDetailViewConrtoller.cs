@@ -92,7 +92,7 @@ namespace CryptoAccouting
 					var source = TableView.Source as BookingTableSource;
 					var rowPath = TableView.IndexPathForSelectedRow;
 					var item = source.GetItem(rowPath.Row);
-                    navctlr.SetPosition(item);
+                    navctlr.SetPosition(item, EnuPopTo.OnePop, false);
 				}
 			}
 
@@ -101,7 +101,8 @@ namespace CryptoAccouting
         partial void ButtonAddNew_Activated(UIBarButtonItem sender)
         {
 			var DestinationViewC = Storyboard.InstantiateViewController("BalanceEditViewC") as BalanceEditViewController;
-            DestinationViewC.SetSearchSelectionItem(symbol_selected, this);
+            //DestinationViewC.SetSearchSelectionItem(symbol_selected);
+            DestinationViewC.SetPosition(new Position(ApplicationCore.GetInstrument(symbol_selected)), EnuPopTo.OnePop, true);
             NavigationController.PushViewController(DestinationViewC, true);
         }
     }

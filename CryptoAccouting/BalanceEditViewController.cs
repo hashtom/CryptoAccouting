@@ -15,7 +15,7 @@ namespace CryptoAccouting
 	{
 		Position PositionDetail;
         ExchangeList exchangesListed;
-        CryptoTableViewController owner;
+        //CryptoTableViewController owner;
 
         bool editmode = true;
 		Instrument thisCoin;
@@ -41,8 +41,7 @@ namespace CryptoAccouting
 
                 foreach (var exc in exchangesListed)
                 {
-                    exchangeAlert.AddAction(UIAlertAction.Create(exc.Name,
-                                                                     UIAlertActionStyle.Default,
+                    exchangeAlert.AddAction(UIAlertAction.Create(exc.Code, UIAlertActionStyle.Default,
                                                                      (obj) =>
                                                                      {
                                                                          buttonExchange.SetTitle(exc.Code, UIControlState.Normal);
@@ -65,7 +64,7 @@ namespace CryptoAccouting
 				{
                     if (wt is EnuCoinStorageType.Exchange)
                     {
-                        var ex = PositionDetail.BookedExchange;
+                        var ex = thisExchange;
                         if (ex != null) storages.Add(ex);
                     }
                     else
@@ -203,7 +202,7 @@ namespace CryptoAccouting
                 imageCoin.Image = logo == null ? null : UIImage.FromFile(logo);
 
                 //labelFiatPrice.Text = String.Format("{0:n0}", PositionDetail.LatestMainPrice());
-                textQuantity.Text = String.Format("{0:n0}", PositionDetail.Amount);
+                textQuantity.Text = String.Format("{0:n6}", PositionDetail.Amount);
                 textBookPrice.Text = PositionDetail.BookPriceUSD < 0 ? String.Format("{0:n2}", PositionDetail.LatestPriceUSD()) : String.Format("{0:n2}", PositionDetail.BookPriceUSD);
                 thisBalanceDate = PositionDetail.BalanceDate;
                 textBalanceDate.Text = PositionDetail.BalanceDate.Date.ToShortDateString();
@@ -220,8 +219,8 @@ namespace CryptoAccouting
 
         }
 
-        private void CreatePosition(){
-
+        private void CreatePosition()
+        {
             if (PositionDetail is null) PositionDetail = new Position(thisCoin);
 
             PositionDetail.Amount = double.Parse(textQuantity.Text);
@@ -230,8 +229,8 @@ namespace CryptoAccouting
             PositionDetail.BalanceDate = thisBalanceDate;
             PositionDetail.Storage = thisStorage;
 
-            ApplicationCore.Balance.AttachPosition(PositionDetail);
-			ApplicationCore.SaveMyBalanceXML();
+            ApplicationCore.Balance.Attach(PositionDetail);
+            ApplicationCore.SaveMyBalanceXML();
         }
 
         partial void ButtonEdit_Activated(UIBarButtonItem sender)
@@ -243,35 +242,38 @@ namespace CryptoAccouting
 
         partial void ButtonDone_Activated(UIBarButtonItem sender)
         {
-            CreatePosition();
-            //AppSetting.balanceMainViewC.CellItemUpdated();
-            if (owner != null)
+            if (textQuantity.Text != "")
             {
-                owner.CellItemUpdated(EnuPopTo.OnePop);
+                CreatePosition();
+                CellItemUpdated(popto);
+
             }
             else
             {
-                AppSetting.balanceMainViewC.CellItemUpdated(EnuPopTo.PopToRoot);
+                UIAlertController okAlertController = UIAlertController.Create("PositionDetail", "Please input at least holding quantity.", UIAlertControllerStyle.Alert);
+                okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
+                this.PresentViewController(okAlertController, true, null);
             }
         }
 
-		public void SetPosition(Position pos)
+        public void SetPosition(Position pos, EnuPopTo popto, bool editmode)
 		{
 			PositionDetail = pos;
 			thisCoin = pos.Coin;
 			exchangesListed = ApplicationCore.GetExchangesBySymbol(pos.Coin.Symbol);
-			editmode = false;
-            //owner = AppSetting.balanceMainViewC;
+			this.editmode = editmode;
+            this.popto = popto;
 		}
 
 
-        public override void SetSearchSelectionItem(string searchitem1, CryptoTableViewController ControllerToBack= null)
+        public override void SetSearchSelectionItem(string searchitem1)
         {
             thisCoin = ApplicationCore.GetInstrument(searchitem1);
             exchangesListed = ApplicationCore.GetExchangesBySymbol(searchitem1);
             //thisExchange = exchangesListed.First();
             editmode = true;
-            this.owner = ControllerToBack == null ? null : ControllerToBack;
+
+            //this.owner = ControllerToBack == null ? null : ControllerToBack;
         }
 
     }

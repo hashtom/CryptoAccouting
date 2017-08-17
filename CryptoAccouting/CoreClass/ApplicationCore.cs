@@ -1,6 +1,6 @@
 ﻿﻿using System; using System.Collections.Generic; using System.Linq;
-//using System.Xml.Serialization; using System.Threading.Tasks; using UIKit; using CryptoAccouting.UIClass; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         public static Balance Balance { get; private set; }         private static EnuCCY baseCurrency;         private static InstrumentList InstrumentList;
-        public static ExchangeList ExchangeList;         public static CrossRate USDCrossRate { get; private set; }         private static bool HasCrossRateUpdated = false;          public static EnuCCY BaseCurrency
+//using System.Xml.Serialization; using System.Threading.Tasks; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         public static Balance Balance { get; private set; }         private static EnuCCY baseCurrency;         private static InstrumentList InstrumentList;         //public static CoinStorageList StorageList { get; private set; }
+        public static ExchangeList PublicExchangeList;          public static CrossRate USDCrossRate { get; private set; }         private static bool HasCrossRateUpdated = false;          public static EnuCCY BaseCurrency
         {             get
             {
                 return baseCurrency;
@@ -34,9 +34,9 @@
             else
             {                 return EnuAppStatus.NotAvailable;             }
         }          public static EnuAppStatus SaveAppSetting()
-        {             return StorageAPI.SaveAppSettingXML("AppSetting.xml", AppName, BaseCurrency, ExchangeList);         }          private static EnuAppStatus LoadExchangeList()
+        {             return StorageAPI.SaveAppSettingXML("AppSetting.xml", AppName, BaseCurrency, PublicExchangeList);         }          private static EnuAppStatus LoadExchangeList()
         {
-            if (ExchangeList is null) ExchangeList = new ExchangeList();             return MarketDataAPI.FetchExchangeList(ExchangeList);         }          public static EnuAppStatus LoadInstruments(bool forceRefresh)
+            if (PublicExchangeList is null) PublicExchangeList = new ExchangeList();             return MarketDataAPI.FetchExchangeList(PublicExchangeList);         }          public static EnuAppStatus LoadInstruments(bool forceRefresh)
         {             InstrumentList = new InstrumentList();             if (forceRefresh)
             {                 var status = MarketDataAPI.FetchAllCoinData(InstrumentList);                 if (status == EnuAppStatus.Success) SaveInstrumentXML();                 return status;
             }
@@ -59,27 +59,25 @@
             {                 return null;             }
          }
 
-        public static InstrumentList GetInstrumentAll(bool OnlyActive = true)
+        public static InstrumentList InstrumentListAll(bool OnlyActive)
         {
             if (!OnlyActive)
             {                 return InstrumentList;             }
             else
-            {                 var list = new InstrumentList();                 foreach (var coin in InstrumentList.Where(x => x.IsActive is true))                 {                     list.Attach(coin);                 }
+            {                 var list = new InstrumentList();                 InstrumentList.Where(x => x.IsActive is true).ToList().ForEach(x => list.Attach(x));
                 return list;             }
-        }          public static async Task LoadTradeListsAsync(string ExchangeCode, bool isAggregatedDaily = true, bool readfromFile = false)
+        }          public static CoinStorageList StorageList()
+        {             return Balance is null ? null : Balance.GetStorageList();         }          //public static CoinStorage GetCoinStorage(string code, EnuCoinStorageType storagetype)         //{         //    return Balance is null ? null : StorageList().GetCoinStorage(code, storagetype);         //}          public static async Task LoadTradeListsAsync(string ExchangeCode, bool isAggregatedDaily = true, bool readfromFile = false)
         {
-            var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              exchange.TradeList = await ExchangeAPI.FetchTradeListAsync(exchange, isAggregatedDaily, readfromFile);             ExchangeList.Attach(exchange);              //return exchange.TradeLists;         }          public static Exchange GetExchange(string Code)
-        {             return ExchangeList.GetExchange(Code);         }
+            var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              exchange.TradeList = await ExchangeAPI.FetchTradeListAsync(exchange, isAggregatedDaily, readfromFile);             PublicExchangeList.Attach(exchange);              //return exchange.TradeLists;         }          public static Exchange GetExchange(string Code)
+        {             return PublicExchangeList.GetExchange(Code);         }
 
         public static ExchangeList GetExchangesBySymbol(string symbol)
         {
-            return ExchangeList.GetExchangesBySymbol(symbol);
+            return PublicExchangeList.GetExchangesBySymbol(symbol);
         }          public static TradeList GetExchangeTradeList(string exchangeCode)
-        {             return ExchangeList.GetTradelist(exchangeCode);
+        {             return PublicExchangeList.GetTradelist(exchangeCode);
         }
-
-        //public static void AttachMyBalance(Balance bal)         //{
-        //    myBalance = bal;         //}
 
         public static DateTime FromEpochSeconds(long EpochSeconds)
         {

@@ -33,7 +33,7 @@ namespace CryptoAccouting.CoreClass
 				Balance bal = new Balance();
                 foreach (var pos in ApplicationCore.Balance.Where(x => (x.Coin.Symbol == Symbol && x.Coin.Id == Id)))
 				{
-					bal.AttachPosition(pos);
+					bal.Attach(pos);
 				}
 				return bal;
 			}

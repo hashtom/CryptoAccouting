@@ -107,13 +107,13 @@ namespace CryptoAccouting
             }
             else
             {
-                UIAlertController okAlertController = UIAlertController.Create("Update COin List", "ERROR!!", UIAlertControllerStyle.Alert);
+                UIAlertController okAlertController = UIAlertController.Create("Update Coin List", "ERROR!!", UIAlertControllerStyle.Alert);
                 okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
                 this.PresentViewController(okAlertController, true, null);
             }
         }
 
-        public override void SetSearchSelectionItem(string searchitem1, CryptoTableViewController ControllerToBack)
+        public override void SetSearchSelectionItem(string searchitem1) //CryptoTableViewController ControllerToBack)
         {
             //base.SetSearchSelectionItem(searchitem1);
             EnuCCY baseccy;

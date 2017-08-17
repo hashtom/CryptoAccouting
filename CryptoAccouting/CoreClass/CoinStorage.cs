@@ -26,7 +26,7 @@ namespace CryptoAccouting.CoreClass
 				Balance bal = new Balance();
 				foreach (var pos in ApplicationCore.Balance.Where(x => x.Storage.Code == Code))
 				{
-					bal.AttachPosition(pos);
+					bal.Attach(pos);
 				}
 				return bal;
 			}

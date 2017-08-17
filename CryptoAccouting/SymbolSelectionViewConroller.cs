@@ -174,10 +174,12 @@ namespace CryptoAccouting
                 CryptoTableViewController root = owner.NavigationController.ViewControllers[0] as CryptoTableViewController;
                 root.SetSearchSelectionItem(searchitems[indexPath.Row].SearchItem1);
                 owner.NavigationController.PopToRootViewController(true);
-            }else{
-				var DestinationViewC = owner.Storyboard.InstantiateViewController(destinationid) as BalanceEditViewController;
-				DestinationViewC.SetSearchSelectionItem(searchitems[indexPath.Row].SearchItem1);
-				owner.NavigationController.PushViewController(DestinationViewC, true);
+            }
+            else
+            {
+                var DestinationViewC = owner.Storyboard.InstantiateViewController(destinationid) as BalanceEditViewController;
+                DestinationViewC.SetSearchSelectionItem(searchitems[indexPath.Row].SearchItem1);
+                owner.NavigationController.PushViewController(DestinationViewC, true);
             }
         }
 

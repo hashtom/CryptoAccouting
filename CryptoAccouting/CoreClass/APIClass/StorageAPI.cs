@@ -50,11 +50,15 @@ namespace CryptoAccouting.CoreClass.APIClass
                     if (coins.Where(i => i.Symbol == elem.Element("symbol").Value).Any())
                     {
                         coin = coins.Where(i => i.Symbol == elem.Element("symbol").Value).First();
-
-                        //EnuExchangeType tradedexchange;
-                        //if(!Enum.TryParse(elem.Element("exchange").Value, out tradedexchange))
-                        //    tradedexchange = EnuExchangeType.NotSpecified;
                         var tradedexchange = ApplicationCore.GetExchange(elem.Element("exchange").Value);
+                        CoinStorage storage = null;
+
+                        var storagecode = elem.Element("storage").Value;
+                        EnuCoinStorageType storagetype;
+                        if (storagecode != "" && Enum.TryParse(elem.Element("storagetype").Value, out storagetype))
+                        {
+                            storage = mybal.GetStorageList().GetCoinStorage(storagecode, storagetype);
+                        }
 
                         var pos = new Position(coin)
                         {
@@ -62,9 +66,10 @@ namespace CryptoAccouting.CoreClass.APIClass
                             Amount = double.Parse(elem.Element("amount").Value),
                             BookPriceUSD = double.Parse(elem.Element("book").Value),
                             BalanceDate = DateTime.Parse(elem.Element("date").Value),
-                            BookedExchange = tradedexchange //(EnuExchangeType)Enum.Parse(typeof(EnuExchangeType), elem.Descendants("exchange").Select(x => x.Value).First())
+                            BookedExchange = tradedexchange, //(EnuExchangeType)Enum.Parse(typeof(EnuExchangeType), elem.Descendants("exchange").Select(x => x.Value).First())
+                            Storage = storage
                         };
-                        mybal.AttachPosition(pos);
+                        mybal.Attach(pos);
                     }
 
                 }
@@ -105,7 +110,9 @@ namespace CryptoAccouting.CoreClass.APIClass
                                                  new XElement("date", pos.BalanceDate),
                                                  new XElement("amount", pos.Amount.ToString()),
                                                  new XElement("book", pos.BookPriceUSD.ToString()),
-                                                 new XElement("exchange", pos.BookedExchange.ToString())
+                                                 new XElement("exchange", pos.BookedExchange == null ? "" : pos.BookedExchange.Code),
+                                                 new XElement("storage", pos.Storage == null ? "" : pos.Storage.Code),
+                                                 new XElement("storagetype", pos.Storage == null ? "" : pos.Storage.StorageType.ToString())
                                                 );
 				balance.Add(position);
 			}
