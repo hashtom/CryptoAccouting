@@ -21,6 +21,22 @@ namespace CryptoAccouting.CoreClass
 
         }
 
+        public void Attach(CoinStorage storage)
+		{
+			if (storages.Any(x => x.Code == storage.Code)) Detach(storage);
+			storages.Add(storage);
+		}
+
+		public void Detach(CoinStorage storage)
+		{
+			storages.RemoveAll(x => x.Code == storage.Code);
+		}
+
+        public CoinStorage GetByIndex(int indexNumber)
+		{
+			return storages[indexNumber];
+		}
+
 		public int Count()
 		{
 			return storages.Count();

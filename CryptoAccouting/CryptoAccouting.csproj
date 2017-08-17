@@ -222,6 +222,7 @@
     <Compile Include="CoreClass\CoinStorage.cs" />
     <Compile Include="CoreClass\CoinStorageList.cs" />
     <Compile Include="CoreClass\Wallet.cs" />
+    <Compile Include="CoreClass\InstrumentList.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />

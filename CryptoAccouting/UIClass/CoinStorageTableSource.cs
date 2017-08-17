@@ -36,13 +36,13 @@ namespace CryptoAccouting.UIClass
 
             var cell = (CoinStorageViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
             //cell.UpdateCell(myBalance.positionsByBookingExchange[indexPath.Row]);
-            cell.UpdateCell(ExchangeList.GetExchangeByIndex(indexPath.Row));
+            cell.UpdateCell(ExchangeList.GetByIndex(indexPath.Row));
             return cell;
         }
 
         public CoinStorage GetItem(int id)
         {
-            return ExchangeList.GetExchangeByIndex(id);
+            return ExchangeList.GetByIndex(id);
             //return myBalance.positionsByBookingExchange[id];
         }
 

@@ -92,7 +92,7 @@ namespace CryptoAccouting.CoreClass
                 tx.TradePrice = tradePrice;
                 tx.TradeDate = tradeDate;
                 tx.Fee = fee;
-                this.AttachTransaction(tx);
+                this.Attach(tx);
             }
 
         }
@@ -155,18 +155,18 @@ namespace CryptoAccouting.CoreClass
             //return (TotalQtyBuy - TotalQtySell) * (2300000 - LatestBookCost);
         }
 
-        public void AttachTransaction(Transaction tx)
+        public void Attach(Transaction tx)
         {
-            if (transactions.Any(x => x.TxId == tx.TxId)) DetachTransaction(tx);
+            if (transactions.Any(x => x.TxId == tx.TxId)) Detach(tx);
             transactions.Add(tx);
         }
 
-        public void DetachTransaction(Transaction tx)
+        public void Detach(Transaction tx)
         {
             transactions.RemoveAll(x => x.TxId == tx.TxId);
         }
 
-        public Transaction GetTransactionByIndex(int indexNumber)
+        public Transaction GetByIndex(int indexNumber)
         {
             return transactions[indexNumber];
         }

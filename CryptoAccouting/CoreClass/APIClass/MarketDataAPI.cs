@@ -13,7 +13,7 @@ namespace CryptoAccouting.CoreClass.APIClass
     {
         //Obtain market data from coinmarketcap API
 
-        public static async Task<EnuAppStatus> FetchCoinMarketDataAsync(List<Instrument> coins)
+        public static async Task<EnuAppStatus> FetchCoinMarketDataAsync(InstrumentList coins)
         {
             const string BaseUrl = "http://api.cryptocoincharts.info/";
             string rawjson;
@@ -29,7 +29,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 if (coins.Any(x => x.Symbol == "BTC"))
                 {
                     var bitcoin = coins.Where(x => x.Symbol == "BTC").First();
-                    coins.Remove(bitcoin);
+                    coins.Detach(bitcoin);
                     coins.Insert(0, bitcoin);
                 }
                 else{
@@ -179,13 +179,11 @@ namespace CryptoAccouting.CoreClass.APIClass
 			return EnuAppStatus.Success;
         }
 
-        public static EnuAppStatus FetchAllCoinData(List<Instrument> instruments)
+        public static EnuAppStatus FetchAllCoinData(InstrumentList coins)
 		{
             
 			const string BaseUrl = "https://api.coinmarketcap.com/v1/ticker/?limit=150";
 			string rawjson;
-
-            //if (instruments is null) instruments = new List<Instrument>();
 
             if (!Reachability.IsHostReachable(BaseUrl))
             {
@@ -208,7 +206,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     //coin.LogoFileName = ((string)elem["id"] + ".png");
                     var p = new Price(coin);
                     coin.MarketPrice = p;
-                    instruments.Add(coin);
+                    coins.Attach(coin);
                     FetchCoinLogo(coin.Id, false);
                 }
 

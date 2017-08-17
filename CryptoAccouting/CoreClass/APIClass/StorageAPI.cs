@@ -28,7 +28,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             return File.ReadAllText(path);
         }
 
-        public static Balance LoadBalanceXML(string fileName, List<Instrument> instruments)
+        public static Balance LoadBalanceXML(string fileName, InstrumentList coins)
         {
             Balance mybal;
 
@@ -47,9 +47,9 @@ namespace CryptoAccouting.CoreClass.APIClass
                 foreach (var elem in mybalXE)
                 {
                     Instrument coin;
-                    if (instruments.Where(i => i.Symbol == elem.Element("symbol").Value).Any())
+                    if (coins.Where(i => i.Symbol == elem.Element("symbol").Value).Any())
                     {
-                        coin = instruments.Where(i => i.Symbol == elem.Element("symbol").Value).First();
+                        coin = coins.Where(i => i.Symbol == elem.Element("symbol").Value).First();
 
                         //EnuExchangeType tradedexchange;
                         //if(!Enum.TryParse(elem.Element("exchange").Value, out tradedexchange))
@@ -116,7 +116,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
 		}
 
-        public static EnuAppStatus SaveInstrumentXML(List<Instrument> myinstruments, string fileName)
+        public static EnuAppStatus SaveInstrumentXML(InstrumentList instrumentlist, string fileName)
         {
 			var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 			var path = Path.Combine(mydocuments, fileName);
@@ -126,7 +126,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             XElement instruments = new XElement("instruments");
 			application.Add(instruments);
 
-            foreach (var coin in myinstruments)
+            foreach (var coin in instrumentlist)
 			{
                 XElement instrument = new XElement("instrument",
                                                           new XAttribute("id", coin.Id),
@@ -144,9 +144,9 @@ namespace CryptoAccouting.CoreClass.APIClass
             return EnuAppStatus.Success;
         }
 
-        public static List<Instrument> LoadInstrumentXML(string fileName)
+        public static InstrumentList LoadInstrumentXML(string fileName)
 		{
-            List<Instrument> instruments;
+            InstrumentList instruments;
 			var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 			var path = Path.Combine(documents, fileName);
 
@@ -155,7 +155,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 var instrumentsXML = File.ReadAllText(path);
 
                 var instrumentsXE = XElement.Parse(instrumentsXML).Descendants("instrument");
-                instruments = new List<Instrument>();
+                instruments = new InstrumentList();
 
                 foreach (var elem in instrumentsXE)
                 {
@@ -167,7 +167,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     //    coin.LogoFileName = (string)elem.Descendants("logofile").Select(x => x.Value).First();
                     //}
                     coin.IsActive = bool.Parse((string)elem.Descendants("isactive").Select(x => x.Value).First());
-                    instruments.Add(coin);
+                    instruments.Attach(coin);
                 }
 
                 return instruments;
@@ -179,9 +179,11 @@ namespace CryptoAccouting.CoreClass.APIClass
 
 		}
 
-        public static List<Instrument> LoadMarketDataXML(string fileName)
+        public static InstrumentList LoadMarketDataXML(string fileName)
         {
-            List<Instrument> instruments = new List<Instrument>();
+            var instruments = new InstrumentList();
+
+            //todo
 
             return instruments;
         }

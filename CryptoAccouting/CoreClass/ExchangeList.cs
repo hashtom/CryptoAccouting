@@ -30,7 +30,7 @@ namespace CryptoAccouting.CoreClass
         {
             if (!exchanges.Any(x => x.Code == Code))
             {
-                this.AttachExchange(new Exchange(Code));
+                this.Attach(new Exchange(Code));
             }
 
             return exchanges.First(x => x.Code == Code);
@@ -55,24 +55,24 @@ namespace CryptoAccouting.CoreClass
 
             foreach (var exc in exchanges)
             {
-                if (exc.ListedCoin.Any(x => x.Symbol == symbol)) exchanged_applied.AttachExchange(exc);
+                if (exc.ListedCoin.Any(x => x.Symbol == symbol)) exchanged_applied.Attach(exc);
             }
             return exchanged_applied;
 
         }
 
-        public void AttachExchange(Exchange exc)
+        public void Attach(Exchange exc)
 		{
-            if (exchanges.Any(x => x.Code == exc.Code)) DetachExchange(exc);
+            if (exchanges.Any(x => x.Code == exc.Code)) Detach(exc);
 			exchanges.Add(exc);
 		}
 
-        public void DetachExchange(Exchange exc)
+        public void Detach(Exchange exc)
 		{
             exchanges.RemoveAll(x => x.Code == exc.Code);
 		}
 
-        public Exchange GetExchangeByIndex(int indexNumber)
+        public Exchange GetByIndex(int indexNumber)
 		{
 			return exchanges[indexNumber];
 		}
