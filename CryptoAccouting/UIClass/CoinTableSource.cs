@@ -11,6 +11,7 @@ namespace CryptoAccouting.UIClass
     public class CoinTableSource : UITableViewSource
     {
         Balance myBalance;
+        List<Instrument> coins;
         NSString cellIdentifier = new NSString("CoinViewCell");
         CryptoTableViewController owner;
 
@@ -18,11 +19,12 @@ namespace CryptoAccouting.UIClass
         {
             this.myBalance = ApplicationCore.Balance;
             this.owner = owner;
+            this.coins = myBalance is null ? new List<Instrument>() : myBalance.Select(x => x.Coin).Distinct().ToList();
         }
 
         public override nint RowsInSection(UITableView tableview, nint section)
         {
-            return myBalance is null ? 0 : myBalance.positionsByCoin.Count;
+            return coins.Count();
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
@@ -34,13 +36,14 @@ namespace CryptoAccouting.UIClass
             //cell = new CustomBalanceCell (cellIdentifier);
 
             var cell = (CoinViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
-            cell.UpdateCell(myBalance.positionsByCoin[indexPath.Row], false);
+            cell.UpdateCell(coins[indexPath.Row].TotalPosition(), false);
 
             return cell;
         }
         public Position GetItem(int id)
         {
-            return myBalance.positionsByCoin[id];
+            return coins[id].TotalPosition();
+            //return myBalance.positionsByCoin[id];
         }
 
 		public override bool CanMoveRow(UITableView tableView, NSIndexPath indexPath)
@@ -84,7 +87,7 @@ namespace CryptoAccouting.UIClass
             {
                 case UITableViewCellEditingStyle.Delete:
                     //tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
-                    myBalance.DetachPositionByCoin(myBalance.positionsByCoin[indexPath.Row]);
+                    myBalance.DetachPositionByCoin(coins[indexPath.Row].Symbol);
                     break;
 
                 case UITableViewCellEditingStyle.None:

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CryptoAccouting.CoreClass
 {
@@ -10,9 +11,7 @@ namespace CryptoAccouting.CoreClass
         public string Symbol { get; }
         public string Name { get; }
         public InstrumentType Type { get; set; }
-        //public DateTime ListedDate { get; set; }
 		public Price MarketPrice { get; set; }
-        //public string LogoFileName { get; set; }
         public bool IsActive { get; set; }
 
         public Instrument(string id, string symbol, string name)
@@ -21,6 +20,43 @@ namespace CryptoAccouting.CoreClass
             Symbol = symbol;
             Name = name;
             IsActive = true;
+        }
+
+		public Balance BalanceOnInstrument()
+		{
+			if (ApplicationCore.Balance is null)
+			{
+				return null;
+			}
+			else
+			{
+				Balance bal = new Balance();
+                foreach (var pos in ApplicationCore.Balance.Where(x => (x.Coin.Symbol == Symbol && x.Coin.Id == Id)))
+				{
+					bal.AttachPosition(pos);
+				}
+				return bal;
+			}
+		}
+
+        public Position TotalPosition()
+        {
+
+            if (ApplicationCore.Balance is null)
+            {
+                return null;
+            }
+            else
+            {
+                Position totalpos = new Position(ApplicationCore.GetInstrument(Symbol))
+                {
+                    Id = 0,
+                    Amount = ApplicationCore.Balance.Where(x => x.Coin.Symbol == Symbol).Sum(x => x.Amount),
+                    BookPriceUSD = ApplicationCore.Balance.Where(x => x.Coin.Symbol == Symbol).Average(x => (x.Amount * x.BookPriceUSD) / x.Amount)
+                };
+
+                return totalpos;
+            }
         }
     }
 

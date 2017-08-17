@@ -45,8 +45,8 @@
                         TableView.Source = new CoinTableSource(this);
                         break;
                     case 1:
-                        TableView.RegisterNibForCellReuse(ExchangeViewCell.Nib, "ExchangeViewCell");
-                        TableView.Source = new ExchangeTableSource(this);
+                        TableView.RegisterNibForCellReuse(CoinStorageViewCell.Nib, "ExchangeViewCell");
+                        TableView.Source = new CoinStorageTableSource(this);
                         break;
                     case 2:
                         //TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "BookingTestViewCell");

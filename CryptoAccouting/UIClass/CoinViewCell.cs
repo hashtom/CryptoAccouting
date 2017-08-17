@@ -40,7 +40,7 @@ namespace CryptoAccouting.UIClass
 
             if (ShowBookingValue)
             {
-                labelPrice.Text = String.Format("{0:n2}", pos.BookPrice);
+                labelPrice.Text = String.Format("{0:n2}", pos.BookPriceUSD);
                 labelValue.Text = String.Format("{0:n0}", pos.BookValue());
                 labelMemo.Text = pos.BookedExchange.Name;
             }

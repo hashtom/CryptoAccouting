@@ -28,7 +28,7 @@
         { 
             if (Balance != null)
             {
-                var mycoins = Balance.positionsByCoin.Select(x => x.Coin).ToList();
+                var mycoins = Balance.Select(x => x.Coin).Distinct().ToList();
                 return await MarketDataAPI.FetchCoinMarketDataAsync(mycoins);
             }
             else

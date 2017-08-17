@@ -5,23 +5,24 @@ using CryptoAccouting.CoreClass;
 
 namespace CryptoAccouting.UIClass
 {
-    public partial class ExchangeViewCell : UITableViewCell
+    public partial class CoinStorageViewCell : UITableViewCell
     {
-        public static readonly NSString Key = new NSString("ExchangeViewCell");
+        public static readonly NSString Key = new NSString("CoinStorageViewCell");
         public static readonly UINib Nib;
 
-        static ExchangeViewCell()
+        static CoinStorageViewCell()
         {
-            Nib = UINib.FromName("ExchangeViewCell", NSBundle.MainBundle);
+            Nib = UINib.FromName("CoinStorageViewCell", NSBundle.MainBundle);
         }
 
-        protected ExchangeViewCell(IntPtr handle) : base(handle)
+        protected CoinStorageViewCell(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
         }
 
         public void UpdateCell(Exchange exc)
 		{
+            
             labelExchange.Text = exc.Name; // pos.BookedExchange.Name;
             //labelHoldingBTC.Text = "฿" + String.Format("{0:n2}", pos.AmountBTC());
             //labelValueK.Text = String.Format("{0:n2}", pos.LatestFiatValueUSD());

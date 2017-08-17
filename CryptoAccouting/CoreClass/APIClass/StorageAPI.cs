@@ -9,13 +9,14 @@ namespace CryptoAccouting.CoreClass.APIClass
     public static class StorageAPI
     {
 
-        public static void SaveJsonFile(string json, string fileName)
+        public static EnuAppStatus SaveJsonFile(string json, string fileName)
         {
 
             var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var path = Path.Combine(documents, fileName);
             File.WriteAllText(path, json);
 
+            return EnuAppStatus.Success;
         }
 
 
@@ -59,11 +60,11 @@ namespace CryptoAccouting.CoreClass.APIClass
                         {
                             Id = int.Parse(elem.Attribute("id").Value),
                             Amount = double.Parse(elem.Element("amount").Value),
-                            BookPrice = double.Parse(elem.Element("book").Value),
+                            BookPriceUSD = double.Parse(elem.Element("book").Value),
                             BalanceDate = DateTime.Parse(elem.Element("date").Value),
                             BookedExchange = tradedexchange //(EnuExchangeType)Enum.Parse(typeof(EnuExchangeType), elem.Descendants("exchange").Select(x => x.Value).First())
                         };
-                        mybal.AttachPosition(pos, false);
+                        mybal.AttachPosition(pos);
                     }
 
                 }
@@ -81,12 +82,11 @@ namespace CryptoAccouting.CoreClass.APIClass
             //    mybal = new Balance();
             //}
 
-            mybal.RecalculatePositionSummary();
 			return mybal;
 
         }
 
-		public static void SaveBalanceXML(Balance myBalance, string fileName)
+        public static EnuAppStatus SaveBalanceXML(Balance myBalance, string fileName)
 		{
 			var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 			var path = Path.Combine(mydocuments, fileName);
@@ -104,7 +104,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                                                  new XElement("symbol", pos.Coin.Symbol),
                                                  new XElement("date", pos.BalanceDate),
                                                  new XElement("amount", pos.Amount.ToString()),
-                                                 new XElement("book", pos.BookPrice.ToString()),
+                                                 new XElement("book", pos.BookPriceUSD.ToString()),
                                                  new XElement("exchange", pos.BookedExchange.ToString())
                                                 );
 				balance.Add(position);
@@ -112,14 +112,14 @@ namespace CryptoAccouting.CoreClass.APIClass
 
 			File.WriteAllText(path, application.ToString());
 
+            return EnuAppStatus.Success;
+
 		}
 
-        public static void SaveInstrumentXML(List<Instrument> myinstruments, string fileName)
+        public static EnuAppStatus SaveInstrumentXML(List<Instrument> myinstruments, string fileName)
         {
 			var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 			var path = Path.Combine(mydocuments, fileName);
-
-            if (File.Exists(path)) File.Delete(path);
 
 			XElement application = new XElement("application",
 												new XAttribute("name", ApplicationCore.AppName));
@@ -140,6 +140,8 @@ namespace CryptoAccouting.CoreClass.APIClass
 			}
 
 			File.WriteAllText(path, application.ToString());
+
+            return EnuAppStatus.Success;
         }
 
         public static List<Instrument> LoadInstrumentXML(string fileName)
@@ -184,9 +186,10 @@ namespace CryptoAccouting.CoreClass.APIClass
             return instruments;
         }
 
-        public static void SaveMarketDataXML(string fileName)
+        public static EnuAppStatus SaveMarketDataXML(string fileName)
         {
 
+            return EnuAppStatus.Success;
         }
 
         public static EnuAppStatus LoadAppSettingXML(string fileName)
@@ -261,8 +264,6 @@ namespace CryptoAccouting.CoreClass.APIClass
             return EnuAppStatus.Success; //todo
 
 		}
-
-
 
   //      public static EnuAppStatus SaveExchangeListXMLTemp(ExchangeList exList, string fileName)
 		//{

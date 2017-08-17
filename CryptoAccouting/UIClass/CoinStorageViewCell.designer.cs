@@ -11,7 +11,7 @@ using System.CodeDom.Compiler;
 namespace CryptoAccouting.UIClass
 {
     [Register ("ExchangeViewCell")]
-    partial class ExchangeViewCell
+    partial class CoinStorageViewCell
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]

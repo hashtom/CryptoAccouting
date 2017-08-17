@@ -33,11 +33,11 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="24928">
-                                    <rect key="frame" x="75" y="76" width="171" height="29"/>
+                                    <rect key="frame" x="63" y="76" width="195" height="29"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <segments>
-                                        <segment title="Detail"/>
-                                        <segment title="Wallet View"/>
+                                        <segment title="Coin"/>
+                                        <segment title="Coin Location"/>
                                     </segments>
                                 </segmentedControl>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="25073">
@@ -103,7 +103,7 @@
                                     <segue destination="4PD-G1-6DB" kind="show" identifier="PositionDetailsSegue" id="27361"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ExchangeViewCell" id="23927">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CoinStorageViewCell" id="23927">
                                 <rect key="frame" x="0.0" y="177" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="23927" id="23928">
@@ -111,7 +111,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="4PD-G1-6DB" kind="show" identifier="ExchangeDetailsSegue" id="27959"/>
+                                    <segue destination="4PD-G1-6DB" kind="show" identifier="CoinLocationDetailsSegue" id="27959"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -1557,15 +1557,11 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="23160">
-                                                    <rect key="frame" x="212" y="5" width="88" height="29"/>
+                                                    <rect key="frame" x="237" y="5" width="63" height="29"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <state key="normal" title="Not Specified">
-                                                        <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <state key="normal" title="Exchange">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
-                                                    <connections>
-                                                        <action selector="ButtonExchange_TouchUpInside:" destination="20419" eventType="touchUpInside" id="24652"/>
-                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
@@ -1768,7 +1764,7 @@
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bac-Nb-vy4">
                                                     <rect key="frame" x="164" y="5" width="150" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="Hardware Wallet"/>
+                                                    <state key="normal" title="Storage"/>
                                                 </button>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -2287,6 +2283,6 @@
         <image name="Images/transactiontab.png" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="27361"/>
+        <segue reference="27959"/>
     </inferredMetricsTieBreakers>
 </document>

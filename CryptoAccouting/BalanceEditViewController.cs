@@ -21,6 +21,7 @@ namespace CryptoAccouting
 		Instrument thisCoin;
         DateTime thisBalanceDate;
         Exchange thisExchange;
+        CoinStorage thisStorage;
 
 		public BalanceEditViewController(IntPtr handle) : base(handle)
 		{
@@ -32,9 +33,10 @@ namespace CryptoAccouting
             PrepareDatePicker();
 			InitializeUserInteractionStates();
 
-            buttonWallet.TouchUpInside += (sender, e) =>
+            buttonExchange.TouchUpInside += (sender, e) =>
             {
-                UIAlertController exchangeAlert = UIAlertController.Create("Wallet", "Choose Wallet", UIAlertControllerStyle.ActionSheet);
+
+                UIAlertController exchangeAlert = UIAlertController.Create("Exchange", "Choose Exchange", UIAlertControllerStyle.ActionSheet);
                 exchangeAlert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
 
                 foreach (var exc in exchangesListed)
@@ -43,8 +45,44 @@ namespace CryptoAccouting
                                                                      UIAlertActionStyle.Default,
                                                                      (obj) =>
                                                                      {
-                                                                         buttonExchange.SetTitle(exc.Name, UIControlState.Normal);
+                                                                         buttonExchange.SetTitle(exc.Code, UIControlState.Normal);
                                                                          thisExchange = exc;
+                                                                     }
+                                                                ));
+                }
+                this.PresentViewController(exchangeAlert, true, null);
+            };
+
+            buttonWallet.TouchUpInside += (sender, e) =>
+            {
+                UIAlertController exchangeAlert = UIAlertController.Create("Storage", "Choose Storage", UIAlertControllerStyle.ActionSheet);
+                exchangeAlert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
+
+                //temp
+				List<CoinStorage> storages = new List<CoinStorage>();
+
+				foreach (EnuCoinStorageType wt in Enum.GetValues(typeof(EnuCoinStorageType)))
+				{
+                    if (wt is EnuCoinStorageType.Exchange)
+                    {
+                        var ex = PositionDetail.BookedExchange;
+                        if (ex != null) storages.Add(ex);
+                    }
+                    else
+                    {
+                        var w = new Wallet(wt.ToString(), wt);
+                        storages.Add(w);
+                    }
+				}
+
+                foreach (var st in storages)
+                {
+                    exchangeAlert.AddAction(UIAlertAction.Create(st.Code,
+                                                                     UIAlertActionStyle.Default,
+                                                                     (obj) =>
+                                                                     {
+                                                                         buttonWallet.SetTitle(st.Code, UIControlState.Normal);
+                                                                         thisStorage = st;
                                                                      }
                                                                 ));
                 }
@@ -105,6 +143,8 @@ namespace CryptoAccouting
                 //buttonDone.SetTitleTextAttributes(new UITextAttributes() { TextColor = UIColor.Blue }, UIControlState.Normal);
                 buttonExchange.SetTitleColor(UIColor.Blue, UIControlState.Normal);
                 buttonExchange.UserInteractionEnabled = true;
+                buttonWallet.SetTitleColor(UIColor.Blue, UIControlState.Normal);
+				buttonWallet.UserInteractionEnabled = true;
                 textQuantity.UserInteractionEnabled = true;
                 textBookPrice.UserInteractionEnabled = true;
                 textBalanceDate.UserInteractionEnabled = true;
@@ -118,6 +158,8 @@ namespace CryptoAccouting
                 buttonExchange.UserInteractionEnabled = false;
                 //buttonDone.SetTitleTextAttributes(new UITextAttributes() { TextColor = UIColor.Black }, UIControlState.Disabled);
                 buttonExchange.SetTitleColor(UIColor.Black, UIControlState.Normal);
+				buttonWallet.UserInteractionEnabled = false;
+                buttonWallet.SetTitleColor(UIColor.Black, UIControlState.Normal);
                 textQuantity.UserInteractionEnabled = false;
                 textBookPrice.UserInteractionEnabled = false;
                 textBalanceDate.UserInteractionEnabled = false;
@@ -162,13 +204,18 @@ namespace CryptoAccouting
 
                 //labelFiatPrice.Text = String.Format("{0:n0}", PositionDetail.LatestMainPrice());
                 textQuantity.Text = String.Format("{0:n0}", PositionDetail.Amount);
-                textBookPrice.Text = PositionDetail.BookPrice < 0 ? String.Format("{0:n2}", PositionDetail.LatestPriceUSD()) : String.Format("{0:n2}", PositionDetail.BookPrice);
+                textBookPrice.Text = PositionDetail.BookPriceUSD < 0 ? String.Format("{0:n2}", PositionDetail.LatestPriceUSD()) : String.Format("{0:n2}", PositionDetail.BookPriceUSD);
                 thisBalanceDate = PositionDetail.BalanceDate;
                 textBalanceDate.Text = PositionDetail.BalanceDate.Date.ToShortDateString();
                 var exname = PositionDetail.BookedExchange is null ?
                                            "Not Specified" :
-                                           PositionDetail.BookedExchange.Name;
+                                           PositionDetail.BookedExchange.Code;
                 buttonExchange.SetTitle(exname, UIControlState.Normal);
+
+                var storagename = PositionDetail.Storage is null ?
+                                           "Not Specified" :
+                                                PositionDetail.Storage.Code;
+                buttonWallet.SetTitle(storagename, UIControlState.Normal);
 			}
 
         }
@@ -178,33 +225,14 @@ namespace CryptoAccouting
             if (PositionDetail is null) PositionDetail = new Position(thisCoin);
 
             PositionDetail.Amount = double.Parse(textQuantity.Text);
-            PositionDetail.BookPrice = textBookPrice.Text is "" ? 0 : double.Parse(textBookPrice.Text);
+            PositionDetail.BookPriceUSD = textBookPrice.Text is "" ? 0 : double.Parse(textBookPrice.Text);
             PositionDetail.BookedExchange = thisExchange;
             PositionDetail.BalanceDate = thisBalanceDate;
+            PositionDetail.Storage = thisStorage;
 
             ApplicationCore.Balance.AttachPosition(PositionDetail);
 			ApplicationCore.SaveMyBalanceXML();
         }
-
-        partial void ButtonExchange_TouchUpInside(UIButton sender)
-        {
-
-            UIAlertController exchangeAlert = UIAlertController.Create("Exchange","Choose Exchange", UIAlertControllerStyle.ActionSheet);
-            exchangeAlert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
-
-            foreach (var exc in exchangesListed)
-            {
-                exchangeAlert.AddAction(UIAlertAction.Create(exc.Name,
-                                                                 UIAlertActionStyle.Default,
-                                                                 (obj) =>
-                                                                 {
-                                                                     buttonExchange.SetTitle(exc.Name, UIControlState.Normal);
-                                                                     thisExchange = exc;
-                                                                 }
-                                                            ));
-            }
-            this.PresentViewController(exchangeAlert, true, null);
-		}
 
         partial void ButtonEdit_Activated(UIBarButtonItem sender)
         {
@@ -241,7 +269,7 @@ namespace CryptoAccouting
         {
             thisCoin = ApplicationCore.GetInstrument(searchitem1);
             exchangesListed = ApplicationCore.GetExchangesBySymbol(searchitem1);
-            thisExchange = exchangesListed.First();
+            //thisExchange = exchangesListed.First();
             editmode = true;
             this.owner = ControllerToBack == null ? null : ControllerToBack;
         }

@@ -8,14 +8,14 @@ using CoreGraphics;
 
 namespace CryptoAccouting.UIClass
 {
-    public class ExchangeTableSource : UITableViewSource
+    public class CoinStorageTableSource : UITableViewSource
     {
         ExchangeList ExchangeList;
         //Balance myBalance;
-        NSString cellIdentifier = new NSString("ExchangeViewCell"); // set in the Storyboard
+        NSString cellIdentifier = new NSString("CoinStorageViewCell"); // set in the Storyboard
         CryptoTableViewController owner;
 
-        public ExchangeTableSource(CryptoTableViewController owner)
+        public CoinStorageTableSource(CryptoTableViewController owner)
         {
             this.ExchangeList = ApplicationCore.ExchangeList;
             this.owner = owner;
@@ -34,13 +34,13 @@ namespace CryptoAccouting.UIClass
             //if (cell == null)
             //cell = new CustomBalanceCell (cellIdentifier);
 
-            var cell = (ExchangeViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
+            var cell = (CoinStorageViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
             //cell.UpdateCell(myBalance.positionsByBookingExchange[indexPath.Row]);
             cell.UpdateCell(ExchangeList.GetExchangeByIndex(indexPath.Row));
             return cell;
         }
 
-        public Exchange GetItem(int id)
+        public CoinStorage GetItem(int id)
         {
             return ExchangeList.GetExchangeByIndex(id);
             //return myBalance.positionsByBookingExchange[id];

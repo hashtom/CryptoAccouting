@@ -10,7 +10,6 @@ namespace CryptoAccouting.CoreClass
         public double LatestPriceUSD { get; set; }
         public double PriceBTCBefore24h { get; set; }
         public double PriceUSDBefore24h { get; set; }
-		//public EnuCCY SourceCurrency { get; set; } //USD or BTC
         public double DayVolume { get; set; }
         public double MarketCap { get; set; }
         //public double SourceRet1h { get; set; }
@@ -18,7 +17,6 @@ namespace CryptoAccouting.CoreClass
         //public double SourceRet7d { get; set; }
         //public double PrevClose { get; set; }
 		public DateTime PriceDate { get; set; }
-        //public CrossRate CrossRate { get; set; }
         //public DateTime UpdateTime { get; set; }
 
         public Price(Instrument coin)
@@ -28,19 +26,19 @@ namespace CryptoAccouting.CoreClass
             LatestPriceUSD = 0;
         }
 
-        public double LatestPriceBase(CrossRate CrossRate)
+        public double LatestPriceBase(CrossRate USDCrossRate)
         {
-            return (CrossRate is null) ? 0 : LatestPriceUSD * CrossRate.Rate;
+            return (USDCrossRate is null) ? 0 : LatestPriceUSD * USDCrossRate.Rate;
         }
 
-        public double MarketCapBase(CrossRate CrossRate)
+        public double MarketCapBase(CrossRate USDCrossRate)
         {
-            return (CrossRate is null) ? 0 : MarketCap * CrossRate.Rate;
+            return (USDCrossRate is null) ? 0 : MarketCap * USDCrossRate.Rate;
         }
 
-        public double Ret1dBase(CrossRate CrossRate)
+        public double Ret1dBase(CrossRate USDCrossRate)
         {
-            return (CrossRate is null) ? 0 : ((LatestPriceUSD * CrossRate.Rate) / (PriceUSDBefore24h * CrossRate.RateBefore24h) - 1) * 100;
+            return (USDCrossRate is null) ? 0 : ((LatestPriceUSD * USDCrossRate.Rate) / (PriceUSDBefore24h * USDCrossRate.RateBefore24h) - 1) * 100;
         }
 
         public double SourceRet1d(){

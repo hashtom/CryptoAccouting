@@ -138,7 +138,7 @@
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="Main.storyboard" />
     <InterfaceDefinition Include="UIClass\CoinViewCell.xib" />
-    <InterfaceDefinition Include="UIClass\ExchangeViewCell.xib" />
+    <InterfaceDefinition Include="UIClass\CoinStorageViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -191,10 +191,10 @@
     <Compile Include="UIClass\CoinViewCell.designer.cs">
       <DependentUpon>CoinViewCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="UIClass\ExchangeTableSource.cs" />
-    <Compile Include="UIClass\ExchangeViewCell.cs" />
-    <Compile Include="UIClass\ExchangeViewCell.designer.cs">
-      <DependentUpon>ExchangeViewCell.cs</DependentUpon>
+    <Compile Include="UIClass\CoinStorageTableSource.cs" />
+    <Compile Include="UIClass\CoinStorageViewCell.cs" />
+    <Compile Include="UIClass\CoinStorageViewCell.designer.cs">
+      <DependentUpon>CoinStorageViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="BalanceEditViewController.cs" />
     <Compile Include="BalanceEditViewController.designer.cs">
@@ -219,6 +219,8 @@
     <Compile Include="APISettingTableViewController.designer.cs">
       <DependentUpon>APISettingTableViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="CoreClass\CoinStorage.cs" />
+    <Compile Include="CoreClass\CoinStorageList.cs" />
     <Compile Include="CoreClass\Wallet.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -9,19 +9,17 @@ namespace CryptoAccouting.CoreClass
         public Instrument Coin { get; }
 		public DateTime BalanceDate { get; set; }
         public double Amount { get; set; }
-        public double BookPrice { get; set; }
-        //public EnuPositionType PositionType { get; }
-        //public double FiatValueTotalExchange { get; set; }
-        public EnuCCY SourceCurrency { get; set; }
+        public double BookPriceUSD { get; set; }
+        //public EnuCCY SourceCurrency { get; set; }
         public Exchange BookedExchange { get; set; }
-        public Wallet Wallet { get; set; }
+        public CoinStorage Storage { get; set; }
 
         public Position(Instrument coin)
         {
             Coin = coin;
             BalanceDate = DateTime.Now.Date;
             Amount = 0;
-            BookPrice = 0;
+            BookPriceUSD = 0;
             //PositionType = positoinType;
             //this.SourceCurrency = coin.MarketPrice.SourceCurrency; //todo network issue = marketprice is null
         }
@@ -30,8 +28,13 @@ namespace CryptoAccouting.CoreClass
             Coin = new Instrument("N/A","N/A","N/A");
             BalanceDate = DateTime.Now.Date;
             Amount = 0;
-            BookPrice = 0;
-            //this.SourceCurrency = sourceCurrencyrency; //todo must be one currency 
+            BookPriceUSD = 0;
+        }
+
+
+        public double BookPriceBase(CrossRate USDCrossRate)
+        {
+            return Coin.MarketPrice == null ? 0 : BookPriceUSD * USDCrossRate.Rate;
         }
 
         public double AmountBTC()
@@ -58,7 +61,7 @@ namespace CryptoAccouting.CoreClass
             //}
 		}
 
-		public double LatestPriceBase(CrossRate CrossRate)
+		public double LatestPriceBase(CrossRate USDCrossRate)
 		{
 			//if (PositionType is EnuPositionType.ExchangeLevel)
 			//{
@@ -66,7 +69,7 @@ namespace CryptoAccouting.CoreClass
 			//}
 			//else
 			//{
-                return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPriceBase(CrossRate);
+                return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPriceBase(USDCrossRate);
 			//}
 		}
 
@@ -94,7 +97,7 @@ namespace CryptoAccouting.CoreClass
             //}
         }
 
-		public double Ret1dBase(CrossRate CrossRate)
+		public double Ret1dBase(CrossRate USDCrossRate)
 		{
 			//if (PositionType is EnuPositionType.ExchangeLevel)
 			//{
@@ -102,7 +105,7 @@ namespace CryptoAccouting.CoreClass
 			//}
 			//else
 			//{
-                return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.Ret1dBase(CrossRate);
+                return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.Ret1dBase(USDCrossRate);
 			//}
 		}
 
@@ -142,7 +145,7 @@ namespace CryptoAccouting.CoreClass
             //}
         }
 
-		public double LatestFiatValueBase(CrossRate CrossRate)
+		public double LatestFiatValueBase(CrossRate USDCrossRate)
 		{
 			//if (PositionType is EnuPositionType.ExchangeLevel)
 			//{
@@ -150,13 +153,13 @@ namespace CryptoAccouting.CoreClass
 			//}
 			//else
 			//{
-                return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPriceBase(CrossRate) * this.Amount;
+                return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.LatestPriceBase(USDCrossRate) * this.Amount;
 			//}
 		}
 
 		public double BookValue()
 		{
-			return Amount * BookPrice;
+			return Amount * BookPriceUSD;
 		}
 	}
 

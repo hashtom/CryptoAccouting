@@ -28,17 +28,6 @@ namespace CryptoAccouting.CoreClass
 
         public Exchange GetExchange(string Code)
         {
-            //if (exchanges == null ? false : exchanges.Where(x => x.ExchangeType == extype).Any())
-            //{
-            //    return exchanges.First(x => x.ExchangeType == extype);
-            //}
-            //else
-            //{
-            //    var exc = new Exchange(extype);
-            //    this.AttachExchange(exc);
-            //    return exc;
-            //}
-
             if (!exchanges.Any(x => x.Code == Code))
             {
                 this.AttachExchange(new Exchange(Code));
@@ -62,7 +51,7 @@ namespace CryptoAccouting.CoreClass
         public ExchangeList GetExchangesBySymbol(string symbol){
 
             var exchanged_applied = new ExchangeList();
-            exchanged_applied.AttachExchange(new Exchange("NotSpecified") { Name = "Not Specified" });
+            //exchanged_applied.AttachExchange(new Exchange("NotSpecified") { Name = "Not Specified" });
 
             foreach (var exc in exchanges)
             {
