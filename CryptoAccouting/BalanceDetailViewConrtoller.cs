@@ -26,7 +26,7 @@ namespace CryptoAccouting
 
 			// Configure Table source
 			this.TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "BookingViewCell");
-            this.TableView.Source = new BookingTableSource(symbol_selected, this);
+            this.TableView.Source = new CoinBookingTableSource(symbol_selected, this);
         }
 
         public override void ViewWillAppear(bool animated)
@@ -89,7 +89,7 @@ namespace CryptoAccouting
                 var navctlr = segue.DestinationViewController as BalanceEditViewController;
 				if (navctlr != null)
 				{
-					var source = TableView.Source as BookingTableSource;
+					var source = TableView.Source as CoinBookingTableSource;
 					var rowPath = TableView.IndexPathForSelectedRow;
 					var item = source.GetItem(rowPath.Row);
                     navctlr.SetPosition(item, EnuPopTo.OnePop, false);

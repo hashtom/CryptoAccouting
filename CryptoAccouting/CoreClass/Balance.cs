@@ -60,7 +60,7 @@ namespace CryptoAccouting.CoreClass
         public Balance GetBalanceByStorage(string storagecode)
         {
             var Bal = new Balance();
-            foreach (var pos in positions.Where(x => x.Storage.Code == storagecode))
+            foreach (var pos in positions.Where(x => x.CoinStorage.Code == storagecode))
 			{
 				Bal.Attach(pos);
 			}
@@ -78,13 +78,36 @@ namespace CryptoAccouting.CoreClass
         public CoinStorageList GetStorageList()
         {
             var list = new CoinStorageList();
-            foreach (var storage in positions.Select(x => x.Storage).Distinct())
+
+            foreach (var storage in positions.Where(x => x.CoinStorage != null).Select(x => x.CoinStorage).Distinct())
             {
-                if (storage != null) list.Attach(storage);
+                if (storage != null)
+                {
+                    storage.ClearBalanceOnStorage();
+                    foreach (var pos in positions.Where(x => x.CoinStorage.Code == storage.Code))
+                    {
+                        storage.AttachPosition(pos);
+                    }
+                    list.Attach(storage);
+                }
+
             }
 
             return list;
         }
+
+
+        public CoinStorage GetCoinStorage(string storagecode, EnuCoinStorageType storagetype)
+		{
+            if (positions.Where(x => x.CoinStorage != null).Select(x=>x.CoinStorage).Any(x => x.Code == storagecode && x.StorageType == storagetype))
+            {
+                return positions.Select(x => x.CoinStorage).Where(x => x.Code == storagecode && x.StorageType == storagetype).First();
+            }
+            else
+            {
+                return null;
+            }
+		}
 
         public void Attach(Position position) //, bool CalcSummary = true)
 		{

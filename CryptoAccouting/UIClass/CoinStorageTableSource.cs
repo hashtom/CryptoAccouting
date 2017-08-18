@@ -111,7 +111,7 @@ namespace CryptoAccouting.UIClass
                 TextAlignment = UITextAlignment.Left,
                 Frame = new System.Drawing.RectangleF(20, 0, 40, 20),
                 BackgroundColor = UIColor.Clear,
-                Text = "Exchange"
+                Text = "Storage"
             };
 
             amountLabel = new UILabel()

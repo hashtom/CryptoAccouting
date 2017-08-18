@@ -57,24 +57,7 @@ namespace CryptoAccouting
                 UIAlertController exchangeAlert = UIAlertController.Create("Storage", "Choose Storage", UIAlertControllerStyle.ActionSheet);
                 exchangeAlert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
 
-                //temp
-				List<CoinStorage> storages = new List<CoinStorage>();
-
-				foreach (EnuCoinStorageType wt in Enum.GetValues(typeof(EnuCoinStorageType)))
-				{
-                    if (wt is EnuCoinStorageType.Exchange)
-                    {
-                        var ex = thisExchange;
-                        if (ex != null) storages.Add(ex);
-                    }
-                    else
-                    {
-                        var w = new Wallet(wt.ToString(), wt);
-                        storages.Add(w);
-                    }
-				}
-
-                foreach (var st in storages)
+                foreach (var st in ApplicationCore.GetStorageList())
                 {
                     exchangeAlert.AddAction(UIAlertAction.Create(st.Code,
                                                                      UIAlertActionStyle.Default,
@@ -211,9 +194,9 @@ namespace CryptoAccouting
                                            PositionDetail.BookedExchange.Code;
                 buttonExchange.SetTitle(exname, UIControlState.Normal);
 
-                var storagename = PositionDetail.Storage is null ?
+                var storagename = PositionDetail.CoinStorage is null ?
                                            "Not Specified" :
-                                                PositionDetail.Storage.Code;
+                                                PositionDetail.CoinStorage.Code;
                 buttonWallet.SetTitle(storagename, UIControlState.Normal);
 			}
 
@@ -227,7 +210,7 @@ namespace CryptoAccouting
             PositionDetail.BookPriceUSD = textBookPrice.Text is "" ? 0 : double.Parse(textBookPrice.Text);
             PositionDetail.BookedExchange = thisExchange;
             PositionDetail.BalanceDate = thisBalanceDate;
-            PositionDetail.Storage = thisStorage;
+            PositionDetail.AttachCoinStorage(thisStorage);
 
             ApplicationCore.Balance.Attach(PositionDetail);
             ApplicationCore.SaveMyBalanceXML();

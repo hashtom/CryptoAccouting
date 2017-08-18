@@ -8,7 +8,7 @@ using CoreGraphics;
 
 namespace CryptoAccouting.UIClass
 {
-	public class BookingTableSource : UITableViewSource
+	public class CoinBookingTableSource : UITableViewSource
 	{
 		Balance myBalance;
         string symbol_selected;
@@ -16,7 +16,7 @@ namespace CryptoAccouting.UIClass
 		CryptoTableViewController owner;
 		//List<Position> bookingPositions;
 
-        public BookingTableSource(string symbol, CryptoTableViewController owner)
+        public CoinBookingTableSource(string symbol, CryptoTableViewController owner)
         {
             this.myBalance = ApplicationCore.Balance;
             this.owner = owner;

@@ -21,22 +21,22 @@ namespace CryptoAccouting.CoreClass
 
         }
 
-        public CoinStorage GetCoinStorage(string Code, EnuCoinStorageType storagetype)
-		{
-			if (!storages.Any(x => x.Code == Code))
-			{
-                if (storagetype == EnuCoinStorageType.Exchange)
-                {
-                    this.Attach(ApplicationCore.GetExchange(Code));
-                }
-                else
-                {
-                    this.Attach(new Wallet(Code, storagetype));
-                }
-			}
+  //      public CoinStorage GetCoinStorage(string Code, EnuCoinStorageType storagetype)
+		//{
+		//	if (!storages.Any(x => x.Code == Code))
+		//	{
+  //              if (storagetype == EnuCoinStorageType.Exchange)
+  //              {
+  //                  this.Attach(ApplicationCore.GetExchange(Code));
+  //              }
+  //              else
+  //              {
+  //                  this.Attach(new Wallet(Code, storagetype));
+  //              }
+		//	}
 
-			return storages.First(x => x.Code == Code);
-		}
+		//	return storages.First(x => x.Code == Code);
+		//}
 
         public void Attach(CoinStorage storage)
 		{

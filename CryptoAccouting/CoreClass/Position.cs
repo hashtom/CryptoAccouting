@@ -12,7 +12,7 @@ namespace CryptoAccouting.CoreClass
         public double BookPriceUSD { get; set; }
         //public EnuCCY SourceCurrency { get; set; }
         public Exchange BookedExchange { get; set; }
-        public CoinStorage Storage { get; set; }
+        public CoinStorage CoinStorage { get; private set; }
 
         public Position(Instrument coin)
         {
@@ -31,6 +31,23 @@ namespace CryptoAccouting.CoreClass
             BookPriceUSD = 0;
         }
 
+        public void AttachNewStorage(string storagecode, EnuCoinStorageType storagetype)
+        {
+            switch (storagetype)
+            {
+                case EnuCoinStorageType.Exchange:
+                    CoinStorage = BookedExchange;
+                    break;
+                default:
+                    CoinStorage = new Wallet(storagecode, storagetype);
+                    break;
+            }
+        }
+
+        public void AttachCoinStorage(CoinStorage storage)
+        {
+            CoinStorage = storage;
+        }
 
         public double BookPriceBase(CrossRate USDCrossRate)
         {

@@ -9,28 +9,28 @@ namespace CryptoAccouting.CoreClass
 		public string Code { get; set; }
 		public string Name { get; set; }
         public EnuCoinStorageType StorageType { get; set; }
+        public Balance BalanceOnStorage { get; private set; }
 
         public CoinStorage(string Code)
         {
             this.Code = Code;
+            BalanceOnStorage = new Balance();
         }
 
-		public Balance BalanceOnStorage()
-		{
-			if (ApplicationCore.Balance is null)
-			{
-				return null;
-			}
-			else
-			{
-				Balance bal = new Balance();
-				foreach (var pos in ApplicationCore.Balance.Where(x => x.Storage.Code == Code))
-				{
-					bal.Attach(pos);
-				}
-				return bal;
-			}
-		}
+        public void ClearBalanceOnStorage()
+        {
+            BalanceOnStorage = new Balance();
+        }
+
+        public void AttachPosition(Position position)
+        {
+            BalanceOnStorage.Attach(position);
+        }
+
+        public void DetachPosition(Position position)
+        {
+            BalanceOnStorage.Detach(position);
+        }
 
     }
 

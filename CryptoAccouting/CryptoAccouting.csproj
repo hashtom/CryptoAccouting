@@ -211,7 +211,7 @@
       <DependentUpon>BalanceDetailViewConrtoller.cs</DependentUpon>
     </Compile>
     <Compile Include="CryptoTableViewController.cs" />
-    <Compile Include="UIClass\BookingTableSource.cs" />
+    <Compile Include="UIClass\CoinBookingTableSource.cs" />
     <Compile Include="CoreClass\CrossRate.cs" />
     <Compile Include="UIClass\CustomExchangeViewCell.cs" />
     <Compile Include="UIClass\AppSetting.cs" />
