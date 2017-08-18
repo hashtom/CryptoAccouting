@@ -25,6 +25,9 @@ namespace CryptoAccouting
 		UIKit.UIButton buttonExchange { get; set; }
 
 		[Outlet]
+		UIKit.UIButton buttonTradeDate { get; set; }
+
+		[Outlet]
 		UIKit.UIButton buttonWallet { get; set; }
 
 		[Outlet]
@@ -57,10 +60,6 @@ namespace CryptoAccouting
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		UIKit.UITextField textBalanceDate { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UITextField textBookPrice { get; set; }
 
 		[Outlet]
@@ -81,6 +80,11 @@ namespace CryptoAccouting
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (buttonTradeDate != null) {
+				buttonTradeDate.Dispose ();
+				buttonTradeDate = null;
+			}
+
 			if (buttonDone != null) {
 				buttonDone.Dispose ();
 				buttonDone = null;
@@ -134,11 +138,6 @@ namespace CryptoAccouting
 			if (labelFiatPrice != null) {
 				labelFiatPrice.Dispose ();
 				labelFiatPrice = null;
-			}
-
-			if (textBalanceDate != null) {
-				textBalanceDate.Dispose ();
-				textBalanceDate = null;
 			}
 
 			if (textBookPrice != null) {

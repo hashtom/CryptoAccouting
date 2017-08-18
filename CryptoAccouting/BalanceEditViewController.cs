@@ -104,13 +104,14 @@ namespace CryptoAccouting
                     DateStyle = NSDateFormatterStyle.Medium
                 };
 
-                textBalanceDate.Text = dateFormatter.ToString(modalPicker.DatePicker.Date);
+                buttonTradeDate.SetTitle(dateFormatter.ToString(modalPicker.DatePicker.Date), UIControlState.Normal);
+                //textBalanceDate.Text = dateFormatter.ToString(modalPicker.DatePicker.Date);
                 thisBalanceDate = (DateTime)modalPicker.DatePicker.Date;
             };
 
 
             //Events description
-            textBalanceDate.EditingDidBegin += (sender, e) =>
+            buttonTradeDate.TouchUpInside += (sender, e) => 
             {
                 PresentViewController(modalPicker, true, null);
             };
@@ -122,32 +123,30 @@ namespace CryptoAccouting
             {
                 buttonDone.Enabled = true;
                 buttonEdit.Enabled = false;
-                //buttonDone.SetTitleTextAttributes(new UITextAttributes() { TextColor = UIColor.Blue }, UIControlState.Normal);
                 buttonExchange.SetTitleColor(UIColor.Blue, UIControlState.Normal);
                 buttonExchange.UserInteractionEnabled = true;
+                buttonTradeDate.SetTitleColor(UIColor.Blue, UIControlState.Normal);
+				buttonTradeDate.UserInteractionEnabled = true;
                 buttonWallet.SetTitleColor(UIColor.Blue, UIControlState.Normal);
 				buttonWallet.UserInteractionEnabled = true;
                 textQuantity.UserInteractionEnabled = true;
                 textBookPrice.UserInteractionEnabled = true;
-                textBalanceDate.UserInteractionEnabled = true;
                 textQuantity.TextColor = UIColor.Blue;
                 textBookPrice.TextColor = UIColor.Blue;
-                textBalanceDate.TextColor = UIColor.Blue;
             }
             else
             {
                 buttonDone.Enabled = false;
                 buttonExchange.UserInteractionEnabled = false;
-                //buttonDone.SetTitleTextAttributes(new UITextAttributes() { TextColor = UIColor.Black }, UIControlState.Disabled);
                 buttonExchange.SetTitleColor(UIColor.Black, UIControlState.Normal);
 				buttonWallet.UserInteractionEnabled = false;
                 buttonWallet.SetTitleColor(UIColor.Black, UIControlState.Normal);
+				buttonTradeDate.UserInteractionEnabled = false;
+				buttonTradeDate.SetTitleColor(UIColor.Black, UIControlState.Normal);
                 textQuantity.UserInteractionEnabled = false;
                 textBookPrice.UserInteractionEnabled = false;
-                textBalanceDate.UserInteractionEnabled = false;
                 textQuantity.TextColor = UIColor.Black;
                 textBookPrice.TextColor = UIColor.Black;
-                textBalanceDate.TextColor = UIColor.Black;
             }
         }
 
@@ -174,8 +173,7 @@ namespace CryptoAccouting
             {
                 textBookPrice.Text = "0";
                 thisBalanceDate = DateTime.Now.Date;
-				textBalanceDate.Text = thisBalanceDate.ToShortDateString();
-                //buttonExchange.SetTitle("Not Selected", UIControlState.Normal);
+                buttonTradeDate.SetTitle(thisBalanceDate.ToShortDateString(), UIControlState.Normal);
 			}
             else
             {
@@ -185,10 +183,10 @@ namespace CryptoAccouting
                 imageCoin.Image = logo == null ? null : UIImage.FromFile(logo);
 
                 //labelFiatPrice.Text = String.Format("{0:n0}", PositionDetail.LatestMainPrice());
-                textQuantity.Text = String.Format("{0:n6}", PositionDetail.Amount);
-                textBookPrice.Text = PositionDetail.BookPriceUSD < 0 ? String.Format("{0:n2}", PositionDetail.LatestPriceUSD()) : String.Format("{0:n2}", PositionDetail.BookPriceUSD);
+                textQuantity.Text = (Math.Abs(PositionDetail.Amount) < 0.00000001) ? "" : String.Format("{0:n6}", PositionDetail.Amount);
+                textBookPrice.Text = (Math.Abs(PositionDetail.BookPriceUSD) < 0.00000001) ? String.Format("{0:n2}", PositionDetail.LatestPriceUSD()) : String.Format("{0:n2}", PositionDetail.BookPriceUSD);
                 thisBalanceDate = PositionDetail.BalanceDate;
-                textBalanceDate.Text = PositionDetail.BalanceDate.Date.ToShortDateString();
+                buttonTradeDate.SetTitle(PositionDetail.BalanceDate.Date.ToShortDateString(), UIControlState.Normal);
                 var exname = PositionDetail.BookedExchange is null ?
                                            "Not Specified" :
                                            PositionDetail.BookedExchange.Code;
@@ -275,10 +273,7 @@ namespace CryptoAccouting
         {
             thisCoin = ApplicationCore.GetInstrument(searchitem1);
             exchangesListed = ApplicationCore.GetExchangesBySymbol(searchitem1);
-            //thisExchange = exchangesListed.First();
             editmode = true;
-
-            //this.owner = ControllerToBack == null ? null : ControllerToBack;
         }
 
     }
