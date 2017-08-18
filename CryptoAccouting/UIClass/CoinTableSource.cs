@@ -15,9 +15,9 @@ namespace CryptoAccouting.UIClass
         NSString cellIdentifier = new NSString("CoinViewCell");
         CryptoTableViewController owner;
 
-        public CoinTableSource(CryptoTableViewController owner) //, string symbol = null)
+        public CoinTableSource(Balance mybalance, CryptoTableViewController owner) //, string symbol = null)
         {
-            this.myBalance = ApplicationCore.Balance;
+            this.myBalance = mybalance;
             this.owner = owner;
             this.coins = myBalance is null ? new List<Instrument>() : myBalance.Select(x => x.Coin).Distinct().ToList();
         }

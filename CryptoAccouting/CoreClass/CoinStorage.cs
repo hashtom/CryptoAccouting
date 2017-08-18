@@ -11,9 +11,11 @@ namespace CryptoAccouting.CoreClass
         public EnuCoinStorageType StorageType { get; set; }
         public Balance BalanceOnStorage { get; private set; }
 
-        public CoinStorage(string Code)
+        public CoinStorage(string code, EnuCoinStorageType storatetype)
         {
-            this.Code = Code;
+            this.Code = code;
+            this.Name = code;
+            this.StorageType = storatetype;
             BalanceOnStorage = new Balance();
         }
 
@@ -31,6 +33,21 @@ namespace CryptoAccouting.CoreClass
         {
             BalanceOnStorage.Detach(position);
         }
+
+        public double AmountBTC()
+        {
+            return BalanceOnStorage.AmountBTC();
+        }
+
+        public double LatestFiatValueUSD()
+        {
+            return BalanceOnStorage.LatestFiatValueUSD();
+        }
+
+		public double LatestFiatValueBase(CrossRate crossrate)
+		{
+			return BalanceOnStorage.LatestFiatValueBase(crossrate);
+		}
 
     }
 

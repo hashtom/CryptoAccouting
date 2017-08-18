@@ -1,7 +1,7 @@
 ﻿using Foundation; using System; using UIKit; using CryptoAccouting.CoreClass; using CryptoAccouting.UIClass; using System.Collections.Generic; using System.Threading.Tasks; using System.Linq;  namespace CryptoAccouting {     public partial class BalanceMainViewController : CryptoTableViewController     {
         //private NavigationDrawer menu;          public BalanceMainViewController(IntPtr handle) : base(handle)         {
         }           public override void ViewDidLoad()         {             base.ViewDidLoad();              // Instantiate Controllers             AppSetting.balanceMainViewC = this;             AppSetting.transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             AppSetting.plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             AppSetting.perfViewC = this.Storyboard.InstantiateViewController("PerfViewC") as PerfomViewController;             AppSetting.settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             //menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);
-             if (ApplicationCore.InitializeCore() != EnuAppStatus.Success){                 this.PopUpWarning("some issue!!");             }              // Configure Segmented control             ConfigureSegmentButton();              // Configure Table source             TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");             TableView.Source = new CoinTableSource(this);             //await ApplicationCore.LoadCoreDataAsync();             //await ApplicationCore.FetchMarketDataFromBalanceAsync();
+             if (ApplicationCore.InitializeCore() != EnuAppStatus.Success){                 this.PopUpWarning("some issue!!");             }              // Configure Segmented control             ConfigureSegmentButton();              // Configure Table source             TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");             TableView.Source = new CoinTableSource(ApplicationCore.Balance, this);             //await ApplicationCore.LoadCoreDataAsync();             //await ApplicationCore.FetchMarketDataFromBalanceAsync();
         }          public async override void ViewWillAppear(bool animated)         {
             base.ViewWillAppear(animated);             await ApplicationCore.LoadCoreDataAsync();             await ApplicationCore.FetchMarketDataFromBalanceAsync();              ReDrawScreen();             TableView.ReloadData();
 		}          public override void ViewDidAppear(bool animated)
@@ -42,11 +42,11 @@
                 {
                     case 0:
                         TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");
-                        TableView.Source = new CoinTableSource(this);
+                        TableView.Source = new CoinTableSource(ApplicationCore.Balance, this);
                         break;
                     case 1:
-                        TableView.RegisterNibForCellReuse(CoinStorageViewCell.Nib, "ExchangeViewCell");
-                        TableView.Source = new CoinStorageTableSource(this);
+                        TableView.RegisterNibForCellReuse(CoinStorageViewCell.Nib, "CoinStorageViewCell");
+                        TableView.Source = new CoinStorageTableSource(ApplicationCore.Balance.GetStorageList(), this);
                         break;
                     case 2:
                         //TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "BookingTestViewCell");

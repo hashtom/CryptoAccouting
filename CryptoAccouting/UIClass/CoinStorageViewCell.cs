@@ -20,12 +20,12 @@ namespace CryptoAccouting.UIClass
             // Note: this .ctor should not contain any initialization logic.
         }
 
-        public void UpdateCell(Exchange exc)
+        public void UpdateCell(CoinStorage storage)
 		{
             
-            labelExchange.Text = exc.Name; // pos.BookedExchange.Name;
-            //labelHoldingBTC.Text = "฿" + String.Format("{0:n2}", pos.AmountBTC());
-            //labelValueK.Text = String.Format("{0:n2}", pos.LatestFiatValueUSD());
+            labelExchange.Text = storage.Name; // pos.BookedExchange.Name;
+            labelHoldingBTC.Text = "฿" + String.Format("{0:n2}", storage.AmountBTC());
+            labelValueK.Text = String.Format("{0:n2}", storage.LatestFiatValueBase(ApplicationCore.USDCrossRate));
             labelRet.Text = "%";
 		}
     }

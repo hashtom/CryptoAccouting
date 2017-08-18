@@ -21,6 +21,17 @@ namespace CryptoAccouting.CoreClass
 
         }
 
+        public static CoinStorageList GetStorageListSelection()
+        {
+            var list = new CoinStorageList();
+			foreach (EnuCoinStorageType storagetype in Enum.GetValues(typeof(EnuCoinStorageType)))
+			{
+                var storage = new CoinStorage(storagetype.ToString(), storagetype);
+                list.Attach(storage);
+			}
+            return list;
+        }
+
   //      public CoinStorage GetCoinStorage(string Code, EnuCoinStorageType storagetype)
 		//{
 		//	if (!storages.Any(x => x.Code == Code))

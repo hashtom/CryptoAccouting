@@ -30,7 +30,7 @@ namespace CryptoAccouting.CoreClass
         {
             if (!exchanges.Any(x => x.Code == Code))
             {
-                this.Attach(new Exchange(Code));
+                this.Attach(new Exchange(Code, EnuCoinStorageType.Exchange));
             }
 
             return exchanges.First(x => x.Code == Code);

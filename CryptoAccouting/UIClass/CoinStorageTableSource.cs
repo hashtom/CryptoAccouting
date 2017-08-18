@@ -10,19 +10,18 @@ namespace CryptoAccouting.UIClass
 {
     public class CoinStorageTableSource : UITableViewSource
     {
-        ExchangeList ExchangeList;
-        //Balance myBalance;
+        CoinStorageList storagelist;
         NSString cellIdentifier = new NSString("CoinStorageViewCell"); // set in the Storyboard
         CryptoTableViewController owner;
 
-        public CoinStorageTableSource(CryptoTableViewController owner)
+        public CoinStorageTableSource(CoinStorageList storagelist, CryptoTableViewController owner)
         {
-            this.ExchangeList = ApplicationCore.PublicExchangeList;
+            this.storagelist = storagelist;
             this.owner = owner;
         }
         public override nint RowsInSection(UITableView tableview, nint section)
         {
-            return ExchangeList.Count();
+            return storagelist.Count();
             //return myBalance.positionsByBookingExchange.Count;
         }
 
@@ -35,15 +34,13 @@ namespace CryptoAccouting.UIClass
             //cell = new CustomBalanceCell (cellIdentifier);
 
             var cell = (CoinStorageViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
-            //cell.UpdateCell(myBalance.positionsByBookingExchange[indexPath.Row]);
-            cell.UpdateCell(ExchangeList.GetByIndex(indexPath.Row));
+            cell.UpdateCell(storagelist.GetByIndex(indexPath.Row));
             return cell;
         }
 
         public CoinStorage GetItem(int id)
         {
-            return ExchangeList.GetByIndex(id);
-            //return myBalance.positionsByBookingExchange[id];
+            return storagelist.GetByIndex(id);
         }
 
 		public override bool CanMoveRow(UITableView tableView, NSIndexPath indexPath)

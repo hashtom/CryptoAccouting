@@ -57,7 +57,7 @@ namespace CryptoAccouting
                 UIAlertController exchangeAlert = UIAlertController.Create("Storage", "Choose Storage", UIAlertControllerStyle.ActionSheet);
                 exchangeAlert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
 
-                foreach (var st in ApplicationCore.GetStorageList())
+                foreach (var st in CoinStorageList.GetStorageListSelection())
                 {
                     exchangeAlert.AddAction(UIAlertAction.Create(st.Code,
                                                                      UIAlertActionStyle.Default,
@@ -196,7 +196,7 @@ namespace CryptoAccouting
 
                 var storagename = PositionDetail.CoinStorage is null ?
                                            "Not Specified" :
-                                                PositionDetail.CoinStorage.Code;
+                                                PositionDetail.CoinStorage.StorageType.ToString();
                 buttonWallet.SetTitle(storagename, UIControlState.Normal);
 			}
 
@@ -208,9 +208,31 @@ namespace CryptoAccouting
 
             PositionDetail.Amount = double.Parse(textQuantity.Text);
             PositionDetail.BookPriceUSD = textBookPrice.Text is "" ? 0 : double.Parse(textBookPrice.Text);
-            PositionDetail.BookedExchange = thisExchange;
             PositionDetail.BalanceDate = thisBalanceDate;
-            PositionDetail.AttachCoinStorage(thisStorage);
+
+            if (thisExchange != null) PositionDetail.BookedExchange = thisExchange;
+
+            if (thisStorage != null)
+            {
+                CoinStorage storage;
+                if (thisStorage.StorageType == EnuCoinStorageType.Exchange)
+                {
+                    storage = thisExchange;
+                }
+                else
+                {
+                    storage = ApplicationCore.Balance.GetCoinStorage(thisStorage.Code, thisStorage.StorageType);
+                }
+
+                if (storage != null)
+                {
+                    PositionDetail.AttachCoinStorage(storage);
+                }
+                else
+                {
+                    PositionDetail.AttachNewStorage(thisStorage.Code, thisStorage.StorageType);
+                }
+            }
 
             ApplicationCore.Balance.Attach(PositionDetail);
             ApplicationCore.SaveMyBalanceXML();

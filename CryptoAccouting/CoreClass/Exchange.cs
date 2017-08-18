@@ -17,10 +17,11 @@ namespace CryptoAccouting.CoreClass
         //public DateTime UpdateTime { get; private set; }
 
 
-        public Exchange(string code) :base (code)
+        public Exchange(string code, EnuCoinStorageType storagetype) : base(code, storagetype)
         {
             ListedCoin = new List<Instrument>();
-            StorageType = EnuCoinStorageType.Exchange;
+            if (storagetype != EnuCoinStorageType.Exchange) throw new Exception();
+            //StorageType = EnuCoinStorageType.Exchange;
         }
 
 		public void AttachListedCoin(Instrument coin)

@@ -84,16 +84,14 @@ namespace CryptoAccouting.CoreClass
                 if (storage != null)
                 {
                     storage.ClearBalanceOnStorage();
-                    foreach (var pos in positions.Where(x => x.CoinStorage.Code == storage.Code))
+                    foreach (var pos in positions.Where(x => x.CoinStorage != null).Where(x => x.CoinStorage.Code == storage.Code))
                     {
                         storage.AttachPosition(pos);
                     }
                     list.Attach(storage);
                 }
-
             }
-
-            return list;
+				return list;
         }
 
 
@@ -101,7 +99,7 @@ namespace CryptoAccouting.CoreClass
 		{
             if (positions.Where(x => x.CoinStorage != null).Select(x=>x.CoinStorage).Any(x => x.Code == storagecode && x.StorageType == storagetype))
             {
-                return positions.Select(x => x.CoinStorage).Where(x => x.Code == storagecode && x.StorageType == storagetype).First();
+                return positions.Where(x => x.CoinStorage != null).Select(x => x.CoinStorage).Where(x => x.Code == storagecode && x.StorageType == storagetype).First();
             }
             else
             {

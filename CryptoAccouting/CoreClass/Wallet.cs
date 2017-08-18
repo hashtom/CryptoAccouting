@@ -7,9 +7,8 @@ namespace CryptoAccouting.CoreClass
     {
         public string Xpubkey { get; set; }
 
-        public Wallet(string code, EnuCoinStorageType storagetype) : base(code)
+        public Wallet(string code, EnuCoinStorageType storagetype) : base(code, storagetype)
         {
-            StorageType = storagetype;
         }
 
     }
