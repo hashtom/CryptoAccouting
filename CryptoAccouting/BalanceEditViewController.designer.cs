@@ -36,27 +36,11 @@ namespace CryptoAccouting
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		UIKit.UILabel labelBTCPrice { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UIKit.UILabel labelBTCRet { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UILabel labelCoinName { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UILabel labelCoinSymbol { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UIKit.UILabel labelFiat1dRet { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UIKit.UILabel labelFiatPrice { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -80,11 +64,6 @@ namespace CryptoAccouting
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (buttonTradeDate != null) {
-				buttonTradeDate.Dispose ();
-				buttonTradeDate = null;
-			}
-
 			if (buttonDone != null) {
 				buttonDone.Dispose ();
 				buttonDone = null;
@@ -100,6 +79,11 @@ namespace CryptoAccouting
 				buttonExchange = null;
 			}
 
+			if (buttonTradeDate != null) {
+				buttonTradeDate.Dispose ();
+				buttonTradeDate = null;
+			}
+
 			if (buttonWallet != null) {
 				buttonWallet.Dispose ();
 				buttonWallet = null;
@@ -110,16 +94,6 @@ namespace CryptoAccouting
 				imageCoin = null;
 			}
 
-			if (labelBTCPrice != null) {
-				labelBTCPrice.Dispose ();
-				labelBTCPrice = null;
-			}
-
-			if (labelBTCRet != null) {
-				labelBTCRet.Dispose ();
-				labelBTCRet = null;
-			}
-
 			if (labelCoinName != null) {
 				labelCoinName.Dispose ();
 				labelCoinName = null;
@@ -128,16 +102,6 @@ namespace CryptoAccouting
 			if (labelCoinSymbol != null) {
 				labelCoinSymbol.Dispose ();
 				labelCoinSymbol = null;
-			}
-
-			if (labelFiat1dRet != null) {
-				labelFiat1dRet.Dispose ();
-				labelFiat1dRet = null;
-			}
-
-			if (labelFiatPrice != null) {
-				labelFiatPrice.Dispose ();
-				labelFiatPrice = null;
 			}
 
 			if (textBookPrice != null) {

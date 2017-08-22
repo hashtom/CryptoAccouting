@@ -53,9 +53,9 @@ namespace CryptoAccouting
 
             if (thisCoin.MarketPrice != null)
             {
-                labelBTCPrice.Text = thisCoin.Symbol == "BTC" ?
-                    "" :
-                    "฿" + String.Format("{0:n8}", thisCoin.MarketPrice.LatestPriceBTC);
+                //labelBTCPrice.Text = thisCoin.Symbol == "BTC" ?
+                    //"" :
+                    //"฿" + String.Format("{0:n8}", thisCoin.MarketPrice.LatestPriceBTC);
                 //labelFiatPrice.Text = thisCoin.Symbol == "BTC" ?
                 //    "$" + String.Format("{0:n2}", thisCoin.MarketPrice.LatestPriceUSD) :
                 //    "$" + String.Format("{0:n6}", thisCoin.MarketPrice.LatestPriceBTC);
@@ -66,7 +66,7 @@ namespace CryptoAccouting
             }
 
             labelMarketValue.Text = "$" + String.Format("{0:n0}", booking_positions.Sum(x => x.LatestFiatValueUSD()));
-            labelTotalQty.Text = String.Format("{0:n0}", booking_positions.Sum(x => x.AmountBTC()));
+            labelTotalQty.Text = String.Format("{0:n0}", booking_positions.Sum(x => x.Amount));
             labelTotalBookCost.Text = "$" + String.Format("{0:n0}", booking_positions.Sum(x => x.BookValue()));
 
             TableView.ReloadData();

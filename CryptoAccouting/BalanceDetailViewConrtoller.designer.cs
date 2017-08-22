@@ -26,14 +26,6 @@ namespace CryptoAccouting
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		UIKit.UILabel labelBTCPrice { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UIKit.UILabel labelBTCRet1d { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UILabel labelCoinName { get; set; }
 
 		[Outlet]
@@ -66,16 +58,6 @@ namespace CryptoAccouting
 			if (imageCoin != null) {
 				imageCoin.Dispose ();
 				imageCoin = null;
-			}
-
-			if (labelBTCPrice != null) {
-				labelBTCPrice.Dispose ();
-				labelBTCPrice = null;
-			}
-
-			if (labelBTCRet1d != null) {
-				labelBTCRet1d.Dispose ();
-				labelBTCRet1d = null;
 			}
 
 			if (labelCoinName != null) {
