@@ -35,6 +35,11 @@ namespace CryptoAccouting.CoreClass
 			return instruments[indexNumber];
 		}
 
+        public void Clear()
+        {
+            instruments.Clear();
+        }
+
 		public int Count()
 		{
 			return instruments.Count();

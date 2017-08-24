@@ -27,7 +27,6 @@ namespace CryptoAccouting
 
         public void CellItemUpdated(EnuPopTo PopTo)
         {
-            TableView.ReloadData();
             switch (PopTo)
             {
                 case EnuPopTo.PopToRoot:
@@ -37,6 +36,7 @@ namespace CryptoAccouting
                     NavigationController.PopViewController(true);
                     break;
                 case EnuPopTo.None:
+                    TableView.ReloadData();
                     break;
                 default:
                     break;

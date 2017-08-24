@@ -26,7 +26,7 @@ namespace CryptoAccouting
 
 			// Configure Table source
 			this.TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "BookingViewCell");
-            this.TableView.Source = new CoinBookingTableSource(symbol_selected, this);
+            this.TableView.Source = new CoinBookingTableSource(symbol_selected, ApplicationCore.Balance, this);
         }
 
         public override void ViewWillAppear(bool animated)
@@ -43,7 +43,7 @@ namespace CryptoAccouting
 
         public override void ReDrawScreen()
         {
-            var booking_positions = ApplicationCore.Balance.positions.Where(x => x.Coin.Symbol == symbol_selected).ToList();
+            var booking_positions = ApplicationCore.Balance.Where(x => x.Coin.Symbol == symbol_selected).ToList();
             var thisCoin = ApplicationCore.GetInstrument(symbol_selected);
             var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                                     "Images", thisCoin.Id + ".png");

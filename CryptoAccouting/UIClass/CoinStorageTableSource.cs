@@ -106,9 +106,9 @@ namespace CryptoAccouting.UIClass
                 Font = UIFont.FromName("ArialMT", 12f),
                 TextColor = UIColor.White,
                 TextAlignment = UITextAlignment.Left,
-                Frame = new System.Drawing.RectangleF(20, 0, 40, 20),
+                Frame = new System.Drawing.RectangleF(20, 0, 50, 20),
                 BackgroundColor = UIColor.Clear,
-                Text = "Storage"
+                Text = "Location"
             };
 
             amountLabel = new UILabel()

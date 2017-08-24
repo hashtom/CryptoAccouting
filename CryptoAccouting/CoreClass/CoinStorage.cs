@@ -53,10 +53,10 @@ namespace CryptoAccouting.CoreClass
 
     public enum EnuCoinStorageType
     {
-        HardwareWallet,
-        DesktopWallet,
-        MobileWallet,
-        WebService,
+        Hardware,
+        Desktop,
+        Mobile,
+        Web,
         Exchange
     }
 }

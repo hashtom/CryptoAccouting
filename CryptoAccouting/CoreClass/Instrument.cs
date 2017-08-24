@@ -22,16 +22,16 @@ namespace CryptoAccouting.CoreClass
             IsActive = true;
         }
 
-		public Balance BalanceOnInstrument()
+        public Balance BalanceOnInstrument(Balance totalbalance)
 		{
-			if (ApplicationCore.Balance is null)
+			if (totalbalance is null)
 			{
 				return null;
 			}
 			else
 			{
 				Balance bal = new Balance();
-                foreach (var pos in ApplicationCore.Balance.Where(x => (x.Coin.Symbol == Symbol && x.Coin.Id == Id)))
+                foreach (var pos in totalbalance.Where(x => (x.Coin.Symbol == Symbol && x.Coin.Id == Id)))
 				{
 					bal.Attach(pos);
 				}
@@ -39,25 +39,25 @@ namespace CryptoAccouting.CoreClass
 			}
 		}
 
-        public Position TotalPosition()
-        {
+        //public Position TotalPosition()
+        //{
 
-            if (ApplicationCore.Balance is null)
-            {
-                return null;
-            }
-            else
-            {
-                Position totalpos = new Position(ApplicationCore.GetInstrument(Symbol))
-                {
-                    Id = 0,
-                    Amount = ApplicationCore.Balance.Where(x => x.Coin.Symbol == Symbol).Sum(x => x.Amount),
-                    BookPriceUSD = ApplicationCore.Balance.Where(x => x.Coin.Symbol == Symbol).Average(x => (x.Amount * x.BookPriceUSD) / x.Amount)
-                };
+        //    if (ApplicationCore.Balance is null)
+        //    {
+        //        return null;
+        //    }
+        //    else
+        //    {
+        //        Position totalpos = new Position(ApplicationCore.GetInstrument(Symbol))
+        //        {
+        //            Id = 0,
+        //            Amount = ApplicationCore.Balance.Where(x => x.Coin.Symbol == Symbol).Sum(x => x.Amount),
+        //            BookPriceUSD = ApplicationCore.Balance.Where(x => x.Coin.Symbol == Symbol).Average(x => (x.Amount * x.BookPriceUSD) / x.Amount)
+        //        };
 
-                return totalpos;
-            }
-        }
+        //        return totalpos;
+        //    }
+        //}
     }
 
 	public enum InstrumentType

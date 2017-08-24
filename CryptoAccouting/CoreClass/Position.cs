@@ -6,7 +6,7 @@ namespace CryptoAccouting.CoreClass
     public class Position
     {
         public int Id { get; set; }
-        public Instrument Coin { get; }
+        public Instrument Coin { get; private set; }
 		public DateTime BalanceDate { get; set; }
         public double Amount { get; set; }
         public double BookPriceUSD { get; set; }
@@ -23,12 +23,18 @@ namespace CryptoAccouting.CoreClass
             //PositionType = positoinType;
             //this.SourceCurrency = coin.MarketPrice.SourceCurrency; //todo network issue = marketprice is null
         }
+
         public Position()
         {
             Coin = new Instrument("N/A","N/A","N/A");
             BalanceDate = DateTime.Now.Date;
             Amount = 0;
             BookPriceUSD = 0;
+        }
+
+        public void AttachInstrument(Instrument coin)
+        {
+            this.Coin = coin;
         }
 
         public void AttachNewStorage(string storagecode, EnuCoinStorageType storagetype)

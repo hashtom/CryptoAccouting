@@ -8,11 +8,24 @@ namespace CryptoAccouting.CoreClass
     public class Balance : IEnumerable<Position>
     {
         public string BalanceName { get; set; }
-        public List<Position> positions { get; private set; }
+        private List<Position> positions; //{ get; private set; }
+        public Balance BalanceByCoin { get; private set; }
+        public CoinStorageList CoinStorageList { get; private set; }
 
 		public Balance()
         {
             positions = new List<Position>();
+        }
+
+        public void ReCalculate()
+        {
+            ReloadBalanceByCoin();
+            ReloadStorageList();
+        }
+
+        public void AttachInstruments(InstrumentList instrumentist)
+        {
+            positions.ForEach(x => x.AttachInstrument(instrumentist.First(y => y.Symbol == x.Coin.Symbol)));
         }
 
         public double LatestFiatValueUSD(){
@@ -30,70 +43,90 @@ namespace CryptoAccouting.CoreClass
 		}
 
         public void SortPositionByHolding(){
-
-            int i = 1;
             positions = positions.OrderByDescending(x => x.AmountBTC()).ToList();
-
-            foreach (var p in positions){
-                p.Id = i;
-                i++;
-            }
         }
 
-        public Balance GetBalanceByExchangeCode(string ExchangeCode)
+        private void ReloadBalanceByCoin()
         {
-            Balance Bal = new Balance();
-            foreach (var pos in positions.Where(x => x.BookedExchange.Code == ExchangeCode))
+            if (BalanceByCoin != null)
             {
-                Bal.Attach(pos);
-            }
-			if (Bal.Count() > 0)
-			{
-				return Bal;
-			}
-			else
-			{
-				return null;
-			}
-        }
-
-        public Balance GetBalanceByStorage(string storagecode)
-        {
-            var Bal = new Balance();
-            foreach (var pos in positions.Where(x => x.CoinStorage.Code == storagecode))
-			{
-				Bal.Attach(pos);
-			}
-
-            if (Bal.Count() > 0)
-            {
-                return Bal;
+                BalanceByCoin.Clear();
             }
             else
             {
-                return null;
+                BalanceByCoin = new Balance();
             }
-        }
 
-        public CoinStorageList GetStorageList()
-        {
-            var list = new CoinStorageList();
-
-            foreach (var storage in positions.Where(x => x.CoinStorage != null).Select(x => x.CoinStorage).Distinct())
+            foreach (var symbol in positions.Select(x => x.Coin.Symbol).Distinct())
             {
-                if (storage != null)
-                {
-                    storage.ClearBalanceOnStorage();
-                    foreach (var pos in positions.Where(x => x.CoinStorage != null).Where(x => x.CoinStorage.Code == storage.Code))
-                    {
-                        storage.AttachPosition(pos);
-                    }
-                    list.Attach(storage);
-                }
+                var amount = positions.Where(x => x.Coin.Symbol == symbol).Sum(x => x.Amount);
+                var bookprice = positions.Where(x => x.Coin.Symbol == symbol).Sum(x => x.BookPriceUSD);
+                var position = new Position(positions.Select(x => x.Coin).First(x => x.Symbol == symbol)) { Amount = amount, BookPriceUSD = bookprice };
+                BalanceByCoin.Attach(position);
             }
-				return list;
+
         }
 
+		private void ReloadStorageList()
+		{
+			if (CoinStorageList != null)
+			{
+				CoinStorageList.Clear();
+			}
+			else
+			{
+                CoinStorageList = new CoinStorageList();
+			}
+
+			foreach (var storage in positions.Where(x => x.CoinStorage != null).Select(x => x.CoinStorage).Distinct())
+			{
+				if (storage != null)
+				{
+					storage.ClearBalanceOnStorage();
+					foreach (var pos in positions.Where(x => x.CoinStorage != null).Where(x => x.CoinStorage.Code == storage.Code))
+					{
+						storage.AttachPosition(pos);
+					}
+					CoinStorageList.Attach(storage);
+				}
+			}
+
+		}
+
+   //     private Balance GetBalanceByExchangeCode(string ExchangeCode)
+   //     {
+   //         Balance Bal = new Balance();
+   //         foreach (var pos in positions.Where(x => x.BookedExchange.Code == ExchangeCode))
+   //         {
+   //             Bal.Attach(pos);
+   //         }
+			//if (Bal.Count() > 0)
+			//{
+			//	return Bal;
+			//}
+			//else
+			//{
+			//	return null;
+			//}
+        //}
+
+   //     private Balance GetBalanceByStorage(string storagecode)
+   //     {
+   //         var Bal = new Balance();
+   //         foreach (var pos in positions.Where(x => x.CoinStorage.Code == storagecode))
+			//{
+			//	Bal.Attach(pos);
+			//}
+
+        //    if (Bal.Count() > 0)
+        //    {
+        //        return Bal;
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
 
         public CoinStorage GetCoinStorage(string storagecode, EnuCoinStorageType storagetype)
 		{
@@ -121,6 +154,11 @@ namespace CryptoAccouting.CoreClass
 			positions.Add(position);
 
 		}
+
+        public void Clear()
+        {
+            positions.Clear();
+        }
 
 		public void Detach(Position position)  //, bool CalcSummary = true)
 		{

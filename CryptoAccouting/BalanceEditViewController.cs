@@ -59,11 +59,12 @@ namespace CryptoAccouting
 
                 foreach (var st in CoinStorageList.GetStorageListSelection())
                 {
+                    var walletname = st.StorageType != EnuCoinStorageType.Exchange ? st.Code + " Wallet" : st.Code;
                     exchangeAlert.AddAction(UIAlertAction.Create(st.Code,
                                                                      UIAlertActionStyle.Default,
                                                                      (obj) =>
                                                                      {
-                                                                         buttonWallet.SetTitle(st.Code, UIControlState.Normal);
+                                                                         buttonWallet.SetTitle(walletname, UIControlState.Normal);
                                                                          thisStorage = st;
                                                                      }
                                                                 ));
@@ -233,6 +234,7 @@ namespace CryptoAccouting
             }
 
             ApplicationCore.Balance.Attach(PositionDetail);
+            ApplicationCore.Balance.ReCalculate();
             ApplicationCore.SaveMyBalanceXML();
         }
 

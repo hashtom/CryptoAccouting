@@ -38,7 +38,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 foreach (var paircoin in coins.Where(x=>x.Symbol!="BTC"))
 				{
-                    pairs = pairs + "," + paircoin.Symbol.ToLower() + "_btc";
+                    pairs = pairs + "," + paircoin.Id.ToLower() + "_btc";
 				}
 
 				var parameters = new Dictionary<string, string>();
@@ -62,31 +62,36 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 foreach (var jrow in jarray)
                 {
-                    var symbol = (string)jrow["id"];
-                    if (symbol.Substring(0, 3) == "btc")
+                    var idstring = (string)jrow["id"];
+                    string symobl;
+
+                    if (idstring.Substring(0, 3) == "btc")
                     {
-                        symbol = "BTC";
+                        symobl = "BTC";
                     }
                     else
                     {
-                        symbol = symbol.Replace("btc", "").Replace("/", "").Replace("¥", "").ToUpper();
+                        symobl = idstring.Replace("btc", "").Replace("/", "").Replace("¥", "").ToUpper();
                     }
 
-                    var coin = coins.Where(x => x.Symbol == symbol).First();
-
-                    if (coin.MarketPrice == null)
+                    if (coins.Any(x => x.Symbol == symobl))
                     {
-                        var p = new Price(coin);
-                        coin.MarketPrice = p;
-                    }
+                        var coin = coins.Where(x => x.Symbol == symobl).First();
 
-                    //coin.MarketPrice.SourceCurrency = coin.Symbol == "BTC" ? EnuCCY.USD : EnuCCY.BTC;
-                    coin.MarketPrice.LatestPriceBTC = coin.Symbol == "BTC" ? 1 : (double)jrow["price"];
-                    coin.MarketPrice.PriceBTCBefore24h = coin.Symbol == "BTC" ? 1 : (double)jrow["price_before_24h"];
-                    coin.MarketPrice.LatestPriceUSD = coin.Symbol == "BTC" ? (double)jrow["price"] : (double)jrow["price"] * (double)jarray[0]["price"];
-                    coin.MarketPrice.PriceUSDBefore24h = coin.Symbol == "BTC" ? (double)jrow["price_before_24h"] : (double)jrow["price_before_24h"] * (double)jarray[0]["price_before_24h"];
-                    coin.MarketPrice.DayVolume = (double)jrow["volume_btc"];
-                    coin.MarketPrice.PriceDate = DateTime.Now;
+                        if (coin.MarketPrice == null)
+                        {
+                            var p = new Price(coin);
+                            coin.MarketPrice = p;
+                        }
+
+                        //coin.MarketPrice.SourceCurrency = coin.Symbol == "BTC" ? EnuCCY.USD : EnuCCY.BTC;
+                        coin.MarketPrice.LatestPriceBTC = coin.Symbol == "BTC" ? 1 : (double)jrow["price"];
+                        coin.MarketPrice.PriceBTCBefore24h = coin.Symbol == "BTC" ? 1 : (double)jrow["price_before_24h"];
+                        coin.MarketPrice.LatestPriceUSD = coin.Symbol == "BTC" ? (double)jrow["price"] : (double)jrow["price"] * (double)jarray[0]["price"];
+                        coin.MarketPrice.PriceUSDBefore24h = coin.Symbol == "BTC" ? (double)jrow["price_before_24h"] : (double)jrow["price_before_24h"] * (double)jarray[0]["price_before_24h"];
+                        coin.MarketPrice.DayVolume = (double)jrow["volume_btc"];
+                        coin.MarketPrice.PriceDate = DateTime.Now;
+                    }
 
                 }
             }
@@ -145,44 +150,52 @@ namespace CryptoAccouting.CoreClass.APIClass
                 await FetchCoinMarketDataAsync(bitcoin);
             }
 
-			if (!Reachability.IsHostReachable(CoinChartsUrl))
-			{
-			    return EnuAppStatus.FailureNetwork;
-			}
-			else
-			{
-				if (coin.MarketPrice == null)
-				{
-					var p = new Price(coin);
-					coin.MarketPrice = p;
-				}
+            if (!Reachability.IsHostReachable(CoinChartsUrl))
+            {
+                return EnuAppStatus.FailureNetwork;
+            }
+            else
+            {
+                if (coin.MarketPrice == null)
+                {
+                    var p = new Price(coin);
+                    coin.MarketPrice = p;
+                }
 
-			    CoinChartsUrl = (coin.Symbol == "BTC") ? CoinChartsUrl + "btc_usd" : CoinChartsUrl + coin.Symbol.ToLower() + "_btc";
+                CoinChartsUrl = (coin.Symbol == "BTC") ? CoinChartsUrl + "btc_usd" : CoinChartsUrl + coin.Id.ToLower() + "_btc";
 
-			    using (var http = new HttpClient())
-			    {
-			        rawjson = await http.GetStringAsync(CoinChartsUrl);
-			    }
+                using (var http = new HttpClient())
+                {
+                    rawjson = await http.GetStringAsync(CoinChartsUrl);
+                }
 
-			    json = await Task.Run(() => JObject.Parse(rawjson));
+                json = await Task.Run(() => JObject.Parse(rawjson));
 
-                //coin.MarketPrice.SourceCurrency = coin.Symbol == "BTC" ? EnuCCY.USD : EnuCCY.BTC;
-				coin.MarketPrice.LatestPriceBTC = coin.Symbol == "BTC" ? 1 : (double)json["price"];
-				coin.MarketPrice.PriceBTCBefore24h = coin.Symbol == "BTC" ? 1 : (double)json["price_before_24h"];
-                coin.MarketPrice.LatestPriceUSD = coin.Symbol == "BTC" ? (double)json["price"] : (double)json["price"] * bitcoin.MarketPrice.LatestPriceUSD;
-                coin.MarketPrice.PriceUSDBefore24h = coin.Symbol == "BTC" ? (double)json["price_before_24h"] : (double)json["price_before_24h"] * bitcoin.MarketPrice.PriceUSDBefore24h;
-				coin.MarketPrice.DayVolume = (double)json["volume_btc"];
-				coin.MarketPrice.PriceDate = DateTime.Now;
+                if ((string)json["id"] != "null")
+                {
+                    //coin.MarketPrice.SourceCurrency = coin.Symbol == "BTC" ? EnuCCY.USD : EnuCCY.BTC;
+                    coin.MarketPrice.LatestPriceBTC = coin.Symbol == "BTC" ? 1 : (double)json["price"];
+                    coin.MarketPrice.PriceBTCBefore24h = coin.Symbol == "BTC" ? 1 : (double)json["price_before_24h"];
+                    coin.MarketPrice.LatestPriceUSD = coin.Symbol == "BTC" ? (double)json["price"] : (double)json["price"] * bitcoin.MarketPrice.LatestPriceUSD;
+                    coin.MarketPrice.PriceUSDBefore24h = coin.Symbol == "BTC" ? (double)json["price_before_24h"] : (double)json["price_before_24h"] * bitcoin.MarketPrice.PriceUSDBefore24h;
+                    coin.MarketPrice.DayVolume = (double)json["volume_btc"];
+                    coin.MarketPrice.PriceDate = DateTime.Now;
+                }
+                else
+                {
+                    Console.WriteLine("null!!");
+                }
 
 			}
 
 			return EnuAppStatus.Success;
         }
 
-        public static EnuAppStatus FetchAllCoinData(InstrumentList coins)
+        public static EnuAppStatus FetchAllCoinData(InstrumentList instrumentlist)
 		{
-            
-			const string BaseUrl = "https://api.coinmarketcap.com/v1/ticker/?limit=150";
+
+            const string BaseUrl = "http://bridgeplace.sakura.ne.jp/cryptoticker/InstrumentList.json";
+                // "https://api.coinmarketcap.com/v1/ticker/?limit=150";
 			string rawjson;
 
             if (!Reachability.IsHostReachable(BaseUrl))
@@ -191,6 +204,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
             else
             {
+                instrumentlist.Clear();
                 using (var http = new HttpClient())
                 {
                     //http.MaxResponseContentBufferSize = 256000;
@@ -206,7 +220,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     //coin.LogoFileName = ((string)elem["id"] + ".png");
                     var p = new Price(coin);
                     coin.MarketPrice = p;
-                    coins.Attach(coin);
+                    instrumentlist.Attach(coin);
                     FetchCoinLogo(coin.Id, false);
                 }
 
@@ -217,11 +231,11 @@ namespace CryptoAccouting.CoreClass.APIClass
         private static void FetchCoinLogo(string InstrumentID, bool ForceRefresh)
         {
             var filename = InstrumentID + ".png";
-            string TargetUri = "https://files.coinmarketcap.com/static/img/coins/32x32/" + filename;
+            string TargetUri = "http://bridgeplace.sakura.ne.jp/cryptoticker/images/" + filename;
 
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Images");
 
-            if (!File.Exists(path))
+            if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }

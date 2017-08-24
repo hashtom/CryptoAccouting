@@ -60,6 +60,11 @@ namespace CryptoAccouting.CoreClass
 			storages.RemoveAll(x => x.Code == storage.Code);
 		}
 
+        public void Clear()
+        {
+            storages.Clear();
+        }
+
         public CoinStorage GetByIndex(int indexNumber)
 		{
 			return storages[indexNumber];

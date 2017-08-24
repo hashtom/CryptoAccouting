@@ -1,7 +1,7 @@
 ﻿using Foundation; using System; using UIKit; using CryptoAccouting.CoreClass; using CryptoAccouting.UIClass; using System.Collections.Generic; using System.Threading.Tasks; using System.Linq;  namespace CryptoAccouting {     public partial class BalanceMainViewController : CryptoTableViewController     {
-        //private NavigationDrawer menu;          public BalanceMainViewController(IntPtr handle) : base(handle)         {
-        }           public override void ViewDidLoad()         {             base.ViewDidLoad();              // Instantiate Controllers             AppSetting.balanceMainViewC = this;             AppSetting.transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             AppSetting.plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             AppSetting.perfViewC = this.Storyboard.InstantiateViewController("PerfViewC") as PerfomViewController;             AppSetting.settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             //menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);
-             if (ApplicationCore.InitializeCore() != EnuAppStatus.Success){                 this.PopUpWarning("some issue!!");             }              // Configure Segmented control             ConfigureSegmentButton();              // Configure Table source             TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");             TableView.Source = new CoinTableSource(ApplicationCore.Balance, this);             //await ApplicationCore.LoadCoreDataAsync();             //await ApplicationCore.FetchMarketDataFromBalanceAsync();
+        //private NavigationDrawer menu;
+        Balance mybalance;          public BalanceMainViewController(IntPtr handle) : base(handle)         {
+        }          public override void ViewDidLoad()         {             base.ViewDidLoad();              // Instantiate Controllers             AppSetting.balanceMainViewC = this;             AppSetting.transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             AppSetting.plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             AppSetting.perfViewC = this.Storyboard.InstantiateViewController("PerfViewC") as PerfomViewController;             AppSetting.settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             //menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);              if (ApplicationCore.InitializeCore() != EnuAppStatus.Success)             {                 this.PopUpWarning("some issue!!");                 this.mybalance = new Balance();             }             else             {                 this.mybalance = ApplicationCore.Balance;             }              // Configure Segmented control             ConfigureSegmentButton();              // Configure Table source             TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");             TableView.Source = new CoinTableSource(mybalance.BalanceByCoin, this);             //await ApplicationCore.LoadCoreDataAsync();             //await ApplicationCore.FetchMarketDataFromBalanceAsync();
         }          public async override void ViewWillAppear(bool animated)         {
             base.ViewWillAppear(animated);             await ApplicationCore.LoadCoreDataAsync();             await ApplicationCore.FetchMarketDataFromBalanceAsync();              ReDrawScreen();             TableView.ReloadData();
 		}          public override void ViewDidAppear(bool animated)
@@ -42,11 +42,11 @@
                 {
                     case 0:
                         TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");
-                        TableView.Source = new CoinTableSource(ApplicationCore.Balance, this);
+                        TableView.Source = new CoinTableSource(mybalance.BalanceByCoin, this);
                         break;
                     case 1:
                         TableView.RegisterNibForCellReuse(CoinStorageViewCell.Nib, "CoinStorageViewCell");
-                        TableView.Source = new CoinStorageTableSource(ApplicationCore.Balance.GetStorageList(), this);
+                        TableView.Source = new CoinStorageTableSource(mybalance.CoinStorageList, this);
                         break;
                     case 2:
                         //TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "BookingTestViewCell");
@@ -57,7 +57,10 @@
                         break;
                 }
                 TableView.ReloadData();
-            };          }          public override void ReDrawScreen()         {                         if (ApplicationCore.Balance != null)             {                 labelCcy.Text = ApplicationCore.BaseCurrency.ToString();                 labelTotalFiat.Text = String.Format("{0:n0}", ApplicationCore.Balance.LatestFiatValueBase(ApplicationCore.USDCrossRate));                 labelTotalBTC.Text = String.Format("{0:n2}", ApplicationCore.Balance.AmountBTC());                 //label1dPctBTC.Text = String.Format("{0:n2}", ApplicationCore.Balance.1dPctBTC();                 ApplicationCore.Balance.SortPositionByHolding();             }         } 
+            };          }          public override void ReDrawScreen()         {
+            if (ApplicationCore.Balance != null)             {                 labelCcy.Text = ApplicationCore.BaseCurrency.ToString();                 labelTotalFiat.Text = String.Format("{0:n0}", mybalance.LatestFiatValueBase(ApplicationCore.USDCrossRate));                 labelTotalBTC.Text = String.Format("{0:n2}", mybalance.AmountBTC());
+                mybalance.BalanceByCoin.SortPositionByHolding();
+            }         } 
         partial void ButtonAddNew_Activated(UIBarButtonItem sender)
         {
             PushSelectionView();
@@ -65,7 +68,7 @@
 
         partial void ButtonRefresh_Activated(UIBarButtonItem sender)
 		{
-           //ApplicationCore.FetchMarketDataFromBalance();
+           //ApplicationCore.FetchMarketDataFromBalance();             mybalance.BalanceByCoin.SortPositionByHolding();             TableView.ReloadData();
 		}          private void PushSelectionView()
         {
             List<SelectionSearchItem> searchitems = new List<SelectionSearchItem>();             foreach (var item in ApplicationCore.InstrumentListAll(true))

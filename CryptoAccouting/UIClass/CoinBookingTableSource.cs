@@ -14,18 +14,17 @@ namespace CryptoAccouting.UIClass
         string symbol_selected;
 		NSString cellIdentifier = new NSString("BookingViewCell");
 		CryptoTableViewController owner;
-		//List<Position> bookingPositions;
 
-        public CoinBookingTableSource(string symbol, CryptoTableViewController owner)
+        public CoinBookingTableSource(string symbol, Balance myBalance, CryptoTableViewController owner)
         {
-            this.myBalance = ApplicationCore.Balance;
+            this.myBalance = myBalance;
             this.owner = owner;
             symbol_selected = symbol;
         }
 
         private List<Position> BookingPositions()
         {
-            return myBalance.positions.Where(x => x.Coin.Symbol == symbol_selected).ToList();
+            return myBalance.Where(x => x.Coin.Symbol == symbol_selected).ToList();
         }
 
 		public override nint RowsInSection(UITableView tableview, nint section)
@@ -88,6 +87,7 @@ namespace CryptoAccouting.UIClass
                 case UITableViewCellEditingStyle.Delete:
                     //tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
                     myBalance.Detach(BookingPositions()[indexPath.Row]);
+                    myBalance.ReCalculate();
                     break;
 
                 case UITableViewCellEditingStyle.None:
@@ -103,12 +103,12 @@ namespace CryptoAccouting.UIClass
 		public static UIView BuidBlanceViewHeader(UITableView tv)
 		{
 
-			UILabel codeLabel, amountLabel, priceLabel, pctLabel;
+			//UILabel codeLabel, amountLabel, priceLabel, pctLabel;
 
 			UIView view = new UIView(new System.Drawing.RectangleF(0, 0, (float)tv.Frame.Width, 20));
 			view.BackgroundColor = UIColor.Gray;
 
-			codeLabel = new UILabel()
+			var codeLabel = new UILabel()
 			{
 				Font = UIFont.FromName("ArialMT", 12f),
 				TextColor = UIColor.White,
@@ -118,7 +118,7 @@ namespace CryptoAccouting.UIClass
 				Text = "Coin"
 			};
 
-			amountLabel = new UILabel()
+			var amountLabel = new UILabel()
 			{
 				Font = UIFont.FromName("ArialMT", 12f),
 				TextColor = UIColor.White,
@@ -128,7 +128,7 @@ namespace CryptoAccouting.UIClass
 				Text = "Holdings"
 			};
 
-			priceLabel = new UILabel()
+			var priceLabel = new UILabel()
 			{
 				Font = UIFont.FromName("ArialMT", 12f),
 				TextColor = UIColor.White,
@@ -138,7 +138,7 @@ namespace CryptoAccouting.UIClass
 				Text = "Book"
 			};
 
-			pctLabel = new UILabel()
+			var exchangeLabel = new UILabel()
 			{
 				Font = UIFont.FromName("ArialMT", 12f),
 				TextColor = UIColor.White,
@@ -148,7 +148,19 @@ namespace CryptoAccouting.UIClass
 				Text = "Exchange"
 			};
 
-			view.AddSubviews(new UIView[] { codeLabel, amountLabel, priceLabel, pctLabel });
+			var storageLabel = new UILabel()
+			{
+				Font = UIFont.FromName("ArialMT", 12f),
+				TextColor = UIColor.White,
+				TextAlignment = UITextAlignment.Left,
+				Frame = new System.Drawing.RectangleF(300, 0, 60, 20),
+				BackgroundColor = UIColor.Clear,
+				Text = "Storage"
+			};
+
+
+
+            view.AddSubviews(new UIView[] { codeLabel, amountLabel, priceLabel, exchangeLabel, storageLabel });
 			return view;
 		}
 	}
