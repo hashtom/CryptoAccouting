@@ -138,7 +138,7 @@ namespace CryptoAccouting.UIClass
                 TextAlignment = UITextAlignment.Left,
                 Frame = new System.Drawing.RectangleF(300, 0, 40, 20),
                 BackgroundColor = UIColor.Clear,
-                Text = "Return"
+                Text = "Weight"
             };
 
             view.AddSubviews(new UIView[] { codeLabel, amountLabel, valueLabel, pctLabel });

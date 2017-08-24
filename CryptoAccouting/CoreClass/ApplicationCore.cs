@@ -1,5 +1,5 @@
 ﻿﻿using System; using System.Collections.Generic; using System.Linq;
-//using System.Xml.Serialization; using System.Threading.Tasks; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         public static Balance Balance { get; private set; }         private static EnuCCY baseCurrency;         private static InstrumentList InstrumentList;         //public static CoinStorageList StorageList { get; private set; }
+//using System.Xml.Serialization; using System.Threading.Tasks; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         public static Balance Balance { get; private set; }         private static EnuCCY baseCurrency;         public static InstrumentList InstrumentList { get; private set; }         //public static CoinStorageList StorageList { get; private set; }
         public static ExchangeList PublicExchangeList { get; private set; }          public static CrossRate USDCrossRate { get; private set; }         private static bool HasCrossRateUpdated = false;          public static EnuCCY BaseCurrency
         {             get
             {
@@ -60,14 +60,14 @@
             {                 return null;             }
          }
 
-        public static InstrumentList InstrumentListAll(bool OnlyActive)
-        {
-            if (!OnlyActive)
-            {                 return InstrumentList;             }
-            else
-            {                 var list = new InstrumentList();                 InstrumentList.Where(x => x.IsActive is true).ToList().ForEach(x => list.Attach(x));
-                return list;             }
-        }          public static CoinStorageList GetStorageList()
+        //public static InstrumentList InstrumentList()
+        //{
+            //if (!OnlyActive)
+            //{             //    return InstrumentList;             //}
+            //else
+            //{                 //var list = new InstrumentList();                 //InstrumentList.Where(x => x.IsActive is true).ToList().ForEach(x => list.Attach(x));
+                //return list;             //}
+        //}          public static CoinStorageList GetStorageList()
         {             return Balance is null ? null : Balance.CoinStorageList;         }          //public static CoinStorage GetCoinStorage(string code, EnuCoinStorageType storagetype)         //{         //    return Balance is null ? null : StorageList().GetCoinStorage(code, storagetype);         //}          public static async Task LoadTradeListsAsync(string ExchangeCode, bool isAggregatedDaily = true, bool readfromFile = false)
         {
             var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              exchange.TradeList = await ExchangeAPI.FetchTradeListAsync(exchange, isAggregatedDaily, readfromFile);             PublicExchangeList.Attach(exchange);              //return exchange.TradeLists;         }          public static Exchange GetExchange(string Code)

@@ -12,14 +12,14 @@ namespace CryptoAccouting.CoreClass
         public string Name { get; }
         public InstrumentType Type { get; set; }
 		public Price MarketPrice { get; set; }
-        public bool IsActive { get; set; }
+        //public bool IsActive { get; set; }
 
         public Instrument(string id, string symbol, string name)
         {
             Id = id;
             Symbol = symbol;
             Name = name;
-            IsActive = true;
+            //IsActive = false;
         }
 
         public Balance BalanceOnInstrument(Balance totalbalance)

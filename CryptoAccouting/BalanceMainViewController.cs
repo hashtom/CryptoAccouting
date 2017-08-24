@@ -71,7 +71,7 @@
            //ApplicationCore.FetchMarketDataFromBalance();             mybalance.BalanceByCoin.SortPositionByHolding();             TableView.ReloadData();
 		}          private void PushSelectionView()
         {
-            List<SelectionSearchItem> searchitems = new List<SelectionSearchItem>();             foreach (var item in ApplicationCore.InstrumentListAll(true))
+            List<SelectionSearchItem> searchitems = new List<SelectionSearchItem>();             foreach (var item in ApplicationCore.InstrumentList)
             {                 SelectionSearchItem searchitem = new SelectionSearchItem()
                 {                     SearchItem1 = item.Symbol,                     SearchItem2 = item.Name,                     ImageFile = item.Id + ".png",                     SortOrder = item.rank                 };                 searchitems.Add(searchitem);             } 
 			var SymbolSelectionViewC = Storyboard.InstantiateViewController("SymbolSelectionViewC") as SymbolSelectionViewConroller;

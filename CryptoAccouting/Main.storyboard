@@ -13,7 +13,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--CoinTicker-->
+        <!--Coin Tracker-->
         <scene sceneID="709">
             <objects>
                 <tableViewController storyboardIdentifier="BalanceViewC" id="710" customClass="BalanceMainViewController" sceneMemberID="viewController">
@@ -124,7 +124,7 @@
                         </connections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="CoinTicker" id="859">
+                    <navigationItem key="navigationItem" title="Coin Tracker" id="859">
                         <barButtonItem key="backBarButtonItem" title="Back" id="15942"/>
                         <rightBarButtonItems>
                             <barButtonItem systemItem="refresh" id="19986">
@@ -468,7 +468,7 @@
             </objects>
             <point key="canvasLocation" x="961" y="1985"/>
         </scene>
-        <!--Title-->
+        <!--損益レポート-->
         <scene sceneID="17627">
             <objects>
                 <tableViewController storyboardIdentifier="PLViewC" id="17628" customClass="PLTableViewController" sceneMemberID="viewController">
@@ -1329,7 +1329,7 @@
                             <outlet property="delegate" destination="17628" id="17631"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Title" id="22929"/>
+                    <navigationItem key="navigationItem" title="損益レポート" id="22929"/>
                     <connections>
                         <outlet property="ButtonCryptCurrency" destination="18294" id="name-outlet-18294"/>
                         <outlet property="ButtonFiatCurrency" destination="18257" id="name-outlet-18257"/>

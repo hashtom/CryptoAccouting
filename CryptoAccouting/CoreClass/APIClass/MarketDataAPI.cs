@@ -11,9 +11,8 @@ namespace CryptoAccouting.CoreClass.APIClass
 {
     public static class MarketDataAPI
     {
-        //Obtain market data from coinmarketcap API
 
-        public static async Task<EnuAppStatus> FetchCoinMarketDataAsync(InstrumentList coins)
+        public static async Task<EnuAppStatus> FetchCoinMarketDataAsync(InstrumentList instrumentlist)
         {
             const string BaseUrl = "http://api.cryptocoincharts.info/";
             string rawjson;
@@ -26,19 +25,19 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
             else
             {
-                if (coins.Any(x => x.Symbol == "BTC"))
+                if (instrumentlist.Any(x => x.Symbol == "BTC"))
                 {
-                    var bitcoin = coins.Where(x => x.Symbol == "BTC").First();
-                    coins.Detach(bitcoin);
-                    coins.Insert(0, bitcoin);
+                    var bitcoin = instrumentlist.Where(x => x.Symbol == "BTC").First();
+                    instrumentlist.Detach(bitcoin);
+                    instrumentlist.Insert(0, bitcoin);
                 }
                 else{
-                    coins.Insert(0, ApplicationCore.GetInstrument("BTC"));
+                    instrumentlist.Insert(0, ApplicationCore.GetInstrument("BTC"));
                 }
 
-                foreach (var paircoin in coins.Where(x=>x.Symbol!="BTC"))
+                foreach (var paircoin in instrumentlist.Where(x=>x.Symbol!="BTC"))
 				{
-                    pairs = pairs + "," + paircoin.Id.ToLower() + "_btc";
+                    pairs = pairs + "," + paircoin.Symbol.ToLower() + "_btc";
 				}
 
 				var parameters = new Dictionary<string, string>();
@@ -74,9 +73,9 @@ namespace CryptoAccouting.CoreClass.APIClass
                         symobl = idstring.Replace("btc", "").Replace("/", "").Replace("¥", "").ToUpper();
                     }
 
-                    if (coins.Any(x => x.Symbol == symobl))
+                    if (instrumentlist.Any(x => x.Symbol == symobl))
                     {
-                        var coin = coins.Where(x => x.Symbol == symobl).First();
+                        var coin = instrumentlist.Where(x => x.Symbol == symobl).First();
 
                         if (coin.MarketPrice == null)
                         {
@@ -102,10 +101,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static async Task<EnuAppStatus> FetchCoinMarketDataAsync(Instrument coin, Instrument bitcoin=null )
         {
-
-            string rawjson;
             //const string CoinMarketUrl = "https://api.coinmarketcap.com/v1/ticker/";
-
    //         if (!Reachability.IsHostReachable(CoinMarketUrl))
    //         {
    //             return EnuAppStatus.FailureNetwork;
@@ -141,6 +137,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
 			//}
 
+            string rawjson;
 			string CoinChartsUrl = "http://api.cryptocoincharts.info/tradingPair/";
             JObject json;
 
@@ -162,7 +159,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     coin.MarketPrice = p;
                 }
 
-                CoinChartsUrl = (coin.Symbol == "BTC") ? CoinChartsUrl + "btc_usd" : CoinChartsUrl + coin.Id.ToLower() + "_btc";
+                CoinChartsUrl = (coin.Symbol == "BTC") ? CoinChartsUrl + "btc_usd" : CoinChartsUrl + coin.Symbol.ToLower() + "_btc";
 
                 using (var http = new HttpClient())
                 {
@@ -171,7 +168,8 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 json = await Task.Run(() => JObject.Parse(rawjson));
 
-                if ((string)json["id"] != "null")
+                var id = (string)json["id"];
+                if (id != null)
                 {
                     //coin.MarketPrice.SourceCurrency = coin.Symbol == "BTC" ? EnuCCY.USD : EnuCCY.BTC;
                     coin.MarketPrice.LatestPriceBTC = coin.Symbol == "BTC" ? 1 : (double)json["price"];
@@ -215,13 +213,16 @@ namespace CryptoAccouting.CoreClass.APIClass
                 //Parse Market Data 
                 foreach (var elem in jarray)
                 {
-                    var coin = new Instrument((string)elem["id"], (string)elem["symbol"], (string)elem["name"]);
-                    coin.rank = int.Parse((string)elem["rank"]);
-                    //coin.LogoFileName = ((string)elem["id"] + ".png");
-                    var p = new Price(coin);
-                    coin.MarketPrice = p;
-                    instrumentlist.Attach(coin);
-                    FetchCoinLogo(coin.Id, false);
+                    if ((bool)elem["active"])
+                    {
+                        var coin = new Instrument((string)elem["id"], (string)elem["symbol"], (string)elem["name"]);
+                        coin.rank = int.Parse((string)elem["rank"]);
+
+                        var p = new Price(coin);
+                        coin.MarketPrice = p;
+                        instrumentlist.Attach(coin);
+                        FetchCoinLogo(coin.Id, false);
+                    }
                 }
 
                 return EnuAppStatus.Success;
@@ -295,7 +296,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                     if (listing.ToList().Count() == 0)
                     {
-                        ApplicationCore.InstrumentListAll(true).ToList().ForEach(x => exchange.AttachListedCoin(x));
+                        ApplicationCore.InstrumentList.ToList().ForEach(x => exchange.AttachListedCoin(x));
                     }
                     else
                     {
@@ -348,7 +349,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 					if (!Enum.TryParse(cursymbol.Replace("=X", ""), out baseccy))
                         continue;
 
-                    if (baseccy == ApplicationCore.BaseCurrency)
+                    if (baseccy == BaseCurrency)
                     {
                         crossrate = new CrossRate(baseccy, (double)ccy["resource"]["fields"]["price"], DateTime.Now.Date);
                         break;
