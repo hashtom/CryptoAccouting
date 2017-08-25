@@ -32,18 +32,18 @@ namespace CryptoAccouting.CoreClass
             return positions.Sum(x => x.LatestFiatValueUSD());
         }
 
-		public double LatestFiatValueBase(CrossRate CrossRate)
+		public double LatestFiatValueBase()
 		{
-            return positions.Sum(x => x.LatestFiatValueBase(CrossRate));
+            return positions.Sum(x => x.LatestFiatValueBase());
 		}
 
 		public double AmountBTC()
 		{
-            return positions.Sum(x => x.AmountBTC());
+            return positions.Sum(x => x.LatestAmountBTC());
 		}
 
         public void SortPositionByHolding(){
-            positions = positions.OrderByDescending(x => x.AmountBTC()).ToList();
+            positions = positions.OrderByDescending(x => x.LatestAmountBTC()).ToList();
         }
 
         private void ReloadBalanceByCoin()
@@ -87,9 +87,10 @@ namespace CryptoAccouting.CoreClass
 					{
 						storage.AttachPosition(pos);
 					}
-					CoinStorageList.Attach(storage);
+					CoinStorageList.Attach(storage, false);
 				}
 			}
+            CoinStorageList.RecalculateWeights();
 
 		}
 

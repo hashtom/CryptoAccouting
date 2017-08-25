@@ -56,9 +56,13 @@ namespace CryptoAccouting.CoreClass.APIClass
                         {
                             Id = int.Parse(elem.Attribute("id").Value),
                             Amount = double.Parse(elem.Element("amount").Value),
-                            BookPriceUSD = double.Parse(elem.Element("book").Value),
+                            AmountBTC = elem.Element("amountbtc") == null ? 0 : double.Parse(elem.Element("amountbtc").Value),
+                            BookPriceUSD = elem.Element("book") == null ? 0 : double.Parse(elem.Element("book").Value),
                             BalanceDate = DateTime.Parse(elem.Element("date").Value),
-                            BookedExchange = tradedexchange //(EnuExchangeType)Enum.Parse(typeof(EnuExchangeType), elem.Descendants("exchange").Select(x => x.Value).First())
+                            BookedExchange = tradedexchange, //(EnuExchangeType)Enum.Parse(typeof(EnuExchangeType), elem.Descendants("exchange").Select(x => x.Value).First())
+                            PriceUSD = elem.Element("priceusd") == null ? 0 : double.Parse(elem.Element("priceusd").Value),
+                            PriceBTC = elem.Element("pricebtc") == null ? 0 : double.Parse(elem.Element("pricebtc").Value),
+                            PriceBase = elem.Element("pricebase") == null ? 0 : double.Parse(elem.Element("pricebase").Value)
                         };
 
                         EnuCoinStorageType storagetype;
@@ -116,10 +120,14 @@ namespace CryptoAccouting.CoreClass.APIClass
                                                  new XElement("symbol", pos.Coin.Symbol),
                                                  new XElement("date", pos.BalanceDate),
                                                  new XElement("amount", pos.Amount.ToString()),
+                                                 new XElement("amountbtc", pos.LatestAmountBTC().ToString()),
                                                  new XElement("book", pos.BookPriceUSD.ToString()),
                                                  new XElement("exchange", pos.BookedExchange == null ? "" : pos.BookedExchange.Code),
                                                  new XElement("storage", pos.CoinStorage == null ? "" : pos.CoinStorage.Code),
-                                                 new XElement("storagetype", pos.CoinStorage == null ? "" : pos.CoinStorage.StorageType.ToString())
+                                                 new XElement("storagetype", pos.CoinStorage == null ? "" : pos.CoinStorage.StorageType.ToString()),
+                                                 new XElement("priceusd", pos.LatestPriceUSD().ToString()),
+                                                 new XElement("pricebtc", pos.LatestPriceBTC().ToString()),
+                                                 new XElement("pricebase", pos.LatestPriceBase().ToString())
                                                 );
 				balance.Add(position);
 			}

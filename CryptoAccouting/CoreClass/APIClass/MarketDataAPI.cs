@@ -12,7 +12,7 @@ namespace CryptoAccouting.CoreClass.APIClass
     public static class MarketDataAPI
     {
 
-        public static async Task<EnuAppStatus> FetchCoinMarketDataAsync(InstrumentList instrumentlist)
+        public static async Task<EnuAppStatus> FetchCoinMarketDataAsync(InstrumentList instrumentlist, CrossRate crossrate)
         {
             const string BaseUrl = "http://api.cryptocoincharts.info/";
             string rawjson;
@@ -90,6 +90,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                         coin.MarketPrice.PriceUSDBefore24h = coin.Symbol == "BTC" ? (double)jrow["price_before_24h"] : (double)jrow["price_before_24h"] * (double)jarray[0]["price_before_24h"];
                         coin.MarketPrice.DayVolume = (double)jrow["volume_btc"];
                         coin.MarketPrice.PriceDate = DateTime.Now;
+                        coin.MarketPrice.USDCrossRate = crossrate;
                     }
 
                 }
@@ -216,6 +217,8 @@ namespace CryptoAccouting.CoreClass.APIClass
                     if ((bool)elem["active"])
                     {
                         var coin = new Instrument((string)elem["id"], (string)elem["symbol"], (string)elem["name"]);
+                        //IOTA symbol注意
+
                         coin.rank = int.Parse((string)elem["rank"]);
 
                         var p = new Price(coin);

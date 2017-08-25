@@ -27,7 +27,7 @@ namespace CryptoAccouting.CoreClass
 			foreach (EnuCoinStorageType storagetype in Enum.GetValues(typeof(EnuCoinStorageType)))
 			{
                 var storage = new CoinStorage(storagetype.ToString(), storagetype);
-                list.Attach(storage);
+                list.Attach(storage, false);
 			}
             return list;
         }
@@ -49,15 +49,23 @@ namespace CryptoAccouting.CoreClass
 		//	return storages.First(x => x.Code == Code);
 		//}
 
-        public void Attach(CoinStorage storage)
+        public void RecalculateWeights()
+        {
+            double sum = storages.Sum(x => x.AmountBTC());
+            storages.ForEach(w=>w.Weight = w.AmountBTC() / sum);
+        }
+
+        public void Attach(CoinStorage storage, bool recalculate = true)
 		{
 			if (storages.Any(x => x.Code == storage.Code)) Detach(storage);
 			storages.Add(storage);
+            if (recalculate) RecalculateWeights();
 		}
 
-		public void Detach(CoinStorage storage)
+        public void Detach(CoinStorage storage, bool recalculate = true)
 		{
 			storages.RemoveAll(x => x.Code == storage.Code);
+            if (recalculate) RecalculateWeights();
 		}
 
         public void Clear()

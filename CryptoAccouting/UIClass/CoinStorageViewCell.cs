@@ -23,10 +23,10 @@ namespace CryptoAccouting.UIClass
         public void UpdateCell(CoinStorage storage)
 		{
             
-            labelExchange.Text = storage.Name; // pos.BookedExchange.Name;
+            labelExchange.Text = storage.Name;
             labelHoldingBTC.Text = "฿" + String.Format("{0:n2}", storage.AmountBTC());
-            labelValueK.Text = String.Format("{0:n2}", storage.LatestFiatValueBase(ApplicationCore.USDCrossRate));
-            labelRet.Text = "%";
+            labelValueK.Text = String.Format("{0:n2}", storage.LatestFiatValueBase());
+            labelRet.Text = String.Format("{0:n2}", storage.Weight * 100) + "%";
 		}
     }
 }

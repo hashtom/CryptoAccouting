@@ -29,7 +29,7 @@
             if (Balance != null)
             {                 var mycoins = new InstrumentList();
                 Balance.Select(x => x.Coin).Distinct().ToList().ForEach(x => mycoins.Attach(x));
-                return await MarketDataAPI.FetchCoinMarketDataAsync(mycoins);
+                return await MarketDataAPI.FetchCoinMarketDataAsync(mycoins, USDCrossRate);
             }
             else
             {                 return EnuAppStatus.NotAvailable;             }

@@ -27,14 +27,14 @@ namespace CryptoAccouting.UIClass
             labelSymbol.Text = pos.Coin.Symbol;
 
             if (pos.Coin.Symbol is "BTC"){
-                labelPrice.Text = String.Format("{0:n}", pos.LatestPriceBase(ApplicationCore.USDCrossRate));
+                labelPrice.Text = "$" + String.Format("{0:n}", pos.LatestPriceUSD());
                 labelHolding.Text = "";
-                labelHoldingBTC.Text = "฿" + String.Format("{0:n4}", pos.AmountBTC());
-                labelMemo.Text = String.Format("{0:n2}", pos.SourceRet1d()) + " %";
+                labelHoldingBTC.Text = "฿" + String.Format("{0:n4}", pos.LatestAmountBTC());
+                labelMemo.Text = String.Format("{0:n2}", pos.LatestSourceRet1d()) + " %";
             }else{
                 labelPrice.Text = "฿" + String.Format("{0:n8}", pos.LatestPriceBTC());
                 labelHolding.Text = String.Format("{0:n2}", pos.Amount);
-                labelHoldingBTC.Text = "฿" + String.Format("{0:n4}", pos.AmountBTC());
+                labelHoldingBTC.Text = "฿" + String.Format("{0:n4}", pos.LatestAmountBTC());
                 labelMemo.Text = String.Format("{0:n2}", pos.BTCRet1d()) + " %";
             }
 
@@ -50,7 +50,7 @@ namespace CryptoAccouting.UIClass
                 ImageView.Image = logo == null ? null : UIImage.FromFile(logo);
                 //imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
 
-                labelValue.Text = String.Format("{0:n2}", pos.LatestFiatValueBase(ApplicationCore.USDCrossRate));
+                labelValue.Text = String.Format("{0:n2}", pos.LatestFiatValueBase());
             }
 
 		}

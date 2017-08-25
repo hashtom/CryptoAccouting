@@ -11,6 +11,7 @@ namespace CryptoAccouting.UIClass
     public class CoinTableSource : UITableViewSource
     {
         Balance myBalance;
+        Balance balanceByCoin;
         //List<Instrument> coins;
         NSString cellIdentifier = new NSString("CoinViewCell");
         CryptoTableViewController owner;
@@ -18,13 +19,14 @@ namespace CryptoAccouting.UIClass
         public CoinTableSource(Balance mybalance, CryptoTableViewController owner)
         {
             this.myBalance = mybalance;
+            this.balanceByCoin = mybalance.BalanceByCoin;
             this.owner = owner;
             //this.coins = myBalance is null ? new List<Instrument>() : myBalance.Select(x => x.Coin).Distinct().ToList();
         }
 
         public override nint RowsInSection(UITableView tableview, nint section)
         {
-            return myBalance.Count();
+            return balanceByCoin.Count();
             //return coins.Count();
         }
 
@@ -37,14 +39,14 @@ namespace CryptoAccouting.UIClass
             //cell = new CustomBalanceCell (cellIdentifier);
 
             var cell = (CoinViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
-            cell.UpdateCell(myBalance.GetByIndex(indexPath.Row), false);
+            cell.UpdateCell(balanceByCoin.GetByIndex(indexPath.Row), false);
 
             return cell;
         }
         public Position GetItem(int id)
         {
             //return coins[id].TotalPosition();
-            return myBalance.GetByIndex(id);
+            return balanceByCoin.GetByIndex(id);
         }
 
 		public override bool CanMoveRow(UITableView tableView, NSIndexPath indexPath)

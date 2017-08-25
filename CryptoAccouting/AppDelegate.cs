@@ -1,5 +1,6 @@
 ﻿using Foundation;
 using UIKit;
+using CryptoAccouting.CoreClass;
 
 namespace CryptoAccouting
 {
@@ -52,7 +53,11 @@ namespace CryptoAccouting
 
         public override void WillTerminate(UIApplication application)
         {
-            // Called when the application is about to terminate. Save data, if needed. See also DidEnterBackground.
+			// Called when the application is about to terminate. Save data, if needed. See also DidEnterBackground.
+			ApplicationCore.SaveAppSetting();
+			ApplicationCore.SaveMyBalanceXML();
+			ApplicationCore.SaveInstrumentXML();
+			ApplicationCore.SaveMarketDataXML();
         }
     }
 }

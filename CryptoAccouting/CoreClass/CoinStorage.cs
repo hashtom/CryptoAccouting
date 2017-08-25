@@ -8,6 +8,7 @@ namespace CryptoAccouting.CoreClass
     {
 		public string Code { get; set; }
 		public string Name { get; set; }
+        public double Weight { get; set; }
         public EnuCoinStorageType StorageType { get; set; }
         public Balance BalanceOnStorage { get; private set; }
 
@@ -44,9 +45,9 @@ namespace CryptoAccouting.CoreClass
             return BalanceOnStorage.LatestFiatValueUSD();
         }
 
-		public double LatestFiatValueBase(CrossRate crossrate)
+		public double LatestFiatValueBase()
 		{
-			return BalanceOnStorage.LatestFiatValueBase(crossrate);
+			return BalanceOnStorage.LatestFiatValueBase();
 		}
 
     }

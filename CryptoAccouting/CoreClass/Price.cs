@@ -12,6 +12,7 @@ namespace CryptoAccouting.CoreClass
         public double PriceUSDBefore24h { get; set; }
         public double DayVolume { get; set; }
         public double MarketCap { get; set; }
+        public CrossRate USDCrossRate { get; set; }
         //public double SourceRet1h { get; set; }
         //public double SourceRet1d { get; set; }
         //public double SourceRet7d { get; set; }
@@ -26,17 +27,17 @@ namespace CryptoAccouting.CoreClass
             LatestPriceUSD = 0;
         }
 
-        public double LatestPriceBase(CrossRate USDCrossRate)
+        public double LatestPriceBase()
         {
             return (USDCrossRate is null) ? 0 : LatestPriceUSD * USDCrossRate.Rate;
         }
 
-        public double MarketCapBase(CrossRate USDCrossRate)
+        public double MarketCapBase()
         {
             return (USDCrossRate is null) ? 0 : MarketCap * USDCrossRate.Rate;
         }
 
-        public double Ret1dBase(CrossRate USDCrossRate)
+        public double Ret1dBase()
         {
             return (USDCrossRate is null) ? 0 : ((LatestPriceUSD * USDCrossRate.Rate) / (PriceUSDBefore24h * USDCrossRate.RateBefore24h) - 1) * 100;
         }
