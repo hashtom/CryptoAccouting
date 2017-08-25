@@ -65,9 +65,9 @@
             PushSelectionView();
         }
 
-        partial void ButtonRefresh_Activated(UIBarButtonItem sender)
+        async partial void ButtonRefresh_Activated(UIBarButtonItem sender)
 		{
-           //ApplicationCore.FetchMarketDataFromBalance();             mybalance.BalanceByCoin.SortPositionByHolding();             TableView.ReloadData();
+            await ApplicationCore.FetchMarketDataFromBalanceAsync();             //mybalance.BalanceByCoin.SortPositionByHolding();             TableView.ReloadData();
 		}          private void PushSelectionView()
         {
             List<SelectionSearchItem> searchitems = new List<SelectionSearchItem>();             foreach (var item in ApplicationCore.InstrumentList)

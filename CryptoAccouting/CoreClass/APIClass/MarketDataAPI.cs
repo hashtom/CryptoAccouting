@@ -169,8 +169,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 json = await Task.Run(() => JObject.Parse(rawjson));
 
-                var id = (string)json["id"];
-                if (id != null)
+                if (json["id"] != null)
                 {
                     //coin.MarketPrice.SourceCurrency = coin.Symbol == "BTC" ? EnuCCY.USD : EnuCCY.BTC;
                     coin.MarketPrice.LatestPriceBTC = coin.Symbol == "BTC" ? 1 : (double)json["price"];
@@ -179,10 +178,6 @@ namespace CryptoAccouting.CoreClass.APIClass
                     coin.MarketPrice.PriceUSDBefore24h = coin.Symbol == "BTC" ? (double)json["price_before_24h"] : (double)json["price_before_24h"] * bitcoin.MarketPrice.PriceUSDBefore24h;
                     coin.MarketPrice.DayVolume = (double)json["volume_btc"];
                     coin.MarketPrice.PriceDate = DateTime.Now;
-                }
-                else
-                {
-                    Console.WriteLine("null!!");
                 }
 
 			}
