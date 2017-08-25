@@ -60,8 +60,17 @@ namespace CryptoAccouting.CoreClass
             foreach (var symbol in positions.Select(x => x.Coin.Symbol).Distinct())
             {
                 var amount = positions.Where(x => x.Coin.Symbol == symbol).Sum(x => x.Amount);
+                var amountbtc = positions.Where(x => x.Coin.Symbol == symbol).Sum(x => x.LatestAmountBTC());
                 var bookprice = positions.Where(x => x.Coin.Symbol == symbol).Sum(x => x.BookPriceUSD);
-                var position = new Position(positions.Select(x => x.Coin).First(x => x.Symbol == symbol)) { Amount = amount, BookPriceUSD = bookprice };
+                var position = new Position(positions.Select(x => x.Coin).First(x => x.Symbol == symbol))
+                {
+                    Amount = amount,
+                    AmountBTC = amountbtc,
+                    BookPriceUSD = bookprice,
+                    PriceBTC = positions.Where(x => x.Coin.Symbol == symbol).Select(x => x.LatestPriceBTC()).First(),
+                    PriceUSD = positions.Where(x => x.Coin.Symbol == symbol).Select(x => x.LatestPriceUSD()).First(),
+                    PriceBase = positions.Where(x => x.Coin.Symbol == symbol).Select(x => x.LatestPriceBase()).First()
+                };
                 BalanceByCoin.Attach(position);
             }
 

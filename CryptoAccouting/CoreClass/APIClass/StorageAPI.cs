@@ -22,10 +22,16 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static string LoadFromJsonFile(string fileName)
         {
-
             var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var path = Path.Combine(documents, fileName);
-            return File.ReadAllText(path);
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+            else
+            {
+                return File.ReadAllText(path);
+            }
         }
 
         public static Balance LoadBalanceXML(string fileName, InstrumentList instrumentlist)

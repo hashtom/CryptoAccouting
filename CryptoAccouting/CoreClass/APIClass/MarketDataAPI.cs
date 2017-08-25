@@ -322,25 +322,27 @@ namespace CryptoAccouting.CoreClass.APIClass
 		{
             CrossRate crossrate = null;
 			string rawjson;
+            const string jsonfilename = "crossrate.json";
             const string BaseUri = "https://finance.yahoo.com/webservice/v1/symbols/allcurrencies/quote?format=json";
 
-			if (!Reachability.IsHostReachable(BaseUri))
-			{
-                return null;
-                //return EnuAppStatus.FailureNetwork;
-			}
-			else
-			{
-				using (var http = new HttpClient())
-				{
+            if (!Reachability.IsHostReachable(BaseUri))
+            {
+                rawjson = StorageAPI.LoadFromJsonFile(jsonfilename);
+                if (rawjson is null) return null;
+            }
+            else
+            {
+                using (var http = new HttpClient())
+                {
                     HttpResponseMessage response = await http.GetAsync(BaseUri);
-					if (!response.IsSuccessStatusCode)
-					{
+                    if (!response.IsSuccessStatusCode)
+                    {
                         return null;
                         //return EnuAppStatus.FailureNetwork;
-					}
+                    }
                     rawjson = await response.Content.ReadAsStringAsync();
-				}
+                }
+            }
 
 				var json = JObject.Parse(rawjson);
 
@@ -358,8 +360,9 @@ namespace CryptoAccouting.CoreClass.APIClass
                         break;
                     }
 				}
+                StorageAPI.SaveJsonFile(rawjson, jsonfilename);
 
-			}
+
 
             return crossrate;
 		}

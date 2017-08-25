@@ -23,7 +23,12 @@
             //Load FX
             if (!HasCrossRateUpdated)
             {
-                USDCrossRate = await MarketDataAPI.FetchUSDCrossRateAsync(BaseCurrency);                 HasCrossRateUpdated = true;             }              return EnuAppStatus.Success;         } 
+                USDCrossRate = await MarketDataAPI.FetchUSDCrossRateAsync(BaseCurrency);                 if (USDCrossRate is null)                 {
+                    return EnuAppStatus.NotAvailable;                 }
+                else
+                {
+                    HasCrossRateUpdated = true;                 }
+            }              return EnuAppStatus.Success;         } 
         public static async Task<EnuAppStatus> FetchMarketDataFromBalanceAsync()
         { 
             if (Balance != null)
