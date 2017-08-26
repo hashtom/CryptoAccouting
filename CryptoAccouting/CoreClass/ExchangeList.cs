@@ -14,11 +14,11 @@ namespace CryptoAccouting.CoreClass
             exchanges = new List<Exchange>();
         }
 
-        public TradeList GetTradelist(string exchangeCode)
+        public TradeList GetTradelist(string exchangecode)
         {
-            if (exchanges == null ? false : exchanges.Any(x => x.Code == exchangeCode))
+            if (exchanges != null && exchangecode != "" && exchanges.Any(x => x.Code == exchangecode))
             {
-                return this.First(x => x.Code == exchangeCode).TradeList;
+                return this.First(x => x.Code == exchangecode).TradeList;
             }
             else
             {
@@ -26,14 +26,21 @@ namespace CryptoAccouting.CoreClass
             }
         }
 
-        public Exchange GetExchange(string Code)
+        public Exchange GetExchange(string exchangecode)
         {
-            if (!exchanges.Any(x => x.Code == Code))
+            if (exchangecode != "")
             {
-                this.Attach(new Exchange(Code, EnuCoinStorageType.Exchange));
-            }
+                if (!exchanges.Any(x => x.Code == exchangecode))
+                {
+                    this.Attach(new Exchange(exchangecode, EnuCoinStorageType.Exchange));
+                }
 
-            return exchanges.First(x => x.Code == Code);
+                return exchanges.First(x => x.Code == exchangecode);
+            }
+            else
+            {
+                return null;
+            }
         }
 
   //      public Exchange GetExchange(string ExchangeName)

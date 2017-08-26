@@ -32,6 +32,7 @@ namespace CryptoAccouting
             base.ViewDidLoad();
             PrepareDatePicker();
 			InitializeUserInteractionStates();
+            ReDrawScreen();
 
             buttonExchange.TouchUpInside += (sender, e) =>
             {
@@ -59,13 +60,22 @@ namespace CryptoAccouting
 
                 foreach (var st in CoinStorageList.GetStorageListSelection())
                 {
-                    var walletname = st.StorageType != EnuCoinStorageType.Exchange ? st.Code + " Wallet" : st.Code;
+                    //var walletname = st.StorageType != EnuCoinStorageType.Exchange ? st.Code + " Wallet" : st.Code;
                     exchangeAlert.AddAction(UIAlertAction.Create(st.Code,
                                                                      UIAlertActionStyle.Default,
                                                                      (obj) =>
                                                                      {
-                                                                         buttonWallet.SetTitle(walletname, UIControlState.Normal);
-                                                                         thisStorage = st;
+                                                                         if (st.StorageType == EnuCoinStorageType.Exchange && thisExchange == null)
+                                                                         {
+                                                                             UIAlertController okAlertController = UIAlertController.Create("Alert", "Please setup booked exchange in advance.", UIAlertControllerStyle.Alert);
+                                                                             okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
+                                                                             this.PresentViewController(okAlertController, true, null);
+                                                                         }
+                                                                         else
+                                                                         {
+                                                                             buttonWallet.SetTitle(st.Code, UIControlState.Normal);
+                                                                             thisStorage = st;
+                                                                         }
                                                                      }
                                                                 ));
                 }
@@ -77,12 +87,6 @@ namespace CryptoAccouting
 		{
 			base.ViewWillAppear(animated);
             await ApplicationCore.FetchMarketDataAsync(thisCoin);
-            ReDrawScreen();
-		}
-
-		public override void ViewDidAppear(bool animated)
-		{
-			base.ViewDidAppear(animated);
 		}
 
         private void PrepareDatePicker()
@@ -151,7 +155,8 @@ namespace CryptoAccouting
             }
         }
 
-        public override void ReDrawScreen(){
+        public override void ReDrawScreen()
+        {
 
             labelCoinSymbol.Text = thisCoin.Symbol;
             labelCoinName.Text = thisCoin.Name;
@@ -175,30 +180,27 @@ namespace CryptoAccouting
                 textBookPrice.Text = "0";
                 thisBalanceDate = DateTime.Now.Date;
                 buttonTradeDate.SetTitle(thisBalanceDate.ToShortDateString(), UIControlState.Normal);
-			}
+            }
             else
             {
                 //labelCoinSymbol.Text = PositionDetail.Coin.Symbol;
-				var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-									"Images", thisCoin.Id + ".png");
+                var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                                    "Images", thisCoin.Id + ".png");
                 imageCoin.Image = logo == null ? null : UIImage.FromFile(logo);
 
                 //labelFiatPrice.Text = String.Format("{0:n0}", PositionDetail.LatestMainPrice());
                 textQuantity.Text = (Math.Abs(PositionDetail.Amount) < 0.00000001) ? "" : String.Format("{0:n6}", PositionDetail.Amount);
-                textBookPrice.Text = (Math.Abs(PositionDetail.BookPriceUSD) < 0.00000001) ? String.Format("{0:n2}", PositionDetail.LatestPriceUSD()) : String.Format("{0:n2}", PositionDetail.BookPriceUSD);
-                thisBalanceDate = PositionDetail.BalanceDate;
+                //textBookPrice.Text = (Math.Abs(PositionDetail.BookPriceUSD) < 0.00000001) ? String.Format("{0:n2}", PositionDetail.LatestPriceUSD()) : String.Format("{0:n2}", PositionDetail.BookPriceUSD);
+                textBookPrice.Text = String.Format("{0:n2}", PositionDetail.BookPriceUSD);
+				thisBalanceDate = PositionDetail.BalanceDate;
                 buttonTradeDate.SetTitle(PositionDetail.BalanceDate.Date.ToShortDateString(), UIControlState.Normal);
-                var exname = PositionDetail.BookedExchange is null ?
-                                           "Not Specified" :
-                                           PositionDetail.BookedExchange.Code;
-                buttonExchange.SetTitle(exname, UIControlState.Normal);
+            }
 
-                var storagename = PositionDetail.CoinStorage is null ?
-                                           "Not Specified" :
-                                                PositionDetail.CoinStorage.StorageType.ToString();
-                buttonWallet.SetTitle(storagename, UIControlState.Normal);
-			}
+            var exname = thisExchange is null ? "Not Specified" : PositionDetail.BookedExchange.Code;
+            buttonExchange.SetTitle(exname, UIControlState.Normal);
 
+            var storagename = thisStorage is null ? "Not Specified" : thisStorage.StorageType.ToString();
+            buttonWallet.SetTitle(storagename, UIControlState.Normal);
         }
 
         private void CreatePosition()
@@ -211,8 +213,8 @@ namespace CryptoAccouting
 
             if (thisExchange != null) PositionDetail.BookedExchange = thisExchange;
 
-            if (thisStorage != null)
-            {
+            //if (thisStorage != null)
+            //{
                 CoinStorage storage;
                 if (thisStorage.StorageType == EnuCoinStorageType.Exchange)
                 {
@@ -231,7 +233,7 @@ namespace CryptoAccouting
                 {
                     PositionDetail.AttachNewStorage(thisStorage.Code, thisStorage.StorageType);
                 }
-            }
+            //}
 
             ApplicationCore.Balance.Attach(PositionDetail);
             ApplicationCore.Balance.ReCalculate();
@@ -243,7 +245,6 @@ namespace CryptoAccouting
             editmode = true;
             InitializeUserInteractionStates();
         }
-
 
         partial void ButtonDone_Activated(UIBarButtonItem sender)
         {
@@ -266,6 +267,8 @@ namespace CryptoAccouting
 			PositionDetail = pos;
 			thisCoin = pos.Coin;
 			exchangesListed = ApplicationCore.GetExchangesBySymbol(pos.Coin.Symbol);
+            thisExchange = PositionDetail.BookedExchange;
+            thisStorage = PositionDetail.CoinStorage;
 			this.editmode = editmode;
             this.popto = popto;
 		}
@@ -275,6 +278,7 @@ namespace CryptoAccouting
         {
             thisCoin = ApplicationCore.GetInstrument(searchitem1);
             exchangesListed = ApplicationCore.GetExchangesBySymbol(searchitem1);
+            thisStorage = CoinStorageList.GetStorageListSelection().First(x => x.StorageType == EnuCoinStorageType.TBA);
             editmode = true;
         }
 
