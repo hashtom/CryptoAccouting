@@ -26,12 +26,15 @@ namespace CryptoAccouting.UIClass
 		{
             labelSymbol.Text = pos.Coin.Symbol;
 
-            if (pos.Coin.Symbol is "BTC"){
+            if (pos.Coin.Symbol is "BTC")
+            {
                 labelPrice.Text = "$" + String.Format("{0:n}", pos.LatestPriceUSD());
                 labelHolding.Text = "";
                 labelHoldingBTC.Text = "฿" + String.Format("{0:n4}", pos.LatestAmountBTC());
                 labelMemo.Text = String.Format("{0:n2}", pos.LatestSourceRet1d()) + " %";
-            }else{
+            }
+            else
+            {
                 labelPrice.Text = "฿" + String.Format("{0:n8}", pos.LatestPriceBTC());
                 labelHolding.Text = String.Format("{0:n2}", pos.Amount);
                 labelHoldingBTC.Text = "฿" + String.Format("{0:n4}", pos.LatestAmountBTC());

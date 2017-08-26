@@ -19,6 +19,7 @@ namespace CryptoAccouting.CoreClass
 
         public Position(Instrument coin)
         {
+            Id = int.MaxValue;
             Coin = coin;
             BalanceDate = DateTime.Now.Date;
             //this.SourceCurrency = coin.MarketPrice.SourceCurrency; //todo network issue = marketprice is null
@@ -26,8 +27,14 @@ namespace CryptoAccouting.CoreClass
 
         public Position()
         {
+            Id = int.MaxValue;
             Coin = new Instrument("N/A","N/A","N/A");
             BalanceDate = DateTime.Now.Date;
+        }
+
+        public bool IsIdAssigned()
+        {
+            return Id != int.MaxValue;
         }
 
         public void AttachInstrument(Instrument coin)

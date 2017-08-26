@@ -268,7 +268,7 @@ namespace CryptoAccouting
 			thisCoin = pos.Coin;
 			exchangesListed = ApplicationCore.GetExchangesBySymbol(pos.Coin.Symbol);
             thisExchange = PositionDetail.BookedExchange;
-            thisStorage = PositionDetail.CoinStorage;
+            thisStorage = PositionDetail.CoinStorage != null ? PositionDetail.CoinStorage : CoinStorageList.GetStorageListSelection().First(x => x.StorageType == EnuCoinStorageType.TBA);
 			this.editmode = editmode;
             this.popto = popto;
 		}

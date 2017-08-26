@@ -152,7 +152,8 @@ namespace CryptoAccouting.CoreClass
 
         public void Attach(Position position) //, bool CalcSummary = true)
 		{
-            if (positions.Any(x => x.Id == position.Id))
+            
+            if (position.IsIdAssigned() && positions.Any(x => x.Id == position.Id))
             {
                 Detach(position);
             }
@@ -172,7 +173,8 @@ namespace CryptoAccouting.CoreClass
 
 		public void Detach(Position position)  //, bool CalcSummary = true)
 		{
-			positions.RemoveAll(x => x.Id == position.Id);
+            positions.Remove(position);
+			//positions.RemoveAll(x => x.Id == position.Id);
 		}
 
         public void DetachPositionByCoin(string symbol)

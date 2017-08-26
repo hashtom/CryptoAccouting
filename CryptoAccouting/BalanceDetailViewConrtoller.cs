@@ -102,7 +102,9 @@ namespace CryptoAccouting
         {
 			var DestinationViewC = Storyboard.InstantiateViewController("BalanceEditViewC") as BalanceEditViewController;
             //DestinationViewC.SetSearchSelectionItem(symbol_selected);
-            DestinationViewC.SetPosition(new Position(ApplicationCore.GetInstrument(symbol_selected)), EnuPopTo.OnePop, true);
+            DestinationViewC.SetPosition(
+                new Position(ApplicationCore.GetInstrument(symbol_selected)),
+                EnuPopTo.OnePop, true);
             NavigationController.PushViewController(DestinationViewC, true);
         }
     }
