@@ -91,7 +91,7 @@ namespace CryptoAccouting.UIClass
                 case UITableViewCellEditingStyle.Delete:
 					//tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
 					//myBalance.DetachPositionByCoin(coins[indexPath.Row].Symbol);
-                    myBalance.DetachPositionByCoin(myBalance.GetByIndex(indexPath.Row).Coin.Symbol);
+                    myBalance.DetachPositionByCoin(balanceByCoin.GetByIndex(indexPath.Row).Coin.Symbol);
                     myBalance.ReCalculate();
                     break;
 
