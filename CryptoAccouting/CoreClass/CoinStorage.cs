@@ -54,6 +54,7 @@ namespace CryptoAccouting.CoreClass
 
     public enum EnuCoinStorageType
     {
+        TBA,
         Hardware,
         Desktop,
         Mobile,
