@@ -107,6 +107,7 @@ namespace CryptoAccouting.UIClass
 
 			UIView view = new UIView(new System.Drawing.RectangleF(0, 0, (float)tv.Frame.Width, 20));
 			view.BackgroundColor = UIColor.Gray;
+            var width = (float)tv.Frame.Width / 5;
 
 			var codeLabel = new UILabel()
 			{
@@ -118,45 +119,45 @@ namespace CryptoAccouting.UIClass
 				Text = "Coin"
 			};
 
-			var amountLabel = new UILabel()
-			{
-				Font = UIFont.FromName("ArialMT", 12f),
-				TextColor = UIColor.White,
-				TextAlignment = UITextAlignment.Left,
-				Frame = new System.Drawing.RectangleF(100, 0, 60, 20),
-				BackgroundColor = UIColor.Clear,
-				Text = "Holdings"
-			};
+            var amountLabel = new UILabel()
+            {
+                Font = UIFont.FromName("ArialMT", 12f),
+                TextColor = UIColor.White,
+                TextAlignment = UITextAlignment.Left,
+                Frame = new System.Drawing.RectangleF(width, 0, 60, 20),
+                BackgroundColor = UIColor.Clear,
+                Text = "Holdings"
+            };
 
-			var priceLabel = new UILabel()
-			{
-				Font = UIFont.FromName("ArialMT", 12f),
-				TextColor = UIColor.White,
-				TextAlignment = UITextAlignment.Left,
-				Frame = new System.Drawing.RectangleF(200, 0, 60, 20),
-				BackgroundColor = UIColor.Clear,
-				Text = "Book"
-			};
+            var priceLabel = new UILabel()
+            {
+                Font = UIFont.FromName("ArialMT", 12f),
+                TextColor = UIColor.White,
+                TextAlignment = UITextAlignment.Left,
+                Frame = new System.Drawing.RectangleF(width * 2, 0, 60, 20),
+                BackgroundColor = UIColor.Clear,
+                Text = "Book"
+            };
 
-			var exchangeLabel = new UILabel()
-			{
-				Font = UIFont.FromName("ArialMT", 12f),
-				TextColor = UIColor.White,
-				TextAlignment = UITextAlignment.Left,
-				Frame = new System.Drawing.RectangleF(300, 0, 60, 20),
-				BackgroundColor = UIColor.Clear,
-				Text = "Exchange"
-			};
+            var exchangeLabel = new UILabel()
+            {
+                Font = UIFont.FromName("ArialMT", 12f),
+                TextColor = UIColor.White,
+                TextAlignment = UITextAlignment.Left,
+                Frame = new System.Drawing.RectangleF(width * 3, 0, 60, 20),
+                BackgroundColor = UIColor.Clear,
+                Text = "Exchange"
+            };
 
-			var storageLabel = new UILabel()
-			{
-				Font = UIFont.FromName("ArialMT", 12f),
-				TextColor = UIColor.White,
-				TextAlignment = UITextAlignment.Left,
-				Frame = new System.Drawing.RectangleF(300, 0, 60, 20),
-				BackgroundColor = UIColor.Clear,
-				Text = "Storage"
-			};
+            var storageLabel = new UILabel()
+            {
+                Font = UIFont.FromName("ArialMT", 12f),
+                TextColor = UIColor.White,
+                TextAlignment = UITextAlignment.Left,
+                Frame = new System.Drawing.RectangleF(width * 4, 0, 60, 20),
+                BackgroundColor = UIColor.Clear,
+                Text = "Storage"
+            };
 
 
 

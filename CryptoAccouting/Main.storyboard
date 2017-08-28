@@ -17,11 +17,11 @@
         <scene sceneID="709">
             <objects>
                 <tableViewController storyboardIdentifier="BalanceViewC" id="710" customClass="BalanceMainViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" sectionIndexMinimumDisplayRowCount="2" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="712">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" dataMode="prototypes" style="plain" sectionIndexMinimumDisplayRowCount="2" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="712">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="2282">
+                        <view key="tableHeaderView" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="2282">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="117"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <subviews>
@@ -1119,9 +1119,6 @@
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="18322" kind="show" id="19204"/>
-                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="35" id="18262">
                                         <rect key="frame" x="0.0" y="377" width="320" height="35"/>
@@ -1355,78 +1352,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="17634" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="960.79999999999995" y="1250.825"/>
-        </scene>
-        <!--収益率レポート-->
-        <scene sceneID="17969">
-            <objects>
-                <viewController storyboardIdentifier="PerfViewC" id="17970" customClass="PerfomViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="17967"/>
-                        <viewControllerLayoutGuide type="bottom" id="17968"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="17971">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="収益率" image="Images/performtab.png" id="24152"/>
-                    <navigationItem key="navigationItem" title="収益率レポート" id="18241"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="17972" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="14" y="2717"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="18321">
-            <objects>
-                <viewController id="18322" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="18319"/>
-                        <viewControllerLayoutGuide type="bottom" id="18320"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="18323">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="19618">
-                                <rect key="frame" x="0.0" y="192" width="1163.5" height="299.5"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <pageControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="19619">
-                                        <rect key="frame" x="168" y="348" width="39" height="37"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </pageControl>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <variation key="default">
-                                    <mask key="subviews">
-                                        <exclude reference="19619"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
-                                    <mask key="subviews">
-                                        <include reference="19619"/>
-                                    </mask>
-                                </variation>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <variation key="default">
-                            <mask key="subviews">
-                                <exclude reference="19618"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=regular-widthClass=compact">
-                            <mask key="subviews">
-                                <include reference="19618"/>
-                            </mask>
-                        </variation>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="18324" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1865" y="1251"/>
         </scene>
         <!--Booking Details-->
         <scene sceneID="20418">
@@ -1792,7 +1717,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="24382" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3531" y="-337"/>
+            <point key="canvasLocation" x="3248" y="-339"/>
         </scene>
         <!--Holding Details-->
         <scene sceneID="uCe-JS-6L8">
@@ -2057,7 +1982,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="28088" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1845" y="1979"/>
+            <point key="canvasLocation" x="1463" y="1985"/>
         </scene>
     </scenes>
     <resources>
@@ -2065,7 +1990,6 @@
         <image name="Images/exchange.png" width="592" height="546"/>
         <image name="Images/jpy.png" width="598" height="554"/>
         <image name="Images/key.png" width="922" height="808"/>
-        <image name="Images/performtab.png" width="32" height="32"/>
         <image name="Images/positiontab.png" width="32" height="32"/>
         <image name="Images/settingstab.png" width="32" height="32"/>
     </resources>

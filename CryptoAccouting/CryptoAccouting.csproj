@@ -183,10 +183,6 @@
     <Compile Include="PLTableViewController.designer.cs">
       <DependentUpon>PLTableViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="PerfomViewController.cs" />
-    <Compile Include="PerfomViewController.designer.cs">
-      <DependentUpon>PerfomViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="CoreClass\ExchangeList.cs" />
     <Compile Include="UIClass\CoinViewCell.cs" />
     <Compile Include="UIClass\CoinViewCell.designer.cs">

@@ -112,6 +112,7 @@ namespace CryptoAccouting.UIClass
 
 			UIView view = new UIView(new System.Drawing.RectangleF(0, 0, (float)tv.Frame.Width, 20));
 			view.BackgroundColor = UIColor.Gray;
+            var width = (float)tv.Frame.Width / 4;
 
 			codeLabel = new UILabel()
 			{
@@ -128,7 +129,7 @@ namespace CryptoAccouting.UIClass
 				Font = UIFont.FromName("ArialMT", 12f),
 				TextColor = UIColor.White,
 				TextAlignment = UITextAlignment.Left,
-				Frame = new System.Drawing.RectangleF(100, 0, 60, 20),
+                Frame = new System.Drawing.RectangleF(width, 0, 60, 20),
 				BackgroundColor = UIColor.Clear,
 				Text = "Holding"
 			};
@@ -138,7 +139,7 @@ namespace CryptoAccouting.UIClass
 				Font = UIFont.FromName("ArialMT", 12f),
 				TextColor = UIColor.White,
 				TextAlignment = UITextAlignment.Left,
-				Frame = new System.Drawing.RectangleF(200, 0, 70, 20),
+				Frame = new System.Drawing.RectangleF(width*2, 0, 70, 20),
 				BackgroundColor = UIColor.Clear,
 				Text = "Price/Value"
 			};
@@ -148,7 +149,7 @@ namespace CryptoAccouting.UIClass
 				Font = UIFont.FromName("ArialMT", 12f),
 				TextColor = UIColor.White,
 				TextAlignment = UITextAlignment.Left,
-				Frame = new System.Drawing.RectangleF(300, 0, 40, 20),
+				Frame = new System.Drawing.RectangleF(width*3, 0, 40, 20),
 				BackgroundColor = UIColor.Clear,
 				Text = "Return"
 			};
