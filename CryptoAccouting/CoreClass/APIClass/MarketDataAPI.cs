@@ -58,7 +58,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     instrumentlist.Insert(0, bitcoin);
                 }
                 else{
-                    instrumentlist.Insert(0, ApplicationCore.GetInstrument("BTC"));
+                    instrumentlist.Insert(0, ApplicationCore.GetInstrumentSymbol("BTC"));
                 }
 
                 foreach (var paircoin in instrumentlist.Where(x=>x.Symbol!="BTC"))
@@ -338,7 +338,16 @@ namespace CryptoAccouting.CoreClass.APIClass
                     {
                         foreach (var symbol in listing)
                         {
-                            var coin = ApplicationCore.GetInstrument((string)symbol["symbol"]);
+                            Instrument coin = null;
+                            if (symbol["symbol"] != null)
+                            {
+                                coin = ApplicationCore.GetInstrumentSymbol((string)symbol["symbol"]);
+                            }
+                            else if (symbol["symbol2"] != null)
+                            {
+                                coin = ApplicationCore.GetInstrumentSymbol2((string)symbol["symbol2"]);
+                            }
+
                             if (coin != null) exchange.AttachListedCoin(coin);
                         }
                     }

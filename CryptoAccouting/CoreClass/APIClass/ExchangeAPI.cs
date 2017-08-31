@@ -123,7 +123,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                         var symbol = (string)json["return"][x.Name]["currency_pair"];
                         symbol = symbol.Replace("_jpy", "").Replace("_btc", "").ToUpper();
 
-                        tradelist.AggregateTransaction(ApplicationCore.GetInstrument(symbol),
+                        tradelist.AggregateTransaction(ApplicationCore.GetInstrumentSymbol(symbol),
                                                        exchange.Code,
                                                       ebuysell,
                                                       (double)json["return"][x.Name]["amount"],

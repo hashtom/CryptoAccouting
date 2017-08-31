@@ -69,7 +69,7 @@
         { "symbol": "XMR" },
         { "symbol": "STRAT" },
         { "symbol": "QTUM" },
-        { "symbol": "BCC" },
+        { "symbol2": "BCC" },
         { "symbol": "BTS" },
         { "symbol": "WAVES" },
         { "symbol": "ZEC" },

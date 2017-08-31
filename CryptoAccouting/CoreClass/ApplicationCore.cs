@@ -54,15 +54,26 @@
                     return EnuAPIStatus.Success;
                 }
             }          }          public static void SaveInstrumentXML()
-        {             StorageAPI.SaveInstrumentXML(InstrumentList, "instruments.xml");         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, "mybalance.xml");         }          public static Instrument GetInstrument(string symbol)
+        {             StorageAPI.SaveInstrumentXML(InstrumentList, "instruments.xml");         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, "mybalance.xml");         }          public static Instrument GetInstrumentSymbol(string symbol)
         {
             if (InstrumentList.Any(i => i.Symbol == symbol))
             {
                 return InstrumentList.First(i => i.Symbol == symbol);
             }
             else
-            {                 return null;             }
-         }
+            {                 return null;             }         }
+
+		public static Instrument GetInstrumentSymbol2(string symbol2)
+		{
+            if (InstrumentList.Any(i => i.Symbol2 == symbol2))
+			{
+				return InstrumentList.First(i => i.Symbol2 == symbol2);
+			}
+			else
+			{
+				return null;
+			}
+		}
 
         //public static InstrumentList InstrumentList()
         //{
@@ -77,9 +88,9 @@
             var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              exchange.TradeList = await ExchangeAPI.FetchTradeListAsync(exchange, isAggregatedDaily, readfromFile);             PublicExchangeList.Attach(exchange);              //return exchange.TradeLists;         }          public static Exchange GetExchange(string Code)
         {             return PublicExchangeList.GetExchange(Code);         }
 
-        public static ExchangeList GetExchangeListBySymbol(string symbol)
+        public static ExchangeList GetExchangeListByInstrument(string id)
         {
-            return PublicExchangeList.GetExchangesBySymbol(symbol);
+            return PublicExchangeList.GetExchangesByInstrument(id);
         }          public static TradeList GetExchangeTradeList(string exchangeCode)
         {             return PublicExchangeList.GetTradelist(exchangeCode);
         }

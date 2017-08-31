@@ -6,7 +6,7 @@ namespace CryptoAccouting.CoreClass
 {
     public class Exchange : CoinStorage
     {
-        public List<Instrument> ListedCoin { get; set; }
+        public InstrumentList Coins { get; private set; }
         public bool APIReady { get; set; }
 		public string Key { get; set; }
 		public string Secret { get; set; }
@@ -16,13 +16,13 @@ namespace CryptoAccouting.CoreClass
 
         public Exchange(string code, EnuCoinStorageType storagetype) : base(code, storagetype)
         {
-            ListedCoin = new List<Instrument>();
+            Coins = new InstrumentList();
             if (storagetype != EnuCoinStorageType.Exchange) throw new Exception();
         }
 
-		public void AttachListedCoin(Instrument coin)
+        public void AttachListedCoin(Instrument coin)
 		{
-            if (!ListedCoin.Any(c => c.Symbol == coin.Symbol)) ListedCoin.Add(coin);
+            if (!Coins.Any(c => c.Id == coin.Id)) Coins.Attach(coin);
 		}
 
     }

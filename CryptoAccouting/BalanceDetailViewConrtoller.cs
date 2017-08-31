@@ -44,7 +44,7 @@ namespace CryptoAccouting
         public override void ReDrawScreen()
         {
             var booking_positions = ApplicationCore.Balance.Where(x => x.Coin.Symbol == symbol_selected).ToList();
-            var thisCoin = ApplicationCore.GetInstrument(symbol_selected);
+            var thisCoin = ApplicationCore.GetInstrumentSymbol(symbol_selected);
             var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                                     "Images", thisCoin.Id + ".png");
 
@@ -104,7 +104,7 @@ namespace CryptoAccouting
 			var DestinationViewC = Storyboard.InstantiateViewController("BalanceEditViewC") as BalanceEditViewController;
             //DestinationViewC.SetSearchSelectionItem(symbol_selected);
             DestinationViewC.SetPosition(
-                new Position(ApplicationCore.GetInstrument(symbol_selected)),
+                new Position(ApplicationCore.GetInstrumentSymbol(symbol_selected)),
                 EnuPopTo.OnePop, true);
             NavigationController.PushViewController(DestinationViewC, true);
         }

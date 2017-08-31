@@ -55,14 +55,14 @@ namespace CryptoAccouting.CoreClass
 		//	}
 		//}
 
-        public ExchangeList GetExchangesBySymbol(string symbol){
+        public ExchangeList GetExchangesByInstrument(string id){
 
             var exchanged_applied = new ExchangeList();
             //exchanged_applied.AttachExchange(new Exchange("NotSpecified") { Name = "Not Specified" });
 
             foreach (var exc in exchanges)
             {
-                if (exc.ListedCoin.Any(x => x.Symbol == symbol)) exchanged_applied.Attach(exc);
+                if (exc.Coins.Any(x => x.Id == id)) exchanged_applied.Attach(exc);
             }
             return exchanged_applied;
 
