@@ -11,8 +11,34 @@ namespace CryptoAccouting.CoreClass.APIClass
 {
     public static class MarketDataAPI
     {
+		public static async Task<EnuAPIStatus> FetchCoinPricesAsync(InstrumentList coins, CrossRate crossrate)
+		{
+            var status = EnuAPIStatus.FailureParameter;
 
-        public static async Task<EnuAppStatus> FetchCoinMarketDataAsync(InstrumentList instrumentlist, CrossRate crossrate)
+            foreach (var source in coins.Select(x => x.PriceSourceCode).Distinct())
+            {
+                switch (source)
+                {
+                    case "Bittrex":
+                        status = await BittrexAPI.FetchPriceAsync(coins, crossrate);
+                        break;
+
+                    case "Bitstamp":
+                        status = await BItstampAPI.FetchPriceAsync(coins, crossrate);
+                        break;
+
+                    case "Zaif":
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            return status;
+		}
+
+        public static async Task<EnuAPIStatus> FetchCoinMarketDataAsync(InstrumentList instrumentlist, CrossRate crossrate)
         {
             const string BaseUrl = "http://api.cryptocoincharts.info/";
             string rawjson;
@@ -21,7 +47,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             if (!Reachability.IsHostReachable(BaseUrl))
             {
-                return EnuAppStatus.FailureNetwork;
+                return EnuAPIStatus.FailureNetwork;
             }
             else
             {
@@ -54,7 +80,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     rawjson = await res.Content.ReadAsStringAsync();
 
                     if (!res.IsSuccessStatusCode)
-                        return EnuAppStatus.FailureNetwork;
+                        return EnuAPIStatus.FailureNetwork;
                 }
 
                 var jarray = await Task.Run(() => JArray.Parse(rawjson));
@@ -96,11 +122,11 @@ namespace CryptoAccouting.CoreClass.APIClass
                 }
             }
 
-            return EnuAppStatus.Success;
+            return EnuAPIStatus.Success;
 
         }
 
-        public static async Task<EnuAppStatus> FetchCoinMarketDataAsync(Instrument coin, Instrument bitcoin=null )
+        public static async Task<EnuAPIStatus> FetchCoinMarketDataAsync(Instrument coin, Instrument bitcoin=null )
         {
             //const string CoinMarketUrl = "https://api.coinmarketcap.com/v1/ticker/";
    //         if (!Reachability.IsHostReachable(CoinMarketUrl))
@@ -150,7 +176,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             if (!Reachability.IsHostReachable(CoinChartsUrl))
             {
-                return EnuAppStatus.FailureNetwork;
+                return EnuAPIStatus.FailureNetwork;
             }
             else
             {
@@ -171,7 +197,6 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 if (json["id"] != null)
                 {
-                    //coin.MarketPrice.SourceCurrency = coin.Symbol == "BTC" ? EnuCCY.USD : EnuCCY.BTC;
                     coin.MarketPrice.LatestPriceBTC = coin.Symbol == "BTC" ? 1 : (double)json["price"];
                     coin.MarketPrice.PriceBTCBefore24h = coin.Symbol == "BTC" ? 1 : (double)json["price_before_24h"];
                     coin.MarketPrice.LatestPriceUSD = coin.Symbol == "BTC" ? (double)json["price"] : (double)json["price"] * bitcoin.MarketPrice.LatestPriceUSD;
@@ -182,10 +207,10 @@ namespace CryptoAccouting.CoreClass.APIClass
 
 			}
 
-			return EnuAppStatus.Success;
+			return EnuAPIStatus.Success;
         }
 
-        public static EnuAppStatus FetchAllCoinData(InstrumentList instrumentlist)
+        public static EnuAPIStatus FetchAllCoinData(InstrumentList instrumentlist)
 		{
 
             const string BaseUrl = "http://bridgeplace.sakura.ne.jp/cryptoticker/InstrumentList.json";
@@ -194,11 +219,11 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             if (!Reachability.IsHostReachable(BaseUrl))
             {
-                return EnuAppStatus.FailureNetwork;
+                return EnuAPIStatus.FailureNetwork;
             }
             else
             {
-                instrumentlist.Clear();
+                //instrumentlist.Clear();
                 using (var http = new HttpClient())
                 {
                     //http.MaxResponseContentBufferSize = 256000;
@@ -211,9 +236,22 @@ namespace CryptoAccouting.CoreClass.APIClass
                 {
                     if ((bool)elem["active"])
                     {
-                        var coin = new Instrument((string)elem["id"], (string)elem["symbol"], (string)elem["name"]);
-                        //IOTA symbol注意
+                        Instrument coin;
+                        if (instrumentlist.Any(x => x.Id == (string)elem["id"]))
+                        {
+                            coin = instrumentlist.First(x => x.Id == (string)elem["id"]);
+                            coin.Symbol = (string)elem["symbol"];
+                            coin.Name = (string)elem["name"];
+                        }
+                        else
+                        {
+                            coin = new Instrument((string)elem["id"], (string)elem["symbol"], (string)elem["name"]);//IOTA symbol注意
+						}
 
+                        if (elem["symbol2"] != null)
+                        {
+                            coin.Symbol2 = (string)elem["symbol2"];
+                        }
                         coin.rank = int.Parse((string)elem["rank"]);
 
                         var p = new Price(coin);
@@ -223,7 +261,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     }
                 }
 
-                return EnuAppStatus.Success;
+                return EnuAPIStatus.Success;
             }
 		}
 
@@ -253,7 +291,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
         }
 
-		public static EnuAppStatus FetchExchangeList(ExchangeList exlist)
+		public static EnuAPIStatus FetchExchangeList(ExchangeList exlist)
 		{
 
 			string rawjson;
@@ -262,7 +300,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 			if (!Reachability.IsHostReachable(BaseUri))
 			{
                 rawjson = File.ReadAllText("Json/ExchangeList.json"); //Bundle file
-                return EnuAppStatus.FailureNetwork;
+                return EnuAPIStatus.FailureNetwork;
 			}
 			else
 			{
@@ -271,7 +309,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 					HttpResponseMessage response = http.GetAsync(BaseUri).Result;
 					if (!response.IsSuccessStatusCode)
 					{
-						return EnuAppStatus.FailureNetwork;
+						return EnuAPIStatus.FailureNetwork;
 					}
 					rawjson = response.Content.ReadAsStringAsync().Result;
 				}
@@ -310,7 +348,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
 			}
 
-			return EnuAppStatus.Success;
+			return EnuAPIStatus.Success;
 		}
 
         public static async Task<CrossRate> FetchUSDCrossRateAsync(EnuCCY BaseCurrency)
@@ -333,7 +371,6 @@ namespace CryptoAccouting.CoreClass.APIClass
                     if (!response.IsSuccessStatusCode)
                     {
                         return null;
-                        //return EnuAppStatus.FailureNetwork;
                     }
                     rawjson = await response.Content.ReadAsStringAsync();
                 }

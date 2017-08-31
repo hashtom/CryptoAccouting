@@ -224,6 +224,8 @@
     <Compile Include="UIClass\CoinBookingViewCell.designer.cs">
       <DependentUpon>CoinBookingViewCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="CoreClass\APIClass\BittrexAPI.cs" />
+    <Compile Include="CoreClass\APIClass\BItstampAPI.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />

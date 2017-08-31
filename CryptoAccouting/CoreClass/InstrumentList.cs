@@ -16,13 +16,13 @@ namespace CryptoAccouting.CoreClass
 
         public void Attach(Instrument coin)
 		{
-            if (instruments.Any(x => x.Symbol == coin.Symbol)) Detach(coin);
+            if (instruments.Any(x => x.Id == coin.Id)) Detach(coin);
 			instruments.Add(coin);
 		}
 
 		public void Detach(Instrument coin)
 		{
-            instruments.RemoveAll(x => x.Symbol == coin.Symbol);
+            instruments.RemoveAll(x => x.Id == coin.Id);
 		}
 
         public void Insert(int i, Instrument coin)

@@ -97,7 +97,7 @@ namespace CryptoAccouting
 
         private void ReloadCoinData()
         {
-            if (ApplicationCore.LoadInstruments(true) == EnuAppStatus.Success)
+            if (ApplicationCore.LoadInstruments(true) == EnuAPIStatus.Success)
             {
                 UIAlertController okAlertController = UIAlertController.Create("Update Coin List", "Successfully Updated", UIAlertControllerStyle.Alert);
                 okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));

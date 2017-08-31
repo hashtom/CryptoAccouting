@@ -49,7 +49,8 @@ namespace CryptoAccouting
                                     "Images", thisCoin.Id + ".png");
 
             imageCoin.Image = logo == null ? null : UIImage.FromFile(logo);
-            labelCoinName.Text = thisCoin.Name;
+            NavigationItem.Title = thisCoin.Name;
+            buttonPriceSourceExchange.SetTitle(thisCoin.PriceSourceCode, UIControlState.Normal);
 
             if (thisCoin.MarketPrice != null)
             {

@@ -266,7 +266,7 @@ namespace CryptoAccouting
 		{
 			PositionDetail = pos;
 			thisCoin = pos.Coin;
-			exchangesListed = ApplicationCore.GetExchangesBySymbol(pos.Coin.Symbol);
+			exchangesListed = ApplicationCore.GetExchangeListBySymbol(pos.Coin.Symbol);
             thisExchange = PositionDetail.BookedExchange;
             thisStorage = PositionDetail.CoinStorage != null ? PositionDetail.CoinStorage : CoinStorageList.GetStorageListSelection().First(x => x.StorageType == EnuCoinStorageType.TBA);
 			this.editmode = editmode;
@@ -277,7 +277,7 @@ namespace CryptoAccouting
         public override void SetSearchSelectionItem(string searchitem1)
         {
             thisCoin = ApplicationCore.GetInstrument(searchitem1);
-            exchangesListed = ApplicationCore.GetExchangesBySymbol(searchitem1);
+            exchangesListed = ApplicationCore.GetExchangeListBySymbol(searchitem1);
             thisStorage = CoinStorageList.GetStorageListSelection().First(x => x.StorageType == EnuCoinStorageType.TBA);
             editmode = true;
         }

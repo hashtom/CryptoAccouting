@@ -17,16 +17,15 @@ namespace CryptoAccouting
 		UIKit.UIBarButtonItem buttonAddNew { get; set; }
 
 		[Outlet]
+		UIKit.UIButton buttonPriceSourceExchange { get; set; }
+
+		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UIView DetailTopView { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UIImageView imageCoin { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UIKit.UILabel labelCoinName { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -50,6 +49,11 @@ namespace CryptoAccouting
 				buttonAddNew = null;
 			}
 
+			if (buttonPriceSourceExchange != null) {
+				buttonPriceSourceExchange.Dispose ();
+				buttonPriceSourceExchange = null;
+			}
+
 			if (DetailTopView != null) {
 				DetailTopView.Dispose ();
 				DetailTopView = null;
@@ -58,11 +62,6 @@ namespace CryptoAccouting
 			if (imageCoin != null) {
 				imageCoin.Dispose ();
 				imageCoin = null;
-			}
-
-			if (labelCoinName != null) {
-				labelCoinName.Dispose ();
-				labelCoinName = null;
 			}
 
 			if (labelMarketValue != null) {

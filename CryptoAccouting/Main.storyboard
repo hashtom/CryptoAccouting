@@ -1353,7 +1353,7 @@
             </objects>
             <point key="canvasLocation" x="960.79999999999995" y="1250.825"/>
         </scene>
-        <!--Booking Details-->
+        <!--Position Details-->
         <scene sceneID="20418">
             <objects>
                 <tableViewController storyboardIdentifier="BalanceEditViewC" id="20419" customClass="BalanceEditViewController" sceneMemberID="viewController">
@@ -1406,10 +1406,10 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Booking Details" id="24962">
+                            <tableViewSection id="24962">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="24965">
-                                        <rect key="frame" x="0.0" y="101" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="73" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="24965" id="24966">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
@@ -1445,7 +1445,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="24967">
-                                        <rect key="frame" x="0.0" y="145" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="117" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="24967" id="24968">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
@@ -1481,7 +1481,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="24969">
-                                        <rect key="frame" x="0.0" y="189" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="161" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="24969" id="24970">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
@@ -1514,7 +1514,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="24963">
-                                        <rect key="frame" x="0.0" y="233" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="205" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="24963" id="24964">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
@@ -1551,7 +1551,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="kmY-be-Unc">
-                                        <rect key="frame" x="0.0" y="277" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="249" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kmY-be-Unc" id="8ou-2x-0N8">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
@@ -1581,7 +1581,7 @@
                             <outlet property="delegate" destination="20419" id="20422"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Booking Details" id="24618">
+                    <navigationItem key="navigationItem" title="Position Details" id="24618">
                         <rightBarButtonItems>
                             <barButtonItem enabled="NO" systemItem="done" id="24682">
                                 <connections>
@@ -1717,7 +1717,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="24382" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3248" y="-339"/>
+            <point key="canvasLocation" x="3638" y="-338"/>
         </scene>
         <!--Holding Details-->
         <scene sceneID="uCe-JS-6L8">
@@ -1735,13 +1735,6 @@
                                     <rect key="frame" x="16" y="8" width="48" height="48"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                                 </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Asset Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="26276">
-                                    <rect key="frame" x="78" y="8" width="141" height="48"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <nil key="textColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Profit/Loss" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="26702">
                                     <rect key="frame" x="230" y="8" width="75" height="15"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -1804,13 +1797,18 @@
                                     </subviews>
                                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 </view>
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aJk-aN-aXR">
+                                    <rect key="frame" x="72" y="17" width="79" height="30"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <state key="normal" title="Bittrex"/>
+                                </button>
                             </subviews>
                             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                             <variation key="heightClass=regular-widthClass=compact">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <mask key="subviews">
                                     <include reference="26275"/>
-                                    <include reference="26276"/>
                                 </mask>
                             </variation>
                         </view>
@@ -1842,8 +1840,8 @@
                     <connections>
                         <outlet property="DetailTopView" destination="qOJ-HG-G4x" id="name-outlet-qOJ-HG-G4x"/>
                         <outlet property="buttonAddNew" destination="28486" id="name-outlet-28486"/>
+                        <outlet property="buttonPriceSourceExchange" destination="aJk-aN-aXR" id="tlB-zH-1tP"/>
                         <outlet property="imageCoin" destination="26275" id="name-outlet-26275"/>
-                        <outlet property="labelCoinName" destination="26276" id="name-outlet-26276"/>
                         <outlet property="labelMarketValue" destination="26297" id="name-outlet-26297"/>
                         <outlet property="labelTotalBookCost" destination="26299" id="name-outlet-26299"/>
                         <outlet property="labelTotalQty" destination="26298" id="name-outlet-26298"/>

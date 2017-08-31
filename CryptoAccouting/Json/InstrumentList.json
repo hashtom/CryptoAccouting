@@ -24,6 +24,7 @@
     "id": "bitcoin-cash",
     "name": "Bitcoin Cash",
     "symbol": "BCH",
+    "symbol2":  "BCC",
     "rank": "4",
     "active": true
   },

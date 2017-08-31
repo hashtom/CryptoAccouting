@@ -6,12 +6,14 @@ namespace CryptoAccouting.CoreClass
 {
     public class Instrument
     {
-        public string Id { get; } //CoinMarketCap ID
-        public int rank { get; set; }
-        public string Symbol { get; }
-        public string Name { get; }
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Symbol { get; set; }
+        public string Symbol2 { get; set; }
         public InstrumentType Type { get; set; }
 		public Price MarketPrice { get; set; }
+        public string PriceSourceCode { get; set; }
+		public int rank { get; set; }
         //public bool IsActive { get; set; }
 
         public Instrument(string id, string symbol, string name)
@@ -19,7 +21,15 @@ namespace CryptoAccouting.CoreClass
             Id = id;
             Symbol = symbol;
             Name = name;
-            //IsActive = false;
+            //TEMP
+            if (symbol == "BTC")
+            {
+                PriceSourceCode = "Bitstamp";
+            }
+            else
+            {
+                PriceSourceCode = "Bittrex";
+            }
         }
 
         public Balance BalanceOnInstrument(Balance totalbalance)
@@ -38,26 +48,6 @@ namespace CryptoAccouting.CoreClass
 				return bal;
 			}
 		}
-
-        //public Position TotalPosition()
-        //{
-
-        //    if (ApplicationCore.Balance is null)
-        //    {
-        //        return null;
-        //    }
-        //    else
-        //    {
-        //        Position totalpos = new Position(ApplicationCore.GetInstrument(Symbol))
-        //        {
-        //            Id = 0,
-        //            Amount = ApplicationCore.Balance.Where(x => x.Coin.Symbol == Symbol).Sum(x => x.Amount),
-        //            BookPriceUSD = ApplicationCore.Balance.Where(x => x.Coin.Symbol == Symbol).Average(x => (x.Amount * x.BookPriceUSD) / x.Amount)
-        //        };
-
-        //        return totalpos;
-        //    }
-        //}
     }
 
 	public enum InstrumentType
