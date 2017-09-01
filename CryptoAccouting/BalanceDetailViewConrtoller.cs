@@ -13,7 +13,7 @@ namespace CryptoAccouting
     public partial class BalanceDetailViewConrtoller : CryptoTableViewController
     {
 
-        string symbol_selected;
+        string instrumentId_selected;
         //List<Position> booking_positions;
 
         public BalanceDetailViewConrtoller (IntPtr handle) : base (handle)
@@ -26,7 +26,7 @@ namespace CryptoAccouting
 
 			// Configure Table source
 			this.TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "BookingViewCell");
-            this.TableView.Source = new CoinBookingTableSource(symbol_selected, ApplicationCore.Balance, this);
+            this.TableView.Source = new CoinBookingTableSource(instrumentId_selected, ApplicationCore.Balance, this);
         }
 
         public override void ViewWillAppear(bool animated)
@@ -43,8 +43,8 @@ namespace CryptoAccouting
 
         public override void ReDrawScreen()
         {
-            var booking_positions = ApplicationCore.Balance.Where(x => x.Coin.Symbol == symbol_selected).ToList();
-            var thisCoin = ApplicationCore.GetInstrumentSymbol(symbol_selected);
+            var booking_positions = ApplicationCore.Balance.Where(x => x.Coin.Id == instrumentId_selected).ToList();
+            var thisCoin = ApplicationCore.InstrumentList.GetByInstrumentId(instrumentId_selected);
             var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                                     "Images", thisCoin.Id + ".png");
 
@@ -74,9 +74,9 @@ namespace CryptoAccouting
 
         }
 
-        public void SetSymbol(string symbol)
+        public void SetInstrument(string instrumentId)
         {
-            symbol_selected = symbol;
+            instrumentId_selected = instrumentId;
             //this.booking_positions = ApplicationCore.Balance.positions.Where(x => x.Coin.Symbol == symbol_selected).ToList();
         }
 
@@ -104,7 +104,7 @@ namespace CryptoAccouting
 			var DestinationViewC = Storyboard.InstantiateViewController("BalanceEditViewC") as BalanceEditViewController;
             //DestinationViewC.SetSearchSelectionItem(symbol_selected);
             DestinationViewC.SetPosition(
-                new Position(ApplicationCore.GetInstrumentSymbol(symbol_selected)),
+                new Position(ApplicationCore.InstrumentList.GetByInstrumentId(instrumentId_selected)),
                 EnuPopTo.OnePop, true);
             NavigationController.PushViewController(DestinationViewC, true);
         }

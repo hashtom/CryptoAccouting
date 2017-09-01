@@ -25,7 +25,7 @@ namespace CryptoAccouting.CoreClass
 
         public void AttachInstruments(InstrumentList instrumentist)
         {
-            positions.ForEach(x => x.AttachInstrument(instrumentist.First(y => y.Symbol == x.Coin.Symbol)));
+            positions.ForEach(x => x.AttachInstrument(instrumentist.First(y => y.Symbol1 == x.Coin.Symbol1)));
         }
 
         public double LatestFiatValueUSD(){
@@ -57,19 +57,19 @@ namespace CryptoAccouting.CoreClass
                 BalanceByCoin = new Balance();
             }
 
-            foreach (var symbol in positions.Select(x => x.Coin.Symbol).Distinct())
+            foreach (var symbol in positions.Select(x => x.Coin.Symbol1).Distinct())
             {
-                var amount = positions.Where(x => x.Coin.Symbol == symbol).Sum(x => x.Amount);
-                var amountbtc = positions.Where(x => x.Coin.Symbol == symbol).Sum(x => x.LatestAmountBTC());
-                var bookprice = positions.Where(x => x.Coin.Symbol == symbol).Sum(x => x.BookPriceUSD);
-                var position = new Position(positions.Select(x => x.Coin).First(x => x.Symbol == symbol))
+                var amount = positions.Where(x => x.Coin.Symbol1 == symbol).Sum(x => x.Amount);
+                var amountbtc = positions.Where(x => x.Coin.Symbol1 == symbol).Sum(x => x.LatestAmountBTC());
+                var bookprice = positions.Where(x => x.Coin.Symbol1 == symbol).Sum(x => x.BookPriceUSD);
+                var position = new Position(positions.Select(x => x.Coin).First(x => x.Symbol1 == symbol))
                 {
                     Amount = amount,
                     AmountBTC = amountbtc,
                     BookPriceUSD = bookprice,
-                    PriceBTC = positions.Where(x => x.Coin.Symbol == symbol).Select(x => x.LatestPriceBTC()).First(),
-                    PriceUSD = positions.Where(x => x.Coin.Symbol == symbol).Select(x => x.LatestPriceUSD()).First(),
-                    PriceBase = positions.Where(x => x.Coin.Symbol == symbol).Select(x => x.LatestPriceBase()).First()
+                    PriceBTC = positions.Where(x => x.Coin.Symbol1 == symbol).Select(x => x.LatestPriceBTC()).First(),
+                    PriceUSD = positions.Where(x => x.Coin.Symbol1 == symbol).Select(x => x.LatestPriceUSD()).First(),
+                    PriceBase = positions.Where(x => x.Coin.Symbol1 == symbol).Select(x => x.LatestPriceBase()).First()
                 };
                 BalanceByCoin.Attach(position);
             }
@@ -179,7 +179,7 @@ namespace CryptoAccouting.CoreClass
 
         public void DetachPositionByCoin(string symbol)
         {
-            positions.RemoveAll(x => x.Coin.Symbol == symbol);
+            positions.RemoveAll(x => x.Coin.Symbol1 == symbol);
         }
 
         public Position GetByIndex(int indexNumber){

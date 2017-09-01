@@ -16,13 +16,13 @@ namespace CryptoAccouting.CoreClass.APIClass
 		//private static string _apiKey;
 		//private static string _apiSecret;
 
-		public static async Task<EnuAPIStatus> FetchPriceAsync(InstrumentList coins, CrossRate crossrate)
+        public static async Task<EnuAPIStatus> FetchPriceAsync(Exchange bitstamp, InstrumentList coins, CrossRate crossrate)
 		{
 			string rawjson;
 
             foreach (var coin in coins.Where(x=>x.PriceSourceCode=="Bitstamp"))
             {
-                var currency_pair = coin.Symbol == "BTC" ? "btcusd" : coin.Symbol.ToLower() + "btc";
+                var currency_pair = coin.Symbol1 == "BTC" ? "btcusd" : bitstamp.GetSymbolForExchange(coin.Id).ToLower() + "btc";
 
                 using (var http = new HttpClient())
                 {
@@ -41,7 +41,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
 
-                if (coin.Symbol == "BTC")
+                if (coin.Symbol1 == "BTC")
                 {
 					coin.MarketPrice.LatestPriceBTC = 1;
 					coin.MarketPrice.PriceBTCBefore24h = 1;
@@ -52,7 +52,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 {
 					coin.MarketPrice.LatestPriceBTC = (double)jobj["last"];
                     coin.MarketPrice.PriceBTCBefore24h = (double)jobj["open"];
-                    var btcprice = coins.Where(x => x.Symbol == "BTC").Select(x => x.MarketPrice).First();
+                    var btcprice = coins.Where(x => x.Symbol1 == "BTC").Select(x => x.MarketPrice).First();
                     if (btcprice != null)
                     {
                         coin.MarketPrice.LatestPriceUSD = (double)jobj["Last"] * btcprice.LatestPriceUSD;

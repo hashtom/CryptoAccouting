@@ -16,7 +16,7 @@ namespace CryptoAccouting.CoreClass.APIClass
         //private static string _apiKey;
         //private static string _apiSecret;
 
-        public static async Task<EnuAPIStatus> FetchPriceAsync(InstrumentList coins, CrossRate crossrate)
+        public static async Task<EnuAPIStatus> FetchPriceAsync(Exchange bittrex, InstrumentList coins, CrossRate crossrate)
         {
             string rawjson;
 
@@ -37,13 +37,13 @@ namespace CryptoAccouting.CoreClass.APIClass
             var jobj = await Task.Run(() => JObject.Parse(rawjson));
             var jarray = (JArray)jobj["result"];
 
-            var btcprice = coins.Where(x => x.Symbol == "BTC").Select(x => x.MarketPrice).First();
+            var btcprice = coins.First(x => x.Symbol1 == "BTC").MarketPrice;
 
             foreach (var coin in coins.Where(x => x.PriceSourceCode == "Bittrex"))
             {
-                if (jarray.Any(x => (string)x["MarketName"] == "BTC-" + coin.Symbol))
+                if (jarray.Any(x => (string)x["MarketName"] == "BTC-" + bittrex.GetSymbolForExchange(coin.Id)))
                 {
-                    var jrow = jarray.First(x => (string)x["MarketName"] == "BTC-" + coin.Symbol);
+                    var jrow = jarray.First(x => (string)x["MarketName"] == "BTC-" + bittrex.GetSymbolForExchange(coin.Id));
                     if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
 
                     coin.MarketPrice.LatestPriceBTC = (double)jrow["Last"];

@@ -72,9 +72,9 @@ namespace CryptoAccouting.CoreClass
         {
             Transaction tx;
 
-            if (transactions.Any(t => (t.TradecCoinSymbol == tradedCoin.Symbol && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date)))
+            if (transactions.Any(t => (t.TradecCoinSymbol == tradedCoin.Symbol1 && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date)))
             {
-                tx = transactions.Single(t => (t.TradecCoinSymbol == tradedCoin.Symbol && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date));
+                tx = transactions.Single(t => (t.TradecCoinSymbol == tradedCoin.Symbol1 && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date));
 
                 double newqty;
                 newqty = tx.Quantity + qty;

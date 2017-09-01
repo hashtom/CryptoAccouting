@@ -28,7 +28,7 @@ namespace CryptoAccouting.CoreClass
         public Position()
         {
             Id = int.MaxValue;
-            Coin = new Instrument("N/A","N/A","N/A");
+            Coin = new Instrument("N/A");
             BalanceDate = DateTime.Now.Date;
         }
 

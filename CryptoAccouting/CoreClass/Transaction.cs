@@ -20,7 +20,7 @@ namespace CryptoAccouting.CoreClass
         //public DateTime UpdateTime { get; set; }
 
         public string TradecCoinSymbol {
-            get { return TradedCoin.Symbol; }
+            get { return TradedCoin.Symbol1; }
         }
 
         public string Side

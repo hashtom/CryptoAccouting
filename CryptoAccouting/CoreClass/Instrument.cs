@@ -8,7 +8,7 @@ namespace CryptoAccouting.CoreClass
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string Symbol { get; set; }
+        public string Symbol1 { get; set; }
         public string Symbol2 { get; set; }
         public InstrumentType Type { get; set; }
 		public Price MarketPrice { get; set; }
@@ -16,13 +16,11 @@ namespace CryptoAccouting.CoreClass
 		public int rank { get; set; }
         //public bool IsActive { get; set; }
 
-        public Instrument(string id, string symbol, string name)
+        public Instrument(string id)
         {
             Id = id;
-            Symbol = symbol;
-            Name = name;
             //TEMP
-            if (symbol == "BTC")
+            if (id == "bitcoin")
             {
                 PriceSourceCode = "Bitstamp";
             }
@@ -41,7 +39,7 @@ namespace CryptoAccouting.CoreClass
 			else
 			{
 				Balance bal = new Balance();
-                foreach (var pos in totalbalance.Where(x => (x.Coin.Symbol == Symbol && x.Coin.Id == Id)))
+                foreach (var pos in totalbalance.Where(x => (x.Coin.Symbol1 == Symbol1 && x.Coin.Id == Id)))
 				{
 					bal.Attach(pos);
 				}

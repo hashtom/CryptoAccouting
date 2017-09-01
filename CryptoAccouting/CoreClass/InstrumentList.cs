@@ -35,6 +35,21 @@ namespace CryptoAccouting.CoreClass
 			return instruments[indexNumber];
 		}
 
+        public Instrument GetByInstrumentId(string instrumentid)
+        {
+            return instruments.Any(x => x.Id == instrumentid) ? instruments.First(x => x.Id == instrumentid) : null;
+        }
+
+		public Instrument GetBySymbol1(string symbol)
+		{
+            return instruments.Any(x => x.Symbol1 == symbol) ? instruments.First(x => x.Symbol1 == symbol) : null;
+		}
+
+		public Instrument GetBySymbol2(string symbol)
+		{
+			return instruments.Any(x => x.Symbol2 == symbol) ? instruments.First(x => x.Symbol2 == symbol) : null;
+		}
+
         public void Clear()
         {
             instruments.Clear();

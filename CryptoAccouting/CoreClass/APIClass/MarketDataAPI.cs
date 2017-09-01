@@ -11,7 +11,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 {
     public static class MarketDataAPI
     {
-		public static async Task<EnuAPIStatus> FetchCoinPricesAsync(InstrumentList coins, CrossRate crossrate)
+        public static async Task<EnuAPIStatus> FetchCoinPricesAsync(ExchangeList exchanges, InstrumentList coins, CrossRate crossrate)
 		{
             var status = EnuAPIStatus.FailureParameter;
 
@@ -20,11 +20,13 @@ namespace CryptoAccouting.CoreClass.APIClass
                 switch (source)
                 {
                     case "Bittrex":
-                        status = await BittrexAPI.FetchPriceAsync(coins, crossrate);
+                        var bittrex = exchanges.First(x => x.Code == "Bittrex");
+                        status = await BittrexAPI.FetchPriceAsync(bittrex, coins, crossrate);
                         break;
 
                     case "Bitstamp":
-                        status = await BItstampAPI.FetchPriceAsync(coins, crossrate);
+                        var bitstamp = exchanges.First(x => x.Code == "Bitstamp");
+                        status = await BItstampAPI.FetchPriceAsync(bitstamp, coins, crossrate);
                         break;
 
                     case "Zaif":
@@ -51,19 +53,19 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
             else
             {
-                if (instrumentlist.Any(x => x.Symbol == "BTC"))
+                if (instrumentlist.Any(x => x.Symbol1 == "BTC"))
                 {
-                    var bitcoin = instrumentlist.Where(x => x.Symbol == "BTC").First();
+                    var bitcoin = instrumentlist.Where(x => x.Symbol1 == "BTC").First();
                     instrumentlist.Detach(bitcoin);
                     instrumentlist.Insert(0, bitcoin);
                 }
                 else{
-                    instrumentlist.Insert(0, ApplicationCore.GetInstrumentSymbol("BTC"));
+                    instrumentlist.Insert(0, ApplicationCore.InstrumentList.GetByInstrumentId("bitcoin"));
                 }
 
-                foreach (var paircoin in instrumentlist.Where(x=>x.Symbol!="BTC"))
+                foreach (var paircoin in instrumentlist.Where(x=>x.Symbol1!="BTC"))
 				{
-                    pairs = pairs + "," + paircoin.Symbol.ToLower() + "_btc";
+                    pairs = pairs + "," + paircoin.Symbol1.ToLower() + "_btc";
 				}
 
 				var parameters = new Dictionary<string, string>();
@@ -99,9 +101,9 @@ namespace CryptoAccouting.CoreClass.APIClass
                         symobl = idstring.Replace("btc", "").Replace("/", "").Replace("¥", "").ToUpper();
                     }
 
-                    if (instrumentlist.Any(x => x.Symbol == symobl))
+                    if (instrumentlist.Any(x => x.Symbol1 == symobl))
                     {
-                        var coin = instrumentlist.Where(x => x.Symbol == symobl).First();
+                        var coin = instrumentlist.Where(x => x.Symbol1 == symobl).First();
 
                         if (coin.MarketPrice == null)
                         {
@@ -110,10 +112,10 @@ namespace CryptoAccouting.CoreClass.APIClass
                         }
 
                         //coin.MarketPrice.SourceCurrency = coin.Symbol == "BTC" ? EnuCCY.USD : EnuCCY.BTC;
-                        coin.MarketPrice.LatestPriceBTC = coin.Symbol == "BTC" ? 1 : (double)jrow["price"];
-                        coin.MarketPrice.PriceBTCBefore24h = coin.Symbol == "BTC" ? 1 : (double)jrow["price_before_24h"];
-                        coin.MarketPrice.LatestPriceUSD = coin.Symbol == "BTC" ? (double)jrow["price"] : (double)jrow["price"] * (double)jarray[0]["price"];
-                        coin.MarketPrice.PriceUSDBefore24h = coin.Symbol == "BTC" ? (double)jrow["price_before_24h"] : (double)jrow["price_before_24h"] * (double)jarray[0]["price_before_24h"];
+                        coin.MarketPrice.LatestPriceBTC = coin.Symbol1 == "BTC" ? 1 : (double)jrow["price"];
+                        coin.MarketPrice.PriceBTCBefore24h = coin.Symbol1 == "BTC" ? 1 : (double)jrow["price_before_24h"];
+                        coin.MarketPrice.LatestPriceUSD = coin.Symbol1 == "BTC" ? (double)jrow["price"] : (double)jrow["price"] * (double)jarray[0]["price"];
+                        coin.MarketPrice.PriceUSDBefore24h = coin.Symbol1 == "BTC" ? (double)jrow["price_before_24h"] : (double)jrow["price_before_24h"] * (double)jarray[0]["price_before_24h"];
                         coin.MarketPrice.DayVolume = (double)jrow["volume_btc"];
                         coin.MarketPrice.PriceDate = DateTime.Now;
                         coin.MarketPrice.USDCrossRate = crossrate;
@@ -168,9 +170,9 @@ namespace CryptoAccouting.CoreClass.APIClass
 			string CoinChartsUrl = "http://api.cryptocoincharts.info/tradingPair/";
             JObject json;
 
-            if (coin.Symbol != "BTC" && bitcoin is null)
+            if (coin.Symbol1 != "BTC" && bitcoin is null)
             {
-                bitcoin = new Instrument("Bitcoin", "BTC", "BitCoin");
+                bitcoin = new Instrument("Bitcoin"){Symbol1="BTC"};
                 await FetchCoinMarketDataAsync(bitcoin);
             }
 
@@ -186,7 +188,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     coin.MarketPrice = p;
                 }
 
-                CoinChartsUrl = (coin.Symbol == "BTC") ? CoinChartsUrl + "btc_usd" : CoinChartsUrl + coin.Symbol.ToLower() + "_btc";
+                CoinChartsUrl = (coin.Symbol1 == "BTC") ? CoinChartsUrl + "btc_usd" : CoinChartsUrl + coin.Symbol1.ToLower() + "_btc";
 
                 using (var http = new HttpClient())
                 {
@@ -197,10 +199,10 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 if (json["id"] != null)
                 {
-                    coin.MarketPrice.LatestPriceBTC = coin.Symbol == "BTC" ? 1 : (double)json["price"];
-                    coin.MarketPrice.PriceBTCBefore24h = coin.Symbol == "BTC" ? 1 : (double)json["price_before_24h"];
-                    coin.MarketPrice.LatestPriceUSD = coin.Symbol == "BTC" ? (double)json["price"] : (double)json["price"] * bitcoin.MarketPrice.LatestPriceUSD;
-                    coin.MarketPrice.PriceUSDBefore24h = coin.Symbol == "BTC" ? (double)json["price_before_24h"] : (double)json["price_before_24h"] * bitcoin.MarketPrice.PriceUSDBefore24h;
+                    coin.MarketPrice.LatestPriceBTC = coin.Symbol1 == "BTC" ? 1 : (double)json["price"];
+                    coin.MarketPrice.PriceBTCBefore24h = coin.Symbol1 == "BTC" ? 1 : (double)json["price_before_24h"];
+                    coin.MarketPrice.LatestPriceUSD = coin.Symbol1 == "BTC" ? (double)json["price"] : (double)json["price"] * bitcoin.MarketPrice.LatestPriceUSD;
+                    coin.MarketPrice.PriceUSDBefore24h = coin.Symbol1 == "BTC" ? (double)json["price_before_24h"] : (double)json["price_before_24h"] * bitcoin.MarketPrice.PriceUSDBefore24h;
                     coin.MarketPrice.DayVolume = (double)json["volume_btc"];
                     coin.MarketPrice.PriceDate = DateTime.Now;
                 }
@@ -240,12 +242,16 @@ namespace CryptoAccouting.CoreClass.APIClass
                         if (instrumentlist.Any(x => x.Id == (string)elem["id"]))
                         {
                             coin = instrumentlist.First(x => x.Id == (string)elem["id"]);
-                            coin.Symbol = (string)elem["symbol"];
+                            coin.Symbol1 = (string)elem["symbol"];
                             coin.Name = (string)elem["name"];
                         }
                         else
                         {
-                            coin = new Instrument((string)elem["id"], (string)elem["symbol"], (string)elem["name"]);//IOTA symbol注意
+                            coin = new Instrument((string)elem["id"])
+                            {
+                                Symbol1 = (string)elem["symbol"],
+                                Name = (string)elem["name"]
+                            };//IOTA symbol注意
 						}
 
                         if (elem["symbol2"] != null)
@@ -341,11 +347,12 @@ namespace CryptoAccouting.CoreClass.APIClass
                             Instrument coin = null;
                             if (symbol["symbol"] != null)
                             {
-                                coin = ApplicationCore.GetInstrumentSymbol((string)symbol["symbol"]);
+                                coin = ApplicationCore.InstrumentList.GetBySymbol1((string)symbol["symbol"]);
                             }
                             else if (symbol["symbol2"] != null)
                             {
-                                coin = ApplicationCore.GetInstrumentSymbol2((string)symbol["symbol2"]);
+                                coin = ApplicationCore.InstrumentList.GetBySymbol2((string)symbol["symbol2"]);
+                                if (coin != null) exchange.AttachSymbolMap(coin.Id, EnuSymbolMapType.Symbol2);
                             }
 
                             if (coin != null) exchange.AttachListedCoin(coin);

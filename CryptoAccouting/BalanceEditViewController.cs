@@ -158,7 +158,7 @@ namespace CryptoAccouting
         public override void ReDrawScreen()
         {
 
-            labelCoinSymbol.Text = thisCoin.Symbol;
+            labelCoinSymbol.Text = thisCoin.Symbol1;
             labelCoinName.Text = thisCoin.Name;
 
             if (thisCoin.MarketPrice != null)
@@ -276,7 +276,7 @@ namespace CryptoAccouting
 
         public override void SetSearchSelectionItem(string searchitem1)
         {
-            thisCoin = ApplicationCore.GetInstrumentSymbol(searchitem1);
+            thisCoin = ApplicationCore.InstrumentList.GetByInstrumentId(searchitem1);
             exchangesListed = ApplicationCore.GetExchangeListByInstrument(searchitem1);
             thisStorage = CoinStorageList.GetStorageListSelection().First(x => x.StorageType == EnuCoinStorageType.TBA);
             editmode = true;

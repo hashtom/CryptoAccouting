@@ -34,7 +34,7 @@
             {                 var mycoins = new InstrumentList();
                 Balance.Select(x => x.Coin).Distinct().ToList().ForEach(x => mycoins.Attach(x));
                 //return await MarketDataAPI.FetchCoinMarketDataAsync(mycoins, USDCrossRate);
-                return await MarketDataAPI.FetchCoinPricesAsync(mycoins, USDCrossRate);             }
+                return await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRate);             }
             else
             {                 return EnuAPIStatus.NotAvailable;             }
         }          public static EnuAPIStatus SaveAppSetting()
@@ -54,26 +54,15 @@
                     return EnuAPIStatus.Success;
                 }
             }          }          public static void SaveInstrumentXML()
-        {             StorageAPI.SaveInstrumentXML(InstrumentList, "instruments.xml");         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, "mybalance.xml");         }          public static Instrument GetInstrumentSymbol(string symbol)
-        {
-            if (InstrumentList.Any(i => i.Symbol == symbol))
-            {
-                return InstrumentList.First(i => i.Symbol == symbol);
-            }
-            else
-            {                 return null;             }         }
+        {             StorageAPI.SaveInstrumentXML(InstrumentList, "instruments.xml");         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, "mybalance.xml");         }          //public static Instrument GetInstrumentSymbol1(string symbol)
+        //{
+        //    if (InstrumentList.Any(i => i.Symbol1 == symbol))
+        //    {
+        //        return InstrumentList.First(i => i.Symbol1 == symbol);
+        //    }
+        //    else
+        //    {         //        return null;         //    }         //}
 
-		public static Instrument GetInstrumentSymbol2(string symbol2)
-		{
-            if (InstrumentList.Any(i => i.Symbol2 == symbol2))
-			{
-				return InstrumentList.First(i => i.Symbol2 == symbol2);
-			}
-			else
-			{
-				return null;
-			}
-		}
 
         //public static InstrumentList InstrumentList()
         //{

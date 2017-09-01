@@ -24,7 +24,7 @@ namespace CryptoAccouting.UIClass
 
         private List<Position> BookingPositions()
         {
-            return myBalance.Where(x => x.Coin.Symbol == symbol_selected).ToList();
+            return myBalance.Where(x => x.Coin.Symbol1 == symbol_selected).ToList();
         }
 
 		public override nint RowsInSection(UITableView tableview, nint section)

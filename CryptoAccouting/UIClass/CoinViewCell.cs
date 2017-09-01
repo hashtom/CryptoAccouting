@@ -24,9 +24,9 @@ namespace CryptoAccouting.UIClass
 
         public void UpdateCell(Position pos, bool ShowBookingValue)
 		{
-            labelSymbol.Text = pos.Coin.Symbol;
+            labelSymbol.Text = pos.Coin.Symbol1;
 
-            if (pos.Coin.Symbol is "BTC")
+            if (pos.Coin.Symbol1 is "BTC")
             {
                 labelPrice.Text = "$" + String.Format("{0:n}", pos.LatestPriceUSD());
                 labelHolding.Text = "";

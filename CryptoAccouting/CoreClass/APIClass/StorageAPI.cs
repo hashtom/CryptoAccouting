@@ -53,9 +53,9 @@ namespace CryptoAccouting.CoreClass.APIClass
                 foreach (var elem in mybalXE)
                 {
                     Instrument coin;
-                    if (instrumentlist.Where(i => i.Symbol == elem.Element("symbol").Value).Any())
+                    if (instrumentlist.Where(i => i.Symbol1 == elem.Element("symbol").Value).Any())
                     {
-                        coin = instrumentlist.Where(i => i.Symbol == elem.Element("symbol").Value).First();
+                        coin = instrumentlist.Where(i => i.Symbol1 == elem.Element("symbol").Value).First();
                         var tradedexchange = ApplicationCore.GetExchange(elem.Element("exchange").Value);
 
                         var pos = new Position(coin)
@@ -123,7 +123,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 			{
                 XElement position = new XElement("position",
                                                  new XAttribute("id", pos.Id.ToString()),
-                                                 new XElement("symbol", pos.Coin.Symbol),
+                                                 new XElement("symbol", pos.Coin.Symbol1),
                                                  new XElement("date", pos.BalanceDate),
                                                  new XElement("amount", pos.Amount.ToString()),
                                                  new XElement("amountbtc", pos.LatestAmountBTC().ToString()),
@@ -158,7 +158,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 XElement instrument = new XElement("instrument",
                                                    new XAttribute("id", coin.Id),
-                                                   new XElement("symbol", coin.Symbol),
+                                                   new XElement("symbol", coin.Symbol1),
                                                    new XElement("symbol2", coin.Symbol2),
                                                    new XElement("name", coin.Name),
                                                    new XElement("type", coin.Type.ToString()),
@@ -190,9 +190,12 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 foreach (var elem in instrumentsXE)
                 {
-                    var coin = new Instrument(elem.Attribute("id").Value,
-                                              elem.Element("symbol").Value,
-                                              elem.Element("name").Value);
+                    var coin = new Instrument(elem.Attribute("id").Value)
+                    {
+                        Symbol1 = elem.Element("symbol").Value,
+                        Name = elem.Element("name").Value
+                    };
+
                     if (elem.Element("symbol2") != null) coin.Symbol2 = elem.Element("symbol2").Value;
                     //if (elem.Descendants("logofile").Select(x => x.Value).Any())
                     //{
