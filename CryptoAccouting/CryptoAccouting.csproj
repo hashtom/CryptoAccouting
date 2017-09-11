@@ -149,6 +149,7 @@
     <None Include="TestData\BalanceData.xml" />
     <None Include="TestData\instrumentsData.xml" />
     <None Include="Images\creditmemo.txt" />
+    <None Include="Json\fxget.sh" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />

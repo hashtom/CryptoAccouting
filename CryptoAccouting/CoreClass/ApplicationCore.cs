@@ -110,7 +110,7 @@
         public static string NumberFormat(double number)
 		{
 			var digit = unchecked((int)Math.Log10(number)) + 1;
-			if (digit > 7)
+			if (digit > 6)
 			{
 				return String.Format("{0:n2}", number / 1000000) + "MM";
 			}

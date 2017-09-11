@@ -370,47 +370,78 @@ namespace CryptoAccouting.CoreClass.APIClass
         public static async Task<CrossRate> FetchUSDCrossRateAsync(EnuCCY BaseCurrency)
 		{
             CrossRate crossrate = null;
-			string rawjson;
-            const string jsonfilename = "crossrate.json";
-            const string BaseUri = "https://finance.yahoo.com/webservice/v1/symbols/allcurrencies/quote?format=json";
+			string rawjson_today, rawjson_yesterday;
+            const string jsonfilename_today = "crossrate_today.json";
+            const string jsonfilename_yesterday = "crossrate_yesterday.json";
+            //const string BaseUri = "https://finance.yahoo.com/webservice/v1/symbols/allcurrencies/quote?format=json";
+            const string BaseUri = "http://bridgeplace.sakura.ne.jp/cryptoticker";
 
-            if (!Reachability.IsHostReachable(BaseUri))
+			if (!Reachability.IsHostReachable(BaseUri))
             {
-                rawjson = StorageAPI.LoadFromJsonFile(jsonfilename);
-                if (rawjson is null) return null;
+                rawjson_today = StorageAPI.LoadFromJsonFile(jsonfilename_today);
+                rawjson_yesterday = StorageAPI.LoadFromJsonFile(jsonfilename_yesterday);
+                if (rawjson_today is null) return null;
             }
             else
             {
                 using (var http = new HttpClient())
                 {
-                    HttpResponseMessage response = await http.GetAsync(BaseUri);
+                    HttpResponseMessage response = await http.GetAsync(BaseUri + "/fxrate/fxrate_latest.json");
                     if (!response.IsSuccessStatusCode)
                     {
                         return null;
                     }
-                    rawjson = await response.Content.ReadAsStringAsync();
+                    rawjson_today = await response.Content.ReadAsStringAsync();
+                }
+
+				using (var http = new HttpClient())
+				{
+					HttpResponseMessage response = await http.GetAsync(BaseUri + "/fxrate/fxrate_yesterday.json");
+					if (!response.IsSuccessStatusCode)
+					{
+						return null;
+					}
+                    rawjson_yesterday = await response.Content.ReadAsStringAsync();
+				}
+            }
+
+            var json = JObject.Parse(rawjson_today);
+
+            foreach (var ccy in (JArray)json["list"]["resources"])
+            {
+                EnuCCY baseccy;
+                var cursymbol = (string)ccy["resource"]["fields"]["symbol"];
+
+                if (!Enum.TryParse(cursymbol.Replace("=X", ""), out baseccy))
+                    continue;
+
+                if (baseccy == BaseCurrency)
+                {
+                    crossrate = new CrossRate(baseccy, (double)ccy["resource"]["fields"]["price"], DateTime.Now.Date);
+                    break;
                 }
             }
 
-				var json = JObject.Parse(rawjson);
+            json = JObject.Parse(rawjson_yesterday);
 
-                foreach (var ccy in (JArray)json["list"]["resources"])
+			foreach (var ccy in (JArray)json["list"]["resources"])
+			{
+				EnuCCY baseccy;
+				var cursymbol = (string)ccy["resource"]["fields"]["symbol"];
+
+				if (!Enum.TryParse(cursymbol.Replace("=X", ""), out baseccy))
+					continue;
+
+				if (baseccy == BaseCurrency)
 				{
-                    EnuCCY baseccy;
-                    var cursymbol = (string)ccy["resource"]["fields"]["symbol"];
-
-					if (!Enum.TryParse(cursymbol.Replace("=X", ""), out baseccy))
-                        continue;
-
-                    if (baseccy == BaseCurrency)
-                    {
-                        crossrate = new CrossRate(baseccy, (double)ccy["resource"]["fields"]["price"], DateTime.Now.Date);
-                        break;
-                    }
+                    crossrate.RateBefore24h = (double)ccy["resource"]["fields"]["price"];
+					break;
 				}
-                StorageAPI.SaveJsonFile(rawjson, jsonfilename);
+			}
 
 
+            StorageAPI.SaveJsonFile(rawjson_today, jsonfilename_today);
+            StorageAPI.SaveJsonFile(rawjson_yesterday, jsonfilename_yesterday);
 
             return crossrate;
 		}

@@ -116,6 +116,19 @@ namespace CryptoAccouting.CoreClass
             return ret1d;
         }
 
+		public double BaseRet1d()
+		{
+			double ret1d = 0;
+            var total = positions.Select(x => x.LatestFiatValueBase()).Sum();
+
+			foreach (var p in positions)
+			{
+                ret1d += p.BaseRet1d() * p.LatestFiatValueBase() / total;
+			}
+
+			return ret1d;
+		}
+
 
    //     private Balance GetBalanceByExchangeCode(string ExchangeCode)
    //     {

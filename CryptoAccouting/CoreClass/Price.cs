@@ -37,7 +37,6 @@ namespace CryptoAccouting.CoreClass
             return (USDCrossRate is null) ? 0 : MarketCap * USDCrossRate.Rate;
         }
 
-        //Todo
         public double BaseRet1d()
         {
             return (USDCrossRate is null) ? 0 : ((LatestPriceUSD * USDCrossRate.Rate) / (PriceUSDBefore24h * USDCrossRate.RateBefore24h) - 1) * 100;

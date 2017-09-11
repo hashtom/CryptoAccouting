@@ -57,7 +57,7 @@
                 }
                 TableView.ReloadData();
             };          }          public override void ReDrawScreen()         {
-            if (ApplicationCore.Balance != null)             {                 labelCcy.Text = ApplicationCore.BaseCurrency.ToString();                  //var digit = (int)Math.Log10(mybalance.LatestFiatValueBase()) + 1;                 labelTotalFiat.Text = ApplicationCore.NumberFormat(mybalance.LatestFiatValueBase());                 labelTotalBTC.Text = ApplicationCore.NumberFormat(mybalance.AmountBTC());                 label1dPctBTC.Text = ApplicationCore.NumberFormat(mybalance.USDRet1d()) + "%";
+            if (ApplicationCore.Balance != null)             {                 labelCcy.Text = ApplicationCore.BaseCurrency.ToString();                  //var digit = (int)Math.Log10(mybalance.LatestFiatValueBase()) + 1;                 labelTotalFiat.Text = ApplicationCore.NumberFormat(mybalance.LatestFiatValueBase());                 labelTotalBTC.Text = ApplicationCore.NumberFormat(mybalance.AmountBTC());                 //label1dPctBTC.Text = ApplicationCore.NumberFormat(mybalance.USDRet1d()) + "%";                 label1dPctBTC.Text = ApplicationCore.NumberFormat(mybalance.BaseRet1d()) + "%";
                 mybalance.BalanceByCoin.SortPositionByHolding();
             }         } 
         partial void ButtonAddNew_Activated(UIBarButtonItem sender)
