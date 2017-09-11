@@ -11,20 +11,20 @@ namespace CryptoAccouting.UIClass
 	public class CoinBookingTableSource : UITableViewSource
 	{
 		Balance myBalance;
-        string symbol_selected;
+        string instrumentid_selected;
 		NSString cellIdentifier = new NSString("BookingViewCell");
 		CryptoTableViewController owner;
 
-        public CoinBookingTableSource(string symbol, Balance myBalance, CryptoTableViewController owner)
+        public CoinBookingTableSource(string instrumentid, Balance myBalance, CryptoTableViewController owner)
         {
             this.myBalance = myBalance;
             this.owner = owner;
-            symbol_selected = symbol;
+            this.instrumentid_selected = instrumentid;
         }
 
         private List<Position> BookingPositions()
         {
-            return myBalance.Where(x => x.Coin.Symbol1 == symbol_selected).ToList();
+            return myBalance.Where(x => x.Coin.Id == instrumentid_selected).ToList();
         }
 
 		public override nint RowsInSection(UITableView tableview, nint section)

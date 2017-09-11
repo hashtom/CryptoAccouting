@@ -105,4 +105,17 @@
         public static async Task FetchMarketDataAsync(Instrument coin)
         {
             await MarketDataAPI.FetchCoinMarketDataAsync(coin);
-        }      }      public enum EnuAPIStatus{         Success,         FailureNetwork,         FailureStorage,         FailureParameter,         NotAvailable     }  } 
+        }
+
+        public static string NumberFormat(double number)
+		{
+			var digit = unchecked((int)Math.Log10(number)) + 1;
+			if (digit > 7)
+			{
+				return String.Format("{0:n2}", number / 1000000) + "MM";
+			}
+			else
+			{
+				return String.Format("{0:n2}", number);
+			}
+		}      }      public enum EnuAPIStatus{         Success,         FailureNetwork,         FailureStorage,         FailureParameter,         NotAvailable     }  } 

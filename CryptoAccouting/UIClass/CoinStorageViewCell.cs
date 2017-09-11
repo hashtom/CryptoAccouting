@@ -24,8 +24,8 @@ namespace CryptoAccouting.UIClass
 		{
             
             labelExchange.Text = storage.Name;
-            labelHoldingBTC.Text = "฿" + String.Format("{0:n2}", storage.AmountBTC());
-            labelValueK.Text = String.Format("{0:n2}", storage.LatestFiatValueBase());
+            labelHoldingBTC.Text = "฿" + ApplicationCore.NumberFormat(storage.AmountBTC());
+            labelValueK.Text = ApplicationCore.NumberFormat(storage.LatestFiatValueBase());
             labelRet.Text = String.Format("{0:n2}", storage.Weight * 100) + "%";
 		}
     }

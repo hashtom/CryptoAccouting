@@ -28,32 +28,30 @@ namespace CryptoAccouting.UIClass
 
             if (pos.Coin.Symbol1 is "BTC")
             {
-                labelPrice.Text = "$" + String.Format("{0:n}", pos.LatestPriceUSD());
+                labelPrice.Text = "$" + ApplicationCore.NumberFormat(pos.LatestPriceUSD());
                 labelHolding.Text = "";
-                labelHoldingBTC.Text = "฿" + String.Format("{0:n4}", pos.LatestAmountBTC());
-                labelMemo.Text = String.Format("{0:n2}", pos.LatestSourceRet1d()) + " %";
+                labelHoldingBTC.Text = "฿" + ApplicationCore.NumberFormat(pos.LatestAmountBTC());
+                labelMemo.Text = ApplicationCore.NumberFormat(pos.LatestSourceRet1d()) + " %";
             }
             else
             {
-                labelPrice.Text = "฿" + String.Format("{0:n8}", pos.LatestPriceBTC());
-                labelHolding.Text = String.Format("{0:n2}", pos.Amount);
-                labelHoldingBTC.Text = "฿" + String.Format("{0:n4}", pos.LatestAmountBTC());
-                labelMemo.Text = String.Format("{0:n2}", pos.BTCRet1d()) + " %";
+                labelPrice.Text = "฿" + ApplicationCore.NumberFormat(pos.LatestPriceBTC());
+                labelHolding.Text = ApplicationCore.NumberFormat(pos.Amount);
+                labelHoldingBTC.Text = "฿" + ApplicationCore.NumberFormat(pos.LatestAmountBTC());
+                labelMemo.Text = ApplicationCore.NumberFormat(pos.BTCRet1d()) + " %";
             }
 
             if (ShowBookingValue)
             {
-                labelPrice.Text = String.Format("{0:n2}", pos.BookPriceUSD);
-                labelValue.Text = String.Format("{0:n0}", pos.BookValue());
+                labelPrice.Text = ApplicationCore.NumberFormat(pos.BookPriceUSD);
+                labelValue.Text = ApplicationCore.NumberFormat(pos.BookValue());
                 labelMemo.Text = pos.BookedExchange == null ? "" : pos.BookedExchange.Name;
             }
             else
             {
                 var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Images", pos.Coin.Id + ".png");
                 ImageView.Image = logo == null ? null : UIImage.FromFile(logo);
-                //imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
-
-                labelValue.Text = String.Format("{0:n2}", pos.LatestFiatValueBase());
+                labelValue.Text = ApplicationCore.NumberFormat(pos.LatestFiatValueBase());
             }
 
 		}

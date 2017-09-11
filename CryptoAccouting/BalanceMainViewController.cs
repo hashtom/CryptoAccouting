@@ -57,7 +57,7 @@
                 }
                 TableView.ReloadData();
             };          }          public override void ReDrawScreen()         {
-            if (ApplicationCore.Balance != null)             {                 labelCcy.Text = ApplicationCore.BaseCurrency.ToString();                 labelTotalFiat.Text = String.Format("{0:n0}", mybalance.LatestFiatValueBase());                 labelTotalBTC.Text = String.Format("{0:n2}", mybalance.AmountBTC());
+            if (ApplicationCore.Balance != null)             {                 labelCcy.Text = ApplicationCore.BaseCurrency.ToString();                  //var digit = (int)Math.Log10(mybalance.LatestFiatValueBase()) + 1;                 labelTotalFiat.Text = mybalance.LatestFiatValueBase_String();                 labelTotalBTC.Text = mybalance.AmountBTC_String();                 //label1dPctBTC.Text = mybalance
                 mybalance.BalanceByCoin.SortPositionByHolding();
             }         } 
         partial void ButtonAddNew_Activated(UIBarButtonItem sender)
@@ -67,7 +67,7 @@
 
         async partial void ButtonRefresh_Activated(UIBarButtonItem sender)
 		{
-            await ApplicationCore.FetchMarketDataFromBalanceAsync();             //mybalance.BalanceByCoin.SortPositionByHolding();             TableView.ReloadData();
+            await ApplicationCore.FetchMarketDataFromBalanceAsync();             //mybalance.BalanceByCoin.SortPositionByHolding();             ReDrawScreen();             TableView.ReloadData();
 		}          private void PushSelectionView()
         {
             List<SelectionSearchItem> searchitems = new List<SelectionSearchItem>();             foreach (var item in ApplicationCore.InstrumentList)

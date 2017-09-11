@@ -29,7 +29,12 @@ namespace CryptoAccouting.CoreClass
         }
 
         public double LatestFiatValueUSD(){
-            return positions.Sum(x => x.LatestFiatValueUSD());
+            return  positions.Sum(x => x.LatestFiatValueUSD());
+        }
+
+        public string LatestFiatValueUSD_String()
+        {
+            return  ApplicationCore.NumberFormat(LatestFiatValueUSD());
         }
 
 		public double LatestFiatValueBase()
@@ -37,10 +42,20 @@ namespace CryptoAccouting.CoreClass
             return positions.Sum(x => x.LatestFiatValueBase());
 		}
 
+        public string LatestFiatValueBase_String()
+        {
+            return ApplicationCore.NumberFormat(LatestFiatValueBase());
+        }
+
 		public double AmountBTC()
 		{
             return positions.Sum(x => x.LatestAmountBTC());
 		}
+
+        public string AmountBTC_String()
+        {
+            return ApplicationCore.NumberFormat(AmountBTC());
+        }
 
         public void SortPositionByHolding(){
             positions = positions.OrderByDescending(x => x.LatestAmountBTC()).ToList();
@@ -200,5 +215,6 @@ namespace CryptoAccouting.CoreClass
 		{
 			return GetEnumerator();
 		}
+
     }
 }
