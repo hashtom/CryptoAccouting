@@ -50,11 +50,12 @@ namespace CryptoAccouting.CoreClass.APIClass
                     coin.MarketPrice.PriceBTCBefore24h = (double)jrow["PrevDay"];
                     coin.MarketPrice.DayVolume = (double)jrow["Volume"];
                     coin.MarketPrice.PriceDate = (DateTime)jrow["TimeStamp"];
+
                     coin.MarketPrice.USDCrossRate = crossrate;
                     if (btcprice != null)
                     {
                         coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"] * btcprice.LatestPriceUSD;
-                        coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"] * btcprice.PriceBTCBefore24h;
+                        coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"] * btcprice.PriceUSDBefore24h;
                     }
                 }
 

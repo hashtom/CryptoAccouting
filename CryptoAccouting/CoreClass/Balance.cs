@@ -32,30 +32,15 @@ namespace CryptoAccouting.CoreClass
             return  positions.Sum(x => x.LatestFiatValueUSD());
         }
 
-        public string LatestFiatValueUSD_String()
-        {
-            return  ApplicationCore.NumberFormat(LatestFiatValueUSD());
-        }
-
 		public double LatestFiatValueBase()
 		{
             return positions.Sum(x => x.LatestFiatValueBase());
 		}
 
-        public string LatestFiatValueBase_String()
-        {
-            return ApplicationCore.NumberFormat(LatestFiatValueBase());
-        }
-
 		public double AmountBTC()
 		{
             return positions.Sum(x => x.LatestAmountBTC());
 		}
-
-        public string AmountBTC_String()
-        {
-            return ApplicationCore.NumberFormat(AmountBTC());
-        }
 
         public void SortPositionByHolding(){
             positions = positions.OrderByDescending(x => x.LatestAmountBTC()).ToList();
@@ -117,6 +102,20 @@ namespace CryptoAccouting.CoreClass
             CoinStorageList.RecalculateWeights();
 
 		}
+
+        public double USDRet1d()
+        {
+            double ret1d = 0;
+            var total = positions.Select(x => x.LatestFiatValueUSD()).Sum();
+
+            foreach (var p in positions)
+            {
+                ret1d += p.USDRet1d() * p.LatestFiatValueUSD() / total;
+            }
+
+            return ret1d;
+        }
+
 
    //     private Balance GetBalanceByExchangeCode(string ExchangeCode)
    //     {

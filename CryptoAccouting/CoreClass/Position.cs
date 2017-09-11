@@ -97,12 +97,17 @@ namespace CryptoAccouting.CoreClass
 
         public double LatestSourceRet1d()
         {
-            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.SourceRet1d();
+            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.USDRet1d();
         }
 
-        public double Ret1dBase()
+		public double USDRet1d()
+		{
+            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.USDRet1d();
+		}
+
+        public double BaseRet1d()
         {
-            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.Ret1dBase();
+            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.BaseRet1d();
         }
 
         public double BTCRet1d()

@@ -37,12 +37,13 @@ namespace CryptoAccouting.CoreClass
             return (USDCrossRate is null) ? 0 : MarketCap * USDCrossRate.Rate;
         }
 
-        public double Ret1dBase()
+        //Todo
+        public double BaseRet1d()
         {
             return (USDCrossRate is null) ? 0 : ((LatestPriceUSD * USDCrossRate.Rate) / (PriceUSDBefore24h * USDCrossRate.RateBefore24h) - 1) * 100;
         }
 
-        public double SourceRet1d(){
+        public double USDRet1d(){
             return (LatestPriceUSD / PriceUSDBefore24h - 1) * 100;
         }
 
