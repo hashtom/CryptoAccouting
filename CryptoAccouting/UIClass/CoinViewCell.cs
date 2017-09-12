@@ -31,14 +31,14 @@ namespace CryptoAccouting.UIClass
                 labelPrice.Text = "$" + ApplicationCore.NumberFormat(pos.LatestPriceUSD());
                 labelHolding.Text = "";
                 labelHoldingBTC.Text = "฿" + ApplicationCore.NumberFormat(pos.LatestAmountBTC());
-                labelMemo.Text = ApplicationCore.NumberFormat(pos.LatestSourceRet1d()) + " %";
+                labelMemo.Text = String.Format("{0:n2}", pos.LatestSourceRet1d()) + " %";
             }
             else
             {
                 labelPrice.Text = "฿" + ApplicationCore.NumberFormat(pos.LatestPriceBTC());
                 labelHolding.Text = ApplicationCore.NumberFormat(pos.Amount);
                 labelHoldingBTC.Text = "฿" + ApplicationCore.NumberFormat(pos.LatestAmountBTC());
-                labelMemo.Text = ApplicationCore.NumberFormat(pos.BTCRet1d()) + " %";
+                labelMemo.Text = String.Format("{0:n2}", pos.BTCRet1d()) + " %";
             }
 
             if (ShowBookingValue)
