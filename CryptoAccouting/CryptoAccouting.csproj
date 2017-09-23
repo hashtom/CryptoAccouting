@@ -36,7 +36,7 @@
     <OutputPath>bin\iPhone\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Distribution</CodesignKey>
     <MtouchFloat32>true</MtouchFloat32>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchLink>SdkOnly</MtouchLink>
@@ -107,7 +107,7 @@
       <HintPath>..\..\..\..\Documents\Syncfusion\15.2.0.40\Xamarin\lib\ios-unified\Syncfusion.SfNavigationDrawer.iOS.dll</HintPath>
     </Reference>
     <Reference Include="NBitcoin">
-      <HintPath>..\packages\NBitcoin.4.0.0.29\lib\netstandard1.3\NBitcoin.dll</HintPath>
+      <HintPath>..\packages\NBitcoin.4.0.0.38\lib\netstandard1.3\NBitcoin.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -120,13 +120,16 @@
     <ImageAsset Include="Assets.xcassets\LaunchImage.launchimage\Contents.json" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone App Icon iOS 5,6.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone App Icon iOS 5,6%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone Spotlight iOS 5,6 &amp; Settings.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone App Icon iOS 7,9%402x.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone App Icon iOS 7,9%403x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone Spotlight iOS 5,6 &amp; Settings.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone Spotlight iOS 5,6 &amp; Settings%402x.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone Spotlight iOS 5,6 &amp; Settings%403x.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone Spotlight iOS 7,9%402x.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone Spotlight iOS 7,9%403x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-40x40%401x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-20x20%403x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iTunesArtwork%402x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -238,8 +241,11 @@
     <BundleResource Include="Images\PLtab.png" />
     <BundleResource Include="Images\transactiontab.png" />
     <BundleResource Include="Images\positiontab.png" />
-    <BundleResource Include="Resources\Default-568h%402x.png" />
     <BundleResource Include="Json\InstrumentList.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ITunesArtwork Include="iTunesArtwork" />
+    <ITunesArtwork Include="iTunesArtwork%402x" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />
