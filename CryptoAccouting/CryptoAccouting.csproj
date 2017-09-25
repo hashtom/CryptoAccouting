@@ -141,7 +141,6 @@
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="Main.storyboard" />
     <InterfaceDefinition Include="UIClass\CoinViewCell.xib" />
-    <InterfaceDefinition Include="UIClass\CoinStorageViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -188,10 +187,6 @@
       <DependentUpon>CoinViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="UIClass\CoinStorageTableSource.cs" />
-    <Compile Include="UIClass\CoinStorageViewCell.cs" />
-    <Compile Include="UIClass\CoinStorageViewCell.designer.cs">
-      <DependentUpon>CoinStorageViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="BalanceEditViewController.cs" />
     <Compile Include="BalanceEditViewController.designer.cs">
       <DependentUpon>BalanceEditViewController.cs</DependentUpon>
