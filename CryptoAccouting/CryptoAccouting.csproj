@@ -142,7 +142,6 @@
     <InterfaceDefinition Include="Main.storyboard" />
     <InterfaceDefinition Include="UIClass\CoinViewCell.xib" />
     <InterfaceDefinition Include="UIClass\CoinStorageViewCell.xib" />
-    <InterfaceDefinition Include="UIClass\CoinBookingViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -169,10 +168,6 @@
     <Compile Include="CoreClass\Price.cs" />
     <Compile Include="CoreClass\Transaction.cs" />
     <Compile Include="CoreClass\TradeList.cs" />
-    <Compile Include="TransactionViewController.cs" />
-    <Compile Include="TransactionViewController.designer.cs">
-      <DependentUpon>TransactionViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="UIClass\NavigationDrawer.cs" />
     <Compile Include="SettingTableViewController.cs" />
     <Compile Include="SettingTableViewController.designer.cs">
@@ -224,10 +219,6 @@
     <Compile Include="CoreClass\CoinStorageList.cs" />
     <Compile Include="CoreClass\Wallet.cs" />
     <Compile Include="CoreClass\InstrumentList.cs" />
-    <Compile Include="UIClass\CoinBookingViewCell.cs" />
-    <Compile Include="UIClass\CoinBookingViewCell.designer.cs">
-      <DependentUpon>CoinBookingViewCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="CoreClass\APIClass\BittrexAPI.cs" />
     <Compile Include="CoreClass\APIClass\BItstampAPI.cs" />
   </ItemGroup>

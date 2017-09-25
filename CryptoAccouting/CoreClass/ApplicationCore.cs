@@ -104,7 +104,8 @@
 
         public static async Task FetchMarketDataAsync(Instrument coin)
         {
-            await MarketDataAPI.FetchCoinMarketDataAsync(coin);
+            //await MarketDataAPI.FetchCoinMarketDataAsync(coin);
+            var mycoins = new InstrumentList();             if (coin.Symbol1 != "BTC") mycoins.Attach(InstrumentList.First(x => x.Symbol1 == "BTC"));             mycoins.Attach(coin);             await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRate);
         }
 
         public static string NumberFormat(double number)

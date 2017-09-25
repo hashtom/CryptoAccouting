@@ -32,6 +32,7 @@ namespace CryptoAccouting.UIClass
                 labelHolding.Text = "";
                 labelHoldingBTC.Text = "฿" + ApplicationCore.NumberFormat(pos.LatestAmountBTC());
                 labelMemo.Text = String.Format("{0:n2}", pos.LatestSourceRet1d()) + " %";
+                labelMemo.TextColor = pos.LatestSourceRet1d() > 0 ? UIColor.Green : UIColor.Red;
             }
             else
             {
@@ -39,6 +40,7 @@ namespace CryptoAccouting.UIClass
                 labelHolding.Text = ApplicationCore.NumberFormat(pos.Amount);
                 labelHoldingBTC.Text = "฿" + ApplicationCore.NumberFormat(pos.LatestAmountBTC());
                 labelMemo.Text = String.Format("{0:n2}", pos.BTCRet1d()) + " %";
+                labelMemo.TextColor = pos.BTCRet1d() > 0 ? UIColor.Green : UIColor.Red;
             }
 
             if (ShowBookingValue)
