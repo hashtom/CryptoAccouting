@@ -31,23 +31,23 @@ namespace CryptoAccouting.UIClass
                 labelPrice.Text = "$" + ApplicationCore.NumberFormat(pos.LatestPriceUSD());
                 labelHolding.Text = "";
                 labelHoldingBTC.Text = "฿" + ApplicationCore.NumberFormat(pos.LatestAmountBTC());
-                labelMemo.Text = String.Format("{0:n2}", pos.LatestSourceRet1d()) + " %";
-                labelMemo.TextColor = pos.LatestSourceRet1d() > 0 ? UIColor.Green : UIColor.Red;
+                labelRet1d.Text = String.Format("{0:n2}", pos.LatestSourceRet1d()) + " %";
+                labelRet1d.TextColor = pos.LatestSourceRet1d() > 0 ? UIColor.Green : UIColor.Red;
             }
             else
             {
                 labelPrice.Text = "฿" + ApplicationCore.NumberFormat(pos.LatestPriceBTC());
                 labelHolding.Text = ApplicationCore.NumberFormat(pos.Amount);
                 labelHoldingBTC.Text = "฿" + ApplicationCore.NumberFormat(pos.LatestAmountBTC());
-                labelMemo.Text = String.Format("{0:n2}", pos.BTCRet1d()) + " %";
-                labelMemo.TextColor = pos.BTCRet1d() > 0 ? UIColor.Green : UIColor.Red;
+                labelRet1d.Text = String.Format("{0:n2}", pos.BTCRet1d()) + " %";
+                labelRet1d.TextColor = pos.BTCRet1d() > 0 ? UIColor.Green : UIColor.Red;
             }
 
             if (ShowBookingValue)
             {
                 labelPrice.Text = ApplicationCore.NumberFormat(pos.BookPriceUSD);
                 labelValue.Text = ApplicationCore.NumberFormat(pos.BookValue());
-                labelMemo.Text = pos.BookedExchange == null ? "" : pos.BookedExchange.Name;
+                labelRet1d.Text = pos.BookedExchange == null ? "" : pos.BookedExchange.Name;
             }
             else
             {
