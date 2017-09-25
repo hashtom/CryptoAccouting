@@ -11,7 +11,7 @@ namespace CryptoAccouting.UIClass
     public class CoinStorageTableSource : UITableViewSource
     {
         CoinStorageList storagelist;
-        NSString cellIdentifier = new NSString("CoinStorageViewCell"); // set in the Storyboard
+        NSString cellIdentifier = new NSString("CoinStorageCell"); // set in the Storyboard
         CryptoTableViewController owner;
 
         public CoinStorageTableSource(CoinStorageList storagelist, CryptoTableViewController owner)
@@ -33,7 +33,7 @@ namespace CryptoAccouting.UIClass
             //if (cell == null)
             //cell = new CustomBalanceCell (cellIdentifier);
 
-            var cell = (CoinStorageViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
+            var cell = (CoinStorageCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
             cell.UpdateCell(storagelist.GetByIndex(indexPath.Row));
             return cell;
         }

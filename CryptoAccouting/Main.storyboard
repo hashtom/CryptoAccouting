@@ -107,7 +107,7 @@
                                     <segue destination="4PD-G1-6DB" kind="show" identifier="PositionDetailsSegue" id="27361"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CoinStorageViewCell" id="23927">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CoinStorageCell" id="23927">
                                 <rect key="frame" x="0.0" y="189" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="23927" id="23928">
