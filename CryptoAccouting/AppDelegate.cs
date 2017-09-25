@@ -11,6 +11,8 @@ namespace CryptoAccouting
     {
         // class-level declarations
 
+        public static bool IsInDesignerView = true;
+
         public override UIWindow Window
         {
             get;
@@ -21,6 +23,8 @@ namespace CryptoAccouting
         {
             // Override point for customization after application launch.
             // If not required for your application you can safely delete this method
+
+            IsInDesignerView = false;
 
             return true;
         }

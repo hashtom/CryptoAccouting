@@ -297,75 +297,75 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
         }
 
-		public static EnuAPIStatus FetchExchangeList(ExchangeList exlist)
-		{
+        public static EnuAPIStatus FetchExchangeList(ExchangeList exlist)
+        {
+            //const string jsonfilename = "ExchangeList.json";
+            string rawjson;
+            string BaseUri = "http://bridgeplace.sakura.ne.jp/cryptoticker/ExchangeList.json";
 
-			string rawjson;
-			string BaseUri = "http://bridgeplace.sakura.ne.jp/cryptoticker/ExchangeList.json";
-
-			if (!Reachability.IsHostReachable(BaseUri))
-			{
+            if (!Reachability.IsHostReachable(BaseUri))
+            {
                 rawjson = File.ReadAllText("Json/ExchangeList.json"); //Bundle file
-                return EnuAPIStatus.FailureNetwork;
-			}
-			else
-			{
-				using (var http = new HttpClient())
-				{
-					HttpResponseMessage response = http.GetAsync(BaseUri).Result;
-					if (!response.IsSuccessStatusCode)
-					{
-						return EnuAPIStatus.FailureNetwork;
-					}
-					rawjson = response.Content.ReadAsStringAsync().Result;
-				}
-
-				var json = JObject.Parse(rawjson);
-
-                foreach (var market in (JArray)json["exchanges"])
+                //return EnuAPIStatus.FailureNetwork;
+            }
+            else
+            {
+                using (var http = new HttpClient())
                 {
-
-                    //EnuExchangeType code;
-                    //if (!Enum.TryParse((string)market["code"], out code))
-                    //	code = EnuExchangeType.NotSelected;
-
-                    //if (code != EnuExchangeType.NotSelected)
-                    //{
-                    var exchange = exlist.GetExchange((string)market["code"]);
-                    exchange.Name = (string)market["name"];
-
-                    var listing = (JArray)market["listing"];
-
-                    if (listing.ToList().Count() == 0)
+                    HttpResponseMessage response = http.GetAsync(BaseUri).Result;
+                    if (!response.IsSuccessStatusCode)
                     {
-                        ApplicationCore.InstrumentList.ToList().ForEach(x => exchange.AttachListedCoin(x));
+                        return EnuAPIStatus.FailureNetwork;
                     }
-                    else
-                    {
-                        foreach (var symbol in listing)
-                        {
-                            Instrument coin = null;
-                            if (symbol["symbol"] != null)
-                            {
-                                coin = ApplicationCore.InstrumentList.GetBySymbol1((string)symbol["symbol"]);
-                            }
-                            else if (symbol["symbol2"] != null)
-                            {
-                                coin = ApplicationCore.InstrumentList.GetBySymbol2((string)symbol["symbol2"]);
-                                if (coin != null) exchange.AttachSymbolMap(coin.Id, EnuSymbolMapType.Symbol2);
-                            }
-
-                            if (coin != null) exchange.AttachListedCoin(coin);
-                        }
-                    }
-                    exchange.APIReady = (bool)market["api"];
-                    //}
+                    rawjson = response.Content.ReadAsStringAsync().Result;
                 }
+            }
 
-			}
+            var json = JObject.Parse(rawjson);
 
-			return EnuAPIStatus.Success;
-		}
+            foreach (var market in (JArray)json["exchanges"])
+            {
+
+                //EnuExchangeType code;
+                //if (!Enum.TryParse((string)market["code"], out code))
+                //	code = EnuExchangeType.NotSelected;
+
+                //if (code != EnuExchangeType.NotSelected)
+                //{
+                var exchange = exlist.GetExchange((string)market["code"]);
+                exchange.Name = (string)market["name"];
+
+                var listing = (JArray)market["listing"];
+
+                if (listing.ToList().Count() == 0)
+                {
+                    ApplicationCore.InstrumentList.ToList().ForEach(x => exchange.AttachListedCoin(x));
+                }
+                else
+                {
+                    foreach (var symbol in listing)
+                    {
+                        Instrument coin = null;
+                        if (symbol["symbol"] != null)
+                        {
+                            coin = ApplicationCore.InstrumentList.GetBySymbol1((string)symbol["symbol"]);
+                        }
+                        else if (symbol["symbol2"] != null)
+                        {
+                            coin = ApplicationCore.InstrumentList.GetBySymbol2((string)symbol["symbol2"]);
+                            if (coin != null) exchange.AttachSymbolMap(coin.Id, EnuSymbolMapType.Symbol2);
+                        }
+
+                        if (coin != null) exchange.AttachListedCoin(coin);
+                    }
+                }
+                exchange.APIReady = (bool)market["api"];
+                //}
+            }
+
+            //StorageAPI.SaveJsonFile(rawjson, jsonfilename);
+            return EnuAPIStatus.Success;
+        }
 
         public static async Task<CrossRate> FetchUSDCrossRateAsync(EnuCCY BaseCurrency)
 		{

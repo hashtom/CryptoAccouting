@@ -20,48 +20,55 @@ namespace CryptoAccouting.CoreClass.APIClass
         {
             string rawjson;
 
-			using (var http = new HttpClient())
-			{
-                http.BaseAddress = new Uri(BaseUrl);
-                Uri path = new Uri("public/getmarketsummaries", UriKind.Relative);
-
-                HttpResponseMessage response = await http.GetAsync(path);
-				if (!response.IsSuccessStatusCode)
-				{
-					return EnuAPIStatus.FailureNetwork;
-				}
-                rawjson = await response.Content.ReadAsStringAsync();
-			}
-
-
-            var jobj = await Task.Run(() => JObject.Parse(rawjson));
-            var jarray = (JArray)jobj["result"];
-
-            var btcprice = coins.First(x => x.Symbol1 == "BTC").MarketPrice;
-
-            foreach (var coin in coins.Where(x => x.PriceSourceCode == "Bittrex"))
+            if (!Reachability.IsHostReachable(BaseUrl))
             {
-                if (jarray.Any(x => (string)x["MarketName"] == "BTC-" + bittrex.GetSymbolForExchange(coin.Id)))
+                return EnuAPIStatus.FailureNetwork;
+            }
+            else
+            {
+                using (var http = new HttpClient())
                 {
-                    var jrow = jarray.First(x => (string)x["MarketName"] == "BTC-" + bittrex.GetSymbolForExchange(coin.Id));
-                    if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
+                    http.BaseAddress = new Uri(BaseUrl);
+                    Uri path = new Uri("public/getmarketsummaries", UriKind.Relative);
 
-                    coin.MarketPrice.LatestPriceBTC = (double)jrow["Last"];
-                    coin.MarketPrice.PriceBTCBefore24h = (double)jrow["PrevDay"];
-                    coin.MarketPrice.DayVolume = (double)jrow["Volume"];
-                    coin.MarketPrice.PriceDate = (DateTime)jrow["TimeStamp"];
-
-                    coin.MarketPrice.USDCrossRate = crossrate;
-                    if (btcprice != null)
+                    HttpResponseMessage response = await http.GetAsync(path);
+                    if (!response.IsSuccessStatusCode)
                     {
-                        coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"] * btcprice.LatestPriceUSD;
-                        coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"] * btcprice.PriceUSDBefore24h;
+                        return EnuAPIStatus.FailureNetwork;
                     }
+                    rawjson = await response.Content.ReadAsStringAsync();
                 }
 
-            }
 
-            return EnuAPIStatus.Success;
+                var jobj = await Task.Run(() => JObject.Parse(rawjson));
+                var jarray = (JArray)jobj["result"];
+
+                var btcprice = coins.First(x => x.Symbol1 == "BTC").MarketPrice;
+
+                foreach (var coin in coins.Where(x => x.PriceSourceCode == "Bittrex"))
+                {
+                    if (jarray.Any(x => (string)x["MarketName"] == "BTC-" + bittrex.GetSymbolForExchange(coin.Id)))
+                    {
+                        var jrow = jarray.First(x => (string)x["MarketName"] == "BTC-" + bittrex.GetSymbolForExchange(coin.Id));
+                        if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
+
+                        coin.MarketPrice.LatestPriceBTC = (double)jrow["Last"];
+                        coin.MarketPrice.PriceBTCBefore24h = (double)jrow["PrevDay"];
+                        coin.MarketPrice.DayVolume = (double)jrow["Volume"];
+                        coin.MarketPrice.PriceDate = (DateTime)jrow["TimeStamp"];
+
+                        coin.MarketPrice.USDCrossRate = crossrate;
+                        if (btcprice != null)
+                        {
+                            coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"] * btcprice.LatestPriceUSD;
+                            coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"] * btcprice.PriceUSDBefore24h;
+                        }
+                    }
+
+                }
+
+                return EnuAPIStatus.Success;
+            }
         }
 
     }

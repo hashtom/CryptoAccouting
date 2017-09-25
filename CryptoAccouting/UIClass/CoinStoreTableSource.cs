@@ -8,13 +8,13 @@ using CoreGraphics;
 
 namespace CryptoAccouting.UIClass
 {
-    public class CoinStorageTableSource : UITableViewSource
+    public class CoinStoreTableSource : UITableViewSource
     {
         CoinStorageList storagelist;
         NSString cellIdentifier = new NSString("CoinStorageCell"); // set in the Storyboard
         CryptoTableViewController owner;
 
-        public CoinStorageTableSource(CoinStorageList storagelist, CryptoTableViewController owner)
+        public CoinStoreTableSource(CoinStorageList storagelist, CryptoTableViewController owner)
         {
             this.storagelist = storagelist;
             this.owner = owner;
@@ -33,7 +33,7 @@ namespace CryptoAccouting.UIClass
             //if (cell == null)
             //cell = new CustomBalanceCell (cellIdentifier);
 
-            var cell = (CoinStorageCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
+            var cell = (CoinStoreCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
             cell.UpdateCell(storagelist.GetByIndex(indexPath.Row));
             return cell;
         }

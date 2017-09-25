@@ -33,6 +33,7 @@ namespace CryptoAccouting
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
             if (SelectionItems is null) SelectionItems = new List<SelectionSearchItem>();
             TableView.Source = new TableSource(SelectionItems, this, DestinationID);
 

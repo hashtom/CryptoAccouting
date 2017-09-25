@@ -24,12 +24,6 @@ namespace CryptoAccouting
             labelBaseCurrency.Text = ApplicationCore.BaseCurrency.ToString();
         }
 
-		public override void ViewDidDisappear(bool animated)
-		{
-			base.ViewDidDisappear(animated);
-			//ApplicationCore.SaveAppSetting();
-		}
-
 		public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
 		{
 			base.PrepareForSegue(segue, sender);

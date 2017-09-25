@@ -30,8 +30,9 @@ namespace CryptoAccouting
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
             PrepareDatePicker();
-			InitializeUserInteractionStates();
+            InitializeUserInteractionStates();
             ReDrawScreen();
 
             buttonExchange.TouchUpInside += (sender, e) =>
@@ -60,11 +61,11 @@ namespace CryptoAccouting
 
                 foreach (var st in CoinStorageList.GetStorageListSelection())
                 {
-                    //var walletname = st.StorageType != EnuCoinStorageType.Exchange ? st.Code + " Wallet" : st.Code;
-                    exchangeAlert.AddAction(UIAlertAction.Create(st.Code,
-                                                                     UIAlertActionStyle.Default,
-                                                                     (obj) =>
-                                                                     {
+                        //var walletname = st.StorageType != EnuCoinStorageType.Exchange ? st.Code + " Wallet" : st.Code;
+                        exchangeAlert.AddAction(UIAlertAction.Create(st.Code,
+                                                                             UIAlertActionStyle.Default,
+                                                                             (obj) =>
+                                                                             {
                                                                          if (st.StorageType == EnuCoinStorageType.Exchange && thisExchange == null)
                                                                          {
                                                                              UIAlertController okAlertController = UIAlertController.Create("Alert", "Please setup booked exchange in advance.", UIAlertControllerStyle.Alert);
@@ -77,17 +78,21 @@ namespace CryptoAccouting
                                                                              thisStorage = st;
                                                                          }
                                                                      }
-                                                                ));
+                                                                        ));
                 }
                 this.PresentViewController(exchangeAlert, true, null);
             };
+
         }
 
         public async override void ViewWillAppear(bool animated)
-		{
-			base.ViewWillAppear(animated);
-            await ApplicationCore.FetchMarketDataAsync(thisCoin);
-		}
+        {
+            base.ViewWillAppear(animated);
+            if (!AppDelegate.IsInDesignerView)
+            {
+                await ApplicationCore.FetchMarketDataAsync(thisCoin);
+            }
+        }
 
         private void PrepareDatePicker()
         {

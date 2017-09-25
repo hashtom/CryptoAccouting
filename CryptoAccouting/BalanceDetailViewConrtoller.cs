@@ -14,6 +14,7 @@ namespace CryptoAccouting
     {
 
         string instrumentId_selected;
+        static readonly NSString MyCellId = new NSString("BookingCell");
         //List<Position> booking_positions;
 
         public BalanceDetailViewConrtoller (IntPtr handle) : base (handle)
@@ -25,20 +26,18 @@ namespace CryptoAccouting
             base.ViewDidLoad();
 
 			// Configure Table source
-			this.TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "BookingViewCell");
+			//this.TableView.RegisterNibForCellReuse(BookingCell.Nib, MyCellId);
+			this.TableView.RegisterClassForCellReuse(typeof(CoinBookingCell), MyCellId);
             this.TableView.Source = new CoinBookingTableSource(instrumentId_selected, ApplicationCore.Balance, this);
         }
 
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            ReDrawScreen();
-        }
-
-        public override void ViewDidAppear(bool animated)
-        {
-            base.ViewDidAppear(animated);
-
+            if (!AppDelegate.IsInDesignerView)
+            {
+                ReDrawScreen();
+            }
         }
 
         public override void ReDrawScreen()

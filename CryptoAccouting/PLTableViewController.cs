@@ -21,13 +21,13 @@ namespace CryptoAccouting
         {
             base.ViewDidLoad();
 
-            //var exchange = await ApplicationCore.LoadTradeListAsync(new Exchange(EnuExchangeType.Zaif), true, true);
-            //myTradeList = exchange.TradeList;
-            await ApplicationCore.LoadTradeListsAsync("Zaif", true, false);
-            myTradeList = ApplicationCore.GetExchangeTradeList("Zaif");
-            myTradeList.CalculateTotalValue(DateTime.Now.Year);
-
-            DrawScreen();
+            if (!AppDelegate.IsInDesignerView)
+            {
+                await ApplicationCore.LoadTradeListsAsync("Zaif", true, false);
+                myTradeList = ApplicationCore.GetExchangeTradeList("Zaif");
+                myTradeList.CalculateTotalValue(DateTime.Now.Year);
+                DrawScreen();
+            }
         }
 
 		public override void ViewWillAppear(bool animated)

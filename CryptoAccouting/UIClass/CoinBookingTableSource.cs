@@ -12,7 +12,7 @@ namespace CryptoAccouting.UIClass
 	{
 		Balance myBalance;
         string instrumentid_selected;
-		NSString cellIdentifier = new NSString("BookingViewCell");
+		NSString cellIdentifier = new NSString("BookingCell");
 		CryptoTableViewController owner;
 
         public CoinBookingTableSource(string instrumentid, Balance myBalance, CryptoTableViewController owner)
@@ -35,10 +35,12 @@ namespace CryptoAccouting.UIClass
 		public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
 		{
 			// OLD method
-			//var cell = tableView.DequeueReusableCell(cellIdentifier) as CustomBalanceCell;
+            //var cell = tableView.DequeueReusableCell(cellIdentifier) as CoinBookingCell;
 			//if (cell == null)
-            var cell = (CoinViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
-			cell.UpdateCell(BookingPositions()[indexPath.Row], true);
+            //    cell = new CoinBookingCell(cellIdentifier);
+            
+            var cell = (CoinBookingCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
+			cell.UpdateCell(BookingPositions()[indexPath.Row]);
 			
             return cell;
 

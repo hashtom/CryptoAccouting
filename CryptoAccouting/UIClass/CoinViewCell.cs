@@ -22,8 +22,8 @@ namespace CryptoAccouting.UIClass
             // Note: this .ctor should not contain any initialization logic.
         }
 
-        public void UpdateCell(Position pos, bool ShowBookingValue)
-		{
+        public void UpdateCell(Position pos)
+        {
             labelSymbol.Text = pos.Coin.Symbol1;
 
             if (pos.Coin.Symbol1 is "BTC")
@@ -43,20 +43,10 @@ namespace CryptoAccouting.UIClass
                 labelRet1d.TextColor = pos.BTCRet1d() > 0 ? UIColor.Green : UIColor.Red;
             }
 
-            if (ShowBookingValue)
-            {
-                labelPrice.Text = ApplicationCore.NumberFormat(pos.BookPriceUSD);
-                labelValue.Text = ApplicationCore.NumberFormat(pos.BookValue());
-                labelRet1d.Text = pos.BookedExchange == null ? "" : pos.BookedExchange.Name;
-            }
-            else
-            {
-                var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Images", pos.Coin.Id + ".png");
-                ImageView.Image = logo == null ? null : UIImage.FromFile(logo);
-                labelValue.Text = ApplicationCore.NumberFormat(pos.LatestFiatValueBase());
-            }
-
-		}
+            var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Images", pos.Coin.Id + ".png");
+            ImageView.Image = logo == null ? null : UIImage.FromFile(logo);
+            labelValue.Text = ApplicationCore.NumberFormat(pos.LatestFiatValueBase());
+        }
 
     }
 

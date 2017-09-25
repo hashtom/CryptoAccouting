@@ -141,7 +141,6 @@
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="Main.storyboard" />
     <InterfaceDefinition Include="UIClass\CoinViewCell.xib" />
-    <InterfaceDefinition Include="UIClass\CoinStorageCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -187,7 +186,7 @@
     <Compile Include="UIClass\CoinViewCell.designer.cs">
       <DependentUpon>CoinViewCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="UIClass\CoinStorageTableSource.cs" />
+    <Compile Include="UIClass\CoinStoreTableSource.cs" />
     <Compile Include="BalanceEditViewController.cs" />
     <Compile Include="BalanceEditViewController.designer.cs">
       <DependentUpon>BalanceEditViewController.cs</DependentUpon>
@@ -205,7 +204,6 @@
     <Compile Include="CryptoTableViewController.cs" />
     <Compile Include="UIClass\CoinBookingTableSource.cs" />
     <Compile Include="CoreClass\CrossRate.cs" />
-    <Compile Include="UIClass\CustomExchangeViewCell.cs" />
     <Compile Include="UIClass\AppSetting.cs" />
     <Compile Include="APISettingTableViewController.cs" />
     <Compile Include="APISettingTableViewController.designer.cs">
@@ -217,10 +215,8 @@
     <Compile Include="CoreClass\InstrumentList.cs" />
     <Compile Include="CoreClass\APIClass\BittrexAPI.cs" />
     <Compile Include="CoreClass\APIClass\BItstampAPI.cs" />
-    <Compile Include="UIClass\CoinStorageCell.cs" />
-    <Compile Include="UIClass\CoinStorageCell.designer.cs">
-      <DependentUpon>CoinStorageCell.cs</DependentUpon>
-    </Compile>
+    <Compile Include="UIClass\CoinBookingCell.cs" />
+    <Compile Include="UIClass\CoinStoreCell.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />

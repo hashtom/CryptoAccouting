@@ -39,7 +39,7 @@ namespace CryptoAccouting.UIClass
             //cell = new CustomBalanceCell (cellIdentifier);
 
             var cell = (CoinViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
-            cell.UpdateCell(balanceByCoin.GetByIndex(indexPath.Row), false);
+            cell.UpdateCell(balanceByCoin.GetByIndex(indexPath.Row));
 
             return cell;
         }
