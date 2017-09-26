@@ -14,11 +14,10 @@
         //                                                   UIViewController SettingViewC)
         //{         //    Navigation = new NavigationDrawer(BalanceTableView.Frame.Width, BalanceTableView.Frame.Height,         //                                      PositionViewC,
         //                                      TransactionViewC,         //                                      PLViewC,         //                                      PerfViewC,         //                                      SettingViewC);         //    Navigation.AddView(BalanceTableView);         //    return Navigation;         //}          public static EnuAPIStatus InitializeCore()
-        {             EnuAPIStatus status;              //Load Instruments Data             status = LoadInstruments(false);              //Load Exchange List
-            if (status is EnuAPIStatus.Success) LoadExchangeList();
-
+        {             //Load Instruments Data and ExchangeList
+            if (LoadInstruments(false) is EnuAPIStatus.Success) LoadExchangeList(); 
 			//Load Balance Data
-            Balance = StorageAPI.LoadBalanceXML(BalanceFile, InstrumentList);             Balance.ReCalculate();              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML(AppSettingFile) != EnuAPIStatus.Success)             {                 BaseCurrency = EnuCCY.USD; //Default setting             }              return status;          }          public static async Task<EnuAPIStatus> LoadCoreDataAsync(){
+            Balance = StorageAPI.LoadBalanceXML(BalanceFile, InstrumentList);             Balance.ReCalculate();              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML(AppSettingFile) != EnuAPIStatus.Success)             {                 BaseCurrency = EnuCCY.USD; //Default setting             }              return EnuAPIStatus.Success;          }          public static async Task<EnuAPIStatus> LoadCoreDataAsync(){
 
             //Load FX
             if (!HasCrossRateUpdated)
@@ -42,7 +41,7 @@
         {             return StorageAPI.SaveAppSettingXML(AppSettingFile, AppName, BaseCurrency, PublicExchangeList);         }          private static EnuAPIStatus LoadExchangeList()
         {
             if (PublicExchangeList is null) PublicExchangeList = new ExchangeList();             return MarketDataAPI.FetchExchangeList(PublicExchangeList);         }          public static EnuAPIStatus LoadInstruments(bool forceRefresh)
-        {             if (InstrumentList is null) InstrumentList = new InstrumentList();              if (forceRefresh)
+        {             if (InstrumentList is null) InstrumentList = new InstrumentList();              //Force update online             if (forceRefresh)
             {                 var status = MarketDataAPI.FetchAllCoinData(InstrumentList, true);                 if (status == EnuAPIStatus.Success)
                 {
                     if (Balance != null) Balance.AttachInstruments(InstrumentList);                 }                 return status;
@@ -50,11 +49,12 @@
             else
             {
                 // 1. Load the latest file
-                // 2. Try on-line update
-                // 3. Use Bundle file 
                 if (StorageAPI.LoadInstrumentXML(InstrumentsFile, InstrumentList) != EnuAPIStatus.Success)
                 {
-                    if (LoadInstruments(true) != EnuAPIStatus.Success)                     {                         return MarketDataAPI.FetchAllCoinData(InstrumentList, false);                     }                 }
+					// 2. Try update online
+					if (LoadInstruments(true) != EnuAPIStatus.Success)                     {
+						// 3. Use Bundled file 
+						return MarketDataAPI.FetchAllCoinData(InstrumentList, false);                     }                 }
                  return EnuAPIStatus.Success;
             }         }           public static void SaveInstrumentXML()         {             StorageAPI.SaveInstrumentXML(InstrumentList, InstrumentsFile);         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, BalanceFile);         }          //public static Instrument GetInstrumentSymbol1(string symbol)
         //{

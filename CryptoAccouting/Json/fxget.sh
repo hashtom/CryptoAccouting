@@ -10,4 +10,4 @@ work="/home/bridgeplace/www/cryptoticker/fxrate"
 wget "https://finance.yahoo.com/webservice/v1/symbols/allcurrencies/quote?format=json" -O $work/data/fxrate_"$stamp".json -o $work/fxrate.log
 
 cp -p $work/data/fxrate_"$stamp".json $work/fxrate_latest.json
-cp -p $work/fxrate/data/fxrate_"$yesterday".json $work/fxrate_yesterday.json
+cp -p $work/data/fxrate_"$yesterday".json $work/fxrate_yesterday.json

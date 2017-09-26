@@ -32,6 +32,10 @@ namespace CryptoAccouting.CoreClass.APIClass
                     case "Zaif":
                         break;
 
+                    case "coinmarketcap":
+                        status = await FetchCoinMarketDataAsync(coins, crossrate);
+                        break;
+
                     default:
                         break;
                 }
@@ -42,184 +46,187 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static async Task<EnuAPIStatus> FetchCoinMarketDataAsync(InstrumentList instrumentlist, CrossRate crossrate)
         {
-            const string BaseUrl = "http://api.cryptocoincharts.info/";
             string rawjson;
 
-            var pairs = "btc_usd";
 
-            if (!Reachability.IsHostReachable(BaseUrl))
+
+            const string CoinMarketUrl = "https://api.coinmarketcap.com/v1/ticker/";
+            if (!Reachability.IsHostReachable(CoinMarketUrl))
             {
                 return EnuAPIStatus.FailureNetwork;
             }
             else
             {
-                if (instrumentlist.Any(x => x.Symbol1 == "BTC"))
-                {
-                    var bitcoin = instrumentlist.Where(x => x.Symbol1 == "BTC").First();
-                    instrumentlist.Detach(bitcoin);
-                    instrumentlist.Insert(0, bitcoin);
-                }
-                else{
-                    instrumentlist.Insert(0, ApplicationCore.InstrumentList.GetByInstrumentId("bitcoin"));
-                }
-
-                foreach (var paircoin in instrumentlist.Where(x=>x.Symbol1!="BTC"))
+				using (var http = new HttpClient())
 				{
-                    pairs = pairs + "," + paircoin.Symbol1.ToLower() + "_btc";
+                    //http.MaxResponseContentBufferSize = 256000;
+                    rawjson = await http.GetStringAsync(CoinMarketUrl);
 				}
 
-				var parameters = new Dictionary<string, string>();
-				parameters.Add("pairs", pairs);
-
-                using (var http = new HttpClient())
+                foreach (var coin in instrumentlist.Where(x=>x.PriceSourceCode=="coinmarketcap"))
                 {
-                    http.BaseAddress = new Uri(BaseUrl);
-                    Uri path = new Uri("tradingPairs", UriKind.Relative);
-
-                    var content = new FormUrlEncodedContent(parameters);
-
-                    HttpResponseMessage res = await http.PostAsync(path, content);
-                    rawjson = await res.Content.ReadAsStringAsync();
-
-                    if (!res.IsSuccessStatusCode)
-                        return EnuAPIStatus.FailureNetwork;
-                }
-
-                var jarray = await Task.Run(() => JArray.Parse(rawjson));
-
-                foreach (var jrow in jarray)
-                {
-                    var idstring = (string)jrow["id"];
-                    string symobl;
-
-                    if (idstring.Substring(0, 3) == "btc")
+                    //Parse Market Data 
+                    if (coin.MarketPrice == null)
                     {
-                        symobl = "BTC";
-                    }
-                    else
-                    {
-                        symobl = idstring.Replace("btc", "").Replace("/", "").Replace("¥", "").ToUpper();
+                        var p = new Price(coin);
+                        coin.MarketPrice = p;
                     }
 
-                    if (instrumentlist.Any(x => x.Symbol1 == symobl))
-                    {
-                        var coin = instrumentlist.Where(x => x.Symbol1 == symobl).First();
+                    var jarray = await Task.Run(() => JArray.Parse(rawjson));
 
-                        if (coin.MarketPrice == null)
-                        {
-                            var p = new Price(coin);
-                            coin.MarketPrice = p;
-                        }
-
-                        //coin.MarketPrice.SourceCurrency = coin.Symbol == "BTC" ? EnuCCY.USD : EnuCCY.BTC;
-                        coin.MarketPrice.LatestPriceBTC = coin.Symbol1 == "BTC" ? 1 : (double)jrow["price"];
-                        coin.MarketPrice.PriceBTCBefore24h = coin.Symbol1 == "BTC" ? 1 : (double)jrow["price_before_24h"];
-                        coin.MarketPrice.LatestPriceUSD = coin.Symbol1 == "BTC" ? (double)jrow["price"] : (double)jrow["price"] * (double)jarray[0]["price"];
-                        coin.MarketPrice.PriceUSDBefore24h = coin.Symbol1 == "BTC" ? (double)jrow["price_before_24h"] : (double)jrow["price_before_24h"] * (double)jarray[0]["price_before_24h"];
-                        coin.MarketPrice.DayVolume = (double)jrow["volume_btc"];
-                        coin.MarketPrice.PriceDate = DateTime.Now;
-                        coin.MarketPrice.USDCrossRate = crossrate;
-                    }
-
+                    coin.MarketPrice.LatestPriceBTC = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_btc"];
+                    coin.MarketPrice.LatestPriceUSD = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_usd"];
+                    coin.MarketPrice.PriceSource = "coinmarketcap";
+                    coin.MarketPrice.DayVolume = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["24h_volume_usd"] / coin.MarketPrice.LatestPriceBTC;
+                    coin.MarketPrice.MarketCap = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["market_cap_usd"];
+                    coin.MarketPrice.PriceDate = ApplicationCore.FromEpochSeconds((long)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["last_updated"]).Date;
+                    coin.MarketPrice.PriceBTCBefore24h = coin.MarketPrice.LatestPriceBTC / ((double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["percent_change_24h"] / 100 + 1);
+                    coin.MarketPrice.PriceUSDBefore24h = coin.MarketPrice.LatestPriceUSD / ((double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["percent_change_24h"] / 100 + 1);
+					coin.MarketPrice.USDCrossRate = crossrate;
                 }
             }
+
+            //         const string BaseUrl = "http://api.cryptocoincharts.info/";
+            //var pairs = "btc_usd";
+
+            //        if (!Reachability.IsHostReachable(BaseUrl))
+            //        {
+            //            return EnuAPIStatus.FailureNetwork;
+            //        }
+            //        else
+            //        {
+            //            if (instrumentlist.Any(x => x.Symbol1 == "BTC"))
+            //            {
+            //                var bitcoin = instrumentlist.Where(x => x.Symbol1 == "BTC").First();
+            //                instrumentlist.Detach(bitcoin);
+            //                instrumentlist.Insert(0, bitcoin);
+            //            }
+            //            else{
+            //                instrumentlist.Insert(0, ApplicationCore.InstrumentList.GetByInstrumentId("bitcoin"));
+            //            }
+
+            //            foreach (var paircoin in instrumentlist.Where(x=>x.Symbol1!="BTC").Where(xx=>xx.PriceSourceCode == "cryptocoincharts"))
+            //{
+            //                pairs = pairs + "," + paircoin.Symbol1.ToLower() + "_btc";
+            //}
+
+            //var parameters = new Dictionary<string, string>();
+            //parameters.Add("pairs", pairs);
+
+            //    using (var http = new HttpClient())
+            //    {
+            //        http.BaseAddress = new Uri(BaseUrl);
+            //        Uri path = new Uri("tradingPairs", UriKind.Relative);
+
+            //        var content = new FormUrlEncodedContent(parameters);
+
+            //        HttpResponseMessage res = await http.PostAsync(path, content);
+            //        rawjson = await res.Content.ReadAsStringAsync();
+
+            //        if (!res.IsSuccessStatusCode)
+            //            return EnuAPIStatus.FailureNetwork;
+            //    }
+
+            //    var jarray = await Task.Run(() => JArray.Parse(rawjson));
+
+            //    foreach (var jrow in jarray)
+            //    {
+            //        var idstring = (string)jrow["id"];
+            //        string symobl;
+
+            //        if (idstring.Substring(0, 3) == "btc")
+            //        {
+            //            symobl = "BTC";
+            //        }
+            //        else
+            //        {
+            //            symobl = idstring.Replace("btc", "").Replace("/", "").Replace("¥", "").ToUpper();
+            //        }
+
+            //        if (instrumentlist.Any(x => x.Symbol1 == symobl))
+            //        {
+            //            var coin = instrumentlist.Where(x => x.Symbol1 == symobl).First();
+
+            //            if (coin.MarketPrice == null)
+            //            {
+            //                var p = new Price(coin);
+            //                coin.MarketPrice = p;
+            //            }
+
+            //            //coin.MarketPrice.SourceCurrency = coin.Symbol == "BTC" ? EnuCCY.USD : EnuCCY.BTC;
+            //            coin.MarketPrice.LatestPriceBTC = coin.Symbol1 == "BTC" ? 1 : (double)jrow["price"];
+            //            coin.MarketPrice.PriceBTCBefore24h = coin.Symbol1 == "BTC" ? 1 : (double)jrow["price_before_24h"];
+            //            coin.MarketPrice.LatestPriceUSD = coin.Symbol1 == "BTC" ? (double)jrow["price"] : (double)jrow["price"] * (double)jarray[0]["price"];
+            //            coin.MarketPrice.PriceUSDBefore24h = coin.Symbol1 == "BTC" ? (double)jrow["price_before_24h"] : (double)jrow["price_before_24h"] * (double)jarray[0]["price_before_24h"];
+            //            coin.MarketPrice.DayVolume = (double)jrow["volume_btc"];
+            //            coin.MarketPrice.PriceDate = DateTime.Now;
+            //            coin.MarketPrice.USDCrossRate = crossrate;
+            //        }
+
+            //    }
+            //}
 
             return EnuAPIStatus.Success;
 
         }
 
-        public static async Task<EnuAPIStatus> FetchCoinMarketDataAsync(Instrument coin, Instrument bitcoin=null )
-        {
-            //const string CoinMarketUrl = "https://api.coinmarketcap.com/v1/ticker/";
-   //         if (!Reachability.IsHostReachable(CoinMarketUrl))
+   //     public static async Task<EnuAPIStatus> FetchCoinMarketDataAsync(Instrument coin, Instrument bitcoin=null )
+   //     {
+
+   //         string rawjson;
+			//string CoinChartsUrl = "http://api.cryptocoincharts.info/tradingPair/";
+   //         JObject json;
+
+   //         if (coin.Symbol1 != "BTC" && bitcoin is null)
    //         {
-   //             return EnuAppStatus.FailureNetwork;
+   //             bitcoin = new Instrument("Bitcoin"){Symbol1="BTC"};
+   //             await FetchCoinMarketDataAsync(bitcoin);
+   //         }
+
+   //         if (!Reachability.IsHostReachable(CoinChartsUrl))
+   //         {
+   //             return EnuAPIStatus.FailureNetwork;
    //         }
    //         else
    //         {
-
-   //             //Parse Market Data 
    //             if (coin.MarketPrice == null)
    //             {
    //                 var p = new Price(coin);
    //                 coin.MarketPrice = p;
    //             }
 
+   //             CoinChartsUrl = (coin.Symbol1 == "BTC") ? CoinChartsUrl + "btc_usd" : CoinChartsUrl + coin.Symbol1.ToLower() + "_btc";
+
    //             using (var http = new HttpClient())
    //             {
-   //                 //http.MaxResponseContentBufferSize = 256000;
-   //                 rawjson = await http.GetStringAsync(CoinMarketUrl + coin.Id);
+   //                 rawjson = await http.GetStringAsync(CoinChartsUrl);
    //             }
 
-   //             var jarray = await Task.Run(() => JArray.Parse(rawjson));
+   //             json = await Task.Run(() => JObject.Parse(rawjson));
 
-   //             coin.MarketPrice.LatestPriceBTC = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["price_btc"];
-   //             coin.MarketPrice.LatestPrice = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["price_usd"];
-   //             coin.MarketPrice.SourceCurrency = coin.Symbol == "BTC" ? EnuCCY.USD : EnuCCY.BTC;
-   //             coin.MarketPrice.DayVolume = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["24h_volume_usd"] / coin.MarketPrice.LatestPriceBTC;
-   //             coin.MarketPrice.MarketCap = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["market_cap_usd"];
-   //             coin.MarketPrice.PriceDate = ApplicationCore.FromEpochSeconds((long)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["last_updated"]).Date;
-   //             coin.MarketPrice.SourceRet1h = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["percent_change_1h"];
-   //             coin.MarketPrice.SourceRet1d = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["percent_change_24h"];
-   //             coin.MarketPrice.SourceRet7d = (double)jarray.SelectToken("[?(@.symbol == '" + coin.Symbol + "')]")["percent_change_7d"];
-   //             coin.MarketPrice.PriceBefore24h = coin.MarketPrice.LatestPrice / (coin.MarketPrice.SourceRet1d / 100 + 1);
+   //             if (json["id"] != null)
+   //             {
+   //                 coin.MarketPrice.LatestPriceBTC = coin.Symbol1 == "BTC" ? 1 : (double)json["price"];
+   //                 coin.MarketPrice.PriceBTCBefore24h = coin.Symbol1 == "BTC" ? 1 : (double)json["price_before_24h"];
+   //                 coin.MarketPrice.LatestPriceUSD = coin.Symbol1 == "BTC" ? (double)json["price"] : (double)json["price"] * bitcoin.MarketPrice.LatestPriceUSD;
+   //                 coin.MarketPrice.PriceUSDBefore24h = coin.Symbol1 == "BTC" ? (double)json["price_before_24h"] : (double)json["price_before_24h"] * bitcoin.MarketPrice.PriceUSDBefore24h;
+   //                 coin.MarketPrice.DayVolume = (double)json["volume_btc"];
+   //                 coin.MarketPrice.PriceDate = DateTime.Now;
+   //             }
 
 			//}
 
-            string rawjson;
-			string CoinChartsUrl = "http://api.cryptocoincharts.info/tradingPair/";
-            JObject json;
+			//return EnuAPIStatus.Success;
+        //}
 
-            if (coin.Symbol1 != "BTC" && bitcoin is null)
-            {
-                bitcoin = new Instrument("Bitcoin"){Symbol1="BTC"};
-                await FetchCoinMarketDataAsync(bitcoin);
-            }
-
-            if (!Reachability.IsHostReachable(CoinChartsUrl))
-            {
-                return EnuAPIStatus.FailureNetwork;
-            }
-            else
-            {
-                if (coin.MarketPrice == null)
-                {
-                    var p = new Price(coin);
-                    coin.MarketPrice = p;
-                }
-
-                CoinChartsUrl = (coin.Symbol1 == "BTC") ? CoinChartsUrl + "btc_usd" : CoinChartsUrl + coin.Symbol1.ToLower() + "_btc";
-
-                using (var http = new HttpClient())
-                {
-                    rawjson = await http.GetStringAsync(CoinChartsUrl);
-                }
-
-                json = await Task.Run(() => JObject.Parse(rawjson));
-
-                if (json["id"] != null)
-                {
-                    coin.MarketPrice.LatestPriceBTC = coin.Symbol1 == "BTC" ? 1 : (double)json["price"];
-                    coin.MarketPrice.PriceBTCBefore24h = coin.Symbol1 == "BTC" ? 1 : (double)json["price_before_24h"];
-                    coin.MarketPrice.LatestPriceUSD = coin.Symbol1 == "BTC" ? (double)json["price"] : (double)json["price"] * bitcoin.MarketPrice.LatestPriceUSD;
-                    coin.MarketPrice.PriceUSDBefore24h = coin.Symbol1 == "BTC" ? (double)json["price_before_24h"] : (double)json["price_before_24h"] * bitcoin.MarketPrice.PriceUSDBefore24h;
-                    coin.MarketPrice.DayVolume = (double)json["volume_btc"];
-                    coin.MarketPrice.PriceDate = DateTime.Now;
-                }
-
-			}
-
-			return EnuAPIStatus.Success;
-        }
-
-        public static EnuAPIStatus FetchAllCoinData(InstrumentList instrumentlist, bool IsOnline)
+        public static EnuAPIStatus FetchAllCoinData(InstrumentList instrumentlist, bool OnlineUpdate)
 		{
             const string BaseUrl = "http://bridgeplace.sakura.ne.jp/cryptoticker/InstrumentList.json";
                 // "https://api.coinmarketcap.com/v1/ticker/?limit=150";
 
 			string rawjson;
 
-            if (!IsOnline)
+            if (!OnlineUpdate)
             {
                 rawjson = StorageAPI.LoadBundleJsonFile(ApplicationCore.InstrumentsBundleFile);
             }
@@ -276,7 +283,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 }
             }
 
-            if (IsOnline) StorageAPI.SaveInstrumentXML(instrumentlist, ApplicationCore.InstrumentsFile);
+            if (OnlineUpdate) StorageAPI.SaveInstrumentXML(instrumentlist, ApplicationCore.InstrumentsFile);
 
 			return EnuAPIStatus.Success;
 		}
@@ -374,7 +381,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 //}
             }
 
-            //StorageAPI.SaveJsonFile(rawjson, jsonfilename);
+            StorageAPI.OverrideBundleJsonFile(rawjson, jsonfilename);
             return EnuAPIStatus.Success;
         }
 

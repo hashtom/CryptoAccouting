@@ -152,6 +152,7 @@
     <None Include="Images\PLtab.png" />
     <None Include="Images\transactiontab.png" />
     <None Include="Images\exchange.png" />
+    <None Include="Json\marketget.sh" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />

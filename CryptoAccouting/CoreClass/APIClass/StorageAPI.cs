@@ -9,6 +9,12 @@ namespace CryptoAccouting.CoreClass.APIClass
     public static class StorageAPI
     {
 
+        public static EnuAPIStatus OverrideBundleJsonFile(string json, string fileName)
+        {
+            File.WriteAllText("Json/" + fileName, json);
+            return EnuAPIStatus.Success;
+        }
+
         public static string LoadBundleJsonFile(string fileName)
 		{
             return File.ReadAllText("Json/" + fileName);

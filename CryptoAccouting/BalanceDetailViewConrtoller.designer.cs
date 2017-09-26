@@ -14,11 +14,12 @@ namespace CryptoAccouting
     partial class BalanceDetailViewConrtoller
     {
         [Outlet]
-        UIKit.UIButton buttonPriceSourceExchange { get; set; }
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIBarButtonItem buttonAddNew { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIBarButtonItem buttonAddNew { get; set; }
+        UIKit.UIButton buttonPriceSource { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -55,9 +56,9 @@ namespace CryptoAccouting
                 buttonAddNew = null;
             }
 
-            if (buttonPriceSourceExchange != null) {
-                buttonPriceSourceExchange.Dispose ();
-                buttonPriceSourceExchange = null;
+            if (buttonPriceSource != null) {
+                buttonPriceSource.Dispose ();
+                buttonPriceSource = null;
             }
 
             if (DetailTopView != null) {

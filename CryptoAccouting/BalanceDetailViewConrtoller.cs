@@ -12,7 +12,7 @@ namespace CryptoAccouting
 {
     public partial class BalanceDetailViewConrtoller : CryptoTableViewController
     {
-
+        Instrument thisCoin;
         string instrumentId_selected;
         static readonly NSString MyCellId = new NSString("BookingCell");
         //List<Position> booking_positions;
@@ -29,6 +29,38 @@ namespace CryptoAccouting
 			//this.TableView.RegisterNibForCellReuse(BookingCell.Nib, MyCellId);
 			this.TableView.RegisterClassForCellReuse(typeof(CoinBookingCell), MyCellId);
             this.TableView.Source = new CoinBookingTableSource(instrumentId_selected, ApplicationCore.Balance, this);
+
+			buttonPriceSource.TouchUpInside += (sender, e) =>
+			{
+				string[] sources;
+
+				//todo
+				if (thisCoin.Symbol1 == "BTC")
+				{
+					sources = new string[] { "Bitstamp", "coinmarketcap" };
+				}
+				else
+				{
+					sources = new string[] { "Bittrex", "coinmarketcap" };
+				}
+
+				UIAlertController PriceSourceAlert = UIAlertController.Create("Price Source", "Choose Price Source", UIAlertControllerStyle.ActionSheet);
+				PriceSourceAlert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
+
+				foreach (var source in sources)
+				{
+                    PriceSourceAlert.AddAction(UIAlertAction.Create(source, UIAlertActionStyle.Default,
+                                                                         (obj) =>
+                                                                         {
+                                                                             buttonPriceSource.SetTitle(source, UIControlState.Normal);
+                                                                             thisCoin.PriceSourceCode = source;
+                                                                             ApplicationCore.SaveInstrumentXML();
+                                                                         }
+                                                                   ));
+				}
+
+				this.PresentViewController(PriceSourceAlert, true, null);
+			};
         }
 
         public override void ViewWillAppear(bool animated)
@@ -43,13 +75,13 @@ namespace CryptoAccouting
         public override void ReDrawScreen()
         {
             var booking_positions = ApplicationCore.Balance.Where(x => x.Coin.Id == instrumentId_selected).ToList();
-            var thisCoin = ApplicationCore.InstrumentList.GetByInstrumentId(instrumentId_selected);
+            //var thisCoin = ApplicationCore.InstrumentList.GetByInstrumentId(instrumentId_selected);
             var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                                     "Images", thisCoin.Id + ".png");
             
             imageCoin.Image = logo == null ? null : UIImage.FromFile(logo);
             NavigationItem.Title = thisCoin.Name;
-            buttonPriceSourceExchange.SetTitle(thisCoin.PriceSourceCode, UIControlState.Normal);
+            buttonPriceSource.SetTitle(thisCoin.PriceSourceCode, UIControlState.Normal);
 
             if (thisCoin.MarketPrice != null)
             {
@@ -77,6 +109,7 @@ namespace CryptoAccouting
         public void SetInstrument(string instrumentId)
         {
             instrumentId_selected = instrumentId;
+            thisCoin = ApplicationCore.InstrumentList.GetByInstrumentId(instrumentId_selected);
             //this.booking_positions = ApplicationCore.Balance.positions.Where(x => x.Coin.Symbol == symbol_selected).ToList();
         }
 

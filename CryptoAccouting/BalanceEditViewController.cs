@@ -31,6 +31,8 @@ namespace CryptoAccouting
         {
             base.ViewDidLoad();
 
+            //thisPriceSource = thisCoin.Symbol1 == "BTC" ? "Bitstamp" : "Bittrex";
+
             PrepareDatePicker();
             InitializeUserInteractionStates();
             ReDrawScreen();
@@ -165,6 +167,7 @@ namespace CryptoAccouting
 
             labelCoinSymbol.Text = thisCoin.Symbol1;
             labelCoinName.Text = thisCoin.Name;
+            //buttonPriceSource.SetTitle(thisCoin.PriceSourceCode, UIControlState.Normal);
 
             if (thisCoin.MarketPrice != null)
             {
@@ -240,6 +243,7 @@ namespace CryptoAccouting
                 }
             //}
 
+
             ApplicationCore.Balance.Attach(PositionDetail);
             ApplicationCore.Balance.ReCalculate();
             ApplicationCore.SaveMyBalanceXML();
@@ -273,7 +277,7 @@ namespace CryptoAccouting
 			thisCoin = pos.Coin;
             exchangesListed = ApplicationCore.GetExchangeListByInstrument(pos.Coin.Id);
             thisExchange = PositionDetail.BookedExchange;
-            thisStorage = PositionDetail.CoinStorage != null ? PositionDetail.CoinStorage : CoinStorageList.GetStorageListSelection().First(x => x.StorageType == EnuCoinStorageType.TBA);
+			thisStorage = PositionDetail.CoinStorage != null ? PositionDetail.CoinStorage : CoinStorageList.GetStorageListSelection().First(x => x.StorageType == EnuCoinStorageType.TBA);
 			this.editmode = editmode;
             this.popto = popto;
 		}
