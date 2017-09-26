@@ -34,6 +34,10 @@ namespace CryptoAccouting
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelProfitLoss { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel labelTotalBookCost { get; set; }
 
         [Outlet]
@@ -69,6 +73,11 @@ namespace CryptoAccouting
             if (labelMarketValue != null) {
                 labelMarketValue.Dispose ();
                 labelMarketValue = null;
+            }
+
+            if (labelProfitLoss != null) {
+                labelProfitLoss.Dispose ();
+                labelProfitLoss = null;
             }
 
             if (labelTotalBookCost != null) {

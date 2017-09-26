@@ -130,10 +130,21 @@ namespace CryptoAccouting.CoreClass
             return Coin.MarketPrice == null ? PriceBase * Amount : Coin.MarketPrice.LatestPriceBase() * this.Amount;
 		}
 
-		public double BookValue()
+		public double BookValueUSD()
 		{
 			return Amount * BookPriceUSD;
 		}
+
+        public double PLBase() //todo
+        {
+            return 0;
+            //return BookValueUSD() - LatestFiatValueBase();
+        }
+
+        public double PLUSD()
+        {
+            return BookValueUSD() - LatestFiatValueUSD(); 
+        }
 	}
 
 }

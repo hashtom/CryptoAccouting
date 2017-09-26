@@ -150,7 +150,8 @@
     <None Include="Json\fxget.sh" />
     <None Include="Images\performtab.png" />
     <None Include="Images\PLtab.png" />
-    <None Include="Images\positiontab.png" />
+    <None Include="Images\transactiontab.png" />
+    <None Include="Images\exchange.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -220,12 +221,11 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />
-    <BundleResource Include="Images\exchange.png" />
     <BundleResource Include="Images\key.png" />
     <BundleResource Include="Json\ExchangeList.json" />
-    <BundleResource Include="Images\transactiontab.png" />
     <BundleResource Include="Json\InstrumentList.json" />
     <BundleResource Include="Images\settingstab.png" />
+    <BundleResource Include="Images\positiontab.png" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork" />

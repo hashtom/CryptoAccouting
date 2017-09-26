@@ -34,10 +34,10 @@ namespace CryptoAccouting
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            if (!AppDelegate.IsInDesignerView)
-            {
+            //if (!AppDelegate.IsInDesignerView)
+            //{
                 ReDrawScreen();
-            }
+            //}
         }
 
         public override void ReDrawScreen()
@@ -46,7 +46,7 @@ namespace CryptoAccouting
             var thisCoin = ApplicationCore.InstrumentList.GetByInstrumentId(instrumentId_selected);
             var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                                     "Images", thisCoin.Id + ".png");
-
+            
             imageCoin.Image = logo == null ? null : UIImage.FromFile(logo);
             NavigationItem.Title = thisCoin.Name;
             buttonPriceSourceExchange.SetTitle(thisCoin.PriceSourceCode, UIControlState.Normal);
@@ -65,9 +65,10 @@ namespace CryptoAccouting
                 //labelMarketCap.Text = "$" + String.Format("{0:n0}", thisCoin.MarketPrice.MarketCap);
             }
 
+            labelProfitLoss.Text = "$" + ApplicationCore.NumberFormat(booking_positions.Sum(x => x.PLUSD()));
             labelMarketValue.Text = "$" + String.Format("{0:n0}", booking_positions.Sum(x => x.LatestFiatValueUSD()));
             labelTotalQty.Text = String.Format("{0:n0}", booking_positions.Sum(x => x.Amount));
-            labelTotalBookCost.Text = "$" + String.Format("{0:n0}", booking_positions.Sum(x => x.BookValue()));
+            labelTotalBookCost.Text = "$" + String.Format("{0:n0}", booking_positions.Sum(x => x.BookValueUSD()));
 
             TableView.ReloadData();
 
