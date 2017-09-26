@@ -106,9 +106,6 @@
     <Reference Include="Syncfusion.SfNavigationDrawer.iOS">
       <HintPath>..\..\..\..\Documents\Syncfusion\15.2.0.40\Xamarin\lib\ios-unified\Syncfusion.SfNavigationDrawer.iOS.dll</HintPath>
     </Reference>
-    <Reference Include="NBitcoin">
-      <HintPath>..\packages\NBitcoin.4.0.0.38\lib\netstandard1.3\NBitcoin.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -151,6 +148,9 @@
     <None Include="TestData\instrumentsData.xml" />
     <None Include="Images\creditmemo.txt" />
     <None Include="Json\fxget.sh" />
+    <None Include="Images\performtab.png" />
+    <None Include="Images\PLtab.png" />
+    <None Include="Images\positiontab.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -223,12 +223,9 @@
     <BundleResource Include="Images\exchange.png" />
     <BundleResource Include="Images\key.png" />
     <BundleResource Include="Json\ExchangeList.json" />
-    <BundleResource Include="Images\settingstab.png" />
-    <BundleResource Include="Images\performtab.png" />
-    <BundleResource Include="Images\PLtab.png" />
     <BundleResource Include="Images\transactiontab.png" />
-    <BundleResource Include="Images\positiontab.png" />
     <BundleResource Include="Json\InstrumentList.json" />
+    <BundleResource Include="Images\settingstab.png" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork" />

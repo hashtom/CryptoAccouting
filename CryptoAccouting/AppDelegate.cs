@@ -61,7 +61,7 @@ namespace CryptoAccouting
 			ApplicationCore.SaveAppSetting();
 			ApplicationCore.SaveMyBalanceXML();
 			ApplicationCore.SaveInstrumentXML();
-			ApplicationCore.SaveMarketDataXML();
+			//ApplicationCore.SaveMarketDataXML();
         }
     }
 }

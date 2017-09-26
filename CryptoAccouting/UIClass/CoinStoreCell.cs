@@ -13,11 +13,11 @@ namespace CryptoAccouting.UIClass
         public CoinStoreCell(IntPtr handle) : base(handle)
         {
 			SelectionStyle = UITableViewCellSelectionStyle.Gray;
-			ContentView.BackgroundColor = UIColor.FromRGB(218, 255, 127);
+			//ContentView.BackgroundColor = UIColor.FromRGB(218, 255, 127);
 
 			labelName = new UILabel()
 			{
-				Font = UIFont.FromName("Cochin-BoldItalic", 22f),
+				Font = UIFont.FromName("Cochin-BoldItalic", 14f),
 				TextColor = UIColor.FromRGB(127, 51, 0),
                 TextAlignment = UITextAlignment.Center,
 				BackgroundColor = UIColor.Clear

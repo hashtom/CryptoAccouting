@@ -89,7 +89,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
 					if (ReadFromFile)
 					{
-						rawjson = StorageAPI.LoadFromJsonFile("zaifTransaction.json");
+						rawjson = StorageAPI.LoadFromFile("zaifTransaction.json");
 					}
 					else
 					{
@@ -134,7 +134,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     }
 
 					// Save Json file
-					StorageAPI.SaveJsonFile(rawjson, "zaifTransaction.json");
+					StorageAPI.SaveFile(rawjson, "zaifTransaction.json");
 					break;
 
 				default:

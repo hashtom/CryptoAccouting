@@ -9,7 +9,12 @@ namespace CryptoAccouting.CoreClass.APIClass
     public static class StorageAPI
     {
 
-        public static EnuAPIStatus SaveJsonFile(string json, string fileName)
+        public static string LoadBundleJsonFile(string fileName)
+		{
+            return File.ReadAllText("Json/" + fileName);
+		}
+
+        public static EnuAPIStatus SaveFile(string json, string fileName)
         {
 
             var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -20,7 +25,7 @@ namespace CryptoAccouting.CoreClass.APIClass
         }
 
 
-        public static string LoadFromJsonFile(string fileName)
+        public static string LoadFromFile(string fileName)
         {
             var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var path = Path.Combine(documents, fileName);
@@ -38,14 +43,15 @@ namespace CryptoAccouting.CoreClass.APIClass
         {
             Balance mybal;
 
+            var balanceXML = LoadFromFile(fileName);
 			//try
 			//{
-			var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-			var path = Path.Combine(documents, fileName);
+			//var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+			//var path = Path.Combine(documents, fileName);
 
-            if (File.Exists(path))
+            if (balanceXML != null)
             {
-                var balanceXML = File.ReadAllText(path);
+                //var balanceXML = File.ReadAllText(path);
 
                 var mybalXE = XElement.Parse(balanceXML).Descendants("position");
                 mybal = new Balance();
@@ -110,8 +116,8 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static EnuAPIStatus SaveBalanceXML(Balance myBalance, string fileName)
 		{
-			var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-			var path = Path.Combine(mydocuments, fileName);
+			//var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+			//var path = Path.Combine(mydocuments, fileName);
 
 			XElement application = new XElement("application",
 												new XAttribute("name", ApplicationCore.AppName));
@@ -138,16 +144,16 @@ namespace CryptoAccouting.CoreClass.APIClass
 				balance.Add(position);
 			}
 
-			File.WriteAllText(path, application.ToString());
+			//File.WriteAllText(path, application.ToString());
 
-            return EnuAPIStatus.Success;
+            return SaveFile(application.ToString(), fileName);
 
 		}
 
         public static EnuAPIStatus SaveInstrumentXML(InstrumentList instrumentlist, string fileName)
         {
-			var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-			var path = Path.Combine(mydocuments, fileName);
+			//var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+			//var path = Path.Combine(mydocuments, fileName);
 
 			XElement application = new XElement("application",
 												new XAttribute("name", ApplicationCore.AppName));
@@ -169,20 +175,20 @@ namespace CryptoAccouting.CoreClass.APIClass
                 instruments.Add(instrument);
             }
 
-			File.WriteAllText(path, application.ToString());
-
-            return EnuAPIStatus.Success;
+            //File.WriteAllText(path, application.ToString());
+            return SaveFile(application.ToString(), fileName);
         }
 
         public static EnuAPIStatus LoadInstrumentXML(string fileName, InstrumentList instrumentlist)
         {
             //InstrumentList instrumentlist;
-            var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var path = Path.Combine(documents, fileName);
+            //var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            //var path = Path.Combine(documents, fileName);
+            var instrumentsXML = LoadFromFile(fileName);
 
-            if (File.Exists(path))
+            if (instrumentsXML != null)
             {
-                var instrumentsXML = File.ReadAllText(path);
+                //var instrumentsXML = File.ReadAllText(path);
 
                 var instrumentsXE = XElement.Parse(instrumentsXML).Descendants("instrument");
                 //instrumentlist = new InstrumentList();
@@ -193,7 +199,8 @@ namespace CryptoAccouting.CoreClass.APIClass
                     var coin = new Instrument(elem.Attribute("id").Value)
                     {
                         Symbol1 = elem.Element("symbol").Value,
-                        Name = elem.Element("name").Value
+                        Name = elem.Element("name").Value,
+                        PriceSourceCode = elem.Element("source").Value
                     };
 
                     if (elem.Element("symbol2") != null) coin.Symbol2 = elem.Element("symbol2").Value;
@@ -233,12 +240,13 @@ namespace CryptoAccouting.CoreClass.APIClass
         public static EnuAPIStatus LoadAppSettingXML(string fileName)
         {
             EnuCCY baseccy;
-			var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-			var path = Path.Combine(documents, fileName);
+            //var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            //var path = Path.Combine(documents, fileName);
+            var xmldoc = LoadFromFile(fileName);
 
-            if (File.Exists(path))
+            if (xmldoc != null)
             {
-                var xmldoc = File.ReadAllText(path);
+                //var xmldoc = File.ReadAllText(path);
 
                 if (!Enum.TryParse(XElement.Parse(xmldoc).Element("basecurrency").Value, out baseccy))
                     baseccy = EnuCCY.USD;
@@ -274,8 +282,8 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static EnuAPIStatus SaveAppSettingXML(string fileName, string AppName, EnuCCY BaseCurrency, ExchangeList exList)
 		{
-			var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-			var path = Path.Combine(mydocuments, fileName);
+			//var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+			//var path = Path.Combine(mydocuments, fileName);
 
 			XElement application = new XElement("application",
 												new XAttribute("name", AppName));
@@ -297,9 +305,9 @@ namespace CryptoAccouting.CoreClass.APIClass
                 apikeys.Add(key);
             }
 
-			File.WriteAllText(path, application.ToString());
+            //File.WriteAllText(path, application.ToString());
 
-            return EnuAPIStatus.Success; //todo
+            return SaveFile(application.ToString(), fileName);
 
 		}
 

@@ -20,14 +20,14 @@ namespace CryptoAccouting.CoreClass
         {
             Id = id;
             //TEMP
-            if (id == "bitcoin")
-            {
-                PriceSourceCode = "Bitstamp";
-            }
-            else
-            {
-                PriceSourceCode = "Bittrex";
-            }
+            //if (id == "bitcoin")
+            //{
+            //    PriceSourceCode = "Bitstamp";
+            //}
+            //else
+            //{
+            //    PriceSourceCode = "Bittrex";
+            //}
         }
 
         public Balance BalanceOnInstrument(Balance totalbalance)

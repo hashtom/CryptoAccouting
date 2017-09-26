@@ -212,63 +212,73 @@ namespace CryptoAccouting.CoreClass.APIClass
 			return EnuAPIStatus.Success;
         }
 
-        public static EnuAPIStatus FetchAllCoinData(InstrumentList instrumentlist)
+        public static EnuAPIStatus FetchAllCoinData(InstrumentList instrumentlist, bool IsOnline)
 		{
-
             const string BaseUrl = "http://bridgeplace.sakura.ne.jp/cryptoticker/InstrumentList.json";
                 // "https://api.coinmarketcap.com/v1/ticker/?limit=150";
+
 			string rawjson;
 
-            if (!Reachability.IsHostReachable(BaseUrl))
+            if (!IsOnline)
             {
-                return EnuAPIStatus.FailureNetwork;
+                rawjson = StorageAPI.LoadBundleJsonFile(ApplicationCore.InstrumentsBundleFile);
             }
             else
             {
-                //instrumentlist.Clear();
-                using (var http = new HttpClient())
+                if (!Reachability.IsHostReachable(BaseUrl))
                 {
-                    //http.MaxResponseContentBufferSize = 256000;
-                    rawjson = http.GetStringAsync(BaseUrl).Result;
+                    return EnuAPIStatus.FailureNetwork;
                 }
-                var jarray = JArray.Parse(rawjson);
-
-                //Parse Market Data 
-                foreach (var elem in jarray)
+                else
                 {
-                    if ((bool)elem["active"])
+                    //instrumentlist.Clear();
+                    using (var http = new HttpClient())
                     {
-                        Instrument coin;
-                        if (instrumentlist.Any(x => x.Id == (string)elem["id"]))
-                        {
-                            coin = instrumentlist.First(x => x.Id == (string)elem["id"]);
-                            coin.Symbol1 = (string)elem["symbol"];
-                            coin.Name = (string)elem["name"];
-                        }
-                        else
-                        {
-                            coin = new Instrument((string)elem["id"])
-                            {
-                                Symbol1 = (string)elem["symbol"],
-                                Name = (string)elem["name"]
-                            };//IOTA symbol注意
-						}
-
-                        if (elem["symbol2"] != null)
-                        {
-                            coin.Symbol2 = (string)elem["symbol2"];
-                        }
-                        coin.rank = int.Parse((string)elem["rank"]);
-
-                        var p = new Price(coin);
-                        coin.MarketPrice = p;
-                        instrumentlist.Attach(coin);
-                        FetchCoinLogo(coin.Id, false);
+                        //http.MaxResponseContentBufferSize = 256000;
+                        rawjson = http.GetStringAsync(BaseUrl).Result;
                     }
                 }
-
-                return EnuAPIStatus.Success;
             }
+
+            var jarray = JArray.Parse(rawjson);
+
+            //Parse Market Data 
+            foreach (var elem in jarray)
+            {
+                if ((bool)elem["active"])
+                {
+                    Instrument coin;
+                    if (instrumentlist.Any(x => x.Id == (string)elem["id"]))
+                    {
+                        coin = instrumentlist.First(x => x.Id == (string)elem["id"]);
+                        coin.Symbol1 = (string)elem["symbol"];
+                        coin.Name = (string)elem["name"];
+                    }
+                    else
+                    {
+                        coin = new Instrument((string)elem["id"])
+                        {
+                            Symbol1 = (string)elem["symbol"],
+                            Name = (string)elem["name"]
+                        };//IOTA symbol注意
+                    }
+
+                    if (elem["symbol2"] != null)
+                    {
+                        coin.Symbol2 = (string)elem["symbol2"];
+                    }
+                    coin.rank = int.Parse((string)elem["rank"]);
+
+                    var p = new Price(coin);
+                    coin.MarketPrice = p;
+                    instrumentlist.Attach(coin);
+                    FetchCoinLogo(coin.Id, false);
+                }
+            }
+
+            if (IsOnline) StorageAPI.SaveInstrumentXML(instrumentlist, ApplicationCore.InstrumentsFile);
+
+			return EnuAPIStatus.Success;
 		}
 
         private static void FetchCoinLogo(string InstrumentID, bool ForceRefresh)
@@ -299,13 +309,14 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static EnuAPIStatus FetchExchangeList(ExchangeList exlist)
         {
-            //const string jsonfilename = "ExchangeList.json";
+            const string jsonfilename = "ExchangeList.json";
             string rawjson;
             string BaseUri = "http://bridgeplace.sakura.ne.jp/cryptoticker/ExchangeList.json";
 
             if (!Reachability.IsHostReachable(BaseUri))
             {
-                rawjson = File.ReadAllText("Json/ExchangeList.json"); //Bundle file
+                rawjson = StorageAPI.LoadBundleJsonFile(jsonfilename);
+                //rawjson = File.ReadAllText("Json/ExchangeList.json"); //Bundle file
                 //return EnuAPIStatus.FailureNetwork;
             }
             else
@@ -373,13 +384,12 @@ namespace CryptoAccouting.CoreClass.APIClass
 			string rawjson_today, rawjson_yesterday;
             const string jsonfilename_today = "crossrate_today.json";
             const string jsonfilename_yesterday = "crossrate_yesterday.json";
-            //const string BaseUri = "https://finance.yahoo.com/webservice/v1/symbols/allcurrencies/quote?format=json";
             const string BaseUri = "http://bridgeplace.sakura.ne.jp/cryptoticker";
 
 			if (!Reachability.IsHostReachable(BaseUri))
             {
-                rawjson_today = StorageAPI.LoadFromJsonFile(jsonfilename_today);
-                rawjson_yesterday = StorageAPI.LoadFromJsonFile(jsonfilename_yesterday);
+                rawjson_today = StorageAPI.LoadFromFile(jsonfilename_today);
+                rawjson_yesterday = StorageAPI.LoadFromFile(jsonfilename_yesterday);
                 if (rawjson_today is null) return null;
             }
             else
@@ -440,8 +450,8 @@ namespace CryptoAccouting.CoreClass.APIClass
 			}
 
 
-            StorageAPI.SaveJsonFile(rawjson_today, jsonfilename_today);
-            StorageAPI.SaveJsonFile(rawjson_yesterday, jsonfilename_yesterday);
+            StorageAPI.SaveFile(rawjson_today, jsonfilename_today);
+            StorageAPI.SaveFile(rawjson_yesterday, jsonfilename_yesterday);
 
             return crossrate;
 		}
