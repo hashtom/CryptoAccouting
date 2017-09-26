@@ -288,29 +288,38 @@ namespace CryptoAccouting.CoreClass.APIClass
 			return EnuAPIStatus.Success;
 		}
 
-        private static void FetchCoinLogo(string InstrumentID, bool ForceRefresh)
+        private static EnuAPIStatus FetchCoinLogo(string InstrumentID, bool ForceRefresh)
         {
             var filename = InstrumentID + ".png";
             string TargetUri = "http://bridgeplace.sakura.ne.jp/cryptoticker/images/" + filename;
 
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Images");
-
-            if (!Directory.Exists(path))
+            if (!Reachability.IsHostReachable(TargetUri))
             {
-                Directory.CreateDirectory(path);
+                return EnuAPIStatus.FailureNetwork;
             }
-
-            path = Path.Combine(path, filename);
-
-            if (!File.Exists(path) || ForceRefresh)
+            else
             {
-                var client = new HttpClient();
-                HttpResponseMessage res = client.GetAsync(TargetUri, HttpCompletionOption.ResponseContentRead).Result;
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Images");
 
-                using (var fileStream = File.Create(path))
-                using (var httpStream = res.Content.ReadAsStreamAsync().Result)
-                    httpStream.CopyTo(fileStream);
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
 
+                path = Path.Combine(path, filename);
+
+                if (!File.Exists(path) || ForceRefresh)
+                {
+
+
+                    var client = new HttpClient();
+                    HttpResponseMessage res = client.GetAsync(TargetUri, HttpCompletionOption.ResponseContentRead).Result;
+
+                    using (var fileStream = File.Create(path))
+                    using (var httpStream = res.Content.ReadAsStreamAsync().Result)
+                        httpStream.CopyTo(fileStream);
+                }
+                return EnuAPIStatus.Success;
             }
         }
 
@@ -322,7 +331,8 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             if (!Reachability.IsHostReachable(BaseUri))
             {
-                rawjson = StorageAPI.LoadBundleJsonFile(jsonfilename);
+                rawjson = StorageAPI.LoadFromFile(jsonfilename);
+                if (rawjson == null) rawjson = StorageAPI.LoadBundleJsonFile(jsonfilename);
                 //rawjson = File.ReadAllText("Json/ExchangeList.json"); //Bundle file
                 //return EnuAPIStatus.FailureNetwork;
             }
@@ -337,6 +347,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     }
                     rawjson = response.Content.ReadAsStringAsync().Result;
                 }
+                StorageAPI.SaveFile(rawjson, jsonfilename);
             }
 
             var json = JObject.Parse(rawjson);
@@ -381,7 +392,6 @@ namespace CryptoAccouting.CoreClass.APIClass
                 //}
             }
 
-            StorageAPI.OverrideBundleJsonFile(rawjson, jsonfilename);
             return EnuAPIStatus.Success;
         }
 
@@ -462,7 +472,6 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             return crossrate;
 		}
-
 
   //      public static EnuAppStatus FetchExchangeListTemp(Instrument coin, ExchangeList exlist)
 		//{

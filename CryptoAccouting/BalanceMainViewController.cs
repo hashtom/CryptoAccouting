@@ -2,7 +2,14 @@
         //private NavigationDrawer menu;
         Balance mybalance;          public BalanceMainViewController(IntPtr handle) : base(handle)         {
         }          public override void ViewDidLoad()         {             base.ViewDidLoad();              // Instantiate Controllers             AppSetting.balanceMainViewC = this;             //AppSetting.transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             AppSetting.plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             AppSetting.settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             //menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);  
-            if (ApplicationCore.InitializeCore() != EnuAPIStatus.Success)             {                 this.PopUpWarning("some issue!!");                 this.mybalance = new Balance();             }             else             {                 this.mybalance = ApplicationCore.Balance;             }                      // Configure Segmented control             ConfigureSegmentButton();              // Configure Table source             TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");             TableView.Source = new CoinTableSource(mybalance, this); 
+            if (ApplicationCore.InitializeCore() != EnuAPIStatus.Success)             {                 this.PopUpWarning("some issue!!");                 this.mybalance = new Balance();             }             else             {                 this.mybalance = ApplicationCore.Balance;             }                      // Configure Segmented control             ConfigureSegmentButton();              // Configure Table source             TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");             TableView.Source = new CoinTableSource(mybalance, this);
+
+            if (!ApplicationCore.IsInternetReachable())
+			{
+				UIAlertController okAlertController = UIAlertController.Create("Warning", "Unable to Connect Internet!", UIAlertControllerStyle.Alert);
+				okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+				this.PresentViewController(okAlertController, true, null);
+			} 
         }          public async override void ViewWillAppear(bool animated)         {
             base.ViewWillAppear(animated);
 
@@ -10,7 +17,7 @@
             {
                 await ApplicationCore.LoadCoreDataAsync();
                 await ApplicationCore.FetchMarketDataFromBalanceAsync();
-            }
+            } 
             ReDrawScreen();
             TableView.ReloadData(); 
         }          public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)

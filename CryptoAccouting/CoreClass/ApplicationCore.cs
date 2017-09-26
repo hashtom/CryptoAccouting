@@ -110,6 +110,10 @@
             var mycoins = new InstrumentList();             if (coin.Symbol1 != "BTC") mycoins.Attach(InstrumentList.First(x => x.Symbol1 == "BTC"));             mycoins.Attach(coin);             await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRate);
         }
 
+		public static bool IsInternetReachable()
+		{
+			return Reachability.IsHostReachable("http://bridgeplace.sakura.ne.jp");
+		} 
         public static string NumberFormat(double number)
         {             double epsilon = 1e-10;
             var digit = unchecked((int)Math.Log10(Math.Abs(number))) + 1;
