@@ -19,14 +19,15 @@ namespace CryptoAccouting.UIClass
 			{
 				Font = UIFont.FromName("Cochin-BoldItalic", 22f),
 				TextColor = UIColor.FromRGB(127, 51, 0),
+                TextAlignment = UITextAlignment.Center,
 				BackgroundColor = UIColor.Clear
 			};
 
 			labelHoldingBTC = new UILabel()
-			{
-				Font = UIFont.FromName("AmericanTypewriter", 12f),
-				TextColor = UIColor.FromRGB(38, 127, 0),
-				TextAlignment = UITextAlignment.Center,
+            {
+                Font = UIFont.FromName("AmericanTypewriter", 12f),
+                TextColor = UIColor.FromRGB(38, 127, 0),
+                TextAlignment = UITextAlignment.Center,
 				BackgroundColor = UIColor.Clear
 			};
 
@@ -34,7 +35,7 @@ namespace CryptoAccouting.UIClass
 			{
 				Font = UIFont.FromName("AmericanTypewriter", 12f),
 				TextColor = UIColor.FromRGB(38, 127, 0),
-				TextAlignment = UITextAlignment.Center,
+                TextAlignment = UITextAlignment.Center,
 				BackgroundColor = UIColor.Clear
 			};
 
@@ -42,7 +43,7 @@ namespace CryptoAccouting.UIClass
 			{
 				Font = UIFont.FromName("AmericanTypewriter", 12f),
 				TextColor = UIColor.FromRGB(38, 127, 0),
-				TextAlignment = UITextAlignment.Center,
+                TextAlignment = UITextAlignment.Center,
 				BackgroundColor = UIColor.Clear
 			};
 

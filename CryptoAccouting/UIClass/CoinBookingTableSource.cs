@@ -104,9 +104,6 @@ namespace CryptoAccouting.UIClass
 
 		public static UIView BuidBlanceViewHeader(UITableView tv)
 		{
-
-			//UILabel codeLabel, amountLabel, priceLabel, pctLabel;
-
 			UIView view = new UIView(new System.Drawing.RectangleF(0, 0, (float)tv.Frame.Width, 20));
 			view.BackgroundColor = UIColor.Gray;
             var width = (float)tv.Frame.Width / 5;
@@ -115,8 +112,8 @@ namespace CryptoAccouting.UIClass
 			{
 				Font = UIFont.FromName("ArialMT", 12f),
 				TextColor = UIColor.White,
-				TextAlignment = UITextAlignment.Left,
-				Frame = new System.Drawing.RectangleF(20, 0, 40, 20),
+                TextAlignment = UITextAlignment.Center,
+				Frame = new System.Drawing.RectangleF(20, 0, 50, 20),
 				BackgroundColor = UIColor.Clear,
 				Text = "Coin"
 			};
@@ -125,8 +122,8 @@ namespace CryptoAccouting.UIClass
             {
                 Font = UIFont.FromName("ArialMT", 12f),
                 TextColor = UIColor.White,
-                TextAlignment = UITextAlignment.Left,
-                Frame = new System.Drawing.RectangleF(width, 0, 60, 20),
+                TextAlignment = UITextAlignment.Center,
+                Frame = new System.Drawing.RectangleF(width, 0, 100, 20),
                 BackgroundColor = UIColor.Clear,
                 Text = "Holdings"
             };
@@ -135,8 +132,8 @@ namespace CryptoAccouting.UIClass
             {
                 Font = UIFont.FromName("ArialMT", 12f),
                 TextColor = UIColor.White,
-                TextAlignment = UITextAlignment.Left,
-                Frame = new System.Drawing.RectangleF(width * 2, 0, 60, 20),
+                TextAlignment = UITextAlignment.Center,
+                Frame = new System.Drawing.RectangleF(width * 2, 0, 100, 20),
                 BackgroundColor = UIColor.Clear,
                 Text = "Book"
             };
@@ -145,7 +142,7 @@ namespace CryptoAccouting.UIClass
             {
                 Font = UIFont.FromName("ArialMT", 12f),
                 TextColor = UIColor.White,
-                TextAlignment = UITextAlignment.Left,
+                TextAlignment = UITextAlignment.Center,
                 Frame = new System.Drawing.RectangleF(width * 3, 0, 60, 20),
                 BackgroundColor = UIColor.Clear,
                 Text = "Exchange"
@@ -155,7 +152,7 @@ namespace CryptoAccouting.UIClass
             {
                 Font = UIFont.FromName("ArialMT", 12f),
                 TextColor = UIColor.White,
-                TextAlignment = UITextAlignment.Left,
+                TextAlignment = UITextAlignment.Center,
                 Frame = new System.Drawing.RectangleF(width * 4, 0, 60, 20),
                 BackgroundColor = UIColor.Clear,
                 Text = "Storage"

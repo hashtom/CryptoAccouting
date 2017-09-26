@@ -21,6 +21,7 @@ namespace CryptoAccouting.UIClass
             {
                 Font = UIFont.FromName("Cochin-BoldItalic", 22f),
                 TextColor = UIColor.FromRGB(127, 51, 0),
+                TextAlignment = UITextAlignment.Center,
                 BackgroundColor = UIColor.Clear
             };
 

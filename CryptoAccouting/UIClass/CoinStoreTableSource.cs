@@ -95,48 +95,46 @@ namespace CryptoAccouting.UIClass
 
         public static UIView BuidBlanceViewHeader(UITableView tv)
         {
-
-            UILabel codeLabel, amountLabel, valueLabel, pctLabel;
-
             UIView view = new UIView(new System.Drawing.RectangleF(0, 0, (float)tv.Frame.Width, 20));
             view.BackgroundColor = UIColor.Gray;
+            var width = (float)tv.Frame.Width / 4;
 
-            codeLabel = new UILabel()
+            var codeLabel = new UILabel()
             {
                 Font = UIFont.FromName("ArialMT", 12f),
                 TextColor = UIColor.White,
-                TextAlignment = UITextAlignment.Left,
+                TextAlignment = UITextAlignment.Center,
                 Frame = new System.Drawing.RectangleF(20, 0, 50, 20),
                 BackgroundColor = UIColor.Clear,
                 Text = "Location"
             };
 
-            amountLabel = new UILabel()
+            var amountLabel = new UILabel()
             {
                 Font = UIFont.FromName("ArialMT", 12f),
                 TextColor = UIColor.White,
-                TextAlignment = UITextAlignment.Left,
-                Frame = new System.Drawing.RectangleF(100, 0, 60, 20),
+                TextAlignment = UITextAlignment.Center,
+                Frame = new System.Drawing.RectangleF(width, 0, 100, 20),
                 BackgroundColor = UIColor.Clear,
                 Text = "Holding"
             };
 
-            valueLabel = new UILabel()
+            var valueLabel = new UILabel()
             {
                 Font = UIFont.FromName("ArialMT", 12f),
                 TextColor = UIColor.White,
-                TextAlignment = UITextAlignment.Left,
-                Frame = new System.Drawing.RectangleF(200, 0, 60, 20),
+                TextAlignment = UITextAlignment.Center,
+                Frame = new System.Drawing.RectangleF(width * 2, 0, 100, 20),
                 BackgroundColor = UIColor.Clear,
                 Text = "Value"
             };
 
-            pctLabel = new UILabel()
+            var pctLabel = new UILabel()
             {
                 Font = UIFont.FromName("ArialMT", 12f),
                 TextColor = UIColor.White,
-                TextAlignment = UITextAlignment.Left,
-                Frame = new System.Drawing.RectangleF(300, 0, 40, 20),
+                TextAlignment = UITextAlignment.Center,
+                Frame = new System.Drawing.RectangleF(width * 3, 0, 60, 20),
                 BackgroundColor = UIColor.Clear,
                 Text = "Weight"
             };

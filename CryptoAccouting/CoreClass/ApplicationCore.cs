@@ -109,14 +109,14 @@
         }
 
         public static string NumberFormat(double number)
-        {
+        {             double epsilon = 1e-10;
             var digit = unchecked((int)Math.Log10(Math.Abs(number))) + 1;
-            if (digit > 6)
+             if (digit > 6)
             {
                 return String.Format("{0:n2}", number / 1000000) + "MM";
             }
             else if (digit <= 1)
             {
-                return String.Format("{0:n6}", number);
+                return Math.Abs(number) < epsilon ? "0" : String.Format("{0:n6}", number);
             }             else             {                 return String.Format("{0:n2}", number);             }
         }      }      public enum EnuAPIStatus{         Success,         FailureNetwork,         FailureStorage,         FailureParameter,         NotAvailable     }  } 
