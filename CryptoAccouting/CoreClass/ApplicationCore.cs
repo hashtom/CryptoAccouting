@@ -56,7 +56,16 @@
 						// 3. Use Bundled file 
 						return MarketDataAPI.FetchAllCoinData(InstrumentList, false);                     }                 }
                  return EnuAPIStatus.Success;
-            }         }           public static void SaveInstrumentXML()         {             StorageAPI.SaveInstrumentXML(InstrumentList, InstrumentsFile);         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, BalanceFile);         }          //public static Instrument GetInstrumentSymbol1(string symbol)
+            }         }          public static async Task<EnuAPIStatus>FetchCoinLogoAsync()         {             if (InstrumentList == null)
+            {
+                return EnuAPIStatus.FatalError;             }
+            else
+            {
+                foreach (var coin in InstrumentList)
+                {
+                    await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);
+                }
+                return EnuAPIStatus.Success;             }         }          public static void SaveInstrumentXML()         {             StorageAPI.SaveInstrumentXML(InstrumentList, InstrumentsFile);         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, BalanceFile);         }          //public static Instrument GetInstrumentSymbol1(string symbol)
         //{
         //    if (InstrumentList.Any(i => i.Symbol1 == symbol))
         //    {

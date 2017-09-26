@@ -279,7 +279,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     var p = new Price(coin);
                     coin.MarketPrice = p;
                     instrumentlist.Attach(coin);
-                    FetchCoinLogo(coin.Id, false);
+                    //FetchCoinLogo(coin.Id, false);
                 }
             }
 
@@ -288,7 +288,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 			return EnuAPIStatus.Success;
 		}
 
-        private static EnuAPIStatus FetchCoinLogo(string InstrumentID, bool ForceRefresh)
+        public static async Task<EnuAPIStatus> FetchCoinLogoAsync(string InstrumentID, bool ForceRefresh)
         {
             var filename = InstrumentID + ".png";
             string TargetUri = "http://bridgeplace.sakura.ne.jp/cryptoticker/images/" + filename;
@@ -313,10 +313,10 @@ namespace CryptoAccouting.CoreClass.APIClass
 
 
                     var client = new HttpClient();
-                    HttpResponseMessage res = client.GetAsync(TargetUri, HttpCompletionOption.ResponseContentRead).Result;
+                    HttpResponseMessage res = await client.GetAsync(TargetUri, HttpCompletionOption.ResponseContentRead);
 
                     using (var fileStream = File.Create(path))
-                    using (var httpStream = res.Content.ReadAsStreamAsync().Result)
+                    using (var httpStream = await res.Content.ReadAsStreamAsync())
                         httpStream.CopyTo(fileStream);
                 }
                 return EnuAPIStatus.Success;
