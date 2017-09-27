@@ -47,10 +47,11 @@ namespace CryptoAccouting.CoreClass.APIClass
         public static async Task<EnuAPIStatus> FetchCoinMarketDataAsync(InstrumentList instrumentlist, CrossRate crossrate)
         {
             string rawjson;
-
-
+            string rawjson_yesterday;
 
             const string CoinMarketUrl = "https://api.coinmarketcap.com/v1/ticker/";
+            const string CoinMarketUrl_yesterday = "http://bridgeplace.sakura.ne.jp/cryptoticker/market/market_yesterday.json";
+
             if (!Reachability.IsHostReachable(CoinMarketUrl))
             {
                 return EnuAPIStatus.FailureNetwork;
@@ -63,6 +64,11 @@ namespace CryptoAccouting.CoreClass.APIClass
                     rawjson = await http.GetStringAsync(CoinMarketUrl);
 				}
 
+				using (var http = new HttpClient())
+				{
+                    rawjson_yesterday = await http.GetStringAsync(CoinMarketUrl_yesterday);
+				}
+
                 foreach (var coin in instrumentlist.Where(x=>x.PriceSourceCode=="coinmarketcap"))
                 {
                     //Parse Market Data 
@@ -73,6 +79,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     }
 
                     var jarray = await Task.Run(() => JArray.Parse(rawjson));
+                    var jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
 
                     coin.MarketPrice.LatestPriceBTC = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_btc"];
                     coin.MarketPrice.LatestPriceUSD = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_usd"];
@@ -80,8 +87,8 @@ namespace CryptoAccouting.CoreClass.APIClass
                     coin.MarketPrice.DayVolume = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["24h_volume_usd"] / coin.MarketPrice.LatestPriceBTC;
                     coin.MarketPrice.MarketCap = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["market_cap_usd"];
                     coin.MarketPrice.PriceDate = ApplicationCore.FromEpochSeconds((long)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["last_updated"]).Date;
-                    coin.MarketPrice.PriceBTCBefore24h = coin.MarketPrice.LatestPriceBTC / ((double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["percent_change_24h"] / 100 + 1);
-                    coin.MarketPrice.PriceUSDBefore24h = coin.MarketPrice.LatestPriceUSD / ((double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["percent_change_24h"] / 100 + 1);
+                    coin.MarketPrice.PriceBTCBefore24h = (double)jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_btc"];
+                    coin.MarketPrice.PriceUSDBefore24h = (double)jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_usd"];
 					coin.MarketPrice.USDCrossRate = crossrate;
                 }
             }
@@ -169,55 +176,6 @@ namespace CryptoAccouting.CoreClass.APIClass
             return EnuAPIStatus.Success;
 
         }
-
-   //     public static async Task<EnuAPIStatus> FetchCoinMarketDataAsync(Instrument coin, Instrument bitcoin=null )
-   //     {
-
-   //         string rawjson;
-			//string CoinChartsUrl = "http://api.cryptocoincharts.info/tradingPair/";
-   //         JObject json;
-
-   //         if (coin.Symbol1 != "BTC" && bitcoin is null)
-   //         {
-   //             bitcoin = new Instrument("Bitcoin"){Symbol1="BTC"};
-   //             await FetchCoinMarketDataAsync(bitcoin);
-   //         }
-
-   //         if (!Reachability.IsHostReachable(CoinChartsUrl))
-   //         {
-   //             return EnuAPIStatus.FailureNetwork;
-   //         }
-   //         else
-   //         {
-   //             if (coin.MarketPrice == null)
-   //             {
-   //                 var p = new Price(coin);
-   //                 coin.MarketPrice = p;
-   //             }
-
-   //             CoinChartsUrl = (coin.Symbol1 == "BTC") ? CoinChartsUrl + "btc_usd" : CoinChartsUrl + coin.Symbol1.ToLower() + "_btc";
-
-   //             using (var http = new HttpClient())
-   //             {
-   //                 rawjson = await http.GetStringAsync(CoinChartsUrl);
-   //             }
-
-   //             json = await Task.Run(() => JObject.Parse(rawjson));
-
-   //             if (json["id"] != null)
-   //             {
-   //                 coin.MarketPrice.LatestPriceBTC = coin.Symbol1 == "BTC" ? 1 : (double)json["price"];
-   //                 coin.MarketPrice.PriceBTCBefore24h = coin.Symbol1 == "BTC" ? 1 : (double)json["price_before_24h"];
-   //                 coin.MarketPrice.LatestPriceUSD = coin.Symbol1 == "BTC" ? (double)json["price"] : (double)json["price"] * bitcoin.MarketPrice.LatestPriceUSD;
-   //                 coin.MarketPrice.PriceUSDBefore24h = coin.Symbol1 == "BTC" ? (double)json["price_before_24h"] : (double)json["price_before_24h"] * bitcoin.MarketPrice.PriceUSDBefore24h;
-   //                 coin.MarketPrice.DayVolume = (double)json["volume_btc"];
-   //                 coin.MarketPrice.PriceDate = DateTime.Now;
-   //             }
-
-			//}
-
-			//return EnuAPIStatus.Success;
-        //}
 
         public static EnuAPIStatus FetchAllCoinData(InstrumentList instrumentlist, bool OnlineUpdate)
 		{
