@@ -114,45 +114,46 @@ namespace CryptoAccouting.UIClass
 			view.BackgroundColor = UIColor.Gray;
             var width = (float)tv.Frame.Width / 4;
 
-			codeLabel = new UILabel()
-			{
-				Font = UIFont.FromName("ArialMT", 12f),
-				TextColor = UIColor.White,
-				TextAlignment = UITextAlignment.Left,
-				Frame = new System.Drawing.RectangleF(20, 0, 40, 20),
-				BackgroundColor = UIColor.Clear,
-				Text = "Coin"
-			};
+            codeLabel = new UILabel()
+            {
+                Font = UIFont.FromName("ArialMT", 12f),
+                TextColor = UIColor.White,
+                TextAlignment = UITextAlignment.Center,
+                Frame = new System.Drawing.RectangleF(20, 0, 90, 20),
+                BackgroundColor = UIColor.Clear,
+                Text = "Coin"
+            };
 
-			amountLabel = new UILabel()
-			{
-				Font = UIFont.FromName("ArialMT", 12f),
-				TextColor = UIColor.White,
-				TextAlignment = UITextAlignment.Left,
-                Frame = new System.Drawing.RectangleF(width, 0, 60, 20),
-				BackgroundColor = UIColor.Clear,
-				Text = "Holding"
-			};
+            amountLabel = new UILabel()
+            {
+                Font = UIFont.FromName("ArialMT", 12f),
+                TextColor = UIColor.White,
+                TextAlignment = UITextAlignment.Center,
+                Frame = new System.Drawing.RectangleF(width + 20, 0, 75, 20),
+                BackgroundColor = UIColor.Clear,
+                Text = "Holding"
+            };
 
-			priceLabel = new UILabel()
-			{
-				Font = UIFont.FromName("ArialMT", 12f),
-				TextColor = UIColor.White,
-				TextAlignment = UITextAlignment.Left,
-				Frame = new System.Drawing.RectangleF(width*2, 0, 70, 20),
-				BackgroundColor = UIColor.Clear,
-				Text = "Price/Value"
-			};
 
-			pctLabel = new UILabel()
-			{
-				Font = UIFont.FromName("ArialMT", 12f),
-				TextColor = UIColor.White,
-				TextAlignment = UITextAlignment.Left,
-				Frame = new System.Drawing.RectangleF(width*3, 0, 40, 20),
-				BackgroundColor = UIColor.Clear,
-				Text = "Return"
-			};
+            priceLabel = new UILabel()
+            {
+                Font = UIFont.FromName("ArialMT", 12f),
+                TextColor = UIColor.White,
+                TextAlignment = UITextAlignment.Center,
+                Frame = new System.Drawing.RectangleF((width * 2) + 20, 0, 75, 20),
+                BackgroundColor = UIColor.Clear,
+                Text = "Price/Value"
+            };
+
+            pctLabel = new UILabel()
+            {
+                Font = UIFont.FromName("ArialMT", 12f),
+                TextColor = UIColor.White,
+                TextAlignment = UITextAlignment.Center,
+                Frame = new System.Drawing.RectangleF((float)tv.Frame.Width - 60, 0, 60, 20),
+                BackgroundColor = UIColor.Clear,
+                Text = "Return"
+            };
 
 			view.AddSubviews(new UIView[] { codeLabel, amountLabel, priceLabel, pctLabel });
 			return view;
