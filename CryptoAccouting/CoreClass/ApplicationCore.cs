@@ -52,10 +52,10 @@
                 // 1. Load the latest file
                 if (StorageAPI.LoadInstrumentXML(InstrumentsFile, InstrumentList) != EnuAPIStatus.Success)
                 {
-					// 2. Try update online
-					if (LoadInstruments(true) != EnuAPIStatus.Success)                     {
-						// 3. Use Bundled file 
-						return MarketDataAPI.FetchAllCoinData(InstrumentList, false);                     }                 }
+					//  Update online
+					//if (LoadInstruments(true) != EnuAPIStatus.Success)                     //{
+						// 2.Use Bundled file 
+						return MarketDataAPI.FetchAllCoinData(InstrumentList, false);                     //}                 }
                  return EnuAPIStatus.Success;
             }         }          public static async Task<EnuAPIStatus>FetchCoinLogoAsync()         {             if (InstrumentList == null)
             {

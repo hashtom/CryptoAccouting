@@ -9,7 +9,7 @@ namespace CryptoAccouting.UIClass
     public class CoinBookingCell : UITableViewCell
     {
 
-        UILabel labelSymbol, labelHolding, labelBook, labelExchange, labelStorage;
+        UILabel labelSymbol, labelHolding, labelTD, labelExchange, labelStorage;
 
         //public CoinBookingCell(NSString cellId) : base(UITableViewCellStyle.Default, cellId)
         public CoinBookingCell(IntPtr handle) : base(handle)
@@ -33,7 +33,7 @@ namespace CryptoAccouting.UIClass
                 BackgroundColor = UIColor.Clear
             };
 
-            labelBook = new UILabel()
+            labelTD = new UILabel()
             {
                 Font = UIFont.FromName("AmericanTypewriter", 12f),
                 TextColor = UIColor.FromRGB(38, 127, 0),
@@ -57,7 +57,7 @@ namespace CryptoAccouting.UIClass
                 BackgroundColor = UIColor.Clear
             };
 
-            ContentView.AddSubviews(new UIView[] { labelSymbol, labelHolding, labelBook, labelExchange, labelStorage });
+            ContentView.AddSubviews(new UIView[] { labelSymbol, labelHolding, labelTD, labelExchange, labelStorage });
 
         }
 
@@ -65,7 +65,8 @@ namespace CryptoAccouting.UIClass
         {
             labelSymbol.Text = pos.Coin.Symbol1;
             labelHolding.Text = ApplicationCore.NumberFormat(pos.Amount);
-            labelBook.Text = ApplicationCore.NumberFormat(pos.BookPriceUSD);
+            //labelBook.Text = ApplicationCore.NumberFormat(pos.BookPriceUSD);
+            labelTD.Text = pos.BalanceDate.ToShortDateString();
             labelExchange.Text = pos.BookedExchange == null ? "N/A" : pos.BookedExchange.Name;
             labelStorage.Text = pos.CoinStorage == null ? "N/A" : pos.CoinStorage.Name;
         }
@@ -78,7 +79,7 @@ namespace CryptoAccouting.UIClass
 
             labelSymbol.Frame = new CGRect(20, 10, 50, 20);
             labelHolding.Frame = new CGRect(width, 10, 100, 20);
-            labelBook.Frame = new CGRect(width * 2, 10, 100, 20);
+            labelTD.Frame = new CGRect(width * 2, 10, 100, 20);
             labelExchange.Frame = new CGRect(width * 3, 10, 60, 20);
             labelStorage.Frame = new CGRect(width * 4, 10, 60, 20);
         }

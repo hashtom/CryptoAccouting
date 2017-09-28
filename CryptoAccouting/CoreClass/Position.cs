@@ -10,7 +10,7 @@ namespace CryptoAccouting.CoreClass
 		public DateTime BalanceDate { get; set; }
         public double Amount { get; set; }
         public double AmountBTC { get; set; }
-        public double BookPriceUSD { get; set; }
+        //public double BookPriceUSD { get; set; }
         public Exchange BookedExchange { get; set; }
         public CoinStorage CoinStorage { get; private set; }
         public double PriceUSD { get; set; }
@@ -66,10 +66,10 @@ namespace CryptoAccouting.CoreClass
             CoinStorage = storage;
         }
 
-        public double BookPriceBase(CrossRate USDCrossRate) //todo booking fx rate
-        {
-            return Coin.MarketPrice == null ? 0 : BookPriceUSD * USDCrossRate.Rate;
-        }
+        //public double BookPriceBase(CrossRate USDCrossRate) //todo booking fx rate
+        //{
+        //    return Coin.MarketPrice == null ? 0 : BookPriceUSD * USDCrossRate.Rate;
+        //}
 
         public double LatestAmountBTC()
         {
@@ -130,21 +130,21 @@ namespace CryptoAccouting.CoreClass
             return Coin.MarketPrice == null ? PriceBase * Amount : Coin.MarketPrice.LatestPriceBase() * this.Amount;
 		}
 
-		public double BookValueUSD()
-		{
-			return Amount * BookPriceUSD;
-		}
+		//public double BookValueUSD()
+		//{
+		//	return Amount * BookPriceUSD;
+		//}
 
-        public double PLBase() //todo
-        {
-            return 0;
+        //public double PLBase()
+        //{
+        //    return 0;
             //return BookValueUSD() - LatestFiatValueBase();
-        }
+        //}
 
-        public double PLUSD()
-        {
-            return BookValueUSD() - LatestFiatValueUSD(); 
-        }
+        //public double PLUSD()
+        //{
+        //    return BookValueUSD() - LatestFiatValueUSD(); 
+        //}
 	}
 
 }

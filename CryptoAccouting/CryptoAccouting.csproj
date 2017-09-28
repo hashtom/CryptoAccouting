@@ -130,7 +130,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="TestData\" />
     <Folder Include="CoreClass\APIClass\" />
     <Folder Include="Bundlefile\" />
   </ItemGroup>
@@ -144,7 +143,6 @@
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <None Include="packages.config" />
-    <None Include="TestData\instrumentsData.xml" />
     <None Include="Images\creditmemo.txt" />
     <None Include="Bundlefile\fxget.sh" />
     <None Include="Images\performtab.png" />

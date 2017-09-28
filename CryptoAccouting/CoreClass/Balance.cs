@@ -61,12 +61,12 @@ namespace CryptoAccouting.CoreClass
             {
                 var amount = positions.Where(x => x.Coin.Symbol1 == symbol).Sum(x => x.Amount);
                 var amountbtc = positions.Where(x => x.Coin.Symbol1 == symbol).Sum(x => x.LatestAmountBTC());
-                var bookprice = positions.Where(x => x.Coin.Symbol1 == symbol).Sum(x => x.BookPriceUSD);
+                //var bookprice = positions.Where(x => x.Coin.Symbol1 == symbol).Sum(x => x.BookPriceUSD);
                 var position = new Position(positions.Select(x => x.Coin).First(x => x.Symbol1 == symbol))
                 {
                     Amount = amount,
                     AmountBTC = amountbtc,
-                    BookPriceUSD = bookprice,
+                    //BookPriceUSD = bookprice,
                     PriceBTC = positions.Where(x => x.Coin.Symbol1 == symbol).Select(x => x.LatestPriceBTC()).First(),
                     PriceUSD = positions.Where(x => x.Coin.Symbol1 == symbol).Select(x => x.LatestPriceUSD()).First(),
                     PriceBase = positions.Where(x => x.Coin.Symbol1 == symbol).Select(x => x.LatestPriceBase()).First()

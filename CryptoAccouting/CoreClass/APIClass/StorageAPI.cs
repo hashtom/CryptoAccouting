@@ -70,7 +70,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                             Id = int.Parse(elem.Attribute("id").Value),
                             Amount = double.Parse(elem.Element("amount").Value),
                             AmountBTC = elem.Element("amountbtc") == null ? 0 : double.Parse(elem.Element("amountbtc").Value),
-                            BookPriceUSD = elem.Element("book") == null ? 0 : double.Parse(elem.Element("book").Value),
+                            //BookPriceUSD = elem.Element("book") == null ? 0 : double.Parse(elem.Element("book").Value),
                             BalanceDate = DateTime.Parse(elem.Element("date").Value),
                             BookedExchange = tradedexchange, //(EnuExchangeType)Enum.Parse(typeof(EnuExchangeType), elem.Descendants("exchange").Select(x => x.Value).First())
                             PriceUSD = elem.Element("priceusd") == null ? 0 : double.Parse(elem.Element("priceusd").Value),
@@ -134,7 +134,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                                                  new XElement("date", pos.BalanceDate),
                                                  new XElement("amount", pos.Amount.ToString()),
                                                  new XElement("amountbtc", pos.LatestAmountBTC().ToString()),
-                                                 new XElement("book", pos.BookPriceUSD.ToString()),
+                                                 new XElement("book", "NA"), //pos.BookPriceUSD.ToString()),
                                                  new XElement("exchange", pos.BookedExchange == null ? "" : pos.BookedExchange.Code),
                                                  new XElement("storage", pos.CoinStorage == null ? "" : pos.CoinStorage.Code),
                                                  new XElement("storagetype", pos.CoinStorage == null ? "" : pos.CoinStorage.StorageType.ToString()),

@@ -142,9 +142,7 @@ namespace CryptoAccouting
                 buttonWallet.SetTitleColor(UIColor.Blue, UIControlState.Normal);
 				buttonWallet.UserInteractionEnabled = true;
                 textQuantity.UserInteractionEnabled = true;
-                textBookPrice.UserInteractionEnabled = true;
                 textQuantity.TextColor = UIColor.Blue;
-                textBookPrice.TextColor = UIColor.Blue;
             }
             else
             {
@@ -156,9 +154,7 @@ namespace CryptoAccouting
 				buttonTradeDate.UserInteractionEnabled = false;
 				buttonTradeDate.SetTitleColor(UIColor.Black, UIControlState.Normal);
                 textQuantity.UserInteractionEnabled = false;
-                textBookPrice.UserInteractionEnabled = false;
                 textQuantity.TextColor = UIColor.Black;
-                textBookPrice.TextColor = UIColor.Black;
             }
         }
 
@@ -185,7 +181,6 @@ namespace CryptoAccouting
 
             if (PositionDetail is null) // new balance
             {
-                textBookPrice.Text = "0";
                 thisBalanceDate = DateTime.Now.Date;
                 buttonTradeDate.SetTitle(thisBalanceDate.ToShortDateString(), UIControlState.Normal);
             }
@@ -199,7 +194,7 @@ namespace CryptoAccouting
                 //labelFiatPrice.Text = String.Format("{0:n0}", PositionDetail.LatestMainPrice());
                 textQuantity.Text = (Math.Abs(PositionDetail.Amount) < 0.00000001) ? "" : String.Format("{0:n6}", PositionDetail.Amount);
                 //textBookPrice.Text = (Math.Abs(PositionDetail.BookPriceUSD) < 0.00000001) ? String.Format("{0:n2}", PositionDetail.LatestPriceUSD()) : String.Format("{0:n2}", PositionDetail.BookPriceUSD);
-                textBookPrice.Text = String.Format("{0:n2}", PositionDetail.BookPriceUSD);
+                //textBookPrice.Text = String.Format("{0:n2}", PositionDetail.BookPriceUSD);
 				thisBalanceDate = PositionDetail.BalanceDate;
                 buttonTradeDate.SetTitle(PositionDetail.BalanceDate.Date.ToShortDateString(), UIControlState.Normal);
             }
@@ -216,7 +211,7 @@ namespace CryptoAccouting
             if (PositionDetail is null) PositionDetail = new Position(thisCoin);
 
             PositionDetail.Amount = double.Parse(textQuantity.Text);
-            PositionDetail.BookPriceUSD = textBookPrice.Text is "" ? 0 : double.Parse(textBookPrice.Text);
+            //PositionDetail.BookPriceUSD = textBookPrice.Text is "" ? 0 : double.Parse(textBookPrice.Text);
             PositionDetail.BalanceDate = thisBalanceDate;
 
             if (thisExchange != null) PositionDetail.BookedExchange = thisExchange;

@@ -104,10 +104,10 @@ namespace CryptoAccouting
                 //labelMarketCap.Text = "$" + String.Format("{0:n0}", thisCoin.MarketPrice.MarketCap);
             }
 
-            labelProfitLoss.Text = "$" + ApplicationCore.NumberFormat(booking_positions.Sum(x => x.PLUSD()));
-            labelMarketValue.Text = "$" + String.Format("{0:n0}", booking_positions.Sum(x => x.LatestFiatValueUSD()));
-            labelTotalQty.Text = String.Format("{0:n0}", booking_positions.Sum(x => x.Amount));
-            labelTotalBookCost.Text = "$" + String.Format("{0:n0}", booking_positions.Sum(x => x.BookValueUSD()));
+            //labelProfitLoss.Text = "$" + ApplicationCore.NumberFormat(booking_positions.Sum(x => x.PLUSD()));
+            labelMarketValue.Text = "$" + ApplicationCore.NumberFormat(booking_positions.Sum(x => x.LatestFiatValueUSD()));
+            labelTotalQty.Text = ApplicationCore.NumberFormat(booking_positions.Sum(x => x.Amount));
+            //labelTotalBookCost.Text = "$" + String.Format("{0:n0}", booking_positions.Sum(x => x.BookValueUSD()));
 
             TableView.ReloadData();
 
