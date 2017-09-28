@@ -186,7 +186,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             if (!OnlineUpdate)
             {
-                rawjson = StorageAPI.LoadBundleJsonFile(ApplicationCore.InstrumentsBundleFile);
+                rawjson = StorageAPI.LoadBundleFile(ApplicationCore.InstrumentsBundleFile);
             }
             else
             {
@@ -290,7 +290,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             if (!Reachability.IsHostReachable(BaseUri))
             {
                 rawjson = StorageAPI.LoadFromFile(jsonfilename);
-                if (rawjson == null) rawjson = StorageAPI.LoadBundleJsonFile(jsonfilename);
+                if (rawjson == null) rawjson = StorageAPI.LoadBundleFile(jsonfilename);
                 //rawjson = File.ReadAllText("Json/ExchangeList.json"); //Bundle file
                 //return EnuAPIStatus.FailureNetwork;
             }

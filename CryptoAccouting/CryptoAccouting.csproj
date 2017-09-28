@@ -132,7 +132,7 @@
     <Folder Include="Resources\" />
     <Folder Include="TestData\" />
     <Folder Include="CoreClass\APIClass\" />
-    <Folder Include="Json\" />
+    <Folder Include="Bundlefile\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -144,15 +144,14 @@
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <None Include="packages.config" />
-    <None Include="TestData\BalanceData.xml" />
     <None Include="TestData\instrumentsData.xml" />
     <None Include="Images\creditmemo.txt" />
-    <None Include="Json\fxget.sh" />
+    <None Include="Bundlefile\fxget.sh" />
     <None Include="Images\performtab.png" />
     <None Include="Images\PLtab.png" />
     <None Include="Images\transactiontab.png" />
     <None Include="Images\exchange.png" />
-    <None Include="Json\marketget.sh" />
+    <None Include="Bundlefile\marketget.sh" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -223,10 +222,11 @@
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />
     <BundleResource Include="Images\key.png" />
-    <BundleResource Include="Json\ExchangeList.json" />
-    <BundleResource Include="Json\InstrumentList.json" />
+    <BundleResource Include="Bundlefile\ExchangeList.json" />
+    <BundleResource Include="Bundlefile\InstrumentList.json" />
     <BundleResource Include="Images\settingstab.png" />
     <BundleResource Include="Images\positiontab.png" />
+    <BundleResource Include="Bundlefile\BalanceData.xml" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork" />

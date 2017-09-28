@@ -9,9 +9,9 @@ namespace CryptoAccouting.CoreClass.APIClass
     public static class StorageAPI
     {
         
-        public static string LoadBundleJsonFile(string fileName)
+        public static string LoadBundleFile(string fileName)
 		{
-            return File.ReadAllText("Json/" + fileName);
+            return File.ReadAllText("Bundlefile/" + fileName);
 		}
 
         public static EnuAPIStatus SaveFile(string json, string fileName)
@@ -43,6 +43,8 @@ namespace CryptoAccouting.CoreClass.APIClass
             Balance mybal;
 
             var balanceXML = LoadFromFile(fileName);
+            if (balanceXML == null ) balanceXML = LoadBundleFile("BalanceData.xml");
+
 			//try
 			//{
 			//var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);

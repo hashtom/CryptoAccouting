@@ -34,15 +34,22 @@ namespace CryptoAccouting
 			{
 				string[] sources;
 
-				//todo
-				if (thisCoin.Symbol1 == "BTC")
-				{
-					sources = new string[] { "Bitstamp", "coinmarketcap" };
-				}
-				else
-				{
-					sources = new string[] { "Bittrex", "coinmarketcap" };
-				}
+                //todo
+                if (thisCoin.Symbol1 == "BTC")
+                {
+                    sources = new string[] { "Bitstamp", "coinmarketcap" };
+                }
+                else
+                {
+                    if (ApplicationCore.GetExchange("Bittrex").IsListed(thisCoin.Id))
+                    {
+                        sources = new string[] { "Bittrex", "coinmarketcap" };
+                    }
+                    else
+                    {
+                        sources = new string[] { "coinmarketcap" };
+                    }
+                }
 
 				UIAlertController PriceSourceAlert = UIAlertController.Create("Price Source", "Choose Price Source", UIAlertControllerStyle.ActionSheet);
 				PriceSourceAlert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));

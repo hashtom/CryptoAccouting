@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+
+<application name="CryptoAccounting">
+  <balance>
+    <position id="1">
+      <symbol>BTC</symbol>
+      <date>2017-09-28T00:00:00+09:00</date>
+      <amount>0.01</amount>
+      <amountbtc>0.01</amountbtc>
+      <book>0</book>
+      <exchange></exchange>
+      <storage>TBA</storage>
+      <storagetype>TBA</storagetype>
+      <priceusd>4162.55</priceusd>
+      <pricebtc>1</pricebtc>
+      <pricebase>4162.55</pricebase>
+    </position>
+    <position id="2">
+      <symbol>MONA</symbol>
+      <date>2017-09-28T00:00:00+09:00</date>
+      <amount>10</amount>
+      <amountbtc>0.0011114</amountbtc>
+      <book>0</book>
+      <exchange></exchange>
+      <storage>TBA</storage>
+      <storagetype>TBA</storagetype>
+      <priceusd>0.463796</priceusd>
+      <pricebtc>0.00011114</pricebtc>
+      <pricebase>0.463796</pricebase>
+    </position>
+  </balance>
+</application>

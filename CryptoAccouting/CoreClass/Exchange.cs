@@ -21,6 +21,11 @@ namespace CryptoAccouting.CoreClass
             if (storagetype != EnuCoinStorageType.Exchange) throw new Exception();
         }
 
+        public bool IsListed(string instrumemntID)
+        {
+            return Coins.Any(x => x.Id == instrumemntID);
+        }
+
         public void AttachListedCoin(Instrument coin)
 		{
             if (!Coins.Any(c => c.Id == coin.Id)) Coins.Attach(coin);

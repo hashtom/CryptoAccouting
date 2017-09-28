@@ -17,7 +17,8 @@
         {             //Load Instruments Data and ExchangeList
             if (LoadInstruments(false) is EnuAPIStatus.Success) LoadExchangeList(); 
 			//Load Balance Data
-            Balance = StorageAPI.LoadBalanceXML(BalanceFile, InstrumentList);             Balance.ReCalculate();              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML(AppSettingFile) != EnuAPIStatus.Success)             {                 BaseCurrency = EnuCCY.USD; //Default setting             }              return EnuAPIStatus.Success;          }          public static async Task<EnuAPIStatus> LoadCoreDataAsync(){
+            Balance = StorageAPI.LoadBalanceXML(BalanceFile, InstrumentList);
+            Balance.ReCalculate();              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML(AppSettingFile) != EnuAPIStatus.Success)             {                 BaseCurrency = EnuCCY.USD; //Default setting             }              return EnuAPIStatus.Success;          }          public static async Task<EnuAPIStatus> LoadCoreDataAsync(){
 
             //Load FX
             if (!HasCrossRateUpdated)
@@ -31,10 +32,10 @@
         public static async Task<EnuAPIStatus> FetchMarketDataFromBalanceAsync()
         { 
             if (Balance != null)
-            {                 var mycoins = new InstrumentList();
+            {                 var mycoins = new InstrumentList(); 
                 Balance.Select(x => x.Coin).Distinct().ToList().ForEach(x => mycoins.Attach(x));
                 //return await MarketDataAPI.FetchCoinMarketDataAsync(mycoins, USDCrossRate);
-                return await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRate);             }
+                if (!mycoins.Any(x => x.Symbol1 == "BTC")) mycoins.Insert(0, InstrumentList.First(x => x.Symbol1 == "BTC"));                 return await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRate);             }
             else
             {                 return EnuAPIStatus.NotAvailable;             }
         }          public static EnuAPIStatus SaveAppSetting()
