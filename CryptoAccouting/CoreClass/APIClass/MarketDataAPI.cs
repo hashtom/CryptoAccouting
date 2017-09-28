@@ -234,8 +234,8 @@ namespace CryptoAccouting.CoreClass.APIClass
                     }
                     coin.rank = int.Parse((string)elem["rank"]);
 
-                    var p = new Price(coin);
-                    coin.MarketPrice = p;
+                    //var p = new Price(coin);
+                    //coin.MarketPrice = p;
                     instrumentlist.Attach(coin);
                     //FetchCoinLogo(coin.Id, false);
                 }

@@ -8,7 +8,7 @@ namespace CryptoAccouting.UIClass
 {
     public class CoinStoreCell: UITableViewCell
     {
-        UILabel labelName, labelHoldingBTC, labelValueK, labelRet;
+        UILabel labelName, labelHoldingBTC, labelValueK, labelWeight;
 
         public CoinStoreCell(IntPtr handle) : base(handle)
         {
@@ -39,7 +39,7 @@ namespace CryptoAccouting.UIClass
 				BackgroundColor = UIColor.Clear
 			};
 
-			labelRet = new UILabel()
+            labelWeight = new UILabel()
 			{
 				Font = UIFont.FromName("AmericanTypewriter", 12f),
 				TextColor = UIColor.FromRGB(38, 127, 0),
@@ -47,7 +47,7 @@ namespace CryptoAccouting.UIClass
 				BackgroundColor = UIColor.Clear
 			};
 
-			ContentView.AddSubviews(new UIView[] { labelName, labelHoldingBTC, labelValueK, labelRet});
+			ContentView.AddSubviews(new UIView[] { labelName, labelHoldingBTC, labelValueK, labelWeight});
 
 		}
 
@@ -56,7 +56,7 @@ namespace CryptoAccouting.UIClass
 			labelName.Text = storage.Name;
 			labelHoldingBTC.Text = "฿" + ApplicationCore.NumberFormat(storage.AmountBTC());
 			labelValueK.Text = ApplicationCore.NumberFormat(storage.LatestFiatValueBase());
-			labelRet.Text = String.Format("{0:n2}", storage.Weight * 100) + "%";
+			labelWeight.Text = String.Format("{0:n2}", storage.Weight * 100) + "%";
 		}
 
 		public override void LayoutSubviews()
@@ -68,7 +68,7 @@ namespace CryptoAccouting.UIClass
 			labelName.Frame = new CGRect(20, 10, 50, 20);
 			labelHoldingBTC.Frame = new CGRect(width, 10, 100, 20);
 			labelValueK.Frame = new CGRect(width * 2, 10, 100, 20);
-			labelRet.Frame = new CGRect(width * 3, 10, 60, 20);
+			labelWeight.Frame = new CGRect(width * 3, 10, 60, 20);
 		}
     }
 }
