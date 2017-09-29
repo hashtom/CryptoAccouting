@@ -334,7 +334,7 @@
         <scene sceneID="6du-eM-Wcw">
             <objects>
                 <navigationController id="MUY-xX-c7o" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="取引" id="oIp-pC-yGF"/>
+                    <tabBarItem key="tabBarItem" title="取引" image="Images/tradetab.png" id="oIp-pC-yGF"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="b9j-8f-PaV">
                         <rect key="frame" x="0.0" y="20" width="320" height="44"/>
@@ -1800,6 +1800,7 @@
         <image name="Images/key.png" width="922" height="808"/>
         <image name="Images/positiontab.png" width="32" height="32"/>
         <image name="Images/settingstab.png" width="32" height="32"/>
+        <image name="Images/tradetab.png" width="16" height="16"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="27361"/>

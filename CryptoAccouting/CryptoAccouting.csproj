@@ -224,6 +224,7 @@
     <BundleResource Include="Images\settingstab.png" />
     <BundleResource Include="Images\positiontab.png" />
     <BundleResource Include="Bundlefile\BalanceData.xml" />
+    <BundleResource Include="Images\tradetab.png" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork" />
