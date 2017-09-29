@@ -34,7 +34,6 @@ namespace CryptoAccouting
 			{
 				string[] sources;
 
-                //todo
                 if (thisCoin.Symbol1 == "BTC")
                 {
                     sources = new string[] { "Bitstamp", "coinmarketcap" };
@@ -105,7 +104,8 @@ namespace CryptoAccouting
             }
 
             //labelProfitLoss.Text = "$" + ApplicationCore.NumberFormat(booking_positions.Sum(x => x.PLUSD()));
-            labelMarketValue.Text = "$" + ApplicationCore.NumberFormat(booking_positions.Sum(x => x.LatestFiatValueUSD()));
+            labelMarketValueTitle.Text += "(" + ApplicationCore.BaseCurrency.ToString() + ")";
+            labelMarketValue.Text = ApplicationCore.NumberFormat(booking_positions.Sum(x => x.LatestFiatValueBase()));
             labelTotalQty.Text = ApplicationCore.NumberFormat(booking_positions.Sum(x => x.Amount));
             //labelTotalBookCost.Text = "$" + String.Format("{0:n0}", booking_positions.Sum(x => x.BookValueUSD()));
 

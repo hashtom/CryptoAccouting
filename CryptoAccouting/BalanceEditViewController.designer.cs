@@ -60,16 +60,6 @@ namespace CryptoAccouting
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (buttonTradeDate != null) {
-				buttonTradeDate.Dispose ();
-				buttonTradeDate = null;
-			}
-
-			if (buttonWallet != null) {
-				buttonWallet.Dispose ();
-				buttonWallet = null;
-			}
-
 			if (buttonDone != null) {
 				buttonDone.Dispose ();
 				buttonDone = null;
@@ -83,6 +73,16 @@ namespace CryptoAccouting
 			if (buttonExchange != null) {
 				buttonExchange.Dispose ();
 				buttonExchange = null;
+			}
+
+			if (buttonTradeDate != null) {
+				buttonTradeDate.Dispose ();
+				buttonTradeDate = null;
+			}
+
+			if (buttonWallet != null) {
+				buttonWallet.Dispose ();
+				buttonWallet = null;
 			}
 
 			if (imageCoin != null) {
