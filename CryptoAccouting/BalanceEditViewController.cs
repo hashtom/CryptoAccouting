@@ -12,20 +12,20 @@ using System.Linq;
 namespace CryptoAccouting
 {
     public partial class BalanceEditViewController : CryptoTableViewController
-	{
-		Position PositionDetail;
+    {
+        Position PositionDetail;
         ExchangeList exchangesListed;
         //CryptoTableViewController owner;
 
         bool editmode = true;
-		Instrument thisCoin;
+        Instrument thisCoin;
         DateTime thisBalanceDate;
         Exchange thisExchange;
         CoinStorage thisStorage;
 
-		public BalanceEditViewController(IntPtr handle) : base(handle)
-		{
-		}
+        public BalanceEditViewController(IntPtr handle) : base(handle)
+        {
+        }
 
         public override void ViewDidLoad()
         {
@@ -63,24 +63,24 @@ namespace CryptoAccouting
 
                 foreach (var st in CoinStorageList.GetStorageListSelection())
                 {
-                        //var walletname = st.StorageType != EnuCoinStorageType.Exchange ? st.Code + " Wallet" : st.Code;
-                        exchangeAlert.AddAction(UIAlertAction.Create(st.Code,
-                                                                             UIAlertActionStyle.Default,
-                                                                             (obj) =>
-                                                                             {
-                                                                         if (st.StorageType == EnuCoinStorageType.Exchange && thisExchange == null)
+                    if (st.StorageType == EnuCoinStorageType.Exchange && (thisExchange == null || thisExchange.Code == "OTC")) continue;
+                    exchangeAlert.AddAction(UIAlertAction.Create(st.Code,
+                                                                         UIAlertActionStyle.Default,
+                                                                         (obj) =>
                                                                          {
-                                                                             UIAlertController okAlertController = UIAlertController.Create("Alert", "Please setup booked exchange in advance.", UIAlertControllerStyle.Alert);
-                                                                             okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
-                                                                             this.PresentViewController(okAlertController, true, null);
+                                                                             //if (st.StorageType == EnuCoinStorageType.Exchange && (thisExchange == null || thisExchange.Code == "OTC"))
+                                                                             //{
+                                                                             //    UIAlertController okAlertController = UIAlertController.Create("Alert", "Please setup booked exchange in advance.", UIAlertControllerStyle.Alert);
+                                                                             //    okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
+                                                                             //    this.PresentViewController(okAlertController, true, null);
+                                                                             //}
+                                                                             //else
+                                                                             //{
+                                                                                 buttonWallet.SetTitle(st.Code, UIControlState.Normal);
+                                                                                 thisStorage = st;
+                                                                             //}
                                                                          }
-                                                                         else
-                                                                         {
-                                                                             buttonWallet.SetTitle(st.Code, UIControlState.Normal);
-                                                                             thisStorage = st;
-                                                                         }
-                                                                     }
-                                                                        ));
+                                                                ));
                 }
                 this.PresentViewController(exchangeAlert, true, null);
             };
@@ -138,9 +138,9 @@ namespace CryptoAccouting
                 buttonExchange.SetTitleColor(UIColor.Blue, UIControlState.Normal);
                 buttonExchange.UserInteractionEnabled = true;
                 buttonTradeDate.SetTitleColor(UIColor.Blue, UIControlState.Normal);
-				buttonTradeDate.UserInteractionEnabled = true;
+                buttonTradeDate.UserInteractionEnabled = true;
                 buttonWallet.SetTitleColor(UIColor.Blue, UIControlState.Normal);
-				buttonWallet.UserInteractionEnabled = true;
+                buttonWallet.UserInteractionEnabled = true;
                 textQuantity.UserInteractionEnabled = true;
                 textQuantity.TextColor = UIColor.Blue;
             }
@@ -149,10 +149,10 @@ namespace CryptoAccouting
                 buttonDone.Enabled = false;
                 buttonExchange.UserInteractionEnabled = false;
                 buttonExchange.SetTitleColor(UIColor.Black, UIControlState.Normal);
-				buttonWallet.UserInteractionEnabled = false;
+                buttonWallet.UserInteractionEnabled = false;
                 buttonWallet.SetTitleColor(UIColor.Black, UIControlState.Normal);
-				buttonTradeDate.UserInteractionEnabled = false;
-				buttonTradeDate.SetTitleColor(UIColor.Black, UIControlState.Normal);
+                buttonTradeDate.UserInteractionEnabled = false;
+                buttonTradeDate.SetTitleColor(UIColor.Black, UIControlState.Normal);
                 textQuantity.UserInteractionEnabled = false;
                 textQuantity.TextColor = UIColor.Black;
             }
@@ -167,16 +167,6 @@ namespace CryptoAccouting
 
             if (thisCoin.MarketPrice != null)
             {
-                //labelBTCPrice.Text = thisCoin.Symbol == "BTC" ?
-                //    "" :
-                //    "฿" + String.Format("{0:n8}", thisCoin.MarketPrice.LatestPriceBTC);
-                //labelFiatPrice.Text = thisCoin.Symbol == "BTC" ?
-                //    "$" + String.Format("{0:n2}", thisCoin.MarketPrice.LatestPriceUSD) :
-                //    "$" + String.Format("{0:n6}", thisCoin.MarketPrice.LatestPriceBTC);
-                //labelFiat1dRet.Text = String.Format("{0:n2}", thisCoin.MarketPrice.SourceRet1d()) + "%";
-                //labelBTCRet.Text = String.Format("{0:n2}", thisCoin.MarketPrice.BTCRet1d()) + "%";
-                //labelVolume.Text = String.Format("{0:n0}", thisCoin.MarketPrice.DayVolume);
-                //labelMarketCap.Text = "$" + String.Format("{0:n0}", thisCoin.MarketPrice.MarketCap);
             }
 
             if (PositionDetail is null) // new balance
@@ -195,7 +185,7 @@ namespace CryptoAccouting
                 textQuantity.Text = (Math.Abs(PositionDetail.Amount) < 0.00000001) ? "" : String.Format("{0:n6}", PositionDetail.Amount);
                 //textBookPrice.Text = (Math.Abs(PositionDetail.BookPriceUSD) < 0.00000001) ? String.Format("{0:n2}", PositionDetail.LatestPriceUSD()) : String.Format("{0:n2}", PositionDetail.BookPriceUSD);
                 //textBookPrice.Text = String.Format("{0:n2}", PositionDetail.BookPriceUSD);
-				thisBalanceDate = PositionDetail.BalanceDate;
+                thisBalanceDate = PositionDetail.BalanceDate;
                 buttonTradeDate.SetTitle(PositionDetail.BalanceDate.Date.ToShortDateString(), UIControlState.Normal);
             }
 
@@ -267,15 +257,15 @@ namespace CryptoAccouting
         }
 
         public void SetPosition(Position pos, EnuPopTo popto, bool editmode)
-		{
-			PositionDetail = pos;
-			thisCoin = pos.Coin;
+        {
+            PositionDetail = pos;
+            thisCoin = pos.Coin;
             exchangesListed = ApplicationCore.GetExchangeListByInstrument(pos.Coin.Id);
             thisExchange = PositionDetail.BookedExchange;
-			thisStorage = PositionDetail.CoinStorage != null ? PositionDetail.CoinStorage : CoinStorageList.GetStorageListSelection().First(x => x.StorageType == EnuCoinStorageType.TBA);
-			this.editmode = editmode;
+            thisStorage = PositionDetail.CoinStorage != null ? PositionDetail.CoinStorage : CoinStorageList.GetStorageListSelection().First(x => x.StorageType == EnuCoinStorageType.TBA);
+            this.editmode = editmode;
             this.popto = popto;
-		}
+        }
 
 
         public override void SetSearchSelectionItem(string searchitem1)

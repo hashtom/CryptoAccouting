@@ -84,23 +84,21 @@ namespace CryptoAccouting
             //var thisCoin = ApplicationCore.InstrumentList.GetByInstrumentId(instrumentId_selected);
             var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                                     "Images", thisCoin.Id + ".png");
-            
+
             imageCoin.Image = logo == null ? null : UIImage.FromFile(logo);
             NavigationItem.Title = thisCoin.Name;
             buttonPriceSource.SetTitle(thisCoin.PriceSourceCode, UIControlState.Normal);
 
             if (thisCoin.MarketPrice != null)
             {
-                //labelBTCPrice.Text = thisCoin.Symbol == "BTC" ?
-                    //"" :
-                    //"฿" + String.Format("{0:n8}", thisCoin.MarketPrice.LatestPriceBTC);
-                //labelFiatPrice.Text = thisCoin.Symbol == "BTC" ?
-                //    "$" + String.Format("{0:n2}", thisCoin.MarketPrice.LatestPriceUSD) :
-                //    "$" + String.Format("{0:n6}", thisCoin.MarketPrice.LatestPriceBTC);
-                //labelFiatRet1d.Text = String.Format("{0:n2}", thisCoin.MarketPrice.SourceRet1d()) + "%";
-                //labelBTCRet1d.Text = thisCoin.Symbol == "BTC" ? "" : String.Format("{0:n2}", thisCoin.MarketPrice.BTCRet1d()) + "%";
-                //labelVolume.Text = String.Format("{0:n0}", thisCoin.MarketPrice.DayVolume);
-                //labelMarketCap.Text = "$" + String.Format("{0:n0}", thisCoin.MarketPrice.MarketCap);
+                if (thisCoin.Symbol1 == "BTC")
+                {
+                    labelPrice.Text = "$" + ApplicationCore.NumberFormat(thisCoin.MarketPrice.LatestPriceUSD);
+                }
+                else
+                {
+                    labelPrice.Text = "฿" + ApplicationCore.NumberFormat(thisCoin.MarketPrice.LatestPriceBTC);
+                }
             }
 
             //labelProfitLoss.Text = "$" + ApplicationCore.NumberFormat(booking_positions.Sum(x => x.PLUSD()));

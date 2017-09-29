@@ -78,7 +78,7 @@ namespace CryptoAccouting.UIClass
             labelHolding.Text = ApplicationCore.NumberFormat(pos.Amount);
             labelTD.Text = pos.BalanceDate.ToShortDateString();
             labelExchange.Text = pos.BookedExchange == null ? "N/A" : pos.BookedExchange.Name;
-            labelStorage.Text = pos.CoinStorage == null ? "N/A" : pos.CoinStorage.Name;
+            labelStorage.Text = pos.CoinStorage == null ? "N/A" : pos.CoinStorage.StorageType.ToString();
         }
 
         public override void LayoutSubviews()
