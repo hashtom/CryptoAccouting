@@ -152,7 +152,7 @@ namespace CryptoAccouting.UIClass
                 TextAlignment = UITextAlignment.Center,
                 Frame = new System.Drawing.RectangleF((float)tv.Frame.Width - 60, 0, 60, 20),
                 BackgroundColor = UIColor.Clear,
-                Text = "Return"
+                Text = "24hr Chg"
             };
 
 			view.AddSubviews(new UIView[] { codeLabel, amountLabel, priceLabel, pctLabel });
