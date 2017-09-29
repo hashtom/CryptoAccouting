@@ -43,15 +43,15 @@ namespace CryptoAccouting.UIClass
             return storagelist.GetByIndex(id);
         }
 
-		public override bool CanMoveRow(UITableView tableView, NSIndexPath indexPath)
-		{
-			return true;
-		}
+		//public override bool CanMoveRow(UITableView tableView, NSIndexPath indexPath)
+		//{
+		//	return true;
+		//}
 
-        public override bool CanEditRow(UITableView tableView, NSIndexPath indexPath)
-        {
-            return true; // return false if you wish to disable editing for a specific indexPath or for all rows
-        }
+        //public override bool CanEditRow(UITableView tableView, NSIndexPath indexPath)
+        //{
+        //    return true; // return false if you wish to disable editing for a specific indexPath or for all rows
+        //}
 
         public override nint NumberOfSections(UITableView tableView)
         {
@@ -74,24 +74,24 @@ namespace CryptoAccouting.UIClass
 			tableView.DeselectRow(indexPath, true);
 		}
 
-		public override void CommitEditingStyle(UITableView tableView, UITableViewCellEditingStyle editingStyle, Foundation.NSIndexPath indexPath)
-		{
-            switch (editingStyle)
-            {
-                case UITableViewCellEditingStyle.Delete:
-                    //tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
-                    //myBalance.DetachPositionByExchange(myBalance.positionsByBookingExchange[indexPath.Row]);
-                    break;
+		//public override void CommitEditingStyle(UITableView tableView, UITableViewCellEditingStyle editingStyle, Foundation.NSIndexPath indexPath)
+		//{
+  //          switch (editingStyle)
+  //          {
+  //              case UITableViewCellEditingStyle.Delete:
+  //                  //tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
+  //                  //myBalance.DetachPositionByExchange(myBalance.positionsByBookingExchange[indexPath.Row]);
+  //                  break;
 
-                case UITableViewCellEditingStyle.None:
-                    Console.WriteLine("CommitEditingStyle:None called");
-                    break;
-            }
+  //              case UITableViewCellEditingStyle.None:
+  //                  Console.WriteLine("CommitEditingStyle:None called");
+  //                  break;
+  //          }
 
-			ApplicationCore.SaveMyBalanceXML();
-            owner.CellItemUpdated(EnuPopTo.None);
+		//	ApplicationCore.SaveMyBalanceXML();
+  //          owner.CellItemUpdated(EnuPopTo.None);
 
-		}
+		//}
 
         public static UIView BuidBlanceViewHeader(UITableView tv)
         {
@@ -104,7 +104,7 @@ namespace CryptoAccouting.UIClass
                 Font = UIFont.FromName("ArialMT", 12f),
                 TextColor = UIColor.White,
                 TextAlignment = UITextAlignment.Center,
-                Frame = new System.Drawing.RectangleF(20, 0, 50, 20),
+                Frame = new System.Drawing.RectangleF(0, 0, 110, 20),
                 BackgroundColor = UIColor.Clear,
                 Text = "Location"
             };

@@ -16,10 +16,11 @@ namespace CryptoAccouting.UIClass
 			//ContentView.BackgroundColor = UIColor.FromRGB(218, 255, 127);
 
 			labelName = new UILabel()
-			{
-				Font = UIFont.FromName("Cochin-BoldItalic", 14f),
-				TextColor = UIColor.FromRGB(127, 51, 0),
+            {
+                Font = UIFont.FromName("Cochin-BoldItalic", 12f),
+                TextColor = UIColor.FromRGB(127, 51, 0),
                 TextAlignment = UITextAlignment.Center,
+                AdjustsFontSizeToFitWidth = true,
 				BackgroundColor = UIColor.Clear
 			};
 
@@ -65,7 +66,7 @@ namespace CryptoAccouting.UIClass
 
 			var width = (float)ContentView.Bounds.Width / 4;
 
-			labelName.Frame = new CGRect(20, 10, 50, 20);
+			labelName.Frame = new CGRect(0, 10, 110, 20);
 			labelHoldingBTC.Frame = new CGRect(width, 10, 100, 20);
 			labelValueK.Frame = new CGRect(width * 2, 10, 100, 20);
 			labelWeight.Frame = new CGRect(width * 3, 10, 60, 20);
