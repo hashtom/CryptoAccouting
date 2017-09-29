@@ -143,12 +143,7 @@
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <None Include="packages.config" />
-    <None Include="Images\creditmemo.txt" />
     <None Include="Bundlefile\fxget.sh" />
-    <None Include="Images\performtab.png" />
-    <None Include="Images\PLtab.png" />
-    <None Include="Images\transactiontab.png" />
-    <None Include="Images\exchange.png" />
     <None Include="Bundlefile\marketget.sh" />
   </ItemGroup>
   <ItemGroup>
@@ -216,6 +211,10 @@
     <Compile Include="CoreClass\APIClass\BItstampAPI.cs" />
     <Compile Include="UIClass\CoinBookingCell.cs" />
     <Compile Include="UIClass\CoinStoreCell.cs" />
+    <Compile Include="TradeTableViewController.cs" />
+    <Compile Include="TradeTableViewController.designer.cs">
+      <DependentUpon>TradeTableViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />
