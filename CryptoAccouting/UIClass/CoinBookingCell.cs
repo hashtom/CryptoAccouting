@@ -8,14 +8,18 @@ namespace CryptoAccouting.UIClass
 {
     public class CoinBookingCell : UITableViewCell
     {
-
         UILabel labelSymbol, labelHolding, labelTD, labelExchange, labelStorage;
+        bool showTD;
+        float width;
 
         //public CoinBookingCell(NSString cellId) : base(UITableViewCellStyle.Default, cellId)
         public CoinBookingCell(IntPtr handle) : base(handle)
         {
             SelectionStyle = UITableViewCellSelectionStyle.Gray;
-            //ContentView.BackgroundColor = UIColor.FromRGB(218, 255, 127);
+			//ContentView.BackgroundColor = UIColor.FromRGB(218, 255, 127);
+
+			showTD = (float)ContentView.Bounds.Width > 320 ? true : false;
+			width = showTD ? (float)ContentView.Bounds.Width / 5 : (float)ContentView.Bounds.Width / 4;
 
             labelSymbol = new UILabel()
             {
@@ -27,7 +31,7 @@ namespace CryptoAccouting.UIClass
 
             labelHolding = new UILabel()
             {
-                Font = UIFont.FromName("AmericanTypewriter", 12f),
+                Font = UIFont.FromName("AmericanTypewriter", 11f),
                 TextColor = UIColor.FromRGB(38, 127, 0),
                 TextAlignment = UITextAlignment.Center,
                 BackgroundColor = UIColor.Clear
@@ -35,15 +39,16 @@ namespace CryptoAccouting.UIClass
 
             labelTD = new UILabel()
             {
-                Font = UIFont.FromName("AmericanTypewriter", 12f),
+                Font = UIFont.FromName("AmericanTypewriter", 11f),
                 TextColor = UIColor.FromRGB(38, 127, 0),
-                TextAlignment = UITextAlignment.Center,
+                TextAlignment = UITextAlignment.Right,
+                AdjustsFontSizeToFitWidth = true,
                 BackgroundColor = UIColor.Clear
             };
 
             labelExchange = new UILabel()
             {
-                Font = UIFont.FromName("AmericanTypewriter", 12f),
+                Font = UIFont.FromName("AmericanTypewriter", 11f),
                 TextColor = UIColor.FromRGB(38, 127, 0),
                 TextAlignment = UITextAlignment.Center,
                 BackgroundColor = UIColor.Clear
@@ -51,21 +56,26 @@ namespace CryptoAccouting.UIClass
 
             labelStorage = new UILabel()
             {
-                Font = UIFont.FromName("AmericanTypewriter", 12f),
+                Font = UIFont.FromName("AmericanTypewriter", 11f),
                 TextColor = UIColor.FromRGB(38, 127, 0),
                 TextAlignment = UITextAlignment.Center,
                 BackgroundColor = UIColor.Clear
             };
 
-            ContentView.AddSubviews(new UIView[] { labelSymbol, labelHolding, labelTD, labelExchange, labelStorage });
-
+            if (showTD)
+            {
+                ContentView.AddSubviews(new UIView[] { labelSymbol, labelHolding, labelTD, labelExchange, labelStorage });
+            }
+            else
+            {
+                ContentView.AddSubviews(new UIView[] { labelSymbol, labelHolding, labelExchange, labelStorage });
+            }
         }
 
         public void UpdateCell(Position pos)
         {
             labelSymbol.Text = pos.Coin.Symbol1;
             labelHolding.Text = ApplicationCore.NumberFormat(pos.Amount);
-            //labelBook.Text = ApplicationCore.NumberFormat(pos.BookPriceUSD);
             labelTD.Text = pos.BalanceDate.ToShortDateString();
             labelExchange.Text = pos.BookedExchange == null ? "N/A" : pos.BookedExchange.Name;
             labelStorage.Text = pos.CoinStorage == null ? "N/A" : pos.CoinStorage.Name;
@@ -75,13 +85,19 @@ namespace CryptoAccouting.UIClass
         {
             base.LayoutSubviews();
 
-            var width = (float)ContentView.Bounds.Width / 5;
-
             labelSymbol.Frame = new CGRect(20, 10, 50, 20);
-            labelHolding.Frame = new CGRect(width, 10, 100, 20);
-            labelTD.Frame = new CGRect(width * 2, 10, 100, 20);
-            labelExchange.Frame = new CGRect(width * 3, 10, 60, 20);
-            labelStorage.Frame = new CGRect(width * 4, 10, 60, 20);
+            labelHolding.Frame = new CGRect(width, 10, 90, 20);
+            if (showTD)
+            {
+                labelTD.Frame = new CGRect((width * 2) + 10, 10, 60, 20);
+                labelExchange.Frame = new CGRect(width * 3, 10, 70, 20);
+                labelStorage.Frame = new CGRect(width * 4, 10, 70, 20);
+            }
+            else
+            {
+                labelExchange.Frame = new CGRect(width * 2, 10, 70, 20);
+                labelStorage.Frame = new CGRect(width * 3, 10, 70, 20);
+            }
         }
     }
 

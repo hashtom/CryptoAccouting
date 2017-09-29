@@ -43,7 +43,6 @@ namespace CryptoAccouting.UIClass
 			cell.UpdateCell(BookingPositions()[indexPath.Row]);
 			
             return cell;
-
 		}
 
 		public Position GetItem(int id)
@@ -102,40 +101,36 @@ namespace CryptoAccouting.UIClass
 
 		}
 
-		public static UIView BuidBlanceViewHeader(UITableView tv)
-		{
-			UIView view = new UIView(new System.Drawing.RectangleF(0, 0, (float)tv.Frame.Width, 20));
-			view.BackgroundColor = UIColor.Gray;
-            var width = (float)tv.Frame.Width / 5;
+        public static UIView BuidBlanceViewHeader(UITableView tv)
+        {
+            UIView view = new UIView(new System.Drawing.RectangleF(0, 0, (float)tv.Frame.Width, 20));
+            view.BackgroundColor = UIColor.Gray;
 
 			var codeLabel = new UILabel()
-			{
-				Font = UIFont.FromName("ArialMT", 12f),
-				TextColor = UIColor.White,
+            {
+                Font = UIFont.FromName("ArialMT", 12f),
+                TextColor = UIColor.White,
                 TextAlignment = UITextAlignment.Center,
-				Frame = new System.Drawing.RectangleF(20, 0, 50, 20),
-				BackgroundColor = UIColor.Clear,
-				Text = "Coin"
-			};
+                BackgroundColor = UIColor.Clear,
+                Text = "Coin"
+            };
 
             var amountLabel = new UILabel()
             {
                 Font = UIFont.FromName("ArialMT", 12f),
                 TextColor = UIColor.White,
                 TextAlignment = UITextAlignment.Center,
-                Frame = new System.Drawing.RectangleF(width, 0, 100, 20),
                 BackgroundColor = UIColor.Clear,
                 Text = "Holdings"
             };
 
-            var priceLabel = new UILabel()
+            var TDLabel = new UILabel()
             {
                 Font = UIFont.FromName("ArialMT", 12f),
                 TextColor = UIColor.White,
                 TextAlignment = UITextAlignment.Center,
-                Frame = new System.Drawing.RectangleF(width * 2, 0, 100, 20),
                 BackgroundColor = UIColor.Clear,
-                Text = "Book"
+                Text = "Date"
             };
 
             var exchangeLabel = new UILabel()
@@ -143,7 +138,6 @@ namespace CryptoAccouting.UIClass
                 Font = UIFont.FromName("ArialMT", 12f),
                 TextColor = UIColor.White,
                 TextAlignment = UITextAlignment.Center,
-                Frame = new System.Drawing.RectangleF(width * 3, 0, 60, 20),
                 BackgroundColor = UIColor.Clear,
                 Text = "Exchange"
             };
@@ -153,16 +147,32 @@ namespace CryptoAccouting.UIClass
                 Font = UIFont.FromName("ArialMT", 12f),
                 TextColor = UIColor.White,
                 TextAlignment = UITextAlignment.Center,
-                Frame = new System.Drawing.RectangleF(width * 4, 0, 60, 20),
                 BackgroundColor = UIColor.Clear,
                 Text = "Storage"
             };
 
+			var showTD = (float)tv.Frame.Width > 320 ? true : false;
+			var width = showTD ? (float)tv.Frame.Width / 5 : (float)tv.Frame.Width / 4;
 
+			codeLabel.Frame = new System.Drawing.RectangleF(20, 0, 50, 20);
+			amountLabel.Frame = new System.Drawing.RectangleF(width, 0, 90, 20);
 
-            view.AddSubviews(new UIView[] { codeLabel, amountLabel, priceLabel, exchangeLabel, storageLabel });
-			return view;
-		}
+			if (showTD)
+            {
+                TDLabel.Frame = new System.Drawing.RectangleF((width * 2) + 10, 0, 60, 20);
+                exchangeLabel.Frame = new System.Drawing.RectangleF(width * 3, 0, 60, 20);
+                storageLabel.Frame = new System.Drawing.RectangleF(width * 4, 0, 60, 20);
+                view.AddSubviews(new UIView[] { codeLabel, amountLabel, TDLabel, exchangeLabel, storageLabel });
+            }
+            else
+            {
+				exchangeLabel.Frame = new System.Drawing.RectangleF(width * 2, 0, 60, 20);
+				storageLabel.Frame = new System.Drawing.RectangleF(width * 3, 0, 60, 20);
+                view.AddSubviews(new UIView[] { codeLabel, amountLabel, exchangeLabel, storageLabel });
+            }
+
+            return view;
+        }
 	}
 
 
