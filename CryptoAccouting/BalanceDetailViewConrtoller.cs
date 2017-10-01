@@ -102,7 +102,11 @@ namespace CryptoAccouting
                 }
 
                 labelPrice.TextColor = thisCoin.MarketPrice.USDRet1d() > 0 ? UIColor.FromRGB(18, 104, 114) : UIColor.Red;
+                labelPriceBase.Text = ApplicationCore.NumberFormat(thisCoin.MarketPrice.LatestPriceBase());
+                labelPriceBase.TextColor = thisCoin.MarketPrice.USDRet1d() > 0 ? UIColor.FromRGB(18, 104, 114) : UIColor.Red;
             }
+
+            labelPriceBaseTitle.Text += "(" + ApplicationCore.BaseCurrency + ")";
 
             //labelProfitLoss.Text = "$" + ApplicationCore.NumberFormat(booking_positions.Sum(x => x.PLUSD()));
             labelMarketValueTitle.Text += "(" + ApplicationCore.BaseCurrency.ToString() + ")";
