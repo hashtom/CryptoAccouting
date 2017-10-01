@@ -94,9 +94,9 @@ namespace CryptoAccouting.CoreClass
 					storage.ClearBalanceOnStorage();
 					foreach (var pos in positions.Where(x => x.CoinStorage != null).Where(x => x.CoinStorage.Code == storage.Code))
 					{
-						storage.AttachPosition(pos);
+                        storage.AttachPosition(pos);
 					}
-					CoinStorageList.Attach(storage, false);
+                    if (storage.AmountBTC() > 0) CoinStorageList.Attach(storage, false);
 				}
 			}
             CoinStorageList.RecalculateWeights();

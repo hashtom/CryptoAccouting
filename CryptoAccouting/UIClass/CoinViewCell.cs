@@ -32,7 +32,7 @@ namespace CryptoAccouting.UIClass
                 labelHolding.Text = "";
                 labelHoldingBTC.Text = "฿" + ApplicationCore.NumberFormat(pos.LatestAmountBTC());
                 labelRet1d.Text = String.Format("{0:n2}", pos.LatestSourceRet1d()) + " %";
-                labelRet1d.TextColor = pos.LatestSourceRet1d() > 0 ? UIColor.Green : UIColor.Red;
+                labelRet1d.TextColor = pos.LatestSourceRet1d() > 0 ? UIColor.FromRGB(18, 104, 114) : UIColor.Red;
             }
             else
             {
@@ -40,7 +40,7 @@ namespace CryptoAccouting.UIClass
                 labelHolding.Text = ApplicationCore.NumberFormat(pos.Amount);
                 labelHoldingBTC.Text = "฿" + ApplicationCore.NumberFormat(pos.LatestAmountBTC());
                 labelRet1d.Text = String.Format("{0:n2}", pos.BTCRet1d()) + " %";
-                labelRet1d.TextColor = pos.BTCRet1d() > 0 ? UIColor.Green : UIColor.Red;
+                labelRet1d.TextColor = pos.BTCRet1d() > 0 ? UIColor.FromRGB(18, 104, 114) : UIColor.Red;
             }
 
             var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Images", pos.Coin.Id + ".png");

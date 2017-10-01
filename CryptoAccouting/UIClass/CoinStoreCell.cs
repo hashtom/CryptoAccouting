@@ -17,7 +17,7 @@ namespace CryptoAccouting.UIClass
 
 			labelName = new UILabel()
             {
-                Font = UIFont.FromName("Cochin-BoldItalic", 12f),
+                Font = UIFont.FromName("Cochin-BoldItalic", 16f),
                 TextColor = UIColor.FromRGB(127, 51, 0),
                 TextAlignment = UITextAlignment.Center,
                 AdjustsFontSizeToFitWidth = true,
@@ -26,24 +26,21 @@ namespace CryptoAccouting.UIClass
 
 			labelHoldingBTC = new UILabel()
             {
-                Font = UIFont.FromName("AmericanTypewriter", 12f),
-                TextColor = UIColor.FromRGB(38, 127, 0),
+                Font = UIFont.FromName("AmericanTypewriter", 13f),
                 TextAlignment = UITextAlignment.Center,
 				BackgroundColor = UIColor.Clear
 			};
 
 			labelValueK = new UILabel()
 			{
-				Font = UIFont.FromName("AmericanTypewriter", 12f),
-				TextColor = UIColor.FromRGB(38, 127, 0),
+				Font = UIFont.FromName("AmericanTypewriter", 13f),
                 TextAlignment = UITextAlignment.Center,
 				BackgroundColor = UIColor.Clear
 			};
 
             labelWeight = new UILabel()
 			{
-				Font = UIFont.FromName("AmericanTypewriter", 12f),
-				TextColor = UIColor.FromRGB(38, 127, 0),
+				Font = UIFont.FromName("AmericanTypewriter", 13f),
                 TextAlignment = UITextAlignment.Center,
 				BackgroundColor = UIColor.Clear
 			};

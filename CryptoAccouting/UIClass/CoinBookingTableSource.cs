@@ -154,7 +154,7 @@ namespace CryptoAccouting.UIClass
 			var showTD = (float)tv.Frame.Width > 320 ? true : false;
 			var width = showTD ? (float)tv.Frame.Width / 5 : (float)tv.Frame.Width / 4;
 
-			codeLabel.Frame = new System.Drawing.RectangleF(20, 0, 50, 20);
+			codeLabel.Frame = new System.Drawing.RectangleF(10, 0, 90, 20);
 			amountLabel.Frame = new System.Drawing.RectangleF(width, 0, 90, 20);
 
 			if (showTD)

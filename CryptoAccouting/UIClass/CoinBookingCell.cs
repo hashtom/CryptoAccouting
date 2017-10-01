@@ -23,7 +23,7 @@ namespace CryptoAccouting.UIClass
 
             labelSymbol = new UILabel()
             {
-                Font = UIFont.FromName("Cochin-BoldItalic", 14f),
+                Font = UIFont.FromName("Cochin-BoldItalic", 16f),
                 TextColor = UIColor.FromRGB(127, 51, 0),
                 TextAlignment = UITextAlignment.Center,
                 BackgroundColor = UIColor.Clear
@@ -31,16 +31,14 @@ namespace CryptoAccouting.UIClass
 
             labelHolding = new UILabel()
             {
-                Font = UIFont.FromName("AmericanTypewriter", 11f),
-                TextColor = UIColor.FromRGB(38, 127, 0),
+                Font = UIFont.FromName("AmericanTypewriter", 12f),
                 TextAlignment = UITextAlignment.Center,
                 BackgroundColor = UIColor.Clear
             };
 
             labelTD = new UILabel()
             {
-                Font = UIFont.FromName("AmericanTypewriter", 11f),
-                TextColor = UIColor.FromRGB(38, 127, 0),
+                Font = UIFont.FromName("AmericanTypewriter", 12f),
                 TextAlignment = UITextAlignment.Right,
                 AdjustsFontSizeToFitWidth = true,
                 BackgroundColor = UIColor.Clear
@@ -48,16 +46,14 @@ namespace CryptoAccouting.UIClass
 
             labelExchange = new UILabel()
             {
-                Font = UIFont.FromName("AmericanTypewriter", 11f),
-                TextColor = UIColor.FromRGB(38, 127, 0),
+                Font = UIFont.FromName("AmericanTypewriter", 12f),
                 TextAlignment = UITextAlignment.Center,
                 BackgroundColor = UIColor.Clear
             };
 
             labelStorage = new UILabel()
             {
-                Font = UIFont.FromName("AmericanTypewriter", 11f),
-                TextColor = UIColor.FromRGB(38, 127, 0),
+                Font = UIFont.FromName("AmericanTypewriter", 12f),
                 TextAlignment = UITextAlignment.Center,
                 BackgroundColor = UIColor.Clear
             };
@@ -85,7 +81,7 @@ namespace CryptoAccouting.UIClass
         {
             base.LayoutSubviews();
 
-            labelSymbol.Frame = new CGRect(20, 10, 50, 20);
+            labelSymbol.Frame = new CGRect(0, 10, 90, 20);
             labelHolding.Frame = new CGRect(width, 10, 90, 20);
             if (showTD)
             {
