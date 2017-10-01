@@ -96,7 +96,7 @@ namespace CryptoAccouting.UIClass
             else
             {
                 labelExchange.Frame = new CGRect(width * 2, 10, 70, 20);
-                labelStorage.Frame = new CGRect(width * 3, 10, 70, 20);
+                labelStorage.Frame = new CGRect(width * 3 - 10, 10, 70, 20);
             }
         }
     }

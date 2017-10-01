@@ -44,6 +44,9 @@ namespace CryptoAccouting
 		UIKit.UILabel labelProfitLoss { get; set; }
 
 		[Outlet]
+		UIKit.UILabel labelSymbol { get; set; }
+
+		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UILabel labelTotalQty { get; set; }
 
@@ -52,9 +55,9 @@ namespace CryptoAccouting
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (labelPrice != null) {
-				labelPrice.Dispose ();
-				labelPrice = null;
+			if (labelSymbol != null) {
+				labelSymbol.Dispose ();
+				labelSymbol = null;
 			}
 
 			if (buttonAddNew != null) {
@@ -85,6 +88,11 @@ namespace CryptoAccouting
 			if (labelMarketValueTitle != null) {
 				labelMarketValueTitle.Dispose ();
 				labelMarketValueTitle = null;
+			}
+
+			if (labelPrice != null) {
+				labelPrice.Dispose ();
+				labelPrice = null;
 			}
 
 			if (labelProfitLoss != null) {

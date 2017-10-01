@@ -31,6 +31,8 @@ namespace CryptoAccouting
         {
             base.ViewDidLoad();
 
+            TableView.SectionFooterHeight = 0;
+
             //thisPriceSource = thisCoin.Symbol1 == "BTC" ? "Bitstamp" : "Bittrex";
 
             PrepareDatePicker();
@@ -84,7 +86,6 @@ namespace CryptoAccouting
                 }
                 this.PresentViewController(exchangeAlert, true, null);
             };
-
         }
 
         public async override void ViewWillAppear(bool animated)

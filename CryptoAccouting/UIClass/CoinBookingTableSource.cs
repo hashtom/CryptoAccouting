@@ -167,7 +167,7 @@ namespace CryptoAccouting.UIClass
             else
             {
 				exchangeLabel.Frame = new System.Drawing.RectangleF(width * 2, 0, 60, 20);
-				storageLabel.Frame = new System.Drawing.RectangleF(width * 3, 0, 60, 20);
+                storageLabel.Frame = new System.Drawing.RectangleF(width * 3 - 10, 0, 60, 20);
                 view.AddSubviews(new UIView[] { codeLabel, amountLabel, exchangeLabel, storageLabel });
             }
 
