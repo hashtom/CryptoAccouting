@@ -31,7 +31,7 @@ namespace CryptoAccouting.UIClass
                 labelPrice.Text = "$" + ApplicationCore.NumberFormat(pos.LatestPriceUSD());
                 labelHolding.Text = "";
                 labelHoldingBTC.Text = "฿" + ApplicationCore.NumberFormat(pos.LatestAmountBTC());
-                labelRet1d.Text = String.Format("{0:n2}", pos.LatestSourceRet1d()) + " %";
+                labelRet1d.Text = ApplicationCore.NumberFormat(pos.LatestSourceRet1d(), true, false) + " %";
                 labelRet1d.TextColor = pos.LatestSourceRet1d() > 0 ? UIColor.FromRGB(18, 104, 114) : UIColor.Red;
             }
             else
@@ -39,7 +39,7 @@ namespace CryptoAccouting.UIClass
                 labelPrice.Text = "฿" + ApplicationCore.NumberFormat(pos.LatestPriceBTC());
                 labelHolding.Text = ApplicationCore.NumberFormat(pos.Amount);
                 labelHoldingBTC.Text = "฿" + ApplicationCore.NumberFormat(pos.LatestAmountBTC());
-                labelRet1d.Text = String.Format("{0:n2}", pos.BTCRet1d()) + " %";
+                labelRet1d.Text = ApplicationCore.NumberFormat(pos.BTCRet1d(), true, false) + " %";
                 labelRet1d.TextColor = pos.BTCRet1d() > 0 ? UIColor.FromRGB(18, 104, 114) : UIColor.Red;
             }
 

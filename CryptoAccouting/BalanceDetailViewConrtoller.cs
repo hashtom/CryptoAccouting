@@ -101,7 +101,7 @@ namespace CryptoAccouting
                     labelPrice.Text = "฿" + ApplicationCore.NumberFormat(thisCoin.MarketPrice.LatestPriceBTC);
                 }
 
-                labelPrice.TextColor = thisCoin.MarketPrice.LatestPriceBTC > 0 ? UIColor.FromRGB(18, 104, 114) : UIColor.Red;
+                labelPrice.TextColor = thisCoin.MarketPrice.USDRet1d() > 0 ? UIColor.FromRGB(18, 104, 114) : UIColor.Red;
             }
 
             //labelProfitLoss.Text = "$" + ApplicationCore.NumberFormat(booking_positions.Sum(x => x.PLUSD()));

@@ -124,15 +124,15 @@
 		{
 			return Reachability.IsHostReachable("http://bridgeplace.sakura.ne.jp");
 		} 
-        public static string NumberFormat(double number)
+        public static string NumberFormat(double number, bool addPlus = false, bool digitAdjust = true)
         {             double epsilon = 1e-10;
             var digit = unchecked((int)Math.Log10(Math.Abs(number))) + 1;
-             if (digit > 6)
+            string strnumber;              if (digit > 6 && digitAdjust)
             {
-                return String.Format("{0:n2}", number / 1000000) + "MM";
+                strnumber = String.Format("{0:n2}", number / 1000000) + "MM"; 
             }
-            else if (digit <= 1)
+            else if (digit <= 1 && digitAdjust)
             {
-                return Math.Abs(number) < epsilon ? "0" : String.Format("{0:n6}", number);
-            }             else             {                 return String.Format("{0:n2}", number);             }
+                strnumber = Math.Abs(number) < epsilon ? "0" : String.Format("{0:n6}", number);
+            }             else             {                 strnumber = String.Format("{0:n2}", number);             }              if (addPlus && number > 0) strnumber = "+" + strnumber;             return strnumber;
         }      }      public enum EnuAPIStatus{         Success,         FailureNetwork,         FailureStorage,         FailureParameter,         NotAvailable,         FatalError     }  } 
