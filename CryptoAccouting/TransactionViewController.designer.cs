@@ -9,12 +9,18 @@ using System.CodeDom.Compiler;
 
 namespace CryptoAccouting
 {
-	[Register ("TradeTableViewController")]
-	partial class TradeTableViewController
+	[Register ("TransactionViewController")]
+	partial class TransactionViewController
 	{
+		[Outlet]
+		UIKit.UIView TransactionView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (TransactionView != null) {
+				TransactionView.Dispose ();
+				TransactionView = null;
+			}
 		}
 	}
 }

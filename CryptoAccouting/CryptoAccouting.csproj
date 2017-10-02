@@ -94,6 +94,30 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Syncfusion.Linq.iOS">
+      <HintPath>..\..\..\..\Documents\Syncfusion\15.3.0.26\Xamarin\lib\ios-unified\Syncfusion.Linq.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfDataGrid.iOS">
+      <HintPath>..\..\..\..\Documents\Syncfusion\15.3.0.26\Xamarin\lib\ios-unified\Syncfusion.SfDataGrid.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.GridCommon.Portable">
+      <HintPath>..\..\..\..\Documents\Syncfusion\15.3.0.26\Xamarin\lib\pcl\Syncfusion.GridCommon.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfNumericTextBox.iOS">
+      <HintPath>..\..\..\..\Documents\Syncfusion\15.3.0.26\Xamarin\lib\ios-unified\Syncfusion.SfNumericTextBox.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfGridConverter.iOS">
+      <HintPath>..\..\..\..\Documents\Syncfusion\15.3.0.26\Xamarin\lib\ios-unified\Syncfusion.SfGridConverter.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Compression.Portable">
+      <HintPath>..\..\..\..\Documents\Syncfusion\15.3.0.26\Xamarin\lib\pcl\Syncfusion.Compression.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Pdf.Portable">
+      <HintPath>..\..\..\..\Documents\Syncfusion\15.3.0.26\Xamarin\lib\pcl\Syncfusion.Pdf.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.XlsIO.Portable">
+      <HintPath>..\..\..\..\Documents\Syncfusion\15.3.0.26\Xamarin\lib\pcl\Syncfusion.XlsIO.Portable.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -199,9 +223,9 @@
     <Compile Include="CoreClass\APIClass\BItstampAPI.cs" />
     <Compile Include="UIClass\CoinBookingCell.cs" />
     <Compile Include="UIClass\CoinStoreCell.cs" />
-    <Compile Include="TradeTableViewController.cs" />
-    <Compile Include="TradeTableViewController.designer.cs">
-      <DependentUpon>TradeTableViewController.cs</DependentUpon>
+    <Compile Include="TransactionViewController.cs" />
+    <Compile Include="TransactionViewController.designer.cs">
+      <DependentUpon>TransactionViewController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -213,6 +237,7 @@
     <BundleResource Include="Images\positiontab.png" />
     <BundleResource Include="Bundlefile\BalanceData.xml" />
     <BundleResource Include="Images\tradetab.png" />
+    <BundleResource Include="Images\app.png" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork" />

@@ -129,42 +129,6 @@ namespace CryptoAccouting.CoreClass
 			return ret1d;
 		}
 
-
-   //     private Balance GetBalanceByExchangeCode(string ExchangeCode)
-   //     {
-   //         Balance Bal = new Balance();
-   //         foreach (var pos in positions.Where(x => x.BookedExchange.Code == ExchangeCode))
-   //         {
-   //             Bal.Attach(pos);
-   //         }
-			//if (Bal.Count() > 0)
-			//{
-			//	return Bal;
-			//}
-			//else
-			//{
-			//	return null;
-			//}
-        //}
-
-   //     private Balance GetBalanceByStorage(string storagecode)
-   //     {
-   //         var Bal = new Balance();
-   //         foreach (var pos in positions.Where(x => x.CoinStorage.Code == storagecode))
-			//{
-			//	Bal.Attach(pos);
-			//}
-
-        //    if (Bal.Count() > 0)
-        //    {
-        //        return Bal;
-        //    }
-        //    else
-        //    {
-        //        return null;
-        //    }
-        //}
-
         public CoinStorage GetCoinStorage(string storagecode, EnuCoinStorageType storagetype)
 		{
             if (positions.Where(x => x.CoinStorage != null).Select(x=>x.CoinStorage).Any(x => x.Code == storagecode && x.StorageType == storagetype))

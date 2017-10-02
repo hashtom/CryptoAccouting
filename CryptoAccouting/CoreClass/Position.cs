@@ -40,12 +40,6 @@ namespace CryptoAccouting.CoreClass
         public void AttachInstrument(Instrument coin)
         {
             this.Coin = coin;
-            //if(coin.MarketPrice != null)
-            //{
-            //    PriceUSD = coin.MarketPrice.LatestPriceUSD;
-            //    PriceBTC = coin.MarketPrice.LatestPriceBTC;
-            //    PriceBase = coin.MarketPrice.LatestPriceBase();
-            //}
         }
 
         public void AttachNewStorage(string storagecode, EnuCoinStorageType storagetype)

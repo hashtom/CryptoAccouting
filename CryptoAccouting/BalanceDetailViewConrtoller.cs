@@ -4,8 +4,6 @@ using System.IO;
 using UIKit;
 using CryptoAccouting.CoreClass;
 using CryptoAccouting.UIClass;
-//using System.Threading.Tasks;
-//using System.Collections.Generic;
 using System.Linq;
 
 namespace CryptoAccouting

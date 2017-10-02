@@ -4,9 +4,6 @@ using System.IO;
 using UIKit;
 using CryptoAccouting.CoreClass;
 using CryptoAccouting.UIClass;
-using System.Collections.Generic;
-//using CoreGraphics;
-//using System.Drawing;
 using System.Linq;
 
 namespace CryptoAccouting

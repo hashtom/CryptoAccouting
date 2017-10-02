@@ -1,4 +1,4 @@
-﻿﻿using System; using System.Collections.Generic; using System.Linq; using System.Threading.Tasks; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         public const string InstrumentsFile = "instruments.xml";
+﻿﻿using System; using System.Linq; using System.Threading.Tasks; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         public const string InstrumentsFile = "instruments.xml";
 		public const string InstrumentsBundleFile = "InstrumentList.json";         public const string BalanceFile = "mybalance.xml";         public const string AppSettingFile = "AppSetting.xml";          public static Balance Balance { get; private set; }         private static EnuCCY baseCurrency;         public static InstrumentList InstrumentList { get; private set; }
         public static ExchangeList PublicExchangeList { get; private set; }          public static CrossRate USDCrossRate { get; private set; }         private static bool HasCrossRateUpdated = false;          public static EnuCCY BaseCurrency
         {             get
@@ -66,27 +66,10 @@
                 {
                     await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);
                 }
-                return EnuAPIStatus.Success;             }         }          public static void SaveInstrumentXML()         {             StorageAPI.SaveInstrumentXML(InstrumentList, InstrumentsFile);         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, BalanceFile);         }          //public static Instrument GetInstrumentSymbol1(string symbol)
-        //{
-        //    if (InstrumentList.Any(i => i.Symbol1 == symbol))
-        //    {
-        //        return InstrumentList.First(i => i.Symbol1 == symbol);
-        //    }
-        //    else
-        //    {         //        return null;         //    }         //}
-
-
-        //public static InstrumentList InstrumentList()
-        //{
-            //if (!OnlyActive)
-            //{             //    return InstrumentList;             //}
-            //else
-            //{                 //var list = new InstrumentList();                 //InstrumentList.Where(x => x.IsActive is true).ToList().ForEach(x => list.Attach(x));
-                //return list;             //}
-        //}          public static CoinStorageList GetStorageList()
-        {             return Balance is null ? null : Balance.CoinStorageList;         }          //public static CoinStorage GetCoinStorage(string code, EnuCoinStorageType storagetype)         //{         //    return Balance is null ? null : StorageList().GetCoinStorage(code, storagetype);         //}           //取引データ取得         public static async Task LoadTradeListsAsync(string ExchangeCode, bool isAggregatedDaily = true, bool readfromFile = false)
+                return EnuAPIStatus.Success;             }         }          public static void SaveInstrumentXML()         {             StorageAPI.SaveInstrumentXML(InstrumentList, InstrumentsFile);         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, BalanceFile);         }          public static CoinStorageList GetStorageList()
+        {             return Balance is null ? null : Balance.CoinStorageList;         }           //取引データ取得         public static async Task LoadTradeListsAsync(string ExchangeCode, bool isAggregatedDaily = true, bool readfromFile = false)
         {
-            var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              exchange.TradeList = await ExchangeAPI.FetchTradeListAsync(exchange, isAggregatedDaily, readfromFile);             PublicExchangeList.Attach(exchange);              //return exchange.TradeLists;         }          public static Exchange GetExchange(string Code)
+            var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              exchange.TradeList = await ExchangeAPI.FetchTradeListAsync(exchange, isAggregatedDaily, readfromFile);             PublicExchangeList.Attach(exchange);         }          public static Exchange GetExchange(string Code)
         {             return PublicExchangeList.GetExchange(Code);         }
 
         public static ExchangeList GetExchangeListByInstrument(string id)
@@ -102,18 +85,6 @@
             return epoch.AddSeconds(EpochSeconds);
 
         } 
-        //public static void LoadMarketDataXML()
-        //{
-        //    InstrumentList = StorageAPI.LoadMarketDataXML("marketdata.xml");
-        //}
-
-        //public static void SaveMarketDataXML()
-        //{
-
-        //        StorageAPI.SaveMarketDataXML("marketdata.xml");
-
-        //}
-
         public static async Task FetchMarketDataAsync(Instrument coin)
         {
             //await MarketDataAPI.FetchCoinMarketDataAsync(coin);
@@ -130,7 +101,7 @@
             string strnumber;              if (digit > 6 && digitAdjust)
             {
                 strnumber = String.Format("{0:n2}", number / 1000000) + "MM"; 
-            }
+            }             else if (digit > 3 && digitAdjust)             {                 strnumber = String.Format("{0:n0}", number);              }
             else if (digit <= 1 && digitAdjust)
             {
                 strnumber = Math.Abs(number) < epsilon ? "0" : String.Format("{0:n6}", number);
