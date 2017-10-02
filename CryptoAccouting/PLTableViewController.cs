@@ -6,6 +6,7 @@ using CryptoAccouting.CoreClass;
 using System.Collections.Generic;
 using CoreGraphics;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CryptoAccouting
 {
@@ -17,17 +18,20 @@ namespace CryptoAccouting
         {
         }
 
-        public async override void ViewDidLoad()
+        public override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
-            if (!AppDelegate.IsInDesignerView)
+            Task.Run(async () =>
             {
-                await ApplicationCore.LoadTradeListsAsync("Zaif", true, false);
-                myTradeList = ApplicationCore.GetExchangeTradeList("Zaif");
-                myTradeList.CalculateTotalValue(DateTime.Now.Year);
-                DrawScreen();
-            }
+                //if (!AppDelegate.IsInDesignerView)
+                //{
+                await ApplicationCore.LoadTradeListsAsync("Zaif", 2017, true);
+                    myTradeList = ApplicationCore.GetExchangeTradeList("Zaif");
+                    myTradeList.CalculateTotalValue(DateTime.Now.Year);
+                    DrawScreen();
+                //}
+            });
         }
 
 		public override void ViewWillAppear(bool animated)

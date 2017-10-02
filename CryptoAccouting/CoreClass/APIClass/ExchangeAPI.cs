@@ -77,72 +77,78 @@ namespace CryptoAccouting.CoreClass.APIClass
 
 		//}
 
-        internal static async Task<TradeList> FetchTradeListAsync(Exchange exchange, bool isAggregateDaily = true, bool ReadFromFile = false)
+        internal static async Task<TradeList> FetchTradeListAsync(Exchange exchange, int calendarYear, bool isAggregateDaily = true)
 		{
-
-            TradeList tradelist = new TradeList(ApplicationCore.BaseCurrency);
 			string rawjson;
+            string filename = "zaifTransaction_" + calendarYear.ToString() + ".json";
 
             switch (exchange.Code)
 			{
                 case "Zaif":
 
-					if (ReadFromFile)
-					{
-						rawjson = StorageAPI.LoadFromFile("zaifTransaction.json");
-					}
-					else
-					{
-						//GetAPIKey(EnuExchangeType.Zaif);
-                        rawjson = await ZaifAPI.FetchTransactionAsync(exchange.Key, exchange.Secret);
-
-					}
-
-					var json = JObject.Parse(rawjson);
-					int status = (int)json.SelectToken("$.success");
-
-                    foreach (JProperty x in (JToken)json["return"])
+                    rawjson = StorageAPI.LoadFromFile(filename);
+                    if (rawjson is null || calendarYear == DateTime.Now.Year)
                     {
-                        //Transaction Date Order must be ascending by design...
-                        EnuBuySell ebuysell;
-
-                        switch ((string)json["return"][x.Name]["your_action"])
-                        {
-                            case "bid":
-                                ebuysell = EnuBuySell.Buy;
-                                break;
-                            case "ask":
-                                ebuysell = EnuBuySell.Sell;
-                                break;
-                            default:
-                                ebuysell = EnuBuySell.Check;
-                                break;
-                        }
-
-
-                        var symbol = (string)json["return"][x.Name]["currency_pair"];
-                        symbol = symbol.Replace("_jpy", "").Replace("_btc", "").ToUpper();
-
-                        tradelist.AggregateTransaction(ApplicationCore.InstrumentList.GetBySymbol1(symbol),
-                                                       exchange.Code,
-                                                      ebuysell,
-                                                      (double)json["return"][x.Name]["amount"],
-                                                      (double)json["return"][x.Name]["price"],
-                                                      ApplicationCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
-                                                      (int)json["return"][x.Name]["fee"]
-                                                      );
+                        rawjson = await ZaifAPI.FetchTransactionAsync(exchange.Key, exchange.Secret, calendarYear);
                     }
 
-					// Save Json file
-					StorageAPI.SaveFile(rawjson, "zaifTransaction.json");
-					break;
+                    var tradelist = ParseZaifJson(rawjson, calendarYear);
+                    if (tradelist != null) StorageAPI.SaveFile(rawjson, filename);
+
+                    return tradelist;
 
 				default:
-					break;
+					return null;
 			}
 
-			return tradelist;
 		}
+
+        private static TradeList ParseZaifJson(string rawjson, int calendarYear)
+        {
+            var json = JObject.Parse(rawjson);
+
+            if ((int)json.SelectToken("$.success") == 1)
+            {
+                var tradelist = new TradeList(ApplicationCore.BaseCurrency);
+                foreach (JProperty x in (JToken)json["return"])
+                {
+                    //Transaction Date Order must be ascending by design...
+                    EnuBuySell ebuysell;
+
+                    switch ((string)json["return"][x.Name]["your_action"])
+                    {
+                        case "bid":
+                            ebuysell = EnuBuySell.Buy;
+                            break;
+                        case "ask":
+                            ebuysell = EnuBuySell.Sell;
+                            break;
+                        default:
+                            ebuysell = EnuBuySell.Check;
+                            break;
+                    }
+
+
+                    var symbol = (string)json["return"][x.Name]["currency_pair"];
+                    symbol = symbol.Replace("_jpy", "").Replace("_btc", "").ToUpper();
+
+                    tradelist.AggregateTransaction(ApplicationCore.InstrumentList.GetBySymbol1(symbol),
+                                                  "Zaif",
+                                                  ebuysell,
+                                                  (double)json["return"][x.Name]["amount"],
+                                                  (double)json["return"][x.Name]["price"],
+                                                  ApplicationCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
+                                                  (int)json["return"][x.Name]["fee"]
+                                                  );
+                }
+
+                return tradelist;
+            }
+            else
+            {
+                return null;
+            }
+        }
 
     }
 

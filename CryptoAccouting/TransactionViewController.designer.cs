@@ -13,6 +13,15 @@ namespace CryptoAccouting
 	partial class TransactionViewController
 	{
 		[Outlet]
+		UIKit.UIButton buttonCalndarYear { get; set; }
+
+		[Outlet]
+		UIKit.UIButton buttonExchange { get; set; }
+
+		[Outlet]
+		UIKit.UIButton buttonSearch { get; set; }
+
+		[Outlet]
 		UIKit.UIView TransactionView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
@@ -20,6 +29,21 @@ namespace CryptoAccouting
 			if (TransactionView != null) {
 				TransactionView.Dispose ();
 				TransactionView = null;
+			}
+
+			if (buttonSearch != null) {
+				buttonSearch.Dispose ();
+				buttonSearch = null;
+			}
+
+			if (buttonExchange != null) {
+				buttonExchange.Dispose ();
+				buttonExchange = null;
+			}
+
+			if (buttonCalndarYear != null) {
+				buttonCalndarYear.Dispose ();
+				buttonCalndarYear = null;
 			}
 		}
 	}

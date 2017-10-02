@@ -25,11 +25,13 @@ namespace CryptoAccouting.CoreClass.APIClass
             return await SendAsync(http, path, "ticker");
 		}
 
-        public static async Task<string> FetchTransactionAsync(string apikey, string secret)
+        public static async Task<string> FetchTransactionAsync(string apikey, string secret, int calendarYear)
 		{
 			_apiKey = apikey;
 			_apiSecret = secret;
             var http = new HttpClient();
+            var from = new DateTime(calendarYear, 1, 1);
+            var to = new DateTime(calendarYear, 12, 31);
 
 			http.BaseAddress = new Uri(BaseUrl);
 			Uri path = new Uri("tapi", UriKind.Relative);
@@ -37,10 +39,10 @@ namespace CryptoAccouting.CoreClass.APIClass
             var param = new Dictionary<string, string>
             {
                 //{ "currency_pair", "btc_jpy" },
-                //{ "count", "15"}
+                //{ "count", "15"},
                 //{ "action", "bid" },
-                //{ "price", "100000" },
-                //{ "amount", "0.01" },
+                { "since", ApplicationCore.ToEpochSeconds(from).ToString() },
+                { "end", ApplicationCore.ToEpochSeconds(to).ToString() },
                 {"order", "ASC"}
             };
 

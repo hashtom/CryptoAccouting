@@ -1,8 +1,8 @@
-﻿using Foundation; using System; using UIKit; using CryptoAccouting.CoreClass; using CryptoAccouting.UIClass; using System.Collections.Generic; using CoreGraphics; using CoreAnimation;  namespace CryptoAccouting {     public partial class BalanceMainViewController : CryptoTableViewController     {
+﻿using Foundation; using System; using UIKit; using CryptoAccouting.CoreClass; using CryptoAccouting.UIClass; using System.Collections.Generic; using CoreGraphics; using CoreAnimation; using System.Threading.Tasks;  namespace CryptoAccouting {     public partial class BalanceMainViewController : CryptoTableViewController     {
         //private NavigationDrawer menu;
-        Balance mybalance;         public CAGradientLayer gradient;          public BalanceMainViewController(IntPtr handle) : base(handle)         {         }          public async override void ViewDidLoad()         {             base.ViewDidLoad();              // Instantiate Controllers             AppSetting.balanceMainViewC = this;             //AppSetting.transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             AppSetting.plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             AppSetting.settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             //menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);  
+        Balance mybalance;         public CAGradientLayer gradient;          public BalanceMainViewController(IntPtr handle) : base(handle)         {         }          public override void ViewDidLoad()         {             base.ViewDidLoad();              // Instantiate Controllers             AppSetting.balanceMainViewC = this;             //AppSetting.transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             AppSetting.plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             AppSetting.settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             //menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);  
             if (ApplicationCore.InitializeCore() != EnuAPIStatus.Success)             {                 this.PopUpWarning("some issue!!");                 this.mybalance = new Balance();             }             else             {                 this.mybalance = ApplicationCore.Balance;             }              // Configure Table source             TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");             TableView.Source = new CoinTableSource(mybalance, this);
-
+            ReDrawScreen(); 
             if (!ApplicationCore.IsInternetReachable())
 			{
 				UIAlertController okAlertController = UIAlertController.Create("Warning", "Unable to Connect Internet!", UIAlertControllerStyle.Alert);
@@ -11,21 +11,22 @@
 			}
              //Color Design             gradient = new CAGradientLayer();             gradient.Frame = BalanceTopView.Bounds;             gradient.NeedsDisplayOnBoundsChange = true;             gradient.MasksToBounds = true;             gradient.Colors = new CGColor[] { UIColor.FromRGB(178, 200, 198).CGColor, UIColor.FromRGB(242, 243, 242).CGColor };             BalanceTopView.Layer.InsertSublayer(gradient, 0); 
 			// Configure Segmented control
-			ConfigureSegmentButton(); 
-			if (!AppDelegate.IsInDesignerView)
-			{
-				await ApplicationCore.FetchCoinLogoAsync();
-			}
+			ConfigureSegmentButton();              Task.Run(async () =>             {
+                //if (!AppDelegate.IsInDesignerView)
+                //{
+                    await ApplicationCore.FetchCoinLogoAsync();
+                //}             });
         }          public async override void ViewWillAppear(bool animated)         {
             base.ViewWillAppear(animated);
-
-            if (!AppDelegate.IsInDesignerView)
-            {
+             //Task.Run(async () =>             //{
+                if (!AppDelegate.IsInDesignerView)
+                {
                 await ApplicationCore.LoadCoreDataAsync();
                 await ApplicationCore.FetchMarketDataFromBalanceAsync();
-            } 
-            ReDrawScreen();
-            TableView.ReloadData(); 
+                }
+
+                ReDrawScreen();
+                TableView.ReloadData();             //});
         }          public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
             base.PrepareForSegue(segue, sender);
@@ -84,12 +85,13 @@
             PushSelectionView();
         }
 
-        async partial void ButtonRefresh_Activated(UIBarButtonItem sender)
-        {
-            await ApplicationCore.FetchMarketDataFromBalanceAsync();
-            //mybalance.BalanceByCoin.SortPositionByHolding();
-            ReDrawScreen();
-            TableView.ReloadData();
+        partial void ButtonRefresh_Activated(UIBarButtonItem sender)
+        {             Task.Run(async () =>
+            {
+                await ApplicationCore.FetchMarketDataFromBalanceAsync();
+                //mybalance.BalanceByCoin.SortPositionByHolding();
+                ReDrawScreen();
+                TableView.ReloadData();             });
         }          private void PushSelectionView()
         {
             List<SelectionSearchItem> searchitems = new List<SelectionSearchItem>();             foreach (var item in ApplicationCore.InstrumentList)

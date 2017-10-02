@@ -21,6 +21,11 @@ namespace CryptoAccouting.CoreClass
             if (storagetype != EnuCoinStorageType.Exchange) throw new Exception();
         }
 
+        public bool APIKeyAvailable()
+        {
+            return (Key != null && Secret != null);
+        }
+
         public bool IsListed(string instrumemntID)
         {
             return Coins.Any(x => x.Id == instrumemntID);
