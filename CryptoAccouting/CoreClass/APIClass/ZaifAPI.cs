@@ -25,13 +25,15 @@ namespace CryptoAccouting.CoreClass.APIClass
             return await SendAsync(http, path, "ticker");
 		}
 
-        public static async Task<string> FetchTransactionAsync(string apikey, string secret, int calendarYear)
+        public static async Task<string> FetchTransactionAsync(string apikey, string secret, string calendarYear)
 		{
 			_apiKey = apikey;
 			_apiSecret = secret;
             var http = new HttpClient();
-            var from = new DateTime(calendarYear, 1, 1);
-            var to = new DateTime(calendarYear, 12, 31);
+
+
+            var from = calendarYear == "ALL" ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
+            var to = calendarYear == "ALL" ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
 
 			http.BaseAddress = new Uri(BaseUrl);
 			Uri path = new Uri("tapi", UriKind.Relative);

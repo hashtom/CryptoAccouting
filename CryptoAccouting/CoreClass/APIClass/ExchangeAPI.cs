@@ -77,22 +77,22 @@ namespace CryptoAccouting.CoreClass.APIClass
 
 		//}
 
-        internal static async Task<TradeList> FetchTradeListAsync(Exchange exchange, int calendarYear, bool isAggregateDaily = true)
+        internal static async Task<TradeList> FetchTradeListAsync(Exchange exchange, string calendarYear, bool isAggregateDaily = true)
 		{
 			string rawjson;
-            string filename = "zaifTransaction_" + calendarYear.ToString() + ".json";
+            string filename = "zaifTransaction_" + calendarYear + ".json";
 
             switch (exchange.Code)
 			{
                 case "Zaif":
 
                     rawjson = StorageAPI.LoadFromFile(filename);
-                    if (rawjson is null || calendarYear == DateTime.Now.Year)
+                    if (rawjson is null || calendarYear == DateTime.Now.Year.ToString() || calendarYear == "ALL")
                     {
                         rawjson = await ZaifAPI.FetchTransactionAsync(exchange.Key, exchange.Secret, calendarYear);
                     }
 
-                    var tradelist = ParseZaifJson(rawjson, calendarYear);
+                    var tradelist = ParseZaifJson(rawjson);
                     if (tradelist != null) StorageAPI.SaveFile(rawjson, filename);
 
                     return tradelist;
@@ -103,8 +103,8 @@ namespace CryptoAccouting.CoreClass.APIClass
 
 		}
 
-        private static TradeList ParseZaifJson(string rawjson, int calendarYear)
-        {
+        private static TradeList ParseZaifJson(string rawjson)
+        {            
             var json = JObject.Parse(rawjson);
 
             if ((int)json.SelectToken("$.success") == 1)

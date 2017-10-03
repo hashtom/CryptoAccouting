@@ -227,6 +227,7 @@
     <Compile Include="TransactionViewController.designer.cs">
       <DependentUpon>TransactionViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="UIClass\LoadingOverlay.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />
@@ -238,6 +239,7 @@
     <BundleResource Include="Bundlefile\BalanceData.xml" />
     <BundleResource Include="Images\tradetab.png" />
     <BundleResource Include="Images\app.png" />
+    <BundleResource Include="Images\pltab.png" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork" />

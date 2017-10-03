@@ -67,7 +67,7 @@
                     await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);
                 }
                 return EnuAPIStatus.Success;             }         }          public static void SaveInstrumentXML()         {             StorageAPI.SaveInstrumentXML(InstrumentList, InstrumentsFile);         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, BalanceFile);         }          public static CoinStorageList GetStorageList()
-        {             return Balance is null ? null : Balance.CoinStorageList;         }           //取引データ取得         public static async Task<EnuAPIStatus> LoadTradeListsAsync(string ExchangeCode, int calendarYear, bool isAggregatedDaily = true)
+        {             return Balance is null ? null : Balance.CoinStorageList;         }           //取引データ取得         public static async Task<EnuAPIStatus> LoadTradeListsAsync(string ExchangeCode, string calendarYear, bool isAggregatedDaily = true)
         {
             var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              if (exchange.APIKeyAvailable())             {                 exchange.TradeList = await ExchangeAPI.FetchTradeListAsync(exchange, calendarYear, isAggregatedDaily);                 //PublicExchangeList.Attach(exchange); //do you need?                 return EnuAPIStatus.Success;             }else             {                 return EnuAPIStatus.FailureParameter;             }         }          public static Exchange GetExchange(string Code)
         {             return PublicExchangeList.GetExchange(Code);         }
