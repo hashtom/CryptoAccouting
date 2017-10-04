@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "id": "bitcoin",
     "name": "Bitcoin",
@@ -36,7 +36,7 @@
     "active": true
   },
   {
-    "id": "iot",
+    "id": "iota",
     "name": "IOTA",
     "symbol": "IOT",
     "rank": "6",

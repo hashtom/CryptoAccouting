@@ -102,7 +102,6 @@ namespace CryptoAccouting
                 {
                     editmode = true;
                     InitializeUserInteractionStates();
-                    ReDrawScreen();
                 }
             };
         }
@@ -195,14 +194,12 @@ namespace CryptoAccouting
 
         public override void ReDrawScreen()
         {
+            double epsilon = 1e-10;
 
             labelCoinSymbol.Text = thisCoin.Symbol1;
             labelCoinName.Text = thisCoin.Name;
-            //buttonPriceSource.SetTitle(thisCoin.PriceSourceCode, UIControlState.Normal);
-
-            if (thisCoin.MarketPrice != null)
-            {
-            }
+            var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Images", thisCoin.Id + ".png");
+            imageCoin.Image = logo == null ? null : UIImage.FromFile(logo);
 
             if (PositionDetail is null) // new balance
             {
@@ -211,24 +208,24 @@ namespace CryptoAccouting
             }
             else
             {
-                //labelCoinSymbol.Text = PositionDetail.Coin.Symbol;
-                var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                                    "Images", thisCoin.Id + ".png");
-                imageCoin.Image = logo == null ? null : UIImage.FromFile(logo);
+                if (Math.Abs(PositionDetail.Amount) < epsilon)
+                {
+                    switchWatchOnly.SetState(true, false);
+                    WatchOnlyScreen();
+                }
+                else
+                {
+                    textQuantity.Text = (Math.Abs(PositionDetail.Amount) < 0.00000001) ? "" : String.Format("{0:n6}", PositionDetail.Amount);
+                    thisBalanceDate = PositionDetail.BalanceDate;
+                    buttonTradeDate.SetTitle(PositionDetail.BalanceDate.Date.ToShortDateString(), UIControlState.Normal);
 
-                //labelFiatPrice.Text = String.Format("{0:n0}", PositionDetail.LatestMainPrice());
-                textQuantity.Text = (Math.Abs(PositionDetail.Amount) < 0.00000001) ? "" : String.Format("{0:n6}", PositionDetail.Amount);
-                //textBookPrice.Text = (Math.Abs(PositionDetail.BookPriceUSD) < 0.00000001) ? String.Format("{0:n2}", PositionDetail.LatestPriceUSD()) : String.Format("{0:n2}", PositionDetail.BookPriceUSD);
-                //textBookPrice.Text = String.Format("{0:n2}", PositionDetail.BookPriceUSD);
-                thisBalanceDate = PositionDetail.BalanceDate;
-                buttonTradeDate.SetTitle(PositionDetail.BalanceDate.Date.ToShortDateString(), UIControlState.Normal);
+                    var exname = thisExchange is null ? "Not Specified" : PositionDetail.BookedExchange.Code;
+                    buttonExchange.SetTitle(exname, UIControlState.Normal);
+
+                    var storagename = thisStorage is null ? "Not Specified" : thisStorage.StorageType.ToString();
+                    buttonWallet.SetTitle(storagename, UIControlState.Normal);
+                }
             }
-
-            var exname = thisExchange is null ? "Not Specified" : PositionDetail.BookedExchange.Code;
-            buttonExchange.SetTitle(exname, UIControlState.Normal);
-
-            var storagename = thisStorage is null ? "Not Specified" : thisStorage.StorageType.ToString();
-            buttonWallet.SetTitle(storagename, UIControlState.Normal);
         }
 
         private void CreatePosition()

@@ -13,7 +13,7 @@ namespace CryptoAccouting.CoreClass.APIClass
     {
         public static async Task<EnuAPIStatus> FetchCoinPricesAsync(ExchangeList exchanges, InstrumentList coins, CrossRate crossrate)
 		{
-            var status = EnuAPIStatus.FailureParameter;
+            var status = EnuAPIStatus.Success;
 
             foreach (var source in coins.Select(x => x.PriceSourceCode).Distinct())
             {
@@ -21,19 +21,19 @@ namespace CryptoAccouting.CoreClass.APIClass
                 {
                     case "Bittrex":
                         var bittrex = exchanges.First(x => x.Code == "Bittrex");
-                        status = await BittrexAPI.FetchPriceAsync(bittrex, coins, crossrate);
+                        await BittrexAPI.FetchPriceAsync(bittrex, coins, crossrate);
                         break;
 
                     case "Bitstamp":
                         var bitstamp = exchanges.First(x => x.Code == "Bitstamp");
-                        status = await BItstampAPI.FetchPriceAsync(bitstamp, coins, crossrate);
+                        await BItstampAPI.FetchPriceAsync(bitstamp, coins, crossrate);
                         break;
 
                     case "Zaif":
                         break;
 
                     case "coinmarketcap":
-                        status = await FetchCoinMarketDataAsync(coins, crossrate);
+                        await FetchCoinMarketDataAsync(coins, crossrate);
                         break;
 
                     default:
@@ -52,6 +52,8 @@ namespace CryptoAccouting.CoreClass.APIClass
             const string CoinMarketUrl = "https://api.coinmarketcap.com/v1/ticker/";
             const string CoinMarketUrl_yesterday = "http://bridgeplace.sakura.ne.jp/cryptoticker/market/market_yesterday.json";
 
+            EnuAPIStatus status = EnuAPIStatus.Success;
+
             if (!Reachability.IsHostReachable(CoinMarketUrl))
             {
                 return EnuAPIStatus.FailureNetwork;
@@ -69,7 +71,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     rawjson_yesterday = await http.GetStringAsync(CoinMarketUrl_yesterday);
 				}
 
-                foreach (var coin in instrumentlist.Where(x=>x.PriceSourceCode=="coinmarketcap"))
+                foreach (var coin in instrumentlist.Where(x => x.PriceSourceCode == "coinmarketcap"))
                 {
                     //Parse Market Data 
                     if (coin.MarketPrice == null)
@@ -89,7 +91,8 @@ namespace CryptoAccouting.CoreClass.APIClass
                     coin.MarketPrice.PriceDate = ApplicationCore.FromEpochSeconds((long)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["last_updated"]).Date;
                     coin.MarketPrice.PriceBTCBefore24h = (double)jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_btc"];
                     coin.MarketPrice.PriceUSDBefore24h = (double)jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_usd"];
-					coin.MarketPrice.USDCrossRate = crossrate;
+                    coin.MarketPrice.USDCrossRate = crossrate;
+
                 }
             }
 
@@ -173,7 +176,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             //    }
             //}
 
-            return EnuAPIStatus.Success;
+            return status;
 
         }
 

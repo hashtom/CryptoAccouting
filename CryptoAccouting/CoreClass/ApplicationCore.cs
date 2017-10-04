@@ -42,13 +42,13 @@
         {             return StorageAPI.SaveAppSettingXML(AppSettingFile, AppName, BaseCurrency, PublicExchangeList);         }          private static EnuAPIStatus LoadExchangeList()
         {
             if (PublicExchangeList is null) PublicExchangeList = new ExchangeList();             return MarketDataAPI.FetchExchangeList(PublicExchangeList);         }          public static EnuAPIStatus LoadInstruments(bool forceRefresh)
-        {             if (InstrumentList is null) InstrumentList = new InstrumentList();              //Force update online             if (forceRefresh)
-            {                 var status = MarketDataAPI.FetchAllCoinData(InstrumentList, true);                 if (status == EnuAPIStatus.Success)
+        {                          //Force update online             if (forceRefresh)
+            {                 InstrumentList = new InstrumentList();                  var status = MarketDataAPI.FetchAllCoinData(InstrumentList, true);                 if (status == EnuAPIStatus.Success)
                 {
                     if (Balance != null) Balance.AttachInstruments(InstrumentList);                 }                  Task.Run(async () => await FetchCoinLogoAsync());                  return status;
             }
             else
-            {
+            {                 if (InstrumentList is null) InstrumentList = new InstrumentList(); 
                 // 1. Load the latest file
                 if (StorageAPI.LoadInstrumentXML(InstrumentsFile, InstrumentList) != EnuAPIStatus.Success)
                 {

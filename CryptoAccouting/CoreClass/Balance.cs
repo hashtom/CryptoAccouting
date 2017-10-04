@@ -159,7 +159,14 @@ namespace CryptoAccouting.CoreClass
 
         public bool CoinContains(Instrument coin)
         {
-            return positions.Select(x => x.Coin).Any(x => x.Id == coin.Id);
+            if(positions.Select(x => x.Coin).Any(x => x.Id == coin.Id))
+            {
+                return positions.Where(x => x.Coin.Id == coin.Id).Sum(x => x.Amount) > 0 ? true : false;
+
+            }else
+            {
+                return false;
+            }
         }
 
         public void Clear()
