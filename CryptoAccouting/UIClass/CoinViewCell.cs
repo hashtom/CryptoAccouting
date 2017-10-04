@@ -30,22 +30,22 @@ namespace CryptoAccouting.UIClass
             {
                 labelPrice.Text = "$" + ApplicationCore.NumberFormat(pos.LatestPriceUSD());
                 labelHolding.Text = "";
-                labelHoldingBTC.Text = "฿" + ApplicationCore.NumberFormat(pos.LatestAmountBTC());
+                labelHoldingBTC.Text = pos.WatchOnly ? "" : "฿" + ApplicationCore.NumberFormat(pos.LatestAmountBTC());
                 labelRet1d.Text = ApplicationCore.NumberFormat(pos.LatestSourceRet1d(), true, false) + " %";
                 labelRet1d.TextColor = pos.LatestSourceRet1d() > 0 ? UIColor.FromRGB(18, 104, 114) : UIColor.Red;
             }
             else
             {
                 labelPrice.Text = "฿" + ApplicationCore.NumberFormat(pos.LatestPriceBTC());
-                labelHolding.Text = ApplicationCore.NumberFormat(pos.Amount);
-                labelHoldingBTC.Text = "฿" + ApplicationCore.NumberFormat(pos.LatestAmountBTC());
+                labelHolding.Text = pos.WatchOnly ? "" : ApplicationCore.NumberFormat(pos.Amount);
+                labelHoldingBTC.Text = pos.WatchOnly ? "" : "฿" + ApplicationCore.NumberFormat(pos.LatestAmountBTC());
                 labelRet1d.Text = ApplicationCore.NumberFormat(pos.BTCRet1d(), true, false) + " %";
                 labelRet1d.TextColor = pos.BTCRet1d() > 0 ? UIColor.FromRGB(18, 104, 114) : UIColor.Red;
             }
 
             var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Images", pos.Coin.Id + ".png");
             ImageView.Image = logo == null ? null : UIImage.FromFile(logo);
-            labelValue.Text = ApplicationCore.NumberFormat(pos.LatestFiatValueBase());
+            labelValue.Text = pos.WatchOnly ? "" : ApplicationCore.NumberFormat(pos.LatestFiatValueBase());
         }
 
     }

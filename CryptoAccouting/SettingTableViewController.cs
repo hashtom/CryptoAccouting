@@ -23,19 +23,19 @@ namespace CryptoAccouting
             labelBaseCurrency.Text = ApplicationCore.BaseCurrency.ToString();
         }
 
-		public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
-		{
-			base.PrepareForSegue(segue, sender);
+		//public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
+		//{
+		//	base.PrepareForSegue(segue, sender);
 
-			if (segue.Identifier == "SettingDetailSegue")
-			{
-                var navctlr = segue.DestinationViewController as SettingTableViewController;
-				if (navctlr != null)
-				{
+		//	if (segue.Identifier == "SettingDetailSegue")
+		//	{
+  //              var navctlr = segue.DestinationViewController as SettingTableViewController;
+		//		if (navctlr != null)
+		//		{
 
-				}
-			}
-		}
+		//		}
+		//	}
+		//}
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {

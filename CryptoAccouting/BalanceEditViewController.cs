@@ -28,7 +28,7 @@ namespace CryptoAccouting
         {
             base.ViewDidLoad();
 
-            TableView.SectionFooterHeight = 0;
+            //TableView.SectionFooterHeight = 0;
 
             //thisPriceSource = thisCoin.Symbol1 == "BTC" ? "Bitstamp" : "Bittrex";
 
@@ -88,7 +88,7 @@ namespace CryptoAccouting
             {
                 if (switchWatchOnly.On)
                 {
-                    if (ApplicationCore.Balance.CoinContains(thisCoin))
+                    if (ApplicationCore.Balance.HasBalance(thisCoin))
                     {
                         UIAlertController okAlertController = UIAlertController.Create("Warning", "You got this coin in your balance.", UIAlertControllerStyle.Alert);
                         okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, (obj) => switchWatchOnly.SetState(false, false)));
@@ -194,8 +194,6 @@ namespace CryptoAccouting
 
         public override void ReDrawScreen()
         {
-            double epsilon = 1e-10;
-
             labelCoinSymbol.Text = thisCoin.Symbol1;
             labelCoinName.Text = thisCoin.Name;
             var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Images", thisCoin.Id + ".png");
@@ -208,13 +206,14 @@ namespace CryptoAccouting
             }
             else
             {
-                if (Math.Abs(PositionDetail.Amount) < epsilon)
+                if (PositionDetail.WatchOnly)
                 {
                     switchWatchOnly.SetState(true, false);
                     WatchOnlyScreen();
                 }
                 else
                 {
+                    switchWatchOnly.SetState(false, false);
                     textQuantity.Text = (Math.Abs(PositionDetail.Amount) < 0.00000001) ? "" : String.Format("{0:n6}", PositionDetail.Amount);
                     thisBalanceDate = PositionDetail.BalanceDate;
                     buttonTradeDate.SetTitle(PositionDetail.BalanceDate.Date.ToShortDateString(), UIControlState.Normal);
@@ -232,14 +231,20 @@ namespace CryptoAccouting
         {
             if (PositionDetail is null) PositionDetail = new Position(thisCoin);
 
-            PositionDetail.Amount = switchWatchOnly.On ? 0 : double.Parse(textQuantity.Text);
-            //PositionDetail.BookPriceUSD = textBookPrice.Text is "" ? 0 : double.Parse(textBookPrice.Text);
-            PositionDetail.BalanceDate = thisBalanceDate;
+            if (switchWatchOnly.On)
+            {
+                PositionDetail.WatchOnly = true;
+            }
+            else
+            {
+                PositionDetail.WatchOnly = false;
+                PositionDetail.Amount = double.Parse(textQuantity.Text);
+                PositionDetail.BalanceDate = thisBalanceDate;
 
-            if (thisExchange != null) PositionDetail.BookedExchange = thisExchange;
+                if (thisExchange != null) PositionDetail.BookedExchange = thisExchange;
 
-            //if (thisStorage != null)
-            //{
+                //if (thisStorage != null)
+                //{
                 CoinStorage storage;
                 if (thisStorage.StorageType == EnuCoinStorageType.Exchange)
                 {
@@ -258,8 +263,9 @@ namespace CryptoAccouting
                 {
                     PositionDetail.AttachNewStorage(thisStorage.Code, thisStorage.StorageType);
                 }
-            //}
+                //}
 
+            }
 
             ApplicationCore.Balance.Attach(PositionDetail);
             ApplicationCore.Balance.ReCalculate();

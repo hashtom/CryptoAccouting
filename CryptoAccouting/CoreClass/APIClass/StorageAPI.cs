@@ -89,7 +89,8 @@ namespace CryptoAccouting.CoreClass.APIClass
                             BookedExchange = tradedexchange, //(EnuExchangeType)Enum.Parse(typeof(EnuExchangeType), elem.Descendants("exchange").Select(x => x.Value).First())
                             PriceUSD = elem.Element("priceusd") == null ? 0 : double.Parse(elem.Element("priceusd").Value),
                             PriceBTC = elem.Element("pricebtc") == null ? 0 : double.Parse(elem.Element("pricebtc").Value),
-                            PriceBase = elem.Element("pricebase") == null ? 0 : double.Parse(elem.Element("pricebase").Value)
+                            PriceBase = elem.Element("pricebase") == null ? 0 : double.Parse(elem.Element("pricebase").Value),
+                            WatchOnly = elem.Element("watchonly") == null ? false : bool.Parse(elem.Element("watchonly").Value),
                         };
 
                         EnuCoinStorageType storagetype;
@@ -154,7 +155,8 @@ namespace CryptoAccouting.CoreClass.APIClass
                                                  new XElement("storagetype", pos.CoinStorage == null ? "" : pos.CoinStorage.StorageType.ToString()),
                                                  new XElement("priceusd", pos.LatestPriceUSD().ToString()),
                                                  new XElement("pricebtc", pos.LatestPriceBTC().ToString()),
-                                                 new XElement("pricebase", pos.LatestPriceBase().ToString())
+                                                 new XElement("pricebase", pos.LatestPriceBase().ToString()),
+                                                 new XElement("watchonly", pos.WatchOnly.ToString())
                                                 );
 				balance.Add(position);
 			}

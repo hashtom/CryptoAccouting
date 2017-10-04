@@ -59,17 +59,18 @@ namespace CryptoAccouting.CoreClass
 
             foreach (var symbol in positions.Select(x => x.Coin.Symbol1).Distinct())
             {
-                var amount = positions.Where(x => x.Coin.Symbol1 == symbol).Sum(x => x.Amount);
-                var amountbtc = positions.Where(x => x.Coin.Symbol1 == symbol).Sum(x => x.LatestAmountBTC());
-                //var bookprice = positions.Where(x => x.Coin.Symbol1 == symbol).Sum(x => x.BookPriceUSD);
+                //var amount = positions.Where(x => x.Coin.Symbol1 == symbol).Sum(x => x.Amount);
+                //var amountbtc = positions.Where(x => x.Coin.Symbol1 == symbol).Sum(x => x.LatestAmountBTC());
+
                 var position = new Position(positions.Select(x => x.Coin).First(x => x.Symbol1 == symbol))
                 {
-                    Amount = amount,
-                    AmountBTC = amountbtc,
+                    Amount = positions.Where(x => x.Coin.Symbol1 == symbol).Sum(x => x.Amount),
+                    AmountBTC = positions.Where(x => x.Coin.Symbol1 == symbol).Sum(x => x.LatestAmountBTC()),
                     //BookPriceUSD = bookprice,
-                    PriceBTC = positions.Where(x => x.Coin.Symbol1 == symbol).Select(x => x.LatestPriceBTC()).First(),
-                    PriceUSD = positions.Where(x => x.Coin.Symbol1 == symbol).Select(x => x.LatestPriceUSD()).First(),
-                    PriceBase = positions.Where(x => x.Coin.Symbol1 == symbol).Select(x => x.LatestPriceBase()).First()
+                    PriceBTC = positions.First(x => x.Coin.Symbol1 == symbol).LatestPriceBTC(),
+                    PriceUSD = positions.First(x => x.Coin.Symbol1 == symbol).LatestPriceUSD(),
+                    PriceBase = positions.First(x => x.Coin.Symbol1 == symbol).LatestPriceBase(),
+                    WatchOnly = positions.First(x => x.Coin.Symbol1 == symbol).WatchOnly
                 };
                 BalanceByCoin.Attach(position);
             }
@@ -157,7 +158,7 @@ namespace CryptoAccouting.CoreClass
 
 		}
 
-        public bool CoinContains(Instrument coin)
+        public bool HasBalance(Instrument coin)
         {
             if(positions.Select(x => x.Coin).Any(x => x.Id == coin.Id))
             {

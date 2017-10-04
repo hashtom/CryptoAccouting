@@ -16,12 +16,14 @@ namespace CryptoAccouting.CoreClass
         public double PriceUSD { get; set; }
         public double PriceBTC { get; set; }
         public double PriceBase { get; set; }
+        public bool WatchOnly { get; set; }
 
         public Position(Instrument coin)
         {
             Id = int.MaxValue;
             Coin = coin;
             BalanceDate = DateTime.Now.Date;
+            WatchOnly = false;
             //this.SourceCurrency = coin.MarketPrice.SourceCurrency; //todo network issue = marketprice is null
         }
 
