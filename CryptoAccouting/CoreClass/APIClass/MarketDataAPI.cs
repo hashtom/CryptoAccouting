@@ -180,14 +180,14 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         }
 
-        public static EnuAPIStatus FetchAllCoinData(InstrumentList instrumentlist, bool OnlineUpdate)
+        public static EnuAPIStatus FetchAllCoinData(InstrumentList instrumentlist, bool UseBundleFile)
 		{
             const string BaseUrl = "http://bridgeplace.sakura.ne.jp/cryptoticker/InstrumentList.json";
                 // "https://api.coinmarketcap.com/v1/ticker/?limit=150";
 
 			string rawjson;
 
-            if (!OnlineUpdate)
+            if (UseBundleFile)
             {
                 rawjson = StorageAPI.LoadBundleFile(ApplicationCore.InstrumentsBundleFile);
             }
@@ -244,7 +244,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 }
             }
 
-            if (OnlineUpdate) StorageAPI.SaveInstrumentXML(instrumentlist, ApplicationCore.InstrumentsFile);
+            if (!UseBundleFile) StorageAPI.SaveInstrumentXML(instrumentlist, ApplicationCore.InstrumentsFile);
 
 			return EnuAPIStatus.Success;
 		}
@@ -410,51 +410,41 @@ namespace CryptoAccouting.CoreClass.APIClass
             try
             {
                 json = JObject.Parse(rawjson_today);
-            }
-            catch (JsonException)
-            {
-                json = JObject.Parse(StorageAPI.LoadFromFile(jsonfilename_today));
-            }
-
-            foreach (var ccy in (JArray)json["list"]["resources"])
-            {
-                EnuCCY baseccy;
-                var cursymbol = (string)ccy["resource"]["fields"]["symbol"];
-
-                if (!Enum.TryParse(cursymbol.Replace("=X", ""), out baseccy))
-                    continue;
-
-                if (baseccy == BaseCurrency)
+                foreach (var ccy in (JArray)json["list"]["resources"])
                 {
-                    crossrate = new CrossRate(baseccy, (double)ccy["resource"]["fields"]["price"], DateTime.Now.Date);
-                    break;
-                }
-            }
+                    EnuCCY baseccy;
+                    var cursymbol = (string)ccy["resource"]["fields"]["symbol"];
 
-            try
-            {
+                    if (!Enum.TryParse(cursymbol.Replace("=X", ""), out baseccy))
+                        continue;
+
+                    if (baseccy == BaseCurrency)
+                    {
+                        crossrate = new CrossRate(baseccy, (double)ccy["resource"]["fields"]["price"], DateTime.Now.Date);
+                        break;
+                    }
+                }
+
                 json = JObject.Parse(rawjson_yesterday);
+                foreach (var ccy in (JArray)json["list"]["resources"])
+                {
+                    EnuCCY baseccy;
+                    var cursymbol = (string)ccy["resource"]["fields"]["symbol"];
+
+                    if (!Enum.TryParse(cursymbol.Replace("=X", ""), out baseccy))
+                        continue;
+
+                    if (baseccy == BaseCurrency)
+                    {
+                        crossrate.RateBefore24h = (double)ccy["resource"]["fields"]["price"];
+                        break;
+                    }
+                }
             }
             catch (JsonException)
             {
-                json = JObject.Parse(StorageAPI.LoadFromFile(jsonfilename_yesterday));
+                return null;
             }
-
-            foreach (var ccy in (JArray)json["list"]["resources"])
-            {
-                EnuCCY baseccy;
-                var cursymbol = (string)ccy["resource"]["fields"]["symbol"];
-
-                if (!Enum.TryParse(cursymbol.Replace("=X", ""), out baseccy))
-                    continue;
-
-                if (baseccy == BaseCurrency)
-                {
-                    crossrate.RateBefore24h = (double)ccy["resource"]["fields"]["price"];
-                    break;
-                }
-            }
-
 
             StorageAPI.SaveFile(rawjson_today, jsonfilename_today);
             StorageAPI.SaveFile(rawjson_yesterday, jsonfilename_yesterday);

@@ -43,7 +43,7 @@
         {
             if (PublicExchangeList is null) PublicExchangeList = new ExchangeList();             return MarketDataAPI.FetchExchangeList(PublicExchangeList);         }          public static EnuAPIStatus LoadInstruments(bool forceRefresh)
         {                          //Force update online             if (forceRefresh)
-            {                 InstrumentList = new InstrumentList();                  var status = MarketDataAPI.FetchAllCoinData(InstrumentList, true);                 if (status == EnuAPIStatus.Success)
+            {                 InstrumentList = new InstrumentList();                  var status = MarketDataAPI.FetchAllCoinData(InstrumentList, false);                 if (status == EnuAPIStatus.Success)
                 {
                     if (Balance != null) Balance.AttachInstruments(InstrumentList);                 }                  Task.Run(async () => await FetchCoinLogoAsync());                  return status;
             }
@@ -55,7 +55,7 @@
 					//  Update online
 					//if (LoadInstruments(true) != EnuAPIStatus.Success)                     //{
 						// 2.Use Bundled file 
-						return MarketDataAPI.FetchAllCoinData(InstrumentList, false);                     //}                 }
+                    return MarketDataAPI.FetchAllCoinData(InstrumentList, true);                     //}                 }
                  return EnuAPIStatus.Success;
             }         }          public static async Task<EnuAPIStatus>FetchCoinLogoAsync()         {             if (InstrumentList == null)
             {
