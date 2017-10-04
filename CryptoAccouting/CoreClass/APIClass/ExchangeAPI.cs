@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace CryptoAccouting.CoreClass.APIClass
@@ -104,10 +105,23 @@ namespace CryptoAccouting.CoreClass.APIClass
 		}
 
         private static TradeList ParseZaifJson(string rawjson)
-        {            
-            var json = JObject.Parse(rawjson);
+        {
+            JObject json;
 
-            if ((int)json.SelectToken("$.success") == 1)
+            try
+            {
+                json = JObject.Parse(rawjson);
+            }
+            catch (JsonException)
+            {
+                return null;
+            }
+
+            if ((int)json.SelectToken("$.success") != 1)
+            {
+                return null;
+            }
+            else
             {
                 var tradelist = new TradeList(ApplicationCore.BaseCurrency);
                 foreach (JProperty x in (JToken)json["return"])
@@ -143,10 +157,6 @@ namespace CryptoAccouting.CoreClass.APIClass
                 }
 
                 return tradelist;
-            }
-            else
-            {
-                return null;
             }
         }
 

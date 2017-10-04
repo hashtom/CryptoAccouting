@@ -83,6 +83,28 @@ namespace CryptoAccouting
                 }
                 this.PresentViewController(exchangeAlert, true, null);
             };
+
+            switchWatchOnly.ValueChanged += (sender, e) => 
+            {
+                if (switchWatchOnly.On)
+                {
+                    if (ApplicationCore.Balance.CoinContains(thisCoin))
+                    {
+                        UIAlertController okAlertController = UIAlertController.Create("Warning", "You got this coin in your balance.", UIAlertControllerStyle.Alert);
+                        okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, (obj) => switchWatchOnly.SetState(false, false)));
+                        this.PresentViewController(okAlertController, true, null);
+                    }
+                    else
+                    {
+                        WatchOnlyScreen();
+                    }
+                }else
+                {
+                    editmode = true;
+                    InitializeUserInteractionStates();
+                    ReDrawScreen();
+                }
+            };
         }
 
         public async override void ViewWillAppear(bool animated)
@@ -131,29 +153,44 @@ namespace CryptoAccouting
         {
             if (editmode)
             {
+                switchWatchOnly.Enabled = true;
                 buttonDone.Enabled = true;
                 buttonEdit.Enabled = false;
                 buttonExchange.SetTitleColor(UIColor.Blue, UIControlState.Normal);
-                buttonExchange.UserInteractionEnabled = true;
+                buttonExchange.Enabled = true;
                 buttonTradeDate.SetTitleColor(UIColor.Blue, UIControlState.Normal);
-                buttonTradeDate.UserInteractionEnabled = true;
+                buttonTradeDate.Enabled = true;
                 buttonWallet.SetTitleColor(UIColor.Blue, UIControlState.Normal);
-                buttonWallet.UserInteractionEnabled = true;
-                textQuantity.UserInteractionEnabled = true;
+                buttonWallet.Enabled = true;
+                textQuantity.Enabled = true;
                 textQuantity.TextColor = UIColor.Blue;
             }
             else
             {
+                switchWatchOnly.Enabled = false;
                 buttonDone.Enabled = false;
-                buttonExchange.UserInteractionEnabled = false;
+                buttonExchange.Enabled = false;
                 buttonExchange.SetTitleColor(UIColor.Black, UIControlState.Normal);
-                buttonWallet.UserInteractionEnabled = false;
+                buttonWallet.Enabled = false;
                 buttonWallet.SetTitleColor(UIColor.Black, UIControlState.Normal);
-                buttonTradeDate.UserInteractionEnabled = false;
+                buttonTradeDate.Enabled = false;
                 buttonTradeDate.SetTitleColor(UIColor.Black, UIControlState.Normal);
-                textQuantity.UserInteractionEnabled = false;
+                textQuantity.Enabled = false;
                 textQuantity.TextColor = UIColor.Black;
             }
+        }
+
+        private void WatchOnlyScreen()
+        {
+            buttonExchange.Enabled = false;
+            buttonExchange.SetTitle("",UIControlState.Disabled);
+            buttonTradeDate.Enabled = false;
+            buttonTradeDate.SetTitle("",UIControlState.Disabled);
+            buttonWallet.Enabled = false;
+            buttonWallet.SetTitle("", UIControlState.Disabled);
+            textQuantity.Enabled = false;
+            textQuantity.Text = "";
+            textQuantity.Placeholder = "Watch Only";
         }
 
         public override void ReDrawScreen()
@@ -198,7 +235,7 @@ namespace CryptoAccouting
         {
             if (PositionDetail is null) PositionDetail = new Position(thisCoin);
 
-            PositionDetail.Amount = double.Parse(textQuantity.Text);
+            PositionDetail.Amount = switchWatchOnly.On ? 0 : double.Parse(textQuantity.Text);
             //PositionDetail.BookPriceUSD = textBookPrice.Text is "" ? 0 : double.Parse(textBookPrice.Text);
             PositionDetail.BalanceDate = thisBalanceDate;
 
@@ -240,7 +277,7 @@ namespace CryptoAccouting
 
         partial void ButtonDone_Activated(UIBarButtonItem sender)
         {
-            if (textQuantity.Text != "")
+            if (textQuantity.Text != "" || switchWatchOnly.On)
             {
                 CreatePosition();
                 CellItemUpdated(popto);

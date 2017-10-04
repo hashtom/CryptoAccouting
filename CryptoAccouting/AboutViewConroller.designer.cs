@@ -12,9 +12,23 @@ namespace CryptoAccouting
 	[Register ("AboutViewConroller")]
 	partial class AboutViewConroller
 	{
+		[Outlet]
+		UIKit.UIWebView CreditWebView { get; set; }
+
+		[Outlet]
+		UIKit.UILabel labelVersion { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (labelVersion != null) {
+				labelVersion.Dispose ();
+				labelVersion = null;
+			}
+
+			if (CreditWebView != null) {
+				CreditWebView.Dispose ();
+				CreditWebView = null;
+			}
 		}
 	}
 }

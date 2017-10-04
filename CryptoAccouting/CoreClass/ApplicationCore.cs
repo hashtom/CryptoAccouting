@@ -45,7 +45,7 @@
         {             if (InstrumentList is null) InstrumentList = new InstrumentList();              //Force update online             if (forceRefresh)
             {                 var status = MarketDataAPI.FetchAllCoinData(InstrumentList, true);                 if (status == EnuAPIStatus.Success)
                 {
-                    if (Balance != null) Balance.AttachInstruments(InstrumentList);                 }                 return status;
+                    if (Balance != null) Balance.AttachInstruments(InstrumentList);                 }                  Task.Run(async () => await FetchCoinLogoAsync());                  return status;
             }
             else
             {
@@ -106,4 +106,4 @@
             {
                 strnumber = Math.Abs(number) < epsilon ? "0" : String.Format("{0:n6}", number);
             }             else             {                 strnumber = String.Format("{0:n2}", number);             }              if (addPlus && number > 0) strnumber = "+" + strnumber;             return strnumber;
-        }      }      public enum EnuAPIStatus{         Success,         FailureNetwork,         FailureStorage,         FailureParameter,         NotAvailable,         FatalError     }  } 
+        }          public static EnuAPIStatus RemoveAllCache()         {             return StorageAPI.RemoveAllCache();         }      }      public enum EnuAPIStatus{         Success,         FailureNetwork,         FailureStorage,         FailureParameter,         NotAvailable,         FatalError     }  } 

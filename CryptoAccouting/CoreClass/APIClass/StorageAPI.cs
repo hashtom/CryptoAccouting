@@ -16,10 +16,16 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static EnuAPIStatus SaveFile(string json, string fileName)
         {
-
-            var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var path = Path.Combine(documents, fileName);
-            File.WriteAllText(path, json);
+            try
+            {
+                var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                var path = Path.Combine(documents, fileName);
+                File.WriteAllText(path, json);
+            }
+            catch (IOException)
+            {
+                return EnuAPIStatus.FailureStorage;
+            }
 
             return EnuAPIStatus.Success;
         }
@@ -28,13 +34,21 @@ namespace CryptoAccouting.CoreClass.APIClass
         {
             var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var path = Path.Combine(documents, fileName);
-            if (!File.Exists(path))
+
+            try
+            {
+                if (!File.Exists(path))
+                {
+                    return null;
+                }
+                else
+                {
+                    return File.ReadAllText(path);
+                }
+            }
+            catch (IOException)
             {
                 return null;
-            }
-            else
-            {
-                return File.ReadAllText(path);
             }
         }
 
@@ -223,20 +237,20 @@ namespace CryptoAccouting.CoreClass.APIClass
 
 		}
 
-        public static InstrumentList LoadMarketDataXML(string fileName)
-        {
-            var instruments = new InstrumentList();
+        //public static InstrumentList LoadMarketDataXML(string fileName)
+        //{
+        //    var instruments = new InstrumentList();
 
-            //todo
+        //    //todo
 
-            return instruments;
-        }
+        //    return instruments;
+        //}
 
-        public static EnuAPIStatus SaveMarketDataXML(string fileName)
-        {
+        //public static EnuAPIStatus SaveMarketDataXML(string fileName)
+        //{
 
-            return EnuAPIStatus.Success;
-        }
+        //    return EnuAPIStatus.Success;
+        //}
 
         public static EnuAPIStatus LoadAppSettingXML(string fileName)
         {
@@ -311,6 +325,35 @@ namespace CryptoAccouting.CoreClass.APIClass
             return SaveFile(application.ToString(), fileName);
 
 		}
+
+        public static EnuAPIStatus RemoveAllCache()
+        {
+			var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            //Don't delete balance data
+            try
+            {
+                //AppSetting
+                File.Delete(Path.Combine(documents, "AppSetting.xml"));
+
+                //json file cache
+                foreach (var file in Directory.EnumerateFiles(documents, "*.json"))
+                {
+                    File.Delete(file);
+                }
+                //png data
+                foreach (var image in Directory.EnumerateFiles(Path.Combine(documents, "Images")))
+                {
+                    File.Delete(image);
+                }
+            }
+            catch(IOException)
+            {
+                return EnuAPIStatus.FailureStorage;
+            }
+
+            return EnuAPIStatus.Success;
+        }
 
   //      public static EnuAppStatus SaveExchangeListXMLTemp(ExchangeList exList, string fileName)
 		//{

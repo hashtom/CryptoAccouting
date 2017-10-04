@@ -48,7 +48,7 @@ namespace CryptoAccouting.UIClass
         public async override void WillDisplay(UITableView tableView, UITableViewCell cell, NSIndexPath indexPath)
         {
             cell.BackgroundColor = UIColor.FromRGBA(242,216,223,60);
-            await Task.Delay(50);
+            await Task.Delay(80);
             cell.BackgroundColor = UIColor.Clear;
         }
 

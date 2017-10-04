@@ -157,6 +157,11 @@ namespace CryptoAccouting.CoreClass
 
 		}
 
+        public bool CoinContains(Instrument coin)
+        {
+            return positions.Select(x => x.Coin).Any(x => x.Id == coin.Id);
+        }
+
         public void Clear()
         {
             positions.Clear();

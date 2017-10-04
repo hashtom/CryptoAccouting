@@ -157,7 +157,6 @@
     <None Include="packages.config" />
     <None Include="Bundlefile\fxget.sh" />
     <None Include="Bundlefile\marketget.sh" />
-    <None Include="Bundlefile\credit.html" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />

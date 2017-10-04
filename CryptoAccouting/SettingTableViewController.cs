@@ -2,7 +2,6 @@ using Foundation;
 using System;
 using UIKit;
 using CryptoAccouting.CoreClass;
-using CryptoAccouting.UIClass;
 using System.Collections.Generic;
 
 namespace CryptoAccouting
@@ -42,26 +41,26 @@ namespace CryptoAccouting
         {
             //base.RowSelected(tableView, indexPath);
             var cell = tableView.CellAt(indexPath);
-
             switch (cell.ReuseIdentifier)
             {
                 case "CurrencyCell":
                     PushSelectionView();
-                    tableView.DeselectRow(indexPath, true);
                     break;
                 case "RefreshCoinCell":
                     ReloadCoinData();
-                    tableView.DeselectRow(indexPath, true);
                     break;
 
-                //case "APIKeyCell":
-                    //PushAPISettingView();
-                    //tableView.DeselectRow(indexPath, true);
-                    //break;
+                case "RemoveCacheCell":
+                    UIAlertController okAlertController = UIAlertController.Create("Warning", "Are you sure you want to clear all cache data? API keys will also be removed.", UIAlertControllerStyle.Alert);
+                    okAlertController.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Default, null));
+                    okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, (obj) => RemoveCache()));
+                    this.PresentViewController(okAlertController, true, null);
+                    break;
                 default:
-                    tableView.DeselectRow(indexPath, true);
                     break;
             }
+
+            tableView.DeselectRow(indexPath, true);
         }
 
 		private void PushSelectionView()
@@ -89,11 +88,27 @@ namespace CryptoAccouting
 			//NavigationController.PushViewController(APISettingViewC, true);
         //}
 
+        private void RemoveCache()
+        {
+			if (ApplicationCore.RemoveAllCache() is EnuAPIStatus.Success)
+			{
+				UIAlertController okAlertController = UIAlertController.Create("Success", "Cache cleared.", UIAlertControllerStyle.Alert);
+				okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+				this.PresentViewController(okAlertController, true, null);
+			}
+			else
+			{
+				UIAlertController okAlertController = UIAlertController.Create("Critical Error", "Failed to remove cache data!", UIAlertControllerStyle.Alert);
+				okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
+				this.PresentViewController(okAlertController, true, null);
+			}
+        }
+
         private void ReloadCoinData()
         {
-            if (ApplicationCore.LoadInstruments(true) == EnuAPIStatus.Success)
+            if (ApplicationCore.LoadInstruments(true) is EnuAPIStatus.Success)
             {
-                UIAlertController okAlertController = UIAlertController.Create("Update Coin List", "Successfully Updated", UIAlertControllerStyle.Alert);
+                UIAlertController okAlertController = UIAlertController.Create("Success", "Successfully Updated.", UIAlertControllerStyle.Alert);
                 okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
                 this.PresentViewController(okAlertController, true, null);
                 ApplicationCore.SaveInstrumentXML();
@@ -101,7 +116,7 @@ namespace CryptoAccouting
             }
             else
             {
-                UIAlertController okAlertController = UIAlertController.Create("Update Coin List", "ERROR!!", UIAlertControllerStyle.Alert);
+                UIAlertController okAlertController = UIAlertController.Create("Critical Error", "Unable to update coin data!", UIAlertControllerStyle.Alert);
                 okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
                 this.PresentViewController(okAlertController, true, null);
             }

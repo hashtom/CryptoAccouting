@@ -43,6 +43,9 @@ namespace CryptoAccouting
 		UIKit.UILabel labelCoinSymbol { get; set; }
 
 		[Outlet]
+		UIKit.UISwitch switchWatchOnly { get; set; }
+
+		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UITextField textQuantity { get; set; }
 
@@ -60,6 +63,11 @@ namespace CryptoAccouting
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (switchWatchOnly != null) {
+				switchWatchOnly.Dispose ();
+				switchWatchOnly = null;
+			}
+
 			if (buttonDone != null) {
 				buttonDone.Dispose ();
 				buttonDone = null;
