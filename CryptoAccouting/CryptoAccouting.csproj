@@ -240,6 +240,7 @@
     <BundleResource Include="Images\tradetab.png" />
     <BundleResource Include="Images\app.png" />
     <BundleResource Include="Images\pltab.png" />
+    <BundleResource Include="Images\garbage.png" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork" />

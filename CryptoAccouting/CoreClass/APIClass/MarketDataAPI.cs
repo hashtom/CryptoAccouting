@@ -284,6 +284,7 @@ namespace CryptoAccouting.CoreClass.APIClass
         public static EnuAPIStatus FetchExchangeList(ExchangeList exlist)
         {
             const string jsonfilename = "ExchangeList.json";
+            JObject json;
             string rawjson;
             string BaseUri = "http://bridgeplace.sakura.ne.jp/cryptoticker/ExchangeList.json";
 
@@ -305,10 +306,15 @@ namespace CryptoAccouting.CoreClass.APIClass
                     }
                     rawjson = response.Content.ReadAsStringAsync().Result;
                 }
-                StorageAPI.SaveFile(rawjson, jsonfilename);
             }
-
-            var json = JObject.Parse(rawjson);
+            try
+            {
+                json = JObject.Parse(rawjson);
+            }
+			catch (JsonException)
+			{
+                return EnuAPIStatus.FatalError;
+			}
 
             foreach (var market in (JArray)json["exchanges"])
             {
@@ -350,18 +356,20 @@ namespace CryptoAccouting.CoreClass.APIClass
                 //}
             }
 
+            StorageAPI.SaveFile(rawjson, jsonfilename);
             return EnuAPIStatus.Success;
         }
 
         public static async Task<CrossRate> FetchUSDCrossRateAsync(EnuCCY BaseCurrency)
-		{
+        {
             CrossRate crossrate = null;
-			string rawjson_today, rawjson_yesterday;
+            string rawjson_today, rawjson_yesterday;
+            JObject json;
             const string jsonfilename_today = "crossrate_today.json";
             const string jsonfilename_yesterday = "crossrate_yesterday.json";
             const string BaseUri = "http://bridgeplace.sakura.ne.jp/cryptoticker";
 
-			if (!Reachability.IsHostReachable(BaseUri))
+            if (!Reachability.IsHostReachable(BaseUri))
             {
                 rawjson_today = StorageAPI.LoadFromFile(jsonfilename_today);
                 rawjson_yesterday = StorageAPI.LoadFromFile(jsonfilename_yesterday);
@@ -374,23 +382,36 @@ namespace CryptoAccouting.CoreClass.APIClass
                     HttpResponseMessage response = await http.GetAsync(BaseUri + "/fxrate/fxrate_latest.json");
                     if (!response.IsSuccessStatusCode)
                     {
-                        return null;
+                        rawjson_today = StorageAPI.LoadFromFile(jsonfilename_today);
                     }
-                    rawjson_today = await response.Content.ReadAsStringAsync();
+                    else
+                    {
+                        rawjson_today = await response.Content.ReadAsStringAsync();
+                    }
                 }
 
-				using (var http = new HttpClient())
-				{
-					HttpResponseMessage response = await http.GetAsync(BaseUri + "/fxrate/fxrate_yesterday.json");
-					if (!response.IsSuccessStatusCode)
-					{
-						return null;
-					}
-                    rawjson_yesterday = await response.Content.ReadAsStringAsync();
-				}
+                using (var http = new HttpClient())
+                {
+                    HttpResponseMessage response = await http.GetAsync(BaseUri + "/fxrate/fxrate_yesterday.json");
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        rawjson_yesterday = StorageAPI.LoadFromFile(jsonfilename_yesterday);
+                    }
+                    else
+                    {
+                        rawjson_yesterday = await response.Content.ReadAsStringAsync();
+                    }
+                }
             }
 
-            var json = JObject.Parse(rawjson_today);
+            try
+            {
+                json = JObject.Parse(rawjson_today);
+            }
+            catch (JsonException)
+            {
+                json = JObject.Parse(StorageAPI.LoadFromFile(jsonfilename_today));
+            }
 
             foreach (var ccy in (JArray)json["list"]["resources"])
             {
@@ -407,29 +428,36 @@ namespace CryptoAccouting.CoreClass.APIClass
                 }
             }
 
-            json = JObject.Parse(rawjson_yesterday);
+            try
+            {
+                json = JObject.Parse(rawjson_yesterday);
+            }
+            catch (JsonException)
+            {
+                json = JObject.Parse(StorageAPI.LoadFromFile(jsonfilename_yesterday));
+            }
 
-			foreach (var ccy in (JArray)json["list"]["resources"])
-			{
-				EnuCCY baseccy;
-				var cursymbol = (string)ccy["resource"]["fields"]["symbol"];
+            foreach (var ccy in (JArray)json["list"]["resources"])
+            {
+                EnuCCY baseccy;
+                var cursymbol = (string)ccy["resource"]["fields"]["symbol"];
 
-				if (!Enum.TryParse(cursymbol.Replace("=X", ""), out baseccy))
-					continue;
+                if (!Enum.TryParse(cursymbol.Replace("=X", ""), out baseccy))
+                    continue;
 
-				if (baseccy == BaseCurrency)
-				{
+                if (baseccy == BaseCurrency)
+                {
                     crossrate.RateBefore24h = (double)ccy["resource"]["fields"]["price"];
-					break;
-				}
-			}
+                    break;
+                }
+            }
 
 
             StorageAPI.SaveFile(rawjson_today, jsonfilename_today);
             StorageAPI.SaveFile(rawjson_yesterday, jsonfilename_yesterday);
 
             return crossrate;
-		}
+        }
 
   //      public static EnuAppStatus FetchExchangeListTemp(Instrument coin, ExchangeList exlist)
 		//{

@@ -5,6 +5,7 @@ using CryptoAccouting.CoreClass;
 using System.Collections.Generic;
 using System.Linq;
 using CoreGraphics;
+using System.Threading.Tasks;
 
 namespace CryptoAccouting.UIClass
 {
@@ -43,6 +44,14 @@ namespace CryptoAccouting.UIClass
 
             return cell;
         }
+
+        public async override void WillDisplay(UITableView tableView, UITableViewCell cell, NSIndexPath indexPath)
+        {
+            cell.BackgroundColor = UIColor.FromRGBA(242,216,223,60);
+            await Task.Delay(50);
+            cell.BackgroundColor = UIColor.Clear;
+        }
+
         public Position GetItem(int id)
         {
             //return coins[id].TotalPosition();

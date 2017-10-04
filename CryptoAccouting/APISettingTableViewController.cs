@@ -22,6 +22,8 @@ namespace CryptoAccouting
             //NavigationItem.HidesBackButton = true;
             buttonDone.Enabled = false;
             buttonFetchPosition.Enabled = false;
+            textAPIKey.Enabled = false;
+            textAPISecret.Enabled = false;
         }
 
         partial void ButtonExchange_TouchUpInside(UIButton sender)
@@ -41,6 +43,8 @@ namespace CryptoAccouting
                                                                      textAPISecret.Text = exc.Secret == null ? "" : exc.Secret;
                                                                      buttonDone.Enabled = true;
                                                                      buttonFetchPosition.Enabled = true;
+                                                                     textAPIKey.Enabled = true;
+                                                                     textAPISecret.Enabled = true;
                 }
                                                             ));
 			}
@@ -62,11 +66,6 @@ namespace CryptoAccouting
                 thisExchange.Secret = textAPISecret.Text;
                 ApplicationCore.SaveAppSetting();
             }
-        }
-
-        partial void ButtonCancel_Activated(UIBarButtonItem sender)
-        {
-            this.NavigationController.PopViewController(true);
         }
 
         partial void ButtonDone_Activated(UIBarButtonItem sender)

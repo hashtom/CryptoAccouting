@@ -14,10 +14,6 @@ namespace CryptoAccouting
 	{
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		UIKit.UIBarButtonItem buttonCancel { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UIBarButtonItem buttonDone { get; set; }
 
 		[Outlet]
@@ -35,9 +31,6 @@ namespace CryptoAccouting
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UITextField textAPISecret { get; set; }
 
-		[Action ("ButtonCancel_Activated:")]
-		partial void ButtonCancel_Activated (UIKit.UIBarButtonItem sender);
-
 		[Action ("ButtonDone_Activated:")]
 		partial void ButtonDone_Activated (UIKit.UIBarButtonItem sender);
 
@@ -46,11 +39,6 @@ namespace CryptoAccouting
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (buttonCancel != null) {
-				buttonCancel.Dispose ();
-				buttonCancel = null;
-			}
-
 			if (buttonDone != null) {
 				buttonDone.Dispose ();
 				buttonDone = null;
@@ -61,6 +49,11 @@ namespace CryptoAccouting
 				buttonExchange = null;
 			}
 
+			if (buttonFetchPosition != null) {
+				buttonFetchPosition.Dispose ();
+				buttonFetchPosition = null;
+			}
+
 			if (textAPIKey != null) {
 				textAPIKey.Dispose ();
 				textAPIKey = null;
@@ -69,11 +62,6 @@ namespace CryptoAccouting
 			if (textAPISecret != null) {
 				textAPISecret.Dispose ();
 				textAPISecret = null;
-			}
-
-			if (buttonFetchPosition != null) {
-				buttonFetchPosition.Dispose ();
-				buttonFetchPosition = null;
 			}
 		}
 	}

@@ -1,6 +1,6 @@
 ﻿using Foundation; using System; using UIKit; using CryptoAccouting.CoreClass; using CryptoAccouting.UIClass; using System.Collections.Generic; using CoreGraphics; using CoreAnimation; using System.Threading.Tasks;  namespace CryptoAccouting {     public partial class BalanceMainViewController : CryptoTableViewController     {
         //private NavigationDrawer menu;
-        Balance mybalance;         public CAGradientLayer gradient;          public BalanceMainViewController(IntPtr handle) : base(handle)         {         }          public override void ViewDidLoad()         {             base.ViewDidLoad();              // Instantiate Controllers             AppSetting.balanceMainViewC = this;             //AppSetting.transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             AppSetting.plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             AppSetting.settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             //menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);  
+        Balance mybalance;         CAGradientLayer gradient;         LoadingOverlay loadPop;          public BalanceMainViewController(IntPtr handle) : base(handle)         {         }          public override void ViewDidLoad()         {             base.ViewDidLoad();              // Instantiate Controllers             AppSetting.balanceMainViewC = this;             //AppSetting.transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             AppSetting.plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             AppSetting.settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             //menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);  
             if (ApplicationCore.InitializeCore() != EnuAPIStatus.Success)             {                 this.PopUpWarning("some issue!!");                 this.mybalance = new Balance();             }             else             {                 this.mybalance = ApplicationCore.Balance;             }              // Configure Table source             TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");             TableView.Source = new CoinTableSource(mybalance, this);
             ReDrawScreen(); 
             if (!ApplicationCore.IsInternetReachable())
@@ -18,15 +18,17 @@
                 //}             });
         }          public async override void ViewWillAppear(bool animated)         {
             base.ViewWillAppear(animated);
-             //Task.Run(async () =>             //{
-                if (!AppDelegate.IsInDesignerView)
-                {
-                await ApplicationCore.LoadCoreDataAsync();
-                await ApplicationCore.FetchMarketDataFromBalanceAsync();
-                }
 
-                ReDrawScreen();
-                TableView.ReloadData();             //});
+            //Task.Run(async () =>
+            //{
+            if (!AppDelegate.IsInDesignerView)
+            {
+                if (await ApplicationCore.LoadUSDCrossRateAsync() != EnuAPIStatus.Success)                 {                     //can't get fxrate even saved file                     UIAlertController okAlertController = UIAlertController.Create("critical", "Critical FX rates data error!", UIAlertControllerStyle.Alert);                     okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));                     this.PresentViewController(okAlertController, true, null);                 } 
+                if(await ApplicationCore.FetchMarketDataFromBalanceAsync() != EnuAPIStatus.Success)                 {                     //Ignore Network error                     //UIAlertController okAlertController = UIAlertController.Create("Critical", "Critical Balance data error.", UIAlertControllerStyle.Alert);                     //okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));                     //this.PresentViewController(okAlertController, true, null);                 }
+            }
+
+            ReDrawScreen();
+            TableView.ReloadData();             
         }          public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
             base.PrepareForSegue(segue, sender);
@@ -85,13 +87,12 @@
             PushSelectionView();
         }
 
-        partial void ButtonRefresh_Activated(UIBarButtonItem sender)
-        {             Task.Run(async () =>
-            {
-                await ApplicationCore.FetchMarketDataFromBalanceAsync();
-                //mybalance.BalanceByCoin.SortPositionByHolding();
-                ReDrawScreen();
-                TableView.ReloadData();             });
+        async partial void ButtonRefresh_Activated(UIBarButtonItem sender)
+        {             var bounds = TableView.Bounds;             loadPop = new LoadingOverlay(bounds);             TableView.Add(loadPop);
+
+            await ApplicationCore.FetchMarketDataFromBalanceAsync();
+            ReDrawScreen();
+            TableView.ReloadData();               loadPop.Hide();
         }          private void PushSelectionView()
         {
             List<SelectionSearchItem> searchitems = new List<SelectionSearchItem>();             foreach (var item in ApplicationCore.InstrumentList)

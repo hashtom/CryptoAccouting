@@ -18,11 +18,11 @@
             if (LoadInstruments(false) is EnuAPIStatus.Success) LoadExchangeList(); 
 			//Load Balance Data
             Balance = StorageAPI.LoadBalanceXML(BalanceFile, InstrumentList);
-            Balance.ReCalculate();              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML(AppSettingFile) != EnuAPIStatus.Success)             {                 BaseCurrency = EnuCCY.USD; //Default setting             }              return EnuAPIStatus.Success;          }          public static async Task<EnuAPIStatus> LoadCoreDataAsync(){
+            Balance.ReCalculate();              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML(AppSettingFile) != EnuAPIStatus.Success)             {                 BaseCurrency = EnuCCY.USD; //Default setting             }              return EnuAPIStatus.Success;          }          public static async Task<EnuAPIStatus> LoadUSDCrossRateAsync(){
 
             //Load FX
             if (!HasCrossRateUpdated)
-            {
+            { 
                 USDCrossRate = await MarketDataAPI.FetchUSDCrossRateAsync(BaseCurrency);                 if (USDCrossRate is null)                 {
                     return EnuAPIStatus.NotAvailable;                 }
                 else
