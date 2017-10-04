@@ -157,6 +157,7 @@
     <None Include="packages.config" />
     <None Include="Bundlefile\fxget.sh" />
     <None Include="Bundlefile\marketget.sh" />
+    <None Include="Bundlefile\credit.html" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -228,6 +229,10 @@
       <DependentUpon>TransactionViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="UIClass\LoadingOverlay.cs" />
+    <Compile Include="AboutViewConroller.cs" />
+    <Compile Include="AboutViewConroller.designer.cs">
+      <DependentUpon>AboutViewConroller.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />
@@ -241,6 +246,7 @@
     <BundleResource Include="Images\app.png" />
     <BundleResource Include="Images\pltab.png" />
     <BundleResource Include="Images\garbage.png" />
+    <BundleResource Include="Resources\Default-568h%402x.png" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork" />
