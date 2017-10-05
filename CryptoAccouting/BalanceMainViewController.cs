@@ -67,7 +67,7 @@
                         break;
                     case 1:
                         TableView.RegisterClassForCellReuse(typeof(CoinStoreCell), "CoinStorageCell");                         //TableView.RegisterNibForCellReuse(CoinStorageCell.Nib, "CoinStorageCell");
-                        TableView.Source = new CoinStoreTableSource(mybalance.CoinStorageList, this);
+                        TableView.Source = new CoinStoreTableSource(ApplicationCore.CoinStorageList, this);
                         break;
                     case 2:
                         //TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "BookingTestViewCell");

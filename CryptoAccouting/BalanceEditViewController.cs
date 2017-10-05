@@ -33,8 +33,8 @@ namespace CryptoAccouting
             //thisPriceSource = thisCoin.Symbol1 == "BTC" ? "Bitstamp" : "Bittrex";
 
             PrepareDatePicker();
-            InitializeUserInteractionStates();
             ReDrawScreen();
+            InitializeUserInteractionStates();
 
             buttonExchange.TouchUpInside += (sender, e) =>
             {
@@ -96,9 +96,10 @@ namespace CryptoAccouting
                     }
                     else
                     {
-                        WatchOnlyScreen();
+                        InitializeUserInteractionStates();
                     }
-                }else
+                }
+                else
                 {
                     editmode = true;
                     InitializeUserInteractionStates();
@@ -150,46 +151,55 @@ namespace CryptoAccouting
 
         private void InitializeUserInteractionStates()
         {
+            if (switchWatchOnly.On)
+            {
+                buttonExchange.Enabled = false;
+                buttonExchange.SetTitle("", UIControlState.Disabled);
+                buttonTradeDate.Enabled = false;
+                buttonTradeDate.SetTitle("", UIControlState.Disabled);
+                buttonWallet.Enabled = false;
+                buttonWallet.SetTitle("", UIControlState.Disabled);
+                textQuantity.Enabled = false;
+                textQuantity.Text = "";
+                textQuantity.Placeholder = "Watch Only";
+            }
+
             if (editmode)
             {
-                switchWatchOnly.Enabled = true;
                 buttonDone.Enabled = true;
                 buttonEdit.Enabled = false;
-                buttonExchange.SetTitleColor(UIColor.Blue, UIControlState.Normal);
-                buttonExchange.Enabled = true;
-                buttonTradeDate.SetTitleColor(UIColor.Blue, UIControlState.Normal);
-                buttonTradeDate.Enabled = true;
-                buttonWallet.SetTitleColor(UIColor.Blue, UIControlState.Normal);
-                buttonWallet.Enabled = true;
-                textQuantity.Enabled = true;
-                textQuantity.TextColor = UIColor.Blue;
+                switchWatchOnly.Enabled = true;
+
+                if (!switchWatchOnly.On)
+                {
+                    buttonExchange.Enabled = true;
+                    buttonExchange.SetTitleColor(UIColor.Blue, UIControlState.Normal);
+                    buttonTradeDate.Enabled = true;
+                    buttonTradeDate.SetTitleColor(UIColor.Blue, UIControlState.Normal);
+                    buttonWallet.Enabled = true;
+                    buttonWallet.SetTitleColor(UIColor.Blue, UIControlState.Normal);
+                    textQuantity.Enabled = true;
+                    textQuantity.TextColor = UIColor.Blue;
+                }
             }
             else
             {
-                switchWatchOnly.Enabled = false;
                 buttonDone.Enabled = false;
-                buttonExchange.Enabled = false;
-                buttonExchange.SetTitleColor(UIColor.Black, UIControlState.Normal);
-                buttonWallet.Enabled = false;
-                buttonWallet.SetTitleColor(UIColor.Black, UIControlState.Normal);
-                buttonTradeDate.Enabled = false;
-                buttonTradeDate.SetTitleColor(UIColor.Black, UIControlState.Normal);
-                textQuantity.Enabled = false;
-                textQuantity.TextColor = UIColor.Black;
-            }
-        }
+                buttonEdit.Enabled = true;
+                switchWatchOnly.Enabled = false;
 
-        private void WatchOnlyScreen()
-        {
-            buttonExchange.Enabled = false;
-            buttonExchange.SetTitle("",UIControlState.Disabled);
-            buttonTradeDate.Enabled = false;
-            buttonTradeDate.SetTitle("",UIControlState.Disabled);
-            buttonWallet.Enabled = false;
-            buttonWallet.SetTitle("", UIControlState.Disabled);
-            textQuantity.Enabled = false;
-            textQuantity.Text = "";
-            textQuantity.Placeholder = "Watch Only";
+                if (!switchWatchOnly.On)
+                {
+                    buttonExchange.Enabled = false;
+                    buttonExchange.SetTitleColor(UIColor.Black, UIControlState.Normal);
+                    buttonWallet.Enabled = false;
+                    buttonWallet.SetTitleColor(UIColor.Black, UIControlState.Normal);
+                    buttonTradeDate.Enabled = false;
+                    buttonTradeDate.SetTitleColor(UIColor.Black, UIControlState.Normal);
+                    textQuantity.Enabled = false;
+                    textQuantity.TextColor = UIColor.Black;
+                }
+            }
         }
 
         public override void ReDrawScreen()
@@ -199,17 +209,12 @@ namespace CryptoAccouting
             var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Images", thisCoin.Id + ".png");
             imageCoin.Image = logo == null ? null : UIImage.FromFile(logo);
 
-            if (PositionDetail is null) // new balance
-            {
-                thisBalanceDate = DateTime.Now.Date;
-                buttonTradeDate.SetTitle(thisBalanceDate.ToShortDateString(), UIControlState.Normal);
-            }
-            else
+            if (PositionDetail != null)
             {
                 if (PositionDetail.WatchOnly)
                 {
                     switchWatchOnly.SetState(true, false);
-                    WatchOnlyScreen();
+                    //WatchOnlyScreen();
                 }
                 else
                 {
@@ -217,14 +222,18 @@ namespace CryptoAccouting
                     textQuantity.Text = (Math.Abs(PositionDetail.Amount) < 0.00000001) ? "" : String.Format("{0:n6}", PositionDetail.Amount);
                     thisBalanceDate = PositionDetail.BalanceDate;
                     buttonTradeDate.SetTitle(PositionDetail.BalanceDate.Date.ToShortDateString(), UIControlState.Normal);
-
-                    var exname = thisExchange is null ? "Not Specified" : PositionDetail.BookedExchange.Code;
+                    var exname = thisExchange is null ? "Not Specified" : thisExchange.Code;
                     buttonExchange.SetTitle(exname, UIControlState.Normal);
-
-                    var storagename = thisStorage is null ? "Not Specified" : thisStorage.StorageType.ToString();
-                    buttonWallet.SetTitle(storagename, UIControlState.Normal);
                 }
             }
+            else
+            {
+                thisBalanceDate = DateTime.Now.Date;
+                buttonTradeDate.SetTitle(thisBalanceDate.ToShortDateString(), UIControlState.Normal);
+                buttonExchange.SetTitle("Not Specified", UIControlState.Normal);
+            }
+
+            buttonWallet.SetTitle(thisStorage.StorageType.ToString(), UIControlState.Normal);
         }
 
         private void CreatePosition()
@@ -241,29 +250,16 @@ namespace CryptoAccouting
                 PositionDetail.Amount = double.Parse(textQuantity.Text);
                 PositionDetail.BalanceDate = thisBalanceDate;
 
-                if (thisExchange != null) PositionDetail.BookedExchange = thisExchange;
-
-                //if (thisStorage != null)
-                //{
-                CoinStorage storage;
-                if (thisStorage.StorageType == EnuCoinStorageType.Exchange)
+                string exchangecode = null;
+                if (thisExchange != null)
                 {
-                    storage = thisExchange;
-                }
-                else
-                {
-                    storage = ApplicationCore.Balance.GetCoinStorage(thisStorage.Code, thisStorage.StorageType);
+                    PositionDetail.BookedExchange = thisExchange;
+                    exchangecode = thisExchange.Code;
                 }
 
-                if (storage != null)
-                {
-                    PositionDetail.AttachCoinStorage(storage);
-                }
-                else
-                {
-                    PositionDetail.AttachNewStorage(thisStorage.Code, thisStorage.StorageType);
-                }
-                //}
+                ApplicationCore.AttachCoinStorage(thisStorage.Code, thisStorage.StorageType, exchangecode);
+                var storage = ApplicationCore.GetCoinStorage(thisStorage.Code, thisStorage.StorageType);
+                PositionDetail.AttachCoinStorage(storage);
 
             }
 

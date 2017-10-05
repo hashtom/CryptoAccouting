@@ -54,7 +54,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static Balance LoadBalanceXML(string fileName, InstrumentList instrumentlist)
         {
-            Balance mybal;
+            Balance mybal = new Balance();
 
             var balanceXML = LoadFromFile(fileName);
             if (balanceXML == null ) balanceXML = LoadBundleFile("BalanceData.xml");
@@ -69,7 +69,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 //var balanceXML = File.ReadAllText(path);
 
                 var mybalXE = XElement.Parse(balanceXML).Descendants("position");
-                mybal = new Balance();
+                //mybal = new Balance();
 
                 foreach (var elem in mybalXE)
                 {
@@ -83,41 +83,38 @@ namespace CryptoAccouting.CoreClass.APIClass
                         {
                             Id = int.Parse(elem.Attribute("id").Value),
                             Amount = double.Parse(elem.Element("amount").Value),
-                            AmountBTC = elem.Element("amountbtc") == null ? 0 : double.Parse(elem.Element("amountbtc").Value),
+                            AmountBTC_Previous = elem.Element("amountbtc") == null ? 0 : double.Parse(elem.Element("amountbtc").Value),
                             //BookPriceUSD = elem.Element("book") == null ? 0 : double.Parse(elem.Element("book").Value),
                             BalanceDate = DateTime.Parse(elem.Element("date").Value),
                             BookedExchange = tradedexchange, //(EnuExchangeType)Enum.Parse(typeof(EnuExchangeType), elem.Descendants("exchange").Select(x => x.Value).First())
-                            PriceUSD = elem.Element("priceusd") == null ? 0 : double.Parse(elem.Element("priceusd").Value),
-                            PriceBTC = elem.Element("pricebtc") == null ? 0 : double.Parse(elem.Element("pricebtc").Value),
-                            PriceBase = elem.Element("pricebase") == null ? 0 : double.Parse(elem.Element("pricebase").Value),
+                            PriceUSD_Previous = elem.Element("priceusd") == null ? 0 : double.Parse(elem.Element("priceusd").Value),
+                            PriceBTC_Previous = elem.Element("pricebtc") == null ? 0 : double.Parse(elem.Element("pricebtc").Value),
+                            PriceBase_Previous = elem.Element("pricebase") == null ? 0 : double.Parse(elem.Element("pricebase").Value),
                             WatchOnly = elem.Element("watchonly") == null ? false : bool.Parse(elem.Element("watchonly").Value),
                         };
 
-                        EnuCoinStorageType storagetype;
 						var storagecode = elem.Element("storage").Value;
-                        if (storagecode != "" && Enum.TryParse(elem.Element("storagetype").Value, out storagetype))
+
+                        if (storagecode != "" && Enum.TryParse(elem.Element("storagetype").Value, out EnuCoinStorageType storagetype))
                         {
-                            var storage = mybal.GetCoinStorage(storagecode, storagetype);
-                            if (storage != null)
-                            {
-                                pos.AttachCoinStorage(storage);
-                            }
-                            else
-                            {
-                                pos.AttachNewStorage(storagecode, storagetype);
-                            }
+                            var exchangecode = tradedexchange != null ? tradedexchange.Code : null;
+                            ApplicationCore.AttachCoinStorage(storagecode, storagetype, exchangecode);
+                            var storage = ApplicationCore.GetCoinStorage(storagecode, storagetype);
+                            pos.AttachCoinStorage(storage);
+                            storage.AttachPosition(pos);
                         }
 
                         mybal.Attach(pos);
+
                     }
 
                 }
 
             }
-            else
-            {
-                mybal = new Balance();
-            }
+            //else
+            //{
+            //    mybal = new Balance();
+            //}
             //}catch(IOException e){
             //    Console.WriteLine(e.ToString());
             //}catch(Exception e){

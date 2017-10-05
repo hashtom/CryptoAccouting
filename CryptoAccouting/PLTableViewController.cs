@@ -26,7 +26,7 @@ namespace CryptoAccouting
             {
                 //if (!AppDelegate.IsInDesignerView)
                 //{
-                await ApplicationCore.LoadTradeListsAsync("Zaif", "2017", true);
+                await ApplicationCore.LoadTradeListsAsync("Zaif");
                     myTradeList = ApplicationCore.GetExchangeTradeList("Zaif");
                     myTradeList.CalculateTotalValue(DateTime.Now.Year);
                     DrawScreen();

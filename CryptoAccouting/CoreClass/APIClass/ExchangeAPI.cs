@@ -78,22 +78,22 @@ namespace CryptoAccouting.CoreClass.APIClass
 
 		//}
 
-        internal static async Task<TradeList> FetchTradeListAsync(Exchange exchange, string calendarYear, bool isAggregateDaily = true)
+        internal static async Task<TradeList> FetchTradeListAsync(Exchange exchange, string calendarYear = null, bool isAggregateDaily = true)
 		{
 			string rawjson;
-            string filename = "zaifTransaction_" + calendarYear + ".json";
+            string filename = exchange.Name + "Transaction_" + calendarYear + ".json";
 
             switch (exchange.Code)
 			{
                 case "Zaif":
 
                     rawjson = StorageAPI.LoadFromFile(filename);
-                    if (rawjson is null || calendarYear == DateTime.Now.Year.ToString() || calendarYear == "ALL")
+                    if (rawjson is null || calendarYear == DateTime.Now.Year.ToString() || calendarYear is null)
                     {
                         rawjson = await ZaifAPI.FetchTransactionAsync(exchange.Key, exchange.Secret, calendarYear);
                     }
 
-                    var tradelist = ParseZaifJson(rawjson);
+                    var tradelist = ZaifAPI.ParseTrade(rawjson);
                     if (tradelist != null) StorageAPI.SaveFile(rawjson, filename);
 
                     return tradelist;
@@ -104,60 +104,27 @@ namespace CryptoAccouting.CoreClass.APIClass
 
 		}
 
-        private static TradeList ParseZaifJson(string rawjson)
+        internal static async Task<List<Position>> FetchPositionAsync(Exchange exchange)
         {
-            JObject json;
+            string rawjson;
+            string filename = exchange.Name + "Position" + ".json";
 
-            try
+            switch (exchange.Code)
             {
-                json = JObject.Parse(rawjson);
+                case "Zaif":
+
+                    rawjson = await ZaifAPI.FetchPositionAsync(exchange.Key, exchange.Secret);
+
+
+                    var positions = ZaifAPI.ParsePosition(rawjson, exchange);
+                    if (positions != null) StorageAPI.SaveFile(rawjson, filename);
+
+                    return positions;
+
+                default:
+                    return null;
             }
-            catch (JsonException)
-            {
-                return null;
-            }
 
-            if ((int)json.SelectToken("$.success") != 1)
-            {
-                return null;
-            }
-            else
-            {
-                var tradelist = new TradeList(ApplicationCore.BaseCurrency);
-                foreach (JProperty x in (JToken)json["return"])
-                {
-                    //Transaction Date Order must be ascending by design...
-                    EnuBuySell ebuysell;
-
-                    switch ((string)json["return"][x.Name]["your_action"])
-                    {
-                        case "bid":
-                            ebuysell = EnuBuySell.Buy;
-                            break;
-                        case "ask":
-                            ebuysell = EnuBuySell.Sell;
-                            break;
-                        default:
-                            ebuysell = EnuBuySell.Check;
-                            break;
-                    }
-
-
-                    var symbol = (string)json["return"][x.Name]["currency_pair"];
-                    symbol = symbol.Replace("_jpy", "").Replace("_btc", "").ToUpper();
-
-                    tradelist.AggregateTransaction(ApplicationCore.InstrumentList.GetBySymbol1(symbol),
-                                                  "Zaif",
-                                                  ebuysell,
-                                                  (double)json["return"][x.Name]["amount"],
-                                                  (double)json["return"][x.Name]["price"],
-                                                  ApplicationCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
-                                                  (int)json["return"][x.Name]["fee"]
-                                                  );
-                }
-
-                return tradelist;
-            }
         }
 
     }

@@ -5,17 +5,20 @@ namespace CryptoAccouting.CoreClass
 {
     public class Position
     {
+        //
+        // You may need to update Balance.ReloadBalanceByCoin() 
+        // when you change properties
+        //
         public int Id { get; set; }
         public Instrument Coin { get; private set; }
 		public DateTime BalanceDate { get; set; }
         public double Amount { get; set; }
-        public double AmountBTC { get; set; }
-        //public double BookPriceUSD { get; set; }
+        public double AmountBTC_Previous { get; set; }
         public Exchange BookedExchange { get; set; }
         public CoinStorage CoinStorage { get; private set; }
-        public double PriceUSD { get; set; }
-        public double PriceBTC { get; set; }
-        public double PriceBase { get; set; }
+        public double PriceUSD_Previous { get; set; }
+        public double PriceBTC_Previous { get; set; }
+        public double PriceBase_Previous { get; set; }
         public bool WatchOnly { get; set; }
 
         public Position(Instrument coin)
@@ -44,18 +47,18 @@ namespace CryptoAccouting.CoreClass
             this.Coin = coin;
         }
 
-        public void AttachNewStorage(string storagecode, EnuCoinStorageType storagetype)
-        {
-            switch (storagetype)
-            {
-                case EnuCoinStorageType.Exchange:
-                    CoinStorage = BookedExchange;
-                    break;
-                default:
-                    CoinStorage = new Wallet(storagecode, storagetype);
-                    break;
-            }
-        }
+        //public void AttachNewStorage(string storagecode, EnuCoinStorageType storagetype)
+        //{
+        //    switch (storagetype)
+        //    {
+        //        case EnuCoinStorageType.Exchange:
+        //            CoinStorage = BookedExchange;
+        //            break;
+        //        default:
+        //            CoinStorage = new Wallet(storagecode, storagetype);
+        //            break;
+        //    }
+        //}
 
         public void AttachCoinStorage(CoinStorage storage)
         {
@@ -69,26 +72,26 @@ namespace CryptoAccouting.CoreClass
 
         public double LatestAmountBTC()
         {
-            AmountBTC = Coin.MarketPrice == null ? AmountBTC : Coin.MarketPrice.LatestPriceBTC * this.Amount;
-            return AmountBTC;
+            AmountBTC_Previous = Coin.MarketPrice == null ? AmountBTC_Previous : Coin.MarketPrice.LatestPriceBTC * this.Amount;
+            return AmountBTC_Previous;
         }
 
         public double LatestPriceUSD()
         {
-            PriceUSD = Coin.MarketPrice == null ? PriceUSD : Coin.MarketPrice.LatestPriceUSD;
-            return PriceUSD;
+            PriceUSD_Previous = Coin.MarketPrice == null ? PriceUSD_Previous : Coin.MarketPrice.LatestPriceUSD;
+            return PriceUSD_Previous;
         }
 
         public double LatestPriceBase()
         {
-            PriceBase = Coin.MarketPrice == null ? PriceBase : Coin.MarketPrice.LatestPriceBase();
-            return PriceBase;
+            PriceBase_Previous = Coin.MarketPrice == null ? PriceBase_Previous : Coin.MarketPrice.LatestPriceBase();
+            return PriceBase_Previous;
         }
 
         public double LatestPriceBTC()
         {
-            PriceBTC = Coin.MarketPrice == null ? PriceBTC : Coin.MarketPrice.LatestPriceBTC;
-            return PriceBTC;
+            PriceBTC_Previous = Coin.MarketPrice == null ? PriceBTC_Previous : Coin.MarketPrice.LatestPriceBTC;
+            return PriceBTC_Previous;
         }
 
         public double LatestSourceRet1d()
@@ -118,12 +121,12 @@ namespace CryptoAccouting.CoreClass
 
         public double LatestFiatValueUSD()
         {
-            return Coin.MarketPrice == null ? PriceUSD * Amount : Coin.MarketPrice.LatestPriceUSD * this.Amount;
+            return Coin.MarketPrice == null ? PriceUSD_Previous * Amount : Coin.MarketPrice.LatestPriceUSD * this.Amount;
         }
 
 		public double LatestFiatValueBase()
 		{
-            return Coin.MarketPrice == null ? PriceBase * Amount : Coin.MarketPrice.LatestPriceBase() * this.Amount;
+            return Coin.MarketPrice == null ? PriceBase_Previous * Amount : Coin.MarketPrice.LatestPriceBase() * this.Amount;
 		}
 
 		//public double BookValueUSD()

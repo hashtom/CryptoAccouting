@@ -2,8 +2,9 @@ using Foundation;
 using System;
 using UIKit;
 using CryptoAccouting.CoreClass;
-using CryptoAccouting.UIClass;
+using CryptoAccouting.CoreClass.APIClass;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace CryptoAccouting
 {
@@ -24,6 +25,25 @@ namespace CryptoAccouting
             buttonFetchPosition.Enabled = false;
             textAPIKey.Enabled = false;
             textAPISecret.Enabled = false;
+
+
+            buttonFetchPosition.TouchUpInside += async (object sender, EventArgs e) =>
+            {
+                List<Position> positions;
+
+                if (thisExchange != null)
+                {
+                    positions = await ExchangeAPI.FetchPositionAsync(thisExchange);
+                    if (positions != null) positions.ForEach(x => ApplicationCore.Balance.Attach(x));
+                }
+                else
+                {
+                    UIAlertController okAlertController = UIAlertController.Create("Warning", "Couldn't get positions from the exchange!", UIAlertControllerStyle.Alert);
+                    okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+                    this.PresentViewController(okAlertController, true, null);
+                }
+
+            };
         }
 
         partial void ButtonExchange_TouchUpInside(UIButton sender)

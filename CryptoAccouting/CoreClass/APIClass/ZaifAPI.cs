@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace CryptoAccouting.CoreClass.APIClass
 {
@@ -13,8 +15,22 @@ namespace CryptoAccouting.CoreClass.APIClass
         private static string _apiKey;
         private static string _apiSecret;
 
-        public static async Task<string> FetchPriceAsync(string apikey, string secret){
-            
+        public static async Task<string> FetchPositionAsync(string apikey, string secret)
+        {
+
+            _apiKey = apikey;
+            _apiSecret = secret;
+            var http = new HttpClient();
+
+            http.BaseAddress = new Uri(BaseUrl);
+            Uri path = new Uri("tapi", UriKind.Relative);
+
+            return await SendAsync(http, path, "get_info2");
+        }
+
+        public static async Task<string> FetchPriceAsync(string apikey, string secret)
+        {
+
             _apiKey = apikey;
             _apiSecret = secret;
             var http = new HttpClient();
@@ -23,20 +39,20 @@ namespace CryptoAccouting.CoreClass.APIClass
             Uri path = new Uri("api/1/ticker/btc_jpy", UriKind.Relative);
 
             return await SendAsync(http, path, "ticker");
-		}
+        }
 
-        public static async Task<string> FetchTransactionAsync(string apikey, string secret, string calendarYear)
-		{
-			_apiKey = apikey;
-			_apiSecret = secret;
+        public static async Task<string> FetchTransactionAsync(string apikey, string secret, string calendarYear = null)
+        {
+            _apiKey = apikey;
+            _apiSecret = secret;
             var http = new HttpClient();
 
 
-            var from = calendarYear == "ALL" ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
-            var to = calendarYear == "ALL" ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
+            var from = calendarYear == null ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
+            var to = calendarYear == null ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
 
-			http.BaseAddress = new Uri(BaseUrl);
-			Uri path = new Uri("tapi", UriKind.Relative);
+            http.BaseAddress = new Uri(BaseUrl);
+            Uri path = new Uri("tapi", UriKind.Relative);
 
             var param = new Dictionary<string, string>
             {
@@ -48,9 +64,9 @@ namespace CryptoAccouting.CoreClass.APIClass
                 {"order", "ASC"}
             };
 
-            return await SendAsync(http, path, "trade_history",param);
+            return await SendAsync(http, path, "trade_history", param);
 
-		}
+        }
 
 
         private static async Task<string> SendAsync(HttpClient http, Uri path, string method, Dictionary<string, string> parameters = null)
@@ -98,7 +114,101 @@ namespace CryptoAccouting.CoreClass.APIClass
             return json;
         }
 
+        public static TradeList ParseTrade(string rawjson)
+        {
+            JObject json;
+
+            try
+            {
+                json = JObject.Parse(rawjson);
+            }
+            catch (JsonException)
+            {
+                return null;
+            }
+
+            if ((int)json.SelectToken("$.success") != 1)
+            {
+                return null;
+            }
+            else
+            {
+                var tradelist = new TradeList(ApplicationCore.BaseCurrency);
+                foreach (JProperty x in (JToken)json["return"])
+                {
+                    //Transaction Date Order must be ascending by design...
+                    EnuBuySell ebuysell;
+
+                    switch ((string)json["return"][x.Name]["your_action"])
+                    {
+                        case "bid":
+                            ebuysell = EnuBuySell.Buy;
+                            break;
+                        case "ask":
+                            ebuysell = EnuBuySell.Sell;
+                            break;
+                        default:
+                            ebuysell = EnuBuySell.Check;
+                            break;
+                    }
+
+
+                    var symbol = (string)json["return"][x.Name]["currency_pair"];
+                    symbol = symbol.Replace("_jpy", "").Replace("_btc", "").ToUpper();
+
+                    tradelist.AggregateTransaction(ApplicationCore.InstrumentList.GetBySymbol1(symbol),
+                                                  "Zaif",
+                                                  ebuysell,
+                                                  (double)json["return"][x.Name]["amount"],
+                                                  (double)json["return"][x.Name]["price"],
+                                                  ApplicationCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
+                                                  (int)json["return"][x.Name]["fee"]
+                                                  );
+                }
+
+                return tradelist;
+            }
+        }
+
+        public static List<Position> ParsePosition(string rawjson, Exchange exchange)
+        {
+            JObject json;
+            List<Position> positions;
+
+            try
+            {
+                json = JObject.Parse(rawjson);
+            }
+            catch (JsonException)
+            {
+                return null;
+            }
+
+            if ((int)json.SelectToken("$.success") != 1)
+            {
+                return null;
+            }
+            else
+            {
+                positions = new List<Position>();
+
+                foreach (JProperty x in (JToken)json["return"]["funds"])
+                {
+                    var coin = ApplicationCore.InstrumentList.GetBySymbol1(x.Name.ToUpper());
+                    if (coin != null)
+                    {
+                        var qty = (double)json["return"]["funds"][x.Name];
+                        var pos = new Position(coin) { 
+                            Amount = qty,
+                            BookedExchange = exchange
+                        };
+                        positions.Add(pos);
+                    }
+                }
+
+                return positions;
+            }
+
+        }
     }
-
-
 }
