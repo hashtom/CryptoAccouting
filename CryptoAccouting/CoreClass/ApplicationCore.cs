@@ -20,7 +20,7 @@
             if (LoadInstruments(false) is EnuAPIStatus.Success) LoadExchangeList(); 
 			//Load Balance Data
             Balance = StorageAPI.LoadBalanceXML(BalanceFile, InstrumentList);
-            Balance.ReCalculate();              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML(AppSettingFile) != EnuAPIStatus.Success)             {                 BaseCurrency = EnuCCY.USD; //Default setting             }              return EnuAPIStatus.Success;          }          public static async Task<EnuAPIStatus> LoadUSDCrossRateAsync(){
+            RefreshBalance();              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML(AppSettingFile) != EnuAPIStatus.Success)             {                 BaseCurrency = EnuCCY.USD; //Default setting             }              return EnuAPIStatus.Success;          }          public static async Task<EnuAPIStatus> LoadUSDCrossRateAsync(){
 
             //Load FX
             if (!HasCrossRateUpdated)
@@ -37,7 +37,7 @@
             {                 var mycoins = new InstrumentList(); 
                 Balance.Select(x => x.Coin).Distinct().ToList().ForEach(x => mycoins.Attach(x));
                 //return await MarketDataAPI.FetchCoinMarketDataAsync(mycoins, USDCrossRate);
-                if (!mycoins.Any(x => x.Symbol1 == "BTC")) mycoins.Insert(0, InstrumentList.First(x => x.Symbol1 == "BTC"));                 return await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRate);             }
+                if (!mycoins.Any(x => x.Symbol1 == "BTC")) mycoins.Insert(0, InstrumentList.First(x => x.Symbol1 == "BTC"));                 await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRate);                 RefreshBalance(); //update weights,etc with latest price                 SaveMyBalanceXML();//save balance with latest price                 return EnuAPIStatus.Success;             }
             else
             {                 return EnuAPIStatus.NotAvailable;             }
         }          public static EnuAPIStatus SaveAppSetting()
@@ -85,20 +85,22 @@
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             return epoch.AddSeconds(EpochSeconds);
 
-        }          public static void RefreshBalance()         {             Balance.ReCalculate();             CoinStorageList.RecalculateWeights();         }          public static void DetachPositionByCoin(string InstrumentId)         {             Balance.DetachPositionByCoin(InstrumentId);             CoinStorageList.DetachPositionByCoin(InstrumentId);             RefreshBalance();         } 
+        }          public static void RefreshBalance()         {             Balance.RefreshBalanceData();             CoinStorageList.RecalculateWeights();         }          public static void AttachPosition(Position position, bool DoRefreshBalance = true)         {             Balance.Attach(position);             if (DoRefreshBalance) RefreshBalance();         }          public static void DetachPosition(Position position, bool DoRefreshBalance = true)         {             Balance.Detach(position);             CoinStorageList.DetachPosition(position);             if (DoRefreshBalance) RefreshBalance();         }          public static void DetachPositionByCoin(string InstrumentId, bool DoRefreshBalance = true)         {             Balance.DetachPositionByCoin(InstrumentId);             CoinStorageList.DetachPositionByCoin(InstrumentId);             if (DoRefreshBalance) RefreshBalance();         }          public static void DetachPositionByExchange(Exchange exchange, bool DoRefreshBalance = true)         {             Balance.DetachPositionByExchange(exchange);             CoinStorageList.Detach(exchange);             if (DoRefreshBalance) RefreshBalance();         } 
         public static async Task FetchMarketDataAsync(Instrument coin)
         {
             //await MarketDataAPI.FetchCoinMarketDataAsync(coin);
             var mycoins = new InstrumentList();             if (coin.Symbol1 != "BTC") mycoins.Attach(InstrumentList.First(x => x.Symbol1 == "BTC"));             mycoins.Attach(coin);             await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRate);
         }          public static CoinStorage GetCoinStorage(string storagecode, EnuCoinStorageType storagetype)         {             return CoinStorageList.Any(x => (x.Code == storagecode && x.StorageType == storagetype))
-                                  ? CoinStorageList.First(x => (x.Code == storagecode && x.StorageType == storagetype))                                       : null;         }          public static void AttachCoinStorage(string storagecode, EnuCoinStorageType storagetype)         {             if (GetCoinStorage(storagecode, storagetype) is null)             {
+                                  ? CoinStorageList.First(x => (x.Code == storagecode && x.StorageType == storagetype))                                       : null;         }          public static void AttachCoinStorage(string storagecode, EnuCoinStorageType storagetype, Position pos)         {             var storage = GetCoinStorage(storagecode, storagetype); 
+            if (storage is null)             {
                 switch (storagetype)
                 {
-                    case EnuCoinStorageType.Exchange:                         CoinStorageList.Attach(GetExchange(storagecode));
+                    case EnuCoinStorageType.Exchange:                         storage = GetExchange(storagecode);                         CoinStorageList.Attach(storage);
                         break;
-                    default:                         CoinStorageList.Attach(new Wallet(storagecode, storagetype));
+                    default:                         storage = new Wallet(storagecode, storagetype);                         CoinStorageList.Attach(storage);
                         break;
-                }              }         } 
+                }
+            }             storage.AttachPosition(pos);             pos.AttachCoinStorage(storage);         } 
 		public static bool IsInternetReachable()
 		{
 			return Reachability.IsHostReachable("http://bridgeplace.sakura.ne.jp");

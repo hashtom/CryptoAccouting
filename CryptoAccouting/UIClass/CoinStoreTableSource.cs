@@ -74,25 +74,6 @@ namespace CryptoAccouting.UIClass
 			tableView.DeselectRow(indexPath, true);
 		}
 
-		//public override void CommitEditingStyle(UITableView tableView, UITableViewCellEditingStyle editingStyle, Foundation.NSIndexPath indexPath)
-		//{
-  //          switch (editingStyle)
-  //          {
-  //              case UITableViewCellEditingStyle.Delete:
-  //                  //tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
-  //                  //myBalance.DetachPositionByExchange(myBalance.positionsByBookingExchange[indexPath.Row]);
-  //                  break;
-
-  //              case UITableViewCellEditingStyle.None:
-  //                  Console.WriteLine("CommitEditingStyle:None called");
-  //                  break;
-  //          }
-
-		//	ApplicationCore.SaveMyBalanceXML();
-  //          owner.CellItemUpdated(EnuPopTo.None);
-
-		//}
-
         public static UIView BuidBlanceViewHeader(UITableView tv)
         {
             UIView view = new UIView(new System.Drawing.RectangleF(0, 0, (float)tv.Frame.Width, 20));

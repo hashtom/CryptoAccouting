@@ -35,6 +35,16 @@ namespace CryptoAccouting.CoreClass
             BalanceOnStorage.Detach(position);
         }
 
+        public void DetachPositionByCoin(string InstrumentId)
+        {
+            BalanceOnStorage.DetachPositionByCoin(InstrumentId);
+        }
+
+        public double Amount()
+        {
+            return BalanceOnStorage.Amount();
+        }
+
         public double AmountBTC()
         {
             return BalanceOnStorage.AmountBTC();
@@ -49,6 +59,11 @@ namespace CryptoAccouting.CoreClass
 		{
 			return BalanceOnStorage.LatestFiatValueBase();
 		}
+
+        public bool HasBalance()
+        {
+            return Math.Abs(Amount()) > 0 ? true : false;
+        }
 
     }
 

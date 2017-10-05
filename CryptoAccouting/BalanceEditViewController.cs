@@ -252,13 +252,13 @@ namespace CryptoAccouting
 
                 if (thisExchange != null) PositionDetail.BookedExchange = thisExchange;
 
-                ApplicationCore.AttachCoinStorage(thisStorage.Code, thisStorage.StorageType);
-                var storage = ApplicationCore.GetCoinStorage(thisStorage.Code, thisStorage.StorageType);
-                PositionDetail.AttachCoinStorage(storage);
+                ApplicationCore.AttachCoinStorage(thisStorage.Code, thisStorage.StorageType, PositionDetail);
+                //var storage = ApplicationCore.GetCoinStorage(thisStorage.Code, thisStorage.StorageType);
+                //PositionDetail.AttachCoinStorage(storage);
             }
 
-            ApplicationCore.Balance.Attach(PositionDetail);
-            ApplicationCore.Balance.ReCalculate();
+            ApplicationCore.AttachPosition(PositionDetail);
+            //ApplicationCore.Balance.ReCalculate();
             ApplicationCore.SaveMyBalanceXML();
         }
 

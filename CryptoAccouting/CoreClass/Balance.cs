@@ -16,11 +16,6 @@ namespace CryptoAccouting.CoreClass
             positions = new List<Position>();
         }
 
-        public void ReCalculate()
-        {
-            ReloadBalanceByCoin();
-        }
-
         public void AttachInstruments(InstrumentList instrumentist)
         {
             positions.ForEach(x => x.AttachInstrument(instrumentist.First(y => y.Symbol1 == x.Coin.Symbol1)));
@@ -35,6 +30,10 @@ namespace CryptoAccouting.CoreClass
             return positions.Sum(x => x.LatestFiatValueBase());
 		}
 
+        public double Amount()
+        {
+            return positions.Sum(x => x.Amount);
+        }
 		public double AmountBTC()
 		{
             return positions.Sum(x => x.LatestAmountBTC());
@@ -44,8 +43,18 @@ namespace CryptoAccouting.CoreClass
             positions = positions.OrderByDescending(x => x.LatestAmountBTC()).ToList();
         }
 
-        private void ReloadBalanceByCoin()
+        public void RefreshBalanceData()
         {
+            //update prices
+            foreach(var pos in positions)
+            {
+                pos.AmountBTC_Previous = pos.LatestAmountBTC();
+                pos.PriceUSD_Previous = pos.LatestPriceUSD();
+                pos.PriceBTC_Previous = pos.LatestPriceBTC();
+                pos.PriceBase_Previous = pos.LatestPriceBase();
+            }
+
+            //Update balancebycoin
             if (BalanceByCoin != null)
             {
                 BalanceByCoin.Clear();
@@ -130,15 +139,25 @@ namespace CryptoAccouting.CoreClass
             positions.Clear();
         }
 
-		public void Detach(Position position)  //, bool CalcSummary = true)
+		public void Detach(Position position)
 		{
             positions.Remove(position);
-			//positions.RemoveAll(x => x.Id == position.Id);
 		}
 
         public void DetachPositionByCoin(string InstrumentId)
         {
             positions.RemoveAll(x => x.Coin.Id == InstrumentId);
+        }
+
+        public void DetachPositionByExchange(Exchange exchange)
+        {
+            foreach (var pos in positions
+                     .Where(x => x.CoinStorage != null)
+                     .Where(x => (x.CoinStorage.Code == exchange.Code && x.CoinStorage.StorageType == EnuCoinStorageType.Exchange)).ToList())
+            {
+                
+                positions.Remove(pos);
+            }
         }
 
         public Position GetByIndex(int indexNumber){

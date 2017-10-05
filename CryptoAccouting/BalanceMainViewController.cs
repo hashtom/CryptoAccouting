@@ -92,7 +92,7 @@
 
             await ApplicationCore.FetchMarketDataFromBalanceAsync();
             ReDrawScreen();
-            TableView.ReloadData();               loadPop.Hide();
+            TableView.ReloadData();              loadPop.Hide();
         }          private void PushSelectionView()
         {
             List<SelectionSearchItem> searchitems = new List<SelectionSearchItem>();             foreach (var item in ApplicationCore.InstrumentList)

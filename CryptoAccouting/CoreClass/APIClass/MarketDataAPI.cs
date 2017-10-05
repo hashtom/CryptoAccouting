@@ -60,16 +60,23 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
             else
             {
-				using (var http = new HttpClient())
-				{
-                    //http.MaxResponseContentBufferSize = 256000;
-                    rawjson = await http.GetStringAsync(CoinMarketUrl);
-				}
+                try
+                {
+                    using (var http = new HttpClient())
+                    {
+                        //http.MaxResponseContentBufferSize = 256000;
+                        rawjson = await http.GetStringAsync(CoinMarketUrl);
+                    }
 
-				using (var http = new HttpClient())
-				{
-                    rawjson_yesterday = await http.GetStringAsync(CoinMarketUrl_yesterday);
-				}
+                    using (var http = new HttpClient())
+                    {
+                        rawjson_yesterday = await http.GetStringAsync(CoinMarketUrl_yesterday);
+                    }
+                }
+                catch (HttpRequestException)
+                {
+                    return EnuAPIStatus.FailureNetwork;
+                }
 
                 foreach (var coin in instrumentlist.Where(x => x.PriceSourceCode == "coinmarketcap"))
                 {

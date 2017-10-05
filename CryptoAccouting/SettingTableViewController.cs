@@ -23,20 +23,6 @@ namespace CryptoAccouting
             labelBaseCurrency.Text = ApplicationCore.BaseCurrency.ToString();
         }
 
-		//public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
-		//{
-		//	base.PrepareForSegue(segue, sender);
-
-		//	if (segue.Identifier == "SettingDetailSegue")
-		//	{
-  //              var navctlr = segue.DestinationViewController as SettingTableViewController;
-		//		if (navctlr != null)
-		//		{
-
-		//		}
-		//	}
-		//}
-
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
             //base.RowSelected(tableView, indexPath);
@@ -81,12 +67,6 @@ namespace CryptoAccouting
 			SymbolSelectionViewC.SelectionItems = searchitems;
 			NavigationController.PushViewController(SymbolSelectionViewC, true);
 		}
-
-   //     private void PushAPISettingView()
-   //     {
-   //         var APISettingViewC = Storyboard.InstantiateViewController("APISettingTableViewC") as APISettingTableViewController;
-			//NavigationController.PushViewController(APISettingViewC, true);
-        //}
 
         private void RemoveCache()
         {

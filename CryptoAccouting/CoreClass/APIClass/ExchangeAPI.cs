@@ -108,6 +108,7 @@ namespace CryptoAccouting.CoreClass.APIClass
         {
             string rawjson;
             string filename = exchange.Name + "Position" + ".json";
+            List<Position> positions = null;
 
             switch (exchange.Code)
             {
@@ -115,16 +116,17 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                     rawjson = await ZaifAPI.FetchPositionAsync(exchange.Key, exchange.Secret);
 
-
-                    var positions = ZaifAPI.ParsePosition(rawjson, exchange);
-                    if (positions != null) StorageAPI.SaveFile(rawjson, filename);
-
-                    return positions;
-
+                    if (rawjson != null)
+                    {
+                        positions = ZaifAPI.ParsePosition(rawjson, exchange);
+                        if (positions != null) StorageAPI.SaveFile(rawjson, filename);
+                    }
+                    break;
                 default:
-                    return null;
+                    break;
             }
 
+            return positions;
         }
 
     }

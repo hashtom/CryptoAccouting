@@ -97,10 +97,10 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                             if (storagecode != "" && Enum.TryParse(elem.Element("storagetype").Value, out EnuCoinStorageType storagetype))
                             {
-                                ApplicationCore.AttachCoinStorage(storagecode, storagetype);
-                                var storage = ApplicationCore.GetCoinStorage(storagecode, storagetype);
-                                pos.AttachCoinStorage(storage);
-                                storage.AttachPosition(pos);
+                                ApplicationCore.AttachCoinStorage(storagecode, storagetype, pos);
+                                //var storage = ApplicationCore.GetCoinStorage(storagecode, storagetype);
+                                //pos.AttachCoinStorage(storage);
+                                //storage.AttachPosition(pos);
                             }
                         }
 

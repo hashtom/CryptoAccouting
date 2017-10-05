@@ -20,7 +20,7 @@ namespace CryptoAccouting.CoreClass
 			foreach (EnuCoinStorageType storagetype in Enum.GetValues(typeof(EnuCoinStorageType)))
 			{
                 var storage = new CoinStorage(storagetype.ToString(), storagetype);
-                list.Attach(storage, false);
+                list.Attach(storage);
 			}
             return list;
         }
@@ -28,28 +28,39 @@ namespace CryptoAccouting.CoreClass
         public void RecalculateWeights()
         {
             double sum = storages.Sum(x => x.AmountBTC());
-            storages.ForEach(w=>w.Weight = w.AmountBTC() / sum);
+            foreach (var s in storages.ToList())
+            {
+                if (!s.HasBalance())
+                {
+                    this.Detach(s);
+                }
+                else
+                {
+                    s.Weight = s.AmountBTC() / sum;
+                }
+            }
+            //storages.ForEach(w=>w.Weight = w.AmountBTC() / sum);
         }
 
-        public void Attach(CoinStorage storage, bool recalculate = true)
+        public void Attach(CoinStorage storage)
 		{
 			if (storages.Any(x => x.Code == storage.Code)) Detach(storage);
 			storages.Add(storage);
-            if (recalculate) RecalculateWeights();
 		}
 
-        public void Detach(CoinStorage storage, bool recalculate = true)
+        public void Detach(CoinStorage storage)
 		{
 			storages.RemoveAll(x => x.Code == storage.Code);
-            if (recalculate) RecalculateWeights();
 		}
+
+        public void DetachPosition(Position position)
+        {
+            storages.ForEach(x=>x.DetachPosition(position));
+        }
 
         public void DetachPositionByCoin(string InstrumentId)
         {
-            foreach(var storage in storages)
-            {
-                storage.BalanceOnStorage.DetachPositionByCoin(InstrumentId);
-            }
+            storages.ForEach(x => x.DetachPositionByCoin(InstrumentId));
         }
 
         public void Clear()
