@@ -10,7 +10,6 @@ namespace CryptoAccouting.CoreClass
         public string BalanceName { get; set; }
         private List<Position> positions; //{ get; private set; }
         public Balance BalanceByCoin { get; private set; }
-        //public CoinStorageList CoinStorageList { get; private set; }
 
 		public Balance()
         {
@@ -20,7 +19,6 @@ namespace CryptoAccouting.CoreClass
         public void ReCalculate()
         {
             ReloadBalanceByCoin();
-            //ReloadStorageList();
         }
 
         public void AttachInstruments(InstrumentList instrumentist)
@@ -73,33 +71,6 @@ namespace CryptoAccouting.CoreClass
 
         }
 
-		//private void ReloadStorageList()
-		//{
-		//	if (CoinStorageList != null)
-		//	{
-		//		CoinStorageList.Clear();
-		//	}
-		//	else
-		//	{
-  //              CoinStorageList = new CoinStorageList();
-		//	}
-
-		//	foreach (var storage in positions.Where(x => x.CoinStorage != null).Select(x => x.CoinStorage).Distinct())
-		//	{
-		//		if (storage != null)
-		//		{
-		//			storage.ClearBalanceOnStorage();
-		//			foreach (var pos in positions.Where(x => x.CoinStorage != null).Where(x => x.CoinStorage.Code == storage.Code))
-		//			{
-  //                      storage.AttachPosition(pos);
-		//			}
-  //                  if (storage.AmountBTC() > 0) CoinStorageList.Attach(storage, false);
-		//		}
-		//	}
-  //          CoinStorageList.RecalculateWeights();
-
-		//}
-
         public double USDRet1d()
         {
             double ret1d = 0;
@@ -125,18 +96,6 @@ namespace CryptoAccouting.CoreClass
 
 			return ret1d;
 		}
-
-  //      public CoinStorage GetCoinStorage(string storagecode, EnuCoinStorageType storagetype)
-		//{
-  //          if (positions.Where(x => x.CoinStorage != null).Select(x=>x.CoinStorage).Any(x => x.Code == storagecode && x.StorageType == storagetype))
-  //          {
-  //              return positions.Where(x => x.CoinStorage != null).Select(x => x.CoinStorage).Where(x => x.Code == storagecode && x.StorageType == storagetype).First();
-  //          }
-  //          else
-  //          {
-  //              return null;
-  //          }
-		//}
 
         public void Attach(Position position) //, bool CalcSummary = true)
 		{
@@ -177,9 +136,9 @@ namespace CryptoAccouting.CoreClass
 			//positions.RemoveAll(x => x.Id == position.Id);
 		}
 
-        public void DetachPositionByCoin(string symbol)
+        public void DetachPositionByCoin(string InstrumentId)
         {
-            positions.RemoveAll(x => x.Coin.Symbol1 == symbol);
+            positions.RemoveAll(x => x.Coin.Id == InstrumentId);
         }
 
         public Position GetByIndex(int indexNumber){

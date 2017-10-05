@@ -3,6 +3,7 @@ using System;
 using UIKit;
 using CryptoAccouting.CoreClass;
 using CryptoAccouting.CoreClass.APIClass;
+using CryptoAccouting.UIClass;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -12,6 +13,7 @@ namespace CryptoAccouting
     {
 
         Exchange thisExchange;
+        LoadingOverlay loadPop;
 
         public APISettingTableViewController (IntPtr handle) : base (handle)
         {
@@ -33,8 +35,26 @@ namespace CryptoAccouting
 
                 if (thisExchange != null)
                 {
+                    var bounds = TableView.Bounds;
+                    loadPop = new LoadingOverlay(bounds);
+                    TableView.Add(loadPop);
+
                     positions = await ExchangeAPI.FetchPositionAsync(thisExchange);
-                    if (positions != null) positions.ForEach(x => ApplicationCore.Balance.Attach(x));
+
+                    loadPop.Hide();
+
+                    if (positions != null)
+                    {
+                        ApplicationCore.AttachCoinStorage(thisExchange.Code, EnuCoinStorageType.Exchange);
+                        var storage = ApplicationCore.GetCoinStorage(thisExchange.Code, EnuCoinStorageType.Exchange);
+                        foreach (var pos in positions)
+                        {
+                            pos.AttachCoinStorage(storage);
+                            storage.AttachPosition(pos);
+                            ApplicationCore.Balance.Attach(pos);
+                        }
+                        ApplicationCore.RefreshBalance();
+                    }
                 }
                 else
                 {

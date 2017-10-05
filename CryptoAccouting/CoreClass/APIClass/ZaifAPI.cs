@@ -198,11 +198,15 @@ namespace CryptoAccouting.CoreClass.APIClass
                     if (coin != null)
                     {
                         var qty = (double)json["return"]["funds"][x.Name];
-                        var pos = new Position(coin) { 
-                            Amount = qty,
-                            BookedExchange = exchange
-                        };
-                        positions.Add(pos);
+                        if (qty > 0)
+                        {
+                            var pos = new Position(coin)
+                            {
+                                Amount = qty,
+                                BookedExchange = exchange
+                            };
+                            positions.Add(pos);
+                        }
                     }
                 }
 

@@ -250,17 +250,11 @@ namespace CryptoAccouting
                 PositionDetail.Amount = double.Parse(textQuantity.Text);
                 PositionDetail.BalanceDate = thisBalanceDate;
 
-                string exchangecode = null;
-                if (thisExchange != null)
-                {
-                    PositionDetail.BookedExchange = thisExchange;
-                    exchangecode = thisExchange.Code;
-                }
+                if (thisExchange != null) PositionDetail.BookedExchange = thisExchange;
 
-                ApplicationCore.AttachCoinStorage(thisStorage.Code, thisStorage.StorageType, exchangecode);
+                ApplicationCore.AttachCoinStorage(thisStorage.Code, thisStorage.StorageType);
                 var storage = ApplicationCore.GetCoinStorage(thisStorage.Code, thisStorage.StorageType);
                 PositionDetail.AttachCoinStorage(storage);
-
             }
 
             ApplicationCore.Balance.Attach(PositionDetail);

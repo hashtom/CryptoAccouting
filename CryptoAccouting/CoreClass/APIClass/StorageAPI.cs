@@ -57,27 +57,25 @@ namespace CryptoAccouting.CoreClass.APIClass
             Balance mybal = new Balance();
 
             var balanceXML = LoadFromFile(fileName);
-            if (balanceXML == null ) balanceXML = LoadBundleFile("BalanceData.xml");
+            if (balanceXML == null) balanceXML = LoadBundleFile("BalanceData.xml");
 
-			//try
-			//{
-			//var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-			//var path = Path.Combine(documents, fileName);
+            //try
+            //{
+            //var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            //var path = Path.Combine(documents, fileName);
 
             if (balanceXML != null)
             {
-                //var balanceXML = File.ReadAllText(path);
-
                 var mybalXE = XElement.Parse(balanceXML).Descendants("position");
-                //mybal = new Balance();
 
                 foreach (var elem in mybalXE)
                 {
                     Instrument coin;
-                    if (instrumentlist.Where(i => i.Symbol1 == elem.Element("symbol").Value).Any())
+                    if (instrumentlist.Any(i => i.Symbol1 == elem.Element("symbol").Value))
                     {
-                        coin = instrumentlist.Where(i => i.Symbol1 == elem.Element("symbol").Value).First();
+                        coin = instrumentlist.First(i => i.Symbol1 == elem.Element("symbol").Value);
                         var tradedexchange = ApplicationCore.GetExchange(elem.Element("exchange").Value);
+                        var watchonly = elem.Element("watchonly") == null ? false : bool.Parse(elem.Element("watchonly").Value);
 
                         var pos = new Position(coin)
                         {
@@ -90,27 +88,27 @@ namespace CryptoAccouting.CoreClass.APIClass
                             PriceUSD_Previous = elem.Element("priceusd") == null ? 0 : double.Parse(elem.Element("priceusd").Value),
                             PriceBTC_Previous = elem.Element("pricebtc") == null ? 0 : double.Parse(elem.Element("pricebtc").Value),
                             PriceBase_Previous = elem.Element("pricebase") == null ? 0 : double.Parse(elem.Element("pricebase").Value),
-                            WatchOnly = elem.Element("watchonly") == null ? false : bool.Parse(elem.Element("watchonly").Value),
+                            WatchOnly = watchonly
                         };
 
-						var storagecode = elem.Element("storage").Value;
-
-                        if (storagecode != "" && Enum.TryParse(elem.Element("storagetype").Value, out EnuCoinStorageType storagetype))
+                        if (!watchonly)
                         {
-                            var exchangecode = tradedexchange != null ? tradedexchange.Code : null;
-                            ApplicationCore.AttachCoinStorage(storagecode, storagetype, exchangecode);
-                            var storage = ApplicationCore.GetCoinStorage(storagecode, storagetype);
-                            pos.AttachCoinStorage(storage);
-                            storage.AttachPosition(pos);
+                            var storagecode = elem.Element("storage").Value;
+
+                            if (storagecode != "" && Enum.TryParse(elem.Element("storagetype").Value, out EnuCoinStorageType storagetype))
+                            {
+                                ApplicationCore.AttachCoinStorage(storagecode, storagetype);
+                                var storage = ApplicationCore.GetCoinStorage(storagecode, storagetype);
+                                pos.AttachCoinStorage(storage);
+                                storage.AttachPosition(pos);
+                            }
                         }
 
                         mybal.Attach(pos);
-
                     }
-
                 }
-
             }
+
             //else
             //{
             //    mybal = new Balance();
@@ -123,7 +121,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             //    mybal = new Balance();
             //}
 
-			return mybal;
+            return mybal;
 
         }
 

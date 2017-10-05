@@ -12,14 +12,7 @@ namespace CryptoAccouting.CoreClass
         public CoinStorageList()
         {
             storages = new List<CoinStorage>();
-            RefreshCoinStorage();
 		}
-
-        public void RefreshCoinStorage()
-        {
-            
-
-        }
 
         public static CoinStorageList GetStorageListSelection()
         {
@@ -31,23 +24,6 @@ namespace CryptoAccouting.CoreClass
 			}
             return list;
         }
-
-  //      public CoinStorage GetCoinStorage(string Code, EnuCoinStorageType storagetype)
-		//{
-		//	if (!storages.Any(x => x.Code == Code))
-		//	{
-  //              if (storagetype == EnuCoinStorageType.Exchange)
-  //              {
-  //                  this.Attach(ApplicationCore.GetExchange(Code));
-  //              }
-  //              else
-  //              {
-  //                  this.Attach(new Wallet(Code, storagetype));
-  //              }
-		//	}
-
-		//	return storages.First(x => x.Code == Code);
-		//}
 
         public void RecalculateWeights()
         {
@@ -67,6 +43,14 @@ namespace CryptoAccouting.CoreClass
 			storages.RemoveAll(x => x.Code == storage.Code);
             if (recalculate) RecalculateWeights();
 		}
+
+        public void DetachPositionByCoin(string InstrumentId)
+        {
+            foreach(var storage in storages)
+            {
+                storage.BalanceOnStorage.DetachPositionByCoin(InstrumentId);
+            }
+        }
 
         public void Clear()
         {

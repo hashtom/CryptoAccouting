@@ -68,8 +68,7 @@
                 {
                     await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);
                 }
-                return EnuAPIStatus.Success;             }         }          public static void SaveInstrumentXML()         {             StorageAPI.SaveInstrumentXML(InstrumentList, InstrumentsFile);         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, BalanceFile);         }          //public static CoinStorageList GetStorageList()
-        //{         //    return Balance is null ? null : CoinStorageList;         //}           //取引データ取得         public static async Task<EnuAPIStatus> LoadTradeListsAsync(string ExchangeCode, string calendarYear = null, bool isAggregatedDaily = true)
+                return EnuAPIStatus.Success;             }         }          public static void SaveInstrumentXML()         {             StorageAPI.SaveInstrumentXML(InstrumentList, InstrumentsFile);         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, BalanceFile);         }           //取引データ取得         public static async Task<EnuAPIStatus> LoadTradeListsAsync(string ExchangeCode, string calendarYear = null, bool isAggregatedDaily = true)
         {
             var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              if (exchange.APIKeyAvailable())             {                 exchange.TradeList = await ExchangeAPI.FetchTradeListAsync(exchange, calendarYear, isAggregatedDaily);                 //PublicExchangeList.Attach(exchange); //do you need?                 return EnuAPIStatus.Success;             }else             {                 return EnuAPIStatus.FailureParameter;             }         }          public static Exchange GetExchange(string Code)
         {             return PublicExchangeList.GetExchange(Code);         }
@@ -86,17 +85,16 @@
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             return epoch.AddSeconds(EpochSeconds);
 
-        } 
+        }          public static void RefreshBalance()         {             Balance.ReCalculate();             CoinStorageList.RecalculateWeights();         }          public static void DetachPositionByCoin(string InstrumentId)         {             Balance.DetachPositionByCoin(InstrumentId);             CoinStorageList.DetachPositionByCoin(InstrumentId);             RefreshBalance();         } 
         public static async Task FetchMarketDataAsync(Instrument coin)
         {
             //await MarketDataAPI.FetchCoinMarketDataAsync(coin);
             var mycoins = new InstrumentList();             if (coin.Symbol1 != "BTC") mycoins.Attach(InstrumentList.First(x => x.Symbol1 == "BTC"));             mycoins.Attach(coin);             await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRate);
-        }
-        // public static void CalculateStorageWeight()         //{             //CoinStorageList.RecalculateWeights();              //foreach (var storage in balance.Where(x => x.CoinStorage != null).Select(x => x.CoinStorage).Distinct())             //{             //    if (storage != null)             //    {             //        storage.ClearBalanceOnStorage();             //        foreach (var pos in balance.Where(x => x.CoinStorage != null).Where(x => x.CoinStorage.Code == storage.Code))             //        {             //            storage.AttachPosition(pos);             //        }             //        if (storage.AmountBTC() > 0) CoinStorageList.Attach(storage, false);             //    }             //}         //}          public static CoinStorage GetCoinStorage(string storagecode, EnuCoinStorageType storagetype)         {             return CoinStorageList.Any(x => (x.Code == storagecode && x.StorageType == storagetype))
-                                  ? CoinStorageList.First(x => (x.Code == storagecode && x.StorageType == storagetype))                                       : null;         }          public static void AttachCoinStorage(string storagecode, EnuCoinStorageType storagetype, string exchangecode = null)         {             if (GetCoinStorage(storagecode, storagetype) is null)             {
+        }          public static CoinStorage GetCoinStorage(string storagecode, EnuCoinStorageType storagetype)         {             return CoinStorageList.Any(x => (x.Code == storagecode && x.StorageType == storagetype))
+                                  ? CoinStorageList.First(x => (x.Code == storagecode && x.StorageType == storagetype))                                       : null;         }          public static void AttachCoinStorage(string storagecode, EnuCoinStorageType storagetype)         {             if (GetCoinStorage(storagecode, storagetype) is null)             {
                 switch (storagetype)
                 {
-                    case EnuCoinStorageType.Exchange:                         CoinStorageList.Attach(GetExchange(exchangecode));
+                    case EnuCoinStorageType.Exchange:                         CoinStorageList.Attach(GetExchange(storagecode));
                         break;
                     default:                         CoinStorageList.Attach(new Wallet(storagecode, storagetype));
                         break;
