@@ -12,7 +12,7 @@ namespace CryptoAccouting.UIClass
     public class CoinTableSource : UITableViewSource
     {
         Balance myBalance;
-        Balance balanceByCoin;
+        List<Position> balanceByCoin;
         //List<Instrument> coins;
         NSString cellIdentifier = new NSString("CoinViewCell");
         CryptoTableViewController owner;
@@ -40,7 +40,7 @@ namespace CryptoAccouting.UIClass
             //cell = new CustomBalanceCell (cellIdentifier);
 
             var cell = (CoinViewCell)tableView.DequeueReusableCell(cellIdentifier, indexPath);
-            cell.UpdateCell(balanceByCoin.GetByIndex(indexPath.Row));
+            cell.UpdateCell(balanceByCoin[indexPath.Row]);
 
             return cell;
         }
@@ -54,8 +54,7 @@ namespace CryptoAccouting.UIClass
 
         public Position GetItem(int id)
         {
-            //return coins[id].TotalPosition();
-            return balanceByCoin.GetByIndex(id);
+            return balanceByCoin[id];
         }
 
 		public override bool CanMoveRow(UITableView tableView, NSIndexPath indexPath)
@@ -98,9 +97,9 @@ namespace CryptoAccouting.UIClass
             switch (editingStyle)
             {
                 case UITableViewCellEditingStyle.Delete:
-					//tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
-					//myBalance.DetachPositionByCoin(coins[indexPath.Row].Symbol);
-                    ApplicationCore.DetachPositionByCoin(balanceByCoin.GetByIndex(indexPath.Row).Coin.Id);
+                    //tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
+                    //myBalance.DetachPositionByCoin(coins[indexPath.Row].Symbol);
+                    ApplicationCore.DetachPositionByCoin(balanceByCoin[indexPath.Row].Coin.Id);
                     //ApplicationCore.RefreshBalance();
                     break;
 

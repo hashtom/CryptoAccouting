@@ -68,7 +68,7 @@ namespace CryptoAccouting.CoreClass
         }
 
         public void AggregateTransaction(Instrument tradedCoin, string exchangeCode, EnuBuySell buysell, double qty, double tradePrice,
-                                         DateTime tradeDate, int fee, EnuTxAggregateFlag flag = EnuTxAggregateFlag.Daliy)
+                                         DateTime tradeDate, double fee, EnuTxAggregateFlag flag = EnuTxAggregateFlag.Daliy)
         {
             Transaction tx;
 

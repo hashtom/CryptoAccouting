@@ -232,6 +232,7 @@
     <Compile Include="AboutViewConroller.designer.cs">
       <DependentUpon>AboutViewConroller.cs</DependentUpon>
     </Compile>
+    <Compile Include="CoreClass\APIClass\CoinCheckAPI.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />

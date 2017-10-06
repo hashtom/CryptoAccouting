@@ -1,4 +1,4 @@
-﻿{
+{
   "exchanges": [
     {
       "code": "OTC",
@@ -14,6 +14,7 @@
         { "symbol": "BTC" },
         { "symbol": "MONA" },
         { "symbol": "XEM" },
+        { "symbol": "ETH" },
         { "symbol": "BCH" }
       ]
     },
@@ -22,15 +23,16 @@
       "name": "BitFlyer",
       "api": "false",
       "listing": [
-        { "symbol": "BTC" },
-        { "symbol": "ETH" },
-        { "symbol": "BCH" }
+          { "symbol": "BTC" },
+          { "symbol": "ETH" },
+          { "symbol": "MONA" },
+          { "symbol": "BCH" }
       ]
     },
     {
       "code": "CoinCheck",
       "name": "CoinCheck",
-      "api": "false",
+      "api": "true",
       "listing": [
         { "symbol": "BTC" },
         { "symbol": "ETH" },
@@ -56,7 +58,7 @@
     {
       "code": "Bittrex",
       "name": "Bittrex",
-      "api": "false",
+      "api": "true",
       "listing": [
         { "symbol": "BTC" },
         { "symbol": "BCH" },

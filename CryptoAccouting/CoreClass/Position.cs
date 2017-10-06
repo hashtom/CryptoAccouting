@@ -47,19 +47,6 @@ namespace CryptoAccouting.CoreClass
             this.Coin = coin;
         }
 
-        //public void AttachNewStorage(string storagecode, EnuCoinStorageType storagetype)
-        //{
-        //    switch (storagetype)
-        //    {
-        //        case EnuCoinStorageType.Exchange:
-        //            CoinStorage = BookedExchange;
-        //            break;
-        //        default:
-        //            CoinStorage = new Wallet(storagecode, storagetype);
-        //            break;
-        //    }
-        //}
-
         public void AttachCoinStorage(CoinStorage storage)
         {
             CoinStorage = storage;

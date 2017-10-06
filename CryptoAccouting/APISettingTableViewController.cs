@@ -45,15 +45,23 @@ namespace CryptoAccouting
 
                     if (positions != null)
                     {
-                        if (AddBalance(positions) is EnuAPIStatus.Success)
+                        if (positions.Count() > 0)
                         {
-                            UIAlertController okAlertController = UIAlertController.Create("Success", "Successfully Imported.", UIAlertControllerStyle.Alert);
-                            okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
-                            this.PresentViewController(okAlertController, true, null);
-                        }
-                        else
+                            if (AddBalance(positions) is EnuAPIStatus.Success)
+                            {
+                                UIAlertController okAlertController = UIAlertController.Create("Success", "Successfully Imported.", UIAlertControllerStyle.Alert);
+                                okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
+                                this.PresentViewController(okAlertController, true, null);
+                            }
+                            else
+                            {
+                                UIAlertController okAlertController = UIAlertController.Create("Faital Error", "Couldn't import positoin!", UIAlertControllerStyle.Alert);
+                                okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
+                                this.PresentViewController(okAlertController, true, null);
+                            }
+                        }else
                         {
-                            UIAlertController okAlertController = UIAlertController.Create("Faital Error", "Couldn't import positoin!", UIAlertControllerStyle.Alert);
+                            UIAlertController okAlertController = UIAlertController.Create("Success", "No balance to get imported.", UIAlertControllerStyle.Alert);
                             okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
                             this.PresentViewController(okAlertController, true, null);
                         }

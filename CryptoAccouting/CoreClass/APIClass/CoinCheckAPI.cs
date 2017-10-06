@@ -10,9 +10,9 @@ using System.Linq;
 
 namespace CryptoAccouting.CoreClass.APIClass
 {
-    public static class ZaifAPI
+    public static class CoinCheckAPI
     {
-        private const string BaseUrl = "https://api.zaif.jp/";
+        private const string BaseUrl = "https://coincheck.com";
         private static string _apiKey;
         private static string _apiSecret;
 
@@ -24,13 +24,14 @@ namespace CryptoAccouting.CoreClass.APIClass
             var http = new HttpClient();
 
             http.BaseAddress = new Uri(BaseUrl);
-            Uri path = new Uri("tapi", UriKind.Relative);
+            Uri path = new Uri("/api/accounts/balance", UriKind.Relative);
 
-            return await SendAsync(http, path, "get_info2");
+            return await SendAsync(http, path, null);
         }
 
-        public static async Task<EnuAPIStatus> FetchPriceAsync(Exchange zaif, InstrumentList coins, CrossRate crossrate)
+        public static async Task<EnuAPIStatus> FetchPriceAsync(Exchange coincheck, InstrumentList coins, CrossRate crossrate)
         {
+
             string rawjson;
             Price btcprice;
 
@@ -40,12 +41,12 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
             else
             {
-                foreach (var coin in coins.Where(x => x.PriceSourceCode == "Zaif"))
+                foreach (var coin in coins.Where(x => x.PriceSourceCode == "CoinCheck"))
                 {
                     using (var http = new HttpClient())
                     {
-                        http.BaseAddress = new Uri(BaseUrl + "api/1/ticker/");
-                        Uri path = new Uri(zaif.GetSymbolForExchange(coin.Id).ToLower() + "_jpy", UriKind.Relative);
+                        http.BaseAddress = new Uri(BaseUrl + "/api/rate/");
+                        Uri path = new Uri(coincheck.GetSymbolForExchange(coin.Id).ToLower() + "_jpy", UriKind.Relative);
                         rawjson = await SendAsync(http, path);
                     }
 
@@ -56,19 +57,18 @@ namespace CryptoAccouting.CoreClass.APIClass
                     if (coin.Id is "bitcoin")
                     {
                         coin.MarketPrice.LatestPriceBTC = 1;
-                        coin.MarketPrice.LatestPriceUSD = (double)jobj["last"] / crossrate.Rate;
+                        coin.MarketPrice.LatestPriceUSD = (double)jobj["rate"] / crossrate.Rate;
                         //coin.MarketPrice.PriceBTCBefore24h = (double)jobj["PrevDay"];
                     }
                     else
                     {
                         btcprice = coins.First(x => x.Id == "bitcoin").MarketPrice;
 
-                        coin.MarketPrice.LatestPriceBTC = (double)jobj["last"] / btcprice.LatestPriceUSD * crossrate.Rate;
+                        coin.MarketPrice.LatestPriceBTC = (double)jobj["rate"] / btcprice.LatestPriceUSD * crossrate.Rate;
                         coin.MarketPrice.LatestPriceUSD = coin.MarketPrice.LatestPriceBTC * btcprice.LatestPriceUSD;
                         //coin.MarketPrice.PriceBTCBefore24h = (double)jobj["PrevDay"];
                     }
 
-                    coin.MarketPrice.DayVolume = (double)jobj["volume"];
                     coin.MarketPrice.PriceDate = DateTime.Now;
                     coin.MarketPrice.USDCrossRate = crossrate;
 
@@ -84,31 +84,18 @@ namespace CryptoAccouting.CoreClass.APIClass
             _apiSecret = secret;
             var http = new HttpClient();
 
-
             var from = calendarYear == null ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
             var to = calendarYear == null ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
 
             http.BaseAddress = new Uri(BaseUrl);
-            Uri path = new Uri("tapi", UriKind.Relative);
+            Uri path = new Uri("/api/exchange/orders/transactions", UriKind.Relative);
 
-            var param = new Dictionary<string, string>
-            {
-                //{ "currency_pair", "btc_jpy" },
-                //{ "count", "15"},
-                //{ "action", "bid" },
-                { "since", ApplicationCore.ToEpochSeconds(from).ToString() },
-                { "end", ApplicationCore.ToEpochSeconds(to).ToString() },
-                {"order", "ASC"}
-            };
-
-            return await SendAsync(http, path, "trade_history", param);
+            return await SendAsync(http, path, null);
 
         }
 
-
         private static async Task<string> SendAsync(HttpClient http, Uri path, string postmethod = null, Dictionary<string, string> parameters = null)
         {
-            double nonce = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
             HttpResponseMessage res;
 
             if (!Reachability.IsHostReachable(BaseUrl))
@@ -119,21 +106,25 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 if (postmethod != null)
                 {
+
                     if (parameters == null)
                         parameters = new Dictionary<string, string>();
 
-                    parameters.Add("nonce", nonce.ToString());
-                    parameters.Add("method", postmethod);
-
                     var content = new FormUrlEncodedContent(parameters);
-                    string message = await content.ReadAsStringAsync();
+                    string param = await content.ReadAsStringAsync();
 
-                    byte[] hash = new HMACSHA512(Encoding.UTF8.GetBytes(_apiSecret)).ComputeHash(Encoding.UTF8.GetBytes(message));
+                    string nonce = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+
+                    var uri = new Uri(http.BaseAddress, path);
+                    string message = nonce + uri.ToString() + param;
+
+                    byte[] hash = new HMACSHA256(Encoding.UTF8.GetBytes(_apiSecret)).ComputeHash(Encoding.UTF8.GetBytes(message));
                     string sign = BitConverter.ToString(hash).ToLower().Replace("-", "");
 
                     http.DefaultRequestHeaders.Clear();
-                    http.DefaultRequestHeaders.Add("key", _apiKey);
-                    http.DefaultRequestHeaders.Add("Sign", sign);
+                    http.DefaultRequestHeaders.Add("ACCESS-KEY", _apiKey);
+                    http.DefaultRequestHeaders.Add("ACCESS-NONCE", nonce);
+                    http.DefaultRequestHeaders.Add("ACCESS-SIGNATURE", sign);
 
                     res = await http.PostAsync(path, content);
                 }
@@ -164,24 +155,26 @@ namespace CryptoAccouting.CoreClass.APIClass
                 return null;
             }
 
-            if ((int)json.SelectToken("$.success") != 1)
+            if ((bool)json.SelectToken("$.success") != true)
             {
                 return null;
             }
             else
             {
                 var tradelist = new TradeList(ApplicationCore.BaseCurrency);
-                foreach (JProperty x in (JToken)json["return"])
+
+                var jarray = (JArray)json["transactions"];
+
+                foreach (var elem in jarray)
                 {
-                    //Transaction Date Order must be ascending by design...
                     EnuBuySell ebuysell;
 
-                    switch ((string)json["return"][x.Name]["your_action"])
+                    switch ((string)elem["side"])
                     {
-                        case "bid":
+                        case "buy":
                             ebuysell = EnuBuySell.Buy;
                             break;
-                        case "ask":
+                        case "sell":
                             ebuysell = EnuBuySell.Sell;
                             break;
                         default:
@@ -189,17 +182,16 @@ namespace CryptoAccouting.CoreClass.APIClass
                             break;
                     }
 
-
-                    var symbol = (string)json["return"][x.Name]["currency_pair"];
+                    var symbol = (string)elem["pair"];
                     symbol = symbol.Replace("_jpy", "").Replace("_btc", "").ToUpper();
 
                     tradelist.AggregateTransaction(ApplicationCore.InstrumentList.GetBySymbol1(symbol),
-                                                  "Zaif",
+                                                  "CoinCheck",
                                                   ebuysell,
-                                                  (double)json["return"][x.Name]["amount"],
-                                                  (double)json["return"][x.Name]["price"],
-                                                  ApplicationCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
-                                                  (int)json["return"][x.Name]["fee"]
+                                                   Math.Abs((double)elem["funds"][symbol.ToLower()]),
+                                                   (double)elem["rate"],
+                                                   DateTime.Parse((string)elem["created_at"]),
+                                                   (double)elem["fee"]
                                                   );
                 }
 
@@ -221,7 +213,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 return null;
             }
 
-            if ((int)json.SelectToken("$.success") != 1)
+            if ((bool)json.SelectToken("$.success") != true)
             {
                 return null;
             }
@@ -229,12 +221,12 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 positions = new List<Position>();
 
-                foreach (JProperty x in (JToken)json["return"]["funds"])
+                foreach (JProperty x in (JToken)json)
                 {
                     var coin = ApplicationCore.InstrumentList.GetBySymbol1(x.Name.ToUpper());
                     if (coin != null)
                     {
-                        var qty = (double)json["return"]["funds"][x.Name];
+                        var qty = (double)json[x.Name];
                         if (qty > 0)
                         {
                             var pos = new Position(coin)
@@ -249,7 +241,9 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 return positions;
             }
-
         }
     }
 }
+
+
+

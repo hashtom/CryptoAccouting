@@ -34,7 +34,7 @@ namespace CryptoAccouting
 
                 if (thisCoin.Symbol1 == "BTC")
                 {
-                    sources = new string[] { "Bitstamp", "coinmarketcap" };
+                    sources = new string[] { "Bitstamp", "Zaif", "CoinCheck", "coinmarketcap" };
                 }
                 else
                 {

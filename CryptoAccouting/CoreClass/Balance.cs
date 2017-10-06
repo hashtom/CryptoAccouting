@@ -9,7 +9,7 @@ namespace CryptoAccouting.CoreClass
     {
         public string BalanceName { get; set; }
         private List<Position> positions; //{ get; private set; }
-        public Balance BalanceByCoin { get; private set; }
+        public List<Position> BalanceByCoin { get; private set; }
 
 		public Balance()
         {
@@ -39,19 +39,21 @@ namespace CryptoAccouting.CoreClass
             return positions.Sum(x => x.LatestAmountBTC());
 		}
 
-        public void SortPositionByHolding(){
-            positions = positions.OrderByDescending(x => x.LatestAmountBTC()).ToList();
-        }
-
         public void RefreshBalanceData()
         {
+            //sort
+            positions = positions.OrderByDescending(x => x.LatestAmountBTC()).ToList();
+
             //update prices
+            int newid = 0;
             foreach(var pos in positions)
             {
+                pos.Id = newid;
                 pos.AmountBTC_Previous = pos.LatestAmountBTC();
                 pos.PriceUSD_Previous = pos.LatestPriceUSD();
                 pos.PriceBTC_Previous = pos.LatestPriceBTC();
                 pos.PriceBase_Previous = pos.LatestPriceBase();
+                newid++;
             }
 
             //Update balancebycoin
@@ -61,23 +63,22 @@ namespace CryptoAccouting.CoreClass
             }
             else
             {
-                BalanceByCoin = new Balance();
+                BalanceByCoin = new List<Position>();
             }
 
-            foreach (var symbol in positions.Select(x => x.Coin.Symbol1).Distinct())
+            foreach (var id in positions.Select(x => x.Coin.Id).Distinct())
             {
-                var position = new Position(positions.Select(x => x.Coin).First(x => x.Symbol1 == symbol))
+                var position = new Position(positions.Select(x => x.Coin).First(x => x.Id == id))
                 {
-                    Amount = positions.Where(x => x.Coin.Symbol1 == symbol).Sum(x => x.Amount),
-                    AmountBTC_Previous = positions.Where(x => x.Coin.Symbol1 == symbol).Sum(x => x.LatestAmountBTC()),
-                    PriceBTC_Previous = positions.First(x => x.Coin.Symbol1 == symbol).LatestPriceBTC(),
-                    PriceUSD_Previous = positions.First(x => x.Coin.Symbol1 == symbol).LatestPriceUSD(),
-                    PriceBase_Previous = positions.First(x => x.Coin.Symbol1 == symbol).LatestPriceBase(),
-                    WatchOnly = positions.First(x => x.Coin.Symbol1 == symbol).WatchOnly
+                    Amount = positions.Where(x => x.Coin.Id == id).Sum(x => x.Amount),
+                    AmountBTC_Previous = positions.Where(x => x.Coin.Id == id).Sum(x => x.LatestAmountBTC()),
+                    PriceBTC_Previous = positions.First(x => x.Coin.Id == id).LatestPriceBTC(),
+                    PriceUSD_Previous = positions.First(x => x.Coin.Id == id).LatestPriceUSD(),
+                    PriceBase_Previous = positions.First(x => x.Coin.Id == id).LatestPriceBase(),
+                    WatchOnly = positions.First(x => x.Coin.Id == id).WatchOnly
                 };
-                BalanceByCoin.Attach(position);
+                BalanceByCoin.Add(position);
             }
-
         }
 
         public double USDRet1d()
@@ -160,14 +161,14 @@ namespace CryptoAccouting.CoreClass
             }
         }
 
-        public Position GetByIndex(int indexNumber){
-            return positions[indexNumber];
-        }
+        //public Position GetByIndex(int indexNumber){
+        //    return positions[indexNumber];
+        //}
 
-        public int Count()
-        {
-            return positions.Count();
-        }
+        //public int Count()
+        //{
+        //    return positions.Count();
+        //}
 
         public IEnumerator<Position> GetEnumerator()
 		{

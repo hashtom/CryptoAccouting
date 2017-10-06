@@ -17,23 +17,33 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             foreach (var source in coins.Select(x => x.PriceSourceCode).Distinct())
             {
+                Exchange exchange;
+
                 switch (source)
                 {
+                    //Bitcoin must go first
                     case "Bittrex":
-                        var bittrex = exchanges.First(x => x.Code == "Bittrex");
-                        await BittrexAPI.FetchPriceAsync(bittrex, coins, crossrate);
+                        exchange = exchanges.First(x => x.Code == "Bittrex");
+                        await BittrexAPI.FetchPriceAsync(exchange, coins, crossrate);
                         break;
 
                     case "Bitstamp":
-                        var bitstamp = exchanges.First(x => x.Code == "Bitstamp");
-                        await BItstampAPI.FetchPriceAsync(bitstamp, coins, crossrate);
+                        exchange = exchanges.First(x => x.Code == "Bitstamp");
+                        await BItstampAPI.FetchPriceAsync(exchange, coins, crossrate);
                         break;
 
                     case "Zaif":
+                        exchange = exchanges.First(x => x.Code == "Zaif");
+                        await ZaifAPI.FetchPriceAsync(exchange, coins, crossrate);
+                        break;
+
+                    case "CoinCheck":
+                        exchange = exchanges.First(x => x.Code == "CoinCheck");
+                        await CoinCheckAPI.FetchPriceAsync(exchange, coins, crossrate);
                         break;
 
                     case "coinmarketcap":
-                        await FetchCoinMarketDataAsync(coins, crossrate);
+                        await FetchCoinMarketCapAsync(coins, crossrate);
                         break;
 
                     default:
@@ -44,7 +54,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             return status;
 		}
 
-        public static async Task<EnuAPIStatus> FetchCoinMarketDataAsync(InstrumentList instrumentlist, CrossRate crossrate)
+        public static async Task<EnuAPIStatus> FetchCoinMarketCapAsync(InstrumentList instrumentlist, CrossRate crossrate)
         {
             string rawjson;
             string rawjson_yesterday;

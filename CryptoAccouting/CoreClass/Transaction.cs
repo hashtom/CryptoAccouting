@@ -14,7 +14,7 @@ namespace CryptoAccouting.CoreClass
         public EnuBuySell BuySell { get; set; }
         public double Quantity { get; set; }
         public double TradePrice { get; set; }
-        public int Fee { get; set; }
+        public double Fee { get; set; }
         public double BookPrice { get; set; }
         //public bool IsMargin { get; set; }
         //public DateTime UpdateTime { get; set; }

@@ -68,7 +68,7 @@
                 {
                     await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);
                 }
-                return EnuAPIStatus.Success;             }         }          public static void SaveInstrumentXML()         {             StorageAPI.SaveInstrumentXML(InstrumentList, InstrumentsFile);         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, BalanceFile);         }           //取引データ取得         public static async Task<EnuAPIStatus> LoadTradeListsAsync(string ExchangeCode, string calendarYear = null, bool isAggregatedDaily = true)
+                return EnuAPIStatus.Success;             }         }          public static void SaveInstrumentXML()         {             StorageAPI.SaveInstrumentXML(InstrumentList, InstrumentsFile);         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, BalanceFile);         }          public static async Task<EnuAPIStatus> LoadTradeListsAsync(string ExchangeCode, string calendarYear = null, bool isAggregatedDaily = true)
         {
             var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              if (exchange.APIKeyAvailable())             {                 exchange.TradeList = await ExchangeAPI.FetchTradeListAsync(exchange, calendarYear, isAggregatedDaily);                 //PublicExchangeList.Attach(exchange); //do you need?                 return EnuAPIStatus.Success;             }else             {                 return EnuAPIStatus.FailureParameter;             }         }          public static Exchange GetExchange(string Code)
         {             return PublicExchangeList.GetExchange(Code);         }
@@ -114,6 +114,6 @@
             }             else if (digit > 3 && digitAdjust)             {                 strnumber = String.Format("{0:n0}", number);              }
             else if (digit <= 1 && digitAdjust)
             {
-                strnumber = Math.Abs(number) < epsilon ? "0" : String.Format("{0:n6}", number);
+                strnumber = Math.Abs(number) < epsilon ? "0" : String.Format("{0:n7}", number);
             }             else             {                 strnumber = String.Format("{0:n2}", number);             }              if (addPlus && number > 0) strnumber = "+" + strnumber;             return strnumber;
         }          public static EnuAPIStatus RemoveAllCache()         {             return StorageAPI.RemoveAllCache();         }      }      public enum EnuAPIStatus{         Success,         FailureNetwork,         FailureStorage,         FailureParameter,         NotAvailable,         FatalError     }  } 
