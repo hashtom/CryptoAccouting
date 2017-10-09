@@ -13,7 +13,7 @@ namespace CryptoAccouting.CoreClass.APIClass
     {
         public static async Task<EnuAPIStatus> FetchCoinPricesAsync(ExchangeList exchanges, InstrumentList coins, CrossRate crossrate)
 		{
-            var status = EnuAPIStatus.Success;
+            //var status = EnuAPIStatus.Success;
 
             foreach (var source in coins.Select(x => x.PriceSourceCode).Distinct())
             {
@@ -51,7 +51,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 }
             }
 
-            return status;
+            return EnuAPIStatus.Success;
 		}
 
         public static async Task<EnuAPIStatus> FetchCoinMarketCapAsync(InstrumentList instrumentlist, CrossRate crossrate)

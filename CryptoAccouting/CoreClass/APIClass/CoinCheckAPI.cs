@@ -35,21 +35,16 @@ namespace CryptoAccouting.CoreClass.APIClass
             string rawjson;
             Price btcprice;
 
-            if (!Reachability.IsHostReachable(BaseUrl))
+            foreach (var coin in coins.Where(x => x.PriceSourceCode == "CoinCheck"))
             {
-                return EnuAPIStatus.FailureNetwork;
-            }
-            else
-            {
-                foreach (var coin in coins.Where(x => x.PriceSourceCode == "CoinCheck"))
+                using (var http = new HttpClient())
                 {
-                    using (var http = new HttpClient())
-                    {
-                        http.BaseAddress = new Uri(BaseUrl + "/api/rate/");
-                        Uri path = new Uri(coincheck.GetSymbolForExchange(coin.Id).ToLower() + "_jpy", UriKind.Relative);
-                        rawjson = await SendAsync(http, path);
-                    }
-
+                    http.BaseAddress = new Uri(BaseUrl + "/api/rate/");
+                    Uri path = new Uri(coincheck.GetSymbolForExchange(coin.Id).ToLower() + "_jpy", UriKind.Relative);
+                    rawjson = await SendAsync(http, path);
+                }
+                if (rawjson != null)
+                {
                     var jobj = await Task.Run(() => JObject.Parse(rawjson));
 
                     if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
@@ -62,20 +57,21 @@ namespace CryptoAccouting.CoreClass.APIClass
                     }
                     else
                     {
-                        btcprice = coins.First(x => x.Id == "bitcoin").MarketPrice;
-
-                        coin.MarketPrice.LatestPriceBTC = (double)jobj["rate"] / btcprice.LatestPriceUSD * crossrate.Rate;
-                        coin.MarketPrice.LatestPriceUSD = coin.MarketPrice.LatestPriceBTC * btcprice.LatestPriceUSD;
-                        //coin.MarketPrice.PriceBTCBefore24h = (double)jobj["PrevDay"];
+                        btcprice = ApplicationCore.Bitcoin().MarketPrice;
+                        if (btcprice != null)
+                        {
+                            coin.MarketPrice.LatestPriceBTC = (double)jobj["rate"] / btcprice.LatestPriceUSD * crossrate.Rate;
+                            coin.MarketPrice.LatestPriceUSD = coin.MarketPrice.LatestPriceBTC * btcprice.LatestPriceUSD;
+                            //coin.MarketPrice.PriceBTCBefore24h = (double)jobj["PrevDay"];
+                        }
                     }
 
                     coin.MarketPrice.PriceDate = DateTime.Now;
                     coin.MarketPrice.USDCrossRate = crossrate;
-
                 }
-
-                return EnuAPIStatus.Success;
             }
+
+            return EnuAPIStatus.Success;
         }
 
         public static async Task<string> FetchTransactionAsync(string apikey, string secret, string calendarYear = null)
@@ -116,7 +112,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     string nonce = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
 
                     var uri = new Uri(http.BaseAddress, path);
-                    string message = nonce + uri.ToString() + param;
+                    string message = nonce + uri + param;
 
                     byte[] hash = new HMACSHA256(Encoding.UTF8.GetBytes(_apiSecret)).ComputeHash(Encoding.UTF8.GetBytes(message));
                     string sign = BitConverter.ToString(hash).ToLower().Replace("-", "");

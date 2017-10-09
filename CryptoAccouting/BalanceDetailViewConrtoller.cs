@@ -5,6 +5,7 @@ using UIKit;
 using CryptoAccouting.CoreClass;
 using CryptoAccouting.UIClass;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace CryptoAccouting
 {
@@ -29,23 +30,28 @@ namespace CryptoAccouting
             this.TableView.Source = new CoinBookingTableSource(instrumentId_selected, ApplicationCore.Balance, this);
 
 			buttonPriceSource.TouchUpInside += (sender, e) =>
-			{
-				string[] sources;
+            {
+                var sources = new List<string>();
 
-                if (thisCoin.Symbol1 == "BTC")
+                sources.Add("coinmarketcap");
+
+                if (ApplicationCore.GetExchange("Bitstamp").IsListed(thisCoin.Id))
                 {
-                    sources = new string[] { "Bitstamp", "Zaif", "CoinCheck", "coinmarketcap" };
+                    sources.Add("Bitstamp");
                 }
-                else
+
+                if (ApplicationCore.GetExchange("Bittrex").IsListed(thisCoin.Id))
                 {
-                    if (ApplicationCore.GetExchange("Bittrex").IsListed(thisCoin.Id))
-                    {
-                        sources = new string[] { "Bittrex", "coinmarketcap" };
-                    }
-                    else
-                    {
-                        sources = new string[] { "coinmarketcap" };
-                    }
+                    sources.Add("Bittrex");
+                }
+                if (ApplicationCore.GetExchange("Zaif").IsListed(thisCoin.Id))
+                {
+                    sources.Add("Zaif");
+                }
+
+                if (ApplicationCore.GetExchange("CoinCheck").IsListed(thisCoin.Id))
+                {
+                    sources.Add("CoinCheck");
                 }
 
 				UIAlertController PriceSourceAlert = UIAlertController.Create("Price Source", "Choose Price Source", UIAlertControllerStyle.ActionSheet);
@@ -58,6 +64,7 @@ namespace CryptoAccouting
                                                                          {
                                                                              buttonPriceSource.SetTitle(source, UIControlState.Normal);
                                                                              thisCoin.PriceSourceCode = source;
+                                                                             ReDrawScreen();
                                                                              ApplicationCore.SaveInstrumentXML();
                                                                          }
                                                                    ));

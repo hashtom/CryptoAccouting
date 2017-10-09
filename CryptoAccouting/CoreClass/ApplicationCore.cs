@@ -37,7 +37,8 @@
             {                 var mycoins = new InstrumentList(); 
                 Balance.Select(x => x.Coin).Distinct().ToList().ForEach(x => mycoins.Attach(x));
                 //return await MarketDataAPI.FetchCoinMarketDataAsync(mycoins, USDCrossRate);
-                if (!mycoins.Any(x => x.Symbol1 == "BTC")) mycoins.Insert(0, InstrumentList.First(x => x.Symbol1 == "BTC"));                 await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRate);                 RefreshBalance(); //update weights,etc with latest price                 SaveMyBalanceXML();//save balance with latest price                 return EnuAPIStatus.Success;             }
+                 var bitcoin = InstrumentList.GetByInstrumentId("bitcoin");
+                if (!mycoins.Any(x => x.Id == "bitcoin")) mycoins.DetachByInstrumentId("bitcoin");                 mycoins.Insert(0, bitcoin);                  await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRate);                 RefreshBalance(); //update weights,etc with latest price                 SaveMyBalanceXML();//save balance with latest price                 return EnuAPIStatus.Success;             }
             else
             {                 return EnuAPIStatus.NotAvailable;             }
         }          public static EnuAPIStatus SaveAppSetting()
@@ -116,4 +117,4 @@
             {
                 strnumber = Math.Abs(number) < epsilon ? "0" : String.Format("{0:n7}", number);
             }             else             {                 strnumber = String.Format("{0:n2}", number);             }              if (addPlus && number > 0) strnumber = "+" + strnumber;             return strnumber;
-        }          public static EnuAPIStatus RemoveAllCache()         {             return StorageAPI.RemoveAllCache();         }      }      public enum EnuAPIStatus{         Success,         FailureNetwork,         FailureStorage,         FailureParameter,         NotAvailable,         FatalError     }  } 
+        }          public static EnuAPIStatus RemoveAllCache()         {             return StorageAPI.RemoveAllCache();         }          public static Instrument Bitcoin()         {             return InstrumentList.GetByInstrumentId("bitcoin");         }      }      public enum EnuAPIStatus{         Success,         FailureNetwork,         FailureStorage,         FailureParameter,         NotAvailable,         FatalError     }  } 

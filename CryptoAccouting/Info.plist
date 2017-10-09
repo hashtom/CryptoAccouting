@@ -33,6 +33,6 @@
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>CFBundleName</key>
-	<string>CryptoTracker</string>
+	<string>CoinBalance</string>
 </dict>
 </plist>

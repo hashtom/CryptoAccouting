@@ -40,6 +40,12 @@ namespace CryptoAccouting.CoreClass
             return instruments.Any(x => x.Id == instrumentid) ? instruments.First(x => x.Id == instrumentid) : null;
         }
 
+        public void DetachByInstrumentId(string instrumentid)
+        {
+            if (instruments.Any(x => x.Id == instrumentid))
+                Detach(instruments.First(x => x.Id == instrumentid));
+        }
+
 		public Instrument GetBySymbol1(string symbol)
 		{
             return instruments.Any(x => x.Symbol1 == symbol) ? instruments.First(x => x.Symbol1 == symbol) : null;
