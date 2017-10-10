@@ -60,7 +60,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             string rawjson_yesterday;
 
             const string CoinMarketUrl = "https://api.coinmarketcap.com/v1/ticker/";
-            const string CoinMarketUrl_yesterday = "http://bridgeplace.sakura.ne.jp/cryptoticker/market/market_yesterday.json";
+            const string CoinMarketUrl_yesterday = "http://coinbalance.jpn.org/market/market_yesterday.json";
 
             EnuAPIStatus status = EnuAPIStatus.Success;
 
@@ -199,7 +199,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static EnuAPIStatus FetchAllCoinData(InstrumentList instrumentlist, bool UseBundleFile)
 		{
-            const string BaseUrl = "http://bridgeplace.sakura.ne.jp/cryptoticker/InstrumentList.json";
+            const string BaseUrl = "http://coinbalance.jpn.org/InstrumentList.json";
                 // "https://api.coinmarketcap.com/v1/ticker/?limit=150";
 
 			string rawjson;
@@ -269,7 +269,7 @@ namespace CryptoAccouting.CoreClass.APIClass
         public static async Task<EnuAPIStatus> FetchCoinLogoAsync(string InstrumentID, bool ForceRefresh)
         {
             var filename = InstrumentID + ".png";
-            string TargetUri = "http://bridgeplace.sakura.ne.jp/cryptoticker/images/" + filename;
+            string TargetUri = "http://coinbalance.jpn.org/images/" + filename;
 
             if (!Reachability.IsHostReachable(TargetUri))
             {
@@ -306,7 +306,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             const string jsonfilename = "ExchangeList.json";
             JObject json;
             string rawjson;
-            string BaseUri = "http://bridgeplace.sakura.ne.jp/cryptoticker/ExchangeList.json";
+            string BaseUri = "http://coinbalance.jpn.org/ExchangeList.json";
 
             if (!Reachability.IsHostReachable(BaseUri))
             {
@@ -387,7 +387,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             JObject json;
             const string jsonfilename_today = "crossrate_today.json";
             const string jsonfilename_yesterday = "crossrate_yesterday.json";
-            const string BaseUri = "http://bridgeplace.sakura.ne.jp/cryptoticker";
+            const string BaseUri = "http://coinbalance.jpn.org/";
 
             if (!Reachability.IsHostReachable(BaseUri))
             {
@@ -469,55 +469,75 @@ namespace CryptoAccouting.CoreClass.APIClass
             return crossrate;
         }
 
-  //      public static EnuAppStatus FetchExchangeListTemp(Instrument coin, ExchangeList exlist)
-		//{
+        //      public static EnuAppStatus FetchExchangeListTemp(Instrument coin, ExchangeList exlist)
+        //{
 
-		//	string rawjson;
+        //	string rawjson;
 
-		//	string BaseUri = "https://api.cryptonator.com/api/full/";
+        //	string BaseUri = "https://api.cryptonator.com/api/full/";
 
-		//	if (!Reachability.IsHostReachable(BaseUri))
-     	//	{
-		//		return EnuAppStatus.FailureNetwork;
-		//	}
-		//	else
-		//	{
+        //	if (!Reachability.IsHostReachable(BaseUri))
+        //	{
+        //		return EnuAppStatus.FailureNetwork;
+        //	}
+        //	else
+        //	{
 
-		//		BaseUri = (coin.Symbol == "BTC") ? BaseUri + "btc-usd" : BaseUri + coin.Symbol.ToLower() + "-btc";
+        //		BaseUri = (coin.Symbol == "BTC") ? BaseUri + "btc-usd" : BaseUri + coin.Symbol.ToLower() + "-btc";
 
-  //              using (var http = new HttpClient())
-  //              {
-  //                  HttpResponseMessage response = http.GetAsync(BaseUri).Result;
-  //                  if (!response.IsSuccessStatusCode)
-  //                  {
-  //                      return EnuAppStatus.FailureNetwork;
-  //                  }
-  //                  rawjson = response.Content.ReadAsStringAsync().Result;
-  //              }
+        //              using (var http = new HttpClient())
+        //              {
+        //                  HttpResponseMessage response = http.GetAsync(BaseUri).Result;
+        //                  if (!response.IsSuccessStatusCode)
+        //                  {
+        //                      return EnuAppStatus.FailureNetwork;
+        //                  }
+        //                  rawjson = response.Content.ReadAsStringAsync().Result;
+        //              }
 
-		//		var json = JObject.Parse(rawjson);
+        //		var json = JObject.Parse(rawjson);
 
-  //              if (!(bool)json["success"]) return EnuAppStatus.FailureParameter;
+        //              if (!(bool)json["success"]) return EnuAppStatus.FailureParameter;
 
-  //              foreach (var market in (JArray)json["ticker"]["markets"])
-  //              {
-  //                  var name = (string)market["market"];
+        //              foreach (var market in (JArray)json["ticker"]["markets"])
+        //              {
+        //                  var name = (string)market["market"];
 
-  //                  EnuExchangeType tradedexchange;
-  //                  if (!Enum.TryParse(name.Replace("-","").Replace(".","").Replace(" ",""), out tradedexchange))
-  //                      tradedexchange = EnuExchangeType.NotSelected;
+        //                  EnuExchangeType tradedexchange;
+        //                  if (!Enum.TryParse(name.Replace("-","").Replace(".","").Replace(" ",""), out tradedexchange))
+        //                      tradedexchange = EnuExchangeType.NotSelected;
 
-  //                  if (tradedexchange != EnuExchangeType.NotSelected)
-  //                  {
-  //                      var exchange = exlist.GetExchange(tradedexchange);
-  //                      exchange.AttachListedCoin(coin);
-  //                  }
-  //              }
+        //                  if (tradedexchange != EnuExchangeType.NotSelected)
+        //                  {
+        //                      var exchange = exlist.GetExchange(tradedexchange);
+        //                      exchange.AttachListedCoin(coin);
+        //                  }
+        //              }
 
-		//	}
+        //	}
 
-		//	return EnuAppStatus.Success;
-		//}
+        //	return EnuAppStatus.Success;
+        //}
 
+
+        public static async Task<double> FetchPriceBTCBefore24hAsync(string instrumentId)
+        {
+            string rawjson_yesterday;
+            const string CoinMarketUrl_yesterday = "http://coinbalance.jpn.org/market/market_yesterday.json";
+
+            if (!Reachability.IsHostReachable(CoinMarketUrl_yesterday))
+            {
+                return 0;
+            }
+            else
+            {
+                using (var http = new HttpClient())
+                {
+                    rawjson_yesterday = await http.GetStringAsync(CoinMarketUrl_yesterday);
+                }
+                var jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
+                return (double)jarray_yesterday.SelectToken("[?(@.id == '" + instrumentId + "')]")["price_btc"];
+            }
+        }
     }
 }

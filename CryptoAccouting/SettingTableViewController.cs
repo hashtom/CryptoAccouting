@@ -20,7 +20,7 @@ namespace CryptoAccouting
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            labelBaseCurrency.Text = ApplicationCore.BaseCurrency.ToString();
+            ReDrawScreen();
         }
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
@@ -75,6 +75,7 @@ namespace CryptoAccouting
 				UIAlertController okAlertController = UIAlertController.Create("Success", "Cache cleared.", UIAlertControllerStyle.Alert);
 				okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
 				this.PresentViewController(okAlertController, true, null);
+                ReDrawScreen();
 			}
 			else
 			{
@@ -110,6 +111,12 @@ namespace CryptoAccouting
             ApplicationCore.BaseCurrency = baseccy;
             labelBaseCurrency.Text = baseccy.ToString();
             ApplicationCore.SaveAppSetting();
+        }
+
+        public override void ReDrawScreen()
+        {
+            base.ReDrawScreen();
+            labelBaseCurrency.Text = ApplicationCore.BaseCurrency.ToString();
         }
         
     }

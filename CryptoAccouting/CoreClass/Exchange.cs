@@ -26,6 +26,12 @@ namespace CryptoAccouting.CoreClass
             return (Key != null && Secret != null);
         }
 
+        public void ClearAPIKeys()
+        {
+            Key = null;
+            Secret = null;
+        }
+
         public bool IsListed(string instrumemntID)
         {
             return Coins.Any(x => x.Id == instrumemntID);

@@ -60,9 +60,10 @@ namespace CryptoAccouting.CoreClass.APIClass
                         btcprice = ApplicationCore.Bitcoin().MarketPrice;
                         if (btcprice != null)
                         {
-                            coin.MarketPrice.LatestPriceBTC = (double)jobj["rate"] / btcprice.LatestPriceUSD * crossrate.Rate;
-                            coin.MarketPrice.LatestPriceUSD = coin.MarketPrice.LatestPriceBTC * btcprice.LatestPriceUSD;
-                            //coin.MarketPrice.PriceBTCBefore24h = (double)jobj["PrevDay"];
+                            coin.MarketPrice.LatestPriceUSD = (double)jobj["rate"] / crossrate.Rate;
+                            coin.MarketPrice.LatestPriceBTC = coin.MarketPrice.LatestPriceUSD / btcprice.LatestPriceUSD;
+                            coin.MarketPrice.PriceBTCBefore24h = await MarketDataAPI.FetchPriceBTCBefore24hAsync(coin.Id); //tmp
+                            coin.MarketPrice.PriceUSDBefore24h = coin.MarketPrice.PriceBTCBefore24h * btcprice.LatestPriceUSD;//tmp
                         }
                     }
 

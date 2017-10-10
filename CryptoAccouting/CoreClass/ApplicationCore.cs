@@ -37,8 +37,8 @@
             {                 var mycoins = new InstrumentList(); 
                 Balance.Select(x => x.Coin).Distinct().ToList().ForEach(x => mycoins.Attach(x));
                 //return await MarketDataAPI.FetchCoinMarketDataAsync(mycoins, USDCrossRate);
-                 var bitcoin = InstrumentList.GetByInstrumentId("bitcoin");
-                if (!mycoins.Any(x => x.Id == "bitcoin")) mycoins.DetachByInstrumentId("bitcoin");                 mycoins.Insert(0, bitcoin);                  await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRate);                 RefreshBalance(); //update weights,etc with latest price                 SaveMyBalanceXML();//save balance with latest price                 return EnuAPIStatus.Success;             }
+
+                if (!mycoins.Any(x => x.Id == "bitcoin")) mycoins.DetachByInstrumentId("bitcoin");                 mycoins.Insert(0, Bitcoin());                  await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRate);                 RefreshBalance(); //update weights,etc with latest price                 SaveMyBalanceXML();//save balance with latest price                 return EnuAPIStatus.Success;             }
             else
             {                 return EnuAPIStatus.NotAvailable;             }
         }          public static EnuAPIStatus SaveAppSetting()
@@ -104,7 +104,7 @@
             }             storage.AttachPosition(pos);             pos.AttachCoinStorage(storage);         } 
 		public static bool IsInternetReachable()
 		{
-			return Reachability.IsHostReachable("http://bridgeplace.sakura.ne.jp");
+            return Reachability.IsHostReachable("http://coinbalance.jpn.org/");
 		} 
         public static string NumberFormat(double number, bool addPlus = false, bool digitAdjust = true)
         {             double epsilon = 1e-10;
@@ -117,4 +117,6 @@
             {
                 strnumber = Math.Abs(number) < epsilon ? "0" : String.Format("{0:n7}", number);
             }             else             {                 strnumber = String.Format("{0:n2}", number);             }              if (addPlus && number > 0) strnumber = "+" + strnumber;             return strnumber;
-        }          public static EnuAPIStatus RemoveAllCache()         {             return StorageAPI.RemoveAllCache();         }          public static Instrument Bitcoin()         {             return InstrumentList.GetByInstrumentId("bitcoin");         }      }      public enum EnuAPIStatus{         Success,         FailureNetwork,         FailureStorage,         FailureParameter,         NotAvailable,         FatalError     }  } 
+        }          public static EnuAPIStatus RemoveAllCache()         {             try
+            {                 baseCurrency = EnuCCY.USD;                 PublicExchangeList.ClearAPIKeys();                 return StorageAPI.RemoveAllCache();             }
+            catch (Exception)             {                 return EnuAPIStatus.FatalError;             }         }          public static Instrument Bitcoin()         {             return InstrumentList.GetByInstrumentId("bitcoin");         }      }      public enum EnuAPIStatus{         Success,         FailureNetwork,         FailureStorage,         FailureParameter,         NotAvailable,         FatalError     }  } 

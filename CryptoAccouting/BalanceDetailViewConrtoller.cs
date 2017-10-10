@@ -59,11 +59,11 @@ namespace CryptoAccouting
 
 				foreach (var source in sources)
 				{
-                    PriceSourceAlert.AddAction(UIAlertAction.Create(source, UIAlertActionStyle.Default,
-                                                                         (obj) =>
+                    PriceSourceAlert.AddAction(UIAlertAction.Create(source, UIAlertActionStyle.Default, async (obj) => 
                                                                          {
                                                                              buttonPriceSource.SetTitle(source, UIControlState.Normal);
                                                                              thisCoin.PriceSourceCode = source;
+                                                                             await ApplicationCore.FetchMarketDataAsync(thisCoin);
                                                                              ReDrawScreen();
                                                                              ApplicationCore.SaveInstrumentXML();
                                                                          }
@@ -111,10 +111,10 @@ namespace CryptoAccouting
                 labelPriceBase.TextColor = thisCoin.MarketPrice.USDRet1d() > 0 ? UIColor.FromRGB(18, 104, 114) : UIColor.Red;
             }
 
-            labelPriceBaseTitle.Text += "(" + ApplicationCore.BaseCurrency + ")";
+            labelPriceBaseTitle.Text = "Price(" + ApplicationCore.BaseCurrency + ")";
 
             //labelProfitLoss.Text = "$" + ApplicationCore.NumberFormat(booking_positions.Sum(x => x.PLUSD()));
-            labelMarketValueTitle.Text += "(" + ApplicationCore.BaseCurrency.ToString() + ")";
+            labelMarketValueTitle.Text = "TotalValue(" + ApplicationCore.BaseCurrency.ToString() + ")";
             labelMarketValue.Text = ApplicationCore.NumberFormat(booking_positions.Sum(x => x.LatestFiatValueBase()));
             labelTotalQty.Text = ApplicationCore.NumberFormat(booking_positions.Sum(x => x.Amount));
             //labelTotalBookCost.Text = "$" + String.Format("{0:n0}", booking_positions.Sum(x => x.BookValueUSD()));

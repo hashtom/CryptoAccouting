@@ -262,7 +262,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 if (!Enum.TryParse(XElement.Parse(xmldoc).Element("basecurrency").Value, out baseccy))
                     baseccy = EnuCCY.USD;
-                
+
                 var apikeysXE = XElement.Parse(xmldoc).Descendants("exchange");
 
                 foreach (var elem in apikeysXE)
@@ -275,8 +275,8 @@ namespace CryptoAccouting.CoreClass.APIClass
                     //else
                     //{
                     var exchange = ApplicationCore.GetExchange((string)elem.Attribute("name").Value);
-                        exchange.Key = elem.Element("key").Value;
-                        exchange.Secret = elem.Element("secret").Value;
+                    exchange.Key = elem.Element("key").Value;
+                    exchange.Secret = elem.Element("secret").Value;
                     //}
                 }
 
@@ -284,8 +284,9 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 return EnuAPIStatus.Success;
 
-            }else{
-                
+            }
+            else
+            {
                 return EnuAPIStatus.FailureStorage;
             }
 

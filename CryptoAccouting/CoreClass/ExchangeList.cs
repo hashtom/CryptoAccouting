@@ -68,6 +68,14 @@ namespace CryptoAccouting.CoreClass
 
         }
 
+        public void ClearAPIKeys()
+        {
+            foreach (var ex in exchanges.Where(x=>x.APIKeyAvailable()))
+            {
+                ex.ClearAPIKeys();
+            }
+        }
+
         public void Attach(Exchange exc)
 		{
             if (exchanges.Any(x => x.Code == exc.Code)) Detach(exc);
