@@ -2,6 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
@@ -13,145 +14,84 @@ namespace CryptoAccouting.CoreClass.APIClass
     public static class BittrexAPI
     {
         private const string BaseUrl = "https://bittrex.com";
-        private static string _apiKey;
-        private static string _apiSecret;
-
-        public static async Task<string> FetchPositionAsync(string apikey, string secret)
-        {
-
-            _apiKey = apikey;
-            _apiSecret = secret;
-            var http = new HttpClient();
-
-            http.BaseAddress = new Uri(BaseUrl);
-            Uri path = new Uri("/api/v1.1/account/", UriKind.Relative);
-
-            return await SendAsync(http, path, "getbalances");
-        }
+        //private static string _apiKey = "";
+        //private static string _apiSecret = "";
+        private static Exchange _bittrex;
 
         public static async Task<EnuAPIStatus> FetchPriceAsync(Exchange bittrex, InstrumentList coins, CrossRate crossrate)
         {
-            string rawjson;
+            _bittrex = bittrex;
 
-            //if (!Reachability.IsHostReachable(BaseUrl))
-            //{
-            //    return EnuAPIStatus.FailureNetwork;
-            //}
-            //else
-            //{
-            //using (var http = new HttpClient())
-            //{
-            //    http.BaseAddress = new Uri(BaseUrl);
-            //    Uri path = new Uri("/public/getmarketsummaries", UriKind.Relative);
+            var rawjson = await request(HttpMethod.Get, BaseUrl + "/api/v1.1/public/getmarketsummaries", false);
 
-            //    HttpResponseMessage response = await http.GetAsync(path);
-            //    if (!response.IsSuccessStatusCode)
-            //    {
-            //        return EnuAPIStatus.FailureNetwork;
-            //    }
-            //    rawjson = await response.Content.ReadAsStringAsync();
-            //}
-
-            using (var http = new HttpClient())
+            try
             {
-                http.BaseAddress = new Uri(BaseUrl);
-                Uri path = new Uri("/api/v1.1/public/getmarketsummaries", UriKind.Relative);
-                rawjson = await SendAsync(http, path);
-            }
+                var jobj = await Task.Run(() => JObject.Parse(rawjson));
+                var jarray = (JArray)jobj["result"];
 
-            var jobj = await Task.Run(() => JObject.Parse(rawjson));
-            var jarray = (JArray)jobj["result"];
+                var btcprice = ApplicationCore.Bitcoin().MarketPrice;
 
-            var btcprice = ApplicationCore.Bitcoin().MarketPrice;
-
-            foreach (var coin in coins.Where(x => x.PriceSourceCode == "Bittrex"))
-            {
-                if (jarray.Any(x => (string)x["MarketName"] == "BTC-" + bittrex.GetSymbolForExchange(coin.Id)))
+                foreach (var coin in coins.Where(x => x.PriceSourceCode == "Bittrex"))
                 {
-                    var jrow = jarray.First(x => (string)x["MarketName"] == "BTC-" + bittrex.GetSymbolForExchange(coin.Id));
-                    if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
-
-                    coin.MarketPrice.LatestPriceBTC = (double)jrow["Last"];
-                    coin.MarketPrice.PriceBTCBefore24h = (double)jrow["PrevDay"];
-                    coin.MarketPrice.DayVolume = (double)jrow["Volume"];
-                    coin.MarketPrice.PriceDate = (DateTime)jrow["TimeStamp"];
-
-                    coin.MarketPrice.USDCrossRate = crossrate;
-                    if (btcprice != null)
+                    if (jarray.Any(x => (string)x["MarketName"] == "BTC-" + bittrex.GetSymbolForExchange(coin.Id)))
                     {
-                        coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"] * btcprice.LatestPriceUSD;
-                        coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"] * btcprice.PriceUSDBefore24h;
-                    }
-                }
+                        var jrow = jarray.First(x => (string)x["MarketName"] == "BTC-" + _bittrex.GetSymbolForExchange(coin.Id));
+                        if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
 
+                        coin.MarketPrice.LatestPriceBTC = (double)jrow["Last"];
+                        coin.MarketPrice.PriceBTCBefore24h = (double)jrow["PrevDay"];
+                        coin.MarketPrice.DayVolume = (double)jrow["Volume"];
+                        coin.MarketPrice.PriceDate = (DateTime)jrow["TimeStamp"];
+
+                        coin.MarketPrice.USDCrossRate = crossrate;
+                        if (btcprice != null)
+                        {
+                            coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"] * btcprice.LatestPriceUSD;
+                            coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"] * btcprice.PriceUSDBefore24h;
+                        }
+                    }
+
+                }
+            }catch(JsonException)
+            {
+                return EnuAPIStatus.FatalError;
             }
 
             return EnuAPIStatus.Success;
-            //}
+
         }
 
-        public static async Task<string> FetchTransactionAsync(string apikey, string secret, string calendarYear = null)
+        public static async Task<List<Position>> FetchPositionAsync(Exchange bittrex)
         {
-            _apiKey = apikey;
-            _apiSecret = secret;
-            var http = new HttpClient();
+            List<Position> positions = null;
+            string filename = bittrex.Name + "Position" + ".json";
+            _bittrex = bittrex;
+
+            var rawjson = await request(HttpMethod.Get, BaseUrl + "/api/v1.1/account/getbalances");
+            if (rawjson != null)
+            {
+                positions = ParsePosition(rawjson);
+                if (positions != null) StorageAPI.SaveFile(rawjson, filename);
+            }
+
+            return positions;
+
+        }
+
+        public static async Task<TradeList> FetchTransactionAsync(Exchange bittrex, string calendarYear = null)
+        {
+            _bittrex = bittrex;
 
             var from = calendarYear == null ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
             var to = calendarYear == null ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
 
-            http.BaseAddress = new Uri(BaseUrl);
-            Uri path = new Uri("/api/v1.1/account", UriKind.Relative);
+            var rawjson = await request(HttpMethod.Get, BaseUrl + "/api/v1.1/account/getorderhistory");
 
-            return await SendAsync(http, path, "getorderhistory");
-
+            return ParseTrade(rawjson);
         }
 
-        private static async Task<string> SendAsync(HttpClient http, Uri path, string postmethod = null, Dictionary<string, string> parameters = null)
-        {
-            double nonce = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
-            HttpResponseMessage res;
 
-            if (!Reachability.IsHostReachable(BaseUrl))
-            {
-                return null;
-            }
-            else
-            {
-                if (postmethod != null)
-                {
-                    if (parameters == null)
-                        parameters = new Dictionary<string, string>();
-
-                    parameters.Add("nonce", nonce.ToString());
-                    parameters.Add("method", postmethod);
-
-                    var content = new FormUrlEncodedContent(parameters);
-                    string message = await content.ReadAsStringAsync();
-
-                    byte[] hash = new HMACSHA512(Encoding.UTF8.GetBytes(_apiSecret)).ComputeHash(Encoding.UTF8.GetBytes(message));
-                    string sign = BitConverter.ToString(hash).ToLower().Replace("-", "");
-
-                    http.DefaultRequestHeaders.Clear();
-                    http.DefaultRequestHeaders.Add("key", _apiKey);
-                    http.DefaultRequestHeaders.Add("Sign", sign);
-
-                    res = await http.PostAsync(path, content);
-                }
-                else
-                {
-                    res = await http.GetAsync(path);
-                }
-
-                var rawjson = await res.Content.ReadAsStringAsync();
-
-                if (!res.IsSuccessStatusCode)
-                    return null;
-
-                return rawjson;
-            }
-        }
-
-        public static List<Position> ParsePosition(string rawjson, Exchange exchange)
+        private static List<Position> ParsePosition(string rawjson)
         {
             JObject json;
             List<Position> positions;
@@ -173,11 +113,12 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 positions = new List<Position>();
 
-                JArray jarray = JArray.Parse((string)json["result"]);
+                var jarray = (JArray)json["result"];
 
                 foreach (var elem in jarray)
                 {
-                    var coin = ApplicationCore.InstrumentList.GetBySymbol1((string)elem["Currency"]);
+                    var instrumentId = _bittrex.GetIdForExchange((string)elem["Currency"]);
+                    var coin = ApplicationCore.InstrumentList.GetByInstrumentId(instrumentId);
                     if (coin != null)
                     {
                         var qty = (double)elem["Balance"];
@@ -186,7 +127,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                             var pos = new Position(coin)
                             {
                                 Amount = qty,
-                                BookedExchange = exchange
+                                BookedExchange = _bittrex
                             };
                             positions.Add(pos);
                         }
@@ -198,7 +139,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         }
 
-        public static TradeList ParseTrade(string rawjson)
+        private static TradeList ParseTrade(string rawjson)
         {
             JObject json;
 
@@ -219,7 +160,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 var tradelist = new TradeList(ApplicationCore.BaseCurrency);
 
-                JArray jarray = JArray.Parse((string)json["result"]);
+                var jarray = (JArray)json["result"];
 
                 foreach (var elem in jarray)
                 {
@@ -245,21 +186,100 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                         var symbol = (string)elem["Exchange"];
                         symbol = symbol.Replace("BTC-", "");
+                        var instrumentId = _bittrex.GetIdForExchange(symbol);
 
-                        tradelist.AggregateTransaction(ApplicationCore.InstrumentList.GetBySymbol1(symbol),
+                        tradelist.AggregateTransaction(ApplicationCore.InstrumentList.GetByInstrumentId(instrumentId),
                                                       "Bittrex",
                                                       ebuysell,
                                                        (double)elem["Quantity"],
-                                                       (double)elem["PricePerUnitv"],
+                                                       (double)elem["PricePerUnit"],
                                                        DateTime.Parse((string)elem["TimeStamp"]),
                                                       comm
                                                       );
                     }
                 }
-
                 return tradelist;
             }
         }
 
+        public const string SignHeaderName = "apisign";
+        private static readonly Encoding encoding = Encoding.UTF8;
+
+        private static string byteToString(byte[] buff)
+        {
+            string sbinary = "";
+            for (int i = 0; i < buff.Length; i++)
+                sbinary += buff[i].ToString("X2"); /* hex format */
+            return sbinary;
+        }
+
+        private static string convertParameterListToString(IDictionary<string, string> parameters)
+        {
+            if (parameters.Count == 0) return "";
+            return parameters.Select(param => WebUtility.UrlEncode(param.Key) + "=" + WebUtility.UrlEncode(param.Value)).Aggregate((l, r) => l + "&" + r);
+        }
+
+        private static (string uri, string hash) createRequestAuthentication(string uri) => createRequestAuthentication(uri, new Dictionary<string, string>());
+        private static (string uri, string hash) createRequestAuthentication(string uri, IDictionary<string, string> parameters)
+        {
+            parameters = new Dictionary<string, string>(parameters);
+
+            var nonce = DateTime.Now.Ticks;
+            parameters.Add("apikey", _bittrex.Key);
+            parameters.Add("nonce", nonce.ToString());
+
+            var parameterString = convertParameterListToString(parameters);
+            var completeUri = uri + "?" + parameterString;
+
+            var uriBytes = encoding.GetBytes(completeUri);
+            using (var hmac = new HMACSHA512(encoding.GetBytes(_bittrex.Secret)))
+            {
+                var hash = hmac.ComputeHash(uriBytes);
+                var hashText = byteToString(hash);
+                return (completeUri, hashText);
+            }
+        }
+
+        private static HttpRequestMessage createRequest(HttpMethod httpMethod, string uri, bool includeAuthentication = true) => createRequest(httpMethod, uri, new Dictionary<string, string>(), includeAuthentication);
+        private static HttpRequestMessage createRequest(HttpMethod httpMethod, string uri, IDictionary<string, string> parameters, bool includeAuthentication)
+        {
+            if (includeAuthentication)
+            {
+                (var completeUri, var hash) = createRequestAuthentication(uri, parameters);
+                var request = new HttpRequestMessage(httpMethod, completeUri);
+                request.Headers.Add(SignHeaderName, hash);
+                return request;
+            }
+            else
+            {
+                var parameterString = convertParameterListToString(parameters);
+                var completeUri = uri + "?" + parameterString;
+                var request = new HttpRequestMessage(httpMethod, completeUri);
+                return request;
+            }
+        }
+
+        private static async Task<string> request(HttpMethod httpMethod, string uri, bool includeAuthentication = true) => await request(httpMethod, uri, new Dictionary<string, string>(), includeAuthentication);
+        private static async Task<string> request(HttpMethod httpMethod, string uri, IDictionary<string, string> parameters, bool includeAuthentication = true)
+        {
+            var request = createRequest(httpMethod, uri, parameters, includeAuthentication);
+            var httpClient = new HttpClient();
+
+            HttpResponseMessage response = null;
+            while (response == null)
+            {
+                try
+                {
+                    response = await httpClient.SendAsync(request);
+                }
+                catch (Exception)
+                {
+                    response = null;
+                }
+            }
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
+
+        }
     }
 }

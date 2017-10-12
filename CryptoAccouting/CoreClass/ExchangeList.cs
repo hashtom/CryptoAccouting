@@ -43,29 +43,26 @@ namespace CryptoAccouting.CoreClass
             }
         }
 
-  //      public Exchange GetExchange(string ExchangeName)
-		//{
-  //          if (exchanges == null ? false : exchanges.Where(x => x.ExchangeName == ExchangeName).Any())
-		//	{
-		//		return exchanges.First(x => x.ExchangeName == ExchangeName);
-		//	}
-		//	else
-		//	{
-		//		return null;
-		//	}
-		//}
+        //      public Exchange GetExchange(string ExchangeName)
+        //{
+        //          if (exchanges == null ? false : exchanges.Where(x => x.ExchangeName == ExchangeName).Any())
+        //	{
+        //		return exchanges.First(x => x.ExchangeName == ExchangeName);
+        //	}
+        //	else
+        //	{
+        //		return null;
+        //	}
+        //}
 
-        public ExchangeList GetExchangesByInstrument(string id){
-
+        public ExchangeList GetExchangesByInstrument(string id)
+        {
             var exchanged_applied = new ExchangeList();
-            //exchanged_applied.AttachExchange(new Exchange("NotSpecified") { Name = "Not Specified" });
-
             foreach (var exc in exchanges)
             {
-                if (exc.Coins.Any(x => x.Id == id)) exchanged_applied.Attach(exc);
+                if (exc.IsListed(id)) exchanged_applied.Attach(exc);
             }
             return exchanged_applied;
-
         }
 
         public void ClearAPIKeys()

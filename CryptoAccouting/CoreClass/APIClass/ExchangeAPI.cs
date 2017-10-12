@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net.Http;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -12,41 +13,96 @@ namespace CryptoAccouting.CoreClass.APIClass
     public static class ExchangeAPI
     {
 
+        public static EnuAPIStatus FetchExchangeList(ExchangeList exlist)
+        {
+            const string jsonfilename = "ExchangeList.json";
+            JObject json;
+            string rawjson;
+            string BaseUri = "http://coinbalance.jpn.org/ExchangeList.json";
+
+            if (!Reachability.IsHostReachable(BaseUri))
+            {
+                rawjson = StorageAPI.LoadFromFile(jsonfilename);
+                if (rawjson == null) rawjson = StorageAPI.LoadBundleFile(jsonfilename);
+            }
+            else
+            {
+                using (var http = new HttpClient())
+                {
+                    HttpResponseMessage response = http.GetAsync(BaseUri).Result;
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return EnuAPIStatus.FailureNetwork;
+                    }
+                    rawjson = response.Content.ReadAsStringAsync().Result;
+                }
+            }
+            try
+            {
+                json = JObject.Parse(rawjson);
+            }
+            catch (JsonException)
+            {
+                return EnuAPIStatus.FatalError;
+            }
+
+            foreach (var market in (JArray)json["exchanges"])
+            {
+
+                var exchange = exlist.GetExchange((string)market["code"]);
+                exchange.Name = (string)market["name"];
+
+                var listing = (JArray)market["listing"];
+
+                if (listing.ToList().Count() == 0)
+                {
+                    ApplicationCore.InstrumentList.ToList().ForEach(x => exchange.AttachListedCoin(x));
+                }
+                else
+                {
+                    foreach (var symbol in listing)
+                    {
+                        Instrument coin = null;
+                        if (symbol["symbol"] != null)
+                        {
+                            coin = ApplicationCore.InstrumentList.GetBySymbol1((string)symbol["symbol"]);
+                            exchange.AttachSymbolMap(coin.Id, (string)symbol["symbol"], EnuSymbolMapType.Symbol1);
+                        }
+                        else if (symbol["symbol2"] != null)
+                        {
+                            coin = ApplicationCore.InstrumentList.GetBySymbol2((string)symbol["symbol2"]);
+                            if (coin != null) exchange.AttachSymbolMap(coin.Id, (string)symbol["symbol2"], EnuSymbolMapType.Symbol2);
+                        }
+
+                        if (coin != null) exchange.AttachListedCoin(coin);
+                    }
+                }
+                exchange.APIReady = (bool)market["api"];
+                //}
+            }
+
+            StorageAPI.SaveFile(rawjson, jsonfilename);
+            return EnuAPIStatus.Success;
+        }
+
         internal static async Task<TradeList> FetchTradeListAsync(Exchange exchange, string calendarYear = null, bool isAggregateDaily = true)
 		{
-			string rawjson;
-            string filename = exchange.Name + "Transaction_" + calendarYear + ".json";
-            TradeList tradelist;
+			//string rawjson;
+            //string filename = exchange.Name + "Transaction_" + calendarYear + ".json";
+            //TradeList tradelist;
 
             switch (exchange.Code)
 			{
                 case "Zaif":
-
-                    rawjson = StorageAPI.LoadFromFile(filename);
-                    if (rawjson is null || calendarYear == DateTime.Now.Year.ToString() || calendarYear is null)
-                    {
-                        rawjson = await ZaifAPI.FetchTransactionAsync(exchange.Key, exchange.Secret, calendarYear);
-                    }
-
-                    tradelist = ZaifAPI.ParseTrade(rawjson);
-                    if (tradelist != null) StorageAPI.SaveFile(rawjson, filename);
-
-                    return tradelist;
+                    return await ZaifAPI.FetchTransactionAsync(exchange, calendarYear);
 
                 case "CoinCheck":
+                    return await CoinCheckAPI.FetchTransactionAsync(exchange, calendarYear);
 
-                    rawjson = StorageAPI.LoadFromFile(filename);
-                    if (rawjson is null || calendarYear == DateTime.Now.Year.ToString() || calendarYear is null)
-                    {
-                        rawjson = await CoinCheckAPI.FetchTransactionAsync(exchange.Key, exchange.Secret, calendarYear);
-                    }
-
-                    tradelist = CoinCheckAPI.ParseTrade(rawjson);
-                    if (tradelist != null) StorageAPI.SaveFile(rawjson, filename);
-
-                    return tradelist;
-
-				default:
+                case "Bittrex":
+                    return await BittrexAPI.FetchTransactionAsync(exchange, calendarYear);
+				
+                default:
 					return null;
 			}
 
@@ -54,39 +110,25 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         internal static async Task<List<Position>> FetchPositionAsync(Exchange exchange)
         {
-            string rawjson;
-            string filename = exchange.Name + "Position" + ".json";
-            List<Position> positions = null;
+            //string rawjson;
+            //string filename = exchange.Name + "Position" + ".json";
+            //List<Position> positions = null;
 
             switch (exchange.Code)
             {
                 case "Zaif":
-
-                    rawjson = await ZaifAPI.FetchPositionAsync(exchange.Key, exchange.Secret);
-
-                    if (rawjson != null)
-                    {
-                        positions = ZaifAPI.ParsePosition(rawjson, exchange);
-                        if (positions != null) StorageAPI.SaveFile(rawjson, filename);
-                    }
-                    break;
+                    return await ZaifAPI.FetchPositionAsync(exchange);
 
                 case "CoinCheck":
-
-                    rawjson = await CoinCheckAPI.FetchPositionAsync(exchange.Key, exchange.Secret);
-
-                    if (rawjson != null)
-                    {
-                        positions = CoinCheckAPI.ParsePosition(rawjson, exchange);
-                        if (positions != null) StorageAPI.SaveFile(rawjson, filename);
-                    }
-                    break;
+                    return await CoinCheckAPI.FetchPositionAsync(exchange);
+                
+                case "Bittrex":
+                    return await BittrexAPI.FetchPositionAsync(exchange);
 
                 default:
-                    break;
+                    return null;
             }
 
-            return positions;
         }
 
     }

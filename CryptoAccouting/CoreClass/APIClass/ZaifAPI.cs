@@ -13,21 +13,8 @@ namespace CryptoAccouting.CoreClass.APIClass
     public static class ZaifAPI
     {
         private const string BaseUrl = "https://api.zaif.jp/";
-        private static string _apiKey;
-        private static string _apiSecret;
-
-        public static async Task<string> FetchPositionAsync(string apikey, string secret)
-        {
-
-            _apiKey = apikey;
-            _apiSecret = secret;
-            var http = new HttpClient();
-
-            http.BaseAddress = new Uri(BaseUrl);
-            Uri path = new Uri("tapi", UriKind.Relative);
-
-            return await SendAsync(http, path, "get_info2");
-        }
+        private static string _apiKey = "";
+        private static string _apiSecret = "";
 
         public static async Task<EnuAPIStatus> FetchPriceAsync(Exchange zaif, InstrumentList coins, CrossRate crossrate)
         {
@@ -38,68 +25,110 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 using (var http = new HttpClient())
                 {
-                    http.BaseAddress = new Uri(BaseUrl + "api/1/ticker/");
-                    Uri path = new Uri(zaif.GetSymbolForExchange(coin.Id).ToLower() + "_jpy", UriKind.Relative);
+                    http.BaseAddress = new Uri(BaseUrl);
+                    Uri path = new Uri("api/1/ticker/" + zaif.GetSymbolForExchange(coin.Id).ToLower() + "_jpy", UriKind.Relative);
                     rawjson = await SendAsync(http, path);
                 }
 
-                if (rawjson != null)
+                try
                 {
-                    var jobj = await Task.Run(() => JObject.Parse(rawjson));
-
-                    if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
-
-                    if (coin.Id is "bitcoin")
+                    if (rawjson != null)
                     {
-                        coin.MarketPrice.LatestPriceBTC = 1;
-                        coin.MarketPrice.LatestPriceUSD = (double)jobj["last"] / crossrate.Rate;
-                        //coin.MarketPrice.PriceBTCBefore24h = (double)jobj["PrevDay"];
-                    }
-                    else
-                    {
-                        btcprice = ApplicationCore.Bitcoin().MarketPrice;
-                        if (btcprice != null)
+                        var jobj = await Task.Run(() => JObject.Parse(rawjson));
+
+                        if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
+
+                        if (coin.Id is "bitcoin")
                         {
+                            coin.MarketPrice.LatestPriceBTC = 1;
                             coin.MarketPrice.LatestPriceUSD = (double)jobj["last"] / crossrate.Rate;
-                            coin.MarketPrice.LatestPriceBTC = coin.MarketPrice.LatestPriceUSD / btcprice.LatestPriceUSD;
-                            coin.MarketPrice.PriceBTCBefore24h = await MarketDataAPI.FetchPriceBTCBefore24hAsync(coin.Id); //tmp
-                            coin.MarketPrice.PriceUSDBefore24h = coin.MarketPrice.PriceBTCBefore24h * btcprice.LatestPriceUSD; //tmp
+                            //coin.MarketPrice.PriceBTCBefore24h = (double)jobj["PrevDay"];
                         }
-                    }
+                        else
+                        {
+                            btcprice = ApplicationCore.Bitcoin().MarketPrice;
+                            if (btcprice != null)
+                            {
+                                coin.MarketPrice.LatestPriceUSD = (double)jobj["last"] / crossrate.Rate;
+                                coin.MarketPrice.LatestPriceBTC = coin.MarketPrice.LatestPriceUSD / btcprice.LatestPriceUSD;
+                                coin.MarketPrice.PriceBTCBefore24h = await MarketDataAPI.FetchPriceBTCBefore24hAsync(coin.Id); //tmp
+                                coin.MarketPrice.PriceUSDBefore24h = coin.MarketPrice.PriceBTCBefore24h * btcprice.LatestPriceUSD; //tmp
+                            }
+                        }
 
-                    coin.MarketPrice.DayVolume = (double)jobj["volume"];
-                    coin.MarketPrice.PriceDate = DateTime.Now;
-                    coin.MarketPrice.USDCrossRate = crossrate;
+                        coin.MarketPrice.DayVolume = (double)jobj["volume"];
+                        coin.MarketPrice.PriceDate = DateTime.Now;
+                        coin.MarketPrice.USDCrossRate = crossrate;
+                    }
+                }catch(JsonException)
+                {
+                    return EnuAPIStatus.FatalError;
                 }
             }
 
             return EnuAPIStatus.Success;
         }
 
-
-        public static async Task<string> FetchTransactionAsync(string apikey, string secret, string calendarYear = null)
+        public static async Task<List<Position>> FetchPositionAsync(Exchange zaif)
         {
-            _apiKey = apikey;
-            _apiSecret = secret;
-            var http = new HttpClient();
+            List<Position> positions = null;
+            string filename = zaif.Name + "Position" + ".json";
+            _apiKey = zaif.Key;
+            _apiSecret = zaif.Secret;
 
-            var from = calendarYear == null ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
-            var to = calendarYear == null ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
-
-            http.BaseAddress = new Uri(BaseUrl);
-            Uri path = new Uri("tapi", UriKind.Relative);
-
-            var param = new Dictionary<string, string>
+            var http = new HttpClient
             {
-                //{ "currency_pair", "btc_jpy" },
-                //{ "count", "15"},
-                //{ "action", "bid" },
-                { "since", ApplicationCore.ToEpochSeconds(from).ToString() },
-                { "end", ApplicationCore.ToEpochSeconds(to).ToString() },
-                {"order", "ASC"}
+                BaseAddress = new Uri(BaseUrl)
             };
 
-            return await SendAsync(http, path, "trade_history", param);
+            Uri path = new Uri("tapi", UriKind.Relative);
+
+            var rawjson = await SendAsync(http, path, "get_info2");
+            if (rawjson != null)
+            {
+                positions = ZaifAPI.ParsePosition(rawjson, zaif);
+                if (positions != null) StorageAPI.SaveFile(rawjson, filename);
+            }
+
+            return positions;
+        }
+
+        public static async Task<TradeList> FetchTransactionAsync(Exchange zaif, string calendarYear = null)
+        {
+            _apiKey = zaif.Key;
+            _apiSecret = zaif.Secret;
+            string rawjson;
+            string filename = zaif.Name + "Transaction_" + calendarYear + ".json";
+
+            rawjson = StorageAPI.LoadFromFile(filename);
+            if (rawjson is null || calendarYear == DateTime.Now.Year.ToString() || calendarYear is null)
+            {
+
+                var http = new HttpClient();
+
+                var from = calendarYear == null ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
+                var to = calendarYear == null ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
+
+                http.BaseAddress = new Uri(BaseUrl);
+                Uri path = new Uri("tapi", UriKind.Relative);
+
+                var param = new Dictionary<string, string>
+                {
+                    //{ "currency_pair", "btc_jpy" },
+                    //{ "count", "15"},
+                    //{ "action", "bid" },
+                    { "since", ApplicationCore.ToEpochSeconds(from).ToString() },
+                    { "end", ApplicationCore.ToEpochSeconds(to).ToString() },
+                    {"order", "ASC"}
+                };
+
+                rawjson = await SendAsync(http, path, "trade_history", param);
+            }
+
+            var tradelist = ParseTrade(rawjson);
+            if (tradelist != null) StorageAPI.SaveFile(rawjson, filename);
+
+            return tradelist;
 
         }
 

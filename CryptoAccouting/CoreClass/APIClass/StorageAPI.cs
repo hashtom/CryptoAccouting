@@ -70,41 +70,44 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 foreach (var elem in mybalXE)
                 {
-                    Instrument coin;
-                    if (instrumentlist.Any(i => i.Symbol1 == elem.Element("symbol").Value))
+                    if (elem.Element("instrument") != null)
                     {
-                        coin = instrumentlist.First(i => i.Symbol1 == elem.Element("symbol").Value);
-                        var tradedexchange = ApplicationCore.GetExchange(elem.Element("exchange").Value);
-                        var watchonly = elem.Element("watchonly") == null ? false : bool.Parse(elem.Element("watchonly").Value);
-
-                        var pos = new Position(coin)
+                        Instrument coin;
+                        if (instrumentlist.Any(i => i.Id == elem.Element("instrument").Value))
                         {
-                            Id = int.Parse(elem.Attribute("id").Value),
-                            Amount = double.Parse(elem.Element("amount").Value),
-                            AmountBTC_Previous = elem.Element("amountbtc") == null ? 0 : double.Parse(elem.Element("amountbtc").Value),
-                            //BookPriceUSD = elem.Element("book") == null ? 0 : double.Parse(elem.Element("book").Value),
-                            BalanceDate = DateTime.Parse(elem.Element("date").Value),
-                            BookedExchange = tradedexchange, //(EnuExchangeType)Enum.Parse(typeof(EnuExchangeType), elem.Descendants("exchange").Select(x => x.Value).First())
-                            PriceUSD_Previous = elem.Element("priceusd") == null ? 0 : double.Parse(elem.Element("priceusd").Value),
-                            PriceBTC_Previous = elem.Element("pricebtc") == null ? 0 : double.Parse(elem.Element("pricebtc").Value),
-                            PriceBase_Previous = elem.Element("pricebase") == null ? 0 : double.Parse(elem.Element("pricebase").Value),
-                            WatchOnly = watchonly
-                        };
+                            coin = instrumentlist.First(i => i.Id == elem.Element("instrument").Value);
+                            var tradedexchange = ApplicationCore.GetExchange(elem.Element("exchange").Value);
+                            var watchonly = elem.Element("watchonly") == null ? false : bool.Parse(elem.Element("watchonly").Value);
 
-                        if (!watchonly)
-                        {
-                            var storagecode = elem.Element("storage").Value;
-
-                            if (storagecode != "" && Enum.TryParse(elem.Element("storagetype").Value, out EnuCoinStorageType storagetype))
+                            var pos = new Position(coin)
                             {
-                                ApplicationCore.AttachCoinStorage(storagecode, storagetype, pos);
-                                //var storage = ApplicationCore.GetCoinStorage(storagecode, storagetype);
-                                //pos.AttachCoinStorage(storage);
-                                //storage.AttachPosition(pos);
-                            }
-                        }
+                                Id = int.Parse(elem.Attribute("id").Value),
+                                Amount = double.Parse(elem.Element("amount").Value),
+                                AmountBTC_Previous = elem.Element("amountbtc") == null ? 0 : double.Parse(elem.Element("amountbtc").Value),
+                                //BookPriceUSD = elem.Element("book") == null ? 0 : double.Parse(elem.Element("book").Value),
+                                BalanceDate = DateTime.Parse(elem.Element("date").Value),
+                                BookedExchange = tradedexchange, //(EnuExchangeType)Enum.Parse(typeof(EnuExchangeType), elem.Descendants("exchange").Select(x => x.Value).First())
+                                PriceUSD_Previous = elem.Element("priceusd") == null ? 0 : double.Parse(elem.Element("priceusd").Value),
+                                PriceBTC_Previous = elem.Element("pricebtc") == null ? 0 : double.Parse(elem.Element("pricebtc").Value),
+                                PriceBase_Previous = elem.Element("pricebase") == null ? 0 : double.Parse(elem.Element("pricebase").Value),
+                                WatchOnly = watchonly
+                            };
 
-                        mybal.Attach(pos);
+                            if (!watchonly)
+                            {
+                                var storagecode = elem.Element("storage").Value;
+
+                                if (storagecode != "" && Enum.TryParse(elem.Element("storagetype").Value, out EnuCoinStorageType storagetype))
+                                {
+                                    ApplicationCore.AttachCoinStorage(storagecode, storagetype, pos);
+                                    //var storage = ApplicationCore.GetCoinStorage(storagecode, storagetype);
+                                    //pos.AttachCoinStorage(storage);
+                                    //storage.AttachPosition(pos);
+                                }
+                            }
+
+                            mybal.Attach(pos);
+                        }
                     }
                 }
             }
@@ -140,7 +143,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 			{
                 XElement position = new XElement("position",
                                                  new XAttribute("id", pos.Id.ToString()),
-                                                 new XElement("symbol", pos.Coin.Symbol1),
+                                                 new XElement("instrument", pos.Coin.Id),
                                                  new XElement("date", pos.BalanceDate),
                                                  new XElement("amount", pos.Amount.ToString()),
                                                  new XElement("amountbtc", pos.LatestAmountBTC().ToString()),

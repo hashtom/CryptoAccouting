@@ -24,14 +24,5 @@ namespace CryptoAccouting
             CreditWebView.LoadHtmlString(html, new NSUrl(contentDirectoryPath, true));
         }
 
-        //public override void ViewWillAppear(bool animated)
-        //{
-        //    base.ViewWillAppear(animated);
-
-        //    string fileName = "Bundlefile/credit.html"; // remember case-sensitive
-        //    string localHtmlUrl = Path.Combine(NSBundle.MainBundle.BundlePath, fileName);
-        //    CreditWebView.LoadRequest(new NSUrlRequest(new NSUrl(localHtmlUrl, false)));
-        //    CreditWebView.ScalesPageToFit = false;
-        //}
 	}
 }

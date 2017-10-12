@@ -22,7 +22,6 @@ namespace CryptoAccouting
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            //NavigationItem.HidesBackButton = true;
             buttonDone.Enabled = false;
             buttonFetchPosition.Enabled = false;
             textAPIKey.Enabled = false;
@@ -55,7 +54,7 @@ namespace CryptoAccouting
                             }
                             else
                             {
-                                UIAlertController okAlertController = UIAlertController.Create("Faital Error", "Couldn't import positoin!", UIAlertControllerStyle.Alert);
+                                UIAlertController okAlertController = UIAlertController.Create("Critical", "Couldn't import positoin!", UIAlertControllerStyle.Alert);
                                 okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
                                 this.PresentViewController(okAlertController, true, null);
                             }
@@ -68,7 +67,7 @@ namespace CryptoAccouting
                     }
                     else
                     {
-                        UIAlertController okAlertController = UIAlertController.Create("Warning", "Couldn't get positions from the exchange!", UIAlertControllerStyle.Alert);
+                        UIAlertController okAlertController = UIAlertController.Create("Critical", "Couldn't get positions from the exchange!", UIAlertControllerStyle.Alert);
                         okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
                         this.PresentViewController(okAlertController, true, null);
                     }

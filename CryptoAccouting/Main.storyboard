@@ -84,9 +84,16 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="28443">
-                                    <rect key="frame" x="220" y="29" width="84" height="25"/>
+                                    <rect key="frame" x="220" y="19" width="84" height="25"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Last update" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nrS-E7-nzm">
+                                    <rect key="frame" x="169" y="77" width="143" height="21"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
@@ -153,6 +160,7 @@
                         <outlet property="buttonRefresh" destination="19986" id="name-outlet-19986"/>
                         <outlet property="label1dPctBTC" destination="28443" id="name-outlet-28443"/>
                         <outlet property="labelCcy" destination="28455" id="name-outlet-28455"/>
+                        <outlet property="labelLastUpdate" destination="nrS-E7-nzm" id="4Vx-Za-OCP"/>
                         <outlet property="labelTotalBTC" destination="25073" id="name-outlet-25073"/>
                         <outlet property="labelTotalFiat" destination="2284" id="name-outlet-2284"/>
                     </connections>
@@ -1517,7 +1525,6 @@
                     <connections>
                         <segue destination="719" kind="relationship" relationship="viewControllers" id="21286"/>
                         <segue destination="NlK-Sg-ajk" kind="relationship" relationship="viewControllers" id="u80-T4-ALd"/>
-                        <segue destination="xl9-BT-Mz3" kind="relationship" relationship="viewControllers" id="qWC-eg-Wc3"/>
                         <segue destination="22123" kind="relationship" relationship="viewControllers" id="3oF-sK-AtX"/>
                     </connections>
                 </tabBarController>
@@ -1903,6 +1910,13 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.36078431372549019" green="0.38823529411764707" blue="0.40392156862745099" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </webView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="admin@coinbalance.jpn.org" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zio-sl-awX">
+                                <rect key="frame" x="16" y="136" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>

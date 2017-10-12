@@ -79,7 +79,7 @@
                 }
                 TableView.ReloadData();
             };          }          public override void ReDrawScreen()         {
-            if (ApplicationCore.Balance != null)             {                 labelCcy.Text = ApplicationCore.BaseCurrency.ToString();                 labelTotalFiat.Text = ApplicationCore.NumberFormat(mybalance.LatestFiatValueBase());                 labelTotalBTC.Text = ApplicationCore.NumberFormat(mybalance.AmountBTC());                 label1dPctBTC.Text = ApplicationCore.NumberFormat(mybalance.BaseRet1d(), true, false) + "%";                 label1dPctBTC.TextColor = mybalance.BaseRet1d() > 0 ? UIColor.FromRGB(18,104,114) : UIColor.Red; 
+            if (ApplicationCore.Balance != null)             {                 labelCcy.Text = ApplicationCore.BaseCurrency.ToString();                 labelTotalFiat.Text = ApplicationCore.NumberFormat(mybalance.LatestFiatValueBase());                 labelTotalBTC.Text = ApplicationCore.NumberFormat(mybalance.AmountBTC());                 label1dPctBTC.Text = ApplicationCore.NumberFormat(mybalance.BaseRet1d(), true, false) + "%";                 label1dPctBTC.TextColor = mybalance.BaseRet1d() > 0 ? UIColor.FromRGB(18,104,114) : UIColor.Red;                 labelLastUpdate.Text = ApplicationCore.Bitcoin().MarketPrice != null ? "Last Update: " + ApplicationCore.Bitcoin().MarketPrice.PriceDate.ToShortTimeString() : "";
                 //mybalance.SortPositionByHolding();
             }         } 
         partial void ButtonAddNew_Activated(UIBarButtonItem sender)
@@ -89,10 +89,10 @@
 
         async partial void ButtonRefresh_Activated(UIBarButtonItem sender)
         {             var bounds = TableView.Bounds;             loadPop = new LoadingOverlay(bounds);             TableView.Add(loadPop);
-
+            buttonRefresh.Enabled = false; 
             await ApplicationCore.FetchMarketDataFromBalanceAsync();
             ReDrawScreen();
-            TableView.ReloadData();              loadPop.Hide();
+            TableView.ReloadData();              buttonRefresh.Enabled = true;             loadPop.Hide();
         }          private void PushSelectionView()
         {
             List<SelectionSearchItem> searchitems = new List<SelectionSearchItem>();             foreach (var item in ApplicationCore.InstrumentList)

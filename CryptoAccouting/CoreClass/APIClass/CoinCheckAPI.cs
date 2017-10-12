@@ -13,25 +13,11 @@ namespace CryptoAccouting.CoreClass.APIClass
     public static class CoinCheckAPI
     {
         private const string BaseUrl = "https://coincheck.com";
-        private static string _apiKey;
-        private static string _apiSecret;
-
-        public static async Task<string> FetchPositionAsync(string apikey, string secret)
-        {
-
-            _apiKey = apikey;
-            _apiSecret = secret;
-            var http = new HttpClient();
-
-            http.BaseAddress = new Uri(BaseUrl);
-            Uri path = new Uri("/api/accounts/balance", UriKind.Relative);
-
-            return await SendAsync(http, path, null);
-        }
+        private static string _apiKey = "";
+        private static string _apiSecret = "";
 
         public static async Task<EnuAPIStatus> FetchPriceAsync(Exchange coincheck, InstrumentList coins, CrossRate crossrate)
         {
-
             string rawjson;
             Price btcprice;
 
@@ -39,59 +25,113 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 using (var http = new HttpClient())
                 {
-                    http.BaseAddress = new Uri(BaseUrl + "/api/rate/");
-                    Uri path = new Uri(coincheck.GetSymbolForExchange(coin.Id).ToLower() + "_jpy", UriKind.Relative);
-                    rawjson = await SendAsync(http, path);
+                    http.BaseAddress = new Uri(BaseUrl);
+                    Uri path = new Uri("/api/rate/" + coincheck.GetSymbolForExchange(coin.Id).ToLower() + "_jpy", UriKind.Relative);
+                    rawjson = await SendAsync(http, path, HttpMethod.Get);
                 }
-                if (rawjson != null)
+
+                try
                 {
-                    var jobj = await Task.Run(() => JObject.Parse(rawjson));
-
-                    if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
-
-                    if (coin.Id is "bitcoin")
+                    if (rawjson != null)
                     {
-                        coin.MarketPrice.LatestPriceBTC = 1;
-                        coin.MarketPrice.LatestPriceUSD = (double)jobj["rate"] / crossrate.Rate;
-                        //coin.MarketPrice.PriceBTCBefore24h = (double)jobj["PrevDay"];
-                    }
-                    else
-                    {
-                        btcprice = ApplicationCore.Bitcoin().MarketPrice;
-                        if (btcprice != null)
+                        var jobj = await Task.Run(() => JObject.Parse(rawjson));
+
+                        if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
+
+                        if (coin.Id is "bitcoin")
                         {
+                            coin.MarketPrice.LatestPriceBTC = 1;
                             coin.MarketPrice.LatestPriceUSD = (double)jobj["rate"] / crossrate.Rate;
-                            coin.MarketPrice.LatestPriceBTC = coin.MarketPrice.LatestPriceUSD / btcprice.LatestPriceUSD;
-                            coin.MarketPrice.PriceBTCBefore24h = await MarketDataAPI.FetchPriceBTCBefore24hAsync(coin.Id); //tmp
-                            coin.MarketPrice.PriceUSDBefore24h = coin.MarketPrice.PriceBTCBefore24h * btcprice.LatestPriceUSD;//tmp
+                            //coin.MarketPrice.PriceBTCBefore24h = (double)jobj["PrevDay"];
                         }
-                    }
+                        else
+                        {
+                            btcprice = ApplicationCore.Bitcoin().MarketPrice;
+                            if (btcprice != null)
+                            {
+                                coin.MarketPrice.LatestPriceUSD = (double)jobj["rate"] / crossrate.Rate;
+                                coin.MarketPrice.LatestPriceBTC = coin.MarketPrice.LatestPriceUSD / btcprice.LatestPriceUSD;
+                                coin.MarketPrice.PriceBTCBefore24h = await MarketDataAPI.FetchPriceBTCBefore24hAsync(coin.Id); //tmp
+                                coin.MarketPrice.PriceUSDBefore24h = coin.MarketPrice.PriceBTCBefore24h * btcprice.LatestPriceUSD;//tmp
+                            }
+                        }
 
-                    coin.MarketPrice.PriceDate = DateTime.Now;
-                    coin.MarketPrice.USDCrossRate = crossrate;
+                        coin.MarketPrice.PriceDate = DateTime.Now;
+                        coin.MarketPrice.USDCrossRate = crossrate;
+                    }
+                }
+                catch (JsonException)
+                {
+                    return EnuAPIStatus.FatalError;
                 }
             }
 
             return EnuAPIStatus.Success;
         }
 
-        public static async Task<string> FetchTransactionAsync(string apikey, string secret, string calendarYear = null)
+        public static async Task<List<Position>> FetchPositionAsync(Exchange coincheck)
         {
-            _apiKey = apikey;
-            _apiSecret = secret;
-            var http = new HttpClient();
+            List<Position> positions = null;
+            string filename = coincheck.Name + "Position" + ".json";
+            _apiKey = coincheck.Key;
+            _apiSecret = coincheck.Secret;
 
-            var from = calendarYear == null ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
-            var to = calendarYear == null ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
+            var http = new HttpClient
+            {
+                BaseAddress = new Uri(BaseUrl)
+            };
 
-            http.BaseAddress = new Uri(BaseUrl);
-            Uri path = new Uri("/api/exchange/orders/transactions", UriKind.Relative);
+            Uri path = new Uri("/api/accounts/balance", UriKind.Relative);
 
-            return await SendAsync(http, path, null);
+            var rawjson = await SendAsync(http, path, HttpMethod.Get);
+            if (rawjson != null)
+            {
+                positions = ParsePosition(rawjson, coincheck);
+                if (positions != null) StorageAPI.SaveFile(rawjson, filename);
+            }
+
+            return positions;
+        }
+
+        public static async Task<TradeList> FetchTransactionAsync(Exchange coincheck, string calendarYear = null)
+        {
+            string rawjson;
+            _apiKey = coincheck.Key;
+            _apiSecret = coincheck.Secret;
+            string filename = coincheck.Name + "Transaction_" + calendarYear + ".json";
+
+            rawjson = StorageAPI.LoadFromFile(filename);
+
+            if (rawjson is null || calendarYear == DateTime.Now.Year.ToString() || calendarYear is null)
+            {
+
+                var from = calendarYear == null ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
+                var to = calendarYear == null ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
+                var http = new HttpClient
+                {
+                    BaseAddress = new Uri(BaseUrl)
+                };
+
+                Uri path = new Uri("/api/exchange/orders/transactions_pagination", UriKind.Relative);
+
+                var param = new Dictionary<string, string>
+                {
+                    //{ "limit", "5" },
+                    //{ "order", "desc" }
+                    //{ "starting_after", "null" },
+                    //{"ending_before", "null"}
+                };
+
+                rawjson = await SendAsync(http, path, HttpMethod.Get);
+                //rawjson = await SendAsync(http, path, "POST", param);
+            }
+
+            return ParseTrade(rawjson);
+            //if (tradelist != null) StorageAPI.SaveFile(rawjson, filename);
 
         }
 
-        private static async Task<string> SendAsync(HttpClient http, Uri path, string postmethod = null, Dictionary<string, string> parameters = null)
+        private static async Task<string> SendAsync(HttpClient http, Uri path, HttpMethod method, Dictionary<string, string> parameters = null)
         {
             HttpResponseMessage res;
 
@@ -101,28 +141,26 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
             else
             {
-                if (postmethod != null)
+                if (parameters == null)
+                    parameters = new Dictionary<string, string>();
+
+                var content = new FormUrlEncodedContent(parameters);
+                string param = await content.ReadAsStringAsync();
+                string nonce = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+
+                var uri = new Uri(http.BaseAddress, path);
+                string message = nonce + uri + param;
+
+                byte[] hash = new HMACSHA256(Encoding.UTF8.GetBytes(_apiSecret)).ComputeHash(Encoding.UTF8.GetBytes(message));
+                string sign = BitConverter.ToString(hash).ToLower().Replace("-", "");
+
+                http.DefaultRequestHeaders.Clear();
+                http.DefaultRequestHeaders.Add("ACCESS-KEY", _apiKey);
+                http.DefaultRequestHeaders.Add("ACCESS-NONCE", nonce);
+                http.DefaultRequestHeaders.Add("ACCESS-SIGNATURE", sign);
+
+                if (method == HttpMethod.Post)
                 {
-
-                    if (parameters == null)
-                        parameters = new Dictionary<string, string>();
-
-                    var content = new FormUrlEncodedContent(parameters);
-                    string param = await content.ReadAsStringAsync();
-
-                    string nonce = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
-
-                    var uri = new Uri(http.BaseAddress, path);
-                    string message = nonce + uri + param;
-
-                    byte[] hash = new HMACSHA256(Encoding.UTF8.GetBytes(_apiSecret)).ComputeHash(Encoding.UTF8.GetBytes(message));
-                    string sign = BitConverter.ToString(hash).ToLower().Replace("-", "");
-
-                    http.DefaultRequestHeaders.Clear();
-                    http.DefaultRequestHeaders.Add("ACCESS-KEY", _apiKey);
-                    http.DefaultRequestHeaders.Add("ACCESS-NONCE", nonce);
-                    http.DefaultRequestHeaders.Add("ACCESS-SIGNATURE", sign);
-
                     res = await http.PostAsync(path, content);
                 }
                 else
@@ -131,7 +169,6 @@ namespace CryptoAccouting.CoreClass.APIClass
                 }
 
                 var rawjson = await res.Content.ReadAsStringAsync();
-
                 if (!res.IsSuccessStatusCode)
                     return null;
 
@@ -160,7 +197,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 var tradelist = new TradeList(ApplicationCore.BaseCurrency);
 
-                var jarray = (JArray)json["transactions"];
+                var jarray = (JArray)json["data"];
 
                 foreach (var elem in jarray)
                 {

@@ -6,13 +6,13 @@ namespace CryptoAccouting.CoreClass
 {
     public class Exchange : CoinStorage
     {
-        public InstrumentList Coins { get; private set; }
-        public List<SymbolMap> ExchangeSymbolMap { get; set; }
         public bool APIReady { get; set; }
-		public string Key { get; set; }
-		public string Secret { get; set; }
-		public TradeList TradeList { get; set; }
+        public string Key { get; set; }
+        public string Secret { get; set; }
         public string LogoFileName { get; set; }
+        public TradeList TradeList { get; private set; }
+        private InstrumentList Coins;
+        private List<SymbolMap> ExchangeSymbolMap;
 
         public Exchange(string code, EnuCoinStorageType storagetype) : base(code, storagetype)
         {
@@ -38,20 +38,27 @@ namespace CryptoAccouting.CoreClass
         }
 
         public void AttachListedCoin(Instrument coin)
-		{
+        {
             if (!Coins.Any(c => c.Id == coin.Id)) Coins.Attach(coin);
-		}
+        }
 
-        public void AttachSymbolMap(string instrumentID, EnuSymbolMapType symbolmaptype)
+        public void AttachSymbolMap(string instrumentID, string Symbol, EnuSymbolMapType symbolmaptype)
         {
             DetachSymbolMap(instrumentID);
-            ExchangeSymbolMap.Add(new SymbolMap(instrumentID, symbolmaptype));
+            ExchangeSymbolMap.Add(new SymbolMap(instrumentID, Symbol, symbolmaptype));
         }
 
         public void DetachSymbolMap(string instrumentID)
         {
-            if (ExchangeSymbolMap.Any(x=>x.InstrumentID == instrumentID))
-                ExchangeSymbolMap.RemoveAll(x=>x.InstrumentID == instrumentID);
+            if (ExchangeSymbolMap.Any(x => x.InstrumentID == instrumentID))
+                ExchangeSymbolMap.RemoveAll(x => x.InstrumentID == instrumentID);
+        }
+
+        public string GetIdForExchange(string symbol)
+        {
+            return ExchangeSymbolMap.Any(x => x.SymbolForExchange == symbol) ? 
+                                     ExchangeSymbolMap.First(x => x.SymbolForExchange == symbol).InstrumentID : 
+                                      null;
         }
 
         public string GetSymbolForExchange(string instrumentID)
@@ -62,21 +69,28 @@ namespace CryptoAccouting.CoreClass
                                         EnuSymbolMapType.Symbol1;
 
             return type == EnuSymbolMapType.Symbol1 ? coin.Symbol1 : coin.Symbol2;
-                                               
+
         }
 
-    }
-
-    public class SymbolMap
-    {
-        public string InstrumentID { get; set; }
-        public EnuSymbolMapType SymbolMapType { get; set; }
-
-        public SymbolMap(string instrumentID, EnuSymbolMapType symbolmaptype)
+        public void AttachTradeList(TradeList tradelist)
         {
-            this.InstrumentID = instrumentID;
-            this.SymbolMapType = symbolmaptype;
+            this.TradeList = tradelist;
         }
+
+        private class SymbolMap
+        {
+            public string InstrumentID { get; private set; }
+            public string SymbolForExchange { get; private set; }
+            public EnuSymbolMapType SymbolMapType { get; private set; }
+
+            public SymbolMap(string instrumentID, string Symbol, EnuSymbolMapType symbolmaptype)
+            {
+                this.InstrumentID = instrumentID;
+                this.SymbolForExchange = Symbol;
+                this.SymbolMapType = symbolmaptype;
+            }
+        }
+
     }
 
     public enum EnuSymbolMapType

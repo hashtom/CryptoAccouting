@@ -105,7 +105,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     coin.MarketPrice.PriceSource = "coinmarketcap";
                     coin.MarketPrice.DayVolume = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["24h_volume_usd"] / coin.MarketPrice.LatestPriceBTC;
                     coin.MarketPrice.MarketCap = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["market_cap_usd"];
-                    coin.MarketPrice.PriceDate = ApplicationCore.FromEpochSeconds((long)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["last_updated"]).Date;
+                    coin.MarketPrice.PriceDate = DateTime.Now;//ApplicationCore.FromEpochSeconds((long)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["last_updated"]);
                     coin.MarketPrice.PriceBTCBefore24h = (double)jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_btc"];
                     coin.MarketPrice.PriceUSDBefore24h = (double)jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_usd"];
                     coin.MarketPrice.USDCrossRate = crossrate;
@@ -299,85 +299,6 @@ namespace CryptoAccouting.CoreClass.APIClass
                 }
                 return EnuAPIStatus.Success;
             }
-        }
-
-        public static EnuAPIStatus FetchExchangeList(ExchangeList exlist)
-        {
-            const string jsonfilename = "ExchangeList.json";
-            JObject json;
-            string rawjson;
-            string BaseUri = "http://coinbalance.jpn.org/ExchangeList.json";
-
-            if (!Reachability.IsHostReachable(BaseUri))
-            {
-                rawjson = StorageAPI.LoadFromFile(jsonfilename);
-                if (rawjson == null) rawjson = StorageAPI.LoadBundleFile(jsonfilename);
-                //rawjson = File.ReadAllText("Json/ExchangeList.json"); //Bundle file
-                //return EnuAPIStatus.FailureNetwork;
-            }
-            else
-            {
-                using (var http = new HttpClient())
-                {
-                    HttpResponseMessage response = http.GetAsync(BaseUri).Result;
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        return EnuAPIStatus.FailureNetwork;
-                    }
-                    rawjson = response.Content.ReadAsStringAsync().Result;
-                }
-            }
-            try
-            {
-                json = JObject.Parse(rawjson);
-            }
-			catch (JsonException)
-			{
-                return EnuAPIStatus.FatalError;
-			}
-
-            foreach (var market in (JArray)json["exchanges"])
-            {
-
-                //EnuExchangeType code;
-                //if (!Enum.TryParse((string)market["code"], out code))
-                //	code = EnuExchangeType.NotSelected;
-
-                //if (code != EnuExchangeType.NotSelected)
-                //{
-                var exchange = exlist.GetExchange((string)market["code"]);
-                exchange.Name = (string)market["name"];
-
-                var listing = (JArray)market["listing"];
-
-                if (listing.ToList().Count() == 0)
-                {
-                    ApplicationCore.InstrumentList.ToList().ForEach(x => exchange.AttachListedCoin(x));
-                }
-                else
-                {
-                    foreach (var symbol in listing)
-                    {
-                        Instrument coin = null;
-                        if (symbol["symbol"] != null)
-                        {
-                            coin = ApplicationCore.InstrumentList.GetBySymbol1((string)symbol["symbol"]);
-                        }
-                        else if (symbol["symbol2"] != null)
-                        {
-                            coin = ApplicationCore.InstrumentList.GetBySymbol2((string)symbol["symbol2"]);
-                            if (coin != null) exchange.AttachSymbolMap(coin.Id, EnuSymbolMapType.Symbol2);
-                        }
-
-                        if (coin != null) exchange.AttachListedCoin(coin);
-                    }
-                }
-                exchange.APIReady = (bool)market["api"];
-                //}
-            }
-
-            StorageAPI.SaveFile(rawjson, jsonfilename);
-            return EnuAPIStatus.Success;
         }
 
         public static async Task<CrossRate> FetchUSDCrossRateAsync(EnuCCY BaseCurrency)
