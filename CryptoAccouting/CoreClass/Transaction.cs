@@ -24,46 +24,6 @@ namespace CryptoAccouting.CoreClass
             get { return TradedCoin.Symbol1; }
         }
 
-        public string SettlementCCY_Str
-        {
-            get { return SettlementCCY.ToString(); }
-        }
-
-        public string Side
-        {
-            get { return BuySell == EnuBuySell.Buy ? "Buy" : "Sell"; }
-        }
-
-        //public string Quantity_Str
-        //{ 
-        //    get { return ApplicationCore.NumberFormat(Quantity); }
-        //}
-
-  //      public string TradePrice_Str
-  //      {
-  //          get { return ApplicationCore.NumberFormat(TradePrice); }
-  //      }
-
-  //      public string Fee_Str
-  //      {
-  //          get { return ApplicationCore.NumberFormat(Fee); }
-  //      }
-
-  //      public string TradeGrossValue_Str
-  //      {
-  //          get { return ApplicationCore.NumberFormat(TradePrice * Quantity); }
-  //      }
-
-  //      public string TradeNetValue_Str
-		//{
-  //          get { return BuySell == EnuBuySell.Buy ? ApplicationCore.NumberFormat(TradePrice * Quantity - Fee) : ApplicationCore.NumberFormat(TradePrice * Quantity + Fee); }
-		//}
-
-        //public string RealizedBookValue_Str
-        //{
-        //    get { return BuySell == EnuBuySell.Sell ? ApplicationCore.NumberFormat(BookPrice * Quantity) : "0"; }
-        //}
-
         public double TradeGrossValue
         {
             get { return TradePrice * Quantity; }

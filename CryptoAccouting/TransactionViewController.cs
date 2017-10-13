@@ -6,9 +6,9 @@ namespace CryptoAccouting
     {         SfDataGrid sfGrid;         TradeList myTradeList;         //string calendaryear = null;         Exchange thisExchange;         LoadingOverlay loadPop;          public TransactionViewController(IntPtr handle) : base(handle)         {             sfGrid = new SfDataGrid();             //sfGrid.AutoGeneratingColumn += HandleAutoGeneratingColumn;             sfGrid.AllowSorting = true;             sfGrid.AutoGenerateColumns = false;             sfGrid.BackgroundColor = UIColor.FromRGB(236, 184, 138);             //sfGrid.GroupColumnDescriptions.Add(new GroupColumnDescription() { ColumnName = "txid" });              GridDateTimeColumn dateColumn = new GridDateTimeColumn()             {                 MappingName = "TradeDate",                 HeaderText = "Date"             };              GridTextColumn coinColumn = new GridTextColumn()             {
                 MappingName = "TradecCoinSymbol",                 HeaderText = "Coin"
             };              GridTextColumn settleColumn = new GridTextColumn()             {
-                MappingName = "SettlementCCY_Str",
+                MappingName = "SettlementCCY",
                 HeaderText = "SettleCCY"             };              GridTextColumn buysellColumn = new GridTextColumn()             {
-                MappingName = "Side",
+                MappingName = "BuySell",
                 HeaderText = "Side"             };              GridNumericColumn amountColumn = new GridNumericColumn()             {
                 MappingName = "Quantity",
                 HeaderText = "Quantity"             };
