@@ -16,8 +16,11 @@
         //                                      TransactionViewC,         //                                      PLViewC,         //                                      PerfViewC,         //                                      SettingViewC);         //    Navigation.AddView(BalanceTableView);         //    return Navigation;         //}          public static EnuAPIStatus InitializeCore()
         {
             //Initialize 
-            CoinStorageList = new CoinStorageList();              //Load Instruments Data and ExchangeList
-            if (LoadInstruments(false) is EnuAPIStatus.Success) LoadExchangeList(); 
+            CoinStorageList = new CoinStorageList();
+
+            //Load Instruments Data and ExchangeList
+            //if (LoadInstruments(false) is EnuAPIStatus.Success) LoadExchangeList();
+            LoadInstruments(false);             LoadExchangeList(); 
 			//Load Balance Data
             Balance = StorageAPI.LoadBalanceXML(BalanceFile, InstrumentList);
             RefreshBalance();              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML(AppSettingFile) != EnuAPIStatus.Success)             {                 BaseCurrency = EnuCCY.USD; //Default setting             }              return EnuAPIStatus.Success;          }          public static async Task<EnuAPIStatus> LoadUSDCrossRateAsync(){

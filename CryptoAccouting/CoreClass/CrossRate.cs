@@ -18,12 +18,20 @@ namespace CryptoAccouting.CoreClass
         }
     }
 
-
 	public enum EnuCCY
 	{
 		JPY,
 		USD,
 		EUR,
-		BTC
+		BTC,
+        ETH,
+        USDT
 	}
+
+    public enum EnuBaseFiatCCY
+    {
+        JPY,
+        USD,
+        EUR
+    }
 }

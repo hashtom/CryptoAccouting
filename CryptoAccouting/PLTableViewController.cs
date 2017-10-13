@@ -28,7 +28,7 @@ namespace CryptoAccouting
                 //{
                 await ApplicationCore.LoadTradeListsAsync("Zaif");
                     myTradeList = ApplicationCore.GetExchangeTradeList("Zaif");
-                    myTradeList.CalculateTotalValue(DateTime.Now.Year);
+                    //myTradeList.CalculateTotalValue(DateTime.Now.Year);
                     DrawScreen();
                 //}
             });
@@ -66,7 +66,7 @@ namespace CryptoAccouting
 			this.LabelQtySell.Text = String.Format("{0:n0}", myTradeList.TxCountSell);
 			this.LabelGrossQty.Text = String.Format("{0:n0}", myTradeList.TxCountSell + myTradeList.TxCountBuy);
 
-			this.LabelQtySell.Text = String.Format("{0:n}", myTradeList.TotalQtySell);
+            this.LabelQtySell.Text = String.Format("{0:n}", myTradeList.TotalQtySell);
 			this.LabelQtySell2.Text = this.LabelQtySell.Text;
 			this.LabelQtyBuy.Text = String.Format("{0:n}", myTradeList.TotalQtyBuy);
 			this.LabelGrossQty.Text = String.Format("{0:n}", (myTradeList.TotalQtyBuy + myTradeList.TotalQtySell));

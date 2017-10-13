@@ -13,45 +13,50 @@ namespace CryptoAccouting.CoreClass.APIClass
     {
         public static async Task<EnuAPIStatus> FetchCoinPricesAsync(ExchangeList exchanges, InstrumentList coins, CrossRate crossrate)
 		{
-            //var status = EnuAPIStatus.Success;
 
-            foreach (var source in coins.Select(x => x.PriceSourceCode).Distinct())
+            if (!Reachability.IsHostReachable("coinbalance.jpn.org"))
             {
-                Exchange exchange;
-
-                switch (source)
-                {
-                    //Bitcoin must go first
-                    case "Bittrex":
-                        exchange = exchanges.First(x => x.Code == "Bittrex");
-                        await BittrexAPI.FetchPriceAsync(exchange, coins, crossrate);
-                        break;
-
-                    case "Bitstamp":
-                        exchange = exchanges.First(x => x.Code == "Bitstamp");
-                        await BItstampAPI.FetchPriceAsync(exchange, coins, crossrate);
-                        break;
-
-                    case "Zaif":
-                        exchange = exchanges.First(x => x.Code == "Zaif");
-                        await ZaifAPI.FetchPriceAsync(exchange, coins, crossrate);
-                        break;
-
-                    case "CoinCheck":
-                        exchange = exchanges.First(x => x.Code == "CoinCheck");
-                        await CoinCheckAPI.FetchPriceAsync(exchange, coins, crossrate);
-                        break;
-
-                    case "coinmarketcap":
-                        await FetchCoinMarketCapAsync(coins, crossrate);
-                        break;
-
-                    default:
-                        break;
-                }
+                return EnuAPIStatus.FailureNetwork;
             }
+            else
+            {          
+                foreach (var source in coins.Select(x => x.PriceSourceCode).Distinct())
+                {
 
-            return EnuAPIStatus.Success;
+                    switch (source)
+                    {
+                        //Bitcoin must go first
+                        case "Bittrex":
+                            if(exchanges.Any(x => x.Code == "Bittrex")) 
+                                await BittrexAPI.FetchPriceAsync(exchanges.First(x => x.Code == "Bittrex"), coins, crossrate);
+                            break;
+
+                        case "Bitstamp":
+                            if(exchanges.Any(x => x.Code == "Bitstamp")) 
+                            await BItstampAPI.FetchPriceAsync(exchanges.First(x => x.Code == "Bitstamp"), coins, crossrate);
+                            break;
+
+                        case "Zaif":
+                            if(exchanges.Any(x => x.Code == "Zaif")) 
+                                await ZaifAPI.FetchPriceAsync(exchanges.First(x => x.Code == "Zaif"), coins, crossrate);
+                            break;
+
+                        case "CoinCheck":
+                            if(exchanges.Any(x => x.Code == "CoinCheck")) 
+                                await CoinCheckAPI.FetchPriceAsync(exchanges.First(x => x.Code == "CoinCheck"), coins, crossrate);
+                            break;
+
+                        case "coinmarketcap":
+                            await FetchCoinMarketCapAsync(coins, crossrate);
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                return EnuAPIStatus.Success;
+            }
 		}
 
         public static async Task<EnuAPIStatus> FetchCoinMarketCapAsync(InstrumentList instrumentlist, CrossRate crossrate)
@@ -253,11 +258,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                         coin.Symbol2 = (string)elem["symbol2"];
                     }
                     coin.rank = int.Parse((string)elem["rank"]);
-
-                    //var p = new Price(coin);
-                    //coin.MarketPrice = p;
                     instrumentlist.Attach(coin);
-                    //FetchCoinLogo(coin.Id, false);
                 }
             }
 

@@ -13,8 +13,6 @@ namespace CryptoAccouting.CoreClass.APIClass
     public static class BItstampAPI
     {
 		private const string BaseUrl = "https://www.bitstamp.net/api/v2/ticker/";
-        //private static string _apiKey;
-        //private static string _apiSecret;
 
         public static async Task<EnuAPIStatus> FetchPriceAsync(Exchange bitstamp, InstrumentList coins, CrossRate crossrate)
         {
@@ -35,7 +33,18 @@ namespace CryptoAccouting.CoreClass.APIClass
                         http.BaseAddress = new Uri(BaseUrl);
                         Uri path = new Uri(currency_pair, UriKind.Relative);
 
-                        HttpResponseMessage response = await http.GetAsync(path);
+                        HttpResponseMessage response = null;
+                        while (response == null)
+                        {
+                            try
+                            {
+                                response = await http.GetAsync(path);
+                            }
+                            catch (Exception)
+                            {
+                                response = null;
+                            }
+                        }
                         if (!response.IsSuccessStatusCode)
                         {
                             return EnuAPIStatus.FailureNetwork;

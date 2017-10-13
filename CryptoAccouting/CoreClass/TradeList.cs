@@ -37,6 +37,16 @@ namespace CryptoAccouting.CoreClass
             this.CCY_Valution = cur_valuation;
         }
 
+        public double TotalQuantity(string instrumentId, EnuBuySell buysell)
+        {
+            return transactions.Where(x => x.TradedCoin.Id == instrumentId).Where(x => x.BuySell == buysell).Sum(x => x.Quantity);
+        }
+
+        public double TotalNetValue(string instrumentId, EnuBuySell buysell)
+        {
+            return transactions.Where(x => x.TradedCoin.Id == instrumentId).Where(x => x.BuySell == buysell).Sum(x => x.TradeNetValue);
+        }
+
         public void CalculateTotalValue(int TradeYear, string Symbol = "ALL")
         {
             this.TradeYear = TradeYear;
@@ -47,8 +57,8 @@ namespace CryptoAccouting.CoreClass
                 TotalQtySell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear).Sum(t => t.Quantity);
                 TxCountBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear).Count();
                 TxCountSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear).Count();
-                TotalValueBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear).Sum(t => t.TradeValue);
-                TotalValueSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear).Sum(t => t.TradeValue);
+                TotalValueBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear).Sum(t => t.TradeGrossValue);
+                TotalValueSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear).Sum(t => t.TradeGrossValue);
                 RealizedBookValue = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear).Sum(t => t.RealizedBookValue);
                 AverageBookPrice = 0;
             }
@@ -58,8 +68,8 @@ namespace CryptoAccouting.CoreClass
 				TotalQtySell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Sum(t => t.Quantity);
 				TxCountBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Count();
 				TxCountSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Count();
-				TotalValueBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Sum(t => t.TradeValue);
-				TotalValueSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Sum(t => t.TradeValue);
+				TotalValueBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Sum(t => t.TradeGrossValue);
+				TotalValueSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Sum(t => t.TradeGrossValue);
                 RealizedBookValue = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Sum(t => t.RealizedBookValue);
                 AverageBookPrice = transactions.Single(t => t.TradeDate == transactions.Max(tt => tt.TradeDate)).BookPrice;
             }
@@ -68,13 +78,13 @@ namespace CryptoAccouting.CoreClass
         }
 
         public void AggregateTransaction(Instrument tradedCoin, string exchangeCode, EnuBuySell buysell, double qty, double tradePrice,
-                                         DateTime tradeDate, double fee, EnuTxAggregateFlag flag = EnuTxAggregateFlag.Daliy)
+                                         EnuCCY settleCcy, DateTime tradeDate, double fee, EnuTxAggregateFlag flag = EnuTxAggregateFlag.Daliy)
         {
             Transaction tx;
 
-            if (transactions.Any(t => (t.TradecCoinSymbol == tradedCoin.Symbol1 && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date)))
+            if (transactions.Any(t => (t.TradecCoinSymbol == tradedCoin.Symbol1 && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date && t.SettlementCCY == settleCcy)))
             {
-                tx = transactions.Single(t => (t.TradecCoinSymbol == tradedCoin.Symbol1 && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date));
+                tx = transactions.Single(t => (t.TradecCoinSymbol == tradedCoin.Symbol1 && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date && t.SettlementCCY == settleCcy));
 
                 double newqty;
                 newqty = tx.Quantity + qty;
@@ -82,16 +92,19 @@ namespace CryptoAccouting.CoreClass
                 tx.TradePrice = (tx.TradePrice * tx.Quantity + tradePrice * qty) / newqty;
                 tx.Quantity = newqty;
                 tx.Fee += fee;
+                tx.NumOfTransaction++;
             }
             else
             {
                 tx = new Transaction(tradedCoin, ApplicationCore.GetExchange(exchangeCode));
                 tx.TxId = (transactions.Count + 1).ToString();
                 tx.BuySell = buysell;
+                tx.SettlementCCY = settleCcy;
                 tx.Quantity = qty;
                 tx.TradePrice = tradePrice;
                 tx.TradeDate = tradeDate;
                 tx.Fee = fee;
+                tx.NumOfTransaction = 1;
                 this.Attach(tx);
             }
 
@@ -118,15 +131,15 @@ namespace CryptoAccouting.CoreClass
                     if (tx.BuySell == EnuBuySell.Buy)
                     {
                         //Buy : Update Bookcost
-                        current_bookprice = (accumulated_value + tx.TradeValueGrossCost) / (accumulated_qty + tx.Quantity);
+                        current_bookprice = (accumulated_value + tx.TradeNetValue) / (accumulated_qty + tx.Quantity);
                         tx.BookPrice = current_bookprice;
-                        accumulated_value += tx.TradeValueGrossCost;
+                        accumulated_value += tx.TradeNetValue;
                         accumulated_qty += tx.Quantity;
                     }
                     else if (tx.BuySell == EnuBuySell.Sell)
                     {
                         //Sell : Reduce Accumulated value
-                        accumulated_value -= tx.TradeValueGrossCost;
+                        accumulated_value -= tx.TradeNetValue;
                         accumulated_qty -= tx.Quantity;
                         tx.BookPrice = current_bookprice;
                     }
@@ -146,7 +159,7 @@ namespace CryptoAccouting.CoreClass
         public double RealizedPL()
         {
 			// calculate Realized PL when one side of trase is Base Fiat Currency
-			// ignore trades both sides are Crypto for Realized PL calculation 
+			// ignore trades both sides are Crypto for Realized PL calculation now
             return transactions.Where(x=>x.TradeDate.Year == this.TradeYear).Sum(x => x.RealizedPL);
         }
 

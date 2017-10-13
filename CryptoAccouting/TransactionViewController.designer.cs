@@ -13,22 +13,43 @@ namespace CryptoAccouting
 	partial class TransactionViewController
 	{
 		[Outlet]
-		UIKit.UIButton buttonCalndarYear { get; set; }
-
-		[Outlet]
 		UIKit.UIButton buttonExchange { get; set; }
 
 		[Outlet]
 		UIKit.UIButton buttonSearch { get; set; }
 
 		[Outlet]
+		UIKit.UILabel labelBTCQtyBuy { get; set; }
+
+		[Outlet]
+		UIKit.UILabel labelBTCQtySell { get; set; }
+
+		[Outlet]
+		UIKit.UILabel labelBTCValBuy { get; set; }
+
+		[Outlet]
+		UIKit.UILabel labelBTCValSell { get; set; }
+
+		[Outlet]
+		UIKit.UILabel labelMonaQtyBuy { get; set; }
+
+		[Outlet]
+		UIKit.UILabel labelMonaQtySell { get; set; }
+
+		[Outlet]
+		UIKit.UILabel labelMonaValBuy { get; set; }
+
+		[Outlet]
+		UIKit.UILabel labelMonaValSell { get; set; }
+
+		[Outlet]
 		UIKit.UIView TransactionView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (TransactionView != null) {
-				TransactionView.Dispose ();
-				TransactionView = null;
+			if (buttonExchange != null) {
+				buttonExchange.Dispose ();
+				buttonExchange = null;
 			}
 
 			if (buttonSearch != null) {
@@ -36,14 +57,49 @@ namespace CryptoAccouting
 				buttonSearch = null;
 			}
 
-			if (buttonExchange != null) {
-				buttonExchange.Dispose ();
-				buttonExchange = null;
+			if (labelBTCQtyBuy != null) {
+				labelBTCQtyBuy.Dispose ();
+				labelBTCQtyBuy = null;
 			}
 
-			if (buttonCalndarYear != null) {
-				buttonCalndarYear.Dispose ();
-				buttonCalndarYear = null;
+			if (labelBTCQtySell != null) {
+				labelBTCQtySell.Dispose ();
+				labelBTCQtySell = null;
+			}
+
+			if (labelBTCValBuy != null) {
+				labelBTCValBuy.Dispose ();
+				labelBTCValBuy = null;
+			}
+
+			if (labelBTCValSell != null) {
+				labelBTCValSell.Dispose ();
+				labelBTCValSell = null;
+			}
+
+			if (labelMonaQtySell != null) {
+				labelMonaQtySell.Dispose ();
+				labelMonaQtySell = null;
+			}
+
+			if (labelMonaValBuy != null) {
+				labelMonaValBuy.Dispose ();
+				labelMonaValBuy = null;
+			}
+
+			if (labelMonaValSell != null) {
+				labelMonaValSell.Dispose ();
+				labelMonaValSell = null;
+			}
+
+			if (labelMonaQtyBuy != null) {
+				labelMonaQtyBuy.Dispose ();
+				labelMonaQtyBuy = null;
+			}
+
+			if (TransactionView != null) {
+				TransactionView.Dispose ();
+				TransactionView = null;
 			}
 		}
 	}

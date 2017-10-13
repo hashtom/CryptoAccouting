@@ -14,51 +14,58 @@ namespace CryptoAccouting.CoreClass.APIClass
     public static class BittrexAPI
     {
         private const string BaseUrl = "https://bittrex.com";
-        //private static string _apiKey = "";
-        //private static string _apiSecret = "";
         private static Exchange _bittrex;
+        public const string SignHeaderName = "apisign";
+        private static readonly Encoding encoding = Encoding.UTF8;
 
         public static async Task<EnuAPIStatus> FetchPriceAsync(Exchange bittrex, InstrumentList coins, CrossRate crossrate)
         {
             _bittrex = bittrex;
 
-            var rawjson = await request(HttpMethod.Get, BaseUrl + "/api/v1.1/public/getmarketsummaries", false);
-
-            try
+            if (!Reachability.IsHostReachable("bittrex.com"))
             {
-                var jobj = await Task.Run(() => JObject.Parse(rawjson));
-                var jarray = (JArray)jobj["result"];
-
-                var btcprice = ApplicationCore.Bitcoin().MarketPrice;
-
-                foreach (var coin in coins.Where(x => x.PriceSourceCode == "Bittrex"))
-                {
-                    if (jarray.Any(x => (string)x["MarketName"] == "BTC-" + bittrex.GetSymbolForExchange(coin.Id)))
-                    {
-                        var jrow = jarray.First(x => (string)x["MarketName"] == "BTC-" + _bittrex.GetSymbolForExchange(coin.Id));
-                        if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
-
-                        coin.MarketPrice.LatestPriceBTC = (double)jrow["Last"];
-                        coin.MarketPrice.PriceBTCBefore24h = (double)jrow["PrevDay"];
-                        coin.MarketPrice.DayVolume = (double)jrow["Volume"];
-                        coin.MarketPrice.PriceDate = (DateTime)jrow["TimeStamp"];
-
-                        coin.MarketPrice.USDCrossRate = crossrate;
-                        if (btcprice != null)
-                        {
-                            coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"] * btcprice.LatestPriceUSD;
-                            coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"] * btcprice.PriceUSDBefore24h;
-                        }
-                    }
-
-                }
-            }catch(JsonException)
-            {
-                return EnuAPIStatus.FatalError;
+                    return EnuAPIStatus.FatalError;
             }
+            else
+            {
+                var rawjson = await request(HttpMethod.Get, BaseUrl + "/api/v1.1/public/getmarketsummaries", false);
 
-            return EnuAPIStatus.Success;
+                try
+                {
+                    var jobj = await Task.Run(() => JObject.Parse(rawjson));
+                    var jarray = (JArray)jobj["result"];
 
+                    var btcprice = ApplicationCore.Bitcoin().MarketPrice;
+
+                    foreach (var coin in coins.Where(x => x.PriceSourceCode == "Bittrex"))
+                    {
+                        if (jarray.Any(x => (string)x["MarketName"] == "BTC-" + bittrex.GetSymbolForExchange(coin.Id)))
+                        {
+                            var jrow = jarray.First(x => (string)x["MarketName"] == "BTC-" + _bittrex.GetSymbolForExchange(coin.Id));
+                            if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
+
+                            coin.MarketPrice.LatestPriceBTC = (double)jrow["Last"];
+                            coin.MarketPrice.PriceBTCBefore24h = (double)jrow["PrevDay"];
+                            coin.MarketPrice.DayVolume = (double)jrow["Volume"];
+                            coin.MarketPrice.PriceDate = (DateTime)jrow["TimeStamp"];
+
+                            coin.MarketPrice.USDCrossRate = crossrate;
+                            if (btcprice != null)
+                            {
+                                coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"] * btcprice.LatestPriceUSD;
+                                coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"] * btcprice.PriceUSDBefore24h;
+                            }
+                        }
+
+                    }
+                }
+                catch (JsonException)
+                {
+                    return EnuAPIStatus.FatalError;
+                }
+
+                return EnuAPIStatus.Success;
+            }
         }
 
         public static async Task<List<Position>> FetchPositionAsync(Exchange bittrex)
@@ -67,27 +74,39 @@ namespace CryptoAccouting.CoreClass.APIClass
             string filename = bittrex.Name + "Position" + ".json";
             _bittrex = bittrex;
 
-            var rawjson = await request(HttpMethod.Get, BaseUrl + "/api/v1.1/account/getbalances");
-            if (rawjson != null)
+            if (!Reachability.IsHostReachable("bittrex.com"))
             {
-                positions = ParsePosition(rawjson);
-                if (positions != null) StorageAPI.SaveFile(rawjson, filename);
+                return null;
             }
+            else
+            {
+                var rawjson = await request(HttpMethod.Get, BaseUrl + "/api/v1.1/account/getbalances");
+                if (rawjson != null)
+                {
+                    positions = ParsePosition(rawjson);
+                    if (positions != null) StorageAPI.SaveFile(rawjson, filename);
+                }
 
-            return positions;
+                return positions;
+            }
 
         }
 
-        public static async Task<TradeList> FetchTransactionAsync(Exchange bittrex, string calendarYear = null)
+        public static async Task<TradeList> FetchTransactionAsync(Exchange bittrex)
         {
             _bittrex = bittrex;
 
-            var from = calendarYear == null ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
-            var to = calendarYear == null ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
-
-            var rawjson = await request(HttpMethod.Get, BaseUrl + "/api/v1.1/account/getorderhistory");
-
-            return ParseTrade(rawjson);
+            if (!Reachability.IsHostReachable("bittrex.com"))
+            {
+                return null;
+            }
+            else
+            {
+                //var from = calendarYear == null ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
+                //var to = calendarYear == null ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
+                var rawjson = await request(HttpMethod.Get, BaseUrl + "/api/v1.1/account/getorderhistory");
+                return ParseTrade(rawjson);
+            }
         }
 
 
@@ -185,7 +204,26 @@ namespace CryptoAccouting.CoreClass.APIClass
                         }
 
                         var symbol = (string)elem["Exchange"];
-                        symbol = symbol.Replace("BTC-", "");
+
+                        EnuCCY settleccy;
+                        if (symbol.Contains("BTC-"))
+                        {
+                            settleccy = EnuCCY.BTC;
+                        }
+                        else if (symbol.Contains("ETH-"))
+                        {
+                            settleccy = EnuCCY.ETH;
+                        }
+                        else if (symbol.Contains("USDT-"))
+                        {
+                            settleccy = EnuCCY.USDT;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+
+                        symbol = symbol.Replace("BTC-", "").Replace("ETH-","").Replace("USDT-","");
                         var instrumentId = _bittrex.GetIdForExchange(symbol);
 
                         tradelist.AggregateTransaction(ApplicationCore.InstrumentList.GetByInstrumentId(instrumentId),
@@ -193,6 +231,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                                                       ebuysell,
                                                        (double)elem["Quantity"],
                                                        (double)elem["PricePerUnit"],
+                                                       settleccy,
                                                        DateTime.Parse((string)elem["TimeStamp"]),
                                                       comm
                                                       );
@@ -201,9 +240,6 @@ namespace CryptoAccouting.CoreClass.APIClass
                 return tradelist;
             }
         }
-
-        public const string SignHeaderName = "apisign";
-        private static readonly Encoding encoding = Encoding.UTF8;
 
         private static string byteToString(byte[] buff)
         {
@@ -254,8 +290,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 var parameterString = convertParameterListToString(parameters);
                 var completeUri = uri + "?" + parameterString;
-                var request = new HttpRequestMessage(httpMethod, completeUri);
-                return request;
+                return new HttpRequestMessage(httpMethod, completeUri);
             }
         }
 
@@ -279,7 +314,6 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsStringAsync();
-
         }
     }
 }

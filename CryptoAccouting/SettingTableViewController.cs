@@ -52,7 +52,7 @@ namespace CryptoAccouting
 		private void PushSelectionView()
 		{
 			List<SelectionSearchItem> searchitems = new List<SelectionSearchItem>();
-            foreach (var item in Enum.GetValues(typeof(EnuCCY)))
+            foreach (var item in Enum.GetValues(typeof(EnuBaseFiatCCY)))
 			{
 				SelectionSearchItem searchitem = new SelectionSearchItem()
 				{

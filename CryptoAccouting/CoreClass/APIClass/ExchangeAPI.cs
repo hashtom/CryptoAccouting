@@ -97,10 +97,10 @@ namespace CryptoAccouting.CoreClass.APIClass
                     return await ZaifAPI.FetchTransactionAsync(exchange, calendarYear);
 
                 case "CoinCheck":
-                    return await CoinCheckAPI.FetchTransactionAsync(exchange, calendarYear);
+                    return await CoinCheckAPI.FetchTransactionAsync(exchange);
 
                 case "Bittrex":
-                    return await BittrexAPI.FetchTransactionAsync(exchange, calendarYear);
+                    return await BittrexAPI.FetchTransactionAsync(exchange);
 				
                 default:
 					return null;
