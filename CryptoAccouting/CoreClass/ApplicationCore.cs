@@ -72,9 +72,9 @@
                 {
                     await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);
                 }
-                return EnuAPIStatus.Success;             }         }          public static void SaveInstrumentXML()         {             StorageAPI.SaveInstrumentXML(InstrumentList, InstrumentsFile);         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, BalanceFile);         }          public static async Task<EnuAPIStatus> LoadTradeListsAsync(string ExchangeCode, string calendarYear = null, bool isAggregatedDaily = true)
+                return EnuAPIStatus.Success;             }         }          public static void SaveInstrumentXML()         {             StorageAPI.SaveInstrumentXML(InstrumentList, InstrumentsFile);         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, BalanceFile);         }          public static async Task<EnuAPIStatus> LoadTradeListsAsync(string ExchangeCode)
         {
-            var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              if (exchange.APIKeyAvailable())             {                 exchange.AttachTradeList(await ExchangeAPI.FetchTradeListAsync(exchange, calendarYear, isAggregatedDaily));                 //PublicExchangeList.Attach(exchange); //do you need?                 return EnuAPIStatus.Success;             }else             {                 return EnuAPIStatus.FailureParameter;             }         }          public static Exchange GetExchange(string Code)
+            var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              if (exchange.APIKeyAvailable())             {                 exchange.AttachTradeList(await ExchangeAPI.FetchTradeListAsync(exchange));                 //PublicExchangeList.Attach(exchange); //do you need?                 return EnuAPIStatus.Success;             }else             {                 return EnuAPIStatus.FailureParameter;             }         }          public static Exchange GetExchange(string Code)
         {             return PublicExchangeList.GetExchange(Code);         }
 
         public static ExchangeList GetExchangeListByInstrument(string id)

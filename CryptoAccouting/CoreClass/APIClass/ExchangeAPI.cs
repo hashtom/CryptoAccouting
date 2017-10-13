@@ -85,7 +85,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             return EnuAPIStatus.Success;
         }
 
-        internal static async Task<TradeList> FetchTradeListAsync(Exchange exchange, string calendarYear = null, bool isAggregateDaily = true)
+        internal static async Task<TradeList> FetchTradeListAsync(Exchange exchange)
 		{
 			//string rawjson;
             //string filename = exchange.Name + "Transaction_" + calendarYear + ".json";
@@ -94,7 +94,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             switch (exchange.Code)
 			{
                 case "Zaif":
-                    return await ZaifAPI.FetchTransactionAsync(exchange, calendarYear);
+                    return await ZaifAPI.FetchTransactionAsync(exchange);
 
                 case "CoinCheck":
                     return await CoinCheckAPI.FetchTransactionAsync(exchange);

@@ -3,7 +3,7 @@ using Foundation; using System; using UIKit; using CoreGraphics; using S
 namespace CryptoAccouting
 {
     public partial class TransactionViewController : UIViewController
-    {         SfDataGrid sfGrid;         TradeList myTradeList;         string calendaryear = null;         Exchange thisExchange;         LoadingOverlay loadPop;          public TransactionViewController(IntPtr handle) : base(handle)         {             sfGrid = new SfDataGrid();             //sfGrid.AutoGeneratingColumn += HandleAutoGeneratingColumn;             sfGrid.AllowSorting = true;             sfGrid.AutoGenerateColumns = false;             sfGrid.BackgroundColor = UIColor.FromRGB(236, 184, 138);             //sfGrid.GroupColumnDescriptions.Add(new GroupColumnDescription() { ColumnName = "txid" });              GridDateTimeColumn dateColumn = new GridDateTimeColumn()             {                 MappingName = "TradeDate",                 HeaderText = "Date"             };              GridTextColumn coinColumn = new GridTextColumn()             {
+    {         SfDataGrid sfGrid;         TradeList myTradeList;         //string calendaryear = null;         Exchange thisExchange;         LoadingOverlay loadPop;          public TransactionViewController(IntPtr handle) : base(handle)         {             sfGrid = new SfDataGrid();             //sfGrid.AutoGeneratingColumn += HandleAutoGeneratingColumn;             sfGrid.AllowSorting = true;             sfGrid.AutoGenerateColumns = false;             sfGrid.BackgroundColor = UIColor.FromRGB(236, 184, 138);             //sfGrid.GroupColumnDescriptions.Add(new GroupColumnDescription() { ColumnName = "txid" });              GridDateTimeColumn dateColumn = new GridDateTimeColumn()             {                 MappingName = "TradeDate",                 HeaderText = "Date"             };              GridTextColumn coinColumn = new GridTextColumn()             {
                 MappingName = "TradecCoinSymbol",                 HeaderText = "Coin"
             };              GridTextColumn settleColumn = new GridTextColumn()             {
                 MappingName = "SettlementCCY_Str",
@@ -39,7 +39,7 @@ namespace CryptoAccouting
                     loadPop = new LoadingOverlay(bounds);
                     TransactionView.Add(loadPop);
 
-                    if (await ApplicationCore.LoadTradeListsAsync(thisExchange.Code, calendaryear, true) is EnuAPIStatus.Success)
+                    if (await ApplicationCore.LoadTradeListsAsync(thisExchange.Code) is EnuAPIStatus.Success)
                     {
                         myTradeList = ApplicationCore.GetExchangeTradeList(thisExchange.Code);
 
