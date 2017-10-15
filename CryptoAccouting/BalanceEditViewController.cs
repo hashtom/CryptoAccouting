@@ -105,7 +105,24 @@ namespace CryptoAccouting
                     InitializeUserInteractionStates();
                 }
             };
+
+            buttonDelete.TouchUpInside += (sender, e) => 
+            {
+                if (PositionDetail != null)
+                {
+                    UIAlertController okCancelAlertController = UIAlertController.Create("Warning", "Are you sure you want to delete this position?", UIAlertControllerStyle.Alert);
+                    okCancelAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default,
+                                                                           alert =>
+                                                                           {
+                                                                               ApplicationCore.DetachPosition(PositionDetail);
+                                                                               CellItemUpdated(popto);
+                                                                           }));
+                    okCancelAlertController.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
+                    this.PresentViewController(okCancelAlertController, true, null);
+                }
+            };
         }
+
 
         public async override void ViewWillAppear(bool animated)
         {
@@ -200,6 +217,16 @@ namespace CryptoAccouting
                     textQuantity.TextColor = UIColor.Black;
                 }
             }
+
+            if (PositionDetail != null)
+            {
+                buttonDelete.Enabled = true;
+            }
+            else
+            {
+                buttonDelete.Enabled = false;
+            }
+
         }
 
         public override void ReDrawScreen()

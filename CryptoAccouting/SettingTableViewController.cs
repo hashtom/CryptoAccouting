@@ -106,8 +106,8 @@ namespace CryptoAccouting
         public override void SetSearchSelectionItem(string searchitem1) //CryptoTableViewController ControllerToBack)
         {
             //base.SetSearchSelectionItem(searchitem1);
-            EnuCCY baseccy;
-            if (!Enum.TryParse(searchitem1, out baseccy)) baseccy = EnuCCY.USD;
+            EnuBaseFiatCCY baseccy;
+            if (!Enum.TryParse(searchitem1, out baseccy)) baseccy = EnuBaseFiatCCY.USD;
             ApplicationCore.BaseCurrency = baseccy;
             labelBaseCurrency.Text = baseccy.ToString();
             ApplicationCore.SaveAppSetting();

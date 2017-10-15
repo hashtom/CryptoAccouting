@@ -15,7 +15,7 @@ namespace CryptoAccouting.CoreClass.APIClass
         private const string BaseUrl = "https://api.zaif.jp/";
         private static Exchange _zaif;
 
-        public static async Task<EnuAPIStatus> FetchPriceAsync(Exchange zaif, InstrumentList coins, CrossRate crossrate)
+        public static async Task<EnuAPIStatus> FetchPriceAsync(Exchange zaif, InstrumentList coins, CrossRate crossrate, CrossRate USDJPYrate)
         {
             string rawjson;
             Price btcprice;
@@ -47,7 +47,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                             if (coin.Id is "bitcoin")
                             {
                                 coin.MarketPrice.LatestPriceBTC = 1;
-                                coin.MarketPrice.LatestPriceUSD = (double)jobj["last"] / crossrate.Rate;
+                                coin.MarketPrice.LatestPriceUSD = (double)jobj["last"] / USDJPYrate.Rate;
                                 //coin.MarketPrice.PriceBTCBefore24h = (double)jobj["PrevDay"];
                             }
                             else
@@ -55,7 +55,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                                 btcprice = ApplicationCore.Bitcoin().MarketPrice;
                                 if (btcprice != null)
                                 {
-                                    coin.MarketPrice.LatestPriceUSD = (double)jobj["last"] / crossrate.Rate;
+                                    coin.MarketPrice.LatestPriceUSD = (double)jobj["last"] / USDJPYrate.Rate;
                                     coin.MarketPrice.LatestPriceBTC = coin.MarketPrice.LatestPriceUSD / btcprice.LatestPriceUSD;
                                     coin.MarketPrice.PriceBTCBefore24h = await MarketDataAPI.FetchPriceBTCBefore24hAsync(coin.Id); //tmp
                                     coin.MarketPrice.PriceUSDBefore24h = coin.MarketPrice.PriceBTCBefore24h * btcprice.LatestPriceUSD; //tmp
@@ -81,7 +81,7 @@ namespace CryptoAccouting.CoreClass.APIClass
         {
             _zaif = zaif;
             List<Position> positions = null;
-            string filename = zaif.Name + "Position" + ".json";
+            //string filename = zaif.Name + "Position" + ".json";
 
             if (!Reachability.IsHostReachable(BaseUrl))
             {
@@ -100,7 +100,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 if (rawjson != null)
                 {
                     positions = ZaifAPI.ParsePosition(rawjson, zaif);
-                    if (positions != null) StorageAPI.SaveFile(rawjson, filename);
+                    //if (positions != null) StorageAPI.SaveFile(rawjson, filename);
                 }
 
                 return positions;

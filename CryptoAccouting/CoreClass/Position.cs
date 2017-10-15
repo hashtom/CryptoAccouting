@@ -37,36 +37,27 @@ namespace CryptoAccouting.CoreClass
             BalanceDate = DateTime.Now.Date;
         }
 
-        public bool IsIdAssigned()
-        {
-            return Id != int.MaxValue;
-        }
-
-        public void AttachInstrument(Instrument coin)
-        {
-            this.Coin = coin;
-        }
-
-        public void AttachCoinStorage(CoinStorage storage)
-        {
-            CoinStorage = storage;
-        }
-
         //public double BookPriceBase(CrossRate USDCrossRate) //todo booking fx rate
         //{
         //    return Coin.MarketPrice == null ? 0 : BookPriceUSD * USDCrossRate.Rate;
         //}
 
-        public double LatestAmountBTC()
+        public double LatestAmountBTC
         {
-            AmountBTC_Previous = Coin.MarketPrice == null ? AmountBTC_Previous : Coin.MarketPrice.LatestPriceBTC * this.Amount;
-            return AmountBTC_Previous;
+            get
+            {
+                AmountBTC_Previous = Coin.MarketPrice == null ? AmountBTC_Previous : Coin.MarketPrice.LatestPriceBTC * this.Amount;
+                return AmountBTC_Previous;
+            }
         }
 
-        public double LatestPriceUSD()
+        public double LatestPriceUSD
         {
-            PriceUSD_Previous = Coin.MarketPrice == null ? PriceUSD_Previous : Coin.MarketPrice.LatestPriceUSD;
-            return PriceUSD_Previous;
+            get
+            {
+                PriceUSD_Previous = Coin.MarketPrice == null ? PriceUSD_Previous : Coin.MarketPrice.LatestPriceUSD;
+                return PriceUSD_Previous;
+            }
         }
 
         public double LatestPriceBase()
@@ -131,6 +122,21 @@ namespace CryptoAccouting.CoreClass
         //{
         //    return BookValueUSD() - LatestFiatValueUSD(); 
         //}
+
+        public bool IsIdAssigned()
+        {
+            return Id != int.MaxValue;
+        }
+
+        public void AttachInstrument(Instrument coin)
+        {
+            this.Coin = coin;
+        }
+
+        public void AttachCoinStorage(CoinStorage storage)
+        {
+            CoinStorage = storage;
+        }
 	}
 
 }

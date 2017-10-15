@@ -15,7 +15,7 @@
                 //if (!AppDelegate.IsInDesignerView)
                 //{
                     await ApplicationCore.FetchCoinLogoAsync();
-                //}             });
+                //}             });              RefreshControl = new UIRefreshControl();             RefreshControl.ValueChanged += async (sender, e) =>              {                 await RefreshPriceAsync();                 RefreshControl.EndRefreshing();             };
         }          public async override void ViewWillAppear(bool animated)         {
             base.ViewWillAppear(animated);
 
@@ -23,7 +23,7 @@
             //{
             if (!AppDelegate.IsInDesignerView)
             {
-                if (await ApplicationCore.LoadUSDCrossRateAsync() != EnuAPIStatus.Success)                 {                     //can't get fxrate even saved file                     UIAlertController okAlertController = UIAlertController.Create("critical", "Critical FX rates data error!", UIAlertControllerStyle.Alert);                     okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));                     this.PresentViewController(okAlertController, true, null);                 } 
+                if (await ApplicationCore.LoadCrossRateAsync() != EnuAPIStatus.Success)                 {                     //can't get fxrate even saved file                     UIAlertController okAlertController = UIAlertController.Create("critical", "Critical FX rates data error!", UIAlertControllerStyle.Alert);                     okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));                     this.PresentViewController(okAlertController, true, null);                 } 
                 if(await ApplicationCore.FetchMarketDataFromBalanceAsync() != EnuAPIStatus.Success)                 {                     //Ignore Network error                     //UIAlertController okAlertController = UIAlertController.Create("Critical", "Critical Balance data error.", UIAlertControllerStyle.Alert);                     //okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));                     //this.PresentViewController(okAlertController, true, null);                 }
             }
 
@@ -88,15 +88,11 @@
         }
 
         async partial void ButtonRefresh_Activated(UIBarButtonItem sender)
-        {             var bounds = TableView.Bounds;             loadPop = new LoadingOverlay(bounds);             TableView.Add(loadPop);
-            buttonRefresh.Enabled = false; 
-            await ApplicationCore.FetchMarketDataFromBalanceAsync();
-            ReDrawScreen();
-            TableView.ReloadData();              buttonRefresh.Enabled = true;             loadPop.Hide();
+        {             var bounds = TableView.Bounds;             loadPop = new LoadingOverlay(bounds);             TableView.Add(loadPop);              await RefreshPriceAsync();              loadPop.Hide();
         }          private void PushSelectionView()
         {
             List<SelectionSearchItem> searchitems = new List<SelectionSearchItem>();             foreach (var item in ApplicationCore.InstrumentList)
             {                 SelectionSearchItem searchitem = new SelectionSearchItem()
                 {                     SearchItem1 = item.Id,                     SearchItem2 = item.Symbol1,                     ImageFile = item.Id + ".png",                     SortOrder = item.rank                 };                 searchitems.Add(searchitem);             } 
 			var SymbolSelectionViewC = Storyboard.InstantiateViewController("SymbolSelectionViewC") as SymbolSelectionViewConroller;
-			SymbolSelectionViewC.SelectionItems = searchitems;             SymbolSelectionViewC.DestinationID = "BalanceEditViewC";             NavigationController.PushViewController(SymbolSelectionViewC, true);         }      } }
+			SymbolSelectionViewC.SelectionItems = searchitems;             SymbolSelectionViewC.DestinationID = "BalanceEditViewC";             NavigationController.PushViewController(SymbolSelectionViewC, true);         }          async private Task RefreshPriceAsync()         {             buttonRefresh.Enabled = false;              await ApplicationCore.FetchMarketDataFromBalanceAsync();             ReDrawScreen();             TableView.ReloadData();              buttonRefresh.Enabled = true;         }     } }

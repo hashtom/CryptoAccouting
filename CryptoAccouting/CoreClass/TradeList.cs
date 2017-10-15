@@ -11,7 +11,7 @@ namespace CryptoAccouting.CoreClass
         public List<string> TradedCoin { get; private set; } 
         public int TradeYear { get; private set; }
         public string TradedCoinString { get; set; }
-        public EnuCCY CCY_Valution { get; set; } // Fiat Only
+        public EnuBaseFiatCCY CCY_Valution { get; set; } // Fiat Only
 		public double TotalQtyBuy { get; set; }
 		public double TotalQtySell { get; set; }
         public int TxCountBuy { get; set; }
@@ -31,7 +31,7 @@ namespace CryptoAccouting.CoreClass
 			set { this.transactions = value; }
 		}
 
-        public TradeList(EnuCCY cur_valuation)
+        public TradeList(EnuBaseFiatCCY cur_valuation)
         {
             transactions = new List<Transaction>();
             this.CCY_Valution = cur_valuation;

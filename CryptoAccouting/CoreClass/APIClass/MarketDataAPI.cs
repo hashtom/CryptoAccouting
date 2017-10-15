@@ -11,7 +11,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 {
     public static class MarketDataAPI
     {
-        public static async Task<EnuAPIStatus> FetchCoinPricesAsync(ExchangeList exchanges, InstrumentList coins, CrossRate crossrate)
+        public static async Task<EnuAPIStatus> FetchCoinPricesAsync(ExchangeList exchanges, InstrumentList coins, List<CrossRate> crossrates)
 		{
 
             if (!Reachability.IsHostReachable("coinbalance.jpn.org"))
@@ -19,10 +19,19 @@ namespace CryptoAccouting.CoreClass.APIClass
                 return EnuAPIStatus.FailureNetwork;
             }
             else
-            {          
+            {
+                var crossrate = crossrates.Any(x => x.Currency == ApplicationCore.BaseCurrency) ?
+                                          crossrates.First(x => x.Currency == ApplicationCore.BaseCurrency) :
+                                          null;
+                if (crossrate is null) return EnuAPIStatus.FatalError;
+
+                var usdjpy = crossrates.Any(x => x.Currency == EnuBaseFiatCCY.JPY) ?
+                                       crossrates.First(x => x.Currency == EnuBaseFiatCCY.JPY) :
+                                       null;
+                
                 foreach (var source in coins.Select(x => x.PriceSourceCode).Distinct())
                 {
-
+                    
                     switch (source)
                     {
                         //Bitcoin must go first
@@ -37,13 +46,13 @@ namespace CryptoAccouting.CoreClass.APIClass
                             break;
 
                         case "Zaif":
-                            if(exchanges.Any(x => x.Code == "Zaif")) 
-                                await ZaifAPI.FetchPriceAsync(exchanges.First(x => x.Code == "Zaif"), coins, crossrate);
+                            if (exchanges.Any(x => x.Code == "Zaif"))
+                                await ZaifAPI.FetchPriceAsync(exchanges.First(x => x.Code == "Zaif"), coins, crossrate, usdjpy);
                             break;
 
                         case "CoinCheck":
-                            if(exchanges.Any(x => x.Code == "CoinCheck")) 
-                                await CoinCheckAPI.FetchPriceAsync(exchanges.First(x => x.Code == "CoinCheck"), coins, crossrate);
+                            if (exchanges.Any(x => x.Code == "CoinCheck"))
+                                await CoinCheckAPI.FetchPriceAsync(exchanges.First(x => x.Code == "CoinCheck"), coins, crossrate, usdjpy);
                             break;
 
                         case "coinmarketcap":
@@ -302,11 +311,11 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
         }
 
-        public static async Task<CrossRate> FetchUSDCrossRateAsync(EnuCCY BaseCurrency)
+        public static async Task<List<CrossRate>> FetchCrossRateAsync()
         {
-            CrossRate crossrate = null;
+            List<CrossRate> crossrates = new List<CrossRate>();
+            //CrossRate crossrate = null;
             string rawjson_today, rawjson_yesterday;
-            JObject json;
             const string jsonfilename_today = "crossrate_today.json";
             const string jsonfilename_yesterday = "crossrate_yesterday.json";
             const string BaseUri = "http://coinbalance.jpn.org/";
@@ -348,47 +357,20 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             try
             {
-                json = JObject.Parse(rawjson_today);
-                foreach (var ccy in (JArray)json["list"]["resources"])
-                {
-                    EnuCCY baseccy;
-                    var cursymbol = (string)ccy["resource"]["fields"]["symbol"];
-
-                    if (!Enum.TryParse(cursymbol.Replace("=X", ""), out baseccy))
-                        continue;
-
-                    if (baseccy == BaseCurrency)
-                    {
-                        crossrate = new CrossRate(baseccy, (double)ccy["resource"]["fields"]["price"], DateTime.Now.Date);
-                        break;
-                    }
-                }
-
-                json = JObject.Parse(rawjson_yesterday);
-                foreach (var ccy in (JArray)json["list"]["resources"])
-                {
-                    EnuCCY baseccy;
-                    var cursymbol = (string)ccy["resource"]["fields"]["symbol"];
-
-                    if (!Enum.TryParse(cursymbol.Replace("=X", ""), out baseccy))
-                        continue;
-
-                    if (baseccy == BaseCurrency)
-                    {
-                        crossrate.RateBefore24h = (double)ccy["resource"]["fields"]["price"];
-                        break;
-                    }
-                }
+                crossrates = parseCrossRate(rawjson_today, rawjson_yesterday);
             }
             catch (JsonException)
             {
-                return null;
+                rawjson_today = StorageAPI.LoadFromFile(jsonfilename_today);
+                rawjson_yesterday = StorageAPI.LoadFromFile(jsonfilename_yesterday);
+                if (rawjson_today is null) return null;
+                crossrates = parseCrossRate(rawjson_today, rawjson_yesterday);
             }
 
             StorageAPI.SaveFile(rawjson_today, jsonfilename_today);
             StorageAPI.SaveFile(rawjson_yesterday, jsonfilename_yesterday);
 
-            return crossrate;
+            return crossrates;
         }
 
         //      public static EnuAppStatus FetchExchangeListTemp(Instrument coin, ExchangeList exlist)
@@ -441,7 +423,6 @@ namespace CryptoAccouting.CoreClass.APIClass
         //	return EnuAppStatus.Success;
         //}
 
-
         public static async Task<double> FetchPriceBTCBefore24hAsync(string instrumentId)
         {
             string rawjson_yesterday;
@@ -460,6 +441,41 @@ namespace CryptoAccouting.CoreClass.APIClass
                 var jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
                 return (double)jarray_yesterday.SelectToken("[?(@.id == '" + instrumentId + "')]")["price_btc"];
             }
+        }
+
+        private static List<CrossRate> parseCrossRate(string rawjson_today, string rawjson_yesterday)
+        {
+            List<CrossRate> crossrates = new List<CrossRate>();
+            JObject json;
+
+            json = JObject.Parse(rawjson_today);
+            foreach (var ccy in (JArray)json["list"]["resources"])
+            {
+                EnuBaseFiatCCY baseccy;
+                var cursymbol = (string)ccy["resource"]["fields"]["symbol"];
+
+                if (!Enum.TryParse(cursymbol.Replace("=X", ""), out baseccy))
+                    continue;
+
+                var crossrate = new CrossRate(baseccy, (double)ccy["resource"]["fields"]["price"], DateTime.Now.Date);
+                crossrates.Add(crossrate);
+            }
+
+            json = JObject.Parse(rawjson_yesterday);
+            foreach (var ccy in (JArray)json["list"]["resources"])
+            {
+                EnuBaseFiatCCY baseccy;
+                var cursymbol = (string)ccy["resource"]["fields"]["symbol"];
+
+                if (!Enum.TryParse(cursymbol.Replace("=X", ""), out baseccy))
+                    continue;
+
+                if (crossrates.Any(x => x.Currency == baseccy))
+                    crossrates.First(x => x.Currency == baseccy).RateBefore24h = (double)ccy["resource"]["fields"]["price"];
+
+            }
+
+            return crossrates;
         }
     }
 }

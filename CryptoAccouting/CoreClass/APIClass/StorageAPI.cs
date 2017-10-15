@@ -146,12 +146,12 @@ namespace CryptoAccouting.CoreClass.APIClass
                                                  new XElement("instrument", pos.Coin.Id),
                                                  new XElement("date", pos.BalanceDate),
                                                  new XElement("amount", pos.Amount.ToString()),
-                                                 new XElement("amountbtc", pos.LatestAmountBTC().ToString()),
+                                                 new XElement("amountbtc", pos.LatestAmountBTC.ToString()),
                                                  new XElement("book", "NA"), //pos.BookPriceUSD.ToString()),
                                                  new XElement("exchange", pos.BookedExchange == null ? "" : pos.BookedExchange.Code),
                                                  new XElement("storage", pos.CoinStorage == null ? "" : pos.CoinStorage.Code),
                                                  new XElement("storagetype", pos.CoinStorage == null ? "" : pos.CoinStorage.StorageType.ToString()),
-                                                 new XElement("priceusd", pos.LatestPriceUSD().ToString()),
+                                                 new XElement("priceusd", pos.LatestPriceUSD.ToString()),
                                                  new XElement("pricebtc", pos.LatestPriceBTC().ToString()),
                                                  new XElement("pricebase", pos.LatestPriceBase().ToString()),
                                                  new XElement("watchonly", pos.WatchOnly.ToString())
@@ -254,7 +254,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static EnuAPIStatus LoadAppSettingXML(string fileName)
         {
-            EnuCCY baseccy;
+            EnuBaseFiatCCY baseccy;
             //var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             //var path = Path.Combine(documents, fileName);
             var xmldoc = LoadFromFile(fileName);
@@ -264,7 +264,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 //var xmldoc = File.ReadAllText(path);
 
                 if (!Enum.TryParse(XElement.Parse(xmldoc).Element("basecurrency").Value, out baseccy))
-                    baseccy = EnuCCY.USD;
+                    baseccy = EnuBaseFiatCCY.USD;
 
                 var apikeysXE = XElement.Parse(xmldoc).Descendants("exchange");
 
@@ -296,7 +296,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         }
 
-        public static EnuAPIStatus SaveAppSettingXML(string fileName, string AppName, EnuCCY BaseCurrency, ExchangeList exList)
+        public static EnuAPIStatus SaveAppSettingXML(string fileName, string AppName, EnuBaseFiatCCY BaseCurrency, ExchangeList exList)
 		{
 			//var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 			//var path = Path.Combine(mydocuments, fileName);

@@ -17,7 +17,7 @@ namespace CryptoAccouting.CoreClass.APIClass
         //private static string _apiKey = "";
         //private static string _apiSecret = "";
 
-        public static async Task<EnuAPIStatus> FetchPriceAsync(Exchange coincheck, InstrumentList coins, CrossRate crossrate)
+        public static async Task<EnuAPIStatus> FetchPriceAsync(Exchange coincheck, InstrumentList coins, CrossRate crossrate, CrossRate USDJPYrate)
         {
             string rawjson;
             Price btcprice;
@@ -49,7 +49,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                             if (coin.Id is "bitcoin")
                             {
                                 coin.MarketPrice.LatestPriceBTC = 1;
-                                coin.MarketPrice.LatestPriceUSD = (double)jobj["rate"] / crossrate.Rate;
+                                coin.MarketPrice.LatestPriceUSD = (double)jobj["rate"] / USDJPYrate.Rate;
                                 //coin.MarketPrice.PriceBTCBefore24h = (double)jobj["PrevDay"];
                             }
                             else
@@ -57,7 +57,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                                 btcprice = ApplicationCore.Bitcoin().MarketPrice;
                                 if (btcprice != null)
                                 {
-                                    coin.MarketPrice.LatestPriceUSD = (double)jobj["rate"] / crossrate.Rate;
+                                    coin.MarketPrice.LatestPriceUSD = (double)jobj["rate"] / USDJPYrate.Rate;
                                     coin.MarketPrice.LatestPriceBTC = coin.MarketPrice.LatestPriceUSD / btcprice.LatestPriceUSD;
                                     coin.MarketPrice.PriceBTCBefore24h = await MarketDataAPI.FetchPriceBTCBefore24hAsync(coin.Id); //tmp
                                     coin.MarketPrice.PriceUSDBefore24h = coin.MarketPrice.PriceBTCBefore24h * btcprice.LatestPriceUSD;//tmp
@@ -83,7 +83,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             List<Position> positions = null;
             _coincheck = coincheck;
 
-            string filename = coincheck.Name + "Position" + ".json";
+            //string filename = coincheck.Name + "Position" + ".json";
 
             if (!Reachability.IsHostReachable(BaseUrl))
             {
@@ -98,11 +98,11 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 Uri path = new Uri("/api/accounts/balance", UriKind.Relative);
 
-                var rawjson = await SendAsync(http, path, HttpMethod.Get);
+                var rawjson = await SendAsync(http, path, HttpMethod.Get, true);
                 if (rawjson != null)
                 {
                     positions = ParsePosition(rawjson, coincheck);
-                    if (positions != null) StorageAPI.SaveFile(rawjson, filename);
+                    //if (positions != null) StorageAPI.SaveFile(rawjson, filename);
                 }
 
                 return positions;

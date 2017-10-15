@@ -46,7 +46,7 @@ namespace CryptoAccouting
 		UIKit.UILabel labelPriceBaseTitle { get; set; }
 
 		[Outlet]
-		UIKit.UILabel labelSymbol { get; set; }
+		UIKit.UILabel labelName { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -102,9 +102,9 @@ namespace CryptoAccouting
 				labelPriceBase = null;
 			}
 
-			if (labelSymbol != null) {
-				labelSymbol.Dispose ();
-				labelSymbol = null;
+            if (labelName != null) {
+                labelName.Dispose ();
+                labelName = null;
 			}
 
 			if (labelTotalQty != null) {

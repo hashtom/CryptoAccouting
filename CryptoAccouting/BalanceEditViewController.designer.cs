@@ -13,6 +13,9 @@ namespace CryptoAccouting
 	partial class BalanceEditViewController
 	{
 		[Outlet]
+		UIKit.UIButton buttonDelete { get; set; }
+
+		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UIBarButtonItem buttonDone { get; set; }
 
@@ -63,11 +66,6 @@ namespace CryptoAccouting
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (switchWatchOnly != null) {
-				switchWatchOnly.Dispose ();
-				switchWatchOnly = null;
-			}
-
 			if (buttonDone != null) {
 				buttonDone.Dispose ();
 				buttonDone = null;
@@ -108,9 +106,19 @@ namespace CryptoAccouting
 				labelCoinSymbol = null;
 			}
 
+			if (switchWatchOnly != null) {
+				switchWatchOnly.Dispose ();
+				switchWatchOnly = null;
+			}
+
 			if (textQuantity != null) {
 				textQuantity.Dispose ();
 				textQuantity = null;
+			}
+
+			if (buttonDelete != null) {
+				buttonDelete.Dispose ();
+				buttonDelete = null;
 			}
 		}
 	}

@@ -71,7 +71,7 @@ namespace CryptoAccouting.CoreClass.APIClass
         public static async Task<List<Position>> FetchPositionAsync(Exchange bittrex)
         {
             List<Position> positions = null;
-            string filename = bittrex.Name + "Position" + ".json";
+            //string filename = bittrex.Name + "Position" + ".json";
             _bittrex = bittrex;
 
             if (!Reachability.IsHostReachable("bittrex.com"))
@@ -84,7 +84,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 if (rawjson != null)
                 {
                     positions = ParsePosition(rawjson);
-                    if (positions != null) StorageAPI.SaveFile(rawjson, filename);
+                    //if (positions != null) StorageAPI.SaveFile(rawjson, filename);
                 }
 
                 return positions;
