@@ -13,6 +13,9 @@ namespace CryptoAccouting
 	partial class TransactionViewController
 	{
 		[Outlet]
+		UIKit.UIBarButtonItem barbuttonShare { get; set; }
+
+		[Outlet]
 		UIKit.UIButton buttonExchange { get; set; }
 
 		[Outlet]
@@ -47,6 +50,11 @@ namespace CryptoAccouting
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (barbuttonShare != null) {
+				barbuttonShare.Dispose ();
+				barbuttonShare = null;
+			}
+
 			if (buttonExchange != null) {
 				buttonExchange.Dispose ();
 				buttonExchange = null;
@@ -77,6 +85,11 @@ namespace CryptoAccouting
 				labelBTCValSell = null;
 			}
 
+			if (labelMonaQtyBuy != null) {
+				labelMonaQtyBuy.Dispose ();
+				labelMonaQtyBuy = null;
+			}
+
 			if (labelMonaQtySell != null) {
 				labelMonaQtySell.Dispose ();
 				labelMonaQtySell = null;
@@ -90,11 +103,6 @@ namespace CryptoAccouting
 			if (labelMonaValSell != null) {
 				labelMonaValSell.Dispose ();
 				labelMonaValSell = null;
-			}
-
-			if (labelMonaQtyBuy != null) {
-				labelMonaQtyBuy.Dispose ();
-				labelMonaQtyBuy = null;
 			}
 
 			if (TransactionView != null) {

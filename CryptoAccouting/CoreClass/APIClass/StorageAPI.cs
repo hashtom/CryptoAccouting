@@ -342,6 +342,13 @@ namespace CryptoAccouting.CoreClass.APIClass
                 {
                     File.Delete(file);
                 }
+
+                //Excel files
+                foreach (var file in Directory.EnumerateFiles(documents, "*.xlsx"))
+                {
+                    File.Delete(file);
+                }
+
                 //png data
                 foreach (var image in Directory.EnumerateFiles(Path.Combine(documents, "Images")))
                 {

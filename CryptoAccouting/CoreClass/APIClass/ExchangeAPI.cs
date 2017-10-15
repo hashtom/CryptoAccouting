@@ -27,14 +27,23 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
             else
             {
-                using (var http = new HttpClient())
+                try
                 {
-                    HttpResponseMessage response = http.GetAsync(BaseUri).Result;
-                    if (!response.IsSuccessStatusCode)
+                    using (var http = new HttpClient())
                     {
-                        return EnuAPIStatus.FailureNetwork;
+                        HttpResponseMessage response = http.GetAsync(BaseUri).Result;
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            return EnuAPIStatus.FailureNetwork;
+                        }
+                        rawjson = response.Content.ReadAsStringAsync().Result;
                     }
-                    rawjson = response.Content.ReadAsStringAsync().Result;
+                }
+                catch (Exception)
+                {
+                    rawjson = StorageAPI.LoadFromFile(jsonfilename);
+                    if (rawjson == null) rawjson = StorageAPI.LoadBundleFile(jsonfilename);
+                    //return EnuAPIStatus.FailureNetwork;
                 }
             }
             try
