@@ -129,15 +129,14 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone App Icon iOS 5,6.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone App Icon iOS 5,6%402x.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iPhone Spotlight iOS 5,6 &amp; Settings.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-20x20%403x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iTunesArtwork%402x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-20x20%402x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-29x29%402x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-29x29%403x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-40x40%402x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-40x40%403x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-60x60%402x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-60x60%403x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\appicon-Small-40.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\appicon-Small%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\appicon-Small%403x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\appicon-Small-40%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\appicon-60%403x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\appicon-60%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\iTunesArtwork%402x" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-60.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
