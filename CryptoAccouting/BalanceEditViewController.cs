@@ -201,21 +201,14 @@ namespace CryptoAccouting
                     textQuantity.TextColor = UIColor.Blue;
                 }
 
-                if (PositionDetail != null)
-                {
-                    buttonDelete.Enabled = true;
-                }
-                else
-                {
-                    buttonDelete.Enabled = false;
-                }
+                buttonDelete.Alpha = PositionDetail != null ? 1 : 0;
             }
             else
             {
                 buttonDone.Enabled = false;
                 buttonEdit.Enabled = true;
                 switchWatchOnly.Enabled = false;
-                buttonDelete.Enabled = false;
+                buttonDelete.Alpha = 0;
 
                 if (!switchWatchOnly.On)
                 {

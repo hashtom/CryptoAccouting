@@ -116,9 +116,9 @@ namespace CryptoAccouting
                     labelPrice.Text = "฿" + ApplicationCore.NumberFormat(thisCoin.MarketPrice.LatestPriceBTC);
                 }
 
-                labelPrice.TextColor = thisCoin.MarketPrice.USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(255, 28, 168);
+                labelPrice.TextColor = thisCoin.MarketPrice.USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);
                 labelPriceBase.Text = ApplicationCore.NumberFormat(thisCoin.MarketPrice.LatestPriceBase());
-                labelPriceBase.TextColor = thisCoin.MarketPrice.USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(255, 28, 168);
+                labelPriceBase.TextColor = thisCoin.MarketPrice.USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);
             }
 
             labelPriceBaseTitle.Text = "Price(" + ApplicationCore.BaseCurrency + ")";
