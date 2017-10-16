@@ -200,12 +200,22 @@ namespace CryptoAccouting
                     textQuantity.Enabled = true;
                     textQuantity.TextColor = UIColor.Blue;
                 }
+
+                if (PositionDetail != null)
+                {
+                    buttonDelete.Enabled = true;
+                }
+                else
+                {
+                    buttonDelete.Enabled = false;
+                }
             }
             else
             {
                 buttonDone.Enabled = false;
                 buttonEdit.Enabled = true;
                 switchWatchOnly.Enabled = false;
+                buttonDelete.Enabled = false;
 
                 if (!switchWatchOnly.On)
                 {
@@ -219,16 +229,6 @@ namespace CryptoAccouting
                     textQuantity.TextColor = UIColor.Black;
                 }
             }
-
-            if (PositionDetail != null)
-            {
-                buttonDelete.Enabled = true;
-            }
-            else
-            {
-                buttonDelete.Enabled = false;
-            }
-
         }
 
         public override void ReDrawScreen()

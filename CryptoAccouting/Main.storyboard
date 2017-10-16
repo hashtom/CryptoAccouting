@@ -21,7 +21,7 @@
         </array>
     </customFonts>
     <scenes>
-        <!--Total Balance-->
+        <!--Coin Balance-->
         <scene sceneID="709">
             <objects>
                 <tableViewController storyboardIdentifier="BalanceViewC" id="710" customClass="BalanceMainViewController" sceneMemberID="viewController">
@@ -138,7 +138,7 @@
                         </connections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Total Balance" id="859">
+                    <navigationItem key="navigationItem" title="Coin Balance" id="859">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="19987">
                             <connections>
                                 <action selector="ButtonAddNew_Activated:" destination="710" id="24645"/>
@@ -354,7 +354,7 @@
             </objects>
             <point key="canvasLocation" x="45" y="360"/>
         </scene>
-        <!--Trade Summary-->
+        <!--Trades-->
         <scene sceneID="8ay-YF-hb1">
             <objects>
                 <viewController id="fSk-S8-Su2" customClass="TransactionViewController" sceneMemberID="viewController">
@@ -504,7 +504,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Trade Summary" id="v7Z-pL-f3v">
+                    <navigationItem key="navigationItem" title="Trades" id="v7Z-pL-f3v">
                         <barButtonItem key="rightBarButtonItem" title="Export" id="40t-xf-m9c">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </barButtonItem>
@@ -1734,7 +1734,7 @@
             </objects>
             <point key="canvasLocation" x="984" y="-1064"/>
         </scene>
-        <!--Details-->
+        <!--Coin Details-->
         <scene sceneID="uCe-JS-6L8">
             <objects>
                 <tableViewController storyboardIdentifier="BalanceDetailViewC" id="4PD-G1-6DB" customClass="BalanceDetailViewConrtoller" sceneMemberID="viewController">
@@ -1855,7 +1855,7 @@
                             <outlet property="delegate" destination="4PD-G1-6DB" id="hEJ-xg-k0t"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Details" id="28485">
+                    <navigationItem key="navigationItem" title="Coin Details" id="28485">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="28486">
                             <connections>
                                 <action selector="ButtonAddNew_Activated:" destination="4PD-G1-6DB" id="28487"/>
