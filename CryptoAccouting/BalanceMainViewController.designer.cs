@@ -22,10 +22,6 @@ namespace CryptoAccouting
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		UIKit.UIBarButtonItem buttonRefresh { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UILabel label1dPctBTC { get; set; }
 
 		[Outlet]
@@ -49,17 +45,9 @@ namespace CryptoAccouting
 
 		[Action ("ButtonAddNew_Activated:")]
 		partial void ButtonAddNew_Activated (UIKit.UIBarButtonItem sender);
-
-		[Action ("ButtonRefresh_Activated:")]
-		partial void ButtonRefresh_Activated (UIKit.UIBarButtonItem sender);
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (labelLastUpdate != null) {
-				labelLastUpdate.Dispose ();
-				labelLastUpdate = null;
-			}
-
 			if (BalanceTopView != null) {
 				BalanceTopView.Dispose ();
 				BalanceTopView = null;
@@ -70,11 +58,6 @@ namespace CryptoAccouting
 				buttonAddNew = null;
 			}
 
-			if (buttonRefresh != null) {
-				buttonRefresh.Dispose ();
-				buttonRefresh = null;
-			}
-
 			if (label1dPctBTC != null) {
 				label1dPctBTC.Dispose ();
 				label1dPctBTC = null;
@@ -83,6 +66,11 @@ namespace CryptoAccouting
 			if (labelCcy != null) {
 				labelCcy.Dispose ();
 				labelCcy = null;
+			}
+
+			if (labelLastUpdate != null) {
+				labelLastUpdate.Dispose ();
+				labelLastUpdate = null;
 			}
 
 			if (labelTotalBTC != null) {

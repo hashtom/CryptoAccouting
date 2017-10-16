@@ -46,10 +46,18 @@ namespace CryptoAccouting
 		UIKit.UILabel labelMonaValSell { get; set; }
 
 		[Outlet]
+		UIKit.UIView TradeTopView { get; set; }
+
+		[Outlet]
 		UIKit.UIView TransactionView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (TradeTopView != null) {
+				TradeTopView.Dispose ();
+				TradeTopView = null;
+			}
+
 			if (barbuttonShare != null) {
 				barbuttonShare.Dispose ();
 				barbuttonShare = null;

@@ -5,6 +5,8 @@ using UIKit;
 using CryptoAccouting.CoreClass;
 using CryptoAccouting.UIClass;
 using System.Linq;
+//using CoreGraphics;
+//using CoreAnimation;
 
 namespace CryptoAccouting
 {

@@ -1,6 +1,6 @@
 ﻿using Foundation; using System; using UIKit; using CryptoAccouting.CoreClass; using CryptoAccouting.UIClass; using System.Collections.Generic; using CoreGraphics; using CoreAnimation; using System.Threading.Tasks;  namespace CryptoAccouting {     public partial class BalanceMainViewController : CryptoTableViewController     {
         //private NavigationDrawer menu;
-        Balance mybalance;         CAGradientLayer gradient;         LoadingOverlay loadPop;          public BalanceMainViewController(IntPtr handle) : base(handle)         {         }          public override void ViewDidLoad()         {             base.ViewDidLoad();              // Instantiate Controllers             AppSetting.balanceMainViewC = this;             //AppSetting.transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             AppSetting.plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             AppSetting.settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             //menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);  
+        Balance mybalance;          public BalanceMainViewController(IntPtr handle) : base(handle)         {         }          public override void ViewDidLoad()         {             base.ViewDidLoad();              // Instantiate Controllers             AppSetting.balanceMainViewC = this;             //AppSetting.transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             AppSetting.plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             AppSetting.settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             //menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);  
             if (ApplicationCore.InitializeCore() != EnuAPIStatus.Success)             {                 this.PopUpWarning("some issue!!");                 this.mybalance = new Balance();             }             else             {                 this.mybalance = ApplicationCore.Balance;             }              // Configure Table source             TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");             TableView.Source = new CoinTableSource(mybalance, this);
             ReDrawScreen(); 
             if (!ApplicationCore.IsInternetReachable())
@@ -9,7 +9,8 @@
 				okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
 				this.PresentViewController(okAlertController, true, null);
 			}
-             //Color Design             gradient = new CAGradientLayer();             gradient.Frame = BalanceTopView.Bounds;             gradient.NeedsDisplayOnBoundsChange = true;             gradient.MasksToBounds = true;             gradient.Colors = new CGColor[] { UIColor.FromRGB(178, 200, 198).CGColor, UIColor.FromRGB(242, 243, 242).CGColor };             BalanceTopView.Layer.InsertSublayer(gradient, 0); 
+
+            //Color Design             var gradient = new CAGradientLayer();             gradient.Frame = this.BalanceTopView.Bounds;             gradient.NeedsDisplayOnBoundsChange = true;             gradient.MasksToBounds = true;             gradient.Colors = new CGColor[] { UIColor.FromRGB(0, 126, 167).CGColor, UIColor.FromRGB(0, 168, 232).CGColor };             //NavigationController.NavigationBar.Layer.InsertSublayer(gradient, 0);             this.BalanceTopView.Layer.InsertSublayer(gradient, 0); 
 			// Configure Segmented control
 			ConfigureSegmentButton();              Task.Run(async () =>             {
                 //if (!AppDelegate.IsInDesignerView)
@@ -79,7 +80,7 @@
                 }
                 TableView.ReloadData();
             };          }          public override void ReDrawScreen()         {
-            if (ApplicationCore.Balance != null)             {                 labelCcy.Text = ApplicationCore.BaseCurrency.ToString();                 labelTotalFiat.Text = ApplicationCore.NumberFormat(mybalance.LatestFiatValueBase());                 labelTotalBTC.Text = ApplicationCore.NumberFormat(mybalance.AmountBTC());                 label1dPctBTC.Text = ApplicationCore.NumberFormat(mybalance.BaseRet1d(), true, false) + "%";                 label1dPctBTC.TextColor = mybalance.BaseRet1d() > 0 ? UIColor.FromRGB(18,104,114) : UIColor.Red;                 labelLastUpdate.Text = ApplicationCore.Bitcoin().MarketPrice != null ? "Last Update: " + ApplicationCore.Bitcoin().MarketPrice.PriceDate.ToShortTimeString() : "";
+            if (ApplicationCore.Balance != null)             {                 labelCcy.Text = ApplicationCore.BaseCurrency.ToString();                 labelTotalFiat.Text = ApplicationCore.NumberFormat(mybalance.LatestFiatValueBase());                 labelTotalBTC.Text = ApplicationCore.NumberFormat(mybalance.AmountBTC());                 label1dPctBTC.Text = ApplicationCore.NumberFormat(mybalance.BaseRet1d(), true, false) + "%";                 label1dPctBTC.TextColor = mybalance.BaseRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(255, 28, 168);                 labelLastUpdate.Text = ApplicationCore.Bitcoin().MarketPrice != null ? "Last Update: " + ApplicationCore.Bitcoin().MarketPrice.PriceDate.ToShortTimeString() : "";
                 //mybalance.SortPositionByHolding();
             }         } 
         partial void ButtonAddNew_Activated(UIBarButtonItem sender)
@@ -87,12 +88,13 @@
             PushSelectionView();
         }
 
-        async partial void ButtonRefresh_Activated(UIBarButtonItem sender)
-        {             var bounds = TableView.Bounds;             loadPop = new LoadingOverlay(bounds);             TableView.Add(loadPop);              await RefreshPriceAsync();              loadPop.Hide();
-        }          private void PushSelectionView()
+        //async partial void ButtonRefresh_Activated(UIBarButtonItem sender)
+        //{         //    var bounds = TableView.Bounds;         //    loadPop = new LoadingOverlay(bounds);         //    TableView.Add(loadPop);          //    await RefreshPriceAsync();          //    loadPop.Hide();
+        //}          private void PushSelectionView()
         {
             List<SelectionSearchItem> searchitems = new List<SelectionSearchItem>();             foreach (var item in ApplicationCore.InstrumentList)
             {                 SelectionSearchItem searchitem = new SelectionSearchItem()
                 {                     SearchItem1 = item.Id,                     SearchItem2 = item.Symbol1,                     ImageFile = item.Id + ".png",                     SortOrder = item.rank                 };                 searchitems.Add(searchitem);             } 
 			var SymbolSelectionViewC = Storyboard.InstantiateViewController("SymbolSelectionViewC") as SymbolSelectionViewConroller;
-			SymbolSelectionViewC.SelectionItems = searchitems;             SymbolSelectionViewC.DestinationID = "BalanceEditViewC";             NavigationController.PushViewController(SymbolSelectionViewC, true);         }          async private Task RefreshPriceAsync()         {             buttonRefresh.Enabled = false;              await ApplicationCore.FetchMarketDataFromBalanceAsync();             ReDrawScreen();             TableView.ReloadData();              buttonRefresh.Enabled = true;         }     } }
+			SymbolSelectionViewC.SelectionItems = searchitems;             SymbolSelectionViewC.DestinationID = "BalanceEditViewC";             NavigationController.PushViewController(SymbolSelectionViewC, true);         }          async private Task RefreshPriceAsync()         {
+            await ApplicationCore.FetchMarketDataFromBalanceAsync();             ReDrawScreen();             TableView.ReloadData();         }     } }

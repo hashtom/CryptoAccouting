@@ -6,6 +6,8 @@ using CryptoAccouting.CoreClass;
 using CryptoAccouting.UIClass;
 using System.Linq;
 using System.Collections.Generic;
+using CoreGraphics;
+using CoreAnimation;
 
 namespace CryptoAccouting
 {
@@ -28,6 +30,14 @@ namespace CryptoAccouting
 			//this.TableView.RegisterNibForCellReuse(BookingCell.Nib, MyCellId);
 			this.TableView.RegisterClassForCellReuse(typeof(CoinBookingCell), MyCellId);
             this.TableView.Source = new CoinBookingTableSource(instrumentId_selected, ApplicationCore.Balance, this);
+
+            //Color Design
+            var gradient = new CAGradientLayer();
+            gradient.Frame = this.DetailTopView.Bounds;
+            gradient.NeedsDisplayOnBoundsChange = true;
+            gradient.MasksToBounds = true;
+            gradient.Colors = new CGColor[] { UIColor.FromRGB(0, 126, 167).CGColor, UIColor.FromRGB(0, 168, 232).CGColor };
+            this.DetailTopView.Layer.InsertSublayer(gradient, 0);
 
 			buttonPriceSource.TouchUpInside += (sender, e) =>
             {
@@ -106,9 +116,9 @@ namespace CryptoAccouting
                     labelPrice.Text = "฿" + ApplicationCore.NumberFormat(thisCoin.MarketPrice.LatestPriceBTC);
                 }
 
-                labelPrice.TextColor = thisCoin.MarketPrice.USDRet1d() > 0 ? UIColor.FromRGB(18, 104, 114) : UIColor.Red;
+                labelPrice.TextColor = thisCoin.MarketPrice.USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(255, 28, 168);
                 labelPriceBase.Text = ApplicationCore.NumberFormat(thisCoin.MarketPrice.LatestPriceBase());
-                labelPriceBase.TextColor = thisCoin.MarketPrice.USDRet1d() > 0 ? UIColor.FromRGB(18, 104, 114) : UIColor.Red;
+                labelPriceBase.TextColor = thisCoin.MarketPrice.USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(255, 28, 168);
             }
 
             labelPriceBaseTitle.Text = "Price(" + ApplicationCore.BaseCurrency + ")";
