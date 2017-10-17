@@ -143,6 +143,7 @@
     <Folder Include="Resources\" />
     <Folder Include="CoreClass\APIClass\" />
     <Folder Include="Bundlefile\" />
+    <Folder Include="Backend\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -154,8 +155,9 @@
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <None Include="packages.config" />
-    <None Include="Bundlefile\fxget.sh" />
-    <None Include="Bundlefile\marketget.sh" />
+    <None Include="Backend\fxget.sh" />
+    <None Include="Backend\marketget.sh" />
+    <None Include="Backend\create_configdata.py" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />

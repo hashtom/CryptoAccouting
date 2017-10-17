@@ -75,12 +75,14 @@ namespace CryptoAccouting.CoreClass.APIClass
                         if (symbol["symbol"] != null)
                         {
                             coin = ApplicationCore.InstrumentList.GetBySymbol1((string)symbol["symbol"]);
-                            exchange.AttachSymbolMap(coin.Id, (string)symbol["symbol"], EnuSymbolMapType.Symbol1);
+                            if (coin != null)
+                                exchange.AttachSymbolMap(coin.Id, (string)symbol["symbol"], EnuSymbolMapType.Symbol1);
                         }
                         else if (symbol["symbol2"] != null)
                         {
                             coin = ApplicationCore.InstrumentList.GetBySymbol2((string)symbol["symbol2"]);
-                            if (coin != null) exchange.AttachSymbolMap(coin.Id, (string)symbol["symbol2"], EnuSymbolMapType.Symbol2);
+                            if (coin != null)
+                                if (coin != null) exchange.AttachSymbolMap(coin.Id, (string)symbol["symbol2"], EnuSymbolMapType.Symbol2);
                         }
 
                         if (coin != null) exchange.AttachListedCoin(coin);
