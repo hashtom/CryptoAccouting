@@ -2,31 +2,32 @@
 
 <application name="CryptoAccounting">
   <balance>
-    <position id="1">
-      <symbol>BTC</symbol>
-      <date>2017-09-28T00:00:00+09:00</date>
-      <amount>0.01</amount>
-      <amountbtc>0.01</amountbtc>
-      <book>0</book>
+    <position id="0">
+      <instrument>bitcoin</instrument>
+      <date>2017-10-17T00:00:00+09:00</date>
+      <amount>0</amount>
+      <amountbtc>0</amountbtc>
+      <book>NA</book>
       <exchange></exchange>
-      <storage>TBA</storage>
-      <storagetype>TBA</storagetype>
-      <priceusd>4162.55</priceusd>
+      <storage></storage>
+      <storagetype></storagetype>
+      <priceusd>5653.89</priceusd>
       <pricebtc>1</pricebtc>
-      <pricebase>4162.55</pricebase>
+      <pricebase>5653.89</pricebase>
+      <watchonly>True</watchonly>
     </position>
-    <position id="2">
-      <symbol>MONA</symbol>
-      <date>2017-09-28T00:00:00+09:00</date>
-      <amount>10</amount>
-      <amountbtc>0.0011114</amountbtc>
-      <book>0</book>
+    <position id="1">
+      <instrument>monacoin</instrument>
+      <date>2017-10-17T00:00:00+09:00</date>
+      <amount>0</amount>
+      <amountbtc>0</amountbtc>
+      <book>NA</book>
       <exchange></exchange>
-      <storage>TBA</storage>
-      <storagetype>TBA</storagetype>
-      <priceusd>0.463796</priceusd>
-      <pricebtc>0.00011114</pricebtc>
-      <pricebase>0.463796</pricebase>
+      <storage></storage>
+      <storagetype></storagetype>
+      <priceusd>3.11907</priceusd>
+      <pricebtc>0.00056105</pricebtc>
+      <pricebase>3.11907</pricebase>
+      <watchonly>True</watchonly>
     </position>
   </balance>
-</application>
