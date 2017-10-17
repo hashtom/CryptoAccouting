@@ -191,7 +191,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 }
             }
 
-            if (!UseBundleFile) StorageAPI.SaveInstrumentXML(instrumentlist, ApplicationCore.InstrumentsFile);
+            StorageAPI.SaveInstrumentXML(instrumentlist, ApplicationCore.InstrumentsFile);
 
 			return EnuAPIStatus.Success;
 		}

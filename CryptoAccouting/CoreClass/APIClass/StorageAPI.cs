@@ -183,7 +183,8 @@ namespace CryptoAccouting.CoreClass.APIClass
                                                    new XElement("symbol2", coin.Symbol2),
                                                    new XElement("name", coin.Name),
                                                    new XElement("type", coin.Type.ToString()),
-                                                   new XElement("source", coin.PriceSourceCode)
+                                                   new XElement("source", coin.PriceSourceCode),
+                                                   new XElement("rank", coin.rank)
                                                   //new XElement("logofile", coin.LogoFileName),
                                                   //new XElement("isactive", coin.IsActive.ToString())
                                                   );
@@ -211,20 +212,30 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 foreach (var elem in instrumentsXE)
                 {
-                    var coin = new Instrument(elem.Attribute("id").Value)
+                    try
                     {
-                        Symbol1 = elem.Element("symbol").Value,
-                        Name = elem.Element("name").Value,
-                        PriceSourceCode = elem.Element("source").Value
-                    };
+                        var coin = new Instrument(elem.Attribute("id").Value)
+                        {
+                            Symbol1 = elem.Element("symbol").Value,
+                            Name = elem.Element("name").Value,
+                            PriceSourceCode = elem.Element("source").Value,
+                            rank = int.Parse(elem.Element("rank").Value)
+                        };
 
-                    if (elem.Element("symbol2") != null) coin.Symbol2 = elem.Element("symbol2").Value;
-                    //if (elem.Descendants("logofile").Select(x => x.Value).Any())
-                    //{
-                    //    coin.LogoFileName = (string)elem.Descendants("logofile").Select(x => x.Value).First();
-                    //}
-                    //coin.IsActive = bool.Parse((string)elem.Descendants("isactive").Select(x => x.Value).First());
-                    instrumentlist.Attach(coin);
+                        if (elem.Element("symbol2") != null) coin.Symbol2 = elem.Element("symbol2").Value;
+                        //if (elem.Descendants("logofile").Select(x => x.Value).Any())
+                        //{
+                        //    coin.LogoFileName = (string)elem.Descendants("logofile").Select(x => x.Value).First();
+                        //}
+                        //coin.IsActive = bool.Parse((string)elem.Descendants("isactive").Select(x => x.Value).First());
+                        instrumentlist.Attach(coin);
+                    }
+                    catch (Exception)
+                    {
+                        RemoveFile(fileName);
+                        return EnuAPIStatus.FatalError;
+                    }
+                
                 }
 
                 return EnuAPIStatus.Success;
@@ -297,16 +308,16 @@ namespace CryptoAccouting.CoreClass.APIClass
         }
 
         public static EnuAPIStatus SaveAppSettingXML(string fileName, string AppName, EnuBaseFiatCCY BaseCurrency, ExchangeList exList)
-		{
-			//var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-			//var path = Path.Combine(mydocuments, fileName);
+        {
+            //var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            //var path = Path.Combine(mydocuments, fileName);
 
-			XElement application = new XElement("application",
-												new XAttribute("name", AppName));
-			
+            XElement application = new XElement("application",
+                                                new XAttribute("name", AppName));
+
 
             XElement basecurrency = new XElement("basecurrency", BaseCurrency);
-			application.Add(basecurrency);
+            application.Add(basecurrency);
 
             XElement apikeys = new XElement("apikeys");
             application.Add(apikeys);
@@ -325,8 +336,23 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             return SaveFile(application.ToString(), fileName);
 
-		}
+        }
 
+        public static EnuAPIStatus RemoveFile(string filename)
+        {
+            var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            try
+            {
+                File.Delete(Path.Combine(documents, filename));
+            }
+            catch (IOException)
+            {
+                return EnuAPIStatus.FailureStorage;
+            }
+
+            return EnuAPIStatus.Success;
+        }
         public static EnuAPIStatus RemoveAllCache()
         {
 			var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);

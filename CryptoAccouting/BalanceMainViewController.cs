@@ -15,7 +15,7 @@
 			ConfigureSegmentButton();              Task.Run(async () =>             {
                 //if (!AppDelegate.IsInDesignerView)
                 //{
-                    await ApplicationCore.FetchCoinLogoAsync();
+                    await ApplicationCore.FetchCoinLogoTop100Async();
                 //}             });              RefreshControl = new UIRefreshControl();             RefreshControl.ValueChanged += async (sender, e) =>              {                 await RefreshPriceAsync();                 RefreshControl.EndRefreshing();             };
         }          public async override void ViewWillAppear(bool animated)         {
             base.ViewWillAppear(animated);

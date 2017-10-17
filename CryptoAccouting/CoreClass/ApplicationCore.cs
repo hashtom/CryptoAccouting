@@ -51,7 +51,7 @@
         {                          //Force update online             if (forceRefresh)
             {                 InstrumentList = new InstrumentList();                  var status = MarketDataAPI.FetchAllCoinData(InstrumentList, false);                 if (status is EnuAPIStatus.Success)
                 {
-                    if (Balance != null) Balance.AttachInstruments(InstrumentList);                 }                  Task.Run(async () => await FetchCoinLogoAsync());                  return status;
+                    if (Balance != null) Balance.AttachInstruments(InstrumentList);                 }                  Task.Run(async () => await FetchCoinLogoTop100Async());                  return status;
             }
             else
             {                 if (InstrumentList is null) InstrumentList = new InstrumentList(); 
@@ -63,12 +63,12 @@
 						// 2.Use Bundled file 
                     return MarketDataAPI.FetchAllCoinData(InstrumentList, true);                     //}                 }
                  return EnuAPIStatus.Success;
-            }         }          public static async Task<EnuAPIStatus>FetchCoinLogoAsync()         {             if (InstrumentList == null)
+            }         }          public static async Task<EnuAPIStatus> FetchCoinLogoAsync(Instrument coin)         {              return await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);         }          public static async Task<EnuAPIStatus>FetchCoinLogoTop100Async()         {             if (InstrumentList == null)
             {
                 return EnuAPIStatus.FatalError;             }
             else
             {
-                foreach (var coin in InstrumentList)
+                foreach (var coin in InstrumentList.Where(x=>x.rank <= 100))
                 {
                     await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);
                 }
@@ -89,7 +89,7 @@
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             return epoch.AddSeconds(EpochSeconds);
 
-        }          public static void RefreshBalance()         {             Balance.RefreshBalanceData();             CoinStorageList.RecalculateWeights();         }          public static void AttachPosition(Position position, bool DoRefreshBalance = true)         {             Balance.Attach(position);             if (DoRefreshBalance) RefreshBalance();         }          public static void DetachPosition(Position position, bool DoRefreshBalance = true)         {             Balance.Detach(position);             CoinStorageList.DetachPosition(position);             if (DoRefreshBalance) RefreshBalance();         }          public static void DetachPositionByCoin(string InstrumentId, bool DoRefreshBalance = true)         {             Balance.DetachPositionByCoin(InstrumentId);             CoinStorageList.DetachPositionByCoin(InstrumentId);             if (DoRefreshBalance) RefreshBalance();         }          public static void DetachPositionByExchange(Exchange exchange, bool DoRefreshBalance = true)         {             Balance.DetachPositionByExchange(exchange);             CoinStorageList.Detach(exchange);             if (DoRefreshBalance) RefreshBalance();         } 
+        }          public static void RefreshBalance()         {             Balance.RefreshBalanceData();             CoinStorageList.RecalculateWeights();         }          public static void AttachPosition(Position position, bool DoRefreshBalance = true)         {             Balance.Attach(position);             if (DoRefreshBalance) RefreshBalance();             Task.Run(async () => await FetchCoinLogoAsync(position.Coin));         }          public static void DetachPosition(Position position, bool DoRefreshBalance = true)         {             Balance.Detach(position);             CoinStorageList.DetachPosition(position);             if (DoRefreshBalance) RefreshBalance();         }          public static void DetachPositionByCoin(string InstrumentId, bool DoRefreshBalance = true)         {             Balance.DetachPositionByCoin(InstrumentId);             CoinStorageList.DetachPositionByCoin(InstrumentId);             if (DoRefreshBalance) RefreshBalance();         }          public static void DetachPositionByExchange(Exchange exchange, bool DoRefreshBalance = true)         {             Balance.DetachPositionByExchange(exchange);             CoinStorageList.Detach(exchange);             if (DoRefreshBalance) RefreshBalance();         } 
         public static async Task FetchMarketDataAsync(Instrument coin)
         {
             //await MarketDataAPI.FetchCoinMarketDataAsync(coin);
