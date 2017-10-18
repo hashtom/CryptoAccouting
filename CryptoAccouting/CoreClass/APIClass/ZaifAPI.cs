@@ -52,7 +52,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                             }
                             else
                             {
-                                btcprice = ApplicationCore.Bitcoin().MarketPrice;
+                                btcprice = ApplicationCore.Bitcoin.MarketPrice;
                                 if (btcprice != null)
                                 {
                                     coin.MarketPrice.LatestPriceUSD = (double)jobj["last"] / USDJPYrate.Rate;
@@ -145,7 +145,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
 
             var tradelist = ParseTrade(rawjson);
-            if (tradelist != null) StorageAPI.SaveFile(rawjson, filename);
+            //if (tradelist != null) StorageAPI.SaveFile(rawjson, filename);
 
             return tradelist;
 

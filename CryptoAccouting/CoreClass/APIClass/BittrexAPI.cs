@@ -35,7 +35,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     var jobj = await Task.Run(() => JObject.Parse(rawjson));
                     var jarray = (JArray)jobj["result"];
 
-                    var btcprice = ApplicationCore.Bitcoin().MarketPrice;
+                    var btcprice = ApplicationCore.Bitcoin.MarketPrice;
 
                     foreach (var coin in coins.Where(x => x.PriceSourceCode == "Bittrex"))
                     {

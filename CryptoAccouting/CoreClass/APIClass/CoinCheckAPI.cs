@@ -54,7 +54,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                             }
                             else
                             {
-                                btcprice = ApplicationCore.Bitcoin().MarketPrice;
+                                btcprice = ApplicationCore.Bitcoin.MarketPrice;
                                 if (btcprice != null)
                                 {
                                     coin.MarketPrice.LatestPriceUSD = (double)jobj["rate"] / USDJPYrate.Rate;

@@ -199,6 +199,7 @@ namespace CryptoAccouting
                     buttonWallet.SetTitleColor(UIColor.Blue, UIControlState.Normal);
                     textQuantity.Enabled = true;
                     textQuantity.TextColor = UIColor.Blue;
+                    textQuantity.Placeholder = "Input Quantity";
                 }
 
                 buttonDelete.Alpha = PositionDetail != null ? 1 : 0;

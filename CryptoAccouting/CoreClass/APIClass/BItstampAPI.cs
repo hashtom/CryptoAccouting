@@ -68,7 +68,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                         {
                             coin.MarketPrice.LatestPriceBTC = (double)jobj["last"];
                             coin.MarketPrice.PriceBTCBefore24h = (double)jobj["open"];
-                            var btcprice = ApplicationCore.Bitcoin().MarketPrice;
+                            var btcprice = ApplicationCore.Bitcoin.MarketPrice;
                             if (btcprice != null)
                             {
                                 coin.MarketPrice.LatestPriceUSD = (double)jobj["Last"] * btcprice.LatestPriceUSD;

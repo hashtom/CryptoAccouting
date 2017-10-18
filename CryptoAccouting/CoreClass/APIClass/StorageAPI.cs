@@ -8,11 +8,11 @@ namespace CryptoAccouting.CoreClass.APIClass
 {
     public static class StorageAPI
     {
-        
+
         public static string LoadBundleFile(string fileName)
-		{
+        {
             return File.ReadAllText("Bundlefile/" + fileName);
-		}
+        }
 
         public static EnuAPIStatus SaveFile(string json, string fileName)
         {
@@ -129,18 +129,18 @@ namespace CryptoAccouting.CoreClass.APIClass
         }
 
         public static EnuAPIStatus SaveBalanceXML(Balance myBalance, string fileName)
-		{
-			//var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-			//var path = Path.Combine(mydocuments, fileName);
+        {
+            //var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            //var path = Path.Combine(mydocuments, fileName);
 
-			XElement application = new XElement("application",
-												new XAttribute("name", ApplicationCore.AppName));
+            XElement application = new XElement("application",
+                                                new XAttribute("name", ApplicationCore.AppName));
             XElement balance = new XElement("balance");
-											//,new XAttribute("exchange", myBalance.ExchangeTraded.ToString()));
-			application.Add(balance);
+            //,new XAttribute("exchange", myBalance.ExchangeTraded.ToString()));
+            application.Add(balance);
 
             foreach (var pos in myBalance)
-			{
+            {
                 XElement position = new XElement("position",
                                                  new XAttribute("id", pos.Id.ToString()),
                                                  new XElement("instrument", pos.Coin.Id),
@@ -156,35 +156,35 @@ namespace CryptoAccouting.CoreClass.APIClass
                                                  new XElement("pricebase", pos.LatestPriceBase().ToString()),
                                                  new XElement("watchonly", pos.WatchOnly.ToString())
                                                 );
-				balance.Add(position);
-			}
+                balance.Add(position);
+            }
 
-			//File.WriteAllText(path, application.ToString());
+            //File.WriteAllText(path, application.ToString());
 
             return SaveFile(application.ToString(), fileName);
 
-		}
+        }
 
-        public static EnuAPIStatus SaveInstrumentXML(InstrumentList instrumentlist, string fileName)
+        public static EnuAPIStatus SavePriceSourceXML(InstrumentList instrumentlist, string fileName)
         {
-			//var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-			//var path = Path.Combine(mydocuments, fileName);
+            //var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            //var path = Path.Combine(mydocuments, fileName);
 
-			XElement application = new XElement("application",
-												new XAttribute("name", ApplicationCore.AppName));
+            XElement application = new XElement("application",
+                                                new XAttribute("name", ApplicationCore.AppName));
             XElement instruments = new XElement("instruments");
-			application.Add(instruments);
+            application.Add(instruments);
 
-            foreach (var coin in instrumentlist)
+            foreach (var coin in instrumentlist.Where(x => x.PriceSourceCode != null))
             {
                 XElement instrument = new XElement("instrument",
                                                    new XAttribute("id", coin.Id),
-                                                   new XElement("symbol", coin.Symbol1),
-                                                   new XElement("symbol2", coin.Symbol2),
-                                                   new XElement("name", coin.Name),
-                                                   new XElement("type", coin.Type.ToString()),
-                                                   new XElement("source", coin.PriceSourceCode),
-                                                   new XElement("rank", coin.rank)
+                                                   //new XElement("symbol", coin.Symbol1),
+                                                   //new XElement("symbol2", coin.Symbol2),
+                                                   //new XElement("name", coin.Name),
+                                                   //new XElement("type", coin.Type.ToString()),
+                                                   new XElement("source", coin.PriceSourceCode)
+                                                  //new XElement("rank", coin.rank)
                                                   //new XElement("logofile", coin.LogoFileName),
                                                   //new XElement("isactive", coin.IsActive.ToString())
                                                   );
@@ -195,79 +195,62 @@ namespace CryptoAccouting.CoreClass.APIClass
             return SaveFile(application.ToString(), fileName);
         }
 
-        public static EnuAPIStatus LoadInstrumentXML(string fileName, InstrumentList instrumentlist)
+        public static InstrumentList LoadInstrument()
         {
-            //InstrumentList instrumentlist;
-            //var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            //var path = Path.Combine(documents, fileName);
-            var instrumentsXML = LoadFromFile(fileName);
+            const string instrumentlistFile = ApplicationCore.InstrumentListFile;
+            const string pricesorceFile = ApplicationCore.PriceSourceFile;
+            InstrumentList instrumentlist;
 
-            if (instrumentsXML != null)
+            var rawjson = LoadFromFile(instrumentlistFile);
+            if (rawjson is null) rawjson = LoadBundleFile(instrumentlistFile);
+
+            try
             {
-                //var instrumentsXML = File.ReadAllText(path);
+                instrumentlist = ParseMarketData.ParseInstrumentListJson(rawjson);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
 
-                var instrumentsXE = XElement.Parse(instrumentsXML).Descendants("instrument");
-                //instrumentlist = new InstrumentList();
-                instrumentlist.Clear();
-
-                foreach (var elem in instrumentsXE)
+            var PriceSourceXML = LoadFromFile(pricesorceFile);
+            if (PriceSourceXML != null)
+            {
+                try
                 {
-                    try
-                    {
-                        var coin = new Instrument(elem.Attribute("id").Value)
-                        {
-                            Symbol1 = elem.Element("symbol").Value,
-                            Name = elem.Element("name").Value,
-                            PriceSourceCode = elem.Element("source").Value,
-                            rank = int.Parse(elem.Element("rank").Value)
-                        };
-
-                        if (elem.Element("symbol2") != null) coin.Symbol2 = elem.Element("symbol2").Value;
-                        //if (elem.Descendants("logofile").Select(x => x.Value).Any())
-                        //{
-                        //    coin.LogoFileName = (string)elem.Descendants("logofile").Select(x => x.Value).First();
-                        //}
-                        //coin.IsActive = bool.Parse((string)elem.Descendants("isactive").Select(x => x.Value).First());
-                        instrumentlist.Attach(coin);
-                    }
-                    catch (Exception)
-                    {
-                        RemoveFile(fileName);
-                        return EnuAPIStatus.FatalError;
-                    }
-                
+                    ParseMarketData.ParsePriceSourceXML(pricesorceFile, instrumentlist);
                 }
+                catch (Exception)
+                {
+                    Console.WriteLine("Parse error: ParsePriceSourceXML");
+                }
+            }
 
-                return EnuAPIStatus.Success;
+            return instrumentlist;
+        }
+
+        public static List<CrossRate> LoadCrossRate()
+        {
+            const string jsonfilename_today = ApplicationCore.CrossRatefile_today;
+            const string jsonfilename_yesterday = ApplicationCore.CrossRatefile_yesterday;
+            string rawjson_today, rawjson_yesterday;
+
+            rawjson_today = StorageAPI.LoadFromFile(jsonfilename_today);
+            rawjson_yesterday = StorageAPI.LoadFromFile(jsonfilename_yesterday);
+
+            if (rawjson_today != null & rawjson_yesterday != null)
+            {
+                return ParseMarketData.ParseCrossRateJson(rawjson_today, rawjson_yesterday);
             }
             else
             {
-                return EnuAPIStatus.FailureStorage;
+                return null;
             }
-
-
-		}
-
-        //public static InstrumentList LoadMarketDataXML(string fileName)
-        //{
-        //    var instruments = new InstrumentList();
-
-        //    //todo
-
-        //    return instruments;
-        //}
-
-        //public static EnuAPIStatus SaveMarketDataXML(string fileName)
-        //{
-
-        //    return EnuAPIStatus.Success;
-        //}
+        }
 
         public static EnuAPIStatus LoadAppSettingXML(string fileName)
         {
             EnuBaseFiatCCY baseccy;
-            //var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            //var path = Path.Combine(documents, fileName);
             var xmldoc = LoadFromFile(fileName);
 
             if (xmldoc != null)

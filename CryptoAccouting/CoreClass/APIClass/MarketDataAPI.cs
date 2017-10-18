@@ -20,6 +20,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
             else
             {
+                if (crossrates is null) crossrates = await FetchCrossRateAsync();
                 var crossrate = crossrates.Any(x => x.Currency == ApplicationCore.BaseCurrency) ?
                                           crossrates.First(x => x.Currency == ApplicationCore.BaseCurrency) :
                                           null;
@@ -60,6 +61,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                             break;
 
                         default:
+                            await FetchCoinMarketCapAsync(coins, crossrate);
                             break;
                     }
                 }
@@ -70,13 +72,10 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static async Task<EnuAPIStatus> FetchCoinMarketCapAsync(InstrumentList instrumentlist, CrossRate crossrate)
         {
-            string rawjson;
-            string rawjson_yesterday;
-
             const string CoinMarketUrl = "https://api.coinmarketcap.com/v1/ticker/";
             const string CoinMarketUrl_yesterday = "http://coinbalance.jpn.org/market/market_yesterday.json";
-
-            EnuAPIStatus status = EnuAPIStatus.Success;
+            string rawjson;
+            string rawjson_yesterday;
 
             if (!Reachability.IsHostReachable(CoinMarketUrl))
             {
@@ -88,7 +87,6 @@ namespace CryptoAccouting.CoreClass.APIClass
                 {
                     using (var http = new HttpClient())
                     {
-                        //http.MaxResponseContentBufferSize = 256000;
                         rawjson = await http.GetStringAsync(CoinMarketUrl);
                     }
 
@@ -102,98 +100,50 @@ namespace CryptoAccouting.CoreClass.APIClass
                     return EnuAPIStatus.FailureNetwork;
                 }
 
-                foreach (var coin in instrumentlist.Where(x => x.PriceSourceCode == "coinmarketcap"))
-                {
-                    //Parse Market Data 
-                    if (coin.MarketPrice == null)
-                    {
-                        var p = new Price(coin);
-                        coin.MarketPrice = p;
-                    }
+                return ParseMarketData.ParseCoinMarketCapJson(rawjson, rawjson_yesterday, instrumentlist, crossrate);
 
-                    var jarray = await Task.Run(() => JArray.Parse(rawjson));
-                    var jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
-
-                    coin.MarketPrice.LatestPriceBTC = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_btc"];
-                    coin.MarketPrice.LatestPriceUSD = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_usd"];
-                    coin.MarketPrice.PriceSource = "coinmarketcap";
-                    coin.MarketPrice.DayVolume = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["24h_volume_usd"] / coin.MarketPrice.LatestPriceBTC;
-                    coin.MarketPrice.MarketCap = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["market_cap_usd"];
-                    coin.MarketPrice.PriceDate = DateTime.Now;//ApplicationCore.FromEpochSeconds((long)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["last_updated"]);
-                    coin.MarketPrice.PriceBTCBefore24h = (double)jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_btc"];
-                    coin.MarketPrice.PriceUSDBefore24h = (double)jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_usd"];
-                    coin.MarketPrice.USDCrossRate = crossrate;
-
-                }
             }
-
-            return status;
 
         }
 
-        public static EnuAPIStatus FetchAllCoinData(InstrumentList instrumentlist, bool UseBundleFile)
+        public static InstrumentList FetchAllCoinData()
 		{
             const string BaseUrl = "http://coinbalance.jpn.org/InstrumentList.json";
-                // "https://api.coinmarketcap.com/v1/ticker/?limit=150";
+            // "https://api.coinmarketcap.com/v1/ticker/?limit=150";
+            const string instrumentlistFile = ApplicationCore.InstrumentListFile;
+            string rawjson;
 
-			string rawjson;
-
-            if (UseBundleFile)
+            if (!Reachability.IsHostReachable(BaseUrl))
             {
-                rawjson = StorageAPI.LoadBundleFile(ApplicationCore.InstrumentsBundleFile);
+                return null;
             }
             else
             {
-                if (!Reachability.IsHostReachable(BaseUrl))
+                //instrumentlist.Clear();
+                using (var http = new HttpClient())
                 {
-                    return EnuAPIStatus.FailureNetwork;
-                }
-                else
-                {
-                    //instrumentlist.Clear();
-                    using (var http = new HttpClient())
-                    {
-                        //http.MaxResponseContentBufferSize = 256000;
-                        rawjson = http.GetStringAsync(BaseUrl).Result;
-                    }
+                    rawjson = http.GetStringAsync(BaseUrl).Result;
                 }
             }
 
-            var jarray = JArray.Parse(rawjson);
-
-            //Parse Market Data 
-            foreach (var elem in jarray)
+            if (rawjson is null)
             {
-                if ((bool)elem["active"])
-                {
-                    Instrument coin;
-                    if (instrumentlist.Any(x => x.Id == (string)elem["id"]))
-                    {
-                        coin = instrumentlist.First(x => x.Id == (string)elem["id"]);
-                        coin.Symbol1 = (string)elem["symbol"];
-                        coin.Name = (string)elem["name"];
-                    }
-                    else
-                    {
-                        coin = new Instrument((string)elem["id"])
-                        {
-                            Symbol1 = (string)elem["symbol"],
-                            Name = (string)elem["name"]
-                        };//IOTA symbol注意
-                    }
+                return null;
+            }
+            else
+            {
+                StorageAPI.SaveFile(rawjson, instrumentlistFile);
 
-                    if (elem["symbol2"] != null)
-                    {
-                        coin.Symbol2 = (string)elem["symbol2"];
-                    }
-                    coin.rank = int.Parse((string)elem["rank"]);
-                    instrumentlist.Attach(coin);
+                try
+                {
+                    return ParseMarketData.ParseInstrumentListJson(rawjson);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Parse error: ParseInstrumentListJson");
+                    return null;
                 }
             }
-
-            StorageAPI.SaveInstrumentXML(instrumentlist, ApplicationCore.InstrumentsFile);
-
-			return EnuAPIStatus.Success;
 		}
 
         public static async Task<EnuAPIStatus> FetchCoinLogoAsync(string InstrumentID, bool ForceRefresh)
@@ -233,18 +183,15 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static async Task<List<CrossRate>> FetchCrossRateAsync()
         {
-            List<CrossRate> crossrates = new List<CrossRate>();
-            //CrossRate crossrate = null;
-            string rawjson_today, rawjson_yesterday;
-            const string jsonfilename_today = "crossrate_today.json";
-            const string jsonfilename_yesterday = "crossrate_yesterday.json";
+            const string jsonfilename_today = ApplicationCore.CrossRatefile_today;
+            const string jsonfilename_yesterday = ApplicationCore.CrossRatefile_yesterday;
             const string BaseUri = "http://coinbalance.jpn.org/";
+
+            string rawjson_today, rawjson_yesterday;
 
             if (!Reachability.IsHostReachable(BaseUri))
             {
-                rawjson_today = StorageAPI.LoadFromFile(jsonfilename_today);
-                rawjson_yesterday = StorageAPI.LoadFromFile(jsonfilename_yesterday);
-                if (rawjson_today is null) return null;
+                return null;
             }
             else
             {
@@ -253,7 +200,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     HttpResponseMessage response = await http.GetAsync(BaseUri + "/fxrate/fxrate_latest.json");
                     if (!response.IsSuccessStatusCode)
                     {
-                        rawjson_today = StorageAPI.LoadFromFile(jsonfilename_today);
+                        return null;
                     }
                     else
                     {
@@ -266,7 +213,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     HttpResponseMessage response = await http.GetAsync(BaseUri + "/fxrate/fxrate_yesterday.json");
                     if (!response.IsSuccessStatusCode)
                     {
-                        rawjson_yesterday = StorageAPI.LoadFromFile(jsonfilename_yesterday);
+                        return null;
                     }
                     else
                     {
@@ -277,20 +224,16 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             try
             {
-                crossrates = parseCrossRate(rawjson_today, rawjson_yesterday);
+                var crossrates = ParseMarketData.ParseCrossRateJson(rawjson_today, rawjson_yesterday);
+                StorageAPI.SaveFile(rawjson_today, jsonfilename_today);
+                StorageAPI.SaveFile(rawjson_yesterday, jsonfilename_yesterday);
+                return crossrates;
             }
             catch (JsonException)
             {
-                rawjson_today = StorageAPI.LoadFromFile(jsonfilename_today);
-                rawjson_yesterday = StorageAPI.LoadFromFile(jsonfilename_yesterday);
-                if (rawjson_today is null) return null;
-                crossrates = parseCrossRate(rawjson_today, rawjson_yesterday);
+                return null;
             }
 
-            StorageAPI.SaveFile(rawjson_today, jsonfilename_today);
-            StorageAPI.SaveFile(rawjson_yesterday, jsonfilename_yesterday);
-
-            return crossrates;
         }
 
         public static async Task<double> FetchPriceBTCBefore24hAsync(string instrumentId)
@@ -313,39 +256,5 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
         }
 
-        private static List<CrossRate> parseCrossRate(string rawjson_today, string rawjson_yesterday)
-        {
-            List<CrossRate> crossrates = new List<CrossRate>();
-            JObject json;
-
-            json = JObject.Parse(rawjson_today);
-            foreach (var ccy in (JArray)json["list"]["resources"])
-            {
-                EnuBaseFiatCCY baseccy;
-                var cursymbol = (string)ccy["resource"]["fields"]["symbol"];
-
-                if (!Enum.TryParse(cursymbol.Replace("=X", ""), out baseccy))
-                    continue;
-
-                var crossrate = new CrossRate(baseccy, (double)ccy["resource"]["fields"]["price"], DateTime.Now.Date);
-                crossrates.Add(crossrate);
-            }
-
-            json = JObject.Parse(rawjson_yesterday);
-            foreach (var ccy in (JArray)json["list"]["resources"])
-            {
-                EnuBaseFiatCCY baseccy;
-                var cursymbol = (string)ccy["resource"]["fields"]["symbol"];
-
-                if (!Enum.TryParse(cursymbol.Replace("=X", ""), out baseccy))
-                    continue;
-
-                if (crossrates.Any(x => x.Currency == baseccy))
-                    crossrates.First(x => x.Currency == baseccy).RateBefore24h = (double)ccy["resource"]["fields"]["price"];
-
-            }
-
-            return crossrates;
-        }
     }
 }

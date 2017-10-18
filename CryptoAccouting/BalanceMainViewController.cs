@@ -16,15 +16,17 @@
                 //if (!AppDelegate.IsInDesignerView)
                 //{
                     await ApplicationCore.FetchCoinLogoTop100Async();
-                //}             });              RefreshControl = new UIRefreshControl();             RefreshControl.ValueChanged += async (sender, e) =>              {                 await RefreshPriceAsync();                 RefreshControl.EndRefreshing();             };
+                //}             });              RefreshControl = new UIRefreshControl();             RefreshControl.ValueChanged += async (sender, e) =>
+            {                 await RefreshPriceAsync();                 RefreshControl.EndRefreshing();
+                //UIAlertController okAlertController = UIAlertController.Create("critical", "Could not update data.", UIAlertControllerStyle.Alert);
+                //okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+                //this.PresentViewController(okAlertController, true, null);             };
         }          public async override void ViewWillAppear(bool animated)         {
             base.ViewWillAppear(animated);
 
-            //Task.Run(async () =>
-            //{
             if (!AppDelegate.IsInDesignerView)
             {
-                if (await ApplicationCore.LoadCrossRateAsync() != EnuAPIStatus.Success)                 {                     //can't get fxrate even saved file                     UIAlertController okAlertController = UIAlertController.Create("critical", "Critical FX rates data error!", UIAlertControllerStyle.Alert);                     okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));                     this.PresentViewController(okAlertController, true, null);                 } 
+                if (await ApplicationCore.LoadCrossRateAsync() != EnuAPIStatus.Success)                 {                     //can't get fxrate even saved file                     //UIAlertController okAlertController = UIAlertController.Create("critical", "Critical FX rates data error!", UIAlertControllerStyle.Alert);                     //okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));                     //this.PresentViewController(okAlertController, true, null);                 } 
                 if(await ApplicationCore.FetchMarketDataFromBalanceAsync() != EnuAPIStatus.Success)                 {                     //Ignore Network error                     //UIAlertController okAlertController = UIAlertController.Create("Critical", "Critical Balance data error.", UIAlertControllerStyle.Alert);                     //okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));                     //this.PresentViewController(okAlertController, true, null);                 }
             }
 
@@ -80,7 +82,7 @@
                 }
                 TableView.ReloadData();
             };          }          public override void ReDrawScreen()         {
-            if (ApplicationCore.Balance != null)             {                 labelCcy.Text = ApplicationCore.BaseCurrency.ToString();                 labelTotalFiat.Text = ApplicationCore.NumberFormat(mybalance.LatestFiatValueBase());                 labelTotalBTC.Text = ApplicationCore.NumberFormat(mybalance.AmountBTC());                 label1dPctBTC.Text = ApplicationCore.NumberFormat(mybalance.BaseRet1d(), true, false) + "%";                 label1dPctBTC.TextColor = mybalance.BaseRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);                 labelLastUpdate.Text = ApplicationCore.Bitcoin().MarketPrice != null ? "Last Update: " + ApplicationCore.Bitcoin().MarketPrice.PriceDate.ToShortTimeString() : "";
+            if (ApplicationCore.Balance != null)             {                 labelCcy.Text = ApplicationCore.BaseCurrency.ToString();                 labelTotalFiat.Text = ApplicationCore.NumberFormat(mybalance.LatestFiatValueBase());                 labelTotalBTC.Text = ApplicationCore.NumberFormat(mybalance.AmountBTC());                 label1dPctBTC.Text = ApplicationCore.NumberFormat(mybalance.BaseRet1d(), true, false) + "%";                 label1dPctBTC.TextColor = mybalance.BaseRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);                 labelLastUpdate.Text = ApplicationCore.Bitcoin.MarketPrice != null ? "Last Update: " + ApplicationCore.Bitcoin.MarketPrice.PriceDate.ToShortTimeString() : "";
                 //mybalance.SortPositionByHolding();
             }         } 
         partial void ButtonAddNew_Activated(UIBarButtonItem sender)
@@ -96,5 +98,6 @@
             {                 SelectionSearchItem searchitem = new SelectionSearchItem()
                 {                     SearchItem1 = item.Id,                     SearchItem2 = item.Symbol1,                     ImageFile = item.Id + ".png",                     SortOrder = item.rank                 };                 searchitems.Add(searchitem);             } 
 			var SymbolSelectionViewC = Storyboard.InstantiateViewController("SymbolSelectionViewC") as SymbolSelectionViewConroller;
-			SymbolSelectionViewC.SelectionItems = searchitems;             SymbolSelectionViewC.DestinationID = "BalanceEditViewC";             NavigationController.PushViewController(SymbolSelectionViewC, true);         }          async private Task RefreshPriceAsync()         {
-            await ApplicationCore.FetchMarketDataFromBalanceAsync();             ReDrawScreen();             TableView.ReloadData();         }     } }
+			SymbolSelectionViewC.SelectionItems = searchitems;             SymbolSelectionViewC.DestinationID = "BalanceEditViewC";             NavigationController.PushViewController(SymbolSelectionViewC, true);         }          async private Task RefreshPriceAsync()         {             await ApplicationCore.LoadCrossRateAsync();             await ApplicationCore.FetchMarketDataFromBalanceAsync();
+            ReDrawScreen();
+            TableView.ReloadData();         }     } }

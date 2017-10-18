@@ -87,7 +87,7 @@ namespace CryptoAccouting
 
         private void ReloadCoinData()
         {
-            if (ApplicationCore.LoadInstruments(true) is EnuAPIStatus.Success)
+            if (ApplicationCore.SyncLatestCoins() is EnuAPIStatus.Success)
             {
                 UIAlertController okAlertController = UIAlertController.Create("Success", "Successfully Updated.", UIAlertControllerStyle.Alert);
                 okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));

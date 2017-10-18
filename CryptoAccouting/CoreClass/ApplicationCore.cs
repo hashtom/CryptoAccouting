@@ -1,14 +1,16 @@
-﻿﻿using System; using System.Linq; using System.Threading.Tasks; using System.Collections.Generic; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         public const string InstrumentsFile = "instruments.xml";
-		public const string InstrumentsBundleFile = "InstrumentList.json";         public const string BalanceFile = "mybalance.xml";         public const string AppSettingFile = "AppSetting.xml";         public static Balance Balance { get; private set; }         public static InstrumentList InstrumentList { get; private set; }
-        public static ExchangeList PublicExchangeList { get; private set; }         public static CoinStorageList CoinStorageList { get; private set; }         public static List<CrossRate> USDCrossRates { get; private set; }         private static EnuBaseFiatCCY baseCurrency;         private static bool HasCrossRateUpdated = false;          public static EnuBaseFiatCCY BaseCurrency
+﻿﻿using System; using System.Linq; using System.Threading.Tasks; using System.Collections.Generic; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";         public const string PriceSourceFile = "pricesource.xml";
+		public const string InstrumentListFile = "InstrumentList.json";         public const string ExchangeListFile = "ExchangeList.json";         public const string BalanceFile = "mybalance.xml";         public const string AppSettingFile = "AppSetting.xml";         public const string CrossRatefile_today = "crossrate_today.json";         public const string CrossRatefile_yesterday = "crossrate_yesterday.json";         public static Balance Balance { get; private set; }         public static InstrumentList InstrumentList { get; private set; }
+        public static ExchangeList PublicExchangeList { get; private set; }         public static CoinStorageList CoinStorageList { get; private set; }         public static List<CrossRate> USDCrossRates { get; private set; }         private static EnuBaseFiatCCY baseCurrency;         //private static bool HasCrossRateUpdated = false;          public static EnuBaseFiatCCY BaseCurrency
         {             get
             {
                 return baseCurrency;
             }             set
             {
                 baseCurrency = value;
-                HasCrossRateUpdated = false;
-            }         }          public static CrossRate USDCrossRate         {             get             {                 return USDCrossRates.First(x => x.Currency == baseCurrency);             }         }          //public static NavigationDrawer Navigation { get; set; }
+                //HasCrossRateUpdated = false;
+            }         }          public static CrossRate USDCrossRate         {             get             {                 return USDCrossRates.First(x => x.Currency == baseCurrency);             }         }          public static Instrument Bitcoin         {             get
+            {                 return InstrumentList.GetByInstrumentId("bitcoin");
+            }         }          //public static NavigationDrawer Navigation { get; set; }
 
         //public static NavigationDrawer InitializeSlideMenu(UIView BalanceTableView,         //                                                   UITableViewController PositionViewC,         //                                                   UIViewController TransactionViewC,         //                                                   UITableViewController PLViewC,         //                                                   UIViewController PerfViewC,
         //                                                   UIViewController SettingViewC)
@@ -18,22 +20,27 @@
             //Initialize 
             CoinStorageList = new CoinStorageList();
 
-            //Load Instruments Data and ExchangeList
-            //if (LoadInstruments(false) is EnuAPIStatus.Success) LoadExchangeList();
-            LoadInstruments(false);             LoadExchangeList(); 
+            // Load the latest file (or Bundle file)             InstrumentList = StorageAPI.LoadInstrument();              //Load ExchangeList             LoadExchangeList(); 
 			//Load Balance Data
             Balance = StorageAPI.LoadBalanceXML(BalanceFile, InstrumentList);
-            RefreshBalance();              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML(AppSettingFile) != EnuAPIStatus.Success)             {                 BaseCurrency = EnuBaseFiatCCY.USD; //Default setting             }              return EnuAPIStatus.Success;          }          public static async Task<EnuAPIStatus> LoadCrossRateAsync(){
+            RefreshBalance();              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML(AppSettingFile) != EnuAPIStatus.Success)             {                 BaseCurrency = EnuBaseFiatCCY.USD; //Default setting             }              return EnuAPIStatus.Success;          }          public static async Task<EnuAPIStatus> LoadCrossRateAsync()
+        {
 
             //Load FX
-            if (!HasCrossRateUpdated)
-            { 
-                USDCrossRates = await MarketDataAPI.FetchCrossRateAsync();                 if (USDCrossRates is null)                 {
-                    return EnuAPIStatus.NotAvailable;                 }
-                else
-                {
-                    HasCrossRateUpdated = true;                 }
-            }              return EnuAPIStatus.Success;         } 
+            //if (!HasCrossRateUpdated)
+            //{
+
+            USDCrossRates = await MarketDataAPI.FetchCrossRateAsync();
+            if (USDCrossRates is null)
+            {
+                USDCrossRates = StorageAPI.LoadCrossRate();             }
+            //else
+            //{
+            //    HasCrossRateUpdated = true;
+            //}
+            //}
+
+            return USDCrossRates != null ? EnuAPIStatus.Success : EnuAPIStatus.NotAvailable;         } 
         public static async Task<EnuAPIStatus> FetchMarketDataFromBalanceAsync()
         { 
             if (Balance != null)
@@ -41,29 +48,16 @@
                 Balance.Select(x => x.Coin).Distinct().ToList().ForEach(x => mycoins.Attach(x));
                 //return await MarketDataAPI.FetchCoinMarketDataAsync(mycoins, USDCrossRate);
 
-                if (!mycoins.Any(x => x.Id == "bitcoin")) mycoins.DetachByInstrumentId("bitcoin");                 mycoins.Insert(0, Bitcoin());                  await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRates);                 RefreshBalance(); //update weights,etc with latest price                 SaveMyBalanceXML();//save balance with latest price                 return EnuAPIStatus.Success;             }
+                if (!mycoins.Any(x => x.Id == "bitcoin")) mycoins.DetachByInstrumentId("bitcoin");                 mycoins.Insert(0, Bitcoin);                  var status = await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRates);                 if (status != EnuAPIStatus.Success)                 {                     return status;                 }
+                else                 {
+                    RefreshBalance(); //update weights,etc with latest price                     SaveMyBalanceXML();//save balance with latest price                     return EnuAPIStatus.Success;                 }             }
             else
             {                 return EnuAPIStatus.NotAvailable;             }
         }          public static EnuAPIStatus SaveAppSetting()
         {             return StorageAPI.SaveAppSettingXML(AppSettingFile, AppName, BaseCurrency, PublicExchangeList);         }          private static EnuAPIStatus LoadExchangeList()
         {
-            if (PublicExchangeList is null) PublicExchangeList = new ExchangeList();             return ExchangeAPI.FetchExchangeList(PublicExchangeList);         }          public static EnuAPIStatus LoadInstruments(bool forceRefresh)
-        {                          //Force update online             if (forceRefresh)
-            {                 InstrumentList = new InstrumentList();                  var status = MarketDataAPI.FetchAllCoinData(InstrumentList, false);                 if (status is EnuAPIStatus.Success)
-                {
-                    if (Balance != null) Balance.AttachInstruments(InstrumentList);                 }                  Task.Run(async () => await FetchCoinLogoTop100Async());                  return status;
-            }
-            else
-            {                 if (InstrumentList is null) InstrumentList = new InstrumentList(); 
-                // 1. Load the latest file
-                if (StorageAPI.LoadInstrumentXML(InstrumentsFile, InstrumentList) != EnuAPIStatus.Success)
-                {
-					//  Update online
-					//if (LoadInstruments(true) != EnuAPIStatus.Success)                     //{
-						// 2.Use Bundled file 
-                    return MarketDataAPI.FetchAllCoinData(InstrumentList, true);                     //}                 }
-                 return EnuAPIStatus.Success;
-            }         }          public static async Task<EnuAPIStatus> FetchCoinLogoAsync(Instrument coin)         {              return await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);         }          public static async Task<EnuAPIStatus>FetchCoinLogoTop100Async()         {             if (InstrumentList == null)
+            if (PublicExchangeList is null) PublicExchangeList = new ExchangeList();             return ExchangeAPI.FetchExchangeList(PublicExchangeList);         }          public static EnuAPIStatus SyncLatestCoins()         {
+            var list = MarketDataAPI.FetchAllCoinData();             if (list != null)             {                 InstrumentList = list;                 if (Balance != null) Balance.AttachInstruments(InstrumentList);                 Task.Run(async () => await FetchCoinLogoTop100Async());                 return EnuAPIStatus.Success;             }             else             {                 return EnuAPIStatus.FatalError;             }         }          public static async Task<EnuAPIStatus> FetchCoinLogoAsync(Instrument coin)         {              return await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);         }          public static async Task<EnuAPIStatus>FetchCoinLogoTop100Async()         {             if (InstrumentList == null)
             {
                 return EnuAPIStatus.FatalError;             }
             else
@@ -72,7 +66,7 @@
                 {
                     await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);
                 }
-                return EnuAPIStatus.Success;             }         }          public static void SaveInstrumentXML()         {             StorageAPI.SaveInstrumentXML(InstrumentList, InstrumentsFile);         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, BalanceFile);         }          public static async Task<EnuAPIStatus> LoadTradeListsAsync(string ExchangeCode)
+                return EnuAPIStatus.Success;             }         }          public static void SaveInstrumentXML()         {             StorageAPI.SavePriceSourceXML(InstrumentList, PriceSourceFile);         }          public static void SaveMyBalanceXML(){              StorageAPI.SaveBalanceXML(Balance, BalanceFile);         }          public static async Task<EnuAPIStatus> LoadTradeListsAsync(string ExchangeCode)
         {
             var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              if (exchange.APIKeyAvailable())             {                 exchange.AttachTradeList(await ExchangeAPI.FetchTradeListAsync(exchange));                 //PublicExchangeList.Attach(exchange); //do you need?                 return EnuAPIStatus.Success;             }else             {                 return EnuAPIStatus.FailureParameter;             }         }          public static Exchange GetExchange(string Code)
         {             return PublicExchangeList.GetExchange(Code);         }
@@ -122,4 +116,4 @@
             }             else             {                 strnumber = String.Format("{0:n2}", number);             }              if (addPlus && number > 0) strnumber = "+" + strnumber;             return strnumber;
         }          public static EnuAPIStatus RemoveAllCache()         {             try
             {                 baseCurrency = EnuBaseFiatCCY.USD;                 PublicExchangeList.ClearAPIKeys();                 return StorageAPI.RemoveAllCache();             }
-            catch (Exception)             {                 return EnuAPIStatus.FatalError;             }         }          public static Instrument Bitcoin()         {             return InstrumentList.GetByInstrumentId("bitcoin");         }      }      public enum EnuAPIStatus     {         Success,         FailureNetwork,         FailureStorage,         FailureParameter,         NotAvailable,         FatalError     }  } 
+            catch (Exception)             {                 return EnuAPIStatus.FatalError;             }         }      }      public enum EnuAPIStatus     {         Success,         FailureNetwork,         FailureStorage,         FailureParameter,         NotAvailable,         FatalError,         ParseError     }  } 
