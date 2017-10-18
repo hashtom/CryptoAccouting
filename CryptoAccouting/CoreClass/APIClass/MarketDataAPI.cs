@@ -61,7 +61,6 @@ namespace CryptoAccouting.CoreClass.APIClass
                             break;
 
                         default:
-                            await FetchCoinMarketCapAsync(coins, crossrate);
                             break;
                     }
                 }
@@ -100,7 +99,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     return EnuAPIStatus.FailureNetwork;
                 }
 
-                return ParseMarketData.ParseCoinMarketCapJson(rawjson, rawjson_yesterday, instrumentlist, crossrate);
+                return await ParseMarketData.ParseCoinMarketCapJsonAsync(rawjson, rawjson_yesterday, instrumentlist, crossrate);
 
             }
 
@@ -119,7 +118,6 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
             else
             {
-                //instrumentlist.Clear();
                 using (var http = new HttpClient())
                 {
                     rawjson = http.GetStringAsync(BaseUrl).Result;
@@ -224,7 +222,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             try
             {
-                var crossrates = ParseMarketData.ParseCrossRateJson(rawjson_today, rawjson_yesterday);
+                var crossrates = await ParseMarketData.ParseCrossRateJsonAsync(rawjson_today, rawjson_yesterday);
                 StorageAPI.SaveFile(rawjson_today, jsonfilename_today);
                 StorageAPI.SaveFile(rawjson_yesterday, jsonfilename_yesterday);
                 return crossrates;

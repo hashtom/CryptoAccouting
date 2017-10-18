@@ -4,6 +4,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Xml.Linq;
+using System.Threading.Tasks;
 
 namespace CryptoAccouting.CoreClass.APIClass
 {
@@ -75,12 +76,12 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
         }
 
-        public static List<CrossRate> ParseCrossRateJson(string rawjson_today, string rawjson_yesterday)
+        public static async Task<List<CrossRate>> ParseCrossRateJsonAsync(string rawjson_today, string rawjson_yesterday)
         {
             List<CrossRate> crossrates = new List<CrossRate>();
             JObject json;
 
-            json = JObject.Parse(rawjson_today);
+            json = await Task.Run(() => JObject.Parse(rawjson_today));
             foreach (var ccy in (JArray)json["list"]["resources"])
             {
                 EnuBaseFiatCCY baseccy;
@@ -93,7 +94,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 crossrates.Add(crossrate);
             }
 
-            json = JObject.Parse(rawjson_yesterday);
+            json = await Task.Run(() => JObject.Parse(rawjson_yesterday));
             foreach (var ccy in (JArray)json["list"]["resources"])
             {
                 EnuBaseFiatCCY baseccy;
@@ -110,8 +111,9 @@ namespace CryptoAccouting.CoreClass.APIClass
             return crossrates;
         }
 
-        public static EnuAPIStatus ParseCoinMarketCapJson(string rawjson, string rawjson_yesterday, InstrumentList instrumentlist, CrossRate crossrate)
+        public static async Task<EnuAPIStatus> ParseCoinMarketCapJsonAsync(string rawjson, string rawjson_yesterday, InstrumentList instrumentlist, CrossRate crossrate)
         {
+            
             foreach (var coin in instrumentlist.Where(x => x.PriceSourceCode == "coinmarketcap" || x.PriceSourceCode is null))
             {
                 //Parse Market Data 
@@ -123,9 +125,9 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 try
                 {
-                    var jarray = JArray.Parse(rawjson);
-                    var jarray_yesterday = JArray.Parse(rawjson_yesterday);
-
+                    var jarray = await Task.Run(() => JArray.Parse(rawjson));
+                    var jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
+                  
                     coin.MarketPrice.LatestPriceBTC = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_btc"];
                     coin.MarketPrice.LatestPriceUSD = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_usd"];
                     coin.MarketPrice.PriceSource = "coinmarketcap";
@@ -135,6 +137,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     coin.MarketPrice.PriceBTCBefore24h = (double)jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_btc"];
                     coin.MarketPrice.PriceUSDBefore24h = (double)jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_usd"];
                     coin.MarketPrice.USDCrossRate = crossrate;
+
                 }
                 catch (Exception)
                 {
@@ -144,6 +147,68 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
 
             return EnuAPIStatus.Success;
+        }
+
+        public static Balance ParseBalanceXML(string balanceXML, InstrumentList instrumentlist)
+        {
+
+            if (balanceXML is null)
+            {
+                return null;
+            }
+            else
+            {
+                Balance mybal = new Balance();
+                var mybalXE = XElement.Parse(balanceXML).Descendants("position");
+
+                foreach (var elem in mybalXE)
+                {
+                    if (elem.Element("instrument") != null)
+                    {
+                        Instrument coin;
+                        if (instrumentlist.Any(i => i.Id == elem.Element("instrument").Value))
+                        {
+                            coin = instrumentlist.First(i => i.Id == elem.Element("instrument").Value);
+                            var tradedexchange = ApplicationCore.GetExchange(elem.Element("exchange").Value);
+                            var watchonly = elem.Element("watchonly") == null ? false : bool.Parse(elem.Element("watchonly").Value);
+
+                            var pos = new Position(coin)
+                            {
+                                Id = int.Parse(elem.Attribute("id").Value),
+                                Amount = double.Parse(elem.Element("amount").Value),
+                                AmountBTC_Previous = elem.Element("amountbtc") == null ? 0 : double.Parse(elem.Element("amountbtc").Value),
+                                //BookPriceUSD = elem.Element("book") == null ? 0 : double.Parse(elem.Element("book").Value),
+                                BalanceDate = DateTime.Parse(elem.Element("date").Value),
+                                BookedExchange = tradedexchange, //(EnuExchangeType)Enum.Parse(typeof(EnuExchangeType), elem.Descendants("exchange").Select(x => x.Value).First())
+                                PriceUSD_Previous = elem.Element("priceusd") == null ? 0 : double.Parse(elem.Element("priceusd").Value),
+                                PriceBTC_Previous = elem.Element("pricebtc") == null ? 0 : double.Parse(elem.Element("pricebtc").Value),
+                                PriceBase_Previous = elem.Element("pricebase") == null ? 0 : double.Parse(elem.Element("pricebase").Value),
+                                USDRet1d_Previous = elem.Element("usdret1d") == null ? 0 : double.Parse(elem.Element("usdret1d").Value),
+                                BTCRet1d_Previous = elem.Element("btcret1d") == null ? 0 : double.Parse(elem.Element("btcret1d").Value),
+                                BaseRet1d_Previous = elem.Element("baseret1d") == null ? 0 : double.Parse(elem.Element("baseret1d").Value),
+                                WatchOnly = watchonly
+                            };
+
+                            if (!watchonly)
+                            {
+                                var storagecode = elem.Element("storage").Value;
+
+                                if (storagecode != "" && Enum.TryParse(elem.Element("storagetype").Value, out EnuCoinStorageType storagetype))
+                                {
+                                    ApplicationCore.AttachCoinStorage(storagecode, storagetype, pos);
+                                    //var storage = ApplicationCore.GetCoinStorage(storagecode, storagetype);
+                                    //pos.AttachCoinStorage(storage);
+                                    //storage.AttachPosition(pos);
+                                }
+                            }
+
+                            mybal.Attach(pos);
+                        }
+                    }
+                }
+
+                return mybal;
+            }
         }
     }
 }

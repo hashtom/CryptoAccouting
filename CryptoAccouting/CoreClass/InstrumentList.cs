@@ -56,6 +56,14 @@ namespace CryptoAccouting.CoreClass
 			return instruments.Any(x => x.Symbol2 == symbol) ? instruments.First(x => x.Symbol2 == symbol) : null;
 		}
 
+        //public void AttachCrossRate(CrossRate usdcrossrate)
+        //{
+        //    foreach (var coin in instruments.Where(x => x.MarketPrice != null))
+        //    {
+        //        coin.MarketPrice.USDCrossRate = usdcrossrate;
+        //    }
+        //}
+
         public void Clear()
         {
             instruments.Clear();

@@ -3,6 +3,7 @@ using System.Xml.Linq;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CryptoAccouting.CoreClass.APIClass
 {
@@ -52,91 +53,25 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
         }
 
-        public static Balance LoadBalanceXML(string fileName, InstrumentList instrumentlist)
+        public static Balance LoadBalanceXML(InstrumentList instrumentlist)
         {
-            Balance mybal = new Balance();
+            const string BalanceFile = ApplicationCore.BalanceFile;
+            const string BalanceBundleFile = ApplicationCore.BalanceBundleFile;
 
-            var balanceXML = LoadFromFile(fileName);
-            if (balanceXML == null) balanceXML = LoadBundleFile("BalanceData.xml");
+            var balanceXML = LoadFromFile(BalanceFile);
+            if (balanceXML == null) balanceXML = LoadBundleFile(BalanceBundleFile);
 
-            //try
-            //{
-            //var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            //var path = Path.Combine(documents, fileName);
-
-            if (balanceXML != null)
-            {
-                var mybalXE = XElement.Parse(balanceXML).Descendants("position");
-
-                foreach (var elem in mybalXE)
-                {
-                    if (elem.Element("instrument") != null)
-                    {
-                        Instrument coin;
-                        if (instrumentlist.Any(i => i.Id == elem.Element("instrument").Value))
-                        {
-                            coin = instrumentlist.First(i => i.Id == elem.Element("instrument").Value);
-                            var tradedexchange = ApplicationCore.GetExchange(elem.Element("exchange").Value);
-                            var watchonly = elem.Element("watchonly") == null ? false : bool.Parse(elem.Element("watchonly").Value);
-
-                            var pos = new Position(coin)
-                            {
-                                Id = int.Parse(elem.Attribute("id").Value),
-                                Amount = double.Parse(elem.Element("amount").Value),
-                                AmountBTC_Previous = elem.Element("amountbtc") == null ? 0 : double.Parse(elem.Element("amountbtc").Value),
-                                //BookPriceUSD = elem.Element("book") == null ? 0 : double.Parse(elem.Element("book").Value),
-                                BalanceDate = DateTime.Parse(elem.Element("date").Value),
-                                BookedExchange = tradedexchange, //(EnuExchangeType)Enum.Parse(typeof(EnuExchangeType), elem.Descendants("exchange").Select(x => x.Value).First())
-                                PriceUSD_Previous = elem.Element("priceusd") == null ? 0 : double.Parse(elem.Element("priceusd").Value),
-                                PriceBTC_Previous = elem.Element("pricebtc") == null ? 0 : double.Parse(elem.Element("pricebtc").Value),
-                                PriceBase_Previous = elem.Element("pricebase") == null ? 0 : double.Parse(elem.Element("pricebase").Value),
-                                WatchOnly = watchonly
-                            };
-
-                            if (!watchonly)
-                            {
-                                var storagecode = elem.Element("storage").Value;
-
-                                if (storagecode != "" && Enum.TryParse(elem.Element("storagetype").Value, out EnuCoinStorageType storagetype))
-                                {
-                                    ApplicationCore.AttachCoinStorage(storagecode, storagetype, pos);
-                                    //var storage = ApplicationCore.GetCoinStorage(storagecode, storagetype);
-                                    //pos.AttachCoinStorage(storage);
-                                    //storage.AttachPosition(pos);
-                                }
-                            }
-
-                            mybal.Attach(pos);
-                        }
-                    }
-                }
-            }
-
-            //else
-            //{
-            //    mybal = new Balance();
-            //}
-            //}catch(IOException e){
-            //    Console.WriteLine(e.ToString());
-            //}catch(Exception e){
-            //    Console.WriteLine(e.ToString());
-            //}finally{
-            //    mybal = new Balance();
-            //}
-
-            return mybal;
+            return ParseMarketData.ParseBalanceXML(balanceXML, instrumentlist);
 
         }
 
         public static EnuAPIStatus SaveBalanceXML(Balance myBalance, string fileName)
         {
-            //var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            //var path = Path.Combine(mydocuments, fileName);
 
             XElement application = new XElement("application",
                                                 new XAttribute("name", ApplicationCore.AppName));
             XElement balance = new XElement("balance");
-            //,new XAttribute("exchange", myBalance.ExchangeTraded.ToString()));
+
             application.Add(balance);
 
             foreach (var pos in myBalance)
@@ -154,12 +89,13 @@ namespace CryptoAccouting.CoreClass.APIClass
                                                  new XElement("priceusd", pos.LatestPriceUSD.ToString()),
                                                  new XElement("pricebtc", pos.LatestPriceBTC().ToString()),
                                                  new XElement("pricebase", pos.LatestPriceBase().ToString()),
+                                                 new XElement("usdret1d", pos.USDRet1d().ToString()),
+                                                 new XElement("btcret1d", pos.BTCRet1d().ToString()),
+                                                 new XElement("baseret1d", pos.BaseRet1d().ToString()),
                                                  new XElement("watchonly", pos.WatchOnly.ToString())
                                                 );
                 balance.Add(position);
             }
-
-            //File.WriteAllText(path, application.ToString());
 
             return SaveFile(application.ToString(), fileName);
 
@@ -167,15 +103,13 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static EnuAPIStatus SavePriceSourceXML(InstrumentList instrumentlist, string fileName)
         {
-            //var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            //var path = Path.Combine(mydocuments, fileName);
 
             XElement application = new XElement("application",
                                                 new XAttribute("name", ApplicationCore.AppName));
             XElement instruments = new XElement("instruments");
             application.Add(instruments);
 
-            foreach (var coin in instrumentlist.Where(x => x.PriceSourceCode != null))
+            foreach (var coin in instrumentlist.Where(x => x.PriceSourceCode != null && x.PriceSourceCode != "coinmarketcap"))
             {
                 XElement instrument = new XElement("instrument",
                                                    new XAttribute("id", coin.Id),
@@ -191,7 +125,6 @@ namespace CryptoAccouting.CoreClass.APIClass
                 instruments.Add(instrument);
             }
 
-            //File.WriteAllText(path, application.ToString());
             return SaveFile(application.ToString(), fileName);
         }
 
@@ -218,7 +151,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 try
                 {
-                    ParseMarketData.ParsePriceSourceXML(pricesorceFile, instrumentlist);
+                    ParseMarketData.ParsePriceSourceXML(PriceSourceXML, instrumentlist);
                 }
                 catch (Exception)
                 {
@@ -229,18 +162,18 @@ namespace CryptoAccouting.CoreClass.APIClass
             return instrumentlist;
         }
 
-        public static List<CrossRate> LoadCrossRate()
+        public static async Task<List<CrossRate>> LoadCrossRateAsync()
         {
             const string jsonfilename_today = ApplicationCore.CrossRatefile_today;
             const string jsonfilename_yesterday = ApplicationCore.CrossRatefile_yesterday;
             string rawjson_today, rawjson_yesterday;
 
-            rawjson_today = StorageAPI.LoadFromFile(jsonfilename_today);
-            rawjson_yesterday = StorageAPI.LoadFromFile(jsonfilename_yesterday);
+            rawjson_today = LoadFromFile(jsonfilename_today);
+            rawjson_yesterday = LoadFromFile(jsonfilename_yesterday);
 
             if (rawjson_today != null & rawjson_yesterday != null)
             {
-                return ParseMarketData.ParseCrossRateJson(rawjson_today, rawjson_yesterday);
+                return await ParseMarketData.ParseCrossRateJsonAsync(rawjson_today, rawjson_yesterday);
             }
             else
             {
@@ -255,8 +188,6 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             if (xmldoc != null)
             {
-                //var xmldoc = File.ReadAllText(path);
-
                 if (!Enum.TryParse(XElement.Parse(xmldoc).Element("basecurrency").Value, out baseccy))
                     baseccy = EnuBaseFiatCCY.USD;
 
@@ -264,17 +195,9 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 foreach (var elem in apikeysXE)
                 {
-                    //EnuExchangeType extype;
-                    //if (!Enum.TryParse((string)elem.Attribute("name").Value, out extype))
-                    //{
-                    //    extype = EnuExchangeType.NotSelected;
-                    //}
-                    //else
-                    //{
                     var exchange = ApplicationCore.GetExchange((string)elem.Attribute("name").Value);
                     exchange.Key = elem.Element("key").Value;
                     exchange.Secret = elem.Element("secret").Value;
-                    //}
                 }
 
                 ApplicationCore.BaseCurrency = baseccy;
@@ -292,9 +215,6 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static EnuAPIStatus SaveAppSettingXML(string fileName, string AppName, EnuBaseFiatCCY BaseCurrency, ExchangeList exList)
         {
-            //var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            //var path = Path.Combine(mydocuments, fileName);
-
             XElement application = new XElement("application",
                                                 new XAttribute("name", AppName));
 
@@ -315,10 +235,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 apikeys.Add(key);
             }
 
-            //File.WriteAllText(path, application.ToString());
-
             return SaveFile(application.ToString(), fileName);
-
         }
 
         public static EnuAPIStatus RemoveFile(string filename)
@@ -343,8 +260,8 @@ namespace CryptoAccouting.CoreClass.APIClass
             //Don't delete balance data
             try
             {
-                //AppSetting
-                File.Delete(Path.Combine(documents, "AppSetting.xml"));
+                File.Delete(Path.Combine(documents, ApplicationCore.AppSettingFile));
+                File.Delete(Path.Combine(documents, ApplicationCore.PriceSourceFile));
 
                 //json file cache
                 foreach (var file in Directory.EnumerateFiles(documents, "*.json"))

@@ -92,7 +92,7 @@ namespace CryptoAccouting
                 UIAlertController okAlertController = UIAlertController.Create("Success", "Successfully Updated.", UIAlertControllerStyle.Alert);
                 okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
                 this.PresentViewController(okAlertController, true, null);
-                ApplicationCore.SaveInstrumentXML();
+                //ApplicationCore.SaveInstrumentXML();
 
             }
             else
@@ -108,8 +108,9 @@ namespace CryptoAccouting
             //base.SetSearchSelectionItem(searchitem1);
             EnuBaseFiatCCY baseccy;
             if (!Enum.TryParse(searchitem1, out baseccy)) baseccy = EnuBaseFiatCCY.USD;
-            ApplicationCore.BaseCurrency = baseccy;
             labelBaseCurrency.Text = baseccy.ToString();
+
+            ApplicationCore.BaseCurrency = baseccy;
             ApplicationCore.SaveAppSetting();
         }
 

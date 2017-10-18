@@ -11,7 +11,7 @@ namespace CryptoAccouting.CoreClass
         private List<Position> positions; //{ get; private set; }
         public List<Position> BalanceByCoin { get; private set; }
 
-		public Balance()
+        public Balance()
         {
             positions = new List<Position>();
         }
@@ -49,10 +49,13 @@ namespace CryptoAccouting.CoreClass
             foreach(var pos in positions)
             {
                 pos.Id = newid;
-                pos.AmountBTC_Previous = pos.LatestAmountBTC;
-                pos.PriceUSD_Previous = pos.LatestPriceUSD;
-                pos.PriceBTC_Previous = pos.LatestPriceBTC();
-                pos.PriceBase_Previous = pos.LatestPriceBase();
+                //pos.AmountBTC_Previous = pos.LatestAmountBTC;
+                //pos.PriceUSD_Previous = pos.LatestPriceUSD;
+                //pos.PriceBTC_Previous = pos.LatestPriceBTC();
+                //pos.PriceBase_Previous = pos.LatestPriceBase();
+                //pos.USDRet1d_Previous = pos.USDRet1d();
+                //pos.BTCRet1d_Previous = pos.BTCRet1d();
+                //pos.BaseRet1d_Previous = pos.BaseRet1d();
                 newid++;
             }
 
@@ -75,6 +78,9 @@ namespace CryptoAccouting.CoreClass
                     PriceBTC_Previous = positions.First(x => x.Coin.Id == id).LatestPriceBTC(),
                     PriceUSD_Previous = positions.First(x => x.Coin.Id == id).LatestPriceUSD,
                     PriceBase_Previous = positions.First(x => x.Coin.Id == id).LatestPriceBase(),
+                    BTCRet1d_Previous = positions.First(x => x.Coin.Id == id).BTCRet1d(),
+                    USDRet1d_Previous = positions.First(x => x.Coin.Id == id).USDRet1d(),
+                    BaseRet1d_Previous = positions.First(x => x.Coin.Id == id).BaseRet1d(),
                     WatchOnly = positions.First(x => x.Coin.Id == id).WatchOnly
                 };
                 BalanceByCoin.Add(position);

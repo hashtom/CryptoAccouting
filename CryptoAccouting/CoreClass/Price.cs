@@ -13,10 +13,6 @@ namespace CryptoAccouting.CoreClass
         public double DayVolume { get; set; }
         public double MarketCap { get; set; }
         public CrossRate USDCrossRate { get; set; }
-        //public double SourceRet1h { get; set; }
-        //public double SourceRet1d { get; set; }
-        //public double SourceRet7d { get; set; }
-        //public double PrevClose { get; set; }
 		public DateTime PriceDate { get; set; }
         //public DateTime UpdateTime { get; set; }
 

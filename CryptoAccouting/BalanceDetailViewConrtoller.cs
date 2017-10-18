@@ -105,22 +105,19 @@ namespace CryptoAccouting
             //NavigationItem.Title = thisCoin.Name;
             buttonPriceSource.SetTitle(thisCoin.PriceSourceCode, UIControlState.Normal);
 
-            if (thisCoin.MarketPrice != null)
-            {
-                if (thisCoin.Symbol1 == "BTC")
-                {
-                    labelPrice.Text = "$" + ApplicationCore.NumberFormat(thisCoin.MarketPrice.LatestPriceUSD);
-                }
-                else
-                {
-                    labelPrice.Text = "฿" + ApplicationCore.NumberFormat(thisCoin.MarketPrice.LatestPriceBTC);
-                }
 
-                labelPrice.TextColor = thisCoin.MarketPrice.USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);
-                labelPriceBase.Text = ApplicationCore.NumberFormat(thisCoin.MarketPrice.LatestPriceBase());
-                labelPriceBase.TextColor = thisCoin.MarketPrice.USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);
+            if (thisCoin.Symbol1 == "BTC")
+            {
+                labelPrice.Text = "$" + ApplicationCore.NumberFormat(booking_positions.First().LatestPriceUSD);
+            }
+            else
+            {
+                labelPrice.Text = "฿" + ApplicationCore.NumberFormat(booking_positions.First().LatestPriceBTC());
             }
 
+            labelPrice.TextColor = booking_positions.First().USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);
+            labelPriceBase.Text = ApplicationCore.NumberFormat(booking_positions.First().LatestPriceBase());
+            labelPriceBase.TextColor = booking_positions.First().USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);
             labelPriceBaseTitle.Text = "Price(" + ApplicationCore.BaseCurrency + ")";
 
             //labelProfitLoss.Text = "$" + ApplicationCore.NumberFormat(booking_positions.Sum(x => x.PLUSD()));

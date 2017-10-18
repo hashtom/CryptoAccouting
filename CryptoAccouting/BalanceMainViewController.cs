@@ -2,7 +2,7 @@
         //private NavigationDrawer menu;
         Balance mybalance;          public BalanceMainViewController(IntPtr handle) : base(handle)         {         }          public override void ViewDidLoad()         {             base.ViewDidLoad();              // Instantiate Controllers             AppSetting.balanceMainViewC = this;             //AppSetting.transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             AppSetting.plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             AppSetting.settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             //menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);  
             if (ApplicationCore.InitializeCore() != EnuAPIStatus.Success)             {                 this.PopUpWarning("some issue!!");                 this.mybalance = new Balance();             }             else             {                 this.mybalance = ApplicationCore.Balance;             }              // Configure Table source             TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");             TableView.Source = new CoinTableSource(mybalance, this);
-            ReDrawScreen(); 
+            //ReDrawScreen(); 
             if (!ApplicationCore.IsInternetReachable())
 			{
 				UIAlertController okAlertController = UIAlertController.Create("Warning", "Unable to Connect Internet!", UIAlertControllerStyle.Alert);
@@ -12,23 +12,16 @@
 
             //Color Design             var gradient = new CAGradientLayer();             gradient.Frame = this.BalanceTopView.Bounds;             gradient.NeedsDisplayOnBoundsChange = true;             gradient.MasksToBounds = true;             gradient.Colors = new CGColor[] { UIColor.FromRGB(0, 126, 167).CGColor, UIColor.FromRGB(0, 168, 232).CGColor };             //NavigationController.NavigationBar.Layer.InsertSublayer(gradient, 0);             this.BalanceTopView.Layer.InsertSublayer(gradient, 0); 
 			// Configure Segmented control
-			ConfigureSegmentButton();              Task.Run(async () =>             {
-                //if (!AppDelegate.IsInDesignerView)
-                //{
-                    await ApplicationCore.FetchCoinLogoTop100Async();
-                //}             });              RefreshControl = new UIRefreshControl();             RefreshControl.ValueChanged += async (sender, e) =>
-            {                 await RefreshPriceAsync();                 RefreshControl.EndRefreshing();
-                //UIAlertController okAlertController = UIAlertController.Create("critical", "Could not update data.", UIAlertControllerStyle.Alert);
-                //okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
-                //this.PresentViewController(okAlertController, true, null);             };
+			ConfigureSegmentButton();              RefreshControl = new UIRefreshControl();             RefreshControl.ValueChanged += async (sender, e) =>
+            {                 await RefreshPriceAsync();                 RefreshControl.EndRefreshing();             };              //run the last             Task.Run(async ()=> await ApplicationCore.FetchCoinLogoTop100Async());              ReDrawScreen();             TableView.ReloadData();
         }          public async override void ViewWillAppear(bool animated)         {
             base.ViewWillAppear(animated);
 
-            if (!AppDelegate.IsInDesignerView)
-            {
+            //if (!AppDelegate.IsInDesignerView)
+            //{
                 if (await ApplicationCore.LoadCrossRateAsync() != EnuAPIStatus.Success)                 {                     //can't get fxrate even saved file                     //UIAlertController okAlertController = UIAlertController.Create("critical", "Critical FX rates data error!", UIAlertControllerStyle.Alert);                     //okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));                     //this.PresentViewController(okAlertController, true, null);                 } 
                 if(await ApplicationCore.FetchMarketDataFromBalanceAsync() != EnuAPIStatus.Success)                 {                     //Ignore Network error                     //UIAlertController okAlertController = UIAlertController.Create("Critical", "Critical Balance data error.", UIAlertControllerStyle.Alert);                     //okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));                     //this.PresentViewController(okAlertController, true, null);                 }
-            }
+            //}
 
             ReDrawScreen();
             TableView.ReloadData();             

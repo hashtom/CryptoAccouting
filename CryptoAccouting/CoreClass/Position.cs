@@ -19,6 +19,9 @@ namespace CryptoAccouting.CoreClass
         public double PriceUSD_Previous { get; set; }
         public double PriceBTC_Previous { get; set; }
         public double PriceBase_Previous { get; set; }
+        public double USDRet1d_Previous { get; set; }
+        public double BTCRet1d_Previous { get; set; }
+        public double BaseRet1d_Previous { get; set; }
         public bool WatchOnly { get; set; }
 
         public Position(Instrument coin)
@@ -72,24 +75,19 @@ namespace CryptoAccouting.CoreClass
             return PriceBTC_Previous;
         }
 
-        public double LatestSourceRet1d()
-        {
-            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.USDRet1d();
-        }
-
 		public double USDRet1d()
 		{
-            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.USDRet1d();
+            return Coin.MarketPrice == null ? USDRet1d_Previous : Coin.MarketPrice.USDRet1d();
 		}
 
         public double BaseRet1d()
         {
-            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.BaseRet1d();
+            return Coin.MarketPrice == null ? BaseRet1d_Previous : Coin.MarketPrice.BaseRet1d();
         }
 
         public double BTCRet1d()
         {
-            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.BTCRet1d();
+            return Coin.MarketPrice == null ? BTCRet1d_Previous : Coin.MarketPrice.BTCRet1d();
         }
 
         public double MarketDayVolume()
