@@ -9,6 +9,10 @@ namespace CryptoAccouting.CoreClass.APIClass
 {
     public static class StorageAPI
     {
+        const string PriceSourceFile = "pricesource.xml";
+        const string BalanceFile = "mybalance.xml";
+        const string BalanceBundleFile = "BalanceData.xml";
+        const string AppSettingFile = "AppSetting.xml";
 
         public static string LoadBundleFile(string fileName)
         {
@@ -55,8 +59,8 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static Balance LoadBalanceXML(InstrumentList instrumentlist)
         {
-            const string BalanceFile = ApplicationCore.BalanceFile;
-            const string BalanceBundleFile = ApplicationCore.BalanceBundleFile;
+            //const string BalanceFile = ApplicationCore.BalanceFile;
+            //const string BalanceBundleFile = ApplicationCore.BalanceBundleFile;
 
             var balanceXML = LoadFromFile(BalanceFile);
             if (balanceXML == null) balanceXML = LoadBundleFile(BalanceBundleFile);
@@ -65,13 +69,13 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         }
 
-        public static EnuAPIStatus SaveBalanceXML(Balance myBalance, string fileName)
+        public static EnuAPIStatus SaveBalanceXML(Balance myBalance)
         {
 
             XElement application = new XElement("application",
                                                 new XAttribute("name", ApplicationCore.AppName));
-            XElement balance = new XElement("balance");
-
+            XElement balance = new XElement("balance", 
+                                            new XAttribute("pricedate", myBalance.PriceDateTime));
             application.Add(balance);
 
             foreach (var pos in myBalance)
@@ -97,11 +101,11 @@ namespace CryptoAccouting.CoreClass.APIClass
                 balance.Add(position);
             }
 
-            return SaveFile(application.ToString(), fileName);
+            return SaveFile(application.ToString(), BalanceFile);
 
         }
 
-        public static EnuAPIStatus SavePriceSourceXML(InstrumentList instrumentlist, string fileName)
+        public static EnuAPIStatus SavePriceSourceXML(InstrumentList instrumentlist)
         {
 
             XElement application = new XElement("application",
@@ -125,17 +129,16 @@ namespace CryptoAccouting.CoreClass.APIClass
                 instruments.Add(instrument);
             }
 
-            return SaveFile(application.ToString(), fileName);
+            return SaveFile(application.ToString(), PriceSourceFile);
         }
 
         public static InstrumentList LoadInstrument()
         {
-            const string instrumentlistFile = ApplicationCore.InstrumentListFile;
-            const string pricesorceFile = ApplicationCore.PriceSourceFile;
+            const string InstrumentListFile = MarketDataAPI.InstrumentListFile;
             InstrumentList instrumentlist;
 
-            var rawjson = LoadFromFile(instrumentlistFile);
-            if (rawjson is null) rawjson = LoadBundleFile(instrumentlistFile);
+            var rawjson = LoadFromFile(InstrumentListFile);
+            if (rawjson is null) rawjson = LoadBundleFile(InstrumentListFile);
 
             try
             {
@@ -146,7 +149,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 return null;
             }
 
-            var PriceSourceXML = LoadFromFile(pricesorceFile);
+            var PriceSourceXML = LoadFromFile(PriceSourceFile);
             if (PriceSourceXML != null)
             {
                 try
@@ -164,8 +167,8 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static async Task<List<CrossRate>> LoadCrossRateAsync()
         {
-            const string jsonfilename_today = ApplicationCore.CrossRatefile_today;
-            const string jsonfilename_yesterday = ApplicationCore.CrossRatefile_yesterday;
+            const string jsonfilename_today = MarketDataAPI.CrossRatefile_today;
+            const string jsonfilename_yesterday = MarketDataAPI.CrossRatefile_yesterday;
             string rawjson_today, rawjson_yesterday;
 
             rawjson_today = LoadFromFile(jsonfilename_today);
@@ -181,10 +184,10 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
         }
 
-        public static EnuAPIStatus LoadAppSettingXML(string fileName)
+        public static EnuAPIStatus LoadAppSettingXML()
         {
             EnuBaseFiatCCY baseccy;
-            var xmldoc = LoadFromFile(fileName);
+            var xmldoc = LoadFromFile(AppSettingFile);
 
             if (xmldoc != null)
             {
@@ -213,7 +216,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         }
 
-        public static EnuAPIStatus SaveAppSettingXML(string fileName, string AppName, EnuBaseFiatCCY BaseCurrency, ExchangeList exList)
+        public static EnuAPIStatus SaveAppSettingXML(string AppName, EnuBaseFiatCCY BaseCurrency, ExchangeList exList)
         {
             XElement application = new XElement("application",
                                                 new XAttribute("name", AppName));
@@ -235,7 +238,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 apikeys.Add(key);
             }
 
-            return SaveFile(application.ToString(), fileName);
+            return SaveFile(application.ToString(), AppSettingFile);
         }
 
         public static EnuAPIStatus RemoveFile(string filename)
@@ -260,8 +263,8 @@ namespace CryptoAccouting.CoreClass.APIClass
             //Don't delete balance data
             try
             {
-                File.Delete(Path.Combine(documents, ApplicationCore.AppSettingFile));
-                File.Delete(Path.Combine(documents, ApplicationCore.PriceSourceFile));
+                File.Delete(Path.Combine(documents, AppSettingFile));
+                File.Delete(Path.Combine(documents, PriceSourceFile));
 
                 //json file cache
                 foreach (var file in Directory.EnumerateFiles(documents, "*.json"))
@@ -288,6 +291,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             return EnuAPIStatus.Success;
         }
+
 
   //      public static EnuAppStatus SaveExchangeListXMLTemp(ExchangeList exList, string fileName)
 		//{

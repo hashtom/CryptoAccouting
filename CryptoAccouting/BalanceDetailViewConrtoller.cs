@@ -75,7 +75,7 @@ namespace CryptoAccouting
                                                                              thisCoin.PriceSourceCode = source;
                                                                              await ApplicationCore.FetchMarketDataAsync(thisCoin);
                                                                              ReDrawScreen();
-                                                                             ApplicationCore.SaveInstrumentXML();
+                                                                             ApplicationCore.SavePriceSourceXML();
                                                                          }
                                                                    ));
 				}

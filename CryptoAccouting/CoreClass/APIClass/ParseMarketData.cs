@@ -21,15 +21,6 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 if ((bool)elem["active"])
                 {
-                    //Instrument coin = instrumentlist.GetByInstrumentId((string)elem["id"]);
-                    //if (coin != null)
-                    //{
-                    //    //coin = instrumentlist.First(x => x.Id == (string)elem["id"]);
-                    //    coin.Symbol1 = (string)elem["symbol"];
-                    //    coin.Name = (string)elem["name"];
-                    //}
-                    //else
-                    //{
                        var coin = new Instrument((string)elem["id"])
                         {
                             Symbol1 = (string)elem["symbol"],
@@ -58,21 +49,6 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 var coin = instrumentlist.GetByInstrumentId(elem.Attribute("id").Value);
                 coin.PriceSourceCode = elem.Element("source").Value;
-                //var coin = new Instrument(elem.Attribute("id").Value)
-                //{
-                //    Symbol1 = elem.Element("symbol").Value,
-                //    Name = elem.Element("name").Value,
-                //    PriceSourceCode = elem.Element("source").Value,
-                //    rank = int.Parse(elem.Element("rank").Value)
-                //};
-
-                //if (elem.Element("symbol2") != null) coin.Symbol2 = elem.Element("symbol2").Value;
-                //if (elem.Descendants("logofile").Select(x => x.Value).Any())
-                //{
-                //    coin.LogoFileName = (string)elem.Descendants("logofile").Select(x => x.Value).First();
-                //}
-                //coin.IsActive = bool.Parse((string)elem.Descendants("isactive").Select(x => x.Value).First());
-                //instrumentlist.Attach(coin);
             }
         }
 
@@ -159,9 +135,13 @@ namespace CryptoAccouting.CoreClass.APIClass
             else
             {
                 Balance mybal = new Balance();
-                var mybalXE = XElement.Parse(balanceXML).Descendants("position");
+                var mybalXE = XElement.Parse(balanceXML);
+                var myPositionsXE = mybalXE.Descendants("position");
 
-                foreach (var elem in mybalXE)
+                var pricedate = mybalXE.Element("balance").Attribute("pricedate");
+                mybal.PriceDateTime = pricedate != null ? DateTime.Parse(pricedate.Value) : DateTime.MinValue;
+                    
+                foreach (var elem in myPositionsXE)
                 {
                     if (elem.Element("instrument") != null)
                     {

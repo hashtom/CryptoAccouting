@@ -10,6 +10,7 @@ namespace CryptoAccouting.CoreClass
         public string BalanceName { get; set; }
         private List<Position> positions; //{ get; private set; }
         public List<Position> BalanceByCoin { get; private set; }
+        public DateTime PriceDateTime { get; set; }
 
         public Balance()
         {

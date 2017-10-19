@@ -11,10 +11,18 @@ namespace CryptoAccouting.CoreClass.APIClass
 {
     public static class MarketDataAPI
     {
+        const string coinbalance_url = "https://coinbalance.jp";
+        const string coinmarketcap_url = "https://api.coinmarketcap.com";
+
+        public const string InstrumentListFile = "InstrumentList.json";
+        public const string ExchangeListFile = "ExchangeList.json";
+        public const string CrossRatefile_today = "crossrate_today.json";
+        public const string CrossRatefile_yesterday = "crossrate_yesterday.json";
+
         public static async Task<EnuAPIStatus> FetchCoinPricesAsync(ExchangeList exchanges, InstrumentList coins, List<CrossRate> crossrates)
 		{
 
-            if (!Reachability.IsHostReachable("coinbalance.jpn.org"))
+            if (!Reachability.IsHostReachable(coinbalance_url))
             {
                 return EnuAPIStatus.FailureNetwork;
             }
@@ -71,12 +79,10 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static async Task<EnuAPIStatus> FetchCoinMarketCapAsync(InstrumentList instrumentlist, CrossRate crossrate)
         {
-            const string CoinMarketUrl = "https://api.coinmarketcap.com/v1/ticker/";
-            const string CoinMarketUrl_yesterday = "http://coinbalance.jpn.org/market/market_yesterday.json";
             string rawjson;
             string rawjson_yesterday;
 
-            if (!Reachability.IsHostReachable(CoinMarketUrl))
+            if (!Reachability.IsHostReachable(coinmarketcap_url))
             {
                 return EnuAPIStatus.FailureNetwork;
             }
@@ -86,12 +92,12 @@ namespace CryptoAccouting.CoreClass.APIClass
                 {
                     using (var http = new HttpClient())
                     {
-                        rawjson = await http.GetStringAsync(CoinMarketUrl);
+                        rawjson = await http.GetStringAsync(coinbalance_url + "/v1/ticker/");
                     }
 
                     using (var http = new HttpClient())
                     {
-                        rawjson_yesterday = await http.GetStringAsync(CoinMarketUrl_yesterday);
+                        rawjson_yesterday = await http.GetStringAsync(coinbalance_url + "/market/market_yesterday.json");
                     }
                 }
                 catch (HttpRequestException)
@@ -107,12 +113,9 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static InstrumentList FetchAllCoinData()
 		{
-            const string BaseUrl = "http://coinbalance.jpn.org/InstrumentList.json";
-            // "https://api.coinmarketcap.com/v1/ticker/?limit=150";
-            const string instrumentlistFile = ApplicationCore.InstrumentListFile;
             string rawjson;
 
-            if (!Reachability.IsHostReachable(BaseUrl))
+            if (!Reachability.IsHostReachable(coinbalance_url))
             {
                 return null;
             }
@@ -120,7 +123,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 using (var http = new HttpClient())
                 {
-                    rawjson = http.GetStringAsync(BaseUrl).Result;
+                    rawjson = http.GetStringAsync(coinbalance_url + "/InstrumentList.json").Result;
                 }
             }
 
@@ -130,7 +133,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
             else
             {
-                StorageAPI.SaveFile(rawjson, instrumentlistFile);
+                StorageAPI.SaveFile(rawjson, InstrumentListFile);
 
                 try
                 {
@@ -147,7 +150,7 @@ namespace CryptoAccouting.CoreClass.APIClass
         public static async Task<EnuAPIStatus> FetchCoinLogoAsync(string InstrumentID, bool ForceRefresh)
         {
             var filename = InstrumentID + ".png";
-            string TargetUri = "http://coinbalance.jpn.org/images/" + filename;
+            string TargetUri = coinbalance_url + "/images/" + filename;
 
             if (!Reachability.IsHostReachable(TargetUri))
             {
@@ -181,13 +184,9 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static async Task<List<CrossRate>> FetchCrossRateAsync()
         {
-            const string jsonfilename_today = ApplicationCore.CrossRatefile_today;
-            const string jsonfilename_yesterday = ApplicationCore.CrossRatefile_yesterday;
-            const string BaseUri = "http://coinbalance.jpn.org/";
-
             string rawjson_today, rawjson_yesterday;
 
-            if (!Reachability.IsHostReachable(BaseUri))
+            if (!Reachability.IsHostReachable(coinbalance_url))
             {
                 return null;
             }
@@ -195,7 +194,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 using (var http = new HttpClient())
                 {
-                    HttpResponseMessage response = await http.GetAsync(BaseUri + "/fxrate/fxrate_latest.json");
+                    HttpResponseMessage response = await http.GetAsync(coinbalance_url + "/fxrate/fxrate_latest.json");
                     if (!response.IsSuccessStatusCode)
                     {
                         return null;
@@ -208,7 +207,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 using (var http = new HttpClient())
                 {
-                    HttpResponseMessage response = await http.GetAsync(BaseUri + "/fxrate/fxrate_yesterday.json");
+                    HttpResponseMessage response = await http.GetAsync(coinbalance_url + "/fxrate/fxrate_yesterday.json");
                     if (!response.IsSuccessStatusCode)
                     {
                         return null;
@@ -223,8 +222,8 @@ namespace CryptoAccouting.CoreClass.APIClass
             try
             {
                 var crossrates = await ParseMarketData.ParseCrossRateJsonAsync(rawjson_today, rawjson_yesterday);
-                StorageAPI.SaveFile(rawjson_today, jsonfilename_today);
-                StorageAPI.SaveFile(rawjson_yesterday, jsonfilename_yesterday);
+                StorageAPI.SaveFile(rawjson_today, CrossRatefile_today);
+                StorageAPI.SaveFile(rawjson_yesterday, CrossRatefile_yesterday);
                 return crossrates;
             }
             catch (JsonException)
@@ -237,9 +236,8 @@ namespace CryptoAccouting.CoreClass.APIClass
         public static async Task<double> FetchPriceBTCBefore24hAsync(string instrumentId)
         {
             string rawjson_yesterday;
-            const string CoinMarketUrl_yesterday = "http://coinbalance.jpn.org/market/market_yesterday.json";
 
-            if (!Reachability.IsHostReachable(CoinMarketUrl_yesterday))
+            if (!Reachability.IsHostReachable(coinbalance_url))
             {
                 return 0;
             }
@@ -247,7 +245,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 using (var http = new HttpClient())
                 {
-                    rawjson_yesterday = await http.GetStringAsync(CoinMarketUrl_yesterday);
+                    rawjson_yesterday = await http.GetStringAsync(coinbalance_url + "/market/market_yesterday.json");
                 }
                 var jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
                 return (double)jarray_yesterday.SelectToken("[?(@.id == '" + instrumentId + "')]")["price_btc"];
