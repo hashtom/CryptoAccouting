@@ -292,42 +292,5 @@ namespace CryptoAccouting.CoreClass.APIClass
             return EnuAPIStatus.Success;
         }
 
-
-  //      public static EnuAppStatus SaveExchangeListXMLTemp(ExchangeList exList, string fileName)
-		//{
-		//	var mydocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-		//	var path = Path.Combine(mydocuments, fileName);
-
-		//	XElement application = new XElement("application",
-  //                                              new XAttribute("name", ApplicationCore.AppName));
-
-		//	XElement exchanges = new XElement("exchanges");
-		//	application.Add(exchanges);
-
-  //          foreach (var ex in exList)
-		//	{
-  //              var coins = new XElement("coins");
-  //              foreach (var coin in ex.ListedCoin)
-  //              {
-  //                  var listing = new XElement("listing",
-  //                                                  new XAttribute("symbol", coin.Symbol));
-  //                  coins.Add(listing);
-  //              }
-
-		//		XElement exchange = new XElement("exchange",
-  //                                          new XAttribute("type", ex.ExchangeType),
-  //                                          new XElement("name", ex.ExchangeName),
-  //                                          coins
-		//								   );
-
-  //              exchanges.Add(exchange);
-		//	}
-
-		//	File.WriteAllText(path, application.ToString());
-
-		//	return EnuAppStatus.Success;
-
-		//}
-
     }
 }

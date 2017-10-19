@@ -12,7 +12,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 {
     public static class ExchangeAPI
     {
-
+        
         public static EnuAPIStatus FetchExchangeList(ExchangeList exlist)
         {
             const string jsonfilename = "ExchangeList.json";
@@ -57,7 +57,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             foreach (var market in (JArray)json["exchanges"])
             {
-
+                
                 var exchange = exlist.GetExchange((string)market["code"]);
                 exchange.Name = (string)market["name"];
 
@@ -98,10 +98,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         internal static async Task<TradeList> FetchTradeListAsync(Exchange exchange)
 		{
-			//string rawjson;
-            //string filename = exchange.Name + "Transaction_" + calendarYear + ".json";
-            //TradeList tradelist;
-
+            
             switch (exchange.Code)
 			{
                 case "Zaif":
@@ -121,10 +118,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         internal static async Task<List<Position>> FetchPositionAsync(Exchange exchange)
         {
-            //string rawjson;
-            //string filename = exchange.Name + "Position" + ".json";
-            //List<Position> positions = null;
-
+            
             switch (exchange.Code)
             {
                 case "Zaif":

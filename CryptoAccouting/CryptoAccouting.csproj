@@ -157,7 +157,8 @@
     <None Include="packages.config" />
     <None Include="Backend\fxget.sh" />
     <None Include="Backend\marketget.sh" />
-    <None Include="Backend\create_configdata.py" />
+    <None Include="Backend\create_instrumentlist.py" />
+    <None Include="Backend\create_exchangelist.py" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
