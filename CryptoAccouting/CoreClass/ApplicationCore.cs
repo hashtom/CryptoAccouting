@@ -93,16 +93,33 @@
             return Reachability.IsHostReachable("http://coinbalance.jpn.org/");
 		} 
         public static string NumberFormat(double number, bool addPlus = false, bool digitAdjust = true)
-        {             double epsilon = 1e-10;
+        {
             var digit = unchecked((int)Math.Log10(Math.Abs(number))) + 1;
-            string strnumber;              if (digit > 6 && digitAdjust)
+            string strnumber;              if (Math.Abs(number) < double.Epsilon)
             {
-                strnumber = String.Format("{0:n2}", number / 1000000) + "MM"; 
-            }             else if (digit > 3 && digitAdjust)             {                 strnumber = String.Format("{0:n0}", number);              }
-            else if (digit <= 1 && digitAdjust)
-            {
-                strnumber = Math.Abs(number) < epsilon ? "0" : String.Format("{0:n7}", number);
-            }             else             {                 strnumber = String.Format("{0:n2}", number);             }              if (addPlus && number > 0) strnumber = "+" + strnumber;             return strnumber;
+                strnumber = "--";
+            }
+            else             {
+                if (digit > 6 && digitAdjust)
+                {
+                    strnumber = String.Format("{0:n2}", number / 1000000) + "MM";
+
+                }
+                else if (digit > 3 && digitAdjust)
+                {
+                    strnumber = String.Format("{0:n0}", number);
+
+                }
+                else if (digit <= 1 && digitAdjust)
+                {
+                    strnumber = Math.Abs(number) < double.Epsilon ? "0" : String.Format("{0:n7}", number);
+                }
+                else
+                {
+                    strnumber = String.Format("{0:n2}", number);
+                }
+
+                if (addPlus && number > 0) strnumber = "+" + strnumber;              }              return strnumber;
         }          public static EnuAPIStatus RemoveAllCache()         {             try
             {                 baseCurrency = EnuBaseFiatCCY.USD;                 PublicExchangeList.ClearAPIKeys();                 return StorageAPI.RemoveAllCache();             }
             catch (Exception)             {                 return EnuAPIStatus.FatalError;             }         }      }      public enum EnuAPIStatus     {         Success,         FailureNetwork,         FailureStorage,         FailureParameter,         NotAvailable,         FatalError,         ParseError     }  } 

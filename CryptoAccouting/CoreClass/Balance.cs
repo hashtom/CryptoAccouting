@@ -106,12 +106,19 @@ namespace CryptoAccouting.CoreClass
 			double ret1d = 0;
             var total = positions.Select(x => x.LatestFiatValueBase()).Sum();
 
-			foreach (var p in positions)
-			{
-                ret1d += p.BaseRet1d() * p.LatestFiatValueBase() / total;
-			}
+            if (Math.Abs(total) < double.Epsilon)
+            {
+                ret1d = 0;
+            }
+            else
+            {
+                foreach (var p in positions)
+                {
+                    ret1d += p.BaseRet1d() * p.LatestFiatValueBase() / total;
+                }
+            }
 
-			return ret1d;
+            return ret1d;
 		}
 
         public void Attach(Position position) //, bool CalcSummary = true)
