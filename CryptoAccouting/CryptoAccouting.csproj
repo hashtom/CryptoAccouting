@@ -237,7 +237,7 @@
     <Compile Include="CoreClass\APIClass\CoinCheckAPI.cs" />
     <Compile Include="CoreClass\APIClass\BitFlyerAPI.cs" />
     <Compile Include="UIClass\PreviewControllerDS.cs" />
-    <Compile Include="CoreClass\APIClass\ParseMarketData.cs" />
+    <Compile Include="CoreClass\APIClass\ParseAPIStrings.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />

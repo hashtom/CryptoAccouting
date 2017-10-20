@@ -13,7 +13,11 @@
             //Color Design             var gradient = new CAGradientLayer();             gradient.Frame = this.BalanceTopView.Bounds;             gradient.NeedsDisplayOnBoundsChange = true;             gradient.MasksToBounds = true;             gradient.Colors = new CGColor[] { UIColor.FromRGB(0, 126, 167).CGColor, UIColor.FromRGB(0, 168, 232).CGColor };             //NavigationController.NavigationBar.Layer.InsertSublayer(gradient, 0);             this.BalanceTopView.Layer.InsertSublayer(gradient, 0); 
 			// Configure Segmented control
 			ConfigureSegmentButton();              RefreshControl = new UIRefreshControl();             RefreshControl.ValueChanged += async (sender, e) =>
-            {                 await RefreshPriceAsync();                 RefreshControl.EndRefreshing();             };              //run the last             Task.Run(async ()=> await ApplicationCore.FetchCoinLogoTop100Async());              ReDrawScreen();             TableView.ReloadData();
+            {                 if (!ApplicationCore.IsInternetReachable())                 {                     UIAlertController okAlertController = UIAlertController.Create("Warning", "Unable to Connect Internet!", UIAlertControllerStyle.Alert);                     okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+                    this.PresentViewController(okAlertController, true, () => RefreshControl.EndRefreshing());                 }
+                else
+                {
+                    await RefreshPriceAsync();                     RefreshControl.EndRefreshing();                 }             };              //run the last             Task.Run(async ()=> await ApplicationCore.FetchCoinLogoTop100Async());              ReDrawScreen();             TableView.ReloadData();
         }          public async override void ViewWillAppear(bool animated)         {
             base.ViewWillAppear(animated);
 

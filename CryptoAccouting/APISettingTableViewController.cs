@@ -81,7 +81,7 @@ namespace CryptoAccouting
 			UIAlertController exchangeAlert = UIAlertController.Create("Exchange", "Choose Exchange", UIAlertControllerStyle.ActionSheet);
 			exchangeAlert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
 
-            foreach (var exc in ApplicationCore.PublicExchangeList.Where(x=>x.APIReady == true))
+            foreach (var exc in ApplicationCore.PublicExchangeList.Where(x=>x.APIProvided == true))
 			{
                 exchangeAlert.AddAction(UIAlertAction.Create(exc.Name,
                                                                  UIAlertActionStyle.Default,

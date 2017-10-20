@@ -45,23 +45,35 @@ namespace CryptoAccouting.CoreClass.APIClass
                     {
                         //Bitcoin must go first
                         case "Bittrex":
-                            if(exchanges.Any(x => x.Code == "Bittrex")) 
-                                await BittrexAPI.FetchPriceAsync(exchanges.First(x => x.Code == "Bittrex"), coins, crossrate);
+                            if (exchanges.Any(x => x.Code == "Bittrex"))
+                            {
+                                var exchange = exchanges.First(x => x.Code == "Bittrex");
+                                if (exchange.HasListedCoins()) await BittrexAPI.FetchPriceAsync(exchange, coins, crossrate);
+                            }
                             break;
 
                         case "Bitstamp":
-                            if(exchanges.Any(x => x.Code == "Bitstamp")) 
-                            await BItstampAPI.FetchPriceAsync(exchanges.First(x => x.Code == "Bitstamp"), coins, crossrate);
+                            if (exchanges.Any(x => x.Code == "Bitstamp"))
+                            {
+                                var exchange = exchanges.First(x => x.Code == "Bitstamp");
+                                if (exchange.HasListedCoins()) await BItstampAPI.FetchPriceAsync(exchange, coins, crossrate);
+                            }
                             break;
 
                         case "Zaif":
                             if (exchanges.Any(x => x.Code == "Zaif"))
-                                await ZaifAPI.FetchPriceAsync(exchanges.First(x => x.Code == "Zaif"), coins, crossrate, usdjpy);
+                            {
+                                var exchange = exchanges.First(x => x.Code == "Zaif");
+                                if (exchange.HasListedCoins()) await ZaifAPI.FetchPriceAsync(exchange, coins, crossrate, usdjpy);
+                            }
                             break;
 
                         case "CoinCheck":
                             if (exchanges.Any(x => x.Code == "CoinCheck"))
-                                await CoinCheckAPI.FetchPriceAsync(exchanges.First(x => x.Code == "CoinCheck"), coins, crossrate, usdjpy);
+                            {
+                                var exchange = exchanges.First(x => x.Code == "CoinCheck");
+                                if (exchange.HasListedCoins()) await CoinCheckAPI.FetchPriceAsync(exchange, coins, crossrate, usdjpy);
+                            }
                             break;
 
                         case "coinmarketcap":
@@ -105,7 +117,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     return EnuAPIStatus.FailureNetwork;
                 }
 
-                return await ParseMarketData.ParseCoinMarketCapJsonAsync(rawjson, rawjson_yesterday, instrumentlist, crossrate);
+                return await ParseAPIStrings.ParseCoinMarketCapJsonAsync(rawjson, rawjson_yesterday, instrumentlist, crossrate);
 
             }
 
@@ -137,7 +149,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 try
                 {
-                    return ParseMarketData.ParseInstrumentListJson(rawjson);
+                    return ParseAPIStrings.ParseInstrumentListJson(rawjson);
                 }
                 catch (Exception)
                 {
@@ -192,36 +204,42 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
             else
             {
-                using (var http = new HttpClient())
+                try
                 {
-                    HttpResponseMessage response = await http.GetAsync(coinbalance_url + "/fxrate/fxrate_latest.json");
-                    if (!response.IsSuccessStatusCode)
+                    using (var http = new HttpClient())
                     {
-                        return null;
+                        HttpResponseMessage response = await http.GetAsync(coinbalance_url + "/fxrate/fxrate_latest.json");
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            return null;
+                        }
+                        else
+                        {
+                            rawjson_today = await response.Content.ReadAsStringAsync();
+                        }
                     }
-                    else
-                    {
-                        rawjson_today = await response.Content.ReadAsStringAsync();
-                    }
-                }
 
-                using (var http = new HttpClient())
+                    using (var http = new HttpClient())
+                    {
+                        HttpResponseMessage response = await http.GetAsync(coinbalance_url + "/fxrate/fxrate_yesterday.json");
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            return null;
+                        }
+                        else
+                        {
+                            rawjson_yesterday = await response.Content.ReadAsStringAsync();
+                        }
+                    }
+                }catch(HttpRequestException)
                 {
-                    HttpResponseMessage response = await http.GetAsync(coinbalance_url + "/fxrate/fxrate_yesterday.json");
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        return null;
-                    }
-                    else
-                    {
-                        rawjson_yesterday = await response.Content.ReadAsStringAsync();
-                    }
+                    return null;
                 }
             }
 
             try
             {
-                var crossrates = await ParseMarketData.ParseCrossRateJsonAsync(rawjson_today, rawjson_yesterday);
+                var crossrates = await ParseAPIStrings.ParseCrossRateJsonAsync(rawjson_today, rawjson_yesterday);
                 StorageAPI.SaveFile(rawjson_today, CrossRatefile_today);
                 StorageAPI.SaveFile(rawjson_yesterday, CrossRatefile_yesterday);
                 return crossrates;

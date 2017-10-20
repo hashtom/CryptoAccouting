@@ -6,7 +6,7 @@ namespace CryptoAccouting.CoreClass
 {
     public class Exchange : CoinStorage
     {
-        public bool APIReady { get; set; }
+        public bool APIProvided { get; set; }
         public string Key { get; set; }
         public string Secret { get; set; }
         public string LogoFileName { get; set; }
@@ -61,15 +61,25 @@ namespace CryptoAccouting.CoreClass
                                       null;
         }
 
+        public bool HasListedCoins()
+        {
+            return Coins.Count() > 0 ? true : false;
+        }
+
         public string GetSymbolForExchange(string instrumentID)
         {
-            var coin = Coins.First(x => x.Id == instrumentID);
-            var type = ExchangeSymbolMap.Any(x => x.InstrumentID == instrumentID) ?
-                                        ExchangeSymbolMap.First(x => x.InstrumentID == instrumentID).SymbolMapType :
-                                        EnuSymbolMapType.Symbol1;
-
-            return type == EnuSymbolMapType.Symbol1 ? coin.Symbol1 : coin.Symbol2;
-
+            if (HasListedCoins())
+            {
+                var coin = Coins.GetByInstrumentId(instrumentID);
+                var type = ExchangeSymbolMap.Any(x => x.InstrumentID == instrumentID) ?
+                                            ExchangeSymbolMap.First(x => x.InstrumentID == instrumentID).SymbolMapType :
+                                            EnuSymbolMapType.Symbol1;
+                return type == EnuSymbolMapType.Symbol1 ? coin.Symbol1 : coin.Symbol2;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public void AttachTradeList(TradeList tradelist)

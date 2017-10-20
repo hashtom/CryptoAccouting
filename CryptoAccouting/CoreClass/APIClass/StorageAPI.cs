@@ -65,7 +65,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             var balanceXML = LoadFromFile(BalanceFile);
             if (balanceXML == null) balanceXML = LoadBundleFile(BalanceBundleFile);
 
-            return ParseMarketData.ParseBalanceXML(balanceXML, instrumentlist);
+            return ParseAPIStrings.ParseBalanceXML(balanceXML, instrumentlist);
 
         }
 
@@ -142,7 +142,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             try
             {
-                instrumentlist = ParseMarketData.ParseInstrumentListJson(rawjson);
+                instrumentlist = ParseAPIStrings.ParseInstrumentListJson(rawjson);
             }
             catch (Exception)
             {
@@ -154,7 +154,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 try
                 {
-                    ParseMarketData.ParsePriceSourceXML(PriceSourceXML, instrumentlist);
+                    ParseAPIStrings.ParsePriceSourceXML(PriceSourceXML, instrumentlist);
                 }
                 catch (Exception)
                 {
@@ -176,7 +176,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             if (rawjson_today != null & rawjson_yesterday != null)
             {
-                return await ParseMarketData.ParseCrossRateJsonAsync(rawjson_today, rawjson_yesterday);
+                return await ParseAPIStrings.ParseCrossRateJsonAsync(rawjson_today, rawjson_yesterday);
             }
             else
             {
@@ -228,7 +228,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             XElement apikeys = new XElement("apikeys");
             application.Add(apikeys);
 
-            foreach (var exchange in exList.Where(x => x.APIReady == true))
+            foreach (var exchange in exList.Where(x => x.APIProvided == true))
             {
                 XElement key = new XElement("exchange",
                                             new XAttribute("name", exchange.Code),

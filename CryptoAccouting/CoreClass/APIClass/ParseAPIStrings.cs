@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CryptoAccouting.CoreClass.APIClass
 {
-    public static class ParseMarketData
+    public static class ParseAPIStrings
     {
 
         public static InstrumentList ParseInstrumentListJson(string rawjson)
@@ -140,7 +140,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 var pricedate = mybalXE.Element("balance").Attribute("pricedate");
                 mybal.PriceDateTime = pricedate != null ? DateTime.Parse(pricedate.Value) : DateTime.MinValue;
-                    
+
                 foreach (var elem in myPositionsXE)
                 {
                     if (elem.Element("instrument") != null)
@@ -188,6 +188,58 @@ namespace CryptoAccouting.CoreClass.APIClass
                 }
 
                 return mybal;
+            }
+        }
+
+        public static EnuAPIStatus ParseExchangeListJson(string rawjson, ExchangeList exlist)
+        {
+            JObject json;
+
+            try
+            {
+                json = JObject.Parse(rawjson);
+
+                foreach (var market in (JArray)json["exchanges"])
+                {
+
+                    var exchange = exlist.GetExchange((string)market["code"]);
+                    exchange.Name = (string)market["name"];
+
+                    var listing = (JArray)market["listing"];
+
+                    if (listing.ToList().Count() == 0)
+                    {
+                        ApplicationCore.InstrumentList.ToList().ForEach(x => exchange.AttachListedCoin(x));
+                    }
+                    else
+                    {
+                        foreach (var symbol in listing)
+                        {
+                            Instrument coin = null;
+                            if (symbol["symbol"] != null)
+                            {
+                                coin = ApplicationCore.InstrumentList.GetBySymbol1((string)symbol["symbol"]);
+                                if (coin != null)
+                                    exchange.AttachSymbolMap(coin.Id, (string)symbol["symbol"], EnuSymbolMapType.Symbol1);
+                            }
+                            else if (symbol["symbol2"] != null)
+                            {
+                                coin = ApplicationCore.InstrumentList.GetBySymbol2((string)symbol["symbol2"]);
+                                if (coin != null)
+                                    if (coin != null) exchange.AttachSymbolMap(coin.Id, (string)symbol["symbol2"], EnuSymbolMapType.Symbol2);
+                            }
+
+                            if (coin != null) exchange.AttachListedCoin(coin);
+                        }
+                    }
+                    exchange.APIProvided = (bool)market["api"];
+                }
+
+                return EnuAPIStatus.Success;
+            }
+            catch (JsonException)
+            {
+                return EnuAPIStatus.FatalError;
             }
         }
     }
