@@ -14,6 +14,8 @@ namespace CryptoAccouting.CoreClass.APIClass
     {
         private const string BaseUrl = "https://coincheck.com";
         private static Exchange _coincheck;
+        private static CrossRate _crossrate;
+        private static CrossRate _USDJPYrate;
         //private static string _apiKey = "";
         //private static string _apiSecret = "";
 
@@ -22,6 +24,8 @@ namespace CryptoAccouting.CoreClass.APIClass
             string rawjson;
             Price btcprice;
             _coincheck = coincheck;
+            _crossrate = crossrate;
+            _USDJPYrate = USDJPYrate;
 
             if (!Reachability.IsHostReachable(BaseUrl))
             {
@@ -34,7 +38,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     using (var http = new HttpClient())
                     {
                         http.BaseAddress = new Uri(BaseUrl);
-                        Uri path = new Uri("/api/rate/" + coincheck.GetSymbolForExchange(coin.Id).ToLower() + "_jpy", UriKind.Relative);
+                        Uri path = new Uri("/api/rate/" + _coincheck.GetSymbolForExchange(coin.Id).ToLower() + "_jpy", UriKind.Relative);
                         rawjson = await SendAsync(http, path, HttpMethod.Get);
                     }
 
@@ -50,7 +54,8 @@ namespace CryptoAccouting.CoreClass.APIClass
                             {
                                 coin.MarketPrice.LatestPriceBTC = 1;
                                 coin.MarketPrice.LatestPriceUSD = (double)jobj["rate"] / USDJPYrate.Rate;
-                                //coin.MarketPrice.PriceBTCBefore24h = (double)jobj["PrevDay"];
+                                coin.MarketPrice.PriceBTCBefore24h = 1;
+                                coin.MarketPrice.PriceUSDBefore24h = await MarketDataAPI.FetchBTCUSDPriceBefore24hAsync(); //tmp
                             }
                             else
                             {
@@ -101,7 +106,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 var rawjson = await SendAsync(http, path, HttpMethod.Get, true);
                 if (rawjson != null)
                 {
-                    positions = ParsePosition(rawjson, coincheck);
+                    positions = ParsePosition(rawjson);
                     //if (positions != null) StorageAPI.SaveFile(rawjson, filename);
                 }
 
@@ -133,11 +138,13 @@ namespace CryptoAccouting.CoreClass.APIClass
         public static async Task<TradeList> FetchTransaction2Async(Exchange coincheck, string calendarYear = "ALL")
         {
             _coincheck = coincheck;
-            string filename = coincheck.Name + "Transaction_" + calendarYear + ".json";
-            var rawjson = StorageAPI.LoadFromFile(filename);
+            string rawjson;
 
-            if (rawjson is null || calendarYear == DateTime.Now.Year.ToString() || calendarYear is "ALL")
-            {
+            //string filename = coincheck.Name + "Transaction_" + calendarYear + ".json";
+            //var rawjson = StorageAPI.LoadFromFile(filename);
+
+            //if (rawjson is null || calendarYear == DateTime.Now.Year.ToString() || calendarYear is "ALL")
+            //{
                 if (!Reachability.IsHostReachable(BaseUrl))
                 {
                     return null;
@@ -164,7 +171,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                     //rawjson = await SendAsync(http, path, HttpMethod.Get);
                     rawjson = await SendAsync(http, path, HttpMethod.Get, true, param);
                 }
-            }
+            //}
 
             return ParseTrade(rawjson);
             //if (tradelist != null) StorageAPI.SaveFile(rawjson, filename);
@@ -223,7 +230,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
         }
 
-        public static List<Position> ParsePosition(string rawjson, Exchange exchange)
+        public static List<Position> ParsePosition(string rawjson)
         {
             JObject json;
             List<Position> positions;
@@ -258,7 +265,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                             var pos = new Position(coin)
                             {
                                 Amount = qty,
-                                BookedExchange = exchange
+                                BookedExchange = _coincheck
                             };
                             positions.Add(pos);
                         }
@@ -288,7 +295,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
             else
             {
-                var tradelist = new TradeList(ApplicationCore.BaseCurrency);
+                var tradelist = new TradeList(EnuBaseFiatCCY.JPY);
 
                 var jarray = IsPagenation ? (JArray)json["data"] : (JArray)json["transactions"];
 

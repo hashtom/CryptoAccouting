@@ -111,9 +111,6 @@
     <Reference Include="Syncfusion.Compression.Portable">
       <HintPath>..\..\..\..\Documents\Syncfusion\15.3.0.26\Xamarin\lib\pcl\Syncfusion.Compression.Portable.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Pdf.Portable">
-      <HintPath>..\..\..\..\Documents\Syncfusion\15.3.0.26\Xamarin\lib\pcl\Syncfusion.Pdf.Portable.dll</HintPath>
-    </Reference>
     <Reference Include="Syncfusion.XlsIO.Portable">
       <HintPath>..\..\..\..\Documents\Syncfusion\15.3.0.26\Xamarin\lib\pcl\Syncfusion.XlsIO.Portable.dll</HintPath>
     </Reference>

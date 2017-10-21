@@ -62,7 +62,8 @@ namespace CryptoAccouting.CoreClass.APIClass
                             coin.MarketPrice.LatestPriceBTC = 1;
                             coin.MarketPrice.PriceBTCBefore24h = 1;
                             coin.MarketPrice.LatestPriceUSD = (double)jobj["last"];
-                            coin.MarketPrice.PriceUSDBefore24h = (double)jobj["open"];
+                            //coin.MarketPrice.PriceUSDBefore24h = (double)jobj["open"];
+                            coin.MarketPrice.PriceUSDBefore24h = await MarketDataAPI.FetchBTCUSDPriceBefore24hAsync(); //tmp
                         }
                         else
                         {

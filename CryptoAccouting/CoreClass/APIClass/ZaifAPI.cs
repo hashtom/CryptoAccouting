@@ -14,12 +14,16 @@ namespace CryptoAccouting.CoreClass.APIClass
     {
         private const string BaseUrl = "https://api.zaif.jp/";
         private static Exchange _zaif;
+        private static CrossRate _crossrate;
+        private static CrossRate _USDJPYrate;
 
         public static async Task<EnuAPIStatus> FetchPriceAsync(Exchange zaif, InstrumentList coins, CrossRate crossrate, CrossRate USDJPYrate)
         {
             string rawjson;
             Price btcprice;
             _zaif = zaif;
+            _crossrate = crossrate;
+            _USDJPYrate = USDJPYrate;
 
             if (!Reachability.IsHostReachable(BaseUrl))
             {
@@ -48,7 +52,8 @@ namespace CryptoAccouting.CoreClass.APIClass
                             {
                                 coin.MarketPrice.LatestPriceBTC = 1;
                                 coin.MarketPrice.LatestPriceUSD = (double)jobj["last"] / USDJPYrate.Rate;
-                                //coin.MarketPrice.PriceBTCBefore24h = (double)jobj["PrevDay"];
+                                coin.MarketPrice.PriceBTCBefore24h = 1;
+                                coin.MarketPrice.PriceUSDBefore24h = await MarketDataAPI.FetchBTCUSDPriceBefore24hAsync(); //tmp
                             }
                             else
                             {
@@ -99,7 +104,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 var rawjson = await SendAsync(http, path, "get_info2");
                 if (rawjson != null)
                 {
-                    positions = ZaifAPI.ParsePosition(rawjson, zaif);
+                    positions = ZaifAPI.ParsePosition(rawjson);
                     //if (positions != null) StorageAPI.SaveFile(rawjson, filename);
                 }
 
@@ -111,11 +116,12 @@ namespace CryptoAccouting.CoreClass.APIClass
         {
             _zaif = zaif;
             string rawjson;
-            string filename = zaif.Name + "Transaction_" + calendarYear + ".json";
-            rawjson = StorageAPI.LoadFromFile(filename);
 
-            if (rawjson is null || calendarYear == DateTime.Now.Year.ToString() || calendarYear is "ALL")
-            {
+            //string filename = zaif.Name + "Transaction_" + calendarYear + ".json";
+            //rawjson = StorageAPI.LoadFromFile(filename);
+
+            //if (rawjson is null || calendarYear == DateTime.Now.Year.ToString() || calendarYear is "ALL")
+            //{
                 if (!Reachability.IsHostReachable(BaseUrl))
                 {
                     return null;
@@ -142,7 +148,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                     rawjson = await SendAsync(http, path, "trade_history", param);
                 }
-            }
+            //}
 
             var tradelist = ParseTrade(rawjson);
             //if (tradelist != null) StorageAPI.SaveFile(rawjson, filename);
@@ -150,7 +156,6 @@ namespace CryptoAccouting.CoreClass.APIClass
             return tradelist;
 
         }
-
 
         private static async Task<string> SendAsync(HttpClient http, Uri path, string postmethod = null, Dictionary<string, string> parameters = null)
         {
@@ -197,7 +202,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
         }
 
-        public static List<Position> ParsePosition(string rawjson, Exchange exchange)
+        public static List<Position> ParsePosition(string rawjson)
         {
             JObject json;
             List<Position> positions;
@@ -231,7 +236,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                             var pos = new Position(coin)
                             {
                                 Amount = qty,
-                                BookedExchange = exchange
+                                BookedExchange = _zaif
                             };
                             positions.Add(pos);
                         }
@@ -242,7 +247,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
         }
 
-        public static TradeList ParseTrade(string rawjson)
+        private static TradeList ParseTrade(string rawjson)
         {
             JObject json;
 
@@ -261,7 +266,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
             else
             {
-                var tradelist = new TradeList(ApplicationCore.BaseCurrency);
+                var tradelist = new TradeList(EnuBaseFiatCCY.JPY);
                 foreach (JProperty x in (JToken)json["return"])
                 {
                     //Transaction Date Order must be ascending by design...
@@ -302,7 +307,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                                                   "Zaif",
                                                   ebuysell,
                                                   (double)json["return"][x.Name]["amount"],
-                                                  (double)json["return"][x.Name]["price"],
+                                                   (double)json["return"][x.Name]["price"],
                                                    settleccy,
                                                   ApplicationCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
                                                    (double)json["return"][x.Name]["fee"]

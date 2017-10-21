@@ -1,5 +1,5 @@
 ﻿﻿using System; using System.Linq; using System.Threading.Tasks; using System.Collections.Generic; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";          public static Balance Balance { get; private set; }         public static InstrumentList InstrumentList { get; private set; }
-        public static ExchangeList PublicExchangeList { get; private set; }         public static CoinStorageList CoinStorageList { get; private set; }         public static List<CrossRate> USDCrossRates { get; private set; }         private static EnuBaseFiatCCY baseCurrency;          public static EnuBaseFiatCCY BaseCurrency
+        public static ExchangeList PublicExchangeList { get; private set; }         public static CoinStorageList CoinStorageList { get; private set; }         private static List<CrossRate> USDCrossRates;         private static EnuBaseFiatCCY baseCurrency;          public static EnuBaseFiatCCY BaseCurrency
         {             get
             {
                 return baseCurrency;
@@ -87,39 +87,41 @@
                     default:                         storage = new Wallet(storagecode, storagetype);                         CoinStorageList.Attach(storage);
                         break;
                 }
-            }             storage.AttachPosition(pos);             pos.AttachCoinStorage(storage);         } 
+            }             storage.AttachPosition(pos);             pos.AttachCoinStorage(storage);         }          public static CrossRate GetCrossRate(EnuBaseFiatCCY CCY)         {             return USDCrossRates is null ? null : USDCrossRates.First(x => x.Currency == CCY);         } 
 		public static bool IsInternetReachable()
 		{
             return Reachability.IsHostReachable("http://coinbalance.jpn.org/");
 		} 
-        public static string NumberFormat(double number, bool addPlus = false, bool digitAdjust = true)
+        public static string NumberFormat(double number, bool percent = false, bool digitAdjust = true)
         {
             var digit = unchecked((int)Math.Log10(Math.Abs(number))) + 1;
             string strnumber;              if (Math.Abs(number) < double.Epsilon)
             {
                 strnumber = "--";
             }
-            else             {
-                if (digit > 6 && digitAdjust)
-                {
-                    strnumber = String.Format("{0:n2}", number / 1000000) + "MM";
-
-                }
-                else if (digit > 3 && digitAdjust)
-                {
+            else             {                 if (percent)                 {                     strnumber = String.Format("{0:n2}", number);                     strnumber = number > 0 ? "+" + strnumber : strnumber;                 }                 else if (!digitAdjust)                 {
                     strnumber = String.Format("{0:n0}", number);
+                }                 else                 {
 
-                }
-                else if (digit <= 1 && digitAdjust)
-                {
-                    strnumber = Math.Abs(number) < double.Epsilon ? "0" : String.Format("{0:n7}", number);
-                }
-                else
-                {
-                    strnumber = String.Format("{0:n2}", number);
-                }
+                    if (digit > 6)
+                    {
+                        strnumber = String.Format("{0:n2}", number / 1000000) + "MM";
 
-                if (addPlus && number > 0) strnumber = "+" + strnumber;              }              return strnumber;
+                    }
+                    else if (digit > 3)
+                    {
+                        strnumber = String.Format("{0:n0}", number);
+
+                    }
+                    else if (digit <= 1)
+                    {
+                        strnumber = Math.Abs(number) < double.Epsilon ? "0" : String.Format("{0:n7}", number);
+                    }
+                    else
+                    {
+                        strnumber = String.Format("{0:n2}", number);
+                    } 
+                }              }              return strnumber;
         }          public static EnuAPIStatus RemoveAllCache()         {             try
             {                 baseCurrency = EnuBaseFiatCCY.USD;                 PublicExchangeList.ClearAPIKeys();                 return StorageAPI.RemoveAllCache();             }
             catch (Exception)             {                 return EnuAPIStatus.FatalError;             }         }      }      public enum EnuAPIStatus     {         Success,         FailureNetwork,         FailureStorage,         FailureParameter,         NotAvailable,         FatalError,         ParseError     }  } 

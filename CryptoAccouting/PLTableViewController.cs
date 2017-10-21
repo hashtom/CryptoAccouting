@@ -41,30 +41,30 @@ namespace CryptoAccouting
 
         partial void ButtonPickExchange_TouchUpInside(UIButton sender)
         {
-            this.myTradeList.SwitchTrdeYear(2016);
+            //this.myTradeList.SwitchTrdeYear(2016);
             DrawScreen();
         }
 
         partial void ButtonFiatCurrency_TouchUpInside(UIButton sender)
         {
-			this.myTradeList.SwitchTrdeYear(2015);
+			//this.myTradeList.SwitchTrdeYear(2015);
 			DrawScreen();
         }
 
         partial void ButtonCryptCurrency_TouchUpInside(UIButton sender)
         {
-			this.myTradeList.SwitchTrdeYear(2017);
+			//this.myTradeList.SwitchTrdeYear(2017);
 			DrawScreen();
         }
 
         private void DrawScreen()
         {
-			this.TextPeriod.Text = myTradeList.TradeYear.ToString();
-			this.LabelTxsBuy.Text = String.Format("{0:n0}", myTradeList.TxCountBuy);
-			this.LabelTxsSell.Text = String.Format("{0:n0}", myTradeList.TxCountSell);
-			this.LabelTxsTotal.Text = String.Format("{0:n0}", myTradeList.TxCountBuy + myTradeList.TxCountSell);
-			this.LabelQtySell.Text = String.Format("{0:n0}", myTradeList.TxCountSell);
-			this.LabelGrossQty.Text = String.Format("{0:n0}", myTradeList.TxCountSell + myTradeList.TxCountBuy);
+			//this.TextPeriod.Text = myTradeList.TradeYear.ToString();
+			this.LabelTxsBuy.Text = String.Format("{0:n0}", myTradeList.NumBuy);
+			this.LabelTxsSell.Text = String.Format("{0:n0}", myTradeList.NumSell);
+			this.LabelTxsTotal.Text = String.Format("{0:n0}", myTradeList.NumBuy + myTradeList.NumSell);
+			this.LabelQtySell.Text = String.Format("{0:n0}", myTradeList.NumSell);
+			this.LabelGrossQty.Text = String.Format("{0:n0}", myTradeList.NumSell + myTradeList.NumBuy);
 
             this.LabelQtySell.Text = String.Format("{0:n}", myTradeList.TotalQtySell);
 			this.LabelQtySell2.Text = this.LabelQtySell.Text;

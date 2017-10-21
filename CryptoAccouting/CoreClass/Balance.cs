@@ -43,7 +43,7 @@ namespace CryptoAccouting.CoreClass
         public void RefreshBalanceData()
         {
             //sort
-            positions = positions.OrderByDescending(x => x.LatestAmountBTC).ToList();
+            positions = positions.OrderByDescending(x => x.LatestAmountBTC).ThenBy(x => x.Coin.rank).ToList();
 
             //update prices
             int newid = 0;

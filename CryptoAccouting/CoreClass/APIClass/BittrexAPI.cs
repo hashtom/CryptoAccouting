@@ -194,7 +194,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
             else
             {
-                var tradelist = new TradeList(ApplicationCore.BaseCurrency);
+                var tradelist = new TradeList(EnuBaseFiatCCY.USD);
 
                 var jarray = (JArray)json["result"];
 

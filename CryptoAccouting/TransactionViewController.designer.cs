@@ -22,28 +22,22 @@ namespace CryptoAccouting
 		UIKit.UIButton buttonSearch { get; set; }
 
 		[Outlet]
-		UIKit.UILabel labelBTCQtyBuy { get; set; }
+		UIKit.UILabel labelBTCBuy { get; set; }
 
 		[Outlet]
-		UIKit.UILabel labelBTCQtySell { get; set; }
+		UIKit.UILabel labelBTCSell { get; set; }
 
 		[Outlet]
-		UIKit.UILabel labelBTCValBuy { get; set; }
+		UIKit.UILabel labelFiatBuy { get; set; }
 
 		[Outlet]
-		UIKit.UILabel labelBTCValSell { get; set; }
+		UIKit.UILabel labelFiatSell { get; set; }
 
 		[Outlet]
-		UIKit.UILabel labelMonaQtyBuy { get; set; }
+		UIKit.UILabel labelNumBuy { get; set; }
 
 		[Outlet]
-		UIKit.UILabel labelMonaQtySell { get; set; }
-
-		[Outlet]
-		UIKit.UILabel labelMonaValBuy { get; set; }
-
-		[Outlet]
-		UIKit.UILabel labelMonaValSell { get; set; }
+		UIKit.UILabel labelNumSell { get; set; }
 
 		[Outlet]
 		UIKit.UIView TradeTopView { get; set; }
@@ -53,11 +47,6 @@ namespace CryptoAccouting
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (TradeTopView != null) {
-				TradeTopView.Dispose ();
-				TradeTopView = null;
-			}
-
 			if (barbuttonShare != null) {
 				barbuttonShare.Dispose ();
 				barbuttonShare = null;
@@ -73,44 +62,39 @@ namespace CryptoAccouting
 				buttonSearch = null;
 			}
 
-			if (labelBTCQtyBuy != null) {
-				labelBTCQtyBuy.Dispose ();
-				labelBTCQtyBuy = null;
+			if (labelNumBuy != null) {
+				labelNumBuy.Dispose ();
+				labelNumBuy = null;
 			}
 
-			if (labelBTCQtySell != null) {
-				labelBTCQtySell.Dispose ();
-				labelBTCQtySell = null;
+			if (labelNumSell != null) {
+				labelNumSell.Dispose ();
+				labelNumSell = null;
 			}
 
-			if (labelBTCValBuy != null) {
-				labelBTCValBuy.Dispose ();
-				labelBTCValBuy = null;
+			if (labelFiatBuy != null) {
+				labelFiatBuy.Dispose ();
+				labelFiatBuy = null;
 			}
 
-			if (labelBTCValSell != null) {
-				labelBTCValSell.Dispose ();
-				labelBTCValSell = null;
+			if (labelFiatSell != null) {
+				labelFiatSell.Dispose ();
+				labelFiatSell = null;
 			}
 
-			if (labelMonaQtyBuy != null) {
-				labelMonaQtyBuy.Dispose ();
-				labelMonaQtyBuy = null;
+			if (labelBTCBuy != null) {
+				labelBTCBuy.Dispose ();
+				labelBTCBuy = null;
 			}
 
-			if (labelMonaQtySell != null) {
-				labelMonaQtySell.Dispose ();
-				labelMonaQtySell = null;
+			if (labelBTCSell != null) {
+				labelBTCSell.Dispose ();
+				labelBTCSell = null;
 			}
 
-			if (labelMonaValBuy != null) {
-				labelMonaValBuy.Dispose ();
-				labelMonaValBuy = null;
-			}
-
-			if (labelMonaValSell != null) {
-				labelMonaValSell.Dispose ();
-				labelMonaValSell = null;
+			if (TradeTopView != null) {
+				TradeTopView.Dispose ();
+				TradeTopView = null;
 			}
 
 			if (TransactionView != null) {
