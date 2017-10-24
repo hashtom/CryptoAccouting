@@ -3,11 +3,14 @@ using System;
 using UIKit;
 using CryptoAccouting.CoreClass;
 using System.Collections.Generic;
+using CryptoAccouting.UIClass;
 
 namespace CryptoAccouting
 {
     public partial class SettingTableViewController : CryptoTableViewController
     {
+        LoadingOverlay loadPop;
+
         public SettingTableViewController (IntPtr handle) : base (handle)
         {
         }
@@ -103,7 +106,7 @@ namespace CryptoAccouting
             }
         }
 
-        public override void SetSearchSelectionItem(string searchitem1) //CryptoTableViewController ControllerToBack)
+        public async override void SetSearchSelectionItem(string searchitem1) //CryptoTableViewController ControllerToBack)
         {
             //base.SetSearchSelectionItem(searchitem1);
             EnuBaseFiatCCY baseccy;
@@ -112,6 +115,13 @@ namespace CryptoAccouting
 
             ApplicationCore.BaseCurrency = baseccy;
             ApplicationCore.SaveAppSetting();
+
+            var bounds = SettingTableView.Bounds;
+            loadPop = new LoadingOverlay(bounds);
+            SettingTableView.Add(loadPop);
+            await ApplicationCore.LoadCrossRateAsync();
+            await ApplicationCore.FetchMarketDataFromBalanceAsync();
+            loadPop.Hide();
         }
 
         public override void ReDrawScreen()

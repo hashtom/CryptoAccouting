@@ -92,8 +92,8 @@ namespace CryptoAccouting
                 {
                     if (ApplicationCore.Balance.HasBalance(thisCoin))
                     {
-                        UIAlertController okAlertController = UIAlertController.Create("Warning", "You got this coin in your balance.", UIAlertControllerStyle.Alert);
-                        okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, (obj) => switchWatchOnly.SetState(false, false)));
+                        UIAlertController okAlertController = UIAlertController.Create("Warning", "You have already got this coin in your balance. You can only add single Watch-only coin.", UIAlertControllerStyle.Alert);
+                        okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, (obj) => switchWatchOnly.SetState(false, false)));
                         this.PresentViewController(okAlertController, true, null);
                     }
                     else
