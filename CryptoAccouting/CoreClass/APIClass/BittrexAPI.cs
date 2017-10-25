@@ -194,7 +194,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
             else
             {
-                var tradelist = new TradeList(EnuBaseFiatCCY.USD);
+                var tradelist = new TradeList() { SettlementCCY = EnuCCY.BTC };
 
                 var jarray = (JArray)json["result"];
 

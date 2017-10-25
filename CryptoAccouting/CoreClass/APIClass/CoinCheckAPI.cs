@@ -295,7 +295,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
             else
             {
-                var tradelist = new TradeList(EnuBaseFiatCCY.JPY);
+                var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY };
 
                 var jarray = IsPagenation ? (JArray)json["data"] : (JArray)json["transactions"];
 

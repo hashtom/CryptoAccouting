@@ -28,16 +28,16 @@ namespace CryptoAccouting
 		UIKit.UILabel labelBTCSell { get; set; }
 
 		[Outlet]
-		UIKit.UILabel labelFiatBuy { get; set; }
-
-		[Outlet]
-		UIKit.UILabel labelFiatSell { get; set; }
-
-		[Outlet]
 		UIKit.UILabel labelNumBuy { get; set; }
 
 		[Outlet]
 		UIKit.UILabel labelNumSell { get; set; }
+
+		[Outlet]
+		UIKit.UILabel labelOtherBuy { get; set; }
+
+		[Outlet]
+		UIKit.UILabel labelOtherSell { get; set; }
 
 		[Outlet]
 		UIKit.UIView TradeTopView { get; set; }
@@ -62,24 +62,14 @@ namespace CryptoAccouting
 				buttonSearch = null;
 			}
 
-			if (labelNumBuy != null) {
-				labelNumBuy.Dispose ();
-				labelNumBuy = null;
+			if (labelOtherBuy != null) {
+				labelOtherBuy.Dispose ();
+				labelOtherBuy = null;
 			}
 
-			if (labelNumSell != null) {
-				labelNumSell.Dispose ();
-				labelNumSell = null;
-			}
-
-			if (labelFiatBuy != null) {
-				labelFiatBuy.Dispose ();
-				labelFiatBuy = null;
-			}
-
-			if (labelFiatSell != null) {
-				labelFiatSell.Dispose ();
-				labelFiatSell = null;
+			if (labelOtherSell != null) {
+				labelOtherSell.Dispose ();
+				labelOtherSell = null;
 			}
 
 			if (labelBTCBuy != null) {
@@ -90,6 +80,16 @@ namespace CryptoAccouting
 			if (labelBTCSell != null) {
 				labelBTCSell.Dispose ();
 				labelBTCSell = null;
+			}
+
+			if (labelNumBuy != null) {
+				labelNumBuy.Dispose ();
+				labelNumBuy = null;
+			}
+
+			if (labelNumSell != null) {
+				labelNumSell.Dispose ();
+				labelNumSell = null;
 			}
 
 			if (TradeTopView != null) {

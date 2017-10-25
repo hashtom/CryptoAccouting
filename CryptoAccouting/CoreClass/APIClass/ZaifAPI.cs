@@ -266,7 +266,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
             else
             {
-                var tradelist = new TradeList(EnuBaseFiatCCY.JPY);
+                var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY };
                 foreach (JProperty x in (JToken)json["return"])
                 {
                     //Transaction Date Order must be ascending by design...

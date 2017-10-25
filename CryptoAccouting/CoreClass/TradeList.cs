@@ -11,39 +11,47 @@ namespace CryptoAccouting.CoreClass
         public List<string> TradedCoin { get; private set; } 
         //public int TradeYear { get; private set; }
         public string TradedCoinString { get; set; }
-        public EnuBaseFiatCCY FiatSettlementCCY { get; set; } // Fiat Only
+        public EnuCCY SettlementCCY { get; set; } // Fiat Only
         public double UnrealizedBookValue { get; set; } 
         public double AverageBookPrice { get; set; }
         public Exchange TradedExchange { get; set; }
 
-        public double TotalQtyBuy
-        { 
-            get { return transactions.Where(t => t.BuySell == EnuBuySell.Buy).Sum(t => t.Quantity); }
-        }
-
-        public double TotalQtySell
-        {
-            get { return transactions.Where(t => t.BuySell == EnuBuySell.Sell).Sum(t => t.Quantity); }
-        }
-
-        public double NumBuy 
+        public double NumBuy
         {
             get { return transactions.Count(t => t.BuySell == EnuBuySell.Buy); }
         }
 
-        public double NumSell 
+        public double NumSell
         {
             get { return transactions.Count(t => t.BuySell == EnuBuySell.Sell); }
         }
 
-        public double TotalValueBuy
-        {
-            get{ return transactions.Where(t => t.BuySell == EnuBuySell.Buy).Sum(t => t.TradeGrossValue); }
+        public double TotalBTCTradeValueBuy
+        { 
+            get { return transactions.Where(t => t.BuySell == EnuBuySell.Buy).
+                                 Where(t=>t.TradedCoin.Id == "bitcoin").
+                                 Sum(t => t.TradeNetValue); }
         }
 
-        public double TotalValueSell
+        public double TotalBTCTradeValueSell
         {
-            get { return transactions.Where(t => t.BuySell == EnuBuySell.Sell).Sum(t => t.TradeGrossValue); }
+            get { return transactions.Where(t => t.BuySell == EnuBuySell.Sell).
+                                 Where(t => t.TradedCoin.Id == "bitcoin").
+                                 Sum(t => t.TradeNetValue); }
+        }
+
+        public double TotalOtherTradeValueBuy
+        {
+            get{ return transactions.Where(t => t.BuySell == EnuBuySell.Buy).
+                                Where(t => t.TradedCoin.Id != "bitcoin").
+                                Sum(t => t.TradeNetValue); }
+        }
+
+        public double TotalOtherTradeValueSell
+        {
+            get { return transactions.Where(t => t.BuySell == EnuBuySell.Sell).
+                                 Where(t => t.TradedCoin.Id != "bitcoin").
+                                 Sum(t => t.TradeNetValue); }
         }
 
         public double RealizedBookValue
@@ -59,10 +67,10 @@ namespace CryptoAccouting.CoreClass
 			set { this.transactions = value; }
 		}
 
-        public TradeList(EnuBaseFiatCCY settlementCCY)
+        public TradeList()
         {
             transactions = new List<Transaction>();
-            this.FiatSettlementCCY = settlementCCY;
+            //this.SettlementCCY = settlementCCY;
         }
 
         public double TotalQuantity(string instrumentId, EnuBuySell buysell)

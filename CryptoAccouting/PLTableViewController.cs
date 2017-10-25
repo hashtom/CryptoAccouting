@@ -66,15 +66,15 @@ namespace CryptoAccouting
 			this.LabelQtySell.Text = String.Format("{0:n0}", myTradeList.NumSell);
 			this.LabelGrossQty.Text = String.Format("{0:n0}", myTradeList.NumSell + myTradeList.NumBuy);
 
-            this.LabelQtySell.Text = String.Format("{0:n}", myTradeList.TotalQtySell);
+            this.LabelQtySell.Text = String.Format("{0:n}", myTradeList.TotalBTCTradeValueSell);
 			this.LabelQtySell2.Text = this.LabelQtySell.Text;
-			this.LabelQtyBuy.Text = String.Format("{0:n}", myTradeList.TotalQtyBuy);
-			this.LabelGrossQty.Text = String.Format("{0:n}", (myTradeList.TotalQtyBuy + myTradeList.TotalQtySell));
+			this.LabelQtyBuy.Text = String.Format("{0:n}", myTradeList.TotalBTCTradeValueBuy);
+			this.LabelGrossQty.Text = String.Format("{0:n}", (myTradeList.TotalBTCTradeValueBuy + myTradeList.TotalBTCTradeValueSell));
 
-			this.LabelBuyValue.Text = String.Format("{0:n0}", myTradeList.TotalValueBuy);
-			this.LabelSellValue.Text = String.Format("{0:n0}", myTradeList.TotalValueSell);
-			this.LabelSellValue2.Text = String.Format("{0:n0}", myTradeList.TotalValueSell);
-			this.LabelTotalValue.Text = String.Format("{0:n0}", (myTradeList.TotalValueBuy + myTradeList.TotalValueSell));
+			this.LabelBuyValue.Text = String.Format("{0:n0}", myTradeList.TotalOtherTradeValueBuy);
+			this.LabelSellValue.Text = String.Format("{0:n0}", myTradeList.TotalOtherTradeValueSell);
+			this.LabelSellValue2.Text = String.Format("{0:n0}", myTradeList.TotalOtherTradeValueSell);
+			this.LabelTotalValue.Text = String.Format("{0:n0}", (myTradeList.TotalOtherTradeValueBuy + myTradeList.TotalOtherTradeValueSell));
 
             this.LabelTradedCoins.Text = ApplicationCore.GetExchangeTradeList("Zaif").TradedCoinString;
 			//foreach (var coinname in ApplicationCore.GetExchange(EnuExchangeType.Zaif).TradeLists.Select(x => x.TradedCoin.Name))

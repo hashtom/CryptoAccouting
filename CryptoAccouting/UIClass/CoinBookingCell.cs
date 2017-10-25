@@ -23,8 +23,8 @@ namespace CryptoAccouting.UIClass
 
             labelSymbol = new UILabel()
             {
-                Font = UIFont.FromName("Cochin-BoldItalic", 16f),
-                TextColor = UIColor.FromRGB(127, 51, 0),
+                Font = UIFont.FromName("Apple SD Gothic Neo", 17f),
+                TextColor = UIColor.FromRGB(0, 0, 128),
                 TextAlignment = UITextAlignment.Center,
                 BackgroundColor = UIColor.Clear
             };

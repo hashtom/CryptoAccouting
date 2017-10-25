@@ -92,7 +92,7 @@
 		{
             return Reachability.IsHostReachable("http://coinbalance.jpn.org/");
 		} 
-        public static string NumberFormat(double number, bool percent = false, bool digitAdjust = true)
+        public static string NumberFormat(double number, bool percent = false, bool digitAdjust = true, string symbol=null)
         {
             var digit = unchecked((int)Math.Log10(Math.Abs(number))) + 1;
             string strnumber;              if (Math.Abs(number) < double.Epsilon)
@@ -121,7 +121,7 @@
                     {
                         strnumber = String.Format("{0:n2}", number);
                     } 
-                }              }              return strnumber;
+                }                 if (symbol != null) strnumber = symbol + " " + strnumber;             }              return strnumber;
         }          public static EnuAPIStatus RemoveAllCache()         {             try
             {                 baseCurrency = EnuBaseFiatCCY.USD;                 PublicExchangeList.ClearAPIKeys();                 return StorageAPI.RemoveAllCache();             }
             catch (Exception)             {                 return EnuAPIStatus.FatalError;             }         }      }      public enum EnuAPIStatus     {         Success,         FailureNetwork,         FailureStorage,         FailureParameter,         NotAvailable,         FatalError,         ParseError     }  } 

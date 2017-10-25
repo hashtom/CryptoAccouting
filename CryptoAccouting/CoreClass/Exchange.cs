@@ -18,18 +18,20 @@ namespace CryptoAccouting.CoreClass
         {
             Coins = new InstrumentList();
             ExchangeSymbolMap = new List<SymbolMap>();
+            Key = "";
+            Secret = "";
             if (storagetype != EnuCoinStorageType.Exchange) throw new Exception();
         }
 
         public bool APIKeyAvailable()
         {
-            return (Key != null && Secret != null);
+            return (Key != "" && Secret != "");
         }
 
         public void ClearAPIKeys()
         {
-            Key = null;
-            Secret = null;
+            Key = "";
+            Secret = "";
         }
 
         public bool IsListed(string instrumemntID)
