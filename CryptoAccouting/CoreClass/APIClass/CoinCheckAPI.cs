@@ -85,7 +85,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static async Task<List<Position>> FetchPositionAsync(Exchange coincheck)
         {
-            List<Position> positions = null;
+            //List<Position> positions = null;
             _coincheck = coincheck;
 
             //string filename = coincheck.Name + "Position" + ".json";
@@ -106,11 +106,13 @@ namespace CryptoAccouting.CoreClass.APIClass
                 var rawjson = await SendAsync(http, path, HttpMethod.Get, true);
                 if (rawjson != null)
                 {
-                    positions = ParsePosition(rawjson);
-                    //if (positions != null) StorageAPI.SaveFile(rawjson, filename);
+                    return ParsePosition(rawjson);
+                }
+                else
+                {
+                    return null;
                 }
 
-                return positions;
             }
         }
 
@@ -131,7 +133,15 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 Uri path = new Uri("/api/exchange/orders/transactions", UriKind.Relative);
                 var rawjson = await SendAsync(http, path, HttpMethod.Get, true);
-                return ParseTrade(rawjson);
+
+                if (rawjson != null)
+                {
+                    return ParseTrade(rawjson);
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 
@@ -173,8 +183,14 @@ namespace CryptoAccouting.CoreClass.APIClass
                 }
             //}
 
-            return ParseTrade(rawjson);
-            //if (tradelist != null) StorageAPI.SaveFile(rawjson, filename);
+            if (rawjson != null)
+            {
+                return ParseTrade(rawjson);
+            }
+            else
+            {
+                return null;
+            }
 
         }
 
@@ -284,7 +300,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 json = JObject.Parse(rawjson);
             }
-            catch (JsonException)
+            catch (Exception)
             {
                 return null;
             }

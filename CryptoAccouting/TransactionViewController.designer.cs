@@ -34,10 +34,13 @@ namespace CryptoAccouting
 		UIKit.UILabel labelNumSell { get; set; }
 
 		[Outlet]
-		UIKit.UILabel labelOtherBuy { get; set; }
+		UIKit.UILabel labelSettleCrossBuy { get; set; }
 
 		[Outlet]
-		UIKit.UILabel labelOtherSell { get; set; }
+		UIKit.UILabel labelSettleCrossSell { get; set; }
+
+		[Outlet]
+		UIKit.UILabel labelSettleCrossText { get; set; }
 
 		[Outlet]
 		UIKit.UIView TradeTopView { get; set; }
@@ -52,29 +55,34 @@ namespace CryptoAccouting
 				barbuttonShare = null;
 			}
 
+			if (labelSettleCrossText != null) {
+				labelSettleCrossText.Dispose ();
+				labelSettleCrossText = null;
+			}
+
+			if (labelSettleCrossBuy != null) {
+				labelSettleCrossBuy.Dispose ();
+				labelSettleCrossBuy = null;
+			}
+
+			if (labelSettleCrossSell != null) {
+				labelSettleCrossSell.Dispose ();
+				labelSettleCrossSell = null;
+			}
+
 			if (buttonExchange != null) {
 				buttonExchange.Dispose ();
 				buttonExchange = null;
 			}
 
-			if (buttonSearch != null) {
-				buttonSearch.Dispose ();
-				buttonSearch = null;
-			}
-
-			if (labelOtherBuy != null) {
-				labelOtherBuy.Dispose ();
-				labelOtherBuy = null;
-			}
-
-			if (labelOtherSell != null) {
-				labelOtherSell.Dispose ();
-				labelOtherSell = null;
-			}
-
 			if (labelBTCBuy != null) {
 				labelBTCBuy.Dispose ();
 				labelBTCBuy = null;
+			}
+
+			if (buttonSearch != null) {
+				buttonSearch.Dispose ();
+				buttonSearch = null;
 			}
 
 			if (labelBTCSell != null) {

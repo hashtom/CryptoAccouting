@@ -16,41 +16,50 @@ namespace CryptoAccouting.CoreClass
         public double AverageBookPrice { get; set; }
         public Exchange TradedExchange { get; set; }
 
-        public double NumBuy
+        public double NumOrdersBuy
         {
-            get { return transactions.Count(t => t.BuySell == EnuBuySell.Buy); }
+            get
+            {
+                return transactions.Where(t => t.BuySell == EnuBuySell.Buy).Sum(t => t.NumTransaction);
+            }
         }
 
-        public double NumSell
+        public double NumOrdersSell
         {
-            get { return transactions.Count(t => t.BuySell == EnuBuySell.Sell); }
+            get
+            {
+                return transactions.Where(t => t.BuySell == EnuBuySell.Sell).Sum(t => t.NumTransaction);
+            }
         }
 
         public double TotalBTCTradeValueBuy
         { 
-            get { return transactions.Where(t => t.BuySell == EnuBuySell.Buy).
-                                 Where(t=>t.TradedCoin.Id == "bitcoin").
-                                 Sum(t => t.TradeNetValue); }
+            get
+            {
+                return transactions.Where(t => t.BuySell == EnuBuySell.Buy).
+                                   Where(t => t.SettlementCCY == EnuCCY.BTC).
+                               Sum(t => t.TradeNetValue);
+            }
         }
 
         public double TotalBTCTradeValueSell
         {
             get { return transactions.Where(t => t.BuySell == EnuBuySell.Sell).
-                                 Where(t => t.TradedCoin.Id == "bitcoin").
+                                 Where(t => t.SettlementCCY == EnuCCY.BTC).
                                  Sum(t => t.TradeNetValue); }
         }
 
-        public double TotalOtherTradeValueBuy
+        public double TotalExchangeSettleTradeValueBuy
         {
             get{ return transactions.Where(t => t.BuySell == EnuBuySell.Buy).
-                                Where(t => t.TradedCoin.Id != "bitcoin").
+                                Where(t => t.SettlementCCY == SettlementCCY).
                                 Sum(t => t.TradeNetValue); }
         }
 
-        public double TotalOtherTradeValueSell
+        public double TotalExchangeSettleTradeValueSell
         {
             get { return transactions.Where(t => t.BuySell == EnuBuySell.Sell).
-                                 Where(t => t.TradedCoin.Id != "bitcoin").
+                                 Where(t => t.SettlementCCY == SettlementCCY).
                                  Sum(t => t.TradeNetValue); }
         }
 

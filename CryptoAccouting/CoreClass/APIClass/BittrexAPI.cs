@@ -100,11 +100,12 @@ namespace CryptoAccouting.CoreClass.APIClass
                 var rawjson = await request(HttpMethod.Get, BaseUrl + "/api/v1.1/account/getbalances");
                 if (rawjson != null)
                 {
-                    positions = ParsePosition(rawjson);
-                    //if (positions != null) StorageAPI.SaveFile(rawjson, filename);
+                    return ParsePosition(rawjson);
                 }
-
-                return positions;
+                else
+                {
+                    return null;
+                }
             }
 
         }
@@ -122,7 +123,14 @@ namespace CryptoAccouting.CoreClass.APIClass
                 //var from = calendarYear == null ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
                 //var to = calendarYear == null ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
                 var rawjson = await request(HttpMethod.Get, BaseUrl + "/api/v1.1/account/getorderhistory");
-                return ParseTrade(rawjson);
+                if (rawjson != null)
+                {
+                    return ParseTrade(rawjson);
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 

@@ -85,7 +85,7 @@ namespace CryptoAccouting.CoreClass.APIClass
         public static async Task<List<Position>> FetchPositionAsync(Exchange zaif)
         {
             _zaif = zaif;
-            List<Position> positions = null;
+            //List<Position> positions = null;
             //string filename = zaif.Name + "Position" + ".json";
 
             if (!Reachability.IsHostReachable(BaseUrl))
@@ -104,11 +104,12 @@ namespace CryptoAccouting.CoreClass.APIClass
                 var rawjson = await SendAsync(http, path, "get_info2");
                 if (rawjson != null)
                 {
-                    positions = ZaifAPI.ParsePosition(rawjson);
-                    //if (positions != null) StorageAPI.SaveFile(rawjson, filename);
+                    return ParsePosition(rawjson);
                 }
-
-                return positions;
+                else
+                {
+                    return null;
+                }
             }
         }
 
@@ -150,10 +151,14 @@ namespace CryptoAccouting.CoreClass.APIClass
                 }
             //}
 
-            var tradelist = ParseTrade(rawjson);
-            //if (tradelist != null) StorageAPI.SaveFile(rawjson, filename);
-
-            return tradelist;
+            if (rawjson != null)
+            {
+                return ParseTrade(rawjson);
+            }
+            else
+            {
+                return null;
+            }
 
         }
 
@@ -255,7 +260,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 json = JObject.Parse(rawjson);
             }
-            catch (JsonException)
+            catch (Exception)
             {
                 return null;
             }
