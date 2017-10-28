@@ -11,7 +11,7 @@ namespace CryptoAccouting.UIClass
 {
     public class CoinTableSource : UITableViewSource
     {
-        Balance myBalance;
+        //Balance myBalance;
         List<Position> balanceByCoin;
         //List<Instrument> coins;
         NSString cellIdentifier = new NSString("CoinViewCell");
@@ -19,7 +19,7 @@ namespace CryptoAccouting.UIClass
 
         public CoinTableSource(Balance mybalance, CryptoTableViewController owner)
         {
-            this.myBalance = mybalance;
+            //this.myBalance = mybalance;
             this.balanceByCoin = mybalance.BalanceByCoin;
             this.owner = owner;
             //this.coins = myBalance is null ? new List<Instrument>() : myBalance.Select(x => x.Coin).Distinct().ToList();

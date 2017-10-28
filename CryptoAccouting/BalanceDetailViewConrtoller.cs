@@ -105,26 +105,28 @@ namespace CryptoAccouting
             //NavigationItem.Title = thisCoin.Name;
             buttonPriceSource.SetTitle(thisCoin.PriceSourceCode, UIControlState.Normal);
 
-
-            if (thisCoin.Symbol1 == "BTC")
+            if (booking_positions.Count() > 0)
             {
-                labelPrice.Text = "$" + ApplicationCore.NumberFormat(booking_positions.First().LatestPriceUSD);
-            }
-            else
-            {
-                labelPrice.Text = "฿" + ApplicationCore.NumberFormat(booking_positions.First().LatestPriceBTC());
-            }
+                if (thisCoin.Symbol1 == "BTC")
+                {
+                    labelPrice.Text = "$" + ApplicationCore.NumberFormat(booking_positions.First().LatestPriceUSD);
+                }
+                else
+                {
+                    labelPrice.Text = "฿" + ApplicationCore.NumberFormat(booking_positions.First().LatestPriceBTC());
+                }
 
-            labelPrice.TextColor = booking_positions.First().USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);
-            labelPriceBase.Text = ApplicationCore.NumberFormat(booking_positions.First().LatestPriceBase());
-            labelPriceBase.TextColor = booking_positions.First().USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);
-            labelPriceBaseTitle.Text = "Price(" + ApplicationCore.BaseCurrency + ")";
+                labelPrice.TextColor = booking_positions.First().USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);
+                labelPriceBase.Text = ApplicationCore.NumberFormat(booking_positions.First().LatestPriceBase());
+                labelPriceBase.TextColor = booking_positions.First().USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);
+                labelPriceBaseTitle.Text = "Price(" + ApplicationCore.BaseCurrency + ")";
 
-            //labelProfitLoss.Text = "$" + ApplicationCore.NumberFormat(booking_positions.Sum(x => x.PLUSD()));
-            labelMarketValueTitle.Text = "TotalValue(" + ApplicationCore.BaseCurrency.ToString() + ")";
-            labelMarketValue.Text = ApplicationCore.NumberFormat(booking_positions.Sum(x => x.LatestFiatValueBase()));
-            labelTotalQty.Text = ApplicationCore.NumberFormat(booking_positions.Sum(x => x.Amount));
-            //labelTotalBookCost.Text = "$" + String.Format("{0:n0}", booking_positions.Sum(x => x.BookValueUSD()));
+                //labelProfitLoss.Text = "$" + ApplicationCore.NumberFormat(booking_positions.Sum(x => x.PLUSD()));
+                labelMarketValueTitle.Text = "TotalValue(" + ApplicationCore.BaseCurrency.ToString() + ")";
+                labelMarketValue.Text = ApplicationCore.NumberFormat(booking_positions.Sum(x => x.LatestFiatValueBase()));
+                labelTotalQty.Text = ApplicationCore.NumberFormat(booking_positions.Sum(x => x.Amount));
+                //labelTotalBookCost.Text = "$" + String.Format("{0:n0}", booking_positions.Sum(x => x.BookValueUSD()));
+            }
 
             TableView.ReloadData();
 

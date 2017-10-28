@@ -21,8 +21,10 @@ namespace CryptoAccouting
 		UIKit.UIBarButtonItem buttonAddNew { get; set; }
 
 		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UIKit.UILabel label1dPctBTC { get; set; }
+		UIKit.UILabel label1dPct { get; set; }
+
+		[Outlet]
+		UIKit.UILabel label1dPctText { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -58,9 +60,14 @@ namespace CryptoAccouting
 				buttonAddNew = null;
 			}
 
-			if (label1dPctBTC != null) {
-				label1dPctBTC.Dispose ();
-				label1dPctBTC = null;
+			if (label1dPctText != null) {
+				label1dPctText.Dispose ();
+				label1dPctText = null;
+			}
+
+			if (label1dPct != null) {
+				label1dPct.Dispose ();
+				label1dPct = null;
 			}
 
 			if (labelCcy != null) {

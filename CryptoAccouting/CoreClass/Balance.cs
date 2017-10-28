@@ -43,22 +43,22 @@ namespace CryptoAccouting.CoreClass
         public void RefreshBalanceData()
         {
             //sort
-            positions = positions.OrderByDescending(x => x.LatestAmountBTC).ThenBy(x => x.Coin.rank).ToList();
+            //positions = positions.OrderByDescending(x => x.LatestAmountBTC).ThenBy(x => x.Coin.rank).ToList();
 
             //update prices
-            int newid = 0;
-            foreach(var pos in positions)
-            {
-                pos.Id = newid;
-                //pos.AmountBTC_Previous = pos.LatestAmountBTC;
-                //pos.PriceUSD_Previous = pos.LatestPriceUSD;
-                //pos.PriceBTC_Previous = pos.LatestPriceBTC();
-                //pos.PriceBase_Previous = pos.LatestPriceBase();
-                //pos.USDRet1d_Previous = pos.USDRet1d();
-                //pos.BTCRet1d_Previous = pos.BTCRet1d();
-                //pos.BaseRet1d_Previous = pos.BaseRet1d();
-                newid++;
-            }
+            //int newid = 0;
+            //foreach(var pos in positions)
+            //{
+            //    pos.Id = newid;
+            //    //pos.AmountBTC_Previous = pos.LatestAmountBTC;
+            //    //pos.PriceUSD_Previous = pos.LatestPriceUSD;
+            //    //pos.PriceBTC_Previous = pos.LatestPriceBTC();
+            //    //pos.PriceBase_Previous = pos.LatestPriceBase();
+            //    //pos.USDRet1d_Previous = pos.USDRet1d();
+            //    //pos.BTCRet1d_Previous = pos.BTCRet1d();
+            //    //pos.BaseRet1d_Previous = pos.BaseRet1d();
+            //    newid++;
+            //}
 
             //Update balancebycoin
             if (BalanceByCoin != null)
@@ -70,20 +70,23 @@ namespace CryptoAccouting.CoreClass
                 BalanceByCoin = new List<Position>();
             }
 
-            foreach (var id in positions.Select(x => x.Coin.Id).Distinct())
+            int newid = 0;
+            foreach (var instrumentid in positions.OrderByDescending(x => x.LatestAmountBTC).ThenBy(x => x.Coin.rank).Select(x => x.Coin.Id).Distinct())
             {
-                var position = new Position(positions.Select(x => x.Coin).First(x => x.Id == id))
+                var position = new Position(positions.Select(x => x.Coin).First(x => x.Id == instrumentid))
                 {
-                    Amount = positions.Where(x => x.Coin.Id == id).Sum(x => x.Amount),
-                    AmountBTC_Previous = positions.Where(x => x.Coin.Id == id).Sum(x => x.LatestAmountBTC),
-                    PriceBTC_Previous = positions.First(x => x.Coin.Id == id).LatestPriceBTC(),
-                    PriceUSD_Previous = positions.First(x => x.Coin.Id == id).LatestPriceUSD,
-                    PriceBase_Previous = positions.First(x => x.Coin.Id == id).LatestPriceBase(),
-                    BTCRet1d_Previous = positions.First(x => x.Coin.Id == id).BTCRet1d(),
-                    USDRet1d_Previous = positions.First(x => x.Coin.Id == id).USDRet1d(),
-                    BaseRet1d_Previous = positions.First(x => x.Coin.Id == id).BaseRet1d(),
-                    WatchOnly = positions.First(x => x.Coin.Id == id).WatchOnly
+                    Id = newid,
+                    Amount = positions.Where(x => x.Coin.Id == instrumentid).Sum(x => x.Amount),
+                    AmountBTC_Previous = positions.Where(x => x.Coin.Id == instrumentid).Sum(x => x.LatestAmountBTC),
+                    PriceBTC_Previous = positions.First(x => x.Coin.Id == instrumentid).LatestPriceBTC(),
+                    PriceUSD_Previous = positions.First(x => x.Coin.Id == instrumentid).LatestPriceUSD,
+                    PriceBase_Previous = positions.First(x => x.Coin.Id == instrumentid).LatestPriceBase(),
+                    BTCRet1d_Previous = positions.First(x => x.Coin.Id == instrumentid).BTCRet1d(),
+                    USDRet1d_Previous = positions.First(x => x.Coin.Id == instrumentid).USDRet1d(),
+                    BaseRet1d_Previous = positions.First(x => x.Coin.Id == instrumentid).BaseRet1d(),
+                    WatchOnly = positions.First(x => x.Coin.Id == instrumentid).WatchOnly
                 };
+                newid++;
                 BalanceByCoin.Add(position);
             }
         }

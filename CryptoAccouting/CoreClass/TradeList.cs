@@ -38,34 +38,47 @@ namespace CryptoAccouting.CoreClass
             {
                 return transactions.Where(t => t.BuySell == EnuBuySell.Buy).
                                    Where(t => t.SettlementCCY == EnuCCY.BTC).
-                               Sum(t => t.TradeNetValue);
+                                   Sum(t => t.TradeNetValue);
             }
         }
 
         public double TotalBTCTradeValueSell
         {
-            get { return transactions.Where(t => t.BuySell == EnuBuySell.Sell).
+            get
+            {
+                return transactions.Where(t => t.BuySell == EnuBuySell.Sell).
                                  Where(t => t.SettlementCCY == EnuCCY.BTC).
-                                 Sum(t => t.TradeNetValue); }
+                                 Sum(t => t.TradeNetValue);
+            }
         }
 
         public double TotalExchangeSettleTradeValueBuy
         {
-            get{ return transactions.Where(t => t.BuySell == EnuBuySell.Buy).
-                                Where(t => t.SettlementCCY == SettlementCCY).
-                                Sum(t => t.TradeNetValue); }
+            get
+            {
+                return transactions.Where(t => t.BuySell == EnuBuySell.Buy).
+                               Where(t => t.SettlementCCY == SettlementCCY).
+                               Sum(t => t.TradeNetValue);
+            }
         }
 
         public double TotalExchangeSettleTradeValueSell
         {
-            get { return transactions.Where(t => t.BuySell == EnuBuySell.Sell).
-                                 Where(t => t.SettlementCCY == SettlementCCY).
-                                 Sum(t => t.TradeNetValue); }
+            get
+            {
+                return transactions.Where(t => t.BuySell == EnuBuySell.Sell).
+                               Where(t => t.SettlementCCY == SettlementCCY).
+                               Sum(t => t.TradeNetValue);
+            }
         }
 
         public double RealizedBookValue
         {
-            get { return transactions.Where(t => t.BuySell == EnuBuySell.Sell).Sum(t => t.RealizedBookValue); }
+            get
+            {
+                return transactions.Where(t => t.BuySell == EnuBuySell.Sell).
+                                   Sum(t => t.RealizedBookValue);
+            }
         }
 
         private List<Transaction> transactions;
