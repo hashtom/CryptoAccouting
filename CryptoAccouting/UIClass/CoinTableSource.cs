@@ -11,9 +11,7 @@ namespace CryptoAccouting.UIClass
 {
     public class CoinTableSource : UITableViewSource
     {
-        //Balance myBalance;
         List<Position> balanceByCoin;
-        //List<Instrument> coins;
         NSString cellIdentifier = new NSString("CoinViewCell");
         CryptoTableViewController owner;
 
@@ -28,7 +26,6 @@ namespace CryptoAccouting.UIClass
         public override nint RowsInSection(UITableView tableview, nint section)
         {
             return balanceByCoin.Count();
-            //return coins.Count();
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
@@ -45,12 +42,12 @@ namespace CryptoAccouting.UIClass
             return cell;
         }
 
-        public async override void WillDisplay(UITableView tableView, UITableViewCell cell, NSIndexPath indexPath)
-        {
-            cell.BackgroundColor = UIColor.FromRGBA(242,216,223,60);
-            await Task.Delay(80);
-            cell.BackgroundColor = UIColor.Clear;
-        }
+        //public async override void WillDisplay(UITableView tableView, UITableViewCell cell, NSIndexPath indexPath)
+        //{
+        //    cell.BackgroundColor = UIColor.FromRGBA(242,216,223,60);
+        //    await Task.Delay(80);
+        //    cell.BackgroundColor = UIColor.Clear;
+        //}
 
         public Position GetItem(int id)
         {

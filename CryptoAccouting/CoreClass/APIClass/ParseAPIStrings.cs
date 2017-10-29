@@ -89,7 +89,10 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static async Task<EnuAPIStatus> ParseCoinMarketCapJsonAsync(string rawjson, string rawjson_yesterday, InstrumentList instrumentlist, CrossRate crossrate)
         {
-            
+
+            var jarray = await Task.Run(() => JArray.Parse(rawjson));
+            var jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
+
             foreach (var coin in instrumentlist.Where(x => x.PriceSourceCode == "coinmarketcap" || x.PriceSourceCode is null))
             {
                 //Parse Market Data 
@@ -101,9 +104,6 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 try
                 {
-                    var jarray = await Task.Run(() => JArray.Parse(rawjson));
-                    var jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
-                  
                     coin.MarketPrice.LatestPriceBTC = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_btc"];
                     coin.MarketPrice.LatestPriceUSD = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_usd"];
                     coin.MarketPrice.PriceSource = "coinmarketcap";
