@@ -2027,7 +2027,7 @@
                                 <rect key="frame" x="7" y="131" width="305" height="265"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <string key="text">CoinBalance is provided free. CoinBalance does not send your API keys or any other sensitive data to external servers. When you store API keys data to CoinBalance you must only enable permissions specific to access your position and trade infromation(DO NOT ENABLE withdrawal or trades) to increase your security. CoinBalane will not be liable to any loss of your funds. Send requests or bug reports to admin@coinbalance.jp.  </string>
+                                <string key="text">CoinBalance does not send your API keys or any other sensitive data to external servers. When you store API keys data to CoinBalance you must only enable permissions specific to access your position and trade infromation to increase your security. CoinBalane will not be liable to any loss of your funds. Please send your requests or bug reports to info@coinbalance.jp.  </string>
                                 <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
