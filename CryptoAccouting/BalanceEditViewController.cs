@@ -293,7 +293,8 @@ namespace CryptoAccouting
 
         partial void ButtonDone_Activated(UIBarButtonItem sender)
         {
-            if (textQuantity.Text != "" || switchWatchOnly.On)
+            double amount;
+            if ((textQuantity.Text != "" && double.TryParse(textQuantity.Text, out amount)) || switchWatchOnly.On)
             {
                 CreatePosition();
                 CellItemUpdated(popto);
@@ -301,7 +302,7 @@ namespace CryptoAccouting
             }
             else
             {
-                UIAlertController okAlertController = UIAlertController.Create("PositionDetail", "Please input at least holding quantity.", UIAlertControllerStyle.Alert);
+                UIAlertController okAlertController = UIAlertController.Create("PositionDetail", "Please input correct holding quantity.", UIAlertControllerStyle.Alert);
                 okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
                 this.PresentViewController(okAlertController, true, null);
             }

@@ -88,5 +88,5 @@
                 {                     SearchItem1 = item.Id,                     SearchItem2 = item.Symbol1,                     ImageFile = item.Id + ".png",                     SortOrder = item.rank                 };                 searchitems.Add(searchitem);             } 
 			var SymbolSelectionViewC = Storyboard.InstantiateViewController("SymbolSelectionViewC") as SymbolSelectionViewConroller;
 			SymbolSelectionViewC.SelectionItems = searchitems;             SymbolSelectionViewC.DestinationID = "BalanceEditViewC";             NavigationController.PushViewController(SymbolSelectionViewC, true);         }          async private Task RefreshPriceAsync()         {             //await ApplicationCore.LoadCrossRateAsync();             await ApplicationCore.FetchMarketDataFromBalanceAsync();
-            //ReDrawScreen();
+            ReDrawScreen();
             //TableView.ReloadData();         }     } }

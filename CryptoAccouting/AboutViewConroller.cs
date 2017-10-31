@@ -15,7 +15,7 @@ namespace CryptoAccouting
         {
             base.ViewDidLoad();
 
-            labelVersion.Text = "Version" + NSBundle.MainBundle.InfoDictionary["CFBundleVersion"];
+            labelVersion.Text = "Ver " + NSBundle.MainBundle.InfoDictionary["CFBundleVersion"];
 
             string contentDirectoryPath = Path.Combine(NSBundle.MainBundle.BundlePath, "Content/");
             string html = @"<html><head> Credit & Thanks </head><p>Icons made by<a href= ""https://www.flaticon.com/authors/gregor-cresnar"""
