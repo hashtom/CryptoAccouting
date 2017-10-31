@@ -72,12 +72,12 @@ namespace CryptoAccouting.CoreClass.APIClass
                             var btcprice = ApplicationCore.Bitcoin.MarketPrice;
                             if (btcprice != null)
                             {
-                                coin.MarketPrice.LatestPriceUSD = (double)jobj["Last"] * btcprice.LatestPriceUSD;
+                                coin.MarketPrice.LatestPriceUSD = (double)jobj["last"] * btcprice.LatestPriceUSD;
                                 coin.MarketPrice.PriceUSDBefore24h = (double)jobj["open"] * btcprice.PriceBTCBefore24h;
                             }
                         }
 
-                        coin.MarketPrice.DayVolume = (double)jobj["volume"];
+                        coin.MarketPrice.DayVolume = (double)jobj["volume"] * coin.MarketPrice.LatestPriceBTC;
                         coin.MarketPrice.PriceDate = DateTime.Now;//ApplicationCore.FromEpochSeconds((long)jobj["timestamp"]);
                         coin.MarketPrice.USDCrossRate = crossrate;
                     }

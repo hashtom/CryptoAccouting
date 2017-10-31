@@ -37,6 +37,9 @@ namespace CryptoAccouting
 		UIKit.UILabel labelMarketValueTitle { get; set; }
 
 		[Outlet]
+		UIKit.UILabel labelName { get; set; }
+
+		[Outlet]
 		UIKit.UILabel labelPrice { get; set; }
 
 		[Outlet]
@@ -46,11 +49,11 @@ namespace CryptoAccouting
 		UIKit.UILabel labelPriceBaseTitle { get; set; }
 
 		[Outlet]
-		UIKit.UILabel labelName { get; set; }
-
-		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UILabel labelTotalQty { get; set; }
+
+		[Outlet]
+		UIKit.UILabel labelVolume { get; set; }
 
 		[Action ("ButtonAddNew_Activated:")]
 		partial void ButtonAddNew_Activated (UIKit.UIBarButtonItem sender);
@@ -92,19 +95,24 @@ namespace CryptoAccouting
 				labelPrice = null;
 			}
 
-			if (labelPriceBaseTitle != null) {
-				labelPriceBaseTitle.Dispose ();
-				labelPriceBaseTitle = null;
-			}
-
 			if (labelPriceBase != null) {
 				labelPriceBase.Dispose ();
 				labelPriceBase = null;
 			}
 
-            if (labelName != null) {
-                labelName.Dispose ();
-                labelName = null;
+			if (labelVolume != null) {
+				labelVolume.Dispose ();
+				labelVolume = null;
+			}
+
+			if (labelPriceBaseTitle != null) {
+				labelPriceBaseTitle.Dispose ();
+				labelPriceBaseTitle = null;
+			}
+
+			if (labelName != null) {
+				labelName.Dispose ();
+				labelName = null;
 			}
 
 			if (labelTotalQty != null) {

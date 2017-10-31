@@ -67,7 +67,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                                 }
                             }
 
-                            coin.MarketPrice.DayVolume = (double)jobj["volume"];
+                            coin.MarketPrice.DayVolume = (double)jobj["volume"] * coin.MarketPrice.LatestPriceBTC;
                             coin.MarketPrice.PriceDate = DateTime.Now;
                             coin.MarketPrice.USDCrossRate = crossrate;
                         }

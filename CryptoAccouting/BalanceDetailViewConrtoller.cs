@@ -109,17 +109,20 @@ namespace CryptoAccouting
             {
                 if (thisCoin.Symbol1 == "BTC")
                 {
-                    labelPrice.Text = "$" + ApplicationCore.NumberFormat(booking_positions.First().LatestPriceUSD);
+                    labelPrice.Text = ApplicationCore.NumberFormat(booking_positions.First().LatestPriceUSD, false, true, "$");
+                    //labelVolume.Text = ApplicationCore.NumberFormat(booking_positions.First().MarketDayVolume(), false, true, "$");
                 }
                 else
                 {
-                    labelPrice.Text = "฿" + ApplicationCore.NumberFormat(booking_positions.First().LatestPriceBTC());
+                    labelPrice.Text = ApplicationCore.NumberFormat(booking_positions.First().LatestPriceBTC(), false, true, "฿");
+                    //labelVolume.Text = ApplicationCore.NumberFormat(booking_positions.First().MarketDayVolume(), false, true, "฿");
                 }
 
                 labelPrice.TextColor = booking_positions.First().USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);
                 labelPriceBase.Text = ApplicationCore.NumberFormat(booking_positions.First().LatestPriceBase());
                 labelPriceBase.TextColor = booking_positions.First().USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);
                 labelPriceBaseTitle.Text = "Price(" + ApplicationCore.BaseCurrency + ")";
+                labelVolume.Text = ApplicationCore.NumberFormat(booking_positions.First().MarketDayVolume(), false, true, "฿");
 
                 //labelProfitLoss.Text = "$" + ApplicationCore.NumberFormat(booking_positions.Sum(x => x.PLUSD()));
                 labelMarketValueTitle.Text = "TotalValue(" + ApplicationCore.BaseCurrency.ToString() + ")";

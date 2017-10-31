@@ -69,6 +69,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                                 }
                             }
 
+                            coin.MarketPrice.DayVolume = 0;
                             coin.MarketPrice.PriceDate = DateTime.Now;
                             coin.MarketPrice.USDCrossRate = crossrate;
                         }
