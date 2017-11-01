@@ -13,12 +13,12 @@ namespace CryptoAccouting
                 MappingName = "Quantity",
                 HeaderText = "Quantity"             };
 
-            GridNumericColumn priceColumn = new GridNumericColumn()
+            GridTextColumn priceColumn = new GridTextColumn()
             {
-                MappingName = "TradePriceSettle",
+                MappingName = "ColumnTradePriceSettle",
                 HeaderText = "Trade Price"
-            };              GridNumericColumn valueColumn = new GridNumericColumn()             {
-                MappingName = "TradeNetValue",
+            };              GridTextColumn valueColumn = new GridTextColumn()             {
+                MappingName = "ColumnTradeNetValue",
                 HeaderText = "Net Value"             };              GridNumericColumn numtxColumn = new GridNumericColumn()             {
                 MappingName = "NumTransaction",
                 HeaderText = "#orders",                 NumberDecimalDigits = 0             };              sfGrid.Columns.Add(dateColumn);             sfGrid.Columns.Add(coinColumn);             sfGrid.Columns.Add(settleColumn);             sfGrid.Columns.Add(buysellColumn);             sfGrid.Columns.Add(amountColumn);             sfGrid.Columns.Add(priceColumn);             sfGrid.Columns.Add(valueColumn);             sfGrid.Columns.Add(numtxColumn);          }          public override void ViewDidLoad()

@@ -35,6 +35,16 @@ namespace CryptoAccouting.CoreClass
             get { return BuySell == EnuBuySell.Buy ? TradePriceSettle * Quantity - Fee : TradePriceSettle * Quantity + Fee; }
         }
 
+        public string ColumnTradePriceSettle
+        {
+            get { return ApplicationCore.NumberFormat(TradePriceSettle); }
+        }
+
+        public string ColumnTradeNetValue
+        {
+            get { return ApplicationCore.NumberFormat(TradeNetValue); }
+        }
+
         public double RealizedBookValue
         {
             get { return BuySell == EnuBuySell.Sell ? BookPrice * Quantity : 0; }
