@@ -36,6 +36,6 @@ Thumbs.db
 # dotCover
 *.dotCover
 # App Specific
-TestData/
+Images/
 # Icon
 Assets.xcassets/AppIcon.appiconset/
