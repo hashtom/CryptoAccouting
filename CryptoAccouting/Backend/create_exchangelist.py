@@ -6,7 +6,7 @@ import re
 import pandas as pd
 
 #basedir = "/home/bridgeplace/www/scripts/"
-basedir = "/Users/"
+basedir = "/Users/name/"
 
 exchanges = []
 ExchangeList = {"exchanges": exchanges}

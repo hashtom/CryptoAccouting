@@ -118,6 +118,9 @@
             "api": "true",
             "listing": [
                 {
+                  "symbol": "BTC"
+                },
+                {
                     "symbol": "LTC"
                 },
                 {
