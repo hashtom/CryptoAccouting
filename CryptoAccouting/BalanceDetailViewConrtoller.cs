@@ -29,7 +29,7 @@ namespace CryptoAccouting
 			// Configure Table source
 			//this.TableView.RegisterNibForCellReuse(BookingCell.Nib, MyCellId);
 			this.TableView.RegisterClassForCellReuse(typeof(CoinBookingCell), MyCellId);
-            this.TableView.Source = new CoinBookingTableSource(instrumentId_selected, ApplicationCore.Balance, this);
+            this.TableView.Source = new CoinBookingTableSource(instrumentId_selected, AppCore.Balance, this);
 
             //Color Design
             var gradient = new CAGradientLayer();
@@ -45,21 +45,21 @@ namespace CryptoAccouting
 
                 sources.Add("coinmarketcap");
 
-                if (ApplicationCore.GetExchange("Bitstamp").IsListed(thisCoin.Id))
+                if (AppCore.GetExchange("Bitstamp").IsListed(thisCoin.Id))
                 {
                     sources.Add("Bitstamp");
                 }
 
-                if (ApplicationCore.GetExchange("Bittrex").IsListed(thisCoin.Id))
+                if (AppCore.GetExchange("Bittrex").IsListed(thisCoin.Id))
                 {
                     sources.Add("Bittrex");
                 }
-                if (ApplicationCore.GetExchange("Zaif").IsListed(thisCoin.Id))
+                if (AppCore.GetExchange("Zaif").IsListed(thisCoin.Id))
                 {
                     sources.Add("Zaif");
                 }
 
-                if (ApplicationCore.GetExchange("CoinCheck").IsListed(thisCoin.Id))
+                if (AppCore.GetExchange("CoinCheck").IsListed(thisCoin.Id))
                 {
                     sources.Add("CoinCheck");
                 }
@@ -69,13 +69,23 @@ namespace CryptoAccouting
 
 				foreach (var source in sources)
 				{
-                    PriceSourceAlert.AddAction(UIAlertAction.Create(source, UIAlertActionStyle.Default, async (obj) => 
+                    PriceSourceAlert.AddAction(UIAlertAction.Create(source, UIAlertActionStyle.Default, async (obj) =>
                                                                          {
                                                                              buttonPriceSource.SetTitle(source, UIControlState.Normal);
                                                                              thisCoin.PriceSourceCode = source;
-                                                                             await ApplicationCore.FetchMarketDataAsync(thisCoin);
-                                                                             ReDrawScreen();
-                                                                             ApplicationCore.SavePriceSourceXML();
+                                                                             try
+                                                                             {
+                                                                                 await AppCore.FetchMarketDataAsync(thisCoin);
+                                                                                 AppCore.SavePriceSourceXML();
+                                                                             }
+                                                                             catch (Exception ex)
+                                                                             {
+                                                                                 Console.WriteLine(DateTime.Now.ToString() + ": ViewDidLoad: buttonPriceSource: " + ex.GetType() + ": " + ex.Message);
+                                                                             }
+                                                                             finally
+                                                                             {
+                                                                                 ReDrawScreen();
+                                                                             }
                                                                          }
                                                                    ));
 				}
@@ -95,7 +105,7 @@ namespace CryptoAccouting
 
         public override void ReDrawScreen()
         {
-            var booking_positions = ApplicationCore.Balance.Where(x => x.Coin.Id == instrumentId_selected).ToList();
+            var booking_positions = AppCore.Balance.Where(x => x.Coin.Id == instrumentId_selected).ToList();
             //var thisCoin = ApplicationCore.InstrumentList.GetByInstrumentId(instrumentId_selected);
             var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                                     "Images", thisCoin.Id + ".png");
@@ -109,25 +119,25 @@ namespace CryptoAccouting
             {
                 if (thisCoin.Symbol1 == "BTC")
                 {
-                    labelPrice.Text = ApplicationCore.NumberFormat(booking_positions.First().LatestPriceUSD, false, true, "$");
+                    labelPrice.Text = AppCore.NumberFormat(booking_positions.First().LatestPriceUSD, false, true, "$");
                     //labelVolume.Text = ApplicationCore.NumberFormat(booking_positions.First().MarketDayVolume(), false, true, "$");
                 }
                 else
                 {
-                    labelPrice.Text = ApplicationCore.NumberFormat(booking_positions.First().LatestPriceBTC(), false, true, "฿");
+                    labelPrice.Text = AppCore.NumberFormat(booking_positions.First().LatestPriceBTC(), false, true, "฿");
                     //labelVolume.Text = ApplicationCore.NumberFormat(booking_positions.First().MarketDayVolume(), false, true, "฿");
                 }
 
                 labelPrice.TextColor = booking_positions.First().USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);
-                labelPriceBase.Text = ApplicationCore.NumberFormat(booking_positions.First().LatestPriceBase());
+                labelPriceBase.Text = AppCore.NumberFormat(booking_positions.First().LatestPriceBase());
                 labelPriceBase.TextColor = booking_positions.First().USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);
-                labelPriceBaseTitle.Text = "Price(" + ApplicationCore.BaseCurrency + ")";
-                labelVolume.Text = ApplicationCore.NumberFormat(booking_positions.First().MarketDayVolume(), false, true, "฿");
+                labelPriceBaseTitle.Text = "Price(" + AppCore.BaseCurrency + ")";
+                labelVolume.Text = AppCore.NumberFormat(booking_positions.First().MarketDayVolume(), false, true, "฿");
 
                 //labelProfitLoss.Text = "$" + ApplicationCore.NumberFormat(booking_positions.Sum(x => x.PLUSD()));
-                labelMarketValueTitle.Text = "TotalValue(" + ApplicationCore.BaseCurrency.ToString() + ")";
-                labelMarketValue.Text = ApplicationCore.NumberFormat(booking_positions.Sum(x => x.LatestFiatValueBase()));
-                labelTotalQty.Text = ApplicationCore.NumberFormat(booking_positions.Sum(x => x.Amount));
+                labelMarketValueTitle.Text = "TotalValue(" + AppCore.BaseCurrency.ToString() + ")";
+                labelMarketValue.Text = AppCore.NumberFormat(booking_positions.Sum(x => x.LatestFiatValueBase()));
+                labelTotalQty.Text = AppCore.NumberFormat(booking_positions.Sum(x => x.Amount));
                 //labelTotalBookCost.Text = "$" + String.Format("{0:n0}", booking_positions.Sum(x => x.BookValueUSD()));
             }
 
@@ -138,7 +148,7 @@ namespace CryptoAccouting
         public void SetInstrument(string instrumentId)
         {
             instrumentId_selected = instrumentId;
-            thisCoin = ApplicationCore.InstrumentList.GetByInstrumentId(instrumentId_selected);
+            thisCoin = AppCore.InstrumentList.GetByInstrumentId(instrumentId_selected);
             //this.booking_positions = ApplicationCore.Balance.positions.Where(x => x.Coin.Symbol == symbol_selected).ToList();
         }
 
@@ -166,7 +176,7 @@ namespace CryptoAccouting
 			var DestinationViewC = Storyboard.InstantiateViewController("BalanceEditViewC") as BalanceEditViewController;
             //DestinationViewC.SetSearchSelectionItem(symbol_selected);
             DestinationViewC.SetPosition(
-                new Position(ApplicationCore.InstrumentList.GetByInstrumentId(instrumentId_selected)),
+                new Position(AppCore.InstrumentList.GetByInstrumentId(instrumentId_selected)),
                 EnuPopTo.OnePop, true);
             NavigationController.PushViewController(DestinationViewC, true);
         }

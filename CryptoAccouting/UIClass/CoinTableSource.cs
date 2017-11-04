@@ -96,7 +96,7 @@ namespace CryptoAccouting.UIClass
                 case UITableViewCellEditingStyle.Delete:
                     //tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
                     //myBalance.DetachPositionByCoin(coins[indexPath.Row].Symbol);
-                    ApplicationCore.DetachPositionByCoin(balanceByCoin[indexPath.Row].Coin.Id);
+                    AppCore.DetachPositionByCoin(balanceByCoin[indexPath.Row].Coin.Id);
                     //ApplicationCore.RefreshBalance();
                     break;
 
@@ -105,7 +105,7 @@ namespace CryptoAccouting.UIClass
                     break;
             }
 
-            ApplicationCore.SaveMyBalanceXML();
+            AppCore.SaveMyBalanceXML();
             owner.ReDrawScreen();
             owner.CellItemUpdated(EnuPopTo.None);
         }

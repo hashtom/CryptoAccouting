@@ -81,7 +81,7 @@ namespace CryptoAccouting
 			UIAlertController exchangeAlert = UIAlertController.Create("Exchange", "Choose Exchange", UIAlertControllerStyle.ActionSheet);
 			exchangeAlert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
 
-            foreach (var exc in ApplicationCore.PublicExchangeList.Where(x=>x.APIProvided == true))
+            foreach (var exc in AppCore.PublicExchangeList.Where(x=>x.APIProvided == true))
 			{
                 exchangeAlert.AddAction(UIAlertAction.Create(exc.Name,
                                                                  UIAlertActionStyle.Default,
@@ -114,7 +114,7 @@ namespace CryptoAccouting
             {
                 thisExchange.Key = textAPIKey.Text;
                 thisExchange.Secret = textAPISecret.Text;
-                ApplicationCore.SaveAppSetting();
+                AppCore.SaveAppSetting();
             }
         }
 
@@ -122,16 +122,16 @@ namespace CryptoAccouting
         {
             //try
             //{
-                ApplicationCore.DetachPositionByExchange(thisExchange);
+                AppCore.DetachPositionByExchange(thisExchange);
                 //var storage = ApplicationCore.GetCoinStorage(thisExchange.Code, EnuCoinStorageType.Exchange);
                 foreach (var pos in positions)
                 {
-                    ApplicationCore.AttachCoinStorage(thisExchange.Code, EnuCoinStorageType.Exchange, pos);
+                    AppCore.AttachCoinStorage(thisExchange.Code, EnuCoinStorageType.Exchange, pos);
                     //pos.AttachCoinStorage(storage);
                     //storage.AttachPosition(pos);
-                    ApplicationCore.AttachPosition(pos, false);
+                    AppCore.AttachPosition(pos, false);
                 }
-                ApplicationCore.RefreshBalance();
+                AppCore.RefreshBalance();
 
             //}catch(Exception)
             //{

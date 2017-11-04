@@ -73,7 +73,7 @@ namespace CryptoAccouting.CoreClass.APIClass
         {
 
             XElement application = new XElement("application",
-                                                new XAttribute("name", ApplicationCore.AppName));
+                                                new XAttribute("name", AppCore.AppName));
             XElement balance = new XElement("balance", 
                                             new XAttribute("pricedate", myBalance.PriceDateTime));
             application.Add(balance);
@@ -109,7 +109,7 @@ namespace CryptoAccouting.CoreClass.APIClass
         {
 
             XElement application = new XElement("application",
-                                                new XAttribute("name", ApplicationCore.AppName));
+                                                new XAttribute("name", AppCore.AppName));
             XElement instruments = new XElement("instruments");
             application.Add(instruments);
 
@@ -198,12 +198,12 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 foreach (var elem in apikeysXE)
                 {
-                    var exchange = ApplicationCore.GetExchange((string)elem.Attribute("name").Value);
+                    var exchange = AppCore.GetExchange((string)elem.Attribute("name").Value);
                     exchange.Key = elem.Element("key").Value;
                     exchange.Secret = elem.Element("secret").Value;
                 }
 
-                ApplicationCore.BaseCurrency = baseccy;
+                AppCore.BaseCurrency = baseccy;
 
                 return EnuAPIStatus.Success;
 

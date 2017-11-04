@@ -22,7 +22,7 @@ namespace CryptoAccouting.CoreClass
             }
             else
             {
-                return null;
+                throw new AppCoreException("No Tradelist");
             }
         }
 
@@ -39,7 +39,7 @@ namespace CryptoAccouting.CoreClass
             }
             else
             {
-                return null;
+                throw new AppCoreException("No Exchange");
             }
         }
 

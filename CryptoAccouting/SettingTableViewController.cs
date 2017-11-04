@@ -73,7 +73,7 @@ namespace CryptoAccouting
 
         private void RemoveCache()
         {
-			if (ApplicationCore.RemoveAllCache() is EnuAPIStatus.Success)
+			if (AppCore.RemoveAllCache() is EnuAPIStatus.Success)
 			{
 				UIAlertController okAlertController = UIAlertController.Create("Success", "Cache cleared.", UIAlertControllerStyle.Alert);
 				okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
@@ -90,17 +90,19 @@ namespace CryptoAccouting
 
         private void ReloadCoinData()
         {
-            if (ApplicationCore.SyncLatestCoins() is EnuAPIStatus.Success)
+            try
             {
+                AppCore.SyncLatestCoins();
+
                 UIAlertController okAlertController = UIAlertController.Create("Success", "Successfully Updated.", UIAlertControllerStyle.Alert);
                 okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
                 this.PresentViewController(okAlertController, true, null);
                 //ApplicationCore.SaveInstrumentXML();
 
             }
-            else
+            catch(Exception e)
             {
-                UIAlertController okAlertController = UIAlertController.Create("Critical Error", "Unable to update coin data!", UIAlertControllerStyle.Alert);
+                UIAlertController okAlertController = UIAlertController.Create("Critical Error", "Unable to update coin data: " + e.Message, UIAlertControllerStyle.Alert);
                 okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
                 this.PresentViewController(okAlertController, true, null);
             }
@@ -113,21 +115,21 @@ namespace CryptoAccouting
             if (!Enum.TryParse(searchitem1, out baseccy)) baseccy = EnuBaseFiatCCY.USD;
             labelBaseCurrency.Text = baseccy.ToString();
 
-            ApplicationCore.BaseCurrency = baseccy;
-            ApplicationCore.SaveAppSetting();
+            AppCore.BaseCurrency = baseccy;
+            AppCore.SaveAppSetting();
 
             var bounds = SettingTableView.Bounds;
             loadPop = new LoadingOverlay(bounds);
             SettingTableView.Add(loadPop);
-            await ApplicationCore.LoadCrossRateAsync();
-            await ApplicationCore.FetchMarketDataFromBalanceAsync();
+            await AppCore.LoadCrossRateAsync();
+            await AppCore.FetchMarketDataFromBalanceAsync();
             loadPop.Hide();
         }
 
         public override void ReDrawScreen()
         {
             base.ReDrawScreen();
-            labelBaseCurrency.Text = ApplicationCore.BaseCurrency.ToString();
+            labelBaseCurrency.Text = AppCore.BaseCurrency.ToString();
         }
         
     }

@@ -1,4 +1,4 @@
-﻿﻿using System; using System.Linq; using System.Threading.Tasks; using System.Collections.Generic; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class ApplicationCore     {         public const string AppName = "CryptoAccounting";          public static Balance Balance { get; private set; }         public static InstrumentList InstrumentList { get; private set; }
+﻿﻿using System; using System.Linq; using System.Threading.Tasks; using System.Collections.Generic; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class AppCore     {         public const string AppName = "CoinBalance";          public static Balance Balance { get; private set; }         public static InstrumentList InstrumentList { get; private set; }
         public static ExchangeList PublicExchangeList { get; private set; }         public static CoinStorageList CoinStorageList { get; private set; }         private static List<CrossRate> USDCrossRates;         private static EnuBaseFiatCCY baseCurrency;          public static EnuBaseFiatCCY BaseCurrency
         {             get
             {
@@ -22,42 +22,53 @@
 
             //Load Balance Data
             Balance = StorageAPI.LoadBalanceXML(InstrumentList);
-            RefreshBalance();              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML() != EnuAPIStatus.Success)             {                 BaseCurrency = EnuBaseFiatCCY.USD; //Default setting             }              return EnuAPIStatus.Success;          }          public static async Task<EnuAPIStatus> LoadCrossRateAsync()
-        {
-            USDCrossRates = await MarketDataAPI.FetchCrossRateAsync();
-            if (USDCrossRates is null)
-            {
-                USDCrossRates = await StorageAPI.LoadCrossRateAsync();             }
-
-            return USDCrossRates != null ? EnuAPIStatus.Success : EnuAPIStatus.NotAvailable;         } 
-        public static async Task<EnuAPIStatus> FetchMarketDataFromBalanceAsync()
+            RefreshBalance();              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML() != EnuAPIStatus.Success)             {                 BaseCurrency = EnuBaseFiatCCY.USD; //Default setting             }              return EnuAPIStatus.Success;          }          public static async Task LoadCrossRateAsync()
+        {             try             {
+                USDCrossRates = await MarketDataAPI.FetchCrossRateAsync();
+                //if (USDCrossRates is null)
+                //{
+                //    USDCrossRates = await StorageAPI.LoadCrossRateAsync();
+                //}
+            }             catch(Exception e)             {                 USDCrossRates = await StorageAPI.LoadCrossRateAsync();                 Console.WriteLine(DateTime.Now.ToString() + ": LoadCrossRateAsync(continued with file): " + e.GetType() + ": " + e.Message);             }
+            //return USDCrossRates != null ? EnuAPIStatus.Success : EnuAPIStatus.NotAvailable;         } 
+        public static async Task FetchMarketDataFromBalanceAsync()
         { 
             if (Balance != null)
-            {                 var mycoins = new InstrumentList(); 
-                Balance.Select(x => x.Coin).Distinct().ToList().ForEach(x => mycoins.Attach(x));
-
-                if (!mycoins.Any(x => x.Id == "bitcoin")) mycoins.DetachByInstrumentId("bitcoin");                 mycoins.Insert(0, Bitcoin);                  var status = await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRates);                 if (status != EnuAPIStatus.Success)                 {                     return status;                 }
-                else                 {                     Balance.PriceDateTime = DateTime.Now;
-                    RefreshBalance(); //update weights,etc with latest price                     SaveMyBalanceXML();//save balance with latest price                     return EnuAPIStatus.Success;                 }             }
+            {                 try                 {
+                    var mycoins = new InstrumentList(); 
+                    Balance.Select(x => x.Coin).Distinct().ToList().ForEach(x => mycoins.Attach(x));
+                    if (!mycoins.Any(x => x.Id == "bitcoin")) mycoins.DetachByInstrumentId("bitcoin");
+                    mycoins.Insert(0, Bitcoin); 
+                    await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRates);                      Balance.PriceDateTime = DateTime.Now;                     RefreshBalance(); //update weights,etc with latest price                     SaveMyBalanceXML();//save balance with latest price                  }                 catch(Exception e)                 {                     Console.WriteLine(DateTime.Now.ToString() + ": FetchMarketDataFromBalanceAsync: " + e.GetType() + ": " + e.Message);                     throw;                 }              }
             else
-            {                 return EnuAPIStatus.NotAvailable;             }
+            {                 throw new AppCoreException("Balance object is null");             }
         }          public static EnuAPIStatus SaveAppSetting()
-        {             return StorageAPI.SaveAppSettingXML(AppName, BaseCurrency, PublicExchangeList);         }          private static EnuAPIStatus LoadExchangeList()
+        {             return StorageAPI.SaveAppSettingXML(AppName, BaseCurrency, PublicExchangeList);         }          private static void LoadExchangeList()
         {
-            if (PublicExchangeList is null) PublicExchangeList = new ExchangeList();             return ExchangeAPI.FetchExchangeList(PublicExchangeList);         }          public static EnuAPIStatus SyncLatestCoins()         {
-            var list = MarketDataAPI.FetchAllCoinData();             if (list != null)             {                 InstrumentList = list;                 if (Balance != null) Balance.AttachInstruments(InstrumentList);                 Task.Run(async () => await FetchCoinLogoTop100Async());                 return EnuAPIStatus.Success;             }             else             {                 return EnuAPIStatus.FatalError;             }         }          public static async Task<EnuAPIStatus> FetchCoinLogoAsync(Instrument coin)         {              return await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);         }          public static async Task<EnuAPIStatus>FetchCoinLogoTop100Async()         {             if (InstrumentList == null)
+            if (PublicExchangeList is null) PublicExchangeList = new ExchangeList();             ExchangeAPI.FetchExchangeList(PublicExchangeList);         }          public static void SyncLatestCoins()         {             try             {
+                var list = MarketDataAPI.FetchAllCoinData();
+                if (list != null)
+                {
+                    InstrumentList = list;
+                    if (Balance != null) Balance.AttachInstruments(InstrumentList);
+                    Task.Run(async () => await FetchCoinLogoTop100Async());
+                }
+                else
+                {
+                    throw new AppCoreException("Couldn't get Instrumentlist.");
+                }             }
+            catch (Exception e)             {                 Console.WriteLine(DateTime.Now.ToString() + ": SyncLatestCoins: " + e.GetType() + ": " + e.Message);                 throw;             }         }          public static async Task FetchCoinLogoAsync(Instrument coin)         {              await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);         }          public static async Task FetchCoinLogoTop100Async()         {             if (InstrumentList == null)
             {
-                return EnuAPIStatus.FatalError;             }
+                throw new AppCoreException("InstrumentList is null.");             }
             else
             {
                 foreach (var coin in InstrumentList.Where(x=>x.rank <= 100))
                 {
                     await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);
-                }
-                return EnuAPIStatus.Success;             }         }          public static void SavePriceSourceXML()         {             StorageAPI.SavePriceSourceXML(InstrumentList);         }          public static void SaveMyBalanceXML()
-        {             StorageAPI.SaveBalanceXML(Balance);         }          public static async Task<EnuAPIStatus> LoadTradeListsAsync(string ExchangeCode)
+                }             }         }          public static void SavePriceSourceXML()         {             StorageAPI.SavePriceSourceXML(InstrumentList);         }          public static void SaveMyBalanceXML()
+        {             StorageAPI.SaveBalanceXML(Balance);         }          public static async Task LoadTradeListsAsync(string ExchangeCode)
         {
-            var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              if (exchange.APIKeyAvailable())             {                 exchange.AttachTradeList(await ExchangeAPI.FetchTradeListAsync(exchange));                 //PublicExchangeList.Attach(exchange); //do you need?                 return EnuAPIStatus.Success;             }else             {                 return EnuAPIStatus.FailureParameter;             }         }          public static Exchange GetExchange(string Code)
+            var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              if (exchange.APIKeyAvailable())             {                 exchange.AttachTradeList(await ExchangeAPI.FetchTradeListAsync(exchange));                 //PublicExchangeList.Attach(exchange); //do you need?             }else             {                 throw new AppCoreException("API Key is not available.");             }         }          public static Exchange GetExchange(string Code)
         {             return PublicExchangeList.GetExchange(Code);         }
 
         public static ExchangeList GetExchangeListByInstrument(string id)

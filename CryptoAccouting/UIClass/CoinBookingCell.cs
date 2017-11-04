@@ -71,7 +71,7 @@ namespace CryptoAccouting.UIClass
         public void UpdateCell(Position pos)
         {
             labelSymbol.Text = pos.Coin.Symbol1;
-            labelHolding.Text = ApplicationCore.NumberFormat(pos.Amount);
+            labelHolding.Text = AppCore.NumberFormat(pos.Amount);
             labelTD.Text = pos.BalanceDate.ToShortDateString();
             labelExchange.Text = pos.BookedExchange == null ? "N/A" : pos.BookedExchange.Name;
             labelStorage.Text = pos.CoinStorage == null ? "N/A" : pos.CoinStorage.StorageType.ToString();

@@ -10,84 +10,105 @@ namespace CryptoAccouting.CoreClass.APIClass
     {
         const string ExchangeListfile = "ExchangeList.json";
 
-        public static EnuAPIStatus FetchExchangeList(ExchangeList exlist)
+        public static void FetchExchangeList(ExchangeList exlist)
         {
             string rawjson;
             string BaseUri = "http://coinbalance.jpn.org/ExchangeList.json";
 
-            if (!Reachability.IsHostReachable(BaseUri))
+            //if (!Reachability.IsHostReachable(BaseUri))
+            //{
+            //    rawjson = StorageAPI.LoadFromFile(ExchangeListfile);
+            //    if (rawjson == null) rawjson = StorageAPI.LoadBundleFile(ExchangeListfile);
+            //}
+            //else
+            //{
+            try
             {
+                using (var http = new HttpClient())
+                {
+                    var res = http.GetAsync(BaseUri).Result;
+                    if (!res.IsSuccessStatusCode)
+                    {
+                        throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
+                    }
+                    else
+                    {
+                        rawjson = res.Content.ReadAsStringAsync().Result;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(process continued with file): " + e.GetType() + ": " + e.Message);
                 rawjson = StorageAPI.LoadFromFile(ExchangeListfile);
                 if (rawjson == null) rawjson = StorageAPI.LoadBundleFile(ExchangeListfile);
             }
-            else
-            {
-                try
-                {
-                    using (var http = new HttpClient())
-                    {
-                        HttpResponseMessage response = http.GetAsync(BaseUri).Result;
-                        if (!response.IsSuccessStatusCode)
-                        {
-                            return EnuAPIStatus.FailureNetwork;
-                        }
-                        rawjson = response.Content.ReadAsStringAsync().Result;
-                    }
-                }
-                catch (Exception)
-                {
-                    rawjson = StorageAPI.LoadFromFile(ExchangeListfile);
-                    if (rawjson == null) rawjson = StorageAPI.LoadBundleFile(ExchangeListfile);
-                }
-            }
 
-            if (ParseAPIStrings.ParseExchangeListJson(rawjson, exlist) != EnuAPIStatus.Success)
+            try
             {
-                return ParseAPIStrings.ParseExchangeListJson(StorageAPI.LoadBundleFile(ExchangeListfile), exlist);
+                ParseAPIStrings.ParseExchangeListJson(rawjson, exlist);
+                StorageAPI.SaveFile(rawjson, ExchangeListfile);
             }
-            else
+            catch(Exception e)
             {
-                return StorageAPI.SaveFile(rawjson, ExchangeListfile);
+                Console.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(process continued with file): " + e.GetType() + ": " + e.Message);
+                ParseAPIStrings.ParseExchangeListJson(StorageAPI.LoadBundleFile(ExchangeListfile), exlist);
             }
 
         }
 
         internal static async Task<TradeList> FetchTradeListAsync(Exchange exchange)
-		{
-            
-            switch (exchange.Code)
-			{
-                case "Zaif":
-                    return await ZaifAPI.FetchTransactionAsync(exchange);
+        {
 
-                case "CoinCheck":
-                    return await CoinCheckAPI.FetchTransactionAsync(exchange);
+            try
+            {
+                switch (exchange.Code)
+                {
+                    case "Zaif":
+                        return await ZaifAPI.FetchTransactionAsync(exchange);
 
-                case "Bittrex":
-                    return await BittrexAPI.FetchTransactionAsync(exchange);
-				
-                default:
-					return null;
-			}
+                    case "CoinCheck":
+                        return await CoinCheckAPI.FetchTransactionAsync(exchange);
 
-		}
+                    case "Bittrex":
+                        return await BittrexAPI.FetchTransactionAsync(exchange);
+
+                    default:
+                        throw new AppCoreNetworkException("ExchangeCode error");
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(DateTime.Now.ToString() + ": FetchTradeListAsync: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
+        }
 
         internal static async Task<List<Position>> FetchPositionAsync(Exchange exchange)
         {
-            
-            switch (exchange.Code)
+            try
             {
-                case "Zaif":
-                    return await ZaifAPI.FetchPositionAsync(exchange);
+                switch (exchange.Code)
+                {
+                    case "Zaif":
+                        return await ZaifAPI.FetchPositionAsync(exchange);
 
-                case "CoinCheck":
-                    return await CoinCheckAPI.FetchPositionAsync(exchange);
-                
-                case "Bittrex":
-                    return await BittrexAPI.FetchPositionAsync(exchange);
+                    case "CoinCheck":
+                        return await CoinCheckAPI.FetchPositionAsync(exchange);
 
-                default:
-                    return null;
+                    case "Bittrex":
+                        return  await BittrexAPI.FetchPositionAsync(exchange);
+
+                    default:
+                        throw new AppCoreNetworkException("ExchangeCode error");
+                }
+
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(DateTime.Now.ToString() + ": FetchPositionAsync: " + e.GetType() + ": " + e.Message);
+                throw;
             }
 
         }

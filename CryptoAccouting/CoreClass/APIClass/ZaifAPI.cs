@@ -17,7 +17,7 @@ namespace CryptoAccouting.CoreClass.APIClass
         private static CrossRate _crossrate;
         private static CrossRate _USDJPYrate;
 
-        public static async Task<EnuAPIStatus> FetchPriceAsync(Exchange zaif, InstrumentList coins, CrossRate crossrate, CrossRate USDJPYrate)
+        public static async Task FetchPriceAsync(Exchange zaif, InstrumentList coins, CrossRate crossrate, CrossRate USDJPYrate)
         {
             string rawjson;
             Price btcprice;
@@ -25,11 +25,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             _crossrate = crossrate;
             _USDJPYrate = USDJPYrate;
 
-            if (!Reachability.IsHostReachable(BaseUrl))
-            {
-                return EnuAPIStatus.FailureNetwork;
-            }
-            else
+            try
             {
                 foreach (var coin in coins.Where(x => x.PriceSourceCode == "Zaif"))
                 {
@@ -40,59 +36,53 @@ namespace CryptoAccouting.CoreClass.APIClass
                         rawjson = await SendAsync(http, path);
                     }
 
-                    try
+                    if (rawjson != null)
                     {
-                        if (rawjson != null)
+                        var jobj = await Task.Run(() => JObject.Parse(rawjson));
+
+                        if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
+
+                        if (coin.Id is "bitcoin")
                         {
-                            var jobj = await Task.Run(() => JObject.Parse(rawjson));
-
-                            if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
-
-                            if (coin.Id is "bitcoin")
-                            {
-                                coin.MarketPrice.LatestPriceBTC = 1;
-                                coin.MarketPrice.LatestPriceUSD = (double)jobj["last"] / USDJPYrate.Rate;
-                                coin.MarketPrice.PriceBTCBefore24h = 1;
-                                coin.MarketPrice.PriceUSDBefore24h = await MarketDataAPI.FetchBTCUSDPriceBefore24hAsync(); //tmp
-                            }
-                            else
-                            {
-                                btcprice = ApplicationCore.Bitcoin.MarketPrice;
-                                if (btcprice != null)
-                                {
-                                    coin.MarketPrice.LatestPriceUSD = (double)jobj["last"] / USDJPYrate.Rate;
-                                    coin.MarketPrice.LatestPriceBTC = coin.MarketPrice.LatestPriceUSD / btcprice.LatestPriceUSD;
-                                    coin.MarketPrice.PriceBTCBefore24h = await MarketDataAPI.FetchPriceBTCBefore24hAsync(coin.Id); //tmp
-                                    coin.MarketPrice.PriceUSDBefore24h = coin.MarketPrice.PriceBTCBefore24h * btcprice.LatestPriceUSD; //tmp
-                                }
-                            }
-
-                            coin.MarketPrice.DayVolume = (double)jobj["volume"] * coin.MarketPrice.LatestPriceBTC;
-                            coin.MarketPrice.PriceDate = DateTime.Now;
-                            coin.MarketPrice.USDCrossRate = crossrate;
+                            coin.MarketPrice.LatestPriceBTC = 1;
+                            coin.MarketPrice.LatestPriceUSD = (double)jobj["last"] / USDJPYrate.Rate;
+                            coin.MarketPrice.PriceBTCBefore24h = 1;
+                            coin.MarketPrice.PriceUSDBefore24h = await MarketDataAPI.FetchBTCUSDPriceBefore24hAsync(); //tmp
                         }
+                        else
+                        {
+                            btcprice = AppCore.Bitcoin.MarketPrice;
+                            if (btcprice != null)
+                            {
+                                coin.MarketPrice.LatestPriceUSD = (double)jobj["last"] / USDJPYrate.Rate;
+                                coin.MarketPrice.LatestPriceBTC = coin.MarketPrice.LatestPriceUSD / btcprice.LatestPriceUSD;
+                                coin.MarketPrice.PriceBTCBefore24h = await MarketDataAPI.FetchPriceBTCBefore24hAsync(coin.Id); //tmp
+                                coin.MarketPrice.PriceUSDBefore24h = coin.MarketPrice.PriceBTCBefore24h * btcprice.LatestPriceUSD; //tmp
+                            }
+                        }
+
+                        coin.MarketPrice.DayVolume = (double)jobj["volume"] * coin.MarketPrice.LatestPriceBTC;
+                        coin.MarketPrice.PriceDate = DateTime.Now;
+                        coin.MarketPrice.USDCrossRate = crossrate;
                     }
-                    catch (JsonException)
-                    {
-                        return EnuAPIStatus.FatalError;
-                    }
+
                 }
 
-                return EnuAPIStatus.Success;
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(DateTime.Now.ToString() + ": FetchPriceAsync: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
+
         }
 
         public static async Task<List<Position>> FetchPositionAsync(Exchange zaif)
         {
             _zaif = zaif;
-            //List<Position> positions = null;
             //string filename = zaif.Name + "Position" + ".json";
 
-            if (!Reachability.IsHostReachable(BaseUrl))
-            {
-                return null;
-            }
-            else
+            try
             {
                 var http = new HttpClient
                 {
@@ -102,64 +92,50 @@ namespace CryptoAccouting.CoreClass.APIClass
                 Uri path = new Uri("tapi", UriKind.Relative);
 
                 var rawjson = await SendAsync(http, path, "get_info2");
-                if (rawjson != null)
-                {
-                    return ParsePosition(rawjson);
-                }
-                else
-                {
-                    return null;
-                }
+                return ParsePosition(rawjson);
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(DateTime.Now.ToString() + ": FetchPositionAsync: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
+
         }
 
         public static async Task<TradeList> FetchTransactionAsync(Exchange zaif, string calendarYear = "ALL")
         {
             _zaif = zaif;
-            string rawjson;
 
             //string filename = zaif.Name + "Transaction_" + calendarYear + ".json";
             //rawjson = StorageAPI.LoadFromFile(filename);
 
-            //if (rawjson is null || calendarYear == DateTime.Now.Year.ToString() || calendarYear is "ALL")
-            //{
-                if (!Reachability.IsHostReachable(BaseUrl))
-                {
-                    return null;
-                }
-                else
-                {
-                    var http = new HttpClient();
+            try
+            {
+                var http = new HttpClient();
+                var from = calendarYear == "ALL" ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
+                var to = calendarYear == "ALL" ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
 
-                    var from = calendarYear == "ALL" ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
-                    var to = calendarYear == "ALL" ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
+                http.BaseAddress = new Uri(BaseUrl);
+                Uri path = new Uri("tapi", UriKind.Relative);
 
-                    http.BaseAddress = new Uri(BaseUrl);
-                    Uri path = new Uri("tapi", UriKind.Relative);
-
-                    var param = new Dictionary<string, string>
+                var param = new Dictionary<string, string>
                 {
                     //{ "currency_pair", "btc_jpy" },
                     //{ "count", "15"},
                     //{ "action", "bid" },
-                    { "since", ApplicationCore.ToEpochSeconds(from).ToString() },
-                    { "end", ApplicationCore.ToEpochSeconds(to).ToString() },
+                    { "since", AppCore.ToEpochSeconds(from).ToString() },
+                    { "end", AppCore.ToEpochSeconds(to).ToString() },
                     {"order", "ASC"}
                 };
 
-                    rawjson = await SendAsync(http, path, "trade_history", param);
-                }
-            //}
-
-            if (rawjson != null)
-            {
+                var rawjson = await SendAsync(http, path, "trade_history", param);
                 return ParseTrade(rawjson);
             }
-            else
+            catch (Exception e)
             {
-                return null;
+                Console.WriteLine(DateTime.Now.ToString() + ": FetchTransactionAsync: " + e.GetType() + ": " + e.Message);
+                throw;
             }
-
         }
 
         private static async Task<string> SendAsync(HttpClient http, Uri path, string postmethod = null, Dictionary<string, string> parameters = null)
@@ -169,7 +145,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             if (!Reachability.IsHostReachable(BaseUrl))
             {
-                return null;
+                throw new AppCoreNetworkException("Host is not reachable: " + BaseUrl);
             }
             else
             {
@@ -199,128 +175,133 @@ namespace CryptoAccouting.CoreClass.APIClass
                 }
 
                 var rawjson = await res.Content.ReadAsStringAsync();
-
                 if (!res.IsSuccessStatusCode)
-                    return null;
+                    throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
 
                 return rawjson;
             }
         }
 
-        public static List<Position> ParsePosition(string rawjson)
+        private static List<Position> ParsePosition(string rawjson)
         {
             JObject json;
             List<Position> positions;
 
-            try
-            {
+            //try
+            //{
                 json = JObject.Parse(rawjson);
-            }
-            catch (JsonException)
-            {
-                return null;
-            }
-
-            if ((int)json.SelectToken("$.success") != 1)
-            {
-                return null;
-            }
-            else
-            {
-                positions = new List<Position>();
-
-                foreach (JProperty x in (JToken)json["return"]["funds"])
+                if ((int)json.SelectToken("$.success") != 1)
                 {
-                    var instrumentId = _zaif.GetIdForExchange(x.Name.ToUpper());
-                    var coin = ApplicationCore.InstrumentList.GetByInstrumentId(instrumentId);
-                    if (coin != null)
+                    throw new AppCoreParseException("API returned error: " + rawjson);
+                }
+                else
+                {
+                    positions = new List<Position>();
+                    foreach (JProperty x in (JToken)json["return"]["funds"])
                     {
-                        var qty = (double)json["return"]["funds"][x.Name];
-                        if (qty > 0)
+                        var instrumentId = _zaif.GetIdForExchange(x.Name.ToUpper());
+                        var coin = AppCore.InstrumentList.GetByInstrumentId(instrumentId);
+                        if (coin != null)
                         {
-                            var pos = new Position(coin)
+                            var qty = (double)json["return"]["funds"][x.Name];
+                            if (qty > 0)
                             {
-                                Amount = qty,
-                                BookedExchange = _zaif
-                            };
-                            positions.Add(pos);
+                                var pos = new Position(coin)
+                                {
+                                    Amount = qty,
+                                    BookedExchange = _zaif
+                                };
+                                positions.Add(pos);
+                            }
                         }
                     }
-                }
 
-                return positions;
-            }
+                    return positions;
+                }
+            //}
+            //catch (JsonException e)
+            //{
+            //    throw new AppCoreParseException("Exception during parsing Zaif Position Json: " + e.Message);
+            //}
+            //catch (Exception e)
+            //{
+            //    throw new AppCoreParseException("Exception during creating Zaif Position object: " + e.Message);
+            //}
+
         }
 
         private static TradeList ParseTrade(string rawjson)
         {
             JObject json;
 
-            try
-            {
+            //try
+            //{
                 json = JObject.Parse(rawjson);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-
-            if ((int)json.SelectToken("$.success") != 1)
-            {
-                return null;
-            }
-            else
-            {
-                var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY };
-                foreach (JProperty x in (JToken)json["return"])
+                if ((int)json.SelectToken("$.success") != 1)
                 {
-                    //Transaction Date Order must be ascending by design...
-                    EnuBuySell ebuysell;
-
-                    switch ((string)json["return"][x.Name]["your_action"])
-                    {
-                        case "bid":
-                            ebuysell = EnuBuySell.Buy;
-                            break;
-                        case "ask":
-                            ebuysell = EnuBuySell.Sell;
-                            break;
-                        default:
-                            ebuysell = EnuBuySell.Check;
-                            break;
-                    }
-
-                    var symbol = (string)json["return"][x.Name]["currency_pair"];
-                    EnuCCY settleccy;
-                    if (symbol.Contains("_jpy"))
-                    {
-                        settleccy = EnuCCY.JPY;
-                    }
-                    else if (symbol.Contains("_btc"))
-                    {
-                        settleccy = EnuCCY.BTC;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-
-                    symbol = symbol.Replace("_jpy", "").Replace("_btc", "").ToUpper();
-                    var instrumentId = _zaif.GetIdForExchange(symbol);
-
-                    tradelist.AggregateTransaction(ApplicationCore.InstrumentList.GetByInstrumentId(instrumentId),
-                                                  "Zaif",
-                                                  ebuysell,
-                                                  (double)json["return"][x.Name]["amount"],
-                                                   (double)json["return"][x.Name]["price"],
-                                                   settleccy,
-                                                  ApplicationCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
-                                                   (double)json["return"][x.Name]["fee"]
-                                                  );
+                    throw new AppCoreParseException("API returned error: " + rawjson);
                 }
+                else
+                {
+                    var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY };
+                    foreach (JProperty x in (JToken)json["return"])
+                    {
+                        //Transaction Date Order must be ascending by design...
+                        EnuBuySell ebuysell;
 
-                return tradelist;
-            }
+                        switch ((string)json["return"][x.Name]["your_action"])
+                        {
+                            case "bid":
+                                ebuysell = EnuBuySell.Buy;
+                                break;
+                            case "ask":
+                                ebuysell = EnuBuySell.Sell;
+                                break;
+                            default:
+                                ebuysell = EnuBuySell.Check;
+                                break;
+                        }
+
+                        var symbol = (string)json["return"][x.Name]["currency_pair"];
+                        EnuCCY settleccy;
+                        if (symbol.Contains("_jpy"))
+                        {
+                            settleccy = EnuCCY.JPY;
+                        }
+                        else if (symbol.Contains("_btc"))
+                        {
+                            settleccy = EnuCCY.BTC;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+
+                        symbol = symbol.Replace("_jpy", "").Replace("_btc", "").ToUpper();
+                        var instrumentId = _zaif.GetIdForExchange(symbol);
+
+                        tradelist.AggregateTransaction(AppCore.InstrumentList.GetByInstrumentId(instrumentId),
+                                                      "Zaif",
+                                                      ebuysell,
+                                                      (double)json["return"][x.Name]["amount"],
+                                                       (double)json["return"][x.Name]["price"],
+                                                       settleccy,
+                                                      AppCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
+                                                       (double)json["return"][x.Name]["fee"]
+                                                      );
+                    }
+                    return tradelist;
+                }
+            //}
+            //catch (JsonException e)
+            //{
+            //    throw new AppCoreParseException("Exception during parsing Zaif Position Json: " + e.Message);
+            //}
+            //catch (Exception e)
+            //{
+            //    throw new AppCoreParseException("Exception during creating Zaif Position object: " + e.Message);
+            //}
+
         }
     }
 }

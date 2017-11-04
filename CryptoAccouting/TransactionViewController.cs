@@ -23,7 +23,7 @@ namespace CryptoAccouting
                 MappingName = "NumTransaction",
                 HeaderText = "#orders",                 NumberDecimalDigits = 0             };              sfGrid.Columns.Add(dateColumn);             sfGrid.Columns.Add(coinColumn);             sfGrid.Columns.Add(settleColumn);             sfGrid.Columns.Add(buysellColumn);             sfGrid.Columns.Add(amountColumn);             sfGrid.Columns.Add(priceColumn);             sfGrid.Columns.Add(valueColumn);             sfGrid.Columns.Add(numtxColumn);          }          public override void ViewDidLoad()
         {
-            base.ViewDidLoad();             sfGrid.HeaderRowHeight = 30;             sfGrid.RowHeight = 30;             TransactionView.AddSubview(sfGrid);              //thisExchange = ApplicationCore.PublicExchangeList.First(x => x.APIReady == true);             //calendaryear = DateTime.Now.Year.ToString();             ReDrawScreen();              myTradeList = new TradeList();             sfGrid.ItemsSource = (myTradeList.TransactionCollection);             this.sfGrid.Frame = new CGRect(0, 0, TransactionView.Frame.Width, TransactionView.Frame.Height);              //Color Design             var gradient = new CAGradientLayer();             gradient.Frame = TradeTopView.Bounds;             gradient.NeedsDisplayOnBoundsChange = true;             gradient.MasksToBounds = true;             gradient.Colors = new CGColor[] { UIColor.FromRGB(0, 126, 167).CGColor, UIColor.FromRGB(0, 168, 232).CGColor };             TradeTopView.Layer.InsertSublayer(gradient, 0);              barbuttonShare.Clicked += (sender, e) => ExportToExcel(sender, e);              buttonExchange.TouchUpInside += (sender, e) =>              {                 UIAlertController exchangeAlert = UIAlertController.Create("Exchange", "Choose Exchange", UIAlertControllerStyle.ActionSheet);                 exchangeAlert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));                  foreach (var exc in ApplicationCore.PublicExchangeList.Where(x => x.APIProvided == true))                 {                     exchangeAlert.AddAction(UIAlertAction.Create(exc.Name,                                                                      UIAlertActionStyle.Default,                                                                      (obj) =>                                                                      {                                                                          buttonExchange.SetTitle(exc.Name, UIControlState.Normal);                                                                          thisExchange = exc;
+            base.ViewDidLoad();             sfGrid.HeaderRowHeight = 30;             sfGrid.RowHeight = 30;             TransactionView.AddSubview(sfGrid);              //thisExchange = ApplicationCore.PublicExchangeList.First(x => x.APIReady == true);             //calendaryear = DateTime.Now.Year.ToString();             ReDrawScreen();              myTradeList = new TradeList();             sfGrid.ItemsSource = (myTradeList.TransactionCollection);             this.sfGrid.Frame = new CGRect(0, 0, TransactionView.Frame.Width, TransactionView.Frame.Height);              //Color Design             var gradient = new CAGradientLayer();             gradient.Frame = TradeTopView.Bounds;             gradient.NeedsDisplayOnBoundsChange = true;             gradient.MasksToBounds = true;             gradient.Colors = new CGColor[] { UIColor.FromRGB(0, 126, 167).CGColor, UIColor.FromRGB(0, 168, 232).CGColor };             TradeTopView.Layer.InsertSublayer(gradient, 0);              barbuttonShare.Clicked += (sender, e) => ExportToExcel(sender, e);              buttonExchange.TouchUpInside += (sender, e) =>              {                 UIAlertController exchangeAlert = UIAlertController.Create("Exchange", "Choose Exchange", UIAlertControllerStyle.ActionSheet);                 exchangeAlert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));                  foreach (var exc in AppCore.PublicExchangeList.Where(x => x.APIProvided == true))                 {                     exchangeAlert.AddAction(UIAlertAction.Create(exc.Name,                                                                      UIAlertActionStyle.Default,                                                                      (obj) =>                                                                      {                                                                          buttonExchange.SetTitle(exc.Name, UIControlState.Normal);                                                                          thisExchange = exc;
                                                                          buttonSearch.Enabled = true;                                                                      }                                                                 ));                 }                 this.PresentViewController(exchangeAlert, true, null);             };              //buttonCalndarYear.TouchUpInside += (sender, e) =>              //{             //    var thisyear = DateTime.Now.Year;             //    string[] years = new string[] { thisyear.ToString(), (thisyear - 1).ToString(), (thisyear - 2).ToString(), "ALL" };              //    UIAlertController calndarYearAlert = UIAlertController.Create("Calendar Year", "Choose Year", UIAlertControllerStyle.ActionSheet);             //    calndarYearAlert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));              //    foreach (var yr in years)             //    {             //        calndarYearAlert.AddAction(UIAlertAction.Create(yr.ToString(), UIAlertActionStyle.Default,             //                                                         (obj) =>             //                                                         {
             //                                                             buttonCalndarYear.SetTitle(yr, UIControlState.Normal);
             //                                                             calendaryear = yr == "ALL" ? null : yr;             //                                                         }             //                                                    ));             //    }             //    this.PresentViewController(calndarYearAlert, true, null);              //};              buttonSearch.TouchUpInside += async (sender, e) =>
@@ -37,27 +37,14 @@ namespace CryptoAccouting
                     var bounds = TransactionView.Bounds;
                     loadPop = new LoadingOverlay(bounds);
                     TransactionView.Add(loadPop);
+                     try                     {
+                        await AppCore.LoadTradeListsAsync(thisExchange.Code); 
+                        myTradeList = AppCore.GetExchangeTradeList(thisExchange.Code);
 
-                    if (await ApplicationCore.LoadTradeListsAsync(thisExchange.Code) is EnuAPIStatus.Success)
-                    {
-                        myTradeList = ApplicationCore.GetExchangeTradeList(thisExchange.Code);
-                        if (myTradeList != null)
-                        {
-                            //myTradeList.CalculateTotalValue(calendaryear, "BTC");
-
-                            //Show Grid View
-                            sfGrid.ItemsSource = (myTradeList.TransactionCollection);
-                            //this.sfGrid.Frame = new CGRect(0, 0, TransactionView.Frame.Width, TransactionView.Frame.Height);
-                        }
-                        else
-                        {
-                            UIAlertController okAlertController = UIAlertController.Create("Warning", "API key setting is incorrect or API call might be timed out. try again."
-                                                                                           , UIAlertControllerStyle.Alert);
-                            okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
-                            this.PresentViewController(okAlertController, true, null);
-                        }
-                    }                     ReDrawScreen();
-                    loadPop.Hide();
+                        sfGrid.ItemsSource = (myTradeList.TransactionCollection);
+                        //this.sfGrid.Frame = new CGRect(0, 0, TransactionView.Frame.Width, TransactionView.Frame.Height);
+                    }                     catch(Exception ex)                     {                         UIAlertController okAlertController = UIAlertController.Create("Warning"                                                                , "API key setting is incorrect or API call might be timed out. try again. Error: " + ex.Message                                                                , UIAlertControllerStyle.Alert);                         okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));                         this.PresentViewController(okAlertController, true, null);                         Console.WriteLine(DateTime.Now.ToString() + ": ViewDidLoad: buttonSearch: " + ex.GetType() + ": " + ex.Message);                     }
+                    finally                     {                         ReDrawScreen();                         loadPop.Hide();                     }
                 }             };
         }          public override void ViewDidAppear(bool animated)
         {
@@ -68,12 +55,12 @@ namespace CryptoAccouting
             else
             {
                 buttonExchange.SetTitle("Select Exchange", UIControlState.Highlighted);                 buttonSearch.Enabled = false;
-            }              if (myTradeList != null)             {                 barbuttonShare.Enabled = myTradeList.Count() > 0 ? true : false;                  labelNumBuy.Text = ApplicationCore.NumberFormat(myTradeList.NumOrdersBuy, false, false);                 labelNumSell.Text = ApplicationCore.NumberFormat(myTradeList.NumOrdersSell, false, false);
-                labelBTCBuy.Text = ApplicationCore.NumberFormat(myTradeList.TotalBTCTradeValueBuy, false, true);
-                labelBTCSell.Text = ApplicationCore.NumberFormat(myTradeList.TotalBTCTradeValueSell, false, true);                  if (myTradeList.SettlementCCY != EnuCCY.BTC)
+            }              if (myTradeList != null)             {                 barbuttonShare.Enabled = myTradeList.Count() > 0 ? true : false;                  labelNumBuy.Text = AppCore.NumberFormat(myTradeList.NumOrdersBuy, false, false);                 labelNumSell.Text = AppCore.NumberFormat(myTradeList.NumOrdersSell, false, false);
+                labelBTCBuy.Text = AppCore.NumberFormat(myTradeList.TotalBTCTradeValueBuy, false, true);
+                labelBTCSell.Text = AppCore.NumberFormat(myTradeList.TotalBTCTradeValueSell, false, true);                  if (myTradeList.SettlementCCY != EnuCCY.BTC)
                 {
-                    labelSettleCrossBuy.Text = ApplicationCore.NumberFormat(myTradeList.TotalExchangeSettleTradeValueBuy, false, true);
-                    labelSettleCrossSell.Text = ApplicationCore.NumberFormat(myTradeList.TotalExchangeSettleTradeValueSell, false, true);
+                    labelSettleCrossBuy.Text = AppCore.NumberFormat(myTradeList.TotalExchangeSettleTradeValueBuy, false, true);
+                    labelSettleCrossSell.Text = AppCore.NumberFormat(myTradeList.TotalExchangeSettleTradeValueSell, false, true);
                     labelSettleCrossText.Text = "Trades/" + myTradeList.SettlementCCY.ToString();                 }
                 else                 {
                     labelSettleCrossBuy.Text = "---";                     labelSettleCrossSell.Text = "---";                     labelSettleCrossText.Text = "---"; 

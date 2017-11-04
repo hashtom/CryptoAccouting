@@ -1,8 +1,8 @@
 ﻿using Foundation; using System; using UIKit; using CryptoAccouting.CoreClass; using CryptoAccouting.UIClass; using System.Collections.Generic; using CoreGraphics; using CoreAnimation; using System.Threading.Tasks;  namespace CryptoAccouting {     public partial class BalanceMainViewController : CryptoTableViewController     {
         //private NavigationDrawer menu;
         Balance mybalance;         int position_count;          public BalanceMainViewController(IntPtr handle) : base(handle)         {         }          public override void ViewDidLoad()         {             base.ViewDidLoad();              // Instantiate Controllers             AppSetting.balanceMainViewC = this;             //AppSetting.transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             AppSetting.plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             AppSetting.settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             //menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);  
-            if (ApplicationCore.InitializeCore() != EnuAPIStatus.Success)             {                 this.PopUpWarning("some issue!!");                 this.mybalance = new Balance();             }             else             {                 this.mybalance = ApplicationCore.Balance;             }              // Configure Table source             TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");             TableView.Source = new CoinTableSource(mybalance, this);             position_count = mybalance.BalanceByCoin.Count; 
-            if (!ApplicationCore.IsInternetReachable())
+            if (AppCore.InitializeCore() != EnuAPIStatus.Success)             {                 this.PopUpWarning("some issue!!");                 this.mybalance = new Balance();             }             else             {                 this.mybalance = AppCore.Balance;             }              // Configure Table source             TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");             TableView.Source = new CoinTableSource(mybalance, this);             position_count = mybalance.BalanceByCoin.Count; 
+            if (!AppCore.IsInternetReachable())
 			{
 				UIAlertController okAlertController = UIAlertController.Create("Warning", "Unable to Connect Internet!", UIAlertControllerStyle.Alert);
 				okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
@@ -12,21 +12,17 @@
             //Color Design             var gradient = new CAGradientLayer();             gradient.Frame = this.BalanceTopView.Bounds;             gradient.NeedsDisplayOnBoundsChange = true;             gradient.MasksToBounds = true;             gradient.Colors = new CGColor[] { UIColor.FromRGB(0, 126, 167).CGColor, UIColor.FromRGB(0, 168, 232).CGColor };             //NavigationController.NavigationBar.Layer.InsertSublayer(gradient, 0);             this.BalanceTopView.Layer.InsertSublayer(gradient, 0); 
 			// Configure Segmented control
 			ConfigureSegmentButton();              RefreshControl = new UIRefreshControl();             RefreshControl.ValueChanged += async (sender, e) =>
-            {                 if (!ApplicationCore.IsInternetReachable())                 {                     UIAlertController okAlertController = UIAlertController.Create("Warning", "Unable to Connect Internet!", UIAlertControllerStyle.Alert);                     okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+            {                 if (!AppCore.IsInternetReachable())                 {                     UIAlertController okAlertController = UIAlertController.Create("Warning", "Unable to Connect Internet!", UIAlertControllerStyle.Alert);                     okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
                     this.PresentViewController(okAlertController, true, () => RefreshControl.EndRefreshing());                 }
                 else
                 {
-                    await RefreshPriceAsync();                     RefreshControl.EndRefreshing();                 }             };              ReDrawScreen();              //run the last             Task.Run(async ()=> await ApplicationCore.FetchCoinLogoTop100Async());
+                    await RefreshPriceAsync();                     RefreshControl.EndRefreshing();                 }             };              ReDrawScreen();              //run the last             try             {                 Task.Run(async () => await AppCore.FetchCoinLogoTop100Async());             }             catch(Exception e)             {                 Console.WriteLine(DateTime.Now.ToString() + ": ViewDidLoad: FetchCoinLogo: " + e.GetType() + ": " + e.Message);             }
         }          public async override void ViewWillAppear(bool animated)         {
             base.ViewWillAppear(animated);
-             if (position_count != mybalance.BalanceByCoin.Count)             {                 TableView.Source = new CoinTableSource(mybalance, this);                 position_count = mybalance.BalanceByCoin.Count;             }              ReDrawScreen();             //TableView.ReloadData();
-
-            if (await ApplicationCore.LoadCrossRateAsync() is EnuAPIStatus.Success)
-            {                 //ReDrawScreen();             }
-
-            if (await ApplicationCore.FetchMarketDataFromBalanceAsync() is EnuAPIStatus.Success)
-            {                 ReDrawScreen();
-            }
+             if (position_count != mybalance.BalanceByCoin.Count)             {                 TableView.Source = new CoinTableSource(mybalance, this);                 position_count = mybalance.BalanceByCoin.Count;             }              ReDrawScreen();             //TableView.ReloadData();             try             {
+                await AppCore.LoadCrossRateAsync();
+                await AppCore.FetchMarketDataFromBalanceAsync();
+            }             finally             {                 ReDrawScreen();             }
 
         }          public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
@@ -66,13 +62,13 @@
                         break;
                     case 1:
                         TableView.RegisterClassForCellReuse(typeof(CoinStoreCell), "CoinStorageCell");                         //TableView.RegisterNibForCellReuse(CoinStorageCell.Nib, "CoinStorageCell");
-                        TableView.Source = new CoinStoreTableSource(ApplicationCore.CoinStorageList, this);
+                        TableView.Source = new CoinStoreTableSource(AppCore.CoinStorageList, this);
                         break;
                     default:
                         break;
                 }                 ReDrawScreen();
             };          }          public override void ReDrawScreen()         {
-            if (ApplicationCore.Balance != null)             {                 labelCcy.Text = ApplicationCore.BaseCurrency.ToString();                 labelTotalFiat.Text = ApplicationCore.NumberFormat(mybalance.LatestFiatValueBase());                 labelTotalBTC.Text = ApplicationCore.NumberFormat(mybalance.AmountBTC());                 label1dPct.Text = ApplicationCore.NumberFormat(mybalance.BaseRet1d(), true, false) + "%";                 label1dPct.TextColor = mybalance.BaseRet1d() >= 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);                 labelLastUpdate.Text = mybalance.PriceDateTime !=                      DateTime.MinValue ? "Price Updated: " + mybalance.PriceDateTime.ToShortDateString() + " " + mybalance.PriceDateTime.ToShortTimeString()                     : "";                 TableView.ReloadData();
+            if (AppCore.Balance != null)             {                 labelCcy.Text = AppCore.BaseCurrency.ToString();                 labelTotalFiat.Text = AppCore.NumberFormat(mybalance.LatestFiatValueBase());                 labelTotalBTC.Text = AppCore.NumberFormat(mybalance.AmountBTC());                 label1dPct.Text = AppCore.NumberFormat(mybalance.BaseRet1d(), true, false) + "%";                 label1dPct.TextColor = mybalance.BaseRet1d() >= 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);                 labelLastUpdate.Text = mybalance.PriceDateTime !=                      DateTime.MinValue ? "Price Updated: " + mybalance.PriceDateTime.ToShortDateString() + " " + mybalance.PriceDateTime.ToShortTimeString()                     : "";                 TableView.ReloadData();
             }          } 
         partial void ButtonAddNew_Activated(UIBarButtonItem sender)
         {
@@ -83,10 +79,12 @@
         //{         //    var bounds = TableView.Bounds;         //    loadPop = new LoadingOverlay(bounds);         //    TableView.Add(loadPop);          //    await RefreshPriceAsync();          //    loadPop.Hide();
         //}          private void PushSelectionView()
         {
-            List<SelectionSearchItem> searchitems = new List<SelectionSearchItem>();             foreach (var item in ApplicationCore.InstrumentList)
+            List<SelectionSearchItem> searchitems = new List<SelectionSearchItem>();             foreach (var item in AppCore.InstrumentList)
             {                 SelectionSearchItem searchitem = new SelectionSearchItem()
                 {                     SearchItem1 = item.Id,                     SearchItem2 = item.Symbol1,                     ImageFile = item.Id + ".png",                     SortOrder = item.rank                 };                 searchitems.Add(searchitem);             } 
 			var SymbolSelectionViewC = Storyboard.InstantiateViewController("SymbolSelectionViewC") as SymbolSelectionViewConroller;
-			SymbolSelectionViewC.SelectionItems = searchitems;             SymbolSelectionViewC.DestinationID = "BalanceEditViewC";             NavigationController.PushViewController(SymbolSelectionViewC, true);         }          async private Task RefreshPriceAsync()         {             //await ApplicationCore.LoadCrossRateAsync();             await ApplicationCore.FetchMarketDataFromBalanceAsync();
-            ReDrawScreen();
-            //TableView.ReloadData();         }     } }
+			SymbolSelectionViewC.SelectionItems = searchitems;             SymbolSelectionViewC.DestinationID = "BalanceEditViewC";             NavigationController.PushViewController(SymbolSelectionViewC, true);         }          async private Task RefreshPriceAsync()         {             try             {
+                //await ApplicationCore.LoadCrossRateAsync();
+                await AppCore.FetchMarketDataFromBalanceAsync();             }             finally             {
+                ReDrawScreen();
+            }         }     } }

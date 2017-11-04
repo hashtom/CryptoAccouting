@@ -18,95 +18,79 @@ namespace CryptoAccouting.CoreClass.APIClass
         public const string SignHeaderName = "apisign";
         private static readonly Encoding encoding = Encoding.UTF8;
 
-        public static async Task<EnuAPIStatus> FetchPriceAsync(Exchange bittrex, InstrumentList coins, CrossRate crossrate)
+        public static async Task FetchPriceAsync(Exchange bittrex, InstrumentList coins, CrossRate crossrate)
         {
             _bittrex = bittrex;
 
-            if (!Reachability.IsHostReachable("bittrex.com"))
+            try
             {
-                    return EnuAPIStatus.FatalError;
-            }
-            else
-            {
-                var rawjson = await request(HttpMethod.Get, BaseUrl + "/api/v1.1/public/getmarketsummaries", false);
+                var rawjson = await SendAsync(HttpMethod.Get, BaseUrl + "/api/v1.1/public/getmarketsummaries", false);
+                var jobj = await Task.Run(() => JObject.Parse(rawjson));
+                var jarray = (JArray)jobj["result"];
 
-                try
+                var btcprice = AppCore.Bitcoin.MarketPrice;
+
+                foreach (var coin in coins.Where(x => x.PriceSourceCode == "Bittrex"))
                 {
-                    var jobj = await Task.Run(() => JObject.Parse(rawjson));
-                    var jarray = (JArray)jobj["result"];
+                    if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
 
-                    var btcprice = ApplicationCore.Bitcoin.MarketPrice;
-
-                    foreach (var coin in coins.Where(x => x.PriceSourceCode == "Bittrex"))
+                    if (coin.Id is "bitcoin")
                     {
-                        if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
+                        var jrow = jarray.First(x => (string)x["MarketName"] == "USDT-BTC");
+                        //if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
 
-                        if (coin.Id is "bitcoin")
+                        coin.MarketPrice.LatestPriceBTC = 1;
+                        coin.MarketPrice.PriceBTCBefore24h = 1;
+                        coin.MarketPrice.DayVolume = (double)jrow["Volume"] * coin.MarketPrice.LatestPriceBTC;
+                        coin.MarketPrice.PriceDate = (DateTime)jrow["TimeStamp"];
+                        coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"];
+                        coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"];
+                        coin.MarketPrice.USDCrossRate = crossrate;
+                    }
+                    else
+                    {
+                        if (jarray.Any(x => (string)x["MarketName"] == "BTC-" + bittrex.GetSymbolForExchange(coin.Id)))
                         {
-                            var jrow = jarray.First(x => (string)x["MarketName"] == "USDT-BTC");
+                            var jrow = jarray.First(x => (string)x["MarketName"] == "BTC-" + _bittrex.GetSymbolForExchange(coin.Id));
                             //if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
 
-                            coin.MarketPrice.LatestPriceBTC = 1;
-                            coin.MarketPrice.PriceBTCBefore24h = 1;
+                            coin.MarketPrice.LatestPriceBTC = (double)jrow["Last"];
+                            coin.MarketPrice.PriceBTCBefore24h = (double)jrow["PrevDay"];
                             coin.MarketPrice.DayVolume = (double)jrow["Volume"] * coin.MarketPrice.LatestPriceBTC;
                             coin.MarketPrice.PriceDate = (DateTime)jrow["TimeStamp"];
-                            coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"];
-                            coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"];
+
                             coin.MarketPrice.USDCrossRate = crossrate;
-                        }
-                        else
-                        {
-                            if (jarray.Any(x => (string)x["MarketName"] == "BTC-" + bittrex.GetSymbolForExchange(coin.Id)))
+                            if (btcprice != null)
                             {
-                                var jrow = jarray.First(x => (string)x["MarketName"] == "BTC-" + _bittrex.GetSymbolForExchange(coin.Id));
-                                //if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
-
-                                coin.MarketPrice.LatestPriceBTC = (double)jrow["Last"];
-                                coin.MarketPrice.PriceBTCBefore24h = (double)jrow["PrevDay"];
-                                coin.MarketPrice.DayVolume = (double)jrow["Volume"] * coin.MarketPrice.LatestPriceBTC;
-                                coin.MarketPrice.PriceDate = (DateTime)jrow["TimeStamp"];
-
-                                coin.MarketPrice.USDCrossRate = crossrate;
-                                if (btcprice != null)
-                                {
-                                    coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"] * btcprice.LatestPriceUSD;
-                                    coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"] * btcprice.PriceUSDBefore24h;
-                                }
+                                coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"] * btcprice.LatestPriceUSD;
+                                coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"] * btcprice.PriceUSDBefore24h;
                             }
                         }
-
                     }
                 }
-                catch (JsonException)
-                {
-                    return EnuAPIStatus.FatalError;
-                }
-
-                return EnuAPIStatus.Success;
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(DateTime.Now.ToString() + ": FetchPriceAsync: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
+
         }
 
         public static async Task<List<Position>> FetchPositionAsync(Exchange bittrex)
         {
-            //List<Position> positions = null;
             //string filename = bittrex.Name + "Position" + ".json";
             _bittrex = bittrex;
 
-            if (!Reachability.IsHostReachable("bittrex.com"))
+            try
             {
-                return null;
+                var rawjson = await SendAsync(HttpMethod.Get, BaseUrl + "/api/v1.1/account/getbalances");
+                return ParsePosition(rawjson);
             }
-            else
+            catch (Exception e)
             {
-                var rawjson = await request(HttpMethod.Get, BaseUrl + "/api/v1.1/account/getbalances");
-                if (rawjson != null)
-                {
-                    return ParsePosition(rawjson);
-                }
-                else
-                {
-                    return null;
-                }
+                Console.WriteLine(DateTime.Now.ToString() + ": FetchPositionAsync: " + e.GetType() + ": " + e.Message);
+                throw;
             }
 
         }
@@ -115,72 +99,69 @@ namespace CryptoAccouting.CoreClass.APIClass
         {
             _bittrex = bittrex;
 
-            if (!Reachability.IsHostReachable("bittrex.com"))
-            {
-                return null;
-            }
-            else
+            try
             {
                 //var from = calendarYear == null ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
                 //var to = calendarYear == null ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
-                var rawjson = await request(HttpMethod.Get, BaseUrl + "/api/v1.1/account/getorderhistory");
-                if (rawjson != null)
-                {
-                    return ParseTrade(rawjson);
-                }
-                else
-                {
-                    return null;
-                }
+                var rawjson = await SendAsync(HttpMethod.Get, BaseUrl + "/api/v1.1/account/getorderhistory");
+                return ParseTrade(rawjson);
             }
-        }
+            catch (Exception e)
+            {
+                Console.WriteLine(DateTime.Now.ToString() + ": FetchTransactionAsync: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
 
+        }
 
         private static List<Position> ParsePosition(string rawjson)
         {
             JObject json;
             List<Position> positions;
 
-            try
-            {
+            //try
+            //{
                 json = JObject.Parse(rawjson);
-            }
-            catch (JsonException)
-            {
-                return null;
-            }
-
-            if ((bool)json.SelectToken("$.success") != true)
-            {
-                return null;
-            }
-            else
-            {
-                positions = new List<Position>();
-
-                var jarray = (JArray)json["result"];
-
-                foreach (var elem in jarray)
+                if ((bool)json.SelectToken("$.success") != true)
                 {
-                    var instrumentId = _bittrex.GetIdForExchange((string)elem["Currency"]);
-                    var coin = ApplicationCore.InstrumentList.GetByInstrumentId(instrumentId);
-                    if (coin != null)
+                    throw new AppCoreParseException("API returned error: " + rawjson);
+                }
+                else
+                {
+                    positions = new List<Position>();
+
+                    var jarray = (JArray)json["result"];
+
+                    foreach (var elem in jarray)
                     {
-                        var qty = (double)elem["Balance"];
-                        if (qty > 0)
+                        var instrumentId = _bittrex.GetIdForExchange((string)elem["Currency"]);
+                        var coin = AppCore.InstrumentList.GetByInstrumentId(instrumentId);
+                        if (coin != null)
                         {
-                            var pos = new Position(coin)
+                            var qty = (double)elem["Balance"];
+                            if (qty > 0)
                             {
-                                Amount = qty,
-                                BookedExchange = _bittrex
-                            };
-                            positions.Add(pos);
+                                var pos = new Position(coin)
+                                {
+                                    Amount = qty,
+                                    BookedExchange = _bittrex
+                                };
+                                positions.Add(pos);
+                            }
                         }
                     }
-                }
 
-                return positions;
-            }
+                    return positions;
+                }
+            //}
+            //catch (JsonException e)
+            //{
+            //    throw new AppCoreParseException("Exception during parsing Bittrex Position Json: " + e.Message);
+            //}
+            //catch (Exception e)
+            //{
+            //    throw new AppCoreParseException("Exception during creating Bittrex Position object: " + e.Message);
+            //}
 
         }
 
@@ -188,83 +169,85 @@ namespace CryptoAccouting.CoreClass.APIClass
         {
             JObject json;
 
-            try
-            {
+            //try
+            //{
                 json = JObject.Parse(rawjson);
-            }
-            catch (JsonException)
-            {
-                return null;
-            }
-
-            if ((bool)json.SelectToken("$.success") != true)
-            {
-                return null;
-            }
-            else
-            {
-                var tradelist = new TradeList() { SettlementCCY = EnuCCY.BTC };
-
-                var jarray = (JArray)json["result"];
-
-                foreach (var elem in jarray)
+                if ((bool)json.SelectToken("$.success") != true)
                 {
-                    var comm = (double)elem["Commission"];
-                    if (comm > 0)
-                    {
-                        //Transaction Date Order must be ascending by design...
-                        EnuBuySell ebuysell;
-                        var buysell = (string)elem["OrderType"];
-
-                        if (buysell.Contains("BUY"))
-                        {
-                            ebuysell = EnuBuySell.Buy;
-                        }
-                        else if (buysell.Contains("SELL"))
-                        {
-                            ebuysell = EnuBuySell.Sell;
-                        }
-                        else
-                        {
-                            ebuysell = EnuBuySell.Check;
-                        }
-
-                        var symbol = (string)elem["Exchange"];
-
-                        EnuCCY settleccy;
-                        if (symbol.Contains("BTC-"))
-                        {
-                            settleccy = EnuCCY.BTC;
-                        }
-                        else if (symbol.Contains("ETH-"))
-                        {
-                            settleccy = EnuCCY.ETH;
-                        }
-                        else if (symbol.Contains("USDT-"))
-                        {
-                            settleccy = EnuCCY.USDT;
-                        }
-                        else
-                        {
-                            continue;
-                        }
-
-                        symbol = symbol.Replace("BTC-", "").Replace("ETH-","").Replace("USDT-","");
-                        var instrumentId = _bittrex.GetIdForExchange(symbol);
-
-                        tradelist.AggregateTransaction(ApplicationCore.InstrumentList.GetByInstrumentId(instrumentId),
-                                                      "Bittrex",
-                                                      ebuysell,
-                                                       (double)elem["Quantity"],
-                                                       (double)elem["PricePerUnit"],
-                                                       settleccy,
-                                                       DateTime.Parse((string)elem["TimeStamp"]),
-                                                      comm
-                                                      );
-                    }
+                    throw new AppCoreParseException("API returned error: " + rawjson);
                 }
-                return tradelist;
-            }
+                else
+                {
+                    var tradelist = new TradeList() { SettlementCCY = EnuCCY.BTC };
+                    var jarray = (JArray)json["result"];
+
+                    foreach (var elem in jarray)
+                    {
+                        var comm = (double)elem["Commission"];
+                        if (comm > 0)
+                        {
+                            //Transaction Date Order must be ascending by design...
+                            EnuBuySell ebuysell;
+                            var buysell = (string)elem["OrderType"];
+
+                            if (buysell.Contains("BUY"))
+                            {
+                                ebuysell = EnuBuySell.Buy;
+                            }
+                            else if (buysell.Contains("SELL"))
+                            {
+                                ebuysell = EnuBuySell.Sell;
+                            }
+                            else
+                            {
+                                ebuysell = EnuBuySell.Check;
+                            }
+
+                            var symbol = (string)elem["Exchange"];
+
+                            EnuCCY settleccy;
+                            if (symbol.Contains("BTC-"))
+                            {
+                                settleccy = EnuCCY.BTC;
+                            }
+                            else if (symbol.Contains("ETH-"))
+                            {
+                                settleccy = EnuCCY.ETH;
+                            }
+                            else if (symbol.Contains("USDT-"))
+                            {
+                                settleccy = EnuCCY.USDT;
+                            }
+                            else
+                            {
+                                continue;
+                            }
+
+                            symbol = symbol.Replace("BTC-", "").Replace("ETH-", "").Replace("USDT-", "");
+                            var instrumentId = _bittrex.GetIdForExchange(symbol);
+
+                            tradelist.AggregateTransaction(AppCore.InstrumentList.GetByInstrumentId(instrumentId),
+                                                          "Bittrex",
+                                                          ebuysell,
+                                                           (double)elem["Quantity"],
+                                                           (double)elem["PricePerUnit"],
+                                                           settleccy,
+                                                           DateTime.Parse((string)elem["TimeStamp"]),
+                                                          comm
+                                                          );
+                        }
+                    }
+                    return tradelist;
+                }
+            //}
+            //catch (JsonException e)
+            //{
+            //    throw new AppCoreParseException("Exception during parsing Bittrex Position Json: " + e.Message);
+            //}
+            //catch (Exception e)
+            //{
+            //    throw new AppCoreParseException("Exception during creating Bittrex Position object: " + e.Message);
+            //}
         }
 
         private static string byteToString(byte[] buff)
@@ -320,26 +303,33 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
         }
 
-        private static async Task<string> request(HttpMethod httpMethod, string uri, bool includeAuthentication = true) => await request(httpMethod, uri, new Dictionary<string, string>(), includeAuthentication);
-        private static async Task<string> request(HttpMethod httpMethod, string uri, IDictionary<string, string> parameters, bool includeAuthentication = true)
+        private static async Task<string> SendAsync(HttpMethod httpMethod, string uri, bool includeAuthentication = true) => await SendAsync(httpMethod, uri, new Dictionary<string, string>(), includeAuthentication);
+        private static async Task<string> SendAsync(HttpMethod httpMethod, string uri, IDictionary<string, string> parameters, bool includeAuthentication = true)
         {
-            var request = createRequest(httpMethod, uri, parameters, includeAuthentication);
-            var httpClient = new HttpClient();
-
-            HttpResponseMessage response = null;
-            while (response == null)
+            if (!Reachability.IsHostReachable(BaseUrl))
             {
-                try
-                {
-                    response = await httpClient.SendAsync(request);
-                }
-                catch (Exception)
-                {
-                    response = null;
-                }
+                throw new AppCoreNetworkException("Host is not reachable: " + BaseUrl);
             }
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsStringAsync();
+            else
+            {
+                var request = createRequest(httpMethod, uri, parameters, includeAuthentication);
+                var httpClient = new HttpClient();
+
+                HttpResponseMessage response = null;
+                while (response == null)
+                {
+                    try
+                    {
+                        response = await httpClient.SendAsync(request);
+                    }
+                    catch (Exception)
+                    {
+                        response = null;
+                    }
+                }
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadAsStringAsync();
+            }
         }
     }
 }

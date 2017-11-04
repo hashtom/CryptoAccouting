@@ -5,7 +5,7 @@ import requests
 import re
 import pandas as pd
 
-#basedir = "/home/bridgeplace/www/scripts/"
+#basedir = "/home/bridgeplace/scripts/"
 basedir = "/Users/name/"
 
 exchanges = []
@@ -19,17 +19,7 @@ other_dict = {
         "listing": []
         }
 exchanges.append(other_dict)
-
-#OTC
-otc_dict = { 
-        "code": "OTC",
-        "name": "Over The Counter",
-        "api": "false",
-        "listing": []
-        }
-
-exchanges.append(otc_dict)
-
+       
 #Zaif
 zaif_dict = { 
         "code": "Zaif",
@@ -255,7 +245,25 @@ exchanges.append(bithumb_dict)
 #Coinone
 
 #Korbit
-    
+
+#OTC
+otc_dict = { 
+        "code": "OTC",
+        "name": "Over The Counter",
+        "api": "false",
+        "listing": []
+        }
+
+exchanges.append(otc_dict)
+
+#AirDrop
+airdrop_dict = {
+          "code": "AirDrop",
+          "name": "Air Drop",
+          "api": "false",
+          "listing": []
+        }
+exchanges.append(airdrop_dict)
     
 # Create File
 json.dump(ExchangeList, open(basedir + 'ExchangeList.json', 'w',encoding='utf-8'),indent=4)

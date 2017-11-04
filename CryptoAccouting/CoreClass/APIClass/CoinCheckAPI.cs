@@ -19,7 +19,7 @@ namespace CryptoAccouting.CoreClass.APIClass
         //private static string _apiKey = "";
         //private static string _apiSecret = "";
 
-        public static async Task<EnuAPIStatus> FetchPriceAsync(Exchange coincheck, InstrumentList coins, CrossRate crossrate, CrossRate USDJPYrate)
+        public static async Task FetchPriceAsync(Exchange coincheck, InstrumentList coins, CrossRate crossrate, CrossRate USDJPYrate)
         {
             string rawjson;
             Price btcprice;
@@ -27,11 +27,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             _crossrate = crossrate;
             _USDJPYrate = USDJPYrate;
 
-            if (!Reachability.IsHostReachable(BaseUrl))
-            {
-                return EnuAPIStatus.FailureNetwork;
-            }
-            else
+            try
             {
                 foreach (var coin in coins.Where(x => x.PriceSourceCode == "CoinCheck"))
                 {
@@ -42,60 +38,51 @@ namespace CryptoAccouting.CoreClass.APIClass
                         rawjson = await SendAsync(http, path, HttpMethod.Get);
                     }
 
-                    try
+
+                    if (rawjson != null)
                     {
-                        if (rawjson != null)
+                        var jobj = await Task.Run(() => JObject.Parse(rawjson));
+
+                        if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
+
+                        if (coin.Id is "bitcoin")
                         {
-                            var jobj = await Task.Run(() => JObject.Parse(rawjson));
-
-                            if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
-
-                            if (coin.Id is "bitcoin")
-                            {
-                                coin.MarketPrice.LatestPriceBTC = 1;
-                                coin.MarketPrice.LatestPriceUSD = (double)jobj["rate"] / USDJPYrate.Rate;
-                                coin.MarketPrice.PriceBTCBefore24h = 1;
-                                coin.MarketPrice.PriceUSDBefore24h = await MarketDataAPI.FetchBTCUSDPriceBefore24hAsync(); //tmp
-                            }
-                            else
-                            {
-                                btcprice = ApplicationCore.Bitcoin.MarketPrice;
-                                if (btcprice != null)
-                                {
-                                    coin.MarketPrice.LatestPriceUSD = (double)jobj["rate"] / USDJPYrate.Rate;
-                                    coin.MarketPrice.LatestPriceBTC = coin.MarketPrice.LatestPriceUSD / btcprice.LatestPriceUSD;
-                                    coin.MarketPrice.PriceBTCBefore24h = await MarketDataAPI.FetchPriceBTCBefore24hAsync(coin.Id); //tmp
-                                    coin.MarketPrice.PriceUSDBefore24h = coin.MarketPrice.PriceBTCBefore24h * btcprice.LatestPriceUSD;//tmp
-                                }
-                            }
-
-                            coin.MarketPrice.DayVolume = 0;
-                            coin.MarketPrice.PriceDate = DateTime.Now;
-                            coin.MarketPrice.USDCrossRate = crossrate;
+                            coin.MarketPrice.LatestPriceBTC = 1;
+                            coin.MarketPrice.LatestPriceUSD = (double)jobj["rate"] / USDJPYrate.Rate;
+                            coin.MarketPrice.PriceBTCBefore24h = 1;
+                            coin.MarketPrice.PriceUSDBefore24h = await MarketDataAPI.FetchBTCUSDPriceBefore24hAsync(); //tmp
                         }
-                    }
-                    catch (JsonException)
-                    {
-                        return EnuAPIStatus.FatalError;
+                        else
+                        {
+                            btcprice = AppCore.Bitcoin.MarketPrice;
+                            if (btcprice != null)
+                            {
+                                coin.MarketPrice.LatestPriceUSD = (double)jobj["rate"] / USDJPYrate.Rate;
+                                coin.MarketPrice.LatestPriceBTC = coin.MarketPrice.LatestPriceUSD / btcprice.LatestPriceUSD;
+                                coin.MarketPrice.PriceBTCBefore24h = await MarketDataAPI.FetchPriceBTCBefore24hAsync(coin.Id); //tmp
+                                coin.MarketPrice.PriceUSDBefore24h = coin.MarketPrice.PriceBTCBefore24h * btcprice.LatestPriceUSD;//tmp
+                            }
+                        }
+                        coin.MarketPrice.DayVolume = 0;
+                        coin.MarketPrice.PriceDate = DateTime.Now;
+                        coin.MarketPrice.USDCrossRate = crossrate;
                     }
                 }
-
-                return EnuAPIStatus.Success;
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(DateTime.Now.ToString() + ": FetchPriceAsync: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
+
         }
 
         public static async Task<List<Position>> FetchPositionAsync(Exchange coincheck)
         {
-            //List<Position> positions = null;
             _coincheck = coincheck;
-
             //string filename = coincheck.Name + "Position" + ".json";
 
-            if (!Reachability.IsHostReachable(BaseUrl))
-            {
-                return null;
-            }
-            else
+            try
             {
                 var http = new HttpClient
                 {
@@ -105,15 +92,13 @@ namespace CryptoAccouting.CoreClass.APIClass
                 Uri path = new Uri("/api/accounts/balance", UriKind.Relative);
 
                 var rawjson = await SendAsync(http, path, HttpMethod.Get, true);
-                if (rawjson != null)
-                {
-                    return ParsePosition(rawjson);
-                }
-                else
-                {
-                    return null;
-                }
+                return ParsePosition(rawjson);
 
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(DateTime.Now.ToString() + ": FetchPositionAsync: " + e.GetType() + ": " + e.Message);
+                throw;
             }
         }
 
@@ -121,11 +106,7 @@ namespace CryptoAccouting.CoreClass.APIClass
         {
             _coincheck = coincheck;
 
-            if (!Reachability.IsHostReachable(BaseUrl))
-            {
-                return null;
-            }
-            else
+            try
             {
                 var http = new HttpClient
                 {
@@ -134,44 +115,33 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 Uri path = new Uri("/api/exchange/orders/transactions", UriKind.Relative);
                 var rawjson = await SendAsync(http, path, HttpMethod.Get, true);
-
-                if (rawjson != null)
-                {
-                    return ParseTrade(rawjson);
-                }
-                else
-                {
-                    return null;
-                }
+                return ParseTrade(rawjson);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(DateTime.Now.ToString() + ": FetchTransactionAsync: " + e.GetType() + ": " + e.Message);
+                throw;
             }
         }
 
         public static async Task<TradeList> FetchTransaction2Async(Exchange coincheck, string calendarYear = "ALL")
         {
             _coincheck = coincheck;
-            string rawjson;
-
             //string filename = coincheck.Name + "Transaction_" + calendarYear + ".json";
             //var rawjson = StorageAPI.LoadFromFile(filename);
 
-            //if (rawjson is null || calendarYear == DateTime.Now.Year.ToString() || calendarYear is "ALL")
-            //{
-                if (!Reachability.IsHostReachable(BaseUrl))
+            try
+            {
+                var from = calendarYear == "ALL" ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
+                var to = calendarYear == "ALL" ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
+                var http = new HttpClient
                 {
-                    return null;
-                }
-                else
-                {
-                    var from = calendarYear == "ALL" ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
-                    var to = calendarYear == "ALL" ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
-                    var http = new HttpClient
-                    {
-                        BaseAddress = new Uri(BaseUrl)
-                    };
+                    BaseAddress = new Uri(BaseUrl)
+                };
 
-                    Uri path = new Uri("/api/exchange/orders/transactions_pagination?limit=100?order=desc", UriKind.Relative);
+                Uri path = new Uri("/api/exchange/orders/transactions_pagination?limit=100?order=desc", UriKind.Relative);
 
-                    var param = new Dictionary<string, string>
+                var param = new Dictionary<string, string>
                 {
                     { "limit", "100" },
                     { "order", "desc" }
@@ -179,18 +149,15 @@ namespace CryptoAccouting.CoreClass.APIClass
                     //{"ending_before", "null"}
                 };
 
-                    //rawjson = await SendAsync(http, path, HttpMethod.Get);
-                    rawjson = await SendAsync(http, path, HttpMethod.Get, true, param);
-                }
-            //}
+                //rawjson = await SendAsync(http, path, HttpMethod.Get);
+                var rawjson = await SendAsync(http, path, HttpMethod.Get, true, param);
 
-            if (rawjson != null)
-            {
                 return ParseTrade(rawjson);
             }
-            else
+            catch (Exception e)
             {
-                return null;
+                Console.WriteLine(DateTime.Now.ToString() + ": FetchTransaction2Async: " + e.GetType() + ": " + e.Message);
+                throw;
             }
 
         }
@@ -201,7 +168,7 @@ namespace CryptoAccouting.CoreClass.APIClass
 
             if (!Reachability.IsHostReachable(BaseUrl))
             {
-                return null;
+                throw new AppCoreNetworkException("Host is not reachable: " + BaseUrl);
             }
             else
             {
@@ -236,12 +203,12 @@ namespace CryptoAccouting.CoreClass.APIClass
                 }
                 else
                 {
-                    return null;
+                    throw new AppCoreException("HttpMethod error: " + method);
                 }
 
                 var rawjson = await res.Content.ReadAsStringAsync();
                 if (!res.IsSuccessStatusCode)
-                    return null;
+                    throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
 
                 return rawjson;
             }
@@ -252,104 +219,111 @@ namespace CryptoAccouting.CoreClass.APIClass
             JObject json;
             List<Position> positions;
 
-            try
-            {
+            //try
+            //{
                 json = JObject.Parse(rawjson);
-            }
-            catch (JsonException)
-            {
-                return null;
-            }
-
-            if ((bool)json.SelectToken("$.success") != true)
-            {
-                return null;
-            }
-            else
-            {
-                positions = new List<Position>();
-
-                foreach (JProperty x in (JToken)json)
+                if ((bool)json.SelectToken("$.success") != true)
                 {
-                    var instrumentId = _coincheck.GetIdForExchange(x.Name.ToUpper());
-                    var coin = ApplicationCore.InstrumentList.GetByInstrumentId(instrumentId);
+                    throw new AppCoreParseException("Coincheck returned error: " + rawjson);
+                }
+                else
+                {
+                    positions = new List<Position>();
 
-                    if (coin != null)
+                    foreach (JProperty x in (JToken)json)
                     {
-                        var qty = (double)json[x.Name];
-                        if (qty > 0)
+                        var instrumentId = _coincheck.GetIdForExchange(x.Name.ToUpper());
+                        var coin = AppCore.InstrumentList.GetByInstrumentId(instrumentId);
+
+                        if (coin != null)
                         {
-                            var pos = new Position(coin)
+                            var qty = (double)json[x.Name];
+                            if (qty > 0)
                             {
-                                Amount = qty,
-                                BookedExchange = _coincheck
-                            };
-                            positions.Add(pos);
+                                var pos = new Position(coin)
+                                {
+                                    Amount = qty,
+                                    BookedExchange = _coincheck
+                                };
+                                positions.Add(pos);
+                            }
                         }
                     }
-                }
 
-                return positions;
-            }
+                    return positions;
+                }
+            //}
+            //catch (JsonException e)
+            //{
+            //    throw new AppCoreParseException("Exception during parsing Coincheck Position Json: " + e.Message);
+            //}
+            //catch (Exception e)
+            //{
+            //    throw new AppCoreParseException("Exception during creating Coincheck Position object: " + e.Message);
+            //}
+
         }
 
         public static TradeList ParseTrade(string rawjson, bool IsPagenation = false)
         {
             JObject json;
 
-            try
-            {
+            //try
+            //{
                 json = JObject.Parse(rawjson);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-
-            if ((bool)json.SelectToken("$.success") != true)
-            {
-                return null;
-            }
-            else
-            {
-                var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY };
-
-                var jarray = IsPagenation ? (JArray)json["data"] : (JArray)json["transactions"];
-
-                foreach (var elem in jarray)
+                if ((bool)json.SelectToken("$.success") != true)
                 {
-                    EnuBuySell ebuysell;
+                    throw new AppCoreParseException("Coincheck returned error: " + rawjson);
+                }
+                else
+                {
+                    var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY };
+                    var jarray = IsPagenation ? (JArray)json["data"] : (JArray)json["transactions"];
 
-                    switch ((string)elem["side"])
+                    foreach (var elem in jarray)
                     {
-                        case "buy":
-                            ebuysell = EnuBuySell.Buy;
-                            break;
-                        case "sell":
-                            ebuysell = EnuBuySell.Sell;
-                            break;
-                        default:
-                            ebuysell = EnuBuySell.Check;
-                            break;
+                        EnuBuySell ebuysell;
+
+                        switch ((string)elem["side"])
+                        {
+                            case "buy":
+                                ebuysell = EnuBuySell.Buy;
+                                break;
+                            case "sell":
+                                ebuysell = EnuBuySell.Sell;
+                                break;
+                            default:
+                                ebuysell = EnuBuySell.Check;
+                                break;
+                        }
+
+                        var symbol = (string)elem["pair"];
+                        symbol = symbol.Replace("_jpy", "").ToUpper();
+                        var instrumentId = _coincheck.GetIdForExchange(symbol);
+
+                        tradelist.AggregateTransaction(AppCore.InstrumentList.GetByInstrumentId(instrumentId),
+                                                      "CoinCheck",
+                                                      ebuysell,
+                                                       Math.Abs((double)elem["funds"][symbol.ToLower()]),
+                                                       (double)elem["rate"],
+                                                       EnuCCY.JPY,
+                                                       DateTime.Parse((string)elem["created_at"]),
+                                                       (double)elem["fee"]
+                                                      );
                     }
 
-                    var symbol = (string)elem["pair"];
-                    symbol = symbol.Replace("_jpy", "").ToUpper();
-                    var instrumentId = _coincheck.GetIdForExchange(symbol);
-
-                    tradelist.AggregateTransaction(ApplicationCore.InstrumentList.GetByInstrumentId(instrumentId),
-                                                  "CoinCheck",
-                                                  ebuysell,
-                                                   Math.Abs((double)elem["funds"][symbol.ToLower()]),
-                                                   (double)elem["rate"],
-                                                   EnuCCY.JPY,
-                                                   DateTime.Parse((string)elem["created_at"]),
-                                                   (double)elem["fee"]
-                                                  );
+                    return tradelist;
                 }
+            //}
+            //catch (JsonException e)
+            //{
+            //    throw new AppCoreParseException("Exception during parsing Coincheck Position Json: " + e.Message);
+            //}
+            //catch (Exception e)
+            //{
+            //    throw new AppCoreParseException("Exception during creating Coincheck Position object: " + e.Message);
+            //}
 
-                return tradelist;
-            }
         }
     }
 }

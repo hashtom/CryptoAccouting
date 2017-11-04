@@ -7,12 +7,6 @@
             "listing": []
         },
         {
-            "code": "OTC",
-            "name": "Over The Counter",
-            "api": "false",
-            "listing": []
-        },
-        {
             "code": "Zaif",
             "name": "Zaif",
             "api": "true",
@@ -2050,6 +2044,18 @@
                     "symbol": "ZEC"
                 }
             ]
+        },
+        {
+          "code": "OTC",
+          "name": "Over The Counter",
+          "api": "false",
+          "listing": []
+        },
+        {
+          "code": "AirDrop",
+          "name": "Air Drop",
+          "api": "false",
+          "listing": []
         }
     ]
 }

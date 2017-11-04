@@ -161,7 +161,7 @@ namespace CryptoAccouting.CoreClass
             }
             else
             {
-                tx = new Transaction(tradedCoin, ApplicationCore.GetExchange(exchangeCode));
+                tx = new Transaction(tradedCoin, AppCore.GetExchange(exchangeCode));
                 tx.TxId = (transactions.Count + 1).ToString();
                 tx.BuySell = buysell;
                 tx.SettlementCCY = settleCcy;

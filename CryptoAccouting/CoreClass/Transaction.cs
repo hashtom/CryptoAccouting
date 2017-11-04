@@ -37,12 +37,12 @@ namespace CryptoAccouting.CoreClass
 
         public string ColumnTradePriceSettle
         {
-            get { return ApplicationCore.NumberFormat(TradePriceSettle); }
+            get { return AppCore.NumberFormat(TradePriceSettle); }
         }
 
         public string ColumnTradeNetValue
         {
-            get { return ApplicationCore.NumberFormat(TradeNetValue); }
+            get { return AppCore.NumberFormat(TradeNetValue); }
         }
 
         public double RealizedBookValue

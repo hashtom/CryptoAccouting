@@ -90,7 +90,7 @@ namespace CryptoAccouting
             {
                 if (switchWatchOnly.On)
                 {
-                    if (ApplicationCore.Balance.HasBalance(thisCoin))
+                    if (AppCore.Balance.HasBalance(thisCoin))
                     {
                         UIAlertController okAlertController = UIAlertController.Create("Warning", "You have already got this coin in your balance. You can only add single Watch-only coin.", UIAlertControllerStyle.Alert);
                         okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, (obj) => switchWatchOnly.SetState(false, false)));
@@ -116,7 +116,7 @@ namespace CryptoAccouting
                     okCancelAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default,
                                                                            alert =>
                                                                            {
-                                                                               ApplicationCore.DetachPosition(PositionDetail);
+                                                                               AppCore.DetachPosition(PositionDetail);
                                                                                CellItemUpdated(popto);
                                                                            }));
                     okCancelAlertController.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
@@ -131,7 +131,14 @@ namespace CryptoAccouting
             base.ViewWillAppear(animated);
             if (!AppDelegate.IsInDesignerView)
             {
-                await ApplicationCore.FetchMarketDataAsync(thisCoin);
+                try
+                {
+                    await AppCore.FetchMarketDataAsync(thisCoin);
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(DateTime.Now.ToString() + ": ViewWillAppear: FetchMarketDataAsync: " + e.GetType() + ": " + e.Message);
+                }
             }
         }
 
@@ -275,14 +282,14 @@ namespace CryptoAccouting
 
                 if (thisExchange != null) PositionDetail.BookedExchange = thisExchange;
 
-                ApplicationCore.AttachCoinStorage(thisStorage.Code, thisStorage.StorageType, PositionDetail);
+                AppCore.AttachCoinStorage(thisStorage.Code, thisStorage.StorageType, PositionDetail);
                 //var storage = ApplicationCore.GetCoinStorage(thisStorage.Code, thisStorage.StorageType);
                 //PositionDetail.AttachCoinStorage(storage);
             }
 
-            ApplicationCore.AttachPosition(PositionDetail);
+            AppCore.AttachPosition(PositionDetail);
             //ApplicationCore.Balance.ReCalculate();
-            ApplicationCore.SaveMyBalanceXML();
+            AppCore.SaveMyBalanceXML();
         }
 
         partial void ButtonEdit_Activated(UIBarButtonItem sender)
@@ -312,7 +319,7 @@ namespace CryptoAccouting
         {
             PositionDetail = pos;
             thisCoin = pos.Coin;
-            exchangesListed = ApplicationCore.GetExchangeListByInstrument(pos.Coin.Id);
+            exchangesListed = AppCore.GetExchangeListByInstrument(pos.Coin.Id);
             thisExchange = PositionDetail.BookedExchange;
             thisStorage = PositionDetail.CoinStorage != null ? PositionDetail.CoinStorage : CoinStorageList.GetStorageListSelection().First(x => x.StorageType == EnuCoinStorageType.TBA);
             this.editmode = editmode;
@@ -322,8 +329,8 @@ namespace CryptoAccouting
 
         public override void SetSearchSelectionItem(string searchitem1)
         {
-            thisCoin = ApplicationCore.InstrumentList.GetByInstrumentId(searchitem1);
-            exchangesListed = ApplicationCore.GetExchangeListByInstrument(searchitem1);
+            thisCoin = AppCore.InstrumentList.GetByInstrumentId(searchitem1);
+            exchangesListed = AppCore.GetExchangeListByInstrument(searchitem1);
             thisStorage = CoinStorageList.GetStorageListSelection().First(x => x.StorageType == EnuCoinStorageType.TBA);
             editmode = true;
         }

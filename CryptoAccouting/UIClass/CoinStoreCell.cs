@@ -52,8 +52,8 @@ namespace CryptoAccouting.UIClass
         public void UpdateCell(CoinStorage storage)
         {
             labelName.Text = storage.Name;
-            labelHoldingBTC.Text = "฿" + ApplicationCore.NumberFormat(storage.AmountBTC());
-            labelValueK.Text = ApplicationCore.NumberFormat(storage.LatestFiatValueBase());
+            labelHoldingBTC.Text = "฿" + AppCore.NumberFormat(storage.AmountBTC());
+            labelValueK.Text = AppCore.NumberFormat(storage.LatestFiatValueBase());
             labelWeight.Text = String.Format("{0:n2}", storage.Weight * 100) + "%";
         }
 
