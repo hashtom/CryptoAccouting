@@ -92,9 +92,10 @@ namespace CryptoAccouting
                 {
                     if (AppCore.Balance.HasBalance(thisCoin))
                     {
-                        UIAlertController okAlertController = UIAlertController.Create("Warning", "You have already got this coin in your balance. You can only add single Watch-only coin.", UIAlertControllerStyle.Alert);
-                        okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, (obj) => switchWatchOnly.SetState(false, false)));
-                        this.PresentViewController(okAlertController, true, null);
+                        this.PopUpWarning("You have already got this coin in your balance. You can only add single Watch-only coin.");
+                        //UIAlertController okAlertController = UIAlertController.Create("Warning", "You have already got this coin in your balance. You can only add single Watch-only coin.", UIAlertControllerStyle.Alert);
+                        //okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, (obj) => switchWatchOnly.SetState(false, false)));
+                        //this.PresentViewController(okAlertController, true, null);
                     }
                     else
                     {
@@ -309,9 +310,10 @@ namespace CryptoAccouting
             }
             else
             {
-                UIAlertController okAlertController = UIAlertController.Create("PositionDetail", "Please input correct holding quantity.", UIAlertControllerStyle.Alert);
-                okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
-                this.PresentViewController(okAlertController, true, null);
+                PopUpWarning("Please input correct holding quantity.");
+                //UIAlertController okAlertController = UIAlertController.Create("PositionDetail", "Please input correct holding quantity.", UIAlertControllerStyle.Alert);
+                //okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
+                //this.PresentViewController(okAlertController, true, null);
             }
         }
 

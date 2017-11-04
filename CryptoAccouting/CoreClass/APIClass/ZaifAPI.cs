@@ -187,8 +187,8 @@ namespace CryptoAccouting.CoreClass.APIClass
             JObject json;
             List<Position> positions;
 
-            //try
-            //{
+            try
+            {
                 json = JObject.Parse(rawjson);
                 if ((int)json.SelectToken("$.success") != 1)
                 {
@@ -218,15 +218,11 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                     return positions;
                 }
-            //}
-            //catch (JsonException e)
-            //{
-            //    throw new AppCoreParseException("Exception during parsing Zaif Position Json: " + e.Message);
-            //}
-            //catch (Exception e)
-            //{
-            //    throw new AppCoreParseException("Exception during creating Zaif Position object: " + e.Message);
-            //}
+            }
+            catch (Exception e)
+            {
+                throw new AppCoreParseException(e.GetType() + ": " + e.Message);
+            }
 
         }
 
@@ -234,8 +230,8 @@ namespace CryptoAccouting.CoreClass.APIClass
         {
             JObject json;
 
-            //try
-            //{
+            try
+            {
                 json = JObject.Parse(rawjson);
                 if ((int)json.SelectToken("$.success") != 1)
                 {
@@ -292,15 +288,11 @@ namespace CryptoAccouting.CoreClass.APIClass
                     }
                     return tradelist;
                 }
-            //}
-            //catch (JsonException e)
-            //{
-            //    throw new AppCoreParseException("Exception during parsing Zaif Position Json: " + e.Message);
-            //}
-            //catch (Exception e)
-            //{
-            //    throw new AppCoreParseException("Exception during creating Zaif Position object: " + e.Message);
-            //}
+            }
+            catch (Exception e)
+            {
+                throw new AppCoreParseException(e.GetType() + ": " + e.Message);
+            }
 
         }
     }

@@ -228,6 +228,8 @@ namespace CryptoAccouting.CoreClass.APIClass
         {
             JObject json;
 
+            if (AppCore.InstrumentList is null) throw new AppCoreParseException("InstrumentList is null.");
+
             try
             {
                 json = JObject.Parse(rawjson);

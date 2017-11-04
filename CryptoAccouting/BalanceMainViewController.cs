@@ -1,28 +1,28 @@
 ﻿using Foundation; using System; using UIKit; using CryptoAccouting.CoreClass; using CryptoAccouting.UIClass; using System.Collections.Generic; using CoreGraphics; using CoreAnimation; using System.Threading.Tasks;  namespace CryptoAccouting {     public partial class BalanceMainViewController : CryptoTableViewController     {
         //private NavigationDrawer menu;
-        Balance mybalance;         int position_count;          public BalanceMainViewController(IntPtr handle) : base(handle)         {         }          public override void ViewDidLoad()         {             base.ViewDidLoad();              // Instantiate Controllers             AppSetting.balanceMainViewC = this;             //AppSetting.transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             AppSetting.plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             AppSetting.settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             //menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);  
-            if (AppCore.InitializeCore() != EnuAPIStatus.Success)             {                 this.PopUpWarning("some issue!!");                 this.mybalance = new Balance();             }             else             {                 this.mybalance = AppCore.Balance;             }              // Configure Table source             TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");             TableView.Source = new CoinTableSource(mybalance, this);             position_count = mybalance.BalanceByCoin.Count; 
-            if (!AppCore.IsInternetReachable())
-			{
-				UIAlertController okAlertController = UIAlertController.Create("Warning", "Unable to Connect Internet!", UIAlertControllerStyle.Alert);
-				okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
-				this.PresentViewController(okAlertController, true, null);
-			}
+        Balance mybalance;         int position_count;          public BalanceMainViewController(IntPtr handle) : base(handle)         {         }          public override void ViewDidLoad()         {             base.ViewDidLoad();              // Instantiate Controllers             AppSetting.balanceMainViewC = this;             //AppSetting.transViewC = this.Storyboard.InstantiateViewController("TransactionViewC") as TransactionViewController;             AppSetting.plViewC = this.Storyboard.InstantiateViewController("PLViewC") as PLTableViewController;             AppSetting.settingViewC = this.Storyboard.InstantiateViewController("SettingTableViewC") as SettingTableViewController;             //menu = ApplicationCore.InitializeSlideMenu(TableView, this, transViewC, plViewC, perfViewC, settingViewC);              try             {
+                AppCore.InitializeCore();
+                this.mybalance = AppCore.Balance;                  // Configure Table source                 TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");                 TableView.Source = new CoinTableSource(mybalance, this);                 position_count = mybalance.BalanceByCoin.Count;
 
-            //Color Design             var gradient = new CAGradientLayer();             gradient.Frame = this.BalanceTopView.Bounds;             gradient.NeedsDisplayOnBoundsChange = true;             gradient.MasksToBounds = true;             gradient.Colors = new CGColor[] { UIColor.FromRGB(0, 126, 167).CGColor, UIColor.FromRGB(0, 168, 232).CGColor };             //NavigationController.NavigationBar.Layer.InsertSublayer(gradient, 0);             this.BalanceTopView.Layer.InsertSublayer(gradient, 0); 
-			// Configure Segmented control
-			ConfigureSegmentButton();              RefreshControl = new UIRefreshControl();             RefreshControl.ValueChanged += async (sender, e) =>
-            {                 if (!AppCore.IsInternetReachable())                 {                     UIAlertController okAlertController = UIAlertController.Create("Warning", "Unable to Connect Internet!", UIAlertControllerStyle.Alert);                     okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
-                    this.PresentViewController(okAlertController, true, () => RefreshControl.EndRefreshing());                 }
-                else
-                {
-                    await RefreshPriceAsync();                     RefreshControl.EndRefreshing();                 }             };              ReDrawScreen();              //run the last             try             {                 Task.Run(async () => await AppCore.FetchCoinLogoTop100Async());             }             catch(Exception e)             {                 Console.WriteLine(DateTime.Now.ToString() + ": ViewDidLoad: FetchCoinLogo: " + e.GetType() + ": " + e.Message);             }
+                //Color Design                 var gradient = new CAGradientLayer();                 gradient.Frame = this.BalanceTopView.Bounds;                 gradient.NeedsDisplayOnBoundsChange = true;                 gradient.MasksToBounds = true;                 gradient.Colors = new CGColor[] { UIColor.FromRGB(0, 126, 167).CGColor, UIColor.FromRGB(0, 168, 232).CGColor };                 //NavigationController.NavigationBar.Layer.InsertSublayer(gradient, 0);                 this.BalanceTopView.Layer.InsertSublayer(gradient, 0); 
+    			// Configure Segmented control
+    			ConfigureSegmentButton();                  RefreshControl = new UIRefreshControl();                 RefreshControl.ValueChanged += async (sender, e) =>
+                {                     if (!AppCore.IsInternetReachable())                     {                         UIAlertController okAlertController = UIAlertController.Create("Warning", "Unable to Connect Internet!", UIAlertControllerStyle.Alert);                         okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+                        this.PresentViewController(okAlertController, true, () => RefreshControl.EndRefreshing());                     }
+                    else
+                    {
+                        await RefreshPriceAsync();                         RefreshControl.EndRefreshing();                     }                 };                  ReDrawScreen();                  if (!AppCore.IsInternetReachable())                 {                     this.PopUpWarning("Unable to Connect Internet!");
+                }
+                else                 {
+                    //run the last
+                    Task.Run(async () => await AppCore.FetchCoinLogoTop100Async());                 }              }             catch (Exception e)             {
+                this.PopUpWarning("Critical issue: " + e.GetType() + ": " + e.Message);                 this.mybalance = new Balance();             } 
         }          public async override void ViewWillAppear(bool animated)         {
             base.ViewWillAppear(animated);
              if (position_count != mybalance.BalanceByCoin.Count)             {                 TableView.Source = new CoinTableSource(mybalance, this);                 position_count = mybalance.BalanceByCoin.Count;             }              ReDrawScreen();             //TableView.ReloadData();             try             {
                 await AppCore.LoadCrossRateAsync();
                 await AppCore.FetchMarketDataFromBalanceAsync();
-            }             finally             {                 ReDrawScreen();             }
+            }             catch(Exception e)             {                 Console.WriteLine(DateTime.Now.ToString() + ": ViewWillAppear: Cound't update price: " + e.GetType() + ": " + e.Message);             }             finally             {                 ReDrawScreen();             }
 
         }          public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {

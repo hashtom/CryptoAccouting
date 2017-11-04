@@ -73,18 +73,21 @@ namespace CryptoAccouting
 
         private void RemoveCache()
         {
-			if (AppCore.RemoveAllCache() is EnuAPIStatus.Success)
+			try
 			{
-				UIAlertController okAlertController = UIAlertController.Create("Success", "Cache cleared.", UIAlertControllerStyle.Alert);
-				okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
-				this.PresentViewController(okAlertController, true, null);
+                AppCore.RemoveAllCache();
+                PopUpWarning("Cache cleared Successfully.");
+				//UIAlertController okAlertController = UIAlertController.Create("Success", "Cache cleared.", UIAlertControllerStyle.Alert);
+				//okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+				//this.PresentViewController(okAlertController, true, null);
                 ReDrawScreen();
 			}
-			else
-			{
-				UIAlertController okAlertController = UIAlertController.Create("Critical Error", "Failed to remove cache data!", UIAlertControllerStyle.Alert);
-				okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
-				this.PresentViewController(okAlertController, true, null);
+            catch(Exception)
+            {
+                PopUpWarning("Failed to remove cache data!");
+				//UIAlertController okAlertController = UIAlertController.Create("Critical Error", "Failed to remove cache data!", UIAlertControllerStyle.Alert);
+				//okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
+				//this.PresentViewController(okAlertController, true, null);
 			}
         }
 
@@ -93,18 +96,19 @@ namespace CryptoAccouting
             try
             {
                 AppCore.SyncLatestCoins();
-
-                UIAlertController okAlertController = UIAlertController.Create("Success", "Successfully Updated.", UIAlertControllerStyle.Alert);
-                okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
-                this.PresentViewController(okAlertController, true, null);
+                PopUpWarning("Successfully Updated.");
+                //UIAlertController okAlertController = UIAlertController.Create("Success", "Successfully Updated.", UIAlertControllerStyle.Alert);
+                //okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+                //this.PresentViewController(okAlertController, true, null);
                 //ApplicationCore.SaveInstrumentXML();
 
             }
             catch(Exception e)
             {
-                UIAlertController okAlertController = UIAlertController.Create("Critical Error", "Unable to update coin data: " + e.Message, UIAlertControllerStyle.Alert);
-                okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
-                this.PresentViewController(okAlertController, true, null);
+                PopUpWarning("Unable to update coin data: " + e.Message);
+                //UIAlertController okAlertController = UIAlertController.Create("Critical Error", "Unable to update coin data: " + e.Message, UIAlertControllerStyle.Alert);
+                //okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
+                //this.PresentViewController(okAlertController, true, null);
             }
         }
 

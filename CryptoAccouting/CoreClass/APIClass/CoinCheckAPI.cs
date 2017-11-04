@@ -174,7 +174,7 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 if (parameters == null)
                     parameters = new Dictionary<string, string>();
-                
+
                 var content = new FormUrlEncodedContent(parameters);
                 string param = await content.ReadAsStringAsync();
                 string nonce = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
@@ -197,7 +197,7 @@ namespace CryptoAccouting.CoreClass.APIClass
                 {
                     res = await http.PostAsync(path, content);
                 }
-                else if(method == HttpMethod.Get)
+                else if (method == HttpMethod.Get)
                 {
                     res = await http.GetAsync(path);
                 }
@@ -214,13 +214,13 @@ namespace CryptoAccouting.CoreClass.APIClass
             }
         }
 
-        public static List<Position> ParsePosition(string rawjson)
+        private static List<Position> ParsePosition(string rawjson)
         {
             JObject json;
             List<Position> positions;
 
-            //try
-            //{
+            try
+            {
                 json = JObject.Parse(rawjson);
                 if ((bool)json.SelectToken("$.success") != true)
                 {
@@ -252,24 +252,20 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                     return positions;
                 }
-            //}
-            //catch (JsonException e)
-            //{
-            //    throw new AppCoreParseException("Exception during parsing Coincheck Position Json: " + e.Message);
-            //}
-            //catch (Exception e)
-            //{
-            //    throw new AppCoreParseException("Exception during creating Coincheck Position object: " + e.Message);
-            //}
+            }
+            catch (Exception e)
+            {
+                throw new AppCoreParseException(e.GetType() + ": " + e.Message);
+            }
 
         }
 
-        public static TradeList ParseTrade(string rawjson, bool IsPagenation = false)
+        private static TradeList ParseTrade(string rawjson, bool IsPagenation = false)
         {
             JObject json;
 
-            //try
-            //{
+            try
+            {
                 json = JObject.Parse(rawjson);
                 if ((bool)json.SelectToken("$.success") != true)
                 {
@@ -314,15 +310,11 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                     return tradelist;
                 }
-            //}
-            //catch (JsonException e)
-            //{
-            //    throw new AppCoreParseException("Exception during parsing Coincheck Position Json: " + e.Message);
-            //}
-            //catch (Exception e)
-            //{
-            //    throw new AppCoreParseException("Exception during creating Coincheck Position object: " + e.Message);
-            //}
+            }
+            catch (Exception e)
+            {
+                throw new AppCoreParseException(e.GetType() + ": " + e.Message);
+            }
 
         }
     }

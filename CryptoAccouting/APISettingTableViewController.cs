@@ -38,41 +38,46 @@ namespace CryptoAccouting
                     loadPop = new LoadingOverlay(bounds);
                     TableView.Add(loadPop);
 
-                    positions = await ExchangeAPI.FetchPositionAsync(thisExchange);
-
-                    loadPop.Hide();
-
-                    if (positions != null)
+                    try
                     {
-                        if (positions.Count() > 0)
+                        positions = await ExchangeAPI.FetchPositionAsync(thisExchange);
+
+                        if (positions.Any())
                         {
-                            if (AddBalance(positions) is EnuAPIStatus.Success)
+                            try
                             {
-                                UIAlertController okAlertController = UIAlertController.Create("Success", "Successfully Imported.", UIAlertControllerStyle.Alert);
-                                okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
-                                this.PresentViewController(okAlertController, true, null);
+                                AddBalance(positions);
+                                this.PopUpWarning("Successfully Imported.");
+                                //UIAlertController okAlertController = UIAlertController.Create("Success", "Successfully Imported.", UIAlertControllerStyle.Alert);
+                                //okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
+                                //this.PresentViewController(okAlertController, true, null);
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                UIAlertController okAlertController = UIAlertController.Create("Critical", "Couldn't import positoin!", UIAlertControllerStyle.Alert);
-                                okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
-                                this.PresentViewController(okAlertController, true, null);
+                                this.PopUpWarning("Couldn't import positoin: " + ex.Message);
+                                //UIAlertController okAlertController = UIAlertController.Create("Critical", "Couldn't import positoin!", UIAlertControllerStyle.Alert);
+                                //okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
+                                //this.PresentViewController(okAlertController, true, null);
                             }
-                        }else
+                        }
+                        else
                         {
-                            UIAlertController okAlertController = UIAlertController.Create("Success", "No balance to get imported.", UIAlertControllerStyle.Alert);
-                            okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
-                            this.PresentViewController(okAlertController, true, null);
+                            PopUpWarning("There is no balance to get imported.");
+                            //UIAlertController okAlertController = UIAlertController.Create("Success", "No balance to get imported.", UIAlertControllerStyle.Alert);
+                            //okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
+                            //this.PresentViewController(okAlertController, true, null);
                         }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        UIAlertController okAlertController = UIAlertController.Create("Critical", "Couldn't get positions from the exchange!", UIAlertControllerStyle.Alert);
-                        okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
-                        this.PresentViewController(okAlertController, true, null);
+                        PopUpWarning("Couldn't get positions from the exchange: " + ex.Message);
+
+                    }
+                    finally
+                    {
+                        loadPop.Hide();
                     }
                 }
-
             };
         }
 
@@ -118,26 +123,20 @@ namespace CryptoAccouting
             }
         }
 
-        private EnuAPIStatus AddBalance(List<Position> positions)
+        private void AddBalance(List<Position> positions)
         {
-            //try
-            //{
-                AppCore.DetachPositionByExchange(thisExchange);
-                //var storage = ApplicationCore.GetCoinStorage(thisExchange.Code, EnuCoinStorageType.Exchange);
-                foreach (var pos in positions)
-                {
-                    AppCore.AttachCoinStorage(thisExchange.Code, EnuCoinStorageType.Exchange, pos);
-                    //pos.AttachCoinStorage(storage);
-                    //storage.AttachPosition(pos);
-                    AppCore.AttachPosition(pos, false);
-                }
-                AppCore.RefreshBalance();
 
-            //}catch(Exception)
-            //{
-            //    return EnuAPIStatus.FatalError;
-            //}
-            return EnuAPIStatus.Success;
+            AppCore.DetachPositionByExchange(thisExchange);
+            //var storage = ApplicationCore.GetCoinStorage(thisExchange.Code, EnuCoinStorageType.Exchange);
+            foreach (var pos in positions)
+            {
+                AppCore.AttachCoinStorage(thisExchange.Code, EnuCoinStorageType.Exchange, pos);
+                //pos.AttachCoinStorage(storage);
+                //storage.AttachPosition(pos);
+                AppCore.AttachPosition(pos, false);
+            }
+            AppCore.RefreshBalance();
+
         }
 
         partial void ButtonDone_Activated(UIBarButtonItem sender)

@@ -16,10 +16,19 @@ namespace CryptoAccouting.CoreClass.APIClass
 
         public static string LoadBundleFile(string fileName)
         {
-            return File.ReadAllText("Bundlefile/" + fileName);
+            try
+            {
+                return File.ReadAllText("Bundlefile/" + fileName);
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine(DateTime.Now.ToString() + ": LoadBundleFile: " + e.GetType() + ": " + e.Message);
+                throw new AppCoreStorageException(e.GetType() + ": " + e.Message);
+            }
+
         }
 
-        public static EnuAPIStatus SaveFile(string json, string fileName)
+        public static void SaveFile(string json, string fileName)
         {
             try
             {
@@ -27,12 +36,12 @@ namespace CryptoAccouting.CoreClass.APIClass
                 var path = Path.Combine(documents, fileName);
                 File.WriteAllText(path, json);
             }
-            catch (IOException)
+            catch (IOException e)
             {
-                return EnuAPIStatus.FailureStorage;
+                Console.WriteLine(DateTime.Now.ToString() + ": SaveFile: " + e.GetType() + ": " + e.Message);
+                throw new AppCoreStorageException(e.GetType() + ": " + e.Message);
             }
 
-            return EnuAPIStatus.Success;
         }
 
         public static string LoadFromFile(string fileName)
@@ -44,16 +53,17 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 if (!File.Exists(path))
                 {
-                    return null;
+                    throw new AppCoreStorageException("File not found: " + fileName);
                 }
                 else
                 {
                     return File.ReadAllText(path);
                 }
             }
-            catch (IOException)
+            catch (Exception e)
             {
-                return null;
+                Console.WriteLine(DateTime.Now.ToString() + ": LoadFromFile: " + e.GetType() + ": " + e.Message);
+                throw new AppCoreStorageException(e.GetType() + ": " + e.Message);
             }
         }
 
@@ -61,21 +71,37 @@ namespace CryptoAccouting.CoreClass.APIClass
         {
             //const string BalanceFile = ApplicationCore.BalanceFile;
             //const string BalanceBundleFile = ApplicationCore.BalanceBundleFile;
+            string balanceXML;
 
-            var balanceXML = LoadFromFile(BalanceFile);
-            if (balanceXML == null) balanceXML = LoadBundleFile(BalanceBundleFile);
+            if (instrumentlist is null) throw new AppCoreBalanceException("InstrumentList is null");
 
-            return ParseAPIStrings.ParseBalanceXML(balanceXML, instrumentlist);
+            try
+            {
+                balanceXML = LoadFromFile(BalanceFile);
+            }
+            catch (Exception e)
+            {
+                balanceXML = LoadBundleFile(BalanceBundleFile);
+                Console.WriteLine(DateTime.Now.ToString() + ": LoadBalanceXML(continued with bundlefile): " + e.GetType() + ": " + e.Message);
+            }
+
+            try
+            {
+                return ParseAPIStrings.ParseBalanceXML(balanceXML, instrumentlist);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(DateTime.Now.ToString() + ": LoadBalanceXML(process terminated): " + e.GetType() + ": " + e.Message);
+                throw new AppCoreBalanceException(e.GetType() + ": " + e.Message);
+            }
 
         }
 
-        public static EnuAPIStatus SaveBalanceXML(Balance myBalance)
+        public static void SaveBalanceXML(Balance myBalance)
         {
 
-            XElement application = new XElement("application",
-                                                new XAttribute("name", AppCore.AppName));
-            XElement balance = new XElement("balance", 
-                                            new XAttribute("pricedate", myBalance.PriceDateTime));
+            XElement application = new XElement("application", new XAttribute("name", AppCore.AppName));
+            XElement balance = new XElement("balance", new XAttribute("pricedate", myBalance.PriceDateTime));
             application.Add(balance);
 
             foreach (var pos in myBalance)
@@ -101,15 +127,14 @@ namespace CryptoAccouting.CoreClass.APIClass
                 balance.Add(position);
             }
 
-            return SaveFile(application.ToString(), BalanceFile);
+            SaveFile(application.ToString(), BalanceFile);
 
         }
 
-        public static EnuAPIStatus SavePriceSourceXML(InstrumentList instrumentlist)
+        public static void SavePriceSourceXML(InstrumentList instrumentlist)
         {
 
-            XElement application = new XElement("application",
-                                                new XAttribute("name", AppCore.AppName));
+            XElement application = new XElement("application", new XAttribute("name", AppCore.AppName));
             XElement instruments = new XElement("instruments");
             application.Add(instruments);
 
@@ -129,40 +154,44 @@ namespace CryptoAccouting.CoreClass.APIClass
                 instruments.Add(instrument);
             }
 
-            return SaveFile(application.ToString(), PriceSourceFile);
+            SaveFile(application.ToString(), PriceSourceFile);
         }
 
         public static InstrumentList LoadInstrument()
         {
             const string InstrumentListFile = MarketDataAPI.InstrumentListFile;
             InstrumentList instrumentlist;
+            string rawjson;
 
-            var rawjson = LoadFromFile(InstrumentListFile);
-            if (rawjson is null) rawjson = LoadBundleFile(InstrumentListFile);
+            try
+            {
+                rawjson = LoadFromFile(InstrumentListFile);
+            }
+            catch (Exception e)
+            {
+                rawjson = LoadBundleFile(InstrumentListFile);
+                Console.WriteLine(DateTime.Now.ToString() + ": LoadInstrument(continued with bundlefile): " + e.GetType() + ": " + e.Message);
+            }
 
             try
             {
                 instrumentlist = ParseAPIStrings.ParseInstrumentListJson(rawjson);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
 
-            var PriceSourceXML = LoadFromFile(PriceSourceFile);
-            if (PriceSourceXML != null)
-            {
                 try
                 {
-                    ParseAPIStrings.ParsePriceSourceXML(PriceSourceXML, instrumentlist);
+                    ParseAPIStrings.ParsePriceSourceXML(LoadFromFile(PriceSourceFile), instrumentlist);
+                    return instrumentlist;
                 }
-                catch (Exception)
+                catch (AppCoreStorageException)
                 {
-                    Console.WriteLine("Parse error: ParsePriceSourceXML");
+                    return instrumentlist;
                 }
             }
-
-            return instrumentlist;
+            catch (AppCoreParseException e)
+            {
+                Console.WriteLine(DateTime.Now.ToString() + ": LoadInstrument: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
         }
 
         public static async Task<List<CrossRate>> LoadCrossRateAsync()
@@ -171,26 +200,25 @@ namespace CryptoAccouting.CoreClass.APIClass
             const string jsonfilename_yesterday = MarketDataAPI.CrossRatefile_yesterday;
             string rawjson_today, rawjson_yesterday;
 
-            rawjson_today = LoadFromFile(jsonfilename_today);
-            rawjson_yesterday = LoadFromFile(jsonfilename_yesterday);
-
-            if (rawjson_today != null & rawjson_yesterday != null)
+            try
             {
+                rawjson_today = LoadFromFile(jsonfilename_today);
+                rawjson_yesterday = LoadFromFile(jsonfilename_yesterday);
                 return await ParseAPIStrings.ParseCrossRateJsonAsync(rawjson_today, rawjson_yesterday);
             }
-            else
+            catch (Exception e)
             {
-                return null;
+                Console.WriteLine(DateTime.Now.ToString() + ": LoadCrossRateAsync: " + e.GetType() + ": " + e.Message);
+                throw;
             }
         }
 
-        public static EnuAPIStatus LoadAppSettingXML()
+        public static void LoadAppSettingXML()
         {
-            EnuBaseFiatCCY baseccy;
-            var xmldoc = LoadFromFile(AppSettingFile);
-
-            if (xmldoc != null)
+            try
             {
+                var xmldoc = LoadFromFile(AppSettingFile);
+                EnuBaseFiatCCY baseccy;
                 if (!Enum.TryParse(XElement.Parse(xmldoc).Element("basecurrency").Value, out baseccy))
                     baseccy = EnuBaseFiatCCY.USD;
 
@@ -205,18 +233,16 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                 AppCore.BaseCurrency = baseccy;
 
-                return EnuAPIStatus.Success;
-
             }
-            else
+            catch (Exception e)
             {
-                return EnuAPIStatus.FailureStorage;
+                Console.WriteLine(DateTime.Now.ToString() + ": LoadAppSettingXML: " + e.GetType() + ": " + e.Message);
+                throw;
             }
-
 
         }
 
-        public static EnuAPIStatus SaveAppSettingXML(string AppName, EnuBaseFiatCCY BaseCurrency, ExchangeList exList)
+        public static void SaveAppSettingXML(string AppName, EnuBaseFiatCCY BaseCurrency, ExchangeList exList)
         {
             XElement application = new XElement("application",
                                                 new XAttribute("name", AppName));
@@ -238,10 +264,10 @@ namespace CryptoAccouting.CoreClass.APIClass
                 apikeys.Add(key);
             }
 
-            return SaveFile(application.ToString(), AppSettingFile);
+            SaveFile(application.ToString(), AppSettingFile);
         }
 
-        public static EnuAPIStatus RemoveFile(string filename)
+        public static void RemoveFile(string filename)
         {
             var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
@@ -249,16 +275,17 @@ namespace CryptoAccouting.CoreClass.APIClass
             {
                 File.Delete(Path.Combine(documents, filename));
             }
-            catch (IOException)
+            catch (IOException e)
             {
-                return EnuAPIStatus.FailureStorage;
+                Console.WriteLine(DateTime.Now.ToString() + ": RemoveFile: " + e.GetType() + ": " + e.Message);
+                throw;
             }
 
-            return EnuAPIStatus.Success;
         }
-        public static EnuAPIStatus RemoveAllCache()
+
+        public static void RemoveAllCache()
         {
-			var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
             //Don't delete balance data
             try
@@ -284,12 +311,12 @@ namespace CryptoAccouting.CoreClass.APIClass
                     File.Delete(image);
                 }
             }
-            catch(IOException)
+            catch(IOException e)
             {
-                return EnuAPIStatus.FailureStorage;
+                Console.WriteLine(DateTime.Now.ToString() + ": RemoveAllCache: " + e.GetType() + ": " + e.Message);
+                throw;
             }
 
-            return EnuAPIStatus.Success;
         }
 
     }

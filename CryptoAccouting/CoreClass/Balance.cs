@@ -15,6 +15,7 @@ namespace CryptoAccouting.CoreClass
         public Balance()
         {
             positions = new List<Position>();
+            BalanceByCoin = new List<Position>();
         }
 
         public void AttachInstruments(InstrumentList instrumentist)

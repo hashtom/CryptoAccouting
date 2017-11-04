@@ -8,21 +8,38 @@
                 baseCurrency = value;
             }         }          public static CrossRate USDCrossRate         {             get             {                 return USDCrossRates.First(x => x.Currency == baseCurrency);             }         }          public static Instrument Bitcoin         {             get
             {                 return InstrumentList.GetByInstrumentId("bitcoin");
-            }         }          //public static NavigationDrawer Navigation { get; set; }
+            }         }
 
-        //public static NavigationDrawer InitializeSlideMenu(UIView BalanceTableView,         //                                                   UITableViewController PositionViewC,         //                                                   UIViewController TransactionViewC,         //                                                   UITableViewController PLViewC,         //                                                   UIViewController PerfViewC,
+        //public static NavigationDrawer Navigation { get; set; }
+
+        //public static NavigationDrawer InitializeSlideMenu(UIView BalanceTableView,
+        //                                                   UITableViewController PositionViewC,
+        //                                                   UIViewController TransactionViewC,
+        //                                                   UITableViewController PLViewC,
+        //                                                   UIViewController PerfViewC,
         //                                                   UIViewController SettingViewC)
-        //{         //    Navigation = new NavigationDrawer(BalanceTableView.Frame.Width, BalanceTableView.Frame.Height,         //                                      PositionViewC,
-        //                                      TransactionViewC,         //                                      PLViewC,         //                                      PerfViewC,         //                                      SettingViewC);         //    Navigation.AddView(BalanceTableView);         //    return Navigation;         //}          public static EnuAPIStatus InitializeCore()
+        //{
+        //    Navigation = new NavigationDrawer(BalanceTableView.Frame.Width, BalanceTableView.Frame.Height,
+        //                                      PositionViewC,
+        //                                      TransactionViewC,
+        //                                      PLViewC,
+        //                                      PerfViewC,
+        //                                      SettingViewC);
+        //    Navigation.AddView(BalanceTableView);
+        //    return Navigation;
+        //}
+
+        public static void InitializeCore()
         {
+
             //Initialize 
-            CoinStorageList = new CoinStorageList();
-
-            // Load the latest file (or Bundle file)             InstrumentList = StorageAPI.LoadInstrument();              //Load ExchangeList             LoadExchangeList();
-
-            //Load Balance Data
-            Balance = StorageAPI.LoadBalanceXML(InstrumentList);
-            RefreshBalance();              //Load App Configuration + API keys             if (StorageAPI.LoadAppSettingXML() != EnuAPIStatus.Success)             {                 BaseCurrency = EnuBaseFiatCCY.USD; //Default setting             }              return EnuAPIStatus.Success;          }          public static async Task LoadCrossRateAsync()
+            CoinStorageList = new CoinStorageList(); 
+            try             {
+                // Load the latest file (or Bundle file)
+                InstrumentList = StorageAPI.LoadInstrument();                 LoadExchangeList();                  Balance = StorageAPI.LoadBalanceXML(InstrumentList);                 RefreshBalance();                  try
+                {
+                    //Load App Configuration + API keys
+                    StorageAPI.LoadAppSettingXML();                 }                 catch (Exception e)                 {                     BaseCurrency = EnuBaseFiatCCY.USD; //Default setting                     Console.WriteLine(DateTime.Now.ToString() + ": InitializeCore: Failed to read AppSettingfile" + e.GetType() + ": " + e.Message);                     //throw new AppCoreWarning(e.Message);                 }              }             catch (AppCoreBalanceException e)             {                 Console.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 Balance = new Balance();                 //throw;             }             catch (Exception e)             {                 Console.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 throw;             }          }          public static async Task LoadCrossRateAsync()
         {             try             {
                 USDCrossRates = await MarketDataAPI.FetchCrossRateAsync();
                 //if (USDCrossRates is null)
@@ -41,9 +58,9 @@
                     mycoins.Insert(0, Bitcoin); 
                     await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRates);                      Balance.PriceDateTime = DateTime.Now;                     RefreshBalance(); //update weights,etc with latest price                     SaveMyBalanceXML();//save balance with latest price                  }                 catch(Exception e)                 {                     Console.WriteLine(DateTime.Now.ToString() + ": FetchMarketDataFromBalanceAsync: " + e.GetType() + ": " + e.Message);                     throw;                 }              }
             else
-            {                 throw new AppCoreException("Balance object is null");             }
-        }          public static EnuAPIStatus SaveAppSetting()
-        {             return StorageAPI.SaveAppSettingXML(AppName, BaseCurrency, PublicExchangeList);         }          private static void LoadExchangeList()
+            {                 throw new AppCoreBalanceException("Balance object is null");             }
+        }          public static void SaveAppSetting()
+        {             StorageAPI.SaveAppSettingXML(AppName, BaseCurrency, PublicExchangeList);         }          private static void LoadExchangeList()
         {
             if (PublicExchangeList is null) PublicExchangeList = new ExchangeList();             ExchangeAPI.FetchExchangeList(PublicExchangeList);         }          public static void SyncLatestCoins()         {             try             {
                 var list = MarketDataAPI.FetchAllCoinData();
@@ -133,6 +150,8 @@
                         strnumber = String.Format("{0:n2}", number);
                     } 
                 }                 if (symbol != null) strnumber = symbol + " " + strnumber;             }              return strnumber;
-        }          public static EnuAPIStatus RemoveAllCache()         {             try
-            {                 baseCurrency = EnuBaseFiatCCY.USD;                 PublicExchangeList.ClearAPIKeys();                 return StorageAPI.RemoveAllCache();             }
-            catch (Exception)             {                 return EnuAPIStatus.FatalError;             }         }      }      public enum EnuAPIStatus     {         Success,         FailureNetwork,         FailureStorage,         FailureParameter,         NotAvailable,         FatalError,         ParseError     }  } 
+        }          public static void RemoveAllCache()         {
+
+            baseCurrency = EnuBaseFiatCCY.USD;
+            PublicExchangeList.ClearAPIKeys();
+            StorageAPI.RemoveAllCache();          }      }      //public enum EnuAPIStatus     //{     //    Success,     //    FailureNetwork,     //    FailureStorage,     //    FailureParameter,     //    NotAvailable,     //    FatalError,     //    ParseError     //}  } 

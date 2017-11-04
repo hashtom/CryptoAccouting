@@ -14,14 +14,12 @@ namespace CryptoAccouting
         {
         }
 
-
-		public void PopUpWarning(string message)
-		{
-
-			UIAlertController okAlertController = UIAlertController.Create("Warning", message, UIAlertControllerStyle.Alert);
-			okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
-			this.PresentViewController(okAlertController, true, null);
-		}
+        internal void PopUpWarning(string message)
+        {
+            UIAlertController okAlertController = UIAlertController.Create("Warning", message, UIAlertControllerStyle.Alert);
+            okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
+            PresentViewController(okAlertController, true, null);
+        }
 
         //public virtual void DeleteItem(Position pos){}
 

@@ -119,8 +119,8 @@ namespace CryptoAccouting.CoreClass.APIClass
             JObject json;
             List<Position> positions;
 
-            //try
-            //{
+            try
+            {
                 json = JObject.Parse(rawjson);
                 if ((bool)json.SelectToken("$.success") != true)
                 {
@@ -153,15 +153,11 @@ namespace CryptoAccouting.CoreClass.APIClass
 
                     return positions;
                 }
-            //}
-            //catch (JsonException e)
-            //{
-            //    throw new AppCoreParseException("Exception during parsing Bittrex Position Json: " + e.Message);
-            //}
-            //catch (Exception e)
-            //{
-            //    throw new AppCoreParseException("Exception during creating Bittrex Position object: " + e.Message);
-            //}
+            }
+            catch (Exception e)
+            {
+                throw new AppCoreParseException(e.GetType() + ": " + e.Message);
+            }
 
         }
 
@@ -169,8 +165,8 @@ namespace CryptoAccouting.CoreClass.APIClass
         {
             JObject json;
 
-            //try
-            //{
+            try
+            {
                 json = JObject.Parse(rawjson);
                 if ((bool)json.SelectToken("$.success") != true)
                 {
@@ -239,15 +235,11 @@ namespace CryptoAccouting.CoreClass.APIClass
                     }
                     return tradelist;
                 }
-            //}
-            //catch (JsonException e)
-            //{
-            //    throw new AppCoreParseException("Exception during parsing Bittrex Position Json: " + e.Message);
-            //}
-            //catch (Exception e)
-            //{
-            //    throw new AppCoreParseException("Exception during creating Bittrex Position object: " + e.Message);
-            //}
+            }
+            catch (Exception e)
+            {
+                throw new AppCoreParseException(e.GetType() + ": " + e.Message);
+            }
         }
 
         private static string byteToString(byte[] buff)

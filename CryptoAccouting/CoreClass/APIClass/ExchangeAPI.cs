@@ -15,13 +15,6 @@ namespace CryptoAccouting.CoreClass.APIClass
             string rawjson;
             string BaseUri = "http://coinbalance.jpn.org/ExchangeList.json";
 
-            //if (!Reachability.IsHostReachable(BaseUri))
-            //{
-            //    rawjson = StorageAPI.LoadFromFile(ExchangeListfile);
-            //    if (rawjson == null) rawjson = StorageAPI.LoadBundleFile(ExchangeListfile);
-            //}
-            //else
-            //{
             try
             {
                 using (var http = new HttpClient())
@@ -49,10 +42,23 @@ namespace CryptoAccouting.CoreClass.APIClass
                 ParseAPIStrings.ParseExchangeListJson(rawjson, exlist);
                 StorageAPI.SaveFile(rawjson, ExchangeListfile);
             }
+            catch(AppCoreInstrumentException e)
+            {
+                Console.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(Process terminated): " + e.GetType() + ": " + e.Message);
+                throw;
+            }
             catch(Exception e)
             {
-                Console.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(process continued with file): " + e.GetType() + ": " + e.Message);
-                ParseAPIStrings.ParseExchangeListJson(StorageAPI.LoadBundleFile(ExchangeListfile), exlist);
+                try
+                {
+                    Console.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(process continued with file): " + e.GetType() + ": " + e.Message);
+                    ParseAPIStrings.ParseExchangeListJson(StorageAPI.LoadBundleFile(ExchangeListfile), exlist);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(Fatal Error): " + e.GetType() + ": " + e.Message);
+                    throw new AppCoreExchangeException(ex.GetType() + ": " + ex.Message);
+                }
             }
 
         }
