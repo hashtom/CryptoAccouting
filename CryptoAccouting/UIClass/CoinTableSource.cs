@@ -1,13 +1,13 @@
 ﻿using System;
 using Foundation;
 using UIKit;
-using CryptoAccouting.CoreClass;
+using CoinBalance.CoreClass;
 using System.Collections.Generic;
 using System.Linq;
 using CoreGraphics;
 using System.Threading.Tasks;
 
-namespace CryptoAccouting.UIClass
+namespace CoinBalance.UIClass
 {
     public class CoinTableSource : UITableViewSource
     {

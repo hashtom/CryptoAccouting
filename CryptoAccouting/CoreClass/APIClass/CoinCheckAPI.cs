@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
-namespace CryptoAccouting.CoreClass.APIClass
+namespace CoinBalance.CoreClass.APIClass
 {
     public static class CoinCheckAPI
     {

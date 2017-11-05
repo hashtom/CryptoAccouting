@@ -1,13 +1,13 @@
 using Foundation;
 using System;
 using UIKit;
-using CryptoAccouting.CoreClass;
-using CryptoAccouting.CoreClass.APIClass;
-using CryptoAccouting.UIClass;
+using CoinBalance.CoreClass;
+using CoinBalance.CoreClass.APIClass;
+using CoinBalance.UIClass;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace CryptoAccouting
+namespace CoinBalance
 {
     public partial class APISettingTableViewController : CryptoTableViewController
     {

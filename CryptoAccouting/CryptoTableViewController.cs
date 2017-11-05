@@ -1,10 +1,10 @@
 ﻿using Foundation;
 using System;
 using UIKit;
-using CryptoAccouting.CoreClass;
-using CryptoAccouting.UIClass;
+using CoinBalance.CoreClass;
+using CoinBalance.UIClass;
 
-namespace CryptoAccouting
+namespace CoinBalance
 {
     public abstract class CryptoTableViewController : UITableViewController
     {

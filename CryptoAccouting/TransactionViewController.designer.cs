@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace CryptoAccouting
+namespace CoinBalance
 {
 	[Register ("TransactionViewController")]
 	partial class TransactionViewController

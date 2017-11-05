@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CryptoAccouting.CoreClass.APIClass
+namespace CoinBalance.CoreClass.APIClass
 {
     public static class StorageAPI
     {

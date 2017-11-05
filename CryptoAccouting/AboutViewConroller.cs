@@ -3,7 +3,7 @@ using Foundation;
 using UIKit;
 using System.IO;
 
-namespace CryptoAccouting
+namespace CoinBalance
 {
 	public partial class AboutViewConroller : UIViewController
 	{
@@ -15,7 +15,10 @@ namespace CryptoAccouting
         {
             base.ViewDidLoad();
 
-            labelVersion.Text = "Ver " + NSBundle.MainBundle.InfoDictionary["CFBundleVersion"];
+            var version = NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"];
+            var build = NSBundle.MainBundle.InfoDictionary["CFBundleVersion"];
+
+            labelVersion.Text = "Ver " + version + " , Build " + build;
 
             string contentDirectoryPath = Path.Combine(NSBundle.MainBundle.BundlePath, "Content/");
             string html = @"<html><head> Credit & Thanks </head><p>Icons made by<a href= ""https://www.flaticon.com/authors/gregor-cresnar"""

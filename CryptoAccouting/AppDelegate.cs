@@ -1,8 +1,8 @@
 ﻿using Foundation;
 using UIKit;
-using CryptoAccouting.CoreClass;
+using CoinBalance.CoreClass;
 
-namespace CryptoAccouting
+namespace CoinBalance
 {
     // The UIApplicationDelegate for the application. This class is responsible for launching the
     // User Interface of the application, as well as listening (and optionally responding) to application events from iOS.

@@ -2,9 +2,9 @@
 using System;
 using UIKit;
 using CoreGraphics;
-using CryptoAccouting.CoreClass;
+using CoinBalance.CoreClass;
 
-namespace CryptoAccouting.UIClass
+namespace CoinBalance.UIClass
 {
     public class CoinBookingCell : UITableViewCell
     {

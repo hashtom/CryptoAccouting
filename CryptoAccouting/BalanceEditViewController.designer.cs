@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace CryptoAccouting
+namespace CoinBalance
 {
 	[Register ("BalanceEditViewController")]
 	partial class BalanceEditViewController

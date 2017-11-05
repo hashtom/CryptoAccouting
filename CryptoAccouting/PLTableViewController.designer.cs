@@ -9,7 +9,7 @@ using System;
 using System.CodeDom.Compiler;
 using UIKit;
 
-namespace CryptoAccouting
+namespace CoinBalance
 {
     [Register ("PLTableViewController")]
     partial class PLTableViewController

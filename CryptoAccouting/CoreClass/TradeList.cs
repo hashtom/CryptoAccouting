@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 //using System.Collections.ObjectModel;
 
-namespace CryptoAccouting.CoreClass
+namespace CoinBalance.CoreClass
 {
     public class TradeList : IEnumerable<Transaction>
     {

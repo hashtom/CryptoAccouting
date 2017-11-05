@@ -3,9 +3,9 @@ using System;
 using System.IO;
 using UIKit;
 using QuickLook;
-using CryptoAccouting.CoreClass;
+using CoinBalance.CoreClass;
 
-namespace CryptoAccouting.UIClass
+namespace CoinBalance.UIClass
 {
 
     public class QLPreviewItemFileSystem : QLPreviewItem

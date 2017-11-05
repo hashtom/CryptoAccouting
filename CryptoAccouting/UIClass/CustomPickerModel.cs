@@ -3,7 +3,7 @@ using UIKit;
 using CoreGraphics;
 using System.Collections.Generic;
 
-namespace CryptoAccouting.UIClass
+namespace CoinBalance.UIClass
 {
     public class CustomPickerModel : UIPickerViewModel
     {

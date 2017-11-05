@@ -2,13 +2,13 @@ using Foundation;
 using System;
 using System.IO;
 using UIKit;
-using CryptoAccouting.CoreClass;
-using CryptoAccouting.UIClass;
+using CoinBalance.CoreClass;
+using CoinBalance.UIClass;
 using System.Linq;
 //using CoreGraphics;
 //using CoreAnimation;
 
-namespace CryptoAccouting
+namespace CoinBalance
 {
     public partial class BalanceEditViewController : CryptoTableViewController
     {

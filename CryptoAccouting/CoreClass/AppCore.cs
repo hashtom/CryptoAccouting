@@ -1,4 +1,4 @@
-﻿﻿using System; using System.Linq; using System.Threading.Tasks; using System.Collections.Generic; using CryptoAccouting.CoreClass.APIClass;  namespace CryptoAccouting.CoreClass {     public static class AppCore     {         public const string AppName = "CoinBalance";          public static Balance Balance { get; private set; }         public static InstrumentList InstrumentList { get; private set; }
+﻿﻿using System; using System.Linq; using System.Threading.Tasks; using System.Collections.Generic; using CoinBalance.CoreClass.APIClass;  namespace CoinBalance.CoreClass {     public static class AppCore     {         public const string AppName = "CoinBalance";          public static Balance Balance { get; private set; }         public static InstrumentList InstrumentList { get; private set; }
         public static ExchangeList PublicExchangeList { get; private set; }         public static CoinStorageList CoinStorageList { get; private set; }         private static List<CrossRate> USDCrossRates;         private static EnuBaseFiatCCY baseCurrency;          public static EnuBaseFiatCCY BaseCurrency
         {             get
             {
@@ -39,14 +39,14 @@
                 InstrumentList = StorageAPI.LoadInstrument();                 LoadExchangeList();                  Balance = StorageAPI.LoadBalanceXML(InstrumentList);                 RefreshBalance();                  try
                 {
                     //Load App Configuration + API keys
-                    StorageAPI.LoadAppSettingXML();                 }                 catch (Exception e)                 {                     BaseCurrency = EnuBaseFiatCCY.USD; //Default setting                     Console.WriteLine(DateTime.Now.ToString() + ": InitializeCore: Failed to read AppSettingfile" + e.GetType() + ": " + e.Message);                     //throw new AppCoreWarning(e.Message);                 }              }             catch (AppCoreBalanceException e)             {                 Console.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 Balance = new Balance();                 //throw;             }             catch (Exception e)             {                 Console.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 throw;             }          }          public static async Task LoadCrossRateAsync()
+                    StorageAPI.LoadAppSettingXML();                 }                 catch (Exception e)                 {                     BaseCurrency = EnuBaseFiatCCY.USD; //Default setting                     System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: Failed to read AppSettingfile" + e.GetType() + ": " + e.Message);                     //throw new AppCoreWarning(e.Message);                 }              }             catch (AppCoreBalanceException e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 Balance = new Balance();                 //throw;             }             catch (Exception e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 throw;             }          }          public static async Task LoadCrossRateAsync()
         {             try             {
                 USDCrossRates = await MarketDataAPI.FetchCrossRateAsync();
                 //if (USDCrossRates is null)
                 //{
                 //    USDCrossRates = await StorageAPI.LoadCrossRateAsync();
                 //}
-            }             catch(Exception e)             {                 USDCrossRates = await StorageAPI.LoadCrossRateAsync();                 Console.WriteLine(DateTime.Now.ToString() + ": LoadCrossRateAsync(continued with file): " + e.GetType() + ": " + e.Message);             }
+            }             catch(Exception e)             {                 USDCrossRates = await StorageAPI.LoadCrossRateAsync();                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadCrossRateAsync(continued with file): " + e.GetType() + ": " + e.Message);             }
             //return USDCrossRates != null ? EnuAPIStatus.Success : EnuAPIStatus.NotAvailable;         } 
         public static async Task FetchMarketDataFromBalanceAsync()
         { 
@@ -56,7 +56,7 @@
                     Balance.Select(x => x.Coin).Distinct().ToList().ForEach(x => mycoins.Attach(x));
                     if (!mycoins.Any(x => x.Id == "bitcoin")) mycoins.DetachByInstrumentId("bitcoin");
                     mycoins.Insert(0, Bitcoin); 
-                    await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRates);                      Balance.PriceDateTime = DateTime.Now;                     RefreshBalance(); //update weights,etc with latest price                     SaveMyBalanceXML();//save balance with latest price                  }                 catch(Exception e)                 {                     Console.WriteLine(DateTime.Now.ToString() + ": FetchMarketDataFromBalanceAsync: " + e.GetType() + ": " + e.Message);                     throw;                 }              }
+                    await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRates);                      Balance.PriceDateTime = DateTime.Now;                     RefreshBalance(); //update weights,etc with latest price                     SaveMyBalanceXML();//save balance with latest price                  }                 catch(Exception e)                 {                     System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchMarketDataFromBalanceAsync: " + e.GetType() + ": " + e.Message);                     throw;                 }              }
             else
             {                 throw new AppCoreBalanceException("Balance object is null");             }
         }          public static void SaveAppSetting()
@@ -74,7 +74,7 @@
                 {
                     throw new AppCoreException("Couldn't get Instrumentlist.");
                 }             }
-            catch (Exception e)             {                 Console.WriteLine(DateTime.Now.ToString() + ": SyncLatestCoins: " + e.GetType() + ": " + e.Message);                 throw;             }         }          public static async Task FetchCoinLogoAsync(Instrument coin)         {              await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);         }          public static async Task FetchCoinLogoTop100Async()         {             if (InstrumentList == null)
+            catch (Exception e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": SyncLatestCoins: " + e.GetType() + ": " + e.Message);                 throw;             }         }          public static async Task FetchCoinLogoAsync(Instrument coin)         {              await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);         }          public static async Task FetchCoinLogoTop100Async()         {             if (InstrumentList == null)
             {
                 throw new AppCoreException("InstrumentList is null.");             }
             else
@@ -154,4 +154,4 @@
 
             baseCurrency = EnuBaseFiatCCY.USD;
             PublicExchangeList.ClearAPIKeys();
-            StorageAPI.RemoveAllCache();          }      }      //public enum EnuAPIStatus     //{     //    Success,     //    FailureNetwork,     //    FailureStorage,     //    FailureParameter,     //    NotAvailable,     //    FatalError,     //    ParseError     //}  } 
+            StorageAPI.RemoveAllCache();          }      }  } 

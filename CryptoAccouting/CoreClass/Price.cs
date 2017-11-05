@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CryptoAccouting.CoreClass
+namespace CoinBalance.CoreClass
 {
     public class Price
     {

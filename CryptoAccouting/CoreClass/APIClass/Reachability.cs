@@ -4,7 +4,7 @@ using SystemConfiguration;
 using CoreFoundation;
 using System.Diagnostics;
 
-namespace CryptoAccouting.CoreClass.APIClass
+namespace CoinBalance.CoreClass.APIClass
 {
 	public enum NetworkStatus
 	{

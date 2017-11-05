@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CryptoAccouting.CoreClass
+namespace CoinBalance.CoreClass
 {
     public class ExchangeList : IEnumerable<Exchange>
     {

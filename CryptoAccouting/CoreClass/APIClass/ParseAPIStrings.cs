@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 using System.Xml.Linq;
 using System.Threading.Tasks;
 
-namespace CryptoAccouting.CoreClass.APIClass
+namespace CoinBalance.CoreClass.APIClass
 {
     public static class ParseAPIStrings
     {

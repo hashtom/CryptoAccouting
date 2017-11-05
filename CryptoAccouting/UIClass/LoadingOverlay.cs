@@ -2,7 +2,7 @@
 using UIKit;
 using CoreGraphics;
 
-namespace CryptoAccouting.UIClass
+namespace CoinBalance.UIClass
 {
     public class LoadingOverlay : UIView
     {

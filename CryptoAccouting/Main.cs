@@ -1,6 +1,6 @@
 ﻿using UIKit;
 
-namespace CryptoAccouting
+namespace CoinBalance
 {
     public class Application
     {

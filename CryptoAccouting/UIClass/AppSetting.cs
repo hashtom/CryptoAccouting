@@ -1,9 +1,9 @@
 ﻿﻿using System;
 using System.Collections.Generic;
-using CryptoAccouting.CoreClass;
-using CryptoAccouting.CoreClass.APIClass;
+using CoinBalance.CoreClass;
+using CoinBalance.CoreClass.APIClass;
 
-namespace CryptoAccouting.UIClass
+namespace CoinBalance.UIClass
 {
     public static class AppSetting
     {

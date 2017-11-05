@@ -3,9 +3,9 @@ using System.IO;
 using CoreGraphics;
 using Foundation;
 using UIKit;
-using CryptoAccouting.CoreClass;
+using CoinBalance.CoreClass;
 
-namespace CryptoAccouting.UIClass
+namespace CoinBalance.UIClass
 {
     public partial class CoinViewCell : UITableViewCell
     {

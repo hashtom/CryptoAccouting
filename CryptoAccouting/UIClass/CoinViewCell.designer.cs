@@ -8,7 +8,7 @@ using Foundation;
 using System;
 using System.CodeDom.Compiler;
 
-namespace CryptoAccouting.UIClass
+namespace CoinBalance.UIClass
 {
     [Register ("CoinViewCell")]
     partial class CoinViewCell

@@ -1,14 +1,14 @@
 using Foundation;
 using System;
 using UIKit;
-using CryptoAccouting.UIClass;
-using CryptoAccouting.CoreClass;
+using CoinBalance.UIClass;
+using CoinBalance.CoreClass;
 using System.Collections.Generic;
 using CoreGraphics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CryptoAccouting
+namespace CoinBalance
 {
     public partial class PLTableViewController : UITableViewController
     {

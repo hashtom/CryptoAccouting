@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CryptoAccouting.CoreClass
+namespace CoinBalance.CoreClass
 {
     public class Position
     {
