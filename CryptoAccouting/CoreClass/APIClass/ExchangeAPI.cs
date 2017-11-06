@@ -80,7 +80,7 @@ namespace CoinBalance.CoreClass.APIClass
                         return await BittrexAPI.FetchTransactionAsync(exchange);
 
                     case "BitFlyer":
-                        throw new AppCoreNetworkException("BitFlyer will be supporte soon!");
+                        throw new AppCoreNetworkException("BitFlyer will be supported soon!");
 
                     default:
                         throw new AppCoreNetworkException("ExchangeCode error");
@@ -108,6 +108,9 @@ namespace CoinBalance.CoreClass.APIClass
 
                     case "Bittrex":
                         return  await BittrexAPI.FetchPositionAsync(exchange);
+
+                    case "BitFlyer":
+                        throw new AppCoreNetworkException("BitFlyer will be supported soon!");
 
                     default:
                         throw new AppCoreNetworkException("ExchangeCode error");
