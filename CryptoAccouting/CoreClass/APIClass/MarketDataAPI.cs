@@ -11,8 +11,8 @@ namespace CoinBalance.CoreClass.APIClass
 {
     public static class MarketDataAPI
     {
-        const string coinbalance_url = "https://coinbalance.jp";
         const string coinmarketcap_url = "https://api.coinmarketcap.com";
+        static string coinbalance_url = CoinbalanceAPI.coinbalance_url;
 
         public const string InstrumentListFile = "InstrumentList.json";
         public const string ExchangeListFile = "ExchangeList.json";
@@ -73,6 +73,14 @@ namespace CoinBalance.CoreClass.APIClass
                             {
                                 var exchange = exchanges.First(x => x.Code == "CoinCheck");
                                 if (exchange.HasListedCoins()) await CoinCheckAPI.FetchPriceAsync(exchange, coins, crossrate, usdjpy);
+                            }
+                            break;
+
+                        case "BitFlyer":
+                            if (exchanges.Any(x => x.Code == "BitFlyer"))
+                            {
+                                var exchange = exchanges.First(x => x.Code == "BitFlyer");
+                                if (exchange.HasListedCoins()) await BitFlyerAPI.FetchPriceAsync(exchange, coins, crossrate, usdjpy);
                             }
                             break;
 

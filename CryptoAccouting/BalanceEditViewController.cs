@@ -46,10 +46,10 @@ namespace CoinBalance
 
                 foreach (var exc in exchangesListed)
                 {
-                    exchangeAlert.AddAction(UIAlertAction.Create(exc.Code, UIAlertActionStyle.Default,
+                    exchangeAlert.AddAction(UIAlertAction.Create(exc.Name, UIAlertActionStyle.Default,
                                                                      (obj) =>
                                                                      {
-                                                                         buttonExchange.SetTitle(exc.Code, UIControlState.Normal);
+                                                                         buttonExchange.SetTitle(exc.Name, UIControlState.Normal);
                                                                          thisExchange = exc;
                                                                      }
                                                                 ));
@@ -253,7 +253,7 @@ namespace CoinBalance
                     textQuantity.Text = (Math.Abs(PositionDetail.Amount) < 0.00000001) ? "" : String.Format("{0:n6}", PositionDetail.Amount);
                     thisBalanceDate = PositionDetail.BalanceDate;
                     buttonTradeDate.SetTitle(PositionDetail.BalanceDate.Date.ToShortDateString(), UIControlState.Normal);
-                    var exname = thisExchange is null ? "Not Specified" : thisExchange.Code;
+                    var exname = thisExchange is null ? "Not Specified" : thisExchange.Name;
                     buttonExchange.SetTitle(exname, UIControlState.Normal);
                 }
             }

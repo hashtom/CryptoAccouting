@@ -45,23 +45,9 @@ namespace CoinBalance
 
                 sources.Add("coinmarketcap");
 
-                if (AppCore.GetExchange("Bitstamp").IsListed(thisCoin.Id))
+                foreach (var ex in AppCore.PublicExchangeList.Where(x => x.APIProvided))
                 {
-                    sources.Add("Bitstamp");
-                }
-
-                if (AppCore.GetExchange("Bittrex").IsListed(thisCoin.Id))
-                {
-                    sources.Add("Bittrex");
-                }
-                if (AppCore.GetExchange("Zaif").IsListed(thisCoin.Id))
-                {
-                    sources.Add("Zaif");
-                }
-
-                if (AppCore.GetExchange("CoinCheck").IsListed(thisCoin.Id))
-                {
-                    sources.Add("CoinCheck");
+                    if (ex.IsListed(thisCoin.Id)) sources.Add(ex.Name);
                 }
 
 				UIAlertController PriceSourceAlert = UIAlertController.Create("Price Source", "Choose Price Source", UIAlertControllerStyle.ActionSheet);

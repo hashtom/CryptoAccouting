@@ -35,18 +35,34 @@
             "listing": [
                 {
                     "symbol": "BTC"
-                },
-                {
-                    "symbol": "ETH"
-                },
-                {
-                    "symbol": "MONA"
-                },
-                {
-                    "symbol": "BCH"
                 }
             ]
         },
+      {
+        "code": "BitFlyer_OTC",
+        "name": "BitFlyer(OTC)",
+        "api": "false",
+        "listing": [
+          {
+            "symbol": "BTC"
+          },
+          {
+            "symbol": "LTC"
+          },
+          {
+            "symbol": "ETH"
+          },
+          {
+            "symbol": "ETC"
+          },
+          {
+            "symbol": "MONA"
+          },
+          {
+            "symbol": "BCH"
+          }
+        ]
+      },
         {
             "code": "CoinCheck",
             "name": "CoinCheck",

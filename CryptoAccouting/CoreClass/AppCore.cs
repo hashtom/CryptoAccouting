@@ -118,7 +118,7 @@
             }             storage.AttachPosition(pos);             pos.AttachCoinStorage(storage);         }          public static CrossRate GetCrossRate(EnuBaseFiatCCY CCY)         {             return USDCrossRates is null ? null : USDCrossRates.First(x => x.Currency == CCY);         } 
 		public static bool IsInternetReachable()
 		{
-            return Reachability.IsHostReachable("http://coinbalance.jpn.org/");
+            return Reachability.IsHostReachable(CoinbalanceAPI.coinbalance_url);
 		} 
         public static string NumberFormat(double number, bool percent = false, bool digitAdjust = true, string symbol=null)
         {

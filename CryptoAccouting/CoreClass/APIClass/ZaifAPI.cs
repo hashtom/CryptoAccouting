@@ -108,50 +108,6 @@ namespace CoinBalance.CoreClass.APIClass
             }
         }
 
-        private static async Task<string> SendAsync(HttpClient http, Uri path, string postmethod = null, Dictionary<string, string> parameters = null)
-        {
-            double nonce = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
-            HttpResponseMessage res;
-
-            if (!Reachability.IsHostReachable(BaseUrl))
-            {
-                throw new AppCoreNetworkException("Host is not reachable: " + BaseUrl);
-            }
-            else
-            {
-                if (postmethod != null)
-                {
-                    if (parameters == null)
-                        parameters = new Dictionary<string, string>();
-
-                    parameters.Add("nonce", nonce.ToString());
-                    parameters.Add("method", postmethod);
-
-                    var content = new FormUrlEncodedContent(parameters);
-                    string message = await content.ReadAsStringAsync();
-
-                    byte[] hash = new HMACSHA512(Encoding.UTF8.GetBytes(_zaif.Secret)).ComputeHash(Encoding.UTF8.GetBytes(message));
-                    string sign = BitConverter.ToString(hash).ToLower().Replace("-", "");
-
-                    http.DefaultRequestHeaders.Clear();
-                    http.DefaultRequestHeaders.Add("key", _zaif.Key);
-                    http.DefaultRequestHeaders.Add("Sign", sign);
-
-                    res = await http.PostAsync(path, content);
-                }
-                else
-                {
-                    res = await http.GetAsync(path);
-                }
-
-                var rawjson = await res.Content.ReadAsStringAsync();
-                if (!res.IsSuccessStatusCode)
-                    throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
-
-                return rawjson;
-            }
-        }
-
         private static async Task ParsePrice(string rawjson, Instrument coin)
         {
             
@@ -303,6 +259,51 @@ namespace CoinBalance.CoreClass.APIClass
                 throw new AppCoreParseException(e.GetType() + ": " + e.Message);
             }
 
+        }
+
+
+        private static async Task<string> SendAsync(HttpClient http, Uri path, string postmethod = null, Dictionary<string, string> parameters = null)
+        {
+            double nonce = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
+            HttpResponseMessage res;
+
+            if (!Reachability.IsHostReachable(BaseUrl))
+            {
+                throw new AppCoreNetworkException("Host is not reachable: " + BaseUrl);
+            }
+            else
+            {
+                if (postmethod != null)
+                {
+                    if (parameters == null)
+                        parameters = new Dictionary<string, string>();
+
+                    parameters.Add("nonce", nonce.ToString());
+                    parameters.Add("method", postmethod);
+
+                    var content = new FormUrlEncodedContent(parameters);
+                    string message = await content.ReadAsStringAsync();
+
+                    byte[] hash = new HMACSHA512(Encoding.UTF8.GetBytes(_zaif.Secret)).ComputeHash(Encoding.UTF8.GetBytes(message));
+                    string sign = BitConverter.ToString(hash).ToLower().Replace("-", "");
+
+                    http.DefaultRequestHeaders.Clear();
+                    http.DefaultRequestHeaders.Add("key", _zaif.Key);
+                    http.DefaultRequestHeaders.Add("Sign", sign);
+
+                    res = await http.PostAsync(path, content);
+                }
+                else
+                {
+                    res = await http.GetAsync(path);
+                }
+
+                var rawjson = await res.Content.ReadAsStringAsync();
+                if (!res.IsSuccessStatusCode)
+                    throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
+
+                return rawjson;
+            }
         }
     }
 }

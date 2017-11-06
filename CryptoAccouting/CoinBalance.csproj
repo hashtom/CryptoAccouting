@@ -5,7 +5,7 @@
     <ProjectGuid>{C7332FBF-F13A-4C20-984C-13C8ABD34EBC}</ProjectGuid>
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
-    <RootNamespace>CryptoAccouting</RootNamespace>
+    <RootNamespace>CoinBalance</RootNamespace>
     <AssemblyName>CryptoAccouting</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
   </PropertyGroup>
@@ -28,6 +28,7 @@
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <PlatformTarget>x86</PlatformTarget>
     <LangVersion>Latest</LangVersion>
+<AssemblyName>CoinBalance</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>pdbonly</DebugType>
@@ -58,6 +59,7 @@
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <PlatformTarget>x86</PlatformTarget>
     <LangVersion>Latest</LangVersion>
+<AssemblyName>CoinBalance</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -239,6 +241,7 @@
     <Compile Include="UIClass\PreviewControllerDS.cs" />
     <Compile Include="CoreClass\APIClass\ParseAPIStrings.cs" />
     <Compile Include="CoreClass\AppCoreException.cs" />
+    <Compile Include="CoreClass\APIClass\CoinbalanceAPI.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />

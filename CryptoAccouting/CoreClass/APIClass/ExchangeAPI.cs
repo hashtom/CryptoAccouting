@@ -12,14 +12,14 @@ namespace CoinBalance.CoreClass.APIClass
 
         public static void FetchExchangeList(ExchangeList exlist)
         {
+            string coinbalance_url = CoinbalanceAPI.coinbalance_url;
             string rawjson;
-            string BaseUri = "http://coinbalance.jpn.org/ExchangeList.json";
 
             try
             {
                 using (var http = new HttpClient())
                 {
-                    var res = http.GetAsync(BaseUri).Result;
+                    var res = http.GetAsync(coinbalance_url + "/" + ExchangeListfile).Result;
                     if (!res.IsSuccessStatusCode)
                     {
                         throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
@@ -78,6 +78,9 @@ namespace CoinBalance.CoreClass.APIClass
 
                     case "Bittrex":
                         return await BittrexAPI.FetchTransactionAsync(exchange);
+
+                    case "BitFlyer":
+                        throw new AppCoreNetworkException("BitFlyer will be supporte soon!");
 
                     default:
                         throw new AppCoreNetworkException("ExchangeCode error");

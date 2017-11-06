@@ -39,15 +39,27 @@ exchanges.append(zaif_dict)
 bitflyer_dict = { 
         "code": "BitFlyer",
         "name": "BitFlyer",
+        "api": "true",
+         "listing": [
+                 { "symbol": "BTC" }
+                 ]
+         }
+exchanges.append(bitflyer_dict)
+
+bitflyer_otc_dict = { 
+        "code": "BitFlyer_OTC",
+        "name": "BitFlyer(OTC)",
         "api": "false",
          "listing": [
                  { "symbol": "BTC" },
+                 { "symbol": "LTC" },
                  { "symbol": "ETH" },
+                 { "symbol": "ETC" },
                  { "symbol": "MONA" },
                  { "symbol": "BCH" }
                  ]
          }
-exchanges.append(bitflyer_dict)
+exchanges.append(bitflyer_otc_dict)
 
 #CoinCheck
 coincheck_dict = {
