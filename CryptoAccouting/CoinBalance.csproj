@@ -242,6 +242,7 @@
     <Compile Include="CoreClass\APIClass\ParseAPIStrings.cs" />
     <Compile Include="CoreClass\AppCoreException.cs" />
     <Compile Include="CoreClass\APIClass\CoinbalanceAPI.cs" />
+    <Compile Include="CoreClass\APIClass\PoloniexAPI.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />

@@ -22,7 +22,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch (IOException e)
             {
-                Console.WriteLine(DateTime.Now.ToString() + ": LoadBundleFile: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadBundleFile: " + e.GetType() + ": " + e.Message);
                 throw new AppCoreStorageException(e.GetType() + ": " + e.Message);
             }
 
@@ -38,7 +38,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch (IOException e)
             {
-                Console.WriteLine(DateTime.Now.ToString() + ": SaveFile: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": SaveFile: " + e.GetType() + ": " + e.Message);
                 throw new AppCoreStorageException(e.GetType() + ": " + e.Message);
             }
 
@@ -62,7 +62,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch (Exception e)
             {
-                Console.WriteLine(DateTime.Now.ToString() + ": LoadFromFile: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadFromFile: " + e.GetType() + ": " + e.Message);
                 throw new AppCoreStorageException(e.GetType() + ": " + e.Message);
             }
         }
@@ -82,7 +82,7 @@ namespace CoinBalance.CoreClass.APIClass
             catch (Exception e)
             {
                 balanceXML = LoadBundleFile(BalanceBundleFile);
-                Console.WriteLine(DateTime.Now.ToString() + ": LoadBalanceXML(continued with bundlefile): " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadBalanceXML(continued with bundlefile): " + e.GetType() + ": " + e.Message);
             }
 
             try
@@ -91,7 +91,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch (Exception e)
             {
-                Console.WriteLine(DateTime.Now.ToString() + ": LoadBalanceXML(process terminated): " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadBalanceXML(process terminated): " + e.GetType() + ": " + e.Message);
                 throw new AppCoreBalanceException(e.GetType() + ": " + e.Message);
             }
 
@@ -170,7 +170,7 @@ namespace CoinBalance.CoreClass.APIClass
             catch (Exception e)
             {
                 rawjson = LoadBundleFile(InstrumentListFile);
-                Console.WriteLine(DateTime.Now.ToString() + ": LoadInstrument(continued with bundlefile): " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadInstrument(continued with bundlefile): " + e.GetType() + ": " + e.Message);
             }
 
             try
@@ -189,7 +189,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch (AppCoreParseException e)
             {
-                Console.WriteLine(DateTime.Now.ToString() + ": LoadInstrument: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadInstrument: " + e.GetType() + ": " + e.Message);
                 throw;
             }
         }
@@ -208,7 +208,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch (Exception e)
             {
-                Console.WriteLine(DateTime.Now.ToString() + ": LoadCrossRateAsync: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadCrossRateAsync: " + e.GetType() + ": " + e.Message);
                 throw;
             }
         }
@@ -236,7 +236,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch (Exception e)
             {
-                Console.WriteLine(DateTime.Now.ToString() + ": LoadAppSettingXML: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadAppSettingXML: " + e.GetType() + ": " + e.Message);
                 throw;
             }
 
@@ -277,7 +277,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch (IOException e)
             {
-                Console.WriteLine(DateTime.Now.ToString() + ": RemoveFile: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": RemoveFile: " + e.GetType() + ": " + e.Message);
                 throw;
             }
 
@@ -313,7 +313,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch(IOException e)
             {
-                Console.WriteLine(DateTime.Now.ToString() + ": RemoveAllCache: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": RemoveAllCache: " + e.GetType() + ": " + e.Message);
                 throw;
             }
 

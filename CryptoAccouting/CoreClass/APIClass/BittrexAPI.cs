@@ -71,7 +71,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch (Exception e)
             {
-                Console.WriteLine(DateTime.Now.ToString() + ": FetchPriceAsync: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchPriceAsync: " + e.GetType() + ": " + e.Message);
                 throw;
             }
 
@@ -89,7 +89,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch (Exception e)
             {
-                Console.WriteLine(DateTime.Now.ToString() + ": FetchPositionAsync: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchPositionAsync: " + e.GetType() + ": " + e.Message);
                 throw;
             }
 
@@ -108,7 +108,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch (Exception e)
             {
-                Console.WriteLine(DateTime.Now.ToString() + ": FetchTransactionAsync: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchTransactionAsync: " + e.GetType() + ": " + e.Message);
                 throw;
             }
 

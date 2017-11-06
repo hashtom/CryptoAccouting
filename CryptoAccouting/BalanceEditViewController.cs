@@ -138,7 +138,7 @@ namespace CoinBalance
                 }
                 catch(Exception e)
                 {
-                    Console.WriteLine(DateTime.Now.ToString() + ": ViewWillAppear: FetchMarketDataAsync: " + e.GetType() + ": " + e.Message);
+                    System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": ViewWillAppear: FetchMarketDataAsync: " + e.GetType() + ": " + e.Message);
                 }
             }
         }

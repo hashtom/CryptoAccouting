@@ -32,7 +32,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch (Exception e)
             {
-                Console.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(process continued with file): " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(process continued with file): " + e.GetType() + ": " + e.Message);
                 rawjson = StorageAPI.LoadFromFile(ExchangeListfile);
                 if (rawjson == null) rawjson = StorageAPI.LoadBundleFile(ExchangeListfile);
             }
@@ -44,19 +44,19 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch(AppCoreInstrumentException e)
             {
-                Console.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(Process terminated): " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(Process terminated): " + e.GetType() + ": " + e.Message);
                 throw;
             }
             catch(Exception e)
             {
                 try
                 {
-                    Console.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(process continued with file): " + e.GetType() + ": " + e.Message);
+                    System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(process continued with file): " + e.GetType() + ": " + e.Message);
                     ParseAPIStrings.ParseExchangeListJson(StorageAPI.LoadBundleFile(ExchangeListfile), exlist);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(Fatal Error): " + e.GetType() + ": " + e.Message);
+                    System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(Fatal Error): " + e.GetType() + ": " + e.Message);
                     throw new AppCoreExchangeException(ex.GetType() + ": " + ex.Message);
                 }
             }
@@ -79,6 +79,12 @@ namespace CoinBalance.CoreClass.APIClass
                     case "Bittrex":
                         return await BittrexAPI.FetchTransactionAsync(exchange);
 
+                    case "Bitstamp":
+                        throw new AppCoreNetworkException("Bitstamp will be supported soon!");
+
+                    case "Poloniex":
+                        throw new AppCoreNetworkException("Poloniex will be supported soon!");
+
                     case "BitFlyer":
                         throw new AppCoreNetworkException("BitFlyer will be supported soon!");
 
@@ -89,7 +95,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch (Exception e)
             {
-                Console.WriteLine(DateTime.Now.ToString() + ": FetchTradeListAsync: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchTradeListAsync: " + e.GetType() + ": " + e.Message);
                 throw;
             }
         }
@@ -109,6 +115,12 @@ namespace CoinBalance.CoreClass.APIClass
                     case "Bittrex":
                         return  await BittrexAPI.FetchPositionAsync(exchange);
 
+                    case "Bitstamp":
+                        throw new AppCoreNetworkException("Bitstamp will be supported soon!");
+
+                    case "Poloniex":
+                        throw new AppCoreNetworkException("Poloniex will be supported soon!");
+
                     case "BitFlyer":
                         throw new AppCoreNetworkException("BitFlyer will be supported soon!");
 
@@ -119,7 +131,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch(Exception e)
             {
-                Console.WriteLine(DateTime.Now.ToString() + ": FetchPositionAsync: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchPositionAsync: " + e.GetType() + ": " + e.Message);
                 throw;
             }
 

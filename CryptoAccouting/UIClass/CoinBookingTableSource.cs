@@ -91,7 +91,7 @@ namespace CoinBalance.UIClass
                     break;
 
                 case UITableViewCellEditingStyle.None:
-                    Console.WriteLine("CommitEditingStyle:None called");
+                    System.Diagnostics.Debug.WriteLine("CommitEditingStyle:None called");
                     break;
             }
 

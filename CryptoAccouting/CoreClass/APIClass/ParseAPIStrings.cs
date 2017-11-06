@@ -114,21 +114,20 @@ namespace CoinBalance.CoreClass.APIClass
 
         public static async Task ParseCoinMarketCapJsonAsync(string rawjson, string rawjson_yesterday, InstrumentList instrumentlist, CrossRate crossrate)
         {
-
-            var jarray = await Task.Run(() => JArray.Parse(rawjson));
-            var jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
-
-            foreach (var coin in instrumentlist.Where(x => x.PriceSourceCode == "coinmarketcap" || x.PriceSourceCode is null))
+            try
             {
-                //Parse Market Data 
-                if (coin.MarketPrice == null)
-                {
-                    var p = new Price(coin);
-                    coin.MarketPrice = p;
-                }
+                var jarray = await Task.Run(() => JArray.Parse(rawjson));
+                var jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
 
-                try
+                foreach (var coin in instrumentlist.Where(x => x.PriceSourceCode == "coinmarketcap" || x.PriceSourceCode is null))
                 {
+                    //Parse Market Data 
+                    if (coin.MarketPrice == null)
+                    {
+                        var p = new Price(coin);
+                        coin.MarketPrice = p;
+                    }
+
                     coin.MarketPrice.LatestPriceBTC = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_btc"];
                     coin.MarketPrice.LatestPriceUSD = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_usd"];
                     coin.MarketPrice.PriceSource = "coinmarketcap";
@@ -140,12 +139,11 @@ namespace CoinBalance.CoreClass.APIClass
                     coin.MarketPrice.USDCrossRate = crossrate;
 
                 }
-                catch (Exception e)
-                {
-                    throw new AppCoreParseException("Exception during parsing coinmarketcap Json: " + e.Message);
-                }
             }
-
+            catch (Exception e)
+            {
+                throw new AppCoreParseException("Exception during parsing coinmarketcap Json: " + e.Message);
+            }
         }
 
 

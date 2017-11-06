@@ -112,7 +112,7 @@
         {
             "code": "Bitstamp",
             "name": "Bitstamp",
-            "api": "false",
+            "api": "true",
             "listing": [
                 {
                     "symbol": "BTC"
@@ -1150,7 +1150,7 @@
         {
             "code": "Poloniex",
             "name": "Poloniex",
-            "api": "false",
+            "api": "true",
             "listing": [
                 {
                     "symbol": "1CR"

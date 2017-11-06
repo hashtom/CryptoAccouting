@@ -1,4 +1,4 @@
-using Foundation; using System; using System.IO; using UIKit; using QuickLook; using CoreGraphics; using CoreAnimation; using System.Linq; using Syncfusion.SfDataGrid; using Syncfusion.SfDataGrid.Exporting; using CoinBalance.CoreClass; using CoinBalance.UIClass;
+﻿using Foundation; using System; using System.IO; using UIKit; using QuickLook; using CoreGraphics; using CoreAnimation; using System.Linq; using Syncfusion.SfDataGrid; using Syncfusion.SfDataGrid.Exporting; using CoinBalance.CoreClass; using CoinBalance.UIClass;
 
 namespace CoinBalance
 {
@@ -41,7 +41,7 @@ namespace CoinBalance
 
                         sfGrid.ItemsSource = (myTradeList.TransactionCollection);
                         //this.sfGrid.Frame = new CGRect(0, 0, TransactionView.Frame.Width, TransactionView.Frame.Height);
-                    }                     catch (Exception ex)                     {                         UIAlertController okAlertController = UIAlertController.Create("Warning"                                                                                        , ex.Message + ": API key setting is incorrect or API call might be timed out. Try again. "                                                                , UIAlertControllerStyle.Alert);                         okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));                         this.PresentViewController(okAlertController, true, null);                         Console.WriteLine(DateTime.Now.ToString() + ": ViewDidLoad: buttonSearch: " + ex.GetType() + ": " + ex.Message);                     }
+                    }                     catch (Exception ex)                     {                         UIAlertController okAlertController = UIAlertController.Create("Warning"                                                                                        , ex.Message + ": API key setting is incorrect or API call might be timed out. Try again. "                                                                , UIAlertControllerStyle.Alert);                         okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));                         this.PresentViewController(okAlertController, true, null);                         System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": ViewDidLoad: buttonSearch: " + ex.GetType() + ": " + ex.Message);                     }
                     finally                     {                         loadPop.Hide();                         buttonSearch.Enabled = true;                         ReDrawScreen();                     }
                 }             };
         }          public override void ViewDidAppear(bool animated)

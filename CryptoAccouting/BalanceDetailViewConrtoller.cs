@@ -66,7 +66,7 @@ namespace CoinBalance
                                                                              }
                                                                              catch (Exception ex)
                                                                              {
-                                                                                 Console.WriteLine(DateTime.Now.ToString() + ": ViewDidLoad: buttonPriceSource: " + ex.GetType() + ": " + ex.Message);
+                                                                                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": ViewDidLoad: buttonPriceSource: " + ex.GetType() + ": " + ex.Message);
                                                                              }
                                                                              finally
                                                                              {

@@ -88,7 +88,7 @@ exchanges.append(coincheck_dict)
 bitstamp_dict = {
         "code": "Bitstamp",
         "name": "Bitstamp",
-        "api": "false",
+        "api": "true",
         "listing": [ 
                 { "symbol": "BTC" },
                 { "symbol": "XRP" }
@@ -225,7 +225,7 @@ exchanges.append(bitfinex_dict)
 poloniex = requests.get("https://poloniex.com/public?command=returnCurrencies").json()
 poloniex_dict = {"code": "Poloniex",
                  "name": "Poloniex",
-                 "api": "false"}
+                 "api": "true"}
 poloniex_symbols = pd.DataFrame({"symbol":list(poloniex.keys())})
 poloniex_symbols.drop_duplicates(inplace=True)
 poloniex_dict["listing"] = poloniex_symbols.to_dict(orient='records')

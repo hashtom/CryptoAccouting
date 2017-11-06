@@ -46,7 +46,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch (Exception e)
             {
-                Console.WriteLine(DateTime.Now.ToString() + ": FetchPriceAsync: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchPriceAsync: " + e.GetType() + ": " + e.Message);
                 throw;
             }
 
@@ -60,13 +60,14 @@ namespace CoinBalance.CoreClass.APIClass
                 var jobj = await Task.Run(() => JObject.Parse(rawjson));
 
                 if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
+                var price_yesterday = await MarketDataAPI.FetchPriceBefore24Async(coin.Id);
 
                 if (coin.Id is "bitcoin")
                 {
                     coin.MarketPrice.LatestPriceBTC = 1;
                     coin.MarketPrice.LatestPriceUSD = (double)jobj["ltp"] / _USDJPYrate.Rate;
                     coin.MarketPrice.PriceBTCBefore24h = 1;
-                    coin.MarketPrice.PriceUSDBefore24h = await MarketDataAPI.FetchBTCUSDPriceBefore24hAsync(); //tmp
+                    coin.MarketPrice.PriceUSDBefore24h = price_yesterday.LatestPriceUSD; //tmp
                 }
                 else
                 {
@@ -75,8 +76,8 @@ namespace CoinBalance.CoreClass.APIClass
                     {
                         coin.MarketPrice.LatestPriceUSD = (double)jobj["ltp"] / _USDJPYrate.Rate;
                         coin.MarketPrice.LatestPriceBTC = coin.MarketPrice.LatestPriceUSD / btcprice.LatestPriceUSD;
-                        coin.MarketPrice.PriceBTCBefore24h = await MarketDataAPI.FetchPriceBTCBefore24hAsync(coin.Id); //tmp
-                        coin.MarketPrice.PriceUSDBefore24h = coin.MarketPrice.PriceBTCBefore24h * btcprice.LatestPriceUSD; //tmp
+                        coin.MarketPrice.PriceBTCBefore24h = price_yesterday.LatestPriceUSD; //tmp
+                        coin.MarketPrice.PriceUSDBefore24h = price_yesterday.LatestPriceUSD; //tmp
                     }
                 }
 
