@@ -116,12 +116,10 @@ namespace CoinBalance.CoreClass.APIClass
 
         private static List<Position> ParsePosition(string rawjson)
         {
-            JObject json;
-            List<Position> positions;
-
             try
             {
-                json = JObject.Parse(rawjson);
+                List<Position> positions;
+                var json = JObject.Parse(rawjson);
                 if ((bool)json.SelectToken("$.success") != true)
                 {
                     throw new AppCoreParseException("API returned error: " + rawjson);
@@ -163,11 +161,9 @@ namespace CoinBalance.CoreClass.APIClass
 
         private static TradeList ParseTrade(string rawjson)
         {
-            JObject json;
-
             try
             {
-                json = JObject.Parse(rawjson);
+                var json = JObject.Parse(rawjson);
                 if ((bool)json.SelectToken("$.success") != true)
                 {
                     throw new AppCoreParseException("API returned error: " + rawjson);

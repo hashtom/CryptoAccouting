@@ -83,10 +83,12 @@ namespace CoinBalance.CoreClass.APIClass
                         throw new AppCoreNetworkException("Bitstamp will be supported soon!");
 
                     case "Poloniex":
-                        throw new AppCoreNetworkException("Poloniex will be supported soon!");
+                        //throw new AppCoreNetworkException("Poloniex will be supported soon!");
+                        return await PoloniexAPI.FetchTransactionAsync(exchange);
 
                     case "BitFlyer":
-                        throw new AppCoreNetworkException("BitFlyer will be supported soon!");
+                        //throw new AppCoreNetworkException("BitFlyer will be supported soon!");
+                        return await BitFlyerAPI.FetchTransactionAsync(exchange);
 
                     default:
                         throw new AppCoreNetworkException("ExchangeCode error");
@@ -119,10 +121,11 @@ namespace CoinBalance.CoreClass.APIClass
                         throw new AppCoreNetworkException("Bitstamp will be supported soon!");
 
                     case "Poloniex":
-                        throw new AppCoreNetworkException("Poloniex will be supported soon!");
+                        return await PoloniexAPI.FetchPositionAsync(exchange);
 
                     case "BitFlyer":
-                        throw new AppCoreNetworkException("BitFlyer will be supported soon!");
+                        //throw new AppCoreNetworkException("BitFlyer will be supported soon!");
+                        return await BitFlyerAPI.FetchPositionAsync(exchange);
 
                     default:
                         throw new AppCoreNetworkException("ExchangeCode error");

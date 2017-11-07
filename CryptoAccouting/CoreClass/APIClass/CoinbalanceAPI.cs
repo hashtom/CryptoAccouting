@@ -5,11 +5,11 @@ namespace CoinBalance.CoreClass.APIClass
     public static class CoinbalanceAPI
     {
 
-#if DEBUG
-        public const string coinbalance_url = "https://coinbalance.jp/develop";
-#else
+//#if DEBUG
+//        public const string coinbalance_url = "https://coinbalance.jp/develop";
+//#else
         public const string coinbalance_url = "https://coinbalance.jp/v1.0.1";
-#endif
+//#endif
 
     }
 }

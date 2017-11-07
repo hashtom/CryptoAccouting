@@ -31,15 +31,15 @@ namespace CoinBalance
                     okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
                     this.PresentViewController(okAlertController, true, null);                 }
                 else
-                {
+                {                     sfGrid.ItemsSource = new TradeList().TransactionCollection; 
                     var bounds = TransactionView.Bounds;
                     loadPop = new LoadingOverlay(bounds);
                     TransactionView.Add(loadPop);                     buttonSearch.Enabled = false;
                      try                     {
-                        await AppCore.LoadTradeListsAsync(thisExchange.Code); 
+                        await AppCore.LoadTradeListsAsync(thisExchange.Code);
                         myTradeList = AppCore.GetExchangeTradeList(thisExchange.Code);
 
-                        sfGrid.ItemsSource = (myTradeList.TransactionCollection);
+                        sfGrid.ItemsSource = myTradeList.TransactionCollection;
                         //this.sfGrid.Frame = new CGRect(0, 0, TransactionView.Frame.Width, TransactionView.Frame.Height);
                     }                     catch (Exception ex)                     {                         UIAlertController okAlertController = UIAlertController.Create("Warning"                                                                                        , ex.Message + ": API key setting is incorrect or API call might be timed out. Try again. "                                                                , UIAlertControllerStyle.Alert);                         okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));                         this.PresentViewController(okAlertController, true, null);                         System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": ViewDidLoad: buttonSearch: " + ex.GetType() + ": " + ex.Message);                     }
                     finally                     {                         loadPop.Hide();                         buttonSearch.Enabled = true;                         ReDrawScreen();                     }

@@ -106,7 +106,7 @@
             //await MarketDataAPI.FetchCoinMarketDataAsync(coin);
             var mycoins = new InstrumentList();             if (coin.Symbol1 != "BTC") mycoins.Attach(InstrumentList.First(x => x.Symbol1 == "BTC"));             mycoins.Attach(coin);             await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRates);
         }          public static CoinStorage GetCoinStorage(string storagecode, EnuCoinStorageType storagetype)         {             return CoinStorageList.Any(x => (x.Code == storagecode && x.StorageType == storagetype))
-                                  ? CoinStorageList.First(x => (x.Code == storagecode && x.StorageType == storagetype))                                       : null;         }          public static void AttachCoinStorage(string storagecode, EnuCoinStorageType storagetype, Position pos)         {             var storage = GetCoinStorage(storagecode, storagetype); 
+                                  ? CoinStorageList.First(x => (x.Code == storagecode && x.StorageType == storagetype))                                       : null;         }          public static void AttachCoinStorage(string storagecode, EnuCoinStorageType storagetype, Position pos)         {             CoinStorageList.DetachPosition(pos);              var storage = GetCoinStorage(storagecode, storagetype);
             if (storage is null)             {
                 switch (storagetype)
                 {
@@ -115,7 +115,7 @@
                     default:                         storage = new Wallet(storagecode, storagetype);                         CoinStorageList.Attach(storage);
                         break;
                 }
-            }             storage.AttachPosition(pos);             pos.AttachCoinStorage(storage);         }          public static CrossRate GetCrossRate(EnuBaseFiatCCY CCY)         {             return USDCrossRates is null ? null : USDCrossRates.First(x => x.Currency == CCY);         } 
+            }              storage.AttachPosition(pos);             pos.AttachCoinStorage(storage);         }          public static CrossRate GetCrossRate(EnuBaseFiatCCY CCY)         {             return USDCrossRates is null ? null : USDCrossRates.First(x => x.Currency == CCY);         } 
 		public static bool IsInternetReachable()
 		{
             return Reachability.IsHostReachable(CoinbalanceAPI.coinbalance_url);

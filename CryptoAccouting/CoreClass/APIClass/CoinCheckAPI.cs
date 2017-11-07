@@ -31,12 +31,12 @@ namespace CoinBalance.CoreClass.APIClass
             {
                 foreach (var coin in coins.Where(x => x.PriceSourceCode == "CoinCheck"))
                 {
-                    using (var http = new HttpClient())
-                    {
-                        http.BaseAddress = new Uri(BaseUrl);
+                    //using (var http = new HttpClient())
+                    //{
+                        //http.BaseAddress = new Uri(BaseUrl);
                         Uri path = new Uri("/api/rate/" + _coincheck.GetSymbolForExchange(coin.Id).ToLower() + "_jpy", UriKind.Relative);
-                        rawjson = await SendAsync(http, path, HttpMethod.Get);
-                    }
+                        rawjson = await SendAsync(path, HttpMethod.Get);
+                    //}
 
 
                     if (rawjson != null)
@@ -85,14 +85,14 @@ namespace CoinBalance.CoreClass.APIClass
 
             try
             {
-                var http = new HttpClient
-                {
-                    BaseAddress = new Uri(BaseUrl)
-                };
+                //var http = new HttpClient
+                //{
+                //    BaseAddress = new Uri(BaseUrl)
+                //};
 
                 Uri path = new Uri("/api/accounts/balance", UriKind.Relative);
 
-                var rawjson = await SendAsync(http, path, HttpMethod.Get, true);
+                var rawjson = await SendAsync(path, HttpMethod.Get, true);
                 return ParsePosition(rawjson);
 
             }
@@ -109,13 +109,13 @@ namespace CoinBalance.CoreClass.APIClass
 
             try
             {
-                var http = new HttpClient
-                {
-                    BaseAddress = new Uri(BaseUrl)
-                };
+                //var http = new HttpClient
+                //{
+                //    BaseAddress = new Uri(BaseUrl)
+                //};
 
                 Uri path = new Uri("/api/exchange/orders/transactions", UriKind.Relative);
-                var rawjson = await SendAsync(http, path, HttpMethod.Get, true);
+                var rawjson = await SendAsync(path, HttpMethod.Get, true);
                 return ParseTrade(rawjson);
             }
             catch (Exception e)
@@ -135,10 +135,10 @@ namespace CoinBalance.CoreClass.APIClass
             {
                 var from = calendarYear == "ALL" ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
                 var to = calendarYear == "ALL" ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
-                var http = new HttpClient
-                {
-                    BaseAddress = new Uri(BaseUrl)
-                };
+                //var http = new HttpClient
+                //{
+                //    BaseAddress = new Uri(BaseUrl)
+                //};
 
                 Uri path = new Uri("/api/exchange/orders/transactions_pagination?limit=100?order=desc", UriKind.Relative);
 
@@ -151,7 +151,7 @@ namespace CoinBalance.CoreClass.APIClass
                 };
 
                 //rawjson = await SendAsync(http, path, HttpMethod.Get);
-                var rawjson = await SendAsync(http, path, HttpMethod.Get, true, param);
+                var rawjson = await SendAsync(path, HttpMethod.Get, true, param);
 
                 return ParseTrade(rawjson);
             }
@@ -161,58 +161,6 @@ namespace CoinBalance.CoreClass.APIClass
                 throw;
             }
 
-        }
-
-        private static async Task<string> SendAsync(HttpClient http, Uri path, HttpMethod method, bool requireAuth = false, Dictionary<string, string> parameters = null)
-        {
-            HttpResponseMessage res;
-
-            if (!Reachability.IsHostReachable(BaseUrl))
-            {
-                throw new AppCoreNetworkException("Host is not reachable: " + BaseUrl);
-            }
-            else
-            {
-                if (parameters == null)
-                    parameters = new Dictionary<string, string>();
-
-                var content = new FormUrlEncodedContent(parameters);
-                string param = await content.ReadAsStringAsync();
-                string nonce = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
-
-                if (requireAuth)
-                {
-                    var uri = new Uri(http.BaseAddress, path);
-                    string message = nonce + uri + param;
-
-                    byte[] hash = new HMACSHA256(Encoding.UTF8.GetBytes(_coincheck.Secret)).ComputeHash(Encoding.UTF8.GetBytes(message));
-                    string sign = BitConverter.ToString(hash).ToLower().Replace("-", "");
-
-                    http.DefaultRequestHeaders.Clear();
-                    http.DefaultRequestHeaders.Add("ACCESS-KEY", _coincheck.Key);
-                    http.DefaultRequestHeaders.Add("ACCESS-NONCE", nonce);
-                    http.DefaultRequestHeaders.Add("ACCESS-SIGNATURE", sign);
-                }
-
-                if (method == HttpMethod.Post)
-                {
-                    res = await http.PostAsync(path, content);
-                }
-                else if (method == HttpMethod.Get)
-                {
-                    res = await http.GetAsync(path);
-                }
-                else
-                {
-                    throw new AppCoreException("HttpMethod error: " + method);
-                }
-
-                var rawjson = await res.Content.ReadAsStringAsync();
-                if (!res.IsSuccessStatusCode)
-                    throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
-
-                return rawjson;
-            }
         }
 
         private static List<Position> ParsePosition(string rawjson)
@@ -317,6 +265,64 @@ namespace CoinBalance.CoreClass.APIClass
                 throw new AppCoreParseException(e.GetType() + ": " + e.Message);
             }
 
+        }
+
+
+        private static async Task<string> SendAsync(Uri path, HttpMethod method, bool requireAuth = false, Dictionary<string, string> parameters = null)
+        {
+            HttpResponseMessage res;
+
+            if (!Reachability.IsHostReachable(BaseUrl))
+            {
+                throw new AppCoreNetworkException("Host is not reachable: " + BaseUrl);
+            }
+            else
+            {
+                using (var http = new HttpClient())
+                {
+                    http.BaseAddress = new Uri(BaseUrl);
+
+                    if (parameters == null)
+                        parameters = new Dictionary<string, string>();
+
+                    var content = new FormUrlEncodedContent(parameters);
+                    string param = await content.ReadAsStringAsync();
+                    string nonce = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+
+                    if (requireAuth)
+                    {
+                        var uri = new Uri(http.BaseAddress, path);
+                        string message = nonce + uri + param;
+
+                        byte[] hash = new HMACSHA256(Encoding.UTF8.GetBytes(_coincheck.Secret)).ComputeHash(Encoding.UTF8.GetBytes(message));
+                        string sign = BitConverter.ToString(hash).ToLower().Replace("-", "");
+
+                        http.DefaultRequestHeaders.Clear();
+                        http.DefaultRequestHeaders.Add("ACCESS-KEY", _coincheck.Key);
+                        http.DefaultRequestHeaders.Add("ACCESS-NONCE", nonce);
+                        http.DefaultRequestHeaders.Add("ACCESS-SIGNATURE", sign);
+                    }
+
+                    if (method == HttpMethod.Post)
+                    {
+                        res = await http.PostAsync(path, content);
+                    }
+                    else if (method == HttpMethod.Get)
+                    {
+                        res = await http.GetAsync(path);
+                    }
+                    else
+                    {
+                        throw new AppCoreException("HttpMethod error: " + method);
+                    }
+                }
+
+                var rawjson = await res.Content.ReadAsStringAsync();
+                if (!res.IsSuccessStatusCode)
+                    throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
+
+                return rawjson;
+            }
         }
     }
 }

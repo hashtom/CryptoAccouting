@@ -28,12 +28,12 @@ namespace CoinBalance.CoreClass.APIClass
             {
                 foreach (var coin in coins.Where(x => x.PriceSourceCode == "Zaif"))
                 {
-                    using (var http = new HttpClient())
-                    {
-                        http.BaseAddress = new Uri(BaseUrl);
+                    //using (var http = new HttpClient())
+                    //{
+                        //http.BaseAddress = new Uri(BaseUrl);
                         Uri path = new Uri("api/1/ticker/" + zaif.GetSymbolForExchange(coin.Id).ToLower() + "_jpy", UriKind.Relative);
-                        rawjson = await SendAsync(http, path);
-                    }
+                        rawjson = await SendAsync(path);
+                    //}
 
                     await ParsePrice(rawjson, coin);
                 }
@@ -50,18 +50,12 @@ namespace CoinBalance.CoreClass.APIClass
         public static async Task<List<Position>> FetchPositionAsync(Exchange zaif)
         {
             _zaif = zaif;
-            //string filename = zaif.Name + "Position" + ".json";
 
             try
             {
-                var http = new HttpClient
-                {
-                    BaseAddress = new Uri(BaseUrl)
-                };
-
                 Uri path = new Uri("tapi", UriKind.Relative);
 
-                var rawjson = await SendAsync(http, path, "get_info2");
+                var rawjson = await SendAsync(path, "get_info2");
                 return ParsePosition(rawjson);
             }
             catch (Exception e)
@@ -76,16 +70,13 @@ namespace CoinBalance.CoreClass.APIClass
         {
             _zaif = zaif;
 
-            //string filename = zaif.Name + "Transaction_" + calendarYear + ".json";
-            //rawjson = StorageAPI.LoadFromFile(filename);
-
             try
             {
-                var http = new HttpClient();
+                //var http = new HttpClient();
                 var from = calendarYear == "ALL" ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
                 var to = calendarYear == "ALL" ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
 
-                http.BaseAddress = new Uri(BaseUrl);
+                //http.BaseAddress = new Uri(BaseUrl);
                 Uri path = new Uri("tapi", UriKind.Relative);
 
                 var param = new Dictionary<string, string>
@@ -98,7 +89,7 @@ namespace CoinBalance.CoreClass.APIClass
                     {"order", "ASC"}
                 };
 
-                var rawjson = await SendAsync(http, path, "trade_history", param);
+                var rawjson = await SendAsync(path, "trade_history", param);
                 return ParseTrade(rawjson);
             }
             catch (Exception e)
@@ -263,10 +254,8 @@ namespace CoinBalance.CoreClass.APIClass
         }
 
 
-        private static async Task<string> SendAsync(HttpClient http, Uri path, string postmethod = null, Dictionary<string, string> parameters = null)
+        private static async Task<string> SendAsync(Uri path, string postmethod = null, Dictionary<string, string> parameters = null)
         {
-            double nonce = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
-            HttpResponseMessage res;
 
             if (!Reachability.IsHostReachable(BaseUrl))
             {
@@ -274,29 +263,37 @@ namespace CoinBalance.CoreClass.APIClass
             }
             else
             {
-                if (postmethod != null)
+                double nonce = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
+                HttpResponseMessage res;
+
+                using (var http = new HttpClient())
                 {
-                    if (parameters == null)
-                        parameters = new Dictionary<string, string>();
+                    http.BaseAddress = new Uri(BaseUrl);
 
-                    parameters.Add("nonce", nonce.ToString());
-                    parameters.Add("method", postmethod);
+                    if (postmethod != null)
+                    {
+                        if (parameters == null)
+                            parameters = new Dictionary<string, string>();
 
-                    var content = new FormUrlEncodedContent(parameters);
-                    string message = await content.ReadAsStringAsync();
+                        parameters.Add("nonce", nonce.ToString());
+                        parameters.Add("method", postmethod);
 
-                    byte[] hash = new HMACSHA512(Encoding.UTF8.GetBytes(_zaif.Secret)).ComputeHash(Encoding.UTF8.GetBytes(message));
-                    string sign = BitConverter.ToString(hash).ToLower().Replace("-", "");
+                        var content = new FormUrlEncodedContent(parameters);
+                        string message = await content.ReadAsStringAsync();
 
-                    http.DefaultRequestHeaders.Clear();
-                    http.DefaultRequestHeaders.Add("key", _zaif.Key);
-                    http.DefaultRequestHeaders.Add("Sign", sign);
+                        byte[] hash = new HMACSHA512(Encoding.UTF8.GetBytes(_zaif.Secret)).ComputeHash(Encoding.UTF8.GetBytes(message));
+                        string sign = BitConverter.ToString(hash).ToLower().Replace("-", "");
 
-                    res = await http.PostAsync(path, content);
-                }
-                else
-                {
-                    res = await http.GetAsync(path);
+                        http.DefaultRequestHeaders.Clear();
+                        http.DefaultRequestHeaders.Add("key", _zaif.Key);
+                        http.DefaultRequestHeaders.Add("Sign", sign);
+
+                        res = await http.PostAsync(path, content);
+                    }
+                    else
+                    {
+                        res = await http.GetAsync(path);
+                    }
                 }
 
                 var rawjson = await res.Content.ReadAsStringAsync();
