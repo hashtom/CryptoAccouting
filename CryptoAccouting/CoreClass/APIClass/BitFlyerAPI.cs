@@ -28,7 +28,7 @@ namespace CoinBalance.CoreClass.APIClass
 
             try
             {
-                foreach (var coin in coins.Where(x => x.PriceSourceCode == "BitFlyer"))
+                foreach (var coin in coins.Where(x => x.PriceSourceCode == "BitFlyer_l"))
                 {
                     Uri path = new Uri(apiver + "/" + "ticker", UriKind.Relative);
 
@@ -194,7 +194,7 @@ namespace CoinBalance.CoreClass.APIClass
                     }
 
                     tradelist.AggregateTransaction(AppCore.InstrumentList.GetByInstrumentId("bitcoin"),
-                                                  "BitFlyer",
+                                                   "BitFlyer_l",
                                                    ebuysell,
                                                    (double)elem["size"],
                                                    (double)elem["price"],

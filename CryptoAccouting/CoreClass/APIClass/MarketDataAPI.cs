@@ -76,10 +76,10 @@ namespace CoinBalance.CoreClass.APIClass
                             }
                             break;
 
-                        case "BitFlyer":
-                            if (exchanges.Any(x => x.Code == "BitFlyer"))
+                        case "BitFlyer_l":
+                            if (exchanges.Any(x => x.Code == "BitFlyer_l"))
                             {
-                                var exchange = exchanges.First(x => x.Code == "BitFlyer");
+                                var exchange = exchanges.First(x => x.Code == "BitFlyer_l");
                                 if (exchange.HasListedCoins()) await BitFlyerAPI.FetchPriceAsync(exchange, coins, crossrate, usdjpy);
                             }
                             break;

@@ -37,8 +37,8 @@ exchanges.append(zaif_dict)
 
 #BitFlyer
 bitflyer_dict = { 
-        "code": "BitFlyer",
-        "name": "BitFlyer",
+        "code": "BitFlyer_l",
+        "name": "BitFlyer(Lightning)",
         "api": "true",
          "listing": [
                  { "symbol": "BTC" }

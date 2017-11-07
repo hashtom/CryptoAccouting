@@ -16,7 +16,7 @@ namespace CoinBalance
         Instrument thisCoin;
         string instrumentId_selected;
         static readonly NSString MyCellId = new NSString("BookingCell");
-        //List<Position> booking_positions;
+        static List<(string, string)> pricesources;
 
         public BalanceDetailViewConrtoller (IntPtr handle) : base (handle)
         {
@@ -39,26 +39,26 @@ namespace CoinBalance
             gradient.Colors = new CGColor[] { UIColor.FromRGB(0, 126, 167).CGColor, UIColor.FromRGB(0, 168, 232).CGColor };
             this.DetailTopView.Layer.InsertSublayer(gradient, 0);
 
+            //Price source list
+            pricesources = new List<(string, string)>();
+            pricesources.Add(("coinmarketcap", "coinmarketcap"));
+
+            foreach (var ex in AppCore.PublicExchangeList.Where(x => x.APIProvided))
+            {
+                if (ex.IsListed(thisCoin.Id)) pricesources.Add((ex.Name, ex.Code));
+            }
+
 			buttonPriceSource.TouchUpInside += (sender, e) =>
             {
-                var sources = new List<string>();
-
-                sources.Add("coinmarketcap");
-
-                foreach (var ex in AppCore.PublicExchangeList.Where(x => x.APIProvided))
-                {
-                    if (ex.IsListed(thisCoin.Id)) sources.Add(ex.Name);
-                }
-
 				UIAlertController PriceSourceAlert = UIAlertController.Create("Price Source", "Choose Price Source", UIAlertControllerStyle.ActionSheet);
 				PriceSourceAlert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
 
-				foreach (var source in sources)
+                foreach (var source in pricesources)
 				{
-                    PriceSourceAlert.AddAction(UIAlertAction.Create(source, UIAlertActionStyle.Default, async (obj) =>
+                    PriceSourceAlert.AddAction(UIAlertAction.Create(source.Item1, UIAlertActionStyle.Default, async (obj) =>
                                                                          {
-                                                                             buttonPriceSource.SetTitle(source, UIControlState.Normal);
-                                                                             thisCoin.PriceSourceCode = source;
+                                                                             buttonPriceSource.SetTitle(source.Item1, UIControlState.Normal);
+                                                                             thisCoin.PriceSourceCode = source.Item2;
                                                                              try
                                                                              {
                                                                                  await AppCore.FetchMarketDataAsync(thisCoin);
@@ -98,8 +98,9 @@ namespace CoinBalance
 
             imageCoin.Image = logo == null ? null : UIImage.FromFile(logo);
             labelName.Text = thisCoin.Name;
-            //NavigationItem.Title = thisCoin.Name;
-            buttonPriceSource.SetTitle(thisCoin.PriceSourceCode, UIControlState.Normal);
+
+            var sourcecode = pricesources.Where(x => x.Item2 == thisCoin.PriceSourceCode).Select(x => x.Item1).First();
+            buttonPriceSource.SetTitle(sourcecode, UIControlState.Normal);
 
             if (booking_positions.Count() > 0)
             {

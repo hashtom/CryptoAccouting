@@ -29,8 +29,8 @@
             ]
         },
         {
-            "code": "BitFlyer",
-            "name": "BitFlyer",
+            "code": "BitFlyer_l",
+            "name": "BitFlyer(Lightning)",
             "api": "true",
             "listing": [
                 {
