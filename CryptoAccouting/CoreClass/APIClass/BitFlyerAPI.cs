@@ -78,7 +78,7 @@ namespace CoinBalance.CoreClass.APIClass
 
                 var param = new Dictionary<string, string>
                 {
-                    //Bitcoin only to be enhanced
+                    //Bitcoin only. to be enhanced
                     { "product_code", _bitflyer.GetSymbolForExchange("bitcoin") + "_JPY"}
                 };
 
@@ -203,8 +203,8 @@ namespace CoinBalance.CoreClass.APIClass
                                                    (double)elem["commission"]
                                                       );
                 }
-                return tradelist;
 
+                return tradelist;
             }
             catch (Exception e)
             {
