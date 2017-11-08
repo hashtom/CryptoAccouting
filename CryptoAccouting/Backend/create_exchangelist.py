@@ -41,8 +41,8 @@ exchanges.append(zaif_dict)
 
 #BitFlyer
 bitflyer_dict = { 
-        "code": "BitFlyer_l",
-        "name": "BitFlyer(Lightning)",
+        "code": "bitFlyer_l",
+        "name": "bitFlyer(lightn",
         "apiprice": "true",
         "apitrade": "true",
         "apibalance": "true",
@@ -53,8 +53,8 @@ bitflyer_dict = {
 exchanges.append(bitflyer_dict)
 
 bitflyer_otc_dict = { 
-        "code": "BitFlyer",
-        "name": "BitFlyer",
+        "code": "bitFlyer",
+        "name": "bitFlyer",
         "apiprice": "false",
         "apitrade": "false",
         "apibalance": "false",

@@ -104,7 +104,8 @@ namespace CoinBalance.CoreClass.APIClass
                 //var from = calendarYear == null ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
                 //var to = calendarYear == null ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
                 var rawjson = await SendAsync(HttpMethod.Get, BaseUrl + "/api/v1.1/account/getorderhistory");
-                return ParseTrade(rawjson);
+                var tradelist = ParseTransaction(rawjson);
+                return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
             }
             catch (Exception e)
             {
@@ -159,7 +160,7 @@ namespace CoinBalance.CoreClass.APIClass
 
         }
 
-        private static TradeList ParseTrade(string rawjson)
+        private static TradeList ParseTransaction(string rawjson)
         {
             try
             {

@@ -33,8 +33,8 @@
       ]
     },
     {
-      "code": "BitFlyer_l",
-      "name": "BitFlyer(Lightning)",
+      "code": "bitFlyer_l",
+      "name": "bitFlyer(lightn",
       "apiprice": "true",
       "apitrade": "true",
       "apibalance": "true",
@@ -45,8 +45,8 @@
       ]
     },
     {
-      "code": "BitFlyer",
-      "name": "BitFlyer",
+      "code": "bitFlyer",
+      "name": "bitFlyer",
       "apiprice": "false",
       "apitrade": "false",
       "apibalance": "false",

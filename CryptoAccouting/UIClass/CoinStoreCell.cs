@@ -17,7 +17,7 @@ namespace CoinBalance.UIClass
 
             labelName = new UILabel()
             {
-                Font = UIFont.FromName("Apple SD Gothic Neo", 16f),
+                Font = UIFont.FromName("Apple SD Gothic Neo", 14f),
                 TextColor = UIColor.FromRGB(0,0,128),
                 TextAlignment = UITextAlignment.Center,
                 AdjustsFontSizeToFitWidth = true,
@@ -63,7 +63,7 @@ namespace CoinBalance.UIClass
 
             var width = (float)ContentView.Bounds.Width / 4;
 
-            labelName.Frame = new CGRect(0, 10, 110, 20);
+            labelName.Frame = new CGRect(5, 10, 95, 20);
             labelHoldingBTC.Frame = new CGRect(width, 10, 100, 20);
             labelValueK.Frame = new CGRect(width * 2, 10, 100, 20);
             labelWeight.Frame = new CGRect(width * 3, 10, 60, 20);
