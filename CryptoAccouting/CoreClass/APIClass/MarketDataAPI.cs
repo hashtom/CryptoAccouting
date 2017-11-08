@@ -76,10 +76,10 @@ namespace CoinBalance.CoreClass.APIClass
                             }
                             break;
 
-                        case "BitFlyer_l":
-                            if (exchanges.Any(x => x.Code == "BitFlyer_l"))
+                        case "bitFlyer_l":
+                            if (exchanges.Any(x => x.Code == "bitFlyer_l"))
                             {
-                                var exchange = exchanges.First(x => x.Code == "BitFlyer_l");
+                                var exchange = exchanges.First(x => x.Code == "bitFlyer_l");
                                 if (exchange.HasListedCoins()) await BitFlyerAPI.FetchPriceAsync(exchange, coins, crossrate, usdjpy);
                             }
                             break;
@@ -97,7 +97,7 @@ namespace CoinBalance.CoreClass.APIClass
                             break;
 
                         default:
-                            throw new AppCoreNetworkException("API call is not supported!");
+                            throw new AppCoreNetworkException("Price API call error. Exchange: " + source);
                     }
                 }
             }

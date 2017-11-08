@@ -8,7 +8,7 @@ namespace CoinBalance.CoreClass.APIClass
 //#if DEBUG
 //        public const string coinbalance_url = "https://coinbalance.jp/develop";
 //#else
-        public const string coinbalance_url = "https://coinbalance.jp/v1.0.1";
+        public const string coinbalance_url = "https://coinbalance.jp/v1.0";
 //#endif
 
     }
