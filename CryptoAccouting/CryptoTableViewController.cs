@@ -14,9 +14,9 @@ namespace CoinBalance
         {
         }
 
-        internal void PopUpWarning(string message)
+        internal void PopUpWarning(string title, string message)
         {
-            UIAlertController okAlertController = UIAlertController.Create("Warning", message, UIAlertControllerStyle.Alert);
+            UIAlertController okAlertController = UIAlertController.Create(title, message, UIAlertControllerStyle.Alert);
             okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
             PresentViewController(okAlertController, true, null);
         }

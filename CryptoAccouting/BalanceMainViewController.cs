@@ -11,12 +11,12 @@
                         this.PresentViewController(okAlertController, true, () => RefreshControl.EndRefreshing());                     }
                     else
                     {
-                        await RefreshPriceAsync();                         RefreshControl.EndRefreshing();                     }                 };                  ReDrawScreen();                  if (!AppCore.IsInternetReachable())                 {                     this.PopUpWarning("Unable to Connect Internet!");
+                        await RefreshPriceAsync();                         RefreshControl.EndRefreshing();                     }                 };                  ReDrawScreen();                  if (!AppCore.IsInternetReachable())                 {                     this.PopUpWarning("Warning", "Unable to Connect Internet!");
                 }
                 else                 {
                     //run the last
                     Task.Run(async () => await AppCore.FetchCoinLogoTop100Async());                 }              }             catch (Exception e)             {
-                this.PopUpWarning("Critical issue: " + e.GetType() + ": " + e.Message);                 this.mybalance = new Balance();             } 
+                this.PopUpWarning("Error", "Critical issue: " + e.GetType() + ": " + e.Message);                 this.mybalance = new Balance();             } 
         }          public async override void ViewWillAppear(bool animated)         {
             base.ViewWillAppear(animated);
              if (position_count != mybalance.BalanceByCoin.Count)             {                 TableView.Source = new CoinTableSource(mybalance, this);                 position_count = mybalance.BalanceByCoin.Count;             }              ReDrawScreen();             //TableView.ReloadData();             try             {
@@ -85,6 +85,6 @@
 			var SymbolSelectionViewC = Storyboard.InstantiateViewController("SymbolSelectionViewC") as SymbolSelectionViewConroller;
 			SymbolSelectionViewC.SelectionItems = searchitems;             SymbolSelectionViewC.DestinationID = "BalanceEditViewC";             NavigationController.PushViewController(SymbolSelectionViewC, true);         }          async private Task RefreshPriceAsync()         {             try             {
                 //await ApplicationCore.LoadCrossRateAsync();
-                await AppCore.FetchMarketDataFromBalanceAsync();             }             catch (Exception e)             {                 this.PopUpWarning("Unable to obtain latest prices: " + e.GetType() + ": " + e.Message);                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": RefreshPriceAsync: Cound't update price: " + e.GetType() + ": " + e.Message);             }             finally             {
+                await AppCore.FetchMarketDataFromBalanceAsync();             }             catch (Exception e)             {                 this.PopUpWarning("Warning", "Unable to obtain latest prices: " + e.GetType() + ": " + e.Message);                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": RefreshPriceAsync: Cound't update price: " + e.GetType() + ": " + e.Message);             }             finally             {
                 ReDrawScreen();
             }         }     } }

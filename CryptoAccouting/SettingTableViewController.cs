@@ -76,7 +76,7 @@ namespace CoinBalance
 			try
 			{
                 AppCore.RemoveAllCache();
-                PopUpWarning("Cache cleared Successfully.");
+                PopUpWarning("Clear Cache Data", "Cache cleared Successfully.");
 				//UIAlertController okAlertController = UIAlertController.Create("Success", "Cache cleared.", UIAlertControllerStyle.Alert);
 				//okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
 				//this.PresentViewController(okAlertController, true, null);
@@ -84,7 +84,7 @@ namespace CoinBalance
 			}
             catch(Exception e)
             {
-                PopUpWarning("Failed to remove cache data: " + e.Message);
+                PopUpWarning("Warning", "Failed to remove cache data: " + e.Message);
 				//UIAlertController okAlertController = UIAlertController.Create("Critical Error", "Failed to remove cache data!", UIAlertControllerStyle.Alert);
 				//okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
 				//this.PresentViewController(okAlertController, true, null);
@@ -96,7 +96,7 @@ namespace CoinBalance
             try
             {
                 AppCore.SyncLatestCoins();
-                PopUpWarning("Successfully Updated.");
+                PopUpWarning("Sync Coin Data", "Successfully Updated.");
                 //UIAlertController okAlertController = UIAlertController.Create("Success", "Successfully Updated.", UIAlertControllerStyle.Alert);
                 //okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
                 //this.PresentViewController(okAlertController, true, null);
@@ -105,7 +105,7 @@ namespace CoinBalance
             }
             catch(Exception e)
             {
-                PopUpWarning("Unable to update coin data: " + e.Message);
+                PopUpWarning("Warning", "Unable to update coin data: " + e.Message);
                 //UIAlertController okAlertController = UIAlertController.Create("Critical Error", "Unable to update coin data: " + e.Message, UIAlertControllerStyle.Alert);
                 //okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
                 //this.PresentViewController(okAlertController, true, null);

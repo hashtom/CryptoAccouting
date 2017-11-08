@@ -45,16 +45,16 @@ namespace CoinBalance
                         if (positions.Any())
                         {
                                 AddBalance(positions);
-                            this.PopUpWarning("Successfully Imported.");
+                            this.PopUpWarning("Import Position", "Successfully Imported.");
                         }
                         else
                         {
-                            PopUpWarning("There is no balance to get imported.");
+                            PopUpWarning("Warning", "There is no balance to get imported.");
                         }
                     }
                     catch (Exception ex)
                     {
-                        PopUpWarning("Couldn't get positions from the exchange: " + ex.Message);
+                        PopUpWarning("Warning", "Couldn't get positions from the exchange: " + ex.Message);
 
                     }
                     finally
@@ -95,7 +95,7 @@ namespace CoinBalance
         {
             if (thisExchange is null)
             {
-                PopUpWarning("Critical error with Exchange Object.");
+                PopUpWarning("Error", "Critical error with Exchange Object.");
             }
             else
             {
