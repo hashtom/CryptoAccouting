@@ -44,28 +44,12 @@ namespace CoinBalance
 
                         if (positions.Any())
                         {
-                            try
-                            {
                                 AddBalance(positions);
-                                this.PopUpWarning("Successfully Imported.");
-                                //UIAlertController okAlertController = UIAlertController.Create("Success", "Successfully Imported.", UIAlertControllerStyle.Alert);
-                                //okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
-                                //this.PresentViewController(okAlertController, true, null);
-                            }
-                            catch (Exception ex)
-                            {
-                                this.PopUpWarning("Couldn't import positoin: " + ex.Message);
-                                //UIAlertController okAlertController = UIAlertController.Create("Critical", "Couldn't import positoin!", UIAlertControllerStyle.Alert);
-                                //okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
-                                //this.PresentViewController(okAlertController, true, null);
-                            }
+                            this.PopUpWarning("Successfully Imported.");
                         }
                         else
                         {
                             PopUpWarning("There is no balance to get imported.");
-                            //UIAlertController okAlertController = UIAlertController.Create("Success", "No balance to get imported.", UIAlertControllerStyle.Alert);
-                            //okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
-                            //this.PresentViewController(okAlertController, true, null);
                         }
                     }
                     catch (Exception ex)
@@ -111,9 +95,7 @@ namespace CoinBalance
         {
             if (thisExchange is null)
             {
-                UIAlertController okAlertController = UIAlertController.Create("Critical", "Critical Error!", UIAlertControllerStyle.Alert);
-                okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
-                this.PresentViewController(okAlertController, true, null);
+                PopUpWarning("Critical error with Exchange Object.");
             }
             else
             {
@@ -141,8 +123,8 @@ namespace CoinBalance
 
         partial void ButtonDone_Activated(UIBarButtonItem sender)
         {
-            UIAlertController okCancelAlertController = UIAlertController.Create("Warning", "This App only uses API Keys to download for positions and transactions."
-                                                                                 + "Please disable trading an withdrawal permissions to increase your security.", UIAlertControllerStyle.Alert);
+            UIAlertController okCancelAlertController = UIAlertController.Create("Warning", "This App only uses API Keys to download positions and transactions."
+                                                                                 + "It would be advised to disable your trading an withdrawal API permissions to increase your security.", UIAlertControllerStyle.Alert);
             okCancelAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default,
                                                                    alert =>
                                                                    {

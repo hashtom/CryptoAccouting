@@ -18,7 +18,7 @@ namespace CoinBalance
             var version = NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"];
             var build = NSBundle.MainBundle.InfoDictionary["CFBundleVersion"];
 
-            labelVersion.Text = "Ver " + version + " , Build " + build;
+            labelVersion.Text = "Ver " + version + " (Build " + build + ")";
 
             string contentDirectoryPath = Path.Combine(NSBundle.MainBundle.BundlePath, "Content/");
             string html = @"<html><head> Credit & Thanks </head><p>Icons made by<a href= ""https://www.flaticon.com/authors/gregor-cresnar"""
