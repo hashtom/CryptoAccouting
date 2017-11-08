@@ -112,7 +112,7 @@ namespace CoinBalance.CoreClass.APIClass
             {
                 using (var http = new HttpClient())
                 {
-                    rawjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/");
+                    rawjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/?limit=0");
                 }
 
                 using (var http = new HttpClient())

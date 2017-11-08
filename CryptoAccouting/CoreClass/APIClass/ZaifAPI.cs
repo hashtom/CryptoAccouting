@@ -90,7 +90,9 @@ namespace CoinBalance.CoreClass.APIClass
                 };
 
                 var rawjson = await SendAsync(path, "trade_history", param);
-                return ParseTrade(rawjson);
+                var tradelist = ParseTransaction(rawjson);
+                return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
+
             }
             catch (Exception e)
             {
@@ -183,7 +185,7 @@ namespace CoinBalance.CoreClass.APIClass
 
         }
 
-        private static TradeList ParseTrade(string rawjson)
+        private static TradeList ParseTransaction(string rawjson)
         {
             JObject json;
 

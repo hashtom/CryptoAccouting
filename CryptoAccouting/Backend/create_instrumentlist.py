@@ -1,7 +1,7 @@
 ﻿import json
 import requests
 
-url = "https://api.coinmarketcap.com/v1/ticker/"
+url = "https://api.coinmarketcap.com/v1/ticker/?limit=0"
 logo_url = "https://files.coinmarketcap.com/static/img/coins/32x32/"
 basedir = "/home/bridgeplace/www/coinbalance/"
 

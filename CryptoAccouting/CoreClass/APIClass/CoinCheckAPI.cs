@@ -116,7 +116,8 @@ namespace CoinBalance.CoreClass.APIClass
 
                 Uri path = new Uri("/api/exchange/orders/transactions", UriKind.Relative);
                 var rawjson = await SendAsync(path, HttpMethod.Get, true);
-                return ParseTrade(rawjson);
+                var tradelist = ParseTransaction(rawjson);
+                return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
             }
             catch (Exception e)
             {
@@ -152,8 +153,8 @@ namespace CoinBalance.CoreClass.APIClass
 
                 //rawjson = await SendAsync(http, path, HttpMethod.Get);
                 var rawjson = await SendAsync(path, HttpMethod.Get, true, param);
-
-                return ParseTrade(rawjson);
+                var tradelist = ParseTransaction(rawjson);
+                return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
             }
             catch (Exception e)
             {
@@ -209,7 +210,7 @@ namespace CoinBalance.CoreClass.APIClass
 
         }
 
-        private static TradeList ParseTrade(string rawjson, bool IsPagenation = false)
+        private static TradeList ParseTransaction(string rawjson, bool IsPagenation = false)
         {
             JObject json;
 

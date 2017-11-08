@@ -83,7 +83,8 @@ namespace CoinBalance.CoreClass.APIClass
                 };
 
                 var rawjson = await SendAsync(path, HttpMethod.Get, param);
-                return ParseTransaction(rawjson);
+                var tradelist = ParseTransaction(rawjson);
+                return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
             }
             catch (Exception e)
             {

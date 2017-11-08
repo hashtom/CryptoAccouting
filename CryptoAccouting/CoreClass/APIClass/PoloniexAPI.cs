@@ -69,9 +69,9 @@ namespace CoinBalance.CoreClass.APIClass
 
                 Uri path = new Uri("tradingApi", UriKind.Relative);
 
-                var rawjson = await SendAsync(path, HttpMethod.Post,
-                                              "command=returnTradeHistory&currencyPair=all" + "&start=" + from + "&end=" + to);
-                return ParseTransaction(rawjson);
+                var rawjson = await SendAsync(path, HttpMethod.Post, "command=returnTradeHistory&currencyPair=all" + "&start=" + from + "&end=" + to);
+                var tradelist = ParseTransaction(rawjson);
+                return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
             }
             catch (Exception e)
             {

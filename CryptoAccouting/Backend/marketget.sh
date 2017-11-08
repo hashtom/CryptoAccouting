@@ -7,7 +7,7 @@ yesterday=`/bin/date -v-1d +"%Y%m%d%H"`
 work="/home/bridgeplace/www/coinbalance/market"
 log="/home/bridgeplace/scripts"
 
-wget "https://api.coinmarketcap.com/v1/ticker/" -O $work/data/market_"$stamp".json -o $log/market.log
+wget "https://api.coinmarketcap.com/v1/ticker/?limit=0" -O $work/data/market_"$stamp".json -o $log/market.log
 
 cp -p $work/data/market_"$stamp".json $work/market_latest.json
 cp -p $work/data/market_"$yesterday".json $work/market_yesterday.json
