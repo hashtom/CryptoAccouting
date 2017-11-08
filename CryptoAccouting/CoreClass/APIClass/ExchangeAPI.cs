@@ -122,7 +122,6 @@ namespace CoinBalance.CoreClass.APIClass
                         return await PoloniexAPI.FetchPositionAsync(exchange);
 
                     case "bitFlyer_l":
-                        //throw new AppCoreNetworkException("BitFlyer will be supported soon!");
                         return await BitFlyerAPI.FetchPositionAsync(exchange);
 
                     default:

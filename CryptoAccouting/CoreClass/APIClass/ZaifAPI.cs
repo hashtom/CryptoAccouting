@@ -26,7 +26,7 @@ namespace CoinBalance.CoreClass.APIClass
 
             try
             {
-                foreach (var coin in coins.Where(x => x.PriceSourceCode == "Zaif"))
+                foreach (var coin in coins.Where(x => x.PriceSourceCode == zaif.Code))
                 {
                     //using (var http = new HttpClient())
                     //{

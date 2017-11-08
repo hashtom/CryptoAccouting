@@ -88,7 +88,7 @@ namespace CoinBalance.CoreClass.APIClass
             {
                 var jobj = await Task.Run(() => JObject.Parse(rawjson));
 
-                foreach (var coin in coins.Where(x => x.PriceSourceCode == "Poloniex"))
+                foreach (var coin in coins.Where(x => x.PriceSourceCode == _poloniex.Code))
                 {
                     if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
                     JToken jrow;

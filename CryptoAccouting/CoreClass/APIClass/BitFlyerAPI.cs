@@ -28,7 +28,7 @@ namespace CoinBalance.CoreClass.APIClass
 
             try
             {
-                foreach (var coin in coins.Where(x => x.PriceSourceCode == "BitFlyer_l"))
+                foreach (var coin in coins.Where(x => x.PriceSourceCode == bitflyer.Code))
                 {
                     Uri path = new Uri(apiver + "/" + "ticker", UriKind.Relative);
 

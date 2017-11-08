@@ -30,7 +30,7 @@ namespace CoinBalance.CoreClass.APIClass
 
                 var btcprice = AppCore.Bitcoin.MarketPrice;
 
-                foreach (var coin in coins.Where(x => x.PriceSourceCode == "Bittrex"))
+                foreach (var coin in coins.Where(x => x.PriceSourceCode == bittrex.Code))
                 {
                     if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
 

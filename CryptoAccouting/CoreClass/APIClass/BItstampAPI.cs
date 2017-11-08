@@ -20,7 +20,7 @@ namespace CoinBalance.CoreClass.APIClass
 
             try
             {
-                foreach (var coin in coins.Where(x => x.PriceSourceCode == "Bitstamp"))
+                foreach (var coin in coins.Where(x => x.PriceSourceCode == bitstamp.Code))
                 {
                     var currency_pair = coin.Symbol1 == "BTC" ? "btcusd" : bitstamp.GetSymbolForExchange(coin.Id).ToLower() + "btc";
 

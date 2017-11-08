@@ -29,7 +29,7 @@ namespace CoinBalance.CoreClass.APIClass
 
             try
             {
-                foreach (var coin in coins.Where(x => x.PriceSourceCode == "CoinCheck"))
+                foreach (var coin in coins.Where(x => x.PriceSourceCode == coincheck.Code))
                 {
                     //using (var http = new HttpClient())
                     //{

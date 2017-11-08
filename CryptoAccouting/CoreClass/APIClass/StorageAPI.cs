@@ -182,8 +182,9 @@ namespace CoinBalance.CoreClass.APIClass
                     ParseAPIStrings.ParsePriceSourceXML(LoadFromFile(PriceSourceFile), instrumentlist);
                     return instrumentlist;
                 }
-                catch (AppCoreStorageException)
+                catch (Exception ex)
                 {
+                    System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadInstrument: Error on loading price Source: " + ex.GetType() + ": " + ex.Message);
                     return instrumentlist;
                 }
             }
