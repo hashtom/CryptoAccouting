@@ -42,12 +42,7 @@
                     StorageAPI.LoadAppSettingXML();                 }                 catch (Exception e)                 {                     BaseCurrency = EnuBaseFiatCCY.USD; //Default setting                     System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: Failed to read AppSettingfile" + e.GetType() + ": " + e.Message);                     //throw new AppCoreWarning(e.Message);                 }             }             catch (AppCoreBalanceException e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 Balance = new Balance();                 //throw;             }             catch (Exception e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 throw;             }          }          public static async Task LoadCrossRateAsync()
         {             try             {
                 USDCrossRates = await MarketDataAPI.FetchCrossRateAsync();
-                //if (USDCrossRates is null)
-                //{
-                //    USDCrossRates = await StorageAPI.LoadCrossRateAsync();
-                //}
-            }             catch(Exception e)             {                 USDCrossRates = await StorageAPI.LoadCrossRateAsync();                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadCrossRateAsync(continued with file): " + e.GetType() + ": " + e.Message);             }
-            //return USDCrossRates != null ? EnuAPIStatus.Success : EnuAPIStatus.NotAvailable;         } 
+            }             catch(Exception e)             {                 USDCrossRates = await StorageAPI.LoadCrossRateAsync();                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadCrossRateAsync(continued with file): " + e.GetType() + ": " + e.Message);             }         } 
         public static async Task FetchMarketDataFromBalanceAsync()
         { 
             if (Balance != null)
