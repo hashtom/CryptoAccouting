@@ -135,6 +135,22 @@ namespace CoinBalance.CoreClass
         {
             CoinStorage = storage;
         }
+
+        public void ClearAttributes()
+        {
+            BalanceDate = DateTime.MinValue;
+            BookedExchange = null;
+
+            if (!WatchOnly)
+            {
+                CoinStorage.StorageType = EnuCoinStorageType.TBA;
+                CoinStorage.Code = EnuCoinStorageType.TBA.ToString();
+            }
+            else
+            {
+                CoinStorage = null;
+            }
+        }
 	}
 
 }

@@ -21,7 +21,7 @@
             base.ViewWillAppear(animated);
              if (position_count != mybalance.BalanceByCoin.Count)             {                 TableView.Source = new CoinTableSource(mybalance, this);                 position_count = mybalance.BalanceByCoin.Count;             }              ReDrawScreen();             //TableView.ReloadData();             try             {
                 await AppCore.LoadCrossRateAsync();
-                await AppCore.FetchMarketDataFromBalanceAsync();
+                await AppCore.FetchMarketDataFromBalanceAsync();                 await AppCore.FetchCoinLogoFromBalanceAsync();
             }             catch(Exception e)             {                 this.PopUpWarning("Unable to obtain latest prices: " + e.GetType() + ": " + e.Message);                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": ViewWillAppear: Cound't update price: " + e.GetType() + ": " + e.Message);             }             finally             {                 ReDrawScreen();             }
 
         }          public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)

@@ -82,9 +82,9 @@ namespace CoinBalance
 				//this.PresentViewController(okAlertController, true, null);
                 ReDrawScreen();
 			}
-            catch(Exception)
+            catch(Exception e)
             {
-                PopUpWarning("Failed to remove cache data!");
+                PopUpWarning("Failed to remove cache data: " + e.Message);
 				//UIAlertController okAlertController = UIAlertController.Create("Critical Error", "Failed to remove cache data!", UIAlertControllerStyle.Alert);
 				//okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
 				//this.PresentViewController(okAlertController, true, null);

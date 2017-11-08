@@ -39,7 +39,7 @@
                 InstrumentList = StorageAPI.LoadInstrument();                 LoadExchangeList();                  Balance = StorageAPI.LoadBalanceXML(InstrumentList);                 RefreshBalance();                  try
                 {
                     //Load App Configuration + API keys
-                    StorageAPI.LoadAppSettingXML();                 }                 catch (Exception e)                 {                     BaseCurrency = EnuBaseFiatCCY.USD; //Default setting                     System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: Failed to read AppSettingfile" + e.GetType() + ": " + e.Message);                     //throw new AppCoreWarning(e.Message);                 }              }             catch (AppCoreBalanceException e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 Balance = new Balance();                 //throw;             }             catch (Exception e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 throw;             }          }          public static async Task LoadCrossRateAsync()
+                    StorageAPI.LoadAppSettingXML();                 }                 catch (Exception e)                 {                     BaseCurrency = EnuBaseFiatCCY.USD; //Default setting                     System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: Failed to read AppSettingfile" + e.GetType() + ": " + e.Message);                     //throw new AppCoreWarning(e.Message);                 }             }             catch (AppCoreBalanceException e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 Balance = new Balance();                 //throw;             }             catch (Exception e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 throw;             }          }          public static async Task LoadCrossRateAsync()
         {             try             {
                 USDCrossRates = await MarketDataAPI.FetchCrossRateAsync();
                 //if (USDCrossRates is null)
@@ -74,7 +74,8 @@
                 {
                     throw new AppCoreException("Couldn't get Instrumentlist.");
                 }             }
-            catch (Exception e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": SyncLatestCoins: " + e.GetType() + ": " + e.Message);                 throw;             }         }          public static async Task FetchCoinLogoAsync(Instrument coin)         {              await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);         }          public static async Task FetchCoinLogoTop100Async()         {             if (InstrumentList == null)
+            catch (Exception e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": SyncLatestCoins: " + e.GetType() + ": " + e.Message);                 throw;             }         }          public static async Task FetchCoinLogoAsync(Instrument coin)         {              await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);         }          public static async Task FetchCoinLogoFromBalanceAsync()         {             foreach (var pos in Balance)             {
+                await MarketDataAPI.FetchCoinLogoAsync(pos.Coin.Id, false);             }         }          public static async Task FetchCoinLogoTop100Async()         {             if (InstrumentList == null)
             {
                 throw new AppCoreException("InstrumentList is null.");             }
             else
@@ -150,8 +151,7 @@
                         strnumber = String.Format("{0:n2}", number);
                     } 
                 }                 if (symbol != null) strnumber = symbol + " " + strnumber;             }              return strnumber;
-        }          public static void RemoveAllCache()         {
-
-            baseCurrency = EnuBaseFiatCCY.USD;
-            PublicExchangeList.ClearAPIKeys();
-            StorageAPI.RemoveAllCache();          }      }  } 
+        }          public static void RemoveAllCache()         {             //Base Currency
+            baseCurrency = EnuBaseFiatCCY.USD;              //Clear API keys
+            PublicExchangeList.ClearAPIKeys();              //Clear Position Attributes             CoinStorageList.Clear();             foreach(var pos in Balance)             {                 pos.ClearAttributes();                 if (pos.CoinStorage != null) AttachCoinStorage(pos.CoinStorage.Code, pos.CoinStorage.StorageType, pos);             }             RefreshBalance();              //Modify & Remove files             StorageAPI.SaveBalanceXML(Balance);
+            StorageAPI.RemoveAllCache();         }      }  } 

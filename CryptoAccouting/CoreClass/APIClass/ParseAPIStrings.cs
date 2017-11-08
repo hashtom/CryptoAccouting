@@ -206,6 +206,11 @@ namespace CoinBalance.CoreClass.APIClass
                                         //pos.AttachCoinStorage(storage);
                                         //storage.AttachPosition(pos);
                                     }
+                                    else
+                                    {
+                                        //var tba = CoinStorageList.GetStorageListSelection().First(x => x.StorageType == EnuCoinStorageType.TBA);
+                                        AppCore.AttachCoinStorage(EnuCoinStorageType.TBA.ToString(), EnuCoinStorageType.TBA, pos);
+                                    }
                                 }
 
                                 mybal.Attach(pos);

@@ -73,10 +73,10 @@ namespace CoinBalance.CoreClass
 			return storages[indexNumber];
 		}
 
-		public int Count()
-		{
-			return storages.Count();
-		}
+		//public int Count()
+		//{
+		//	return storages.Count();
+		//}
 
         public IEnumerator<CoinStorage> GetEnumerator()
 		{

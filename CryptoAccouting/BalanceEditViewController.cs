@@ -274,6 +274,7 @@ namespace CoinBalance
             if (switchWatchOnly.On)
             {
                 PositionDetail.WatchOnly = true;
+                PositionDetail.ClearAttributes();
             }
             else
             {
