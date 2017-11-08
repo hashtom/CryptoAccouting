@@ -6,7 +6,7 @@ import re
 import pandas as pd
 
 #basedir = "/home/bridgeplace/scripts/"
-basedir = "/Users/name/"
+#basedir = "/Users/name/Downloads/"
 
 exchanges = []
 ExchangeList = {"exchanges": exchanges}
@@ -15,7 +15,9 @@ ExchangeList = {"exchanges": exchanges}
 other_dict = { 
         "code": "Other",
         "name": "Other Exchange",
-        "api": "false",
+        "apiprice": "false",
+        "apitrade": "false",
+        "apibalance": "false",
         "listing": []
         }
 exchanges.append(other_dict)
@@ -24,7 +26,9 @@ exchanges.append(other_dict)
 zaif_dict = { 
         "code": "Zaif",
         "name": "Zaif",
-        "api": "true",
+        "apiprice": "true",
+        "apitrade": "true",
+        "apibalance": "true",
         "listing": [
              { "symbol": "BTC" },
              { "symbol": "MONA" },
@@ -39,7 +43,9 @@ exchanges.append(zaif_dict)
 bitflyer_dict = { 
         "code": "BitFlyer_l",
         "name": "BitFlyer(Lightning)",
-        "api": "true",
+        "apiprice": "true",
+        "apitrade": "true",
+        "apibalance": "true",
          "listing": [
                  { "symbol": "BTC" }
                  ]
@@ -47,9 +53,11 @@ bitflyer_dict = {
 exchanges.append(bitflyer_dict)
 
 bitflyer_otc_dict = { 
-        "code": "BitFlyer_OTC",
-        "name": "BitFlyer(OTC)",
-        "api": "false",
+        "code": "BitFlyer",
+        "name": "BitFlyer",
+        "apiprice": "false",
+        "apitrade": "false",
+        "apibalance": "false",
          "listing": [
                  { "symbol": "BTC" },
                  { "symbol": "LTC" },
@@ -65,7 +73,9 @@ exchanges.append(bitflyer_otc_dict)
 coincheck_dict = {
         "code": "CoinCheck",
         "name": "CoinCheck",
-        "api": "true",
+        "apiprice": "true",
+        "apitrade": "true",
+        "apibalance": "true",
         "listing": [
                 { "symbol": "BTC" },
                 { "symbol": "ETH" },
@@ -88,7 +98,9 @@ exchanges.append(coincheck_dict)
 bitstamp_dict = {
         "code": "Bitstamp",
         "name": "Bitstamp",
-        "api": "true",
+        "apiprice": "true",
+        "apitrade": "false",
+        "apibalance": "false",
         "listing": [ 
                 { "symbol": "BTC" },
                 { "symbol": "XRP" }
@@ -102,7 +114,10 @@ bittrex = requests.get(bittrex_baseurl + "/api/v1.1/public/getcurrencies").json(
 #bittrex_text = requests.get(bittrex_baseurl + "/api/v1.1/public/getcurrencies").text
 bittrex_dict = { "code": "Bittrex",
                 "name": "Bittrex",
-                "api": "true"}
+                "apiprice": "true",
+                "apitrade": "true",
+                "apibalance": "true"
+                }
                 #"listing": bittrex_coins}
 
 if bittrex["success"] == True:
@@ -121,7 +136,9 @@ if bittrex["success"] == True:
 btcbox_dict = { 
         "code": "BTCBox",
         "name": "BTCBox",
-        "api": "false",
+        "apiprice": "false",
+        "apitrade": "false",
+        "apibalance": "false",
          "listing": [
                  { "symbol": "BTC" },
                  { "symbol": "BCH" }
@@ -133,7 +150,9 @@ exchanges.append(btcbox_dict)
 quoine_dict = { 
         "code": "Quoine",
         "name": "Quoine",
-        "api": "false",
+        "apiprice": "false",
+        "apitrade": "false",
+        "apibalance": "false",
          "listing": [
                  { "symbol": "BTC" },
                  { "symbol": "BCH" }
@@ -145,7 +164,9 @@ exchanges.append(quoine_dict)
 bitbank_dict = { 
         "code": "Bitbank",
         "name": "Bitbank",
-        "api": "false",
+        "apiprice": "false",
+        "apitrade": "false",
+        "apibalance": "false",
          "listing": [
                  { "symbol": "BTC" },
                  { "symbol": "BCH" }
@@ -157,7 +178,9 @@ exchanges.append(bitbank_dict)
 gdax_dict = { 
         "code": "GDAX",
         "name": "GDAX",
-        "api": "false",
+        "apiprice": "false",
+        "apitrade": "false",
+        "apibalance": "false",
          "listing": [
                  { "symbol": "BTC" },
                  { "symbol": "LTC" },
@@ -170,7 +193,9 @@ exchanges.append(gdax_dict)
 gemini_dict = { 
         "code": "Gemini",
         "name": "Gemini",
-        "api": "false",
+        "apiprice": "false",
+        "apitrade": "false",
+        "apibalance": "false",
          "listing": [
                  { "symbol": "BTC" },
                  { "symbol": "ETH" }
@@ -182,7 +207,9 @@ exchanges.append(gemini_dict)
 kraken_dict = {
         "code": "Kraken",
         "name": "Kraken",
-        "api": "false",
+        "apiprice": "false",
+        "apitrade": "false",
+        "apibalance": "false",
         "listing": [
                 { "symbol": "BTC" },
                 { "symbol": "BCH" },
@@ -209,7 +236,10 @@ exchanges.append(kraken_dict)
 bitfinex = requests.get("https://api.bitfinex.com/v1/symbols").json()
 bitfinex_dict = {"code": "BitFinex",
                  "name": "BitFinex",
-                 "api": "false"}
+                 "apiprice": "false",
+                 "apitrade": "false",
+                 "apibalance": "false"
+                 }
 bitfinex_symbols = [] #pd.Series()
 for ins in bitfinex:
     if re.search(r"\w\w\wusd",ins) or re.search(r"\w\w\wbtc",ins) :
@@ -225,7 +255,10 @@ exchanges.append(bitfinex_dict)
 poloniex = requests.get("https://poloniex.com/public?command=returnCurrencies").json()
 poloniex_dict = {"code": "Poloniex",
                  "name": "Poloniex",
-                 "api": "true"}
+                 "apiprice": "true",
+                 "apitrade": "true",
+                 "apibalance": "true"
+                 }
 poloniex_symbols = pd.DataFrame({"symbol":list(poloniex.keys())})
 poloniex_symbols.drop_duplicates(inplace=True)
 poloniex_dict["listing"] = poloniex_symbols.to_dict(orient='records')
@@ -238,7 +271,9 @@ exchanges.append(poloniex_dict)
 bithumb_dict = {
         "code": "Bithumb",
         "name": "Bithumb",
-        "api": "false",
+        "apiprice": "false",
+        "apitrade": "false",
+        "apibalance": "false",
         "listing": [
                 { "symbol": "BTC" }, 
                 { "symbol": "ETH" },
@@ -262,7 +297,9 @@ exchanges.append(bithumb_dict)
 otc_dict = { 
         "code": "OTC",
         "name": "Over The Counter",
-        "api": "false",
+        "apiprice": "false",
+        "apitrade": "false",
+        "apibalance": "false",
         "listing": []
         }
 
@@ -272,7 +309,9 @@ exchanges.append(otc_dict)
 airdrop_dict = {
           "code": "AirDrop",
           "name": "Air Drop",
-          "api": "false",
+        "apiprice": "false",
+        "apitrade": "false",
+        "apibalance": "false",
           "listing": []
         }
 exchanges.append(airdrop_dict)

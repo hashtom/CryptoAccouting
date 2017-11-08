@@ -43,7 +43,7 @@ namespace CoinBalance
             pricesources = new List<(string, string)>();
             pricesources.Add(("coinmarketcap", "coinmarketcap"));
 
-            foreach (var ex in AppCore.PublicExchangeList.Where(x => x.APIProvided))
+            foreach (var ex in AppCore.PublicExchangeList.Where(x => x.HasPriceAPI))
             {
                 if (ex.IsListed(thisCoin.Id)) pricesources.Add((ex.Name, ex.Code));
             }

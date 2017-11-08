@@ -222,7 +222,7 @@ namespace CoinBalance.CoreClass.APIClass
                 }
                 else
                 {
-                    var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY };
+                    var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _coincheck };
                     var jarray = IsPagenation ? (JArray)json["data"] : (JArray)json["transactions"];
 
                     foreach (var elem in jarray)

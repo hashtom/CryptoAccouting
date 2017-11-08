@@ -171,7 +171,7 @@ namespace CoinBalance.CoreClass.APIClass
         {
             try
             {
-                var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY };
+                var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _bitflyer };
                 var jarray = JArray.Parse(rawjson);
 
                 foreach (var elem in jarray)

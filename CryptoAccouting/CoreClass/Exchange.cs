@@ -6,9 +6,11 @@ namespace CoinBalance.CoreClass
 {
     public class Exchange : CoinStorage
     {
-        public bool APIProvided { get; set; }
         public string Key { get; set; }
         public string Secret { get; set; }
+        public bool HasPriceAPI { get; set; }
+        public bool HasTradeAPI { get; set; }
+        public bool HasBalanceAPI { get; set; }
         public string LogoFileName { get; set; }
         public TradeList TradeList { get; private set; }
         private InstrumentList Coins;
@@ -25,7 +27,12 @@ namespace CoinBalance.CoreClass
 
         public bool APIKeyAvailable()
         {
-            return (Key != "" && Secret != "");
+            return (PrivateAPIAvailable() && Key != "" && Secret != "");
+        }
+
+        public bool PrivateAPIAvailable()
+        {
+            return (HasTradeAPI || HasBalanceAPI);
         }
 
         public void ClearAPIKeys()

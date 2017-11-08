@@ -178,7 +178,7 @@ namespace CoinBalance.CoreClass.APIClass
         {
             try
             {
-                var tradelist = new TradeList() { SettlementCCY = EnuCCY.BTC };
+                var tradelist = new TradeList() { SettlementCCY = EnuCCY.BTC, TradedExchange = _poloniex };
                 var json = JObject.Parse(rawjson);
 
                 foreach (JProperty x in (JToken)json)

@@ -254,7 +254,7 @@ namespace CoinBalance.CoreClass.APIClass
             XElement apikeys = new XElement("apikeys");
             application.Add(apikeys);
 
-            foreach (var exchange in exList.Where(x => x.APIProvided == true))
+            foreach (var exchange in exList.Where(x => x.APIKeyAvailable() == true))
             {
                 XElement key = new XElement("exchange",
                                             new XAttribute("name", exchange.Code),

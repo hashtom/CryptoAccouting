@@ -83,11 +83,11 @@ namespace CoinBalance
 
         partial void ButtonExchange_TouchUpInside(UIButton sender)
         {
-			UIAlertController exchangeAlert = UIAlertController.Create("Exchange", "Choose Exchange", UIAlertControllerStyle.ActionSheet);
-			exchangeAlert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
+            UIAlertController exchangeAlert = UIAlertController.Create("Exchange", "Choose Exchange", UIAlertControllerStyle.ActionSheet);
+            exchangeAlert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
 
-            foreach (var exc in AppCore.PublicExchangeList.Where(x=>x.APIProvided == true))
-			{
+            foreach (var exc in AppCore.PublicExchangeList.Where(x => (x.HasTradeAPI == true || x.HasBalanceAPI)))
+            {
                 exchangeAlert.AddAction(UIAlertAction.Create(exc.Name,
                                                                  UIAlertActionStyle.Default,
                                                                  (obj) =>
@@ -100,10 +100,10 @@ namespace CoinBalance
                                                                      buttonFetchPosition.Enabled = true;
                                                                      textAPIKey.Enabled = true;
                                                                      textAPISecret.Enabled = true;
-                }
+                                                                 }
                                                             ));
-			}
-			this.PresentViewController(exchangeAlert, true, null);
+            }
+            this.PresentViewController(exchangeAlert, true, null);
 
         }
 

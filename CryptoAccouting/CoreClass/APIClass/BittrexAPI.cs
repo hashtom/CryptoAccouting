@@ -170,7 +170,7 @@ namespace CoinBalance.CoreClass.APIClass
                 }
                 else
                 {
-                    var tradelist = new TradeList() { SettlementCCY = EnuCCY.BTC };
+                    var tradelist = new TradeList() { SettlementCCY = EnuCCY.BTC, TradedExchange = _bittrex };
                     var jarray = (JArray)json["result"];
 
                     foreach (var elem in jarray)

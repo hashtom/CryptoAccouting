@@ -265,7 +265,9 @@ namespace CoinBalance.CoreClass.APIClass
                             if (coin != null) exchange.AttachListedCoin(coin);
                         }
                     }
-                    exchange.APIProvided = (bool)market["api"];
+                    exchange.HasPriceAPI = (bool)market["apiprice"];
+                    exchange.HasTradeAPI = (bool)market["apitrade"];
+                    exchange.HasBalanceAPI = (bool)market["apibalance"];
                 }
 
             }

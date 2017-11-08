@@ -196,7 +196,7 @@ namespace CoinBalance.CoreClass.APIClass
                 }
                 else
                 {
-                    var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY };
+                    var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _zaif };
                     foreach (JProperty x in (JToken)json["return"])
                     {
                         //Transaction Date Order must be ascending by design...

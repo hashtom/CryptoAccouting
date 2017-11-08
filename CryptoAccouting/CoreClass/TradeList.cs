@@ -105,6 +105,11 @@ namespace CoinBalance.CoreClass
             return transactions.Where(x => x.TradedCoin.Id == instrumentId).Where(x => x.BuySell == buysell).Sum(x => x.TradeNetValue);
         }
 
+        public string ExchangeName()
+        {
+            return TradedExchange != null ? TradedExchange.Name : null;
+        }
+
    //     public void CalculateTotalValue(int TradeYear, string Symbol = "ALL")
    //     {
    //         this.TradeYear = TradeYear;
