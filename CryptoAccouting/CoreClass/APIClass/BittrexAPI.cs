@@ -27,8 +27,6 @@ namespace CoinBalance.CoreClass.APIClass
                 var rawjson = await SendAsync(HttpMethod.Get, BaseUrl + "/api/v1.1/public/getmarketsummaries", false);
                 var jobj = await Task.Run(() => JObject.Parse(rawjson));
                 var jarray = (JArray)jobj["result"];
-
-                //var btcprice = AppCore.Bitcoin.MarketPrice;
                 var btcjrow = jarray.First(x => (string)x["MarketName"] == "USDT-BTC");
 
                 foreach (var coin in coins.Where(x => x.PriceSourceCode == bittrex.Code))
@@ -62,6 +60,8 @@ namespace CoinBalance.CoreClass.APIClass
                             coin.MarketPrice.PriceBTCBefore24h = (double)jrow["PrevDay"];
                             coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"] * (double)btcjrow["Last"];
                             coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"] * (double)btcjrow["PrevDay"];
+                            coin.MarketPrice.DayVolume = (double)jrow["Volume"];
+                            coin.MarketPrice.PriceDate = (DateTime)jrow["TimeStamp"];
                         }
                     }
 

@@ -358,7 +358,7 @@
         <!--Recent Trades-->
         <scene sceneID="8ay-YF-hb1">
             <objects>
-                <viewController id="fSk-S8-Su2" customClass="TransactionViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TransactionViewC" id="fSk-S8-Su2" customClass="TransactionViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="z7B-BV-qb2"/>
                         <viewControllerLayoutGuide type="bottom" id="m27-RO-mML"/>

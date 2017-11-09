@@ -117,11 +117,12 @@ namespace CoinBalance.CoreClass.APIClass
                                                  new XElement("storage", pos.CoinStorage == null ? "" : pos.CoinStorage.Code),
                                                  new XElement("storagetype", pos.CoinStorage == null ? "" : pos.CoinStorage.StorageType.ToString()),
                                                  new XElement("priceusd", pos.LatestPriceUSD.ToString()),
-                                                 new XElement("pricebtc", pos.LatestPriceBTC().ToString()),
-                                                 new XElement("pricebase", pos.LatestPriceBase().ToString()),
-                                                 new XElement("usdret1d", pos.USDRet1d().ToString()),
-                                                 new XElement("btcret1d", pos.BTCRet1d().ToString()),
-                                                 new XElement("baseret1d", pos.BaseRet1d().ToString()),
+                                                 new XElement("pricebtc", pos.LatestPriceBTC.ToString()),
+                                                 new XElement("pricebase", pos.LatestPriceBase.ToString()),
+                                                 new XElement("usdret1d", pos.USDRet1d.ToString()),
+                                                 new XElement("btcret1d", pos.BTCRet1d.ToString()),
+                                                 new XElement("baseret1d", pos.BaseRet1d.ToString()),
+                                                 new XElement("volume", pos.MarketDayVolume.ToString()),
                                                  new XElement("watchonly", pos.WatchOnly.ToString())
                                                 );
                 balance.Add(position);

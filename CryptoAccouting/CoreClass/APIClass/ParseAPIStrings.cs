@@ -191,6 +191,7 @@ namespace CoinBalance.CoreClass.APIClass
                                     USDRet1d_Previous = elem.Element("usdret1d") == null ? 0 : double.Parse(elem.Element("usdret1d").Value),
                                     BTCRet1d_Previous = elem.Element("btcret1d") == null ? 0 : double.Parse(elem.Element("btcret1d").Value),
                                     BaseRet1d_Previous = elem.Element("baseret1d") == null ? 0 : double.Parse(elem.Element("baseret1d").Value),
+                                    Volume_Previous = elem.Element("volume") == null ? 0 : double.Parse(elem.Element("volume").Value),
                                     WatchOnly = watchonly
                                 };
 

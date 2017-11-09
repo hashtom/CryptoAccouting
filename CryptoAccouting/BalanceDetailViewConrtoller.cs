@@ -111,15 +111,15 @@ namespace CoinBalance
                 }
                 else
                 {
-                    labelPrice.Text = AppCore.NumberFormat(booking_positions.First().LatestPriceBTC(), false, true, "฿");
+                    labelPrice.Text = AppCore.NumberFormat(booking_positions.First().LatestPriceBTC, false, true, "฿");
                     //labelVolume.Text = ApplicationCore.NumberFormat(booking_positions.First().MarketDayVolume(), false, true, "฿");
                 }
 
-                labelPrice.TextColor = booking_positions.First().USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);
-                labelPriceBase.Text = AppCore.NumberFormat(booking_positions.First().LatestPriceBase());
-                labelPriceBase.TextColor = booking_positions.First().USDRet1d() > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);
+                labelPrice.TextColor = booking_positions.First().USDRet1d > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);
+                labelPriceBase.Text = AppCore.NumberFormat(booking_positions.First().LatestPriceBase);
+                labelPriceBase.TextColor = booking_positions.First().USDRet1d > 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);
                 labelPriceBaseTitle.Text = "Price(" + AppCore.BaseCurrency + ")";
-                labelVolume.Text = AppCore.NumberFormat(booking_positions.First().MarketDayVolume(), false, true, "฿");
+                labelVolume.Text = AppCore.NumberFormat(booking_positions.First().MarketDayVolume, false, true, "฿");
 
                 //labelProfitLoss.Text = "$" + ApplicationCore.NumberFormat(booking_positions.Sum(x => x.PLUSD()));
                 labelMarketValueTitle.Text = "TotalValue(" + AppCore.BaseCurrency.ToString() + ")";

@@ -22,6 +22,7 @@ namespace CoinBalance.CoreClass
         public double USDRet1d_Previous { get; set; }
         public double BTCRet1d_Previous { get; set; }
         public double BaseRet1d_Previous { get; set; }
+        public double Volume_Previous { get; set; }
         public bool WatchOnly { get; set; }
 
         public Position(Instrument coin)
@@ -63,36 +64,58 @@ namespace CoinBalance.CoreClass
             }
         }
 
-        public double LatestPriceBase()
+        public double LatestPriceBase
         {
-            PriceBase_Previous = Coin.MarketPrice == null ? PriceBase_Previous : Coin.MarketPrice.LatestPriceBase();
-            return PriceBase_Previous;
+            get
+            {
+                PriceBase_Previous = Coin.MarketPrice == null ? PriceBase_Previous : Coin.MarketPrice.LatestPriceBase();
+                return PriceBase_Previous;
+            }
         }
 
-        public double LatestPriceBTC()
+        public double LatestPriceBTC
         {
-            PriceBTC_Previous = Coin.MarketPrice == null ? PriceBTC_Previous : Coin.MarketPrice.LatestPriceBTC;
-            return PriceBTC_Previous;
+            get
+            {
+                PriceBTC_Previous = Coin.MarketPrice == null ? PriceBTC_Previous : Coin.MarketPrice.LatestPriceBTC;
+                return PriceBTC_Previous;
+            }
         }
 
-		public double USDRet1d()
+		public double USDRet1d
 		{
-            return Coin.MarketPrice == null ? USDRet1d_Previous : Coin.MarketPrice.USDRet1d();
+            get
+            {
+                USDRet1d_Previous = Coin.MarketPrice == null ? USDRet1d_Previous : Coin.MarketPrice.USDRet1d();
+                return USDRet1d_Previous;
+            }
 		}
 
-        public double BaseRet1d()
+        public double BaseRet1d
         {
-            return Coin.MarketPrice == null ? BaseRet1d_Previous : Coin.MarketPrice.BaseRet1d();
+            get
+            {
+                BaseRet1d_Previous = Coin.MarketPrice == null ? BaseRet1d_Previous : Coin.MarketPrice.BaseRet1d();
+                return BaseRet1d_Previous;
+            }
         }
 
-        public double BTCRet1d()
+        public double BTCRet1d
         {
-            return Coin.MarketPrice == null ? BTCRet1d_Previous : Coin.MarketPrice.BTCRet1d();
+            get
+            {
+                BTCRet1d_Previous = Coin.MarketPrice == null ? BTCRet1d_Previous : Coin.MarketPrice.BTCRet1d();
+                return BTCRet1d_Previous;
+            }
         }
 
-        public double MarketDayVolume()
+        public double MarketDayVolume
         {
-            return Coin.MarketPrice == null ? 0 : Coin.MarketPrice.DayVolume;
+            get
+            {
+                Volume_Previous = Coin.MarketPrice == null ? Volume_Previous : Coin.MarketPrice.DayVolume;
+                return Volume_Previous;
+            }
         }
 
         public double LatestFiatValueUSD()
@@ -104,22 +127,6 @@ namespace CoinBalance.CoreClass
 		{
             return Coin.MarketPrice == null ? PriceBase_Previous * Amount : Coin.MarketPrice.LatestPriceBase() * this.Amount;
 		}
-
-		//public double BookValueUSD()
-		//{
-		//	return Amount * BookPriceUSD;
-		//}
-
-        //public double PLBase()
-        //{
-        //    return 0;
-            //return BookValueUSD() - LatestFiatValueBase();
-        //}
-
-        //public double PLUSD()
-        //{
-        //    return BookValueUSD() - LatestFiatValueUSD(); 
-        //}
 
         public bool IsIdAssigned()
         {

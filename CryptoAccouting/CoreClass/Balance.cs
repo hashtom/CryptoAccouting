@@ -60,12 +60,13 @@ namespace CoinBalance.CoreClass
                     Id = newid,
                     Amount = positions.Where(x => x.Coin.Id == instrumentid).Sum(x => x.Amount),
                     AmountBTC_Previous = positions.Where(x => x.Coin.Id == instrumentid).Sum(x => x.LatestAmountBTC),
-                    PriceBTC_Previous = positions.First(x => x.Coin.Id == instrumentid).LatestPriceBTC(),
+                    PriceBTC_Previous = positions.First(x => x.Coin.Id == instrumentid).LatestPriceBTC,
                     PriceUSD_Previous = positions.First(x => x.Coin.Id == instrumentid).LatestPriceUSD,
-                    PriceBase_Previous = positions.First(x => x.Coin.Id == instrumentid).LatestPriceBase(),
-                    BTCRet1d_Previous = positions.First(x => x.Coin.Id == instrumentid).BTCRet1d(),
-                    USDRet1d_Previous = positions.First(x => x.Coin.Id == instrumentid).USDRet1d(),
-                    BaseRet1d_Previous = positions.First(x => x.Coin.Id == instrumentid).BaseRet1d(),
+                    PriceBase_Previous = positions.First(x => x.Coin.Id == instrumentid).LatestPriceBase,
+                    BTCRet1d_Previous = positions.First(x => x.Coin.Id == instrumentid).BTCRet1d,
+                    USDRet1d_Previous = positions.First(x => x.Coin.Id == instrumentid).USDRet1d,
+                    BaseRet1d_Previous = positions.First(x => x.Coin.Id == instrumentid).BaseRet1d,
+                    Volume_Previous = positions.First(x => x.Coin.Id == instrumentid).MarketDayVolume,
                     WatchOnly = positions.First(x => x.Coin.Id == instrumentid).WatchOnly
                 };
                 newid++;
@@ -80,7 +81,7 @@ namespace CoinBalance.CoreClass
 
             foreach (var p in positions)
             {
-                ret1d += p.USDRet1d() * p.LatestFiatValueUSD() / total;
+                ret1d += p.USDRet1d * p.LatestFiatValueUSD() / total;
             }
 
             return ret1d;
@@ -99,14 +100,14 @@ namespace CoinBalance.CoreClass
             {
                 foreach (var p in positions)
                 {
-                    ret1d += p.BaseRet1d() * p.LatestFiatValueBase() / total;
+                    ret1d += p.BaseRet1d * p.LatestFiatValueBase() / total;
                 }
             }
 
             return ret1d;
 		}
 
-        public void Attach(Position position) //, bool CalcSummary = true)
+        public void Attach(Position position)
 		{
             
             if (position.IsIdAssigned() && positions.Any(x => x.Id == position.Id))

@@ -14,11 +14,11 @@ namespace CoinBalance
         {
         }
 
-        internal void PopUpWarning(string title, string message)
+        internal void PopUpWarning(string title, string message, Action lamda = null)
         {
             UIAlertController okAlertController = UIAlertController.Create(title, message, UIAlertControllerStyle.Alert);
             okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, null));
-            PresentViewController(okAlertController, true, null);
+            PresentViewController(okAlertController, true, lamda);
         }
 
         //public virtual void DeleteItem(Position pos){}

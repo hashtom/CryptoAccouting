@@ -31,16 +31,16 @@ namespace CoinBalance.UIClass
                 labelPrice.Text = AppCore.NumberFormat(pos.LatestPriceUSD, false, true, "$");
                 labelHolding.Text = "";
                 labelHoldingBTC.Text = pos.WatchOnly ? "" : AppCore.NumberFormat(pos.LatestAmountBTC, false, true, "฿");
-                labelRet1d.Text = AppCore.NumberFormat(pos.BaseRet1d(), true, false) + " %";
-                labelRet1d.TextColor = pos.BaseRet1d() > 0 ? UIColor.FromRGB(18, 104, 114) : UIColor.Red;
+                labelRet1d.Text = AppCore.NumberFormat(pos.BaseRet1d, true, false) + " %";
+                labelRet1d.TextColor = pos.BaseRet1d > 0 ? UIColor.FromRGB(18, 104, 114) : UIColor.Red;
             }
             else
             {
-                labelPrice.Text = AppCore.NumberFormat(pos.LatestPriceBTC(), false, true, "฿");
+                labelPrice.Text = AppCore.NumberFormat(pos.LatestPriceBTC, false, true, "฿");
                 labelHolding.Text = pos.WatchOnly ? "" : AppCore.NumberFormat(pos.Amount);
                 labelHoldingBTC.Text = pos.WatchOnly ? "" : "฿" + AppCore.NumberFormat(pos.LatestAmountBTC);
-                labelRet1d.Text = AppCore.NumberFormat(pos.BaseRet1d(), true, false) + " %";
-                labelRet1d.TextColor = pos.BaseRet1d() > 0 ? UIColor.FromRGB(18, 104, 114) : UIColor.Red;
+                labelRet1d.Text = AppCore.NumberFormat(pos.BaseRet1d, true, false) + " %";
+                labelRet1d.TextColor = pos.BaseRet1d > 0 ? UIColor.FromRGB(18, 104, 114) : UIColor.Red;
             }
 
             var logo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Images", pos.Coin.Id + ".png");
