@@ -143,12 +143,12 @@ namespace CoinBalance.CoreClass.APIClass
         {
             string rawjson;
 
-            if (!Reachability.IsHostReachable(coinbalance_url))
-            {
-                throw new AppCoreNetworkException("Host is not reachable: " + coinbalance_url);
-            }
-            else
-            {
+            //if (!Reachability.IsHostReachable(coinbalance_url))
+            //{
+            //    throw new AppCoreNetworkException("Host is not reachable: " + coinbalance_url);
+            //}
+            //else
+            //{
                 try
                 {
                     using (var http = new HttpClient())
@@ -165,7 +165,7 @@ namespace CoinBalance.CoreClass.APIClass
                     System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchAllCoinData: " + e.GetType() + ": " + e.Message);
                     throw;
                 }
-            }
+            //}
 
         }
 
