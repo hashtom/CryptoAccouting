@@ -18,7 +18,7 @@ namespace CoinBalance.CoreClass.APIClass
         public const string SignHeaderName = "apisign";
         private static readonly Encoding encoding = Encoding.UTF8;
 
-        public static async Task FetchPriceAsync(Exchange bittrex, InstrumentList coins, CrossRate crossrate)
+        public static async Task FetchPriceAsync(Exchange bittrex, InstrumentList coins)
         {
             _bittrex = bittrex;
 
@@ -28,7 +28,8 @@ namespace CoinBalance.CoreClass.APIClass
                 var jobj = await Task.Run(() => JObject.Parse(rawjson));
                 var jarray = (JArray)jobj["result"];
 
-                var btcprice = AppCore.Bitcoin.MarketPrice;
+                //var btcprice = AppCore.Bitcoin.MarketPrice;
+                var btcjrow = jarray.First(x => (string)x["MarketName"] == "USDT-BTC");
 
                 foreach (var coin in coins.Where(x => x.PriceSourceCode == bittrex.Code))
                 {
@@ -36,37 +37,35 @@ namespace CoinBalance.CoreClass.APIClass
 
                     if (coin.Id is "bitcoin")
                     {
-                        var jrow = jarray.First(x => (string)x["MarketName"] == "USDT-BTC");
-                        //if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
-
                         coin.MarketPrice.LatestPriceBTC = 1;
                         coin.MarketPrice.PriceBTCBefore24h = 1;
-                        coin.MarketPrice.DayVolume = (double)jrow["Volume"] * coin.MarketPrice.LatestPriceBTC;
-                        coin.MarketPrice.PriceDate = (DateTime)jrow["TimeStamp"];
-                        coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"];
-                        coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"];
-                        coin.MarketPrice.USDCrossRate = crossrate;
+                        coin.MarketPrice.LatestPriceUSD = (double)btcjrow["Last"];
+                        coin.MarketPrice.PriceUSDBefore24h = (double)btcjrow["PrevDay"];
+                        coin.MarketPrice.DayVolume = (double)btcjrow["Volume"];
+                        coin.MarketPrice.PriceDate = (DateTime)btcjrow["TimeStamp"];
+                    }
+                    else if (coin.Id is "tether")
+                    {
+                        coin.MarketPrice.LatestPriceBTC = 1 / (double)btcjrow["Last"];
+                        coin.MarketPrice.PriceBTCBefore24h = 1 / (double)btcjrow["PrevDay"];
+                        coin.MarketPrice.LatestPriceUSD = 1;
+                        coin.MarketPrice.PriceUSDBefore24h = 1;
+                        coin.MarketPrice.DayVolume = (double)btcjrow["Volume"] / (double)btcjrow["Last"];
+                        coin.MarketPrice.PriceDate = (DateTime)btcjrow["TimeStamp"];
                     }
                     else
                     {
                         if (jarray.Any(x => (string)x["MarketName"] == "BTC-" + bittrex.GetSymbolForExchange(coin.Id)))
                         {
                             var jrow = jarray.First(x => (string)x["MarketName"] == "BTC-" + _bittrex.GetSymbolForExchange(coin.Id));
-                            //if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
-
                             coin.MarketPrice.LatestPriceBTC = (double)jrow["Last"];
                             coin.MarketPrice.PriceBTCBefore24h = (double)jrow["PrevDay"];
-                            coin.MarketPrice.DayVolume = (double)jrow["Volume"] * coin.MarketPrice.LatestPriceBTC;
-                            coin.MarketPrice.PriceDate = (DateTime)jrow["TimeStamp"];
-
-                            coin.MarketPrice.USDCrossRate = crossrate;
-                            if (btcprice != null)
-                            {
-                                coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"] * btcprice.LatestPriceUSD;
-                                coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"] * btcprice.PriceUSDBefore24h;
-                            }
+                            coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"] * (double)btcjrow["Last"];
+                            coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"] * (double)btcjrow["PrevDay"];
                         }
                     }
+
+                    //coin.MarketPrice.USDCrossRate = crossrate;
                 }
             }
             catch (Exception e)

@@ -16,12 +16,12 @@ namespace CoinBalance.CoreClass.APIClass
     {
         private const string BaseUrl = "https://poloniex.com/";
         private static Exchange _poloniex;
-        private static CrossRate _crossrate;
+        //private static CrossRate _crossrate;
 
-        public static async Task FetchPriceAsync(Exchange poloniex, InstrumentList coins, CrossRate crossrate)
+        public static async Task FetchPriceAsync(Exchange poloniex, InstrumentList coins)
         {
             _poloniex = poloniex;
-            _crossrate = crossrate;
+            //_crossrate = crossrate;
             string rawjson;
 
             try
@@ -87,47 +87,46 @@ namespace CoinBalance.CoreClass.APIClass
             try
             {
                 var jobj = await Task.Run(() => JObject.Parse(rawjson));
+                var btcjrow = jobj["USDT_BTC"];
 
                 foreach (var coin in coins.Where(x => x.PriceSourceCode == _poloniex.Code))
                 {
                     if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
-                    JToken jrow;
-
-                    var price_yesterday = await MarketDataAPI.FetchPriceBefore24Async(coin.Id);
+                    //var price_yesterday = await MarketDataAPI.FetchPriceBefore24Async(coin.Id);
 
                     if (coin.Id is "bitcoin")
                     {
-                        jrow = jobj["USDT_BTC"];
-
                         coin.MarketPrice.LatestPriceBTC = 1;
                         coin.MarketPrice.PriceBTCBefore24h = 1;
-                        //coin.MarketPrice.DayVolume = (double)jrow["baseVolume"];
-                        //coin.MarketPrice.PriceDate = (DateTime)jrow["TimeStamp"];
-                        coin.MarketPrice.LatestPriceUSD = (double)jrow["last"];
-                        coin.MarketPrice.PriceUSDBefore24h = price_yesterday.LatestPriceUSD;
-                        coin.MarketPrice.USDCrossRate = _crossrate;
+                        coin.MarketPrice.LatestPriceUSD = (double)btcjrow["last"];
+                        //coin.MarketPrice.PriceUSDBefore24h = price_yesterday.LatestPriceUSD;
+                        //coin.MarketPrice.USDCrossRate = _crossrate;
+                        coin.MarketPrice.DayVolume = (double)btcjrow["baseVolume"];
+                    }
+                    else if (coin.Id is "tether")
+                    {
+                        coin.MarketPrice.LatestPriceBTC = 1 / (double)btcjrow["last"];
+                        //coin.MarketPrice.PriceBTCBefore24h = 1 / price_yesterday.LatestPriceUSD;
+                        coin.MarketPrice.LatestPriceUSD = 1;
+                        coin.MarketPrice.PriceUSDBefore24h = 1;
+                        //coin.MarketPrice.USDCrossRate = _crossrate;
+                        coin.MarketPrice.DayVolume = (double)btcjrow["baseVolume"];
                     }
                     else
                     {
-                        var btcprice = AppCore.Bitcoin.MarketPrice;
+                        //var btcprice = AppCore.Bitcoin.MarketPrice;
 
-                        jrow = jobj["BTC_" + _poloniex.GetSymbolForExchange(coin.Id)];
+                        var jrow = jobj["BTC_" + _poloniex.GetSymbolForExchange(coin.Id)];
 
                         coin.MarketPrice.LatestPriceBTC = (double)jrow["last"];
-                        coin.MarketPrice.PriceBTCBefore24h = price_yesterday.LatestPriceBTC;
-                        //coin.MarketPrice.DayVolume = (double)jrow["baseVolume"];
-                        //coin.MarketPrice.PriceDate = (DateTime)jrow["TimeStamp"];
-
-                        coin.MarketPrice.USDCrossRate = _crossrate;
-                        if (btcprice != null)
-                        {
-                            coin.MarketPrice.LatestPriceUSD = (double)jrow["last"] * btcprice.LatestPriceUSD;
-                            coin.MarketPrice.PriceUSDBefore24h = price_yesterday.LatestPriceUSD;
-                        }
+                        //coin.MarketPrice.PriceBTCBefore24h = price_yesterday.LatestPriceBTC;
+                        //coin.MarketPrice.USDCrossRate = _crossrate;
+                        coin.MarketPrice.LatestPriceUSD = (double)jrow["last"] * (double)btcjrow["last"];
+                        //coin.MarketPrice.PriceUSDBefore24h = price_yesterday.LatestPriceUSD;
+                        coin.MarketPrice.DayVolume = (double)jrow["baseVolume"];
 
                     }
 
-                    coin.MarketPrice.DayVolume = (double)jrow["baseVolume"];
                     coin.MarketPrice.PriceDate = DateTime.Now;
                 }
             }

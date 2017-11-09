@@ -25,7 +25,7 @@ namespace CoinBalance
             else
             {
                 buttonExchange.SetTitle("Select Exchange", UIControlState.Highlighted);                 buttonSearch.Enabled = false;
-            }              if (myTradeList != null)             {                 barbuttonShare.Enabled = myTradeList.Count() > 0 ? true : false;                  labelNumBuy.Text = AppCore.NumberFormat(myTradeList.NumOrdersBuy, false, false);                 labelNumSell.Text = AppCore.NumberFormat(myTradeList.NumOrdersSell, false, false);
+            }              if (myTradeList != null)             {                 barbuttonShare.Enabled = myTradeList.Any() ? true : false;                  labelNumBuy.Text = AppCore.NumberFormat(myTradeList.NumOrdersBuy, false, false);                 labelNumSell.Text = AppCore.NumberFormat(myTradeList.NumOrdersSell, false, false);
                 labelBTCBuy.Text = AppCore.NumberFormat(myTradeList.TotalBTCTradeValueBuy, false, true);
                 labelBTCSell.Text = AppCore.NumberFormat(myTradeList.TotalBTCTradeValueSell, false, true);                  if (myTradeList.SettlementCCY != EnuCCY.BTC)
                 {

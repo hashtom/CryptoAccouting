@@ -119,7 +119,7 @@ namespace CoinBalance.CoreClass.APIClass
                 var jarray = await Task.Run(() => JArray.Parse(rawjson));
                 var jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
 
-                foreach (var coin in instrumentlist.Where(x => x.PriceSourceCode == "coinmarketcap" || x.PriceSourceCode is null))
+                foreach (var coin in instrumentlist) //.Where(x => x.PriceSourceCode == "coinmarketcap" || x.PriceSourceCode is null))
                 {
                     //Parse Market Data 
                     if (coin.MarketPrice == null)
@@ -137,7 +137,6 @@ namespace CoinBalance.CoreClass.APIClass
                     coin.MarketPrice.PriceBTCBefore24h = (double)jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_btc"];
                     coin.MarketPrice.PriceUSDBefore24h = (double)jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_usd"];
                     coin.MarketPrice.USDCrossRate = crossrate;
-
                 }
             }
             catch (Exception e)

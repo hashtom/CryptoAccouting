@@ -161,6 +161,7 @@
     <None Include="Backend\marketget.sh" />
     <None Include="Backend\create_instrumentlist.py" />
     <None Include="Backend\create_exchangelist.py" />
+    <None Include="Backend\market_latest.cgi" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />

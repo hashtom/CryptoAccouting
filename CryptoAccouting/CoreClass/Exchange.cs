@@ -72,7 +72,7 @@ namespace CoinBalance.CoreClass
 
         public bool HasListedCoins()
         {
-            return Coins.Count() > 0 ? true : false;
+            return Coins.Any() ? true : false;
         }
 
         public string GetSymbolForExchange(string instrumentID)

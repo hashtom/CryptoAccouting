@@ -16,14 +16,14 @@ namespace CoinBalance.CoreClass.APIClass
         private const string BaseUrl = "https://api.bitflyer.jp";
         private const string apiver = "v1";
         private static Exchange _bitflyer;
-        private static CrossRate _crossrate;
+        //private static CrossRate _crossrate;
         private static CrossRate _USDJPYrate;
 
-        public static async Task FetchPriceAsync(Exchange bitflyer, InstrumentList coins, CrossRate crossrate, CrossRate USDJPYrate)
+        public static async Task FetchPriceAsync(Exchange bitflyer, InstrumentList coins, CrossRate USDJPYrate)
         {
             string rawjson;
             _bitflyer = bitflyer;
-            _crossrate = crossrate;
+            //_crossrate = crossrate;
             _USDJPYrate = USDJPYrate;
 
             try
@@ -102,14 +102,14 @@ namespace CoinBalance.CoreClass.APIClass
                 var jobj = await Task.Run(() => JObject.Parse(rawjson));
 
                 if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
-                var price_yesterday = await MarketDataAPI.FetchPriceBefore24Async(coin.Id);
+                //var price_yesterday = await MarketDataAPI.FetchPriceBefore24Async(coin.Id);
 
                 if (coin.Id is "bitcoin")
                 {
                     coin.MarketPrice.LatestPriceBTC = 1;
                     coin.MarketPrice.LatestPriceUSD = (double)jobj["ltp"] / _USDJPYrate.Rate;
-                    coin.MarketPrice.PriceBTCBefore24h = 1;
-                    coin.MarketPrice.PriceUSDBefore24h = price_yesterday.LatestPriceUSD; //tmp
+                    //coin.MarketPrice.PriceBTCBefore24h = 1;
+                    //coin.MarketPrice.PriceUSDBefore24h = price_yesterday.LatestPriceUSD; //tmp
                 }
                 else
                 {
@@ -118,14 +118,14 @@ namespace CoinBalance.CoreClass.APIClass
                     {
                         coin.MarketPrice.LatestPriceUSD = (double)jobj["ltp"] / _USDJPYrate.Rate;
                         coin.MarketPrice.LatestPriceBTC = coin.MarketPrice.LatestPriceUSD / btcprice.LatestPriceUSD;
-                        coin.MarketPrice.PriceBTCBefore24h = price_yesterday.LatestPriceUSD; //tmp
-                        coin.MarketPrice.PriceUSDBefore24h = price_yesterday.LatestPriceUSD; //tmp
+                        //coin.MarketPrice.PriceBTCBefore24h = price_yesterday.LatestPriceUSD; //tmp
+                        //coin.MarketPrice.PriceUSDBefore24h = price_yesterday.LatestPriceUSD; //tmp
                     }
                 }
 
                 coin.MarketPrice.DayVolume = (double)jobj["volume_by_product"];
                 coin.MarketPrice.PriceDate = DateTime.Now;
-                coin.MarketPrice.USDCrossRate = _crossrate;
+                //coin.MarketPrice.USDCrossRate = _crossrate;
 
             }
             catch (Exception e)

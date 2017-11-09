@@ -11,7 +11,7 @@ namespace CoinBalance.CoreClass.APIClass
 {
     public static class MarketDataAPI
     {
-        const string coinmarketcap_url = "https://api.coinmarketcap.com";
+        //const string coinmarketcap_url = "https://api.coinmarketcap.com";
         static string coinbalance_url = CoinbalanceAPI.coinbalance_url;
 
         public const string InstrumentListFile = "InstrumentList.json";
@@ -22,7 +22,7 @@ namespace CoinBalance.CoreClass.APIClass
         public static async Task FetchCoinPricesAsync(ExchangeList exchanges, InstrumentList coins, List<CrossRate> crossrates)
         {
 
-            if (!Reachability.IsHostReachable(coinmarketcap_url))
+            if (!Reachability.IsHostReachable(coinbalance_url))
             {
                 throw new AppCoreNetworkException("Host is not reachable: " + coinbalance_url);
             }
@@ -33,10 +33,10 @@ namespace CoinBalance.CoreClass.APIClass
                                           crossrates.First(x => x.Currency == AppCore.BaseCurrency) :
                                           null;
                 if (crossrate is null) throw new AppCoreException("Crossrate is null");
+                var usdjpy = crossrates.Any(x => x.Currency == EnuBaseFiatCCY.JPY) ? crossrates.First(x => x.Currency == EnuBaseFiatCCY.JPY) : null;
 
-                var usdjpy = crossrates.Any(x => x.Currency == EnuBaseFiatCCY.JPY) ?
-                                       crossrates.First(x => x.Currency == EnuBaseFiatCCY.JPY) :
-                                       null;
+                // Go coinmarket for all instruments to fill in all market data
+                await FetchCoinMarketCapAsync(coins, crossrate);
 
                 foreach (var source in coins.Select(x => x.PriceSourceCode).Distinct())
                 {
@@ -48,7 +48,7 @@ namespace CoinBalance.CoreClass.APIClass
                             if (exchanges.Any(x => x.Code == "Bittrex"))
                             {
                                 var exchange = exchanges.First(x => x.Code == "Bittrex");
-                                if (exchange.HasListedCoins()) await BittrexAPI.FetchPriceAsync(exchange, coins, crossrate);
+                                if (exchange.HasListedCoins()) await BittrexAPI.FetchPriceAsync(exchange, coins);
                             }
                             break;
 
@@ -56,7 +56,7 @@ namespace CoinBalance.CoreClass.APIClass
                             if (exchanges.Any(x => x.Code == "Bitstamp"))
                             {
                                 var exchange = exchanges.First(x => x.Code == "Bitstamp");
-                                if (exchange.HasListedCoins()) await BItstampAPI.FetchPriceAsync(exchange, coins, crossrate);
+                                if (exchange.HasListedCoins()) await BItstampAPI.FetchPriceAsync(exchange, coins);
                             }
                             break;
 
@@ -64,7 +64,7 @@ namespace CoinBalance.CoreClass.APIClass
                             if (exchanges.Any(x => x.Code == "Zaif"))
                             {
                                 var exchange = exchanges.First(x => x.Code == "Zaif");
-                                if (exchange.HasListedCoins()) await ZaifAPI.FetchPriceAsync(exchange, coins, crossrate, usdjpy);
+                                if (exchange.HasListedCoins()) await ZaifAPI.FetchPriceAsync(exchange, coins, usdjpy);
                             }
                             break;
 
@@ -72,7 +72,7 @@ namespace CoinBalance.CoreClass.APIClass
                             if (exchanges.Any(x => x.Code == "CoinCheck"))
                             {
                                 var exchange = exchanges.First(x => x.Code == "CoinCheck");
-                                if (exchange.HasListedCoins()) await CoinCheckAPI.FetchPriceAsync(exchange, coins, crossrate, usdjpy);
+                                if (exchange.HasListedCoins()) await CoinCheckAPI.FetchPriceAsync(exchange, coins, usdjpy);
                             }
                             break;
 
@@ -80,7 +80,7 @@ namespace CoinBalance.CoreClass.APIClass
                             if (exchanges.Any(x => x.Code == "bitFlyer_l"))
                             {
                                 var exchange = exchanges.First(x => x.Code == "bitFlyer_l");
-                                if (exchange.HasListedCoins()) await BitFlyerAPI.FetchPriceAsync(exchange, coins, crossrate, usdjpy);
+                                if (exchange.HasListedCoins()) await BitFlyerAPI.FetchPriceAsync(exchange, coins, usdjpy);
                             }
                             break;
 
@@ -88,12 +88,12 @@ namespace CoinBalance.CoreClass.APIClass
                             if (exchanges.Any(x => x.Code == "Poloniex"))
                             {
                                 var exchange = exchanges.First(x => x.Code == "Poloniex");
-                                if (exchange.HasListedCoins()) await PoloniexAPI.FetchPriceAsync(exchange, coins, crossrate);
+                                if (exchange.HasListedCoins()) await PoloniexAPI.FetchPriceAsync(exchange, coins);
                             }
                             break;
 
                         case "coinmarketcap":
-                            await FetchCoinMarketCapAsync(coins, crossrate);
+                            //await FetchCoinMarketCapAsync(coins, crossrate);
                             break;
 
                         default:
@@ -112,7 +112,8 @@ namespace CoinBalance.CoreClass.APIClass
             {
                 using (var http = new HttpClient())
                 {
-                    rawjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/?limit=0");
+                    rawjson = await http.GetStringAsync(coinbalance_url + "/market/market_latest.cgi");
+                        //await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/?limit=0");
                 }
 
                 using (var http = new HttpClient())
@@ -249,72 +250,44 @@ namespace CoinBalance.CoreClass.APIClass
 
         }
 
-
-        //public static async Task<double> FetchPriceBTCBefore24hAsync(string instrumentId)
+        //public static async Task<Price> FetchPriceBefore24Async(string instrumentid)
         //{
         //    string rawjson_yesterday;
 
-        //    using (var http = new HttpClient())
+        //    try
         //    {
-        //        rawjson_yesterday = await http.GetStringAsync(coinbalance_url + "/market/market_yesterday.json");
+        //        using (var http = new HttpClient())
+        //        {
+        //            rawjson_yesterday = await http.GetStringAsync(coinbalance_url + "/market/market_yesterday.json");
+        //        }
         //    }
-        //    var jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
-
-        //    return (double)jarray_yesterday.SelectToken("[?(@.id == '" + instrumentId + "')]")["price_btc"];
-        //}
-
-        //public static async Task<double> FetchPriceUSDBefore24hAsync(string instrumentId)
-        //{
-        //    string rawjson_yesterday;
-
-        //    using (var http = new HttpClient())
+        //    catch (HttpRequestException e)
         //    {
-        //        rawjson_yesterday = await http.GetStringAsync(coinbalance_url + "/market/market_yesterday.json");
+        //        throw new AppCoreNetworkException("Http connection error: " + e.Message);
         //    }
-        //    var jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
 
-        //    return (double)jarray_yesterday.SelectToken("[?(@.id == '" + instrumentId + "')]")["price_usd"];
+        //    var price = new Price(AppCore.InstrumentList.GetByInstrumentId(instrumentid));
+        //    try
+        //    {
+        //        var jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
+
+        //        price.LatestPriceBTC = (double)jarray_yesterday.SelectToken("[?(@.id == '" + instrumentid + "')]")["price_btc"];
+        //        price.LatestPriceUSD = (double)jarray_yesterday.SelectToken("[?(@.id == '" + instrumentid + "')]")["price_usd"];
+        //        price.PriceSource = "coinmarketcap";
+        //        price.DayVolume = 0; 
+        //        price.MarketCap = (double)jarray_yesterday.SelectToken("[?(@.id == '" + instrumentid + "')]")["market_cap_usd"];
+        //        price.PriceDate = DateTime.Now;
+        //        //price.PriceBTCBefore24h = (double)jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_btc"];
+        //        //price.PriceUSDBefore24h = (double)jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_usd"];
+        //        //price.USDCrossRate = crossrate;
+
+        //        return price;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw new AppCoreParseException("Exception during parsing coinmarketcap Json: " + e.Message);
+        //    }
 
         //}
-
-        public static async Task<Price> FetchPriceBefore24Async(string instrumentid)
-        {
-            string rawjson_yesterday;
-
-            try
-            {
-                using (var http = new HttpClient())
-                {
-                    rawjson_yesterday = await http.GetStringAsync(coinbalance_url + "/market/market_yesterday.json");
-                }
-            }
-            catch (HttpRequestException e)
-            {
-                throw new AppCoreNetworkException("Http connection error: " + e.Message);
-            }
-
-            var price = new Price(AppCore.InstrumentList.GetByInstrumentId(instrumentid));
-            try
-            {
-                var jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
-
-                price.LatestPriceBTC = (double)jarray_yesterday.SelectToken("[?(@.id == '" + instrumentid + "')]")["price_btc"];
-                price.LatestPriceUSD = (double)jarray_yesterday.SelectToken("[?(@.id == '" + instrumentid + "')]")["price_usd"];
-                price.PriceSource = "coinmarketcap";
-                price.DayVolume = 0; 
-                price.MarketCap = (double)jarray_yesterday.SelectToken("[?(@.id == '" + instrumentid + "')]")["market_cap_usd"];
-                price.PriceDate = DateTime.Now;
-                //price.PriceBTCBefore24h = (double)jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_btc"];
-                //price.PriceUSDBefore24h = (double)jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_usd"];
-                //price.USDCrossRate = crossrate;
-
-                return price;
-            }
-            catch (Exception e)
-            {
-                throw new AppCoreParseException("Exception during parsing coinmarketcap Json: " + e.Message);
-            }
-
-        }
     }
 }

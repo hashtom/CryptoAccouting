@@ -102,7 +102,7 @@ namespace CoinBalance
             var sourcecode = pricesources.Where(x => x.Item2 == thisCoin.PriceSourceCode).Select(x => x.Item1).First();
             buttonPriceSource.SetTitle(sourcecode, UIControlState.Normal);
 
-            if (booking_positions.Count() > 0)
+            if (booking_positions.Any())
             {
                 if (thisCoin.Symbol1 == "BTC")
                 {
