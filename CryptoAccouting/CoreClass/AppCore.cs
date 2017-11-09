@@ -51,7 +51,7 @@
                     Balance.Select(x => x.Coin).Distinct().ToList().ForEach(x => mycoins.Attach(x));
                     if (!mycoins.Any(x => x.Id == "bitcoin")) mycoins.DetachByInstrumentId("bitcoin");
                     mycoins.Insert(0, Bitcoin); 
-                    await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRates);                      Balance.PriceDateTime = DateTime.Now;                     RefreshBalance(); //update weights,etc with latest price                     SaveMyBalanceXML();//save balance with latest price                  }                 catch(Exception e)                 {                     System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchMarketDataFromBalanceAsync: " + e.GetType() + ": " + e.Message);                     throw;                 }              }
+                    await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRates);                      Balance.PriceDateTime = DateTime.Now;                     RefreshBalance(); //update weights,etc with latest price                     //SaveMyBalanceXML();//save balance with latest price                  }                 catch(Exception e)                 {                     System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchMarketDataFromBalanceAsync: " + e.GetType() + ": " + e.Message);                     throw;                 }              }
             else
             {                 throw new AppCoreBalanceException("Balance object is null");             }
         }          public static void SaveAppSetting()
