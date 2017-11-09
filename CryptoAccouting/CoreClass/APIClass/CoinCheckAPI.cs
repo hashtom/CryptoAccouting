@@ -271,57 +271,57 @@ namespace CoinBalance.CoreClass.APIClass
         {
             HttpResponseMessage res;
 
-            if (!Reachability.IsHostReachable(BaseUrl))
+            //if (!Reachability.IsHostReachable(BaseUrl))
+            //{
+            //    throw new AppCoreNetworkException("Host is not reachable: " + BaseUrl);
+            //}
+            //else
+            //{
+            using (var http = new HttpClient())
             {
-                throw new AppCoreNetworkException("Host is not reachable: " + BaseUrl);
-            }
-            else
-            {
-                using (var http = new HttpClient())
+                http.BaseAddress = new Uri(BaseUrl);
+
+                if (parameters == null)
+                    parameters = new Dictionary<string, string>();
+
+                var content = new FormUrlEncodedContent(parameters);
+                string param = await content.ReadAsStringAsync();
+                string nonce = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+
+                if (requireAuth)
                 {
-                    http.BaseAddress = new Uri(BaseUrl);
+                    var uri = new Uri(http.BaseAddress, path);
+                    string message = nonce + uri + param;
 
-                    if (parameters == null)
-                        parameters = new Dictionary<string, string>();
+                    byte[] hash = new HMACSHA256(Encoding.UTF8.GetBytes(_coincheck.Secret)).ComputeHash(Encoding.UTF8.GetBytes(message));
+                    string sign = BitConverter.ToString(hash).ToLower().Replace("-", "");
 
-                    var content = new FormUrlEncodedContent(parameters);
-                    string param = await content.ReadAsStringAsync();
-                    string nonce = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
-
-                    if (requireAuth)
-                    {
-                        var uri = new Uri(http.BaseAddress, path);
-                        string message = nonce + uri + param;
-
-                        byte[] hash = new HMACSHA256(Encoding.UTF8.GetBytes(_coincheck.Secret)).ComputeHash(Encoding.UTF8.GetBytes(message));
-                        string sign = BitConverter.ToString(hash).ToLower().Replace("-", "");
-
-                        http.DefaultRequestHeaders.Clear();
-                        http.DefaultRequestHeaders.Add("ACCESS-KEY", _coincheck.Key);
-                        http.DefaultRequestHeaders.Add("ACCESS-NONCE", nonce);
-                        http.DefaultRequestHeaders.Add("ACCESS-SIGNATURE", sign);
-                    }
-
-                    if (method == HttpMethod.Post)
-                    {
-                        res = await http.PostAsync(path, content);
-                    }
-                    else if (method == HttpMethod.Get)
-                    {
-                        res = await http.GetAsync(path);
-                    }
-                    else
-                    {
-                        throw new AppCoreException("HttpMethod error: " + method);
-                    }
+                    http.DefaultRequestHeaders.Clear();
+                    http.DefaultRequestHeaders.Add("ACCESS-KEY", _coincheck.Key);
+                    http.DefaultRequestHeaders.Add("ACCESS-NONCE", nonce);
+                    http.DefaultRequestHeaders.Add("ACCESS-SIGNATURE", sign);
                 }
 
-                var rawjson = await res.Content.ReadAsStringAsync();
-                if (!res.IsSuccessStatusCode)
-                    throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
-
-                return rawjson;
+                if (method == HttpMethod.Post)
+                {
+                    res = await http.PostAsync(path, content);
+                }
+                else if (method == HttpMethod.Get)
+                {
+                    res = await http.GetAsync(path);
+                }
+                else
+                {
+                    throw new AppCoreException("HttpMethod error: " + method);
+                }
             }
+
+            var rawjson = await res.Content.ReadAsStringAsync();
+            if (!res.IsSuccessStatusCode)
+                throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
+
+            return rawjson;
+            //}
         }
     }
 }

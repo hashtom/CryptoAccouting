@@ -216,12 +216,12 @@ namespace CoinBalance.CoreClass.APIClass
         internal static async Task<string> SendAsync(Uri path, HttpMethod method, Dictionary<string, string> parameters = null, object body = null)
         {
 
-            if (!Reachability.IsHostReachable(BaseUrl))
-            {
-                throw new AppCoreNetworkException("Host is not reachable: " + BaseUrl);
-            }
-            else
-            {
+            //if (!Reachability.IsHostReachable(BaseUrl))
+            //{
+            //    throw new AppCoreNetworkException("Host is not reachable: " + BaseUrl);
+            //}
+            //else
+            //{
                 HttpResponseMessage res;
 
                 if (parameters != null && parameters.Any())
@@ -257,7 +257,7 @@ namespace CoinBalance.CoreClass.APIClass
                     throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
 
                 return rawjson;
-            }
+            //}
 
         }
     }

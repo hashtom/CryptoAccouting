@@ -11,7 +11,7 @@ namespace CoinBalance.CoreClass.APIClass
 {
     public static class MarketDataAPI
     {
-        //const string coinmarketcap_url = "https://api.coinmarketcap.com";
+        const string coinmarketcap_url = "https://api.coinmarketcap.com";
         static string coinbalance_url = CoinbalanceAPI.coinbalance_url;
 
         public const string InstrumentListFile = "InstrumentList.json";
@@ -22,11 +22,13 @@ namespace CoinBalance.CoreClass.APIClass
         public static async Task FetchCoinPricesAsync(ExchangeList exchanges, InstrumentList coins, List<CrossRate> crossrates)
         {
 
-            if (!Reachability.IsHostReachable(coinbalance_url))
-            {
-                throw new AppCoreNetworkException("Host is not reachable: " + coinbalance_url);
-            }
-            else
+            //if (!Reachability.IsHostReachable(coinbalance_url))
+            //{
+            //    throw new AppCoreNetworkException("Host is not reachable: " + coinbalance_url);
+            //}
+            //else
+            //{
+            try
             {
                 if (crossrates is null) crossrates = await FetchCrossRateAsync();
                 var crossrate = crossrates.Any(x => x.Currency == AppCore.BaseCurrency) ?
@@ -97,9 +99,14 @@ namespace CoinBalance.CoreClass.APIClass
                             break;
 
                         default:
-                            throw new AppCoreNetworkException("Price API call error. Exchange: " + source);
+                            throw new AppCoreNetworkException("FetchCoinPricesAsync: Exchange code error. code: " + source);
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchCoinPricesAsync: " + e.GetType() + ": " + e.Message);
+                throw;
             }
         }
 
@@ -112,8 +119,8 @@ namespace CoinBalance.CoreClass.APIClass
             {
                 using (var http = new HttpClient())
                 {
-                    rawjson = await http.GetStringAsync(coinbalance_url + "/market/market_latest.cgi");
-                        //await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/?limit=0");
+                    //rawjson = await http.GetStringAsync(coinbalance_url + "/market/market_latest.cgi");
+                    rawjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/?limit=0");
                 }
 
                 using (var http = new HttpClient())
@@ -167,52 +174,54 @@ namespace CoinBalance.CoreClass.APIClass
             var filename = InstrumentID + ".png";
             string TargetUri = coinbalance_url + "/images/" + filename;
 
-            if (!Reachability.IsHostReachable(TargetUri))
+            //if (!Reachability.IsHostReachable(TargetUri))
+            //{
+            //    throw new AppCoreNetworkException("Host is not reachable: " + coinbalance_url);
+            //}
+            //else
+            //{
+            try
             {
-                throw new AppCoreNetworkException("Host is not reachable: " + coinbalance_url);
-            }
-            else
-            {
-                try
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Images");
+
+                if (!Directory.Exists(path))
                 {
-                    var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Images");
-
-                    if (!Directory.Exists(path))
-                    {
-                        Directory.CreateDirectory(path);
-                    }
-
-                    path = Path.Combine(path, filename);
-
-                    if (!File.Exists(path) || ForceRefresh)
-                    {
-                        var client = new HttpClient();
-                        HttpResponseMessage res = await client.GetAsync(TargetUri, HttpCompletionOption.ResponseContentRead);
-
-                        using (var fileStream = File.Create(path))
-                        using (var httpStream = await res.Content.ReadAsStreamAsync())
-                            httpStream.CopyTo(fileStream);
-                    }
-
+                    Directory.CreateDirectory(path);
                 }
-                catch (Exception e)
+
+                path = Path.Combine(path, filename);
+
+                if (!File.Exists(path) || ForceRefresh)
                 {
-                    System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchCoinLogoAsync: " + e.GetType() + ": " + e.Message);
-                    throw;
+                    var client = new HttpClient();
+                    HttpResponseMessage res = await client.GetAsync(TargetUri, HttpCompletionOption.ResponseContentRead);
+
+                    using (var fileStream = File.Create(path))
+                    using (var httpStream = await res.Content.ReadAsStreamAsync())
+                        httpStream.CopyTo(fileStream);
                 }
 
             }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchCoinLogoAsync: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
+
+            //}
         }
 
         public static async Task<List<CrossRate>> FetchCrossRateAsync()
         {
             string rawjson_today, rawjson_yesterday;
 
-            if (!Reachability.IsHostReachable(coinbalance_url))
-            {
-                throw new AppCoreNetworkException("Host is not reachable: " + coinbalance_url);
-            }
-            else
+            //if (!Reachability.IsHostReachable(coinbalance_url))
+            //{
+            //    throw new AppCoreNetworkException("Host is not reachable: " + coinbalance_url);
+            //}
+            //else
+            //{
+            try
             {
                 using (var http = new HttpClient())
                 {
@@ -239,15 +248,24 @@ namespace CoinBalance.CoreClass.APIClass
                         rawjson_yesterday = await res.Content.ReadAsStringAsync();
                     }
                 }
-
+            }
+            catch (HttpRequestException e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchCrossRateAsync: fetching cross rates: " + e.GetType() + ": " + e.Message);
+                throw;
             }
 
-            var crossrates = await ParseAPIStrings.ParseCrossRateJsonAsync(rawjson_today, rawjson_yesterday);
-            StorageAPI.SaveFile(rawjson_today, CrossRatefile_today);
-            StorageAPI.SaveFile(rawjson_yesterday, CrossRatefile_yesterday);
-
-            return crossrates;
-
+            try
+            {
+                var crossrates = await ParseAPIStrings.ParseCrossRateJsonAsync(rawjson_today, rawjson_yesterday);
+                StorageAPI.SaveFile(rawjson_today, CrossRatefile_today);
+                StorageAPI.SaveFile(rawjson_yesterday, CrossRatefile_yesterday);
+                return crossrates;
+            }catch(Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchCrossRateAsync: Parsing Cross rate: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
         }
 
         //public static async Task<Price> FetchPriceBefore24Async(string instrumentid)

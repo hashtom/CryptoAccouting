@@ -294,12 +294,12 @@ namespace CoinBalance.CoreClass.APIClass
         private static async Task<string> SendAsync(HttpMethod httpMethod, string uri, bool includeAuthentication = true) => await SendAsync(httpMethod, uri, new Dictionary<string, string>(), includeAuthentication);
         private static async Task<string> SendAsync(HttpMethod httpMethod, string uri, IDictionary<string, string> parameters, bool includeAuthentication = true)
         {
-            if (!Reachability.IsHostReachable(BaseUrl))
-            {
-                throw new AppCoreNetworkException("Host is not reachable: " + BaseUrl);
-            }
-            else
-            {
+            //if (!Reachability.IsHostReachable(BaseUrl))
+            //{
+            //    throw new AppCoreNetworkException("Host is not reachable: " + BaseUrl);
+            //}
+            //else
+            //{
                 var request = createRequest(httpMethod, uri, parameters, includeAuthentication);
                 var httpClient = new HttpClient();
 
@@ -317,7 +317,7 @@ namespace CoinBalance.CoreClass.APIClass
                 }
                 response.EnsureSuccessStatusCode();
                 return await response.Content.ReadAsStringAsync();
-            }
+            //}
         }
     }
 }

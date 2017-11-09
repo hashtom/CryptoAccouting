@@ -246,44 +246,43 @@ namespace CoinBalance.CoreClass.APIClass
 
         private static async Task<string> SendAsync(Uri path, HttpMethod method, string parameters = null)
         {
-            if (!Reachability.IsHostReachable(BaseUrl))
-            {
-                throw new AppCoreNetworkException("Host is not reachable: " + BaseUrl);
-            }
-            else
-            {
-                HttpResponseMessage res;
+            //if (!Reachability.IsHostReachable(BaseUrl))
+            //{
+            //    throw new AppCoreNetworkException("Host is not reachable: " + BaseUrl);
+            //}
+            //else
+            //{
+            HttpResponseMessage res;
 
-                using (var request = new HttpRequestMessage(method, path))
-                using (var http = new HttpClient())
+            using (var request = new HttpRequestMessage(method, path))
+            using (var http = new HttpClient())
+            {
+                http.BaseAddress = new Uri(BaseUrl);
+
+                if (method == HttpMethod.Post)
                 {
-                    http.BaseAddress = new Uri(BaseUrl);
+                    string nonce = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+                    string myParam = parameters + "&nonce=" + nonce;
 
-                    if (method == HttpMethod.Post)
-                    {
-                        string nonce = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
-                        string myParam = parameters + "&nonce=" + nonce;
+                    request.Content = new StringContent(myParam);
+                    request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-                        request.Content = new StringContent(myParam);
-                        request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+                    byte[] hash = new HMACSHA512(Encoding.ASCII.GetBytes(_poloniex.Secret)).ComputeHash(Encoding.ASCII.GetBytes(myParam));
+                    string sign = BitConverter.ToString(hash).Replace("-", "").ToLower();
 
-                        byte[] hash = new HMACSHA512(Encoding.ASCII.GetBytes(_poloniex.Secret)).ComputeHash(Encoding.ASCII.GetBytes(myParam));
-                        string sign = BitConverter.ToString(hash).Replace("-", "").ToLower();
-
-                        request.Headers.Add("Key", _poloniex.Key);
-                        request.Headers.Add("Sign", sign);
-                    }
-
-                    res = await http.SendAsync(request);
-
-                    var rawjson = await res.Content.ReadAsStringAsync();
-                    if (!res.IsSuccessStatusCode)
-                        throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
-
-                    return rawjson;
+                    request.Headers.Add("Key", _poloniex.Key);
+                    request.Headers.Add("Sign", sign);
                 }
-            }
-        }
 
+                res = await http.SendAsync(request);
+
+                var rawjson = await res.Content.ReadAsStringAsync();
+                if (!res.IsSuccessStatusCode)
+                    throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
+
+                return rawjson;
+            }
+            //}
+        }
     }
 }
