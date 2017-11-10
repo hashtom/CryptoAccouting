@@ -98,6 +98,7 @@ namespace CoinBalance.UIClass
                     //myBalance.DetachPositionByCoin(coins[indexPath.Row].Symbol);
                     AppCore.DetachPositionByCoin(balanceByCoin[indexPath.Row].Coin.Id);
                     //ApplicationCore.RefreshBalance();
+                    owner.ReDrawScreen();
                     break;
 
                 case UITableViewCellEditingStyle.None:
