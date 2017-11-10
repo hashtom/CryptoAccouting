@@ -57,19 +57,24 @@ namespace CoinBalance
 				{
                     PriceSourceAlert.AddAction(UIAlertAction.Create(source.Item1, UIAlertActionStyle.Default, async (obj) =>
                                                                          {
-                                                                             buttonPriceSource.SetTitle(source.Item1, UIControlState.Normal);
                                                                              thisCoin.PriceSourceCode = source.Item2;
                                                                              try
                                                                              {
+                                                                                 var bounds = View.Bounds;
+                                                                                 LoadPop = new LoadingOverlay(bounds);
+                                                                                 View.Add(LoadPop);
                                                                                  await AppCore.FetchMarketDataAsync(thisCoin);
                                                                                  AppCore.SavePriceSourceXML();
+                                                                                 buttonPriceSource.SetTitle(source.Item1, UIControlState.Normal);
                                                                              }
                                                                              catch (Exception ex)
                                                                              {
+                                                                                 this.PopUpWarning("Warning", "Unable to update price data: " + ex.GetType(), () => LoadPop.Hide());
                                                                                  System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": ViewDidLoad: buttonPriceSource: " + ex.GetType() + ": " + ex.Message);
                                                                              }
                                                                              finally
                                                                              {
+                                                                                 LoadPop.Hide();
                                                                                  ReDrawScreen();
                                                                              }
                                                                          }

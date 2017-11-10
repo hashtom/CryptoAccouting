@@ -120,7 +120,7 @@ namespace CoinBalance.CoreClass.APIClass
                 using (var http = new HttpClient())
                 {
                     //rawjson = await http.GetStringAsync(coinbalance_url + "/market/market_latest.cgi");
-                    rawjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/?limit=0");
+                    rawjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/?limit=500");
                 }
 
                 using (var http = new HttpClient())
@@ -157,7 +157,7 @@ namespace CoinBalance.CoreClass.APIClass
                     }
                     //if (rawjson is null) return (null, "json data is null");
 
-                    StorageAPI.SaveFile(rawjson, InstrumentListFile);
+                    //StorageAPI.SaveFile(rawjson, InstrumentListFile);
                     return ParseAPIStrings.ParseInstrumentListJson(rawjson);
                 }
                 catch (Exception e)

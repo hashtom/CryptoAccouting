@@ -6,7 +6,7 @@ import re
 import pandas as pd
 
 #basedir = "/home/bridgeplace/scripts/"
-#basedir = "/Users/name/Downloads/"
+basedir = "/Users/tomoaki/Downloads/"
 
 exchanges = []
 ExchangeList = {"exchanges": exchanges}
@@ -261,7 +261,12 @@ poloniex_dict = {"code": "Poloniex",
                  }
 poloniex_symbols = pd.DataFrame({"symbol":list(poloniex.keys())})
 poloniex_symbols.drop_duplicates(inplace=True)
-poloniex_dict["listing"] = poloniex_symbols.to_dict(orient='records')
+
+poloniex_symbols.drop(poloniex_symbols[poloniex_symbols.symbol=="STR"].index, inplace=True)
+symbols = poloniex_symbols.to_dict(orient='records')
+symbols.append({"symbol2" : "STR"})
+poloniex_dict["listing"] = symbols
+#poloniex_dict["listing"] = poloniex_symbols.to_dict(orient='records')
 
 exchanges.append(poloniex_dict)
 

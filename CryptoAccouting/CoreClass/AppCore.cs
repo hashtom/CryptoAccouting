@@ -34,9 +34,11 @@
 
             //Initialize 
             CoinStorageList = new CoinStorageList(); 
-            try             {
-                // Load the latest file (or Bundle file)
-                InstrumentList = StorageAPI.LoadInstrument();                 LoadExchangeList();                  Balance = StorageAPI.LoadBalanceXML(InstrumentList);                 RefreshBalance();                  try
+            try             {                 try
+                {                     InstrumentList = MarketDataAPI.FetchAllCoinData();                 }
+                catch (Exception e)                 {                     System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: Failed to read InstrumentList: " + e.GetType() + ": " + e.Message);
+                    InstrumentList = StorageAPI.LoadInstrument(); // Load Bundle file
+                }                  LoadExchangeList();                  Balance = StorageAPI.LoadBalanceXML(InstrumentList);                 RefreshBalance();                  try
                 {
                     //Load App Configuration + API keys
                     StorageAPI.LoadAppSettingXML();                 }                 catch (Exception e)                 {                     BaseCurrency = EnuBaseFiatCCY.USD; //Default setting                     System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: Failed to read AppSettingfile" + e.GetType() + ": " + e.Message);                     //throw new AppCoreWarning(e.Message);                 }             }             catch (AppCoreBalanceException e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 Balance = new Balance();                 //throw;             }             catch (Exception e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 throw;             }          }          public static async Task LoadCrossRateAsync()
@@ -58,17 +60,9 @@
         {             StorageAPI.SaveAppSettingXML(AppName, BaseCurrency, PublicExchangeList);         }          private static void LoadExchangeList()
         {
             if (PublicExchangeList is null) PublicExchangeList = new ExchangeList();             ExchangeAPI.FetchExchangeList(PublicExchangeList);         }          public static void SyncLatestCoins()         {             try             {
-                var list = MarketDataAPI.FetchAllCoinData();
-                if (list != null)
-                {
-                    InstrumentList = list;
-                    if (Balance != null) Balance.AttachInstruments(InstrumentList);
-                    Task.Run(async () => await FetchCoinLogoTop100Async());
-                }
-                else
-                {
-                    throw new AppCoreException("Couldn't get Instrumentlist.");
-                }             }
+                InstrumentList = MarketDataAPI.FetchAllCoinData();
+                if (Balance != null) Balance.AttachInstruments(InstrumentList);
+                Task.Run(async () => await FetchCoinLogoTop100Async());             }
             catch (Exception e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": SyncLatestCoins: " + e.GetType() + ": " + e.Message);                 throw;             }         }          public static async Task FetchCoinLogoAsync(Instrument coin)         {              await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);         }          public static async Task FetchCoinLogoFromBalanceAsync()         {             foreach (var pos in Balance)             {
                 await MarketDataAPI.FetchCoinLogoAsync(pos.Coin.Id, false);             }         }          public static async Task FetchCoinLogoTop100Async()         {             if (InstrumentList == null)
             {

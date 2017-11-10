@@ -118,7 +118,7 @@ namespace CoinBalance
                                                                            alert =>
                                                                            {
                                                                                AppCore.DetachPosition(PositionDetail);
-                                                                               CellItemUpdated(popto);
+                                                                               CellItemUpdated(Popto);
                                                                            }));
                     okCancelAlertController.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
                     this.PresentViewController(okCancelAlertController, true, null);
@@ -306,7 +306,7 @@ namespace CoinBalance
             if ((textQuantity.Text != "" && double.TryParse(textQuantity.Text, out amount)) || switchWatchOnly.On)
             {
                 CreatePosition();
-                CellItemUpdated(popto);
+                CellItemUpdated(Popto);
 
             }
             else
@@ -326,7 +326,7 @@ namespace CoinBalance
             thisExchange = PositionDetail.BookedExchange;
             thisStorage = PositionDetail.CoinStorage != null ? PositionDetail.CoinStorage : CoinStorageList.GetStorageListSelection().First(x => x.StorageType == EnuCoinStorageType.TBA);
             this.editmode = editmode;
-            this.popto = popto;
+            this.Popto = popto;
         }
 
 

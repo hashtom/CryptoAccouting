@@ -164,15 +164,15 @@ namespace CoinBalance.CoreClass.APIClass
             InstrumentList instrumentlist;
             string rawjson;
 
-            try
-            {
-                rawjson = LoadFromFile(InstrumentListFile);
-            }
-            catch (Exception e)
-            {
+            //try
+            //{
+            //    rawjson = LoadFromFile(InstrumentListFile);
+            //}
+            //catch (Exception e)
+            //{
                 rawjson = LoadBundleFile(InstrumentListFile);
-                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadInstrument(continued with bundlefile): " + e.GetType() + ": " + e.Message);
-            }
+                //System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadInstrument(continued with bundlefile): " + e.GetType() + ": " + e.Message);
+            //}
 
             try
             {

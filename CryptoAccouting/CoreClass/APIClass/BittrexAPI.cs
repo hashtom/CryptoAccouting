@@ -48,7 +48,7 @@ namespace CoinBalance.CoreClass.APIClass
                         coin.MarketPrice.PriceBTCBefore24h = 1 / (double)btcjrow["PrevDay"];
                         coin.MarketPrice.LatestPriceUSD = 1;
                         coin.MarketPrice.PriceUSDBefore24h = 1;
-                        coin.MarketPrice.DayVolume = (double)btcjrow["Volume"] / (double)btcjrow["Last"];
+                        coin.MarketPrice.DayVolume = (double)btcjrow["Volume"];
                         coin.MarketPrice.PriceDate = (DateTime)btcjrow["TimeStamp"];
                     }
                     else
@@ -60,7 +60,7 @@ namespace CoinBalance.CoreClass.APIClass
                             coin.MarketPrice.PriceBTCBefore24h = (double)jrow["PrevDay"];
                             coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"] * (double)btcjrow["Last"];
                             coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"] * (double)btcjrow["PrevDay"];
-                            coin.MarketPrice.DayVolume = (double)jrow["Volume"];
+                            coin.MarketPrice.DayVolume = (double)jrow["BaseVolume"];
                             coin.MarketPrice.PriceDate = (DateTime)jrow["TimeStamp"];
                         }
                     }

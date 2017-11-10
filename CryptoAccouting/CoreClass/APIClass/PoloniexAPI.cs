@@ -101,7 +101,7 @@ namespace CoinBalance.CoreClass.APIClass
                         coin.MarketPrice.LatestPriceUSD = (double)btcjrow["last"];
                         //coin.MarketPrice.PriceUSDBefore24h = price_yesterday.LatestPriceUSD;
                         //coin.MarketPrice.USDCrossRate = _crossrate;
-                        coin.MarketPrice.DayVolume = (double)btcjrow["baseVolume"];
+                        coin.MarketPrice.DayVolume = (double)btcjrow["quoteVolume"];
                     }
                     else if (coin.Id is "tether")
                     {
@@ -110,7 +110,7 @@ namespace CoinBalance.CoreClass.APIClass
                         coin.MarketPrice.LatestPriceUSD = 1;
                         coin.MarketPrice.PriceUSDBefore24h = 1;
                         //coin.MarketPrice.USDCrossRate = _crossrate;
-                        coin.MarketPrice.DayVolume = (double)btcjrow["baseVolume"];
+                        coin.MarketPrice.DayVolume = (double)btcjrow["quoteVolume"];
                     }
                     else
                     {

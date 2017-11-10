@@ -1,9 +1,11 @@
 ﻿import json
 import requests
+import os
 
-url = "https://api.coinmarketcap.com/v1/ticker/?limit=0"
+url = "https://api.coinmarketcap.com/v1/ticker/?limit=500"
 logo_url = "https://files.coinmarketcap.com/static/img/coins/32x32/"
-basedir = "/home/bridgeplace/www/coinbalance/"
+basedir = "/home/bridgeplace/scripts/"
+#basedir = "/Users/name/Downloads"
 
 def download_image(url, timeout = 10):
     response = requests.get(url, allow_redirects=False, timeout=timeout)
@@ -25,7 +27,7 @@ def save_image(filename, image):
 InstrumentList = requests.get(url).json()
 
 data = []
-del InstrumentList[500:]
+#del InstrumentList[500:]
 for ins in InstrumentList:
         if ins["id"] == "bitcoin-cash":
             data.append({
@@ -34,6 +36,15 @@ for ins in InstrumentList:
                 "name":ins["name"],
                 "symbol":ins["symbol"],
                 "symbol2":"BCC",
+                "id":ins["id"]
+                })
+        elif ins["id"] == "stellar":
+            data.append({
+                "active":"true",
+                "rank":ins["rank"],
+                "name":ins["name"],
+                "symbol":ins["symbol"],
+                "symbol2":"STR",
                 "id":ins["id"]
                 })
         else:
@@ -46,11 +57,11 @@ for ins in InstrumentList:
                         })
         try:
             image = download_image(logo_url + ins["id"] + ".png")
-            save_image(basedir + "/images/" + ins["id"] + ".png", image)
+            if os.path.exists(basedir + "/images/" + ins["id"] + ".png"):
+                save_image(basedir + "/images/" + ins["id"] + ".png", image)
         except KeyboardInterrupt:
             break
         except Exception as err:
             print(err)
-
      
 json.dump(data, open(basedir + 'InstrumentList.json', 'w',encoding='utf-8'),indent=4)

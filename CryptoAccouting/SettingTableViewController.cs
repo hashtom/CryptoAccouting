@@ -9,7 +9,7 @@ namespace CoinBalance
 {
     public partial class SettingTableViewController : CryptoTableViewController
     {
-        LoadingOverlay loadPop;
+        //LoadingOverlay loadPop;
 
         public SettingTableViewController (IntPtr handle) : base (handle)
         {
@@ -123,11 +123,11 @@ namespace CoinBalance
             AppCore.SaveAppSetting();
 
             var bounds = SettingTableView.Bounds;
-            loadPop = new LoadingOverlay(bounds);
-            SettingTableView.Add(loadPop);
+            LoadPop = new LoadingOverlay(bounds);
+            SettingTableView.Add(LoadPop);
             await AppCore.LoadCrossRateAsync();
             await AppCore.FetchMarketDataFromBalanceAsync();
-            loadPop.Hide();
+            LoadPop.Hide();
         }
 
         public override void ReDrawScreen()

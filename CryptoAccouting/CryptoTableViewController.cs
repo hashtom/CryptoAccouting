@@ -8,7 +8,8 @@ namespace CoinBalance
 {
     public abstract class CryptoTableViewController : UITableViewController
     {
-		public EnuPopTo popto;
+        internal EnuPopTo Popto;
+        internal LoadingOverlay LoadPop;
 
         public CryptoTableViewController(IntPtr handle) : base(handle)
         {
