@@ -21,12 +21,12 @@
                     Task.Run(async () => await AppCore.FetchCoinLogoTop100Async());                 }              }             catch (Exception e)             {
                 this.PopUpWarning("Error", "Critical issue: " + e.GetType() + ": " + e.Message);                 this.mybalance = new Balance();             } 
         }          public async override void ViewWillAppear(bool animated)         {
-            base.ViewWillAppear(animated);              if (position_count != mybalance.BalanceByCoin.Count)             {                 TableView.Source = new CoinTableSource(mybalance, this);                 position_count = mybalance.BalanceByCoin.Count;             }              ReDrawScreen(); //need this              var updatetime = AppCore.Balance.PriceDateTime.AddMinutes(1);             if (DateTime.Now > updatetime)             {
+            base.ViewWillAppear(animated);              if (position_count != mybalance.BalanceByCoin.Count)             {                 TableView.Source = new CoinTableSource(mybalance, this);                 position_count = mybalance.BalanceByCoin.Count;             }              ReDrawScreen(); //need this              var updatetime = AppCore.Balance.PriceDateTime.AddSeconds(60);             if (DateTime.Now > updatetime)             {
                 try
                 {
                     await AppCore.LoadCrossRateAsync();
                     await AppCore.FetchMarketDataFromBalanceAsync();
-                    await AppCore.FetchCoinLogoFromBalanceAsync();
+                    //await AppCore.FetchCoinLogoFromBalanceAsync();
                 }
                 catch (Exception e)
                 {
@@ -95,4 +95,4 @@
 			var SymbolSelectionViewC = Storyboard.InstantiateViewController("SymbolSelectionViewC") as SymbolSelectionViewConroller;
 			SymbolSelectionViewC.SelectionItems = searchitems;             SymbolSelectionViewC.DestinationID = "BalanceEditViewC";             NavigationController.PushViewController(SymbolSelectionViewC, true);         }          async private Task RefreshPriceAsync()         {             try             {
                 //await ApplicationCore.LoadCrossRateAsync();
-                await AppCore.FetchMarketDataFromBalanceAsync();             }             catch (Exception e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": RefreshPriceAsync: Cound't update price: " + e.GetType() + ": " + e.Message);                 throw;             }         }     } }
+                await AppCore.FetchMarketDataFromBalanceAsync();                 await AppCore.FetchCoinLogoFromBalanceAsync();             }             catch (Exception e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": RefreshPriceAsync: Cound't update price: " + e.GetType() + ": " + e.Message);                 throw;             }         }     } }
