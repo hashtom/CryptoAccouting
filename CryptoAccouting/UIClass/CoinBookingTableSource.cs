@@ -88,6 +88,7 @@ namespace CoinBalance.UIClass
                 case UITableViewCellEditingStyle.Delete:
                     //tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
                     AppCore.DetachPosition(BookingPositions()[indexPath.Row]);
+                    owner.ReDrawScreen();
                     break;
 
                 case UITableViewCellEditingStyle.None:

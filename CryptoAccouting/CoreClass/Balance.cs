@@ -152,11 +152,11 @@ namespace CoinBalance.CoreClass
             positions.RemoveAll(x => x.Coin.Id == InstrumentId);
         }
 
-        public void DetachPositionByExchange(Exchange exchange)
+        public void DetachPositionByStorage(CoinStorage storage)
         {
             foreach (var pos in positions
                      .Where(x => x.CoinStorage != null)
-                     .Where(x => (x.CoinStorage.Code == exchange.Code && x.CoinStorage.StorageType == EnuCoinStorageType.Exchange)).ToList())
+                     .Where(x => (x.CoinStorage.Code == storage.Code && x.CoinStorage.StorageType == storage.StorageType)).ToList())
             {
                 
                 positions.Remove(pos);

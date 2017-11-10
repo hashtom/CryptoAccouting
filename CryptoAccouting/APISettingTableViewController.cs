@@ -108,16 +108,9 @@ namespace CoinBalance
         private void AddBalance(List<Position> positions)
         {
 
-            AppCore.DetachPositionByExchange(thisExchange);
-            //var storage = ApplicationCore.GetCoinStorage(thisExchange.Code, EnuCoinStorageType.Exchange);
-            foreach (var pos in positions)
-            {
-                AppCore.AttachCoinStorage(thisExchange.Code, EnuCoinStorageType.Exchange, pos);
-                //pos.AttachCoinStorage(storage);
-                //storage.AttachPosition(pos);
-                AppCore.AttachPosition(pos, false);
-            }
-            AppCore.RefreshBalance();
+            //AppCore.DetachPositionByExchange(thisExchange, false);
+            AppCore.AttachPositionByStorage(thisExchange, positions, true);
+            //AppCore.RefreshBalance();
 
         }
 

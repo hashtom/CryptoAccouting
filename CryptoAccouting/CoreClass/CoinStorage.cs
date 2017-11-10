@@ -40,6 +40,11 @@ namespace CoinBalance.CoreClass
             BalanceOnStorage.DetachPositionByCoin(InstrumentId);
         }
 
+        public void DetachPositionByStorage(CoinStorage storage)
+        {
+            BalanceOnStorage.DetachPositionByStorage(storage);
+        }
+
         public double Amount()
         {
             return BalanceOnStorage.Amount();
