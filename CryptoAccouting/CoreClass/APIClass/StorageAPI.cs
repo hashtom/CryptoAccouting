@@ -180,7 +180,7 @@ namespace CoinBalance.CoreClass.APIClass
 
                 try
                 {
-                    ParseAPIStrings.ParsePriceSourceXML(LoadFromFile(PriceSourceFile), instrumentlist);
+                    LoadPriceSource(instrumentlist);
                     return instrumentlist;
                 }
                 catch (Exception ex)
@@ -194,6 +194,11 @@ namespace CoinBalance.CoreClass.APIClass
                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadInstrument: " + e.GetType() + ": " + e.Message);
                 throw;
             }
+        }
+
+        public static void LoadPriceSource(InstrumentList instrumentlist)
+        {
+            ParseAPIStrings.ParsePriceSourceXML(LoadFromFile(PriceSourceFile), instrumentlist);
         }
 
         public static async Task<List<CrossRate>> LoadCrossRateAsync()

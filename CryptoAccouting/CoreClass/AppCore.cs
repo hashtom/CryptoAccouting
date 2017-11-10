@@ -51,8 +51,8 @@
             {                 try                 {
                     var mycoins = new InstrumentList(); 
                     Balance.Select(x => x.Coin).Distinct().ToList().ForEach(x => mycoins.Attach(x));
-                    if (!mycoins.Any(x => x.Id == "bitcoin")) mycoins.DetachByInstrumentId("bitcoin");
-                    mycoins.Insert(0, Bitcoin); 
+                    //if (!mycoins.Any(x => x.Id == "bitcoin")) mycoins.DetachByInstrumentId("bitcoin");
+                    //mycoins.Insert(0, Bitcoin); 
                     await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRates);                      Balance.PriceDateTime = DateTime.Now;                     RefreshBalance(); //update weights,etc with latest price                     //SaveMyBalanceXML();//save balance with latest price                  }                 catch(Exception e)                 {                     System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchMarketDataFromBalanceAsync: " + e.GetType() + ": " + e.Message);                     throw;                 }              }
             else
             {                 throw new AppCoreBalanceException("Balance object is null");             }
@@ -94,7 +94,7 @@
         public static async Task FetchMarketDataAsync(Instrument coin)
         {
             //await MarketDataAPI.FetchCoinMarketDataAsync(coin);
-            var mycoins = new InstrumentList();             if (coin.Symbol1 != "BTC") mycoins.Attach(InstrumentList.First(x => x.Symbol1 == "BTC"));             mycoins.Attach(coin);             await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRates);
+            var mycoins = new InstrumentList();             //if (coin.Symbol1 != "BTC") mycoins.Attach(InstrumentList.First(x => x.Symbol1 == "BTC"));             mycoins.Attach(coin);             await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRates);
         }          public static CoinStorage GetCoinStorage(string storagecode, EnuCoinStorageType storagetype)         {             return CoinStorageList.Any(x => (x.Code == storagecode && x.StorageType == storagetype))
                                   ? CoinStorageList.First(x => (x.Code == storagecode && x.StorageType == storagetype))                                       : null;         }          public static void AttachCoinStorage(string storagecode, EnuCoinStorageType storagetype, Position pos)         {             CoinStorageList.DetachPosition(pos);              var storage = GetCoinStorage(storagecode, storagetype);
             if (storage is null)             {

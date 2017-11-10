@@ -143,29 +143,24 @@ namespace CoinBalance.CoreClass.APIClass
         {
             string rawjson;
 
-            //if (!Reachability.IsHostReachable(coinbalance_url))
-            //{
-            //    throw new AppCoreNetworkException("Host is not reachable: " + coinbalance_url);
-            //}
-            //else
-            //{
-                try
+            try
+            {
+                using (var http = new HttpClient())
                 {
-                    using (var http = new HttpClient())
-                    {
-                        rawjson = http.GetStringAsync(coinbalance_url + "/InstrumentList.json").Result;
-                    }
-                    //if (rawjson is null) return (null, "json data is null");
+                    rawjson = http.GetStringAsync(coinbalance_url + "/InstrumentList.json").Result;
+                }
+                //if (rawjson is null) return (null, "json data is null");
 
-                    //StorageAPI.SaveFile(rawjson, InstrumentListFile);
-                    return ParseAPIStrings.ParseInstrumentListJson(rawjson);
-                }
-                catch (Exception e)
-                {
-                    System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchAllCoinData: " + e.GetType() + ": " + e.Message);
-                    throw;
-                }
-            //}
+                //StorageAPI.SaveFile(rawjson, InstrumentListFile);
+                var InstrumentList = ParseAPIStrings.ParseInstrumentListJson(rawjson);
+                StorageAPI.LoadPriceSource(InstrumentList);
+                return InstrumentList;
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchAllCoinData: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
 
         }
 

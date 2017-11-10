@@ -57,25 +57,31 @@ namespace CoinBalance
 				{
                     PriceSourceAlert.AddAction(UIAlertAction.Create(source.Item1, UIAlertActionStyle.Default, async (obj) =>
                                                                          {
+                                                                             var prevItem = thisCoin.PriceSourceCode;
                                                                              thisCoin.PriceSourceCode = source.Item2;
+                                                                             buttonPriceSource.SetTitle("Loaing...", UIControlState.Normal);
+                                                                             buttonPriceSource.Enabled = false;
                                                                              try
                                                                              {
-                                                                                 var bounds = View.Bounds;
-                                                                                 LoadPop = new LoadingOverlay(bounds);
-                                                                                 View.Add(LoadPop);
+                                                                                 //var bounds = View.Bounds;
+                                                                                 //LoadPop = new LoadingOverlay(bounds);
+                                                                                 //View.Add(LoadPop);
                                                                                  await AppCore.FetchMarketDataAsync(thisCoin);
+                                                                                 //ReDrawScreen();
                                                                                  AppCore.SavePriceSourceXML();
-                                                                                 buttonPriceSource.SetTitle(source.Item1, UIControlState.Normal);
                                                                              }
                                                                              catch (Exception ex)
                                                                              {
-                                                                                 this.PopUpWarning("Warning", "Unable to update price data: " + ex.GetType(), () => LoadPop.Hide());
+                                                                                 this.PopUpWarning("Warning", "Unable to update price data: " + ex.GetType(), null);
                                                                                  System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": ViewDidLoad: buttonPriceSource: " + ex.GetType() + ": " + ex.Message);
+                                                                                 thisCoin.PriceSourceCode = prevItem;
+                                                                                 //buttonPriceSource.SetTitle(prevItem, UIControlState.Normal);
                                                                              }
                                                                              finally
                                                                              {
-                                                                                 LoadPop.Hide();
+                                                                                 buttonPriceSource.Enabled = true;
                                                                                  ReDrawScreen();
+                                                                                 //LoadPop.Hide();
                                                                              }
                                                                          }
                                                                    ));
