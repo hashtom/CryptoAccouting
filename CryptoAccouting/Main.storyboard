@@ -445,8 +445,8 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" text="* Trades are aggregated on daily basis." textAlignment="right" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F19-mj-dAm">
-                                        <rect key="frame" x="11" y="85" width="301" height="28"/>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" text="* Trades are aggregated on daily basis" textAlignment="right" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F19-mj-dAm">
+                                        <rect key="frame" x="11" y="85" width="301" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
@@ -1916,10 +1916,10 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="API " id="28097">
+                            <tableViewSection id="28097">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="100" id="28098">
-                                        <rect key="frame" x="0.0" y="72" width="320" height="100"/>
+                                        <rect key="frame" x="0.0" y="44" width="320" height="100"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="28098" id="28099">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="99.5"/>
@@ -1942,7 +1942,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="100" id="28100">
-                                        <rect key="frame" x="0.0" y="172" width="320" height="100"/>
+                                        <rect key="frame" x="0.0" y="144" width="320" height="100"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="28100" id="28101">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="99.5"/>
@@ -1965,7 +1965,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="f3p-h5-1zr">
-                                        <rect key="frame" x="0.0" y="272" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="244" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="f3p-h5-1zr" id="hOX-ve-xMo">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
@@ -1983,18 +1983,25 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="120" id="aRh-Rt-fVY">
-                                        <rect key="frame" x="0.0" y="316" width="320" height="120"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="140" id="aRh-Rt-fVY">
+                                        <rect key="frame" x="0.0" y="288" width="320" height="140"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aRh-Rt-fVY" id="2Sc-b6-7Vj">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="119.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="139.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qq2-MJ-Goo">
-                                                    <rect key="frame" x="5" y="18" width="310" height="92"/>
+                                                    <rect key="frame" x="5" y="8" width="310" height="91"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                                    <string key="text">CoinBalance does not send your API keys or any other sensitive data to external servers. When you store API keys data to CoinBalance you must only enable permissions specific to access your position and trade infromation to increase your security. CoinBalane will not be liable to any loss of your funds. </string>
+                                                    <string key="text">CoinBalance does not send your API keys to external servers. You are responsible for managing your own security. When you store API keys data to CoinBalance you should only enable permissions specific to access your position and trade infromation to increase your security. CoinBalane will not be liable to any loss of your funds. </string>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                </textView>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="Some exchange does return your only recent trade history. You may not view all of your past trades." translatesAutoresizingMaskIntoConstraints="NO" id="5mF-vP-t5p">
+                                                    <rect key="frame" x="5" y="101" width="310" height="39"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                 </textView>
