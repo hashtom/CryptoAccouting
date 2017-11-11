@@ -196,7 +196,9 @@ namespace CoinBalance.CoreClass.APIClass
 
         }
 
-        private static TradeList ParseTransaction(List<string> rawjsons)
+        private static TradeList 
+
+        ParseTransaction(List<string> rawjsons)
         {
             JObject json;
             var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _zaif };
@@ -208,7 +210,8 @@ namespace CoinBalance.CoreClass.APIClass
                     json = JObject.Parse(rawjson);
                     if ((int)json.SelectToken("$.success") != 1)
                     {
-                        throw new AppCoreParseException("API returned error: " + rawjson);
+                        throw new
+                        AppCoreParseException("API returned error: " + rawjson);
                     }
                     else
                     {
@@ -246,7 +249,8 @@ namespace CoinBalance.CoreClass.APIClass
                             }
 
                             symbol = symbol.Replace("_jpy", "").Replace("_btc", "").ToUpper();
-                            //var instrumentId = _zaif.GetIdForExchange(symbol);
+
+                            var fee = json["return"][x.Name]["fee_amount"] != null ? (double)json["return"][x.Name]["fee_amount"] : (double)json["return"][x.Name]["fee"];
 
                             tradelist.AggregateTransaction(symbol,
                                                           ebuysell,
@@ -254,7 +258,7 @@ namespace CoinBalance.CoreClass.APIClass
                                                            (double)json["return"][x.Name]["price"],
                                                            settleccy,
                                                           AppCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
-                                                           (double)json["return"][x.Name]["fee"],
+                                                           fee,
                                                            _zaif
                                                           );
                         }
