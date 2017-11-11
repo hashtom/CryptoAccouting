@@ -70,7 +70,7 @@ namespace CoinBalance.CoreClass.APIClass
             {
                 //var http = new HttpClient();
                 var from = calendarYear == "ALL" ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
-                var to = calendarYear == "ALL" ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
+                var to = calendarYear == "ALL" ? DateTime.Now.Date : new DateTime(int.Parse(calendarYear), 12, 31);
 
                 //http.BaseAddress = new Uri(BaseUrl);
                 Uri path = new Uri("tapi", UriKind.Relative);
