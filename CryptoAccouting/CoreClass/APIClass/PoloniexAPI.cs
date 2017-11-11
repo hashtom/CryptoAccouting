@@ -246,13 +246,8 @@ namespace CoinBalance.CoreClass.APIClass
 
         private static async Task<string> SendAsync(Uri path, HttpMethod method, string parameters = null)
         {
-            //if (!Reachability.IsHostReachable(BaseUrl))
-            //{
-            //    throw new AppCoreNetworkException("Host is not reachable: " + BaseUrl);
-            //}
-            //else
-            //{
             HttpResponseMessage res;
+            string rawjson;
 
             using (var request = new HttpRequestMessage(method, path))
             using (var http = new HttpClient())
@@ -275,14 +270,13 @@ namespace CoinBalance.CoreClass.APIClass
                 }
 
                 res = await http.SendAsync(request);
-
-                var rawjson = await res.Content.ReadAsStringAsync();
-                if (!res.IsSuccessStatusCode)
-                    throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
-
-                return rawjson;
             }
-            //}
+
+            res.EnsureSuccessStatusCode();
+            rawjson = await res.Content.ReadAsStringAsync();
+            //if (!res.IsSuccessStatusCode)
+                //throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
+            return rawjson;
         }
     }
 }

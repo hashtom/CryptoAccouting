@@ -41,10 +41,11 @@ namespace CoinBalance.CoreClass.APIClass
                                 response = null;
                             }
                         }
-                        if (!response.IsSuccessStatusCode)
-                        {
-                            throw new AppCoreNetworkException("http response error. status code: " + response.StatusCode);
-                        }
+                        response.EnsureSuccessStatusCode();
+                        //if (!response.IsSuccessStatusCode)
+                        //{
+                        //    throw new AppCoreNetworkException("http response error. status code: " + response.StatusCode);
+                        //}
                         rawjson = await response.Content.ReadAsStringAsync();
                     }
 

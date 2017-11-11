@@ -20,14 +20,16 @@ namespace CoinBalance.CoreClass.APIClass
                 using (var http = new HttpClient())
                 {
                     var res = http.GetAsync(coinbalance_url + "/" + ExchangeListfile).Result;
-                    if (!res.IsSuccessStatusCode)
-                    {
-                        throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
-                    }
-                    else
-                    {
-                        rawjson = res.Content.ReadAsStringAsync().Result;
-                    }
+                    res.EnsureSuccessStatusCode();
+                    rawjson = res.Content.ReadAsStringAsync().Result;
+                    //if (!res.IsSuccessStatusCode)
+                    //{
+                    //    throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
+                    //}
+                    //else
+                    //{
+                    //    rawjson = res.Content.ReadAsStringAsync().Result;
+                    //}
                 }
             }
             catch (Exception e)

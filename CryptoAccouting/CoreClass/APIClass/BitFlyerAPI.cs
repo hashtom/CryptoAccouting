@@ -215,49 +215,41 @@ namespace CoinBalance.CoreClass.APIClass
 
         internal static async Task<string> SendAsync(Uri path, HttpMethod method, Dictionary<string, string> parameters = null, object body = null)
         {
+            HttpResponseMessage res;
+            string rawjson;
 
-            //if (!Reachability.IsHostReachable(BaseUrl))
-            //{
-            //    throw new AppCoreNetworkException("Host is not reachable: " + BaseUrl);
-            //}
-            //else
-            //{
-                HttpResponseMessage res;
+            if (parameters != null && parameters.Any())
+            {
+                var content = new FormUrlEncodedContent(parameters);
+                string q = await content.ReadAsStringAsync();
 
-                if (parameters != null && parameters.Any())
-                {
-                    var content = new FormUrlEncodedContent(parameters);
-                    string q = await content.ReadAsStringAsync();
+                path = new Uri(path + "?" + q, UriKind.Relative);
+            }
 
-                    path = new Uri(path + "?" + q, UriKind.Relative);
-                }
+            using (var request = new HttpRequestMessage(method, path))
+            using (var http = new HttpClient())
+            {
+                http.BaseAddress = new Uri(BaseUrl);
 
-                using (var request = new HttpRequestMessage(method, path))
-                using (var http = new HttpClient())
-                {
-                    http.BaseAddress = new Uri(BaseUrl);
+                string timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+                string jsonBody = body == null ? "" : JsonConvert.SerializeObject(body);
+                string message = timestamp + method + path + jsonBody;
 
-                    string timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
-                    string jsonBody = body == null ? "" : JsonConvert.SerializeObject(body);
-                    string message = timestamp + method + path + jsonBody;
+                byte[] hash = new HMACSHA256(Encoding.UTF8.GetBytes(_bitflyer.Secret)).ComputeHash(Encoding.UTF8.GetBytes(message));
+                string sign = BitConverter.ToString(hash).ToLower().Replace("-", "");
 
-                    byte[] hash = new HMACSHA256(Encoding.UTF8.GetBytes(_bitflyer.Secret)).ComputeHash(Encoding.UTF8.GetBytes(message));
-                    string sign = BitConverter.ToString(hash).ToLower().Replace("-", "");
+                request.Headers.Add("ACCESS-KEY", _bitflyer.Key);
+                request.Headers.Add("ACCESS-TIMESTAMP", timestamp);
+                request.Headers.Add("ACCESS-SIGN", sign);
 
-                    request.Headers.Add("ACCESS-KEY", _bitflyer.Key);
-                    request.Headers.Add("ACCESS-TIMESTAMP", timestamp);
-                    request.Headers.Add("ACCESS-SIGN", sign);
+                res = await http.SendAsync(request);
+            }
 
-                    res = await http.SendAsync(request);
-
-                }
-
-                var rawjson = await res.Content.ReadAsStringAsync();
-                if (!res.IsSuccessStatusCode)
-                    throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
-
-                return rawjson;
-            //}
+            res.EnsureSuccessStatusCode();
+            rawjson = await res.Content.ReadAsStringAsync();
+            return rawjson;
+            //if (!res.IsSuccessStatusCode)
+            //throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
 
         }
     }

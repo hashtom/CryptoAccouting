@@ -70,7 +70,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchPriceAsync: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": BittrexAPI: " + e.GetType() + ": " + e.Message);
                 throw;
             }
 
@@ -88,7 +88,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchPositionAsync: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": BittrexAPI: " + e.GetType() + ": " + e.Message);
                 throw;
             }
 
@@ -108,7 +108,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchTransactionAsync: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": BittrexAPI: " + e.GetType() + ": " + e.Message);
                 throw;
             }
 
@@ -300,24 +300,26 @@ namespace CoinBalance.CoreClass.APIClass
             //}
             //else
             //{
-                var request = createRequest(httpMethod, uri, parameters, includeAuthentication);
-                var httpClient = new HttpClient();
-
-                HttpResponseMessage response = null;
-                while (response == null)
-                {
-                    try
-                    {
-                        response = await httpClient.SendAsync(request);
-                    }
-                    catch (Exception)
-                    {
-                        response = null;
-                    }
-                }
+            var request = createRequest(httpMethod, uri, parameters, includeAuthentication);
+            //var httpClient = new HttpClient();
+            using (var http = new HttpClient())
+            {
+                //HttpResponseMessage response = null;
+                //while (response == null)
+                //{
+                //    try
+                //    {
+                //        response = await httpClient.SendAsync(request);
+                //    }
+                //    catch (Exception)
+                //    {
+                //        response = null;
+                //    }
+                //}
+                var response = await http.SendAsync(request);
                 response.EnsureSuccessStatusCode();
                 return await response.Content.ReadAsStringAsync();
-            //}
+            }
         }
     }
 }

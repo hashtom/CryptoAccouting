@@ -188,12 +188,16 @@ namespace CoinBalance.CoreClass.APIClass
 
                 if (!File.Exists(path) || ForceRefresh)
                 {
-                    var client = new HttpClient();
-                    HttpResponseMessage res = await client.GetAsync(TargetUri, HttpCompletionOption.ResponseContentRead);
+                    using (var http = new HttpClient())
+                    {
+                        //var client = new HttpClient();
+                        var res = await http.GetAsync(TargetUri, HttpCompletionOption.ResponseContentRead);
+                        res.EnsureSuccessStatusCode();
 
-                    using (var fileStream = File.Create(path))
-                    using (var httpStream = await res.Content.ReadAsStreamAsync())
-                        httpStream.CopyTo(fileStream);
+                        using (var fileStream = File.Create(path))
+                        using (var httpStream = await res.Content.ReadAsStreamAsync())
+                            httpStream.CopyTo(fileStream);
+                    }   
                 }
 
             }
@@ -220,28 +224,30 @@ namespace CoinBalance.CoreClass.APIClass
             {
                 using (var http = new HttpClient())
                 {
-                    HttpResponseMessage res = await http.GetAsync(coinbalance_url + "/fxrate/fxrate_latest.json");
-                    if (!res.IsSuccessStatusCode)
-                    {
-                        throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
-                    }
-                    else
-                    {
+                    var res = await http.GetAsync(coinbalance_url + "/fxrate/fxrate_latest.json");
+                    res.EnsureSuccessStatusCode();
+                    //if (!res.IsSuccessStatusCode)
+                    //{
+                    //    throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
+                    //}
+                    //else
+                    //{
                         rawjson_today = await res.Content.ReadAsStringAsync();
-                    }
+                    //}
                 }
 
                 using (var http = new HttpClient())
                 {
-                    HttpResponseMessage res = await http.GetAsync(coinbalance_url + "/fxrate/fxrate_yesterday.json");
-                    if (!res.IsSuccessStatusCode)
-                    {
-                        throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
-                    }
-                    else
-                    {
+                    var res = await http.GetAsync(coinbalance_url + "/fxrate/fxrate_yesterday.json");
+                    res.EnsureSuccessStatusCode();
+                    //if (!res.IsSuccessStatusCode)
+                    //{
+                    //    throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
+                    //}
+                    //else
+                    //{
                         rawjson_yesterday = await res.Content.ReadAsStringAsync();
-                    }
+                    //}
                 }
             }
             catch (HttpRequestException e)
