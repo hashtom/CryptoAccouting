@@ -229,16 +229,16 @@ namespace CoinBalance.CoreClass.APIClass
                         }
 
                         symbol = symbol.Replace("_jpy", "").Replace("_btc", "").ToUpper();
-                        var instrumentId = _zaif.GetIdForExchange(symbol);
+                        //var instrumentId = _zaif.GetIdForExchange(symbol);
 
-                        tradelist.AggregateTransaction(AppCore.InstrumentList.GetByInstrumentId(instrumentId),
-                                                      "Zaif",
+                        tradelist.AggregateTransaction(symbol,
                                                       ebuysell,
                                                       (double)json["return"][x.Name]["amount"],
                                                        (double)json["return"][x.Name]["price"],
                                                        settleccy,
                                                       AppCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
-                                                       (double)json["return"][x.Name]["fee"]
+                                                       (double)json["return"][x.Name]["fee"],
+                                                       _zaif
                                                       );
                     }
                     return tradelist;

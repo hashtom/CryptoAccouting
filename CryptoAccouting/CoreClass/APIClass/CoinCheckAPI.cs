@@ -243,16 +243,16 @@ namespace CoinBalance.CoreClass.APIClass
 
                         var symbol = (string)elem["pair"];
                         symbol = symbol.Replace("_jpy", "").ToUpper();
-                        var instrumentId = _coincheck.GetIdForExchange(symbol);
+                        //var instrumentId = _coincheck.GetIdForExchange(symbol);
 
-                        tradelist.AggregateTransaction(AppCore.InstrumentList.GetByInstrumentId(instrumentId),
-                                                      "CoinCheck",
+                        tradelist.AggregateTransaction(symbol,
                                                       ebuysell,
                                                        Math.Abs((double)elem["funds"][symbol.ToLower()]),
                                                        (double)elem["rate"],
                                                        EnuCCY.JPY,
                                                        DateTime.Parse((string)elem["created_at"]),
-                                                       (double)elem["fee"]
+                                                       (double)elem["fee"],
+                                                       _coincheck
                                                       );
                     }
 

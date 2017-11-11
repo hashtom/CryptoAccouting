@@ -222,16 +222,16 @@ namespace CoinBalance.CoreClass.APIClass
                         }
 
                         symbol = symbol.Replace("BTC_", "").Replace("ETH_", "").Replace("USDT_", "");
-                        var instrumentId = _poloniex.GetIdForExchange(symbol);
+                        //var instrumentId = _poloniex.GetIdForExchange(symbol);
 
-                        tradelist.AggregateTransaction(AppCore.InstrumentList.GetByInstrumentId(instrumentId),
-                                                      "Poloniex",
+                        tradelist.AggregateTransaction(symbol,
                                                       ebuysell,
                                                        (double)elem["amount"],
                                                        (double)elem["rate"],
                                                        settleccy,
                                                        DateTime.Parse((string)elem["date"]),
                                                        (double)elem["fee"]
+                                                       ,_poloniex
                                                       );
                     }
                 }

@@ -216,16 +216,16 @@ namespace CoinBalance.CoreClass.APIClass
                             }
 
                             symbol = symbol.Replace("BTC-", "").Replace("ETH-", "").Replace("USDT-", "");
-                            var instrumentId = _bittrex.GetIdForExchange(symbol);
+                            //var instrumentId = _bittrex.GetIdForExchange(symbol);
 
-                            tradelist.AggregateTransaction(AppCore.InstrumentList.GetByInstrumentId(instrumentId),
-                                                          "Bittrex",
+                            tradelist.AggregateTransaction(symbol,
                                                           ebuysell,
-                                                           (double)elem["Quantity"],
+                                                           (double)elem["Quantity"] - (double)elem["QuantityRemaining"],
                                                            (double)elem["PricePerUnit"],
                                                            settleccy,
                                                            DateTime.Parse((string)elem["TimeStamp"]),
-                                                          comm
+                                                          comm,
+                                                           _bittrex
                                                           );
                         }
                     }

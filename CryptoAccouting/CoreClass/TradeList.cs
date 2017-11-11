@@ -8,11 +8,11 @@ namespace CoinBalance.CoreClass
 {
     public class TradeList : IEnumerable<Transaction>
     {
-        public List<string> TradedCoin { get; private set; } 
+        public List<string> TradedCoin { get; private set; }
         //public int TradeYear { get; private set; }
         public string TradedCoinString { get; set; }
         public EnuCCY SettlementCCY { get; set; } // Fiat Only
-        public double UnrealizedBookValue { get; set; } 
+        public double UnrealizedBookValue { get; set; }
         public double AverageBookPrice { get; set; }
         public Exchange TradedExchange { get; set; }
 
@@ -33,7 +33,7 @@ namespace CoinBalance.CoreClass
         }
 
         public double TotalBTCTradeValueBuy
-        { 
+        {
             get
             {
                 return transactions.Where(t => t.BuySell == EnuBuySell.Buy).
@@ -83,11 +83,11 @@ namespace CoinBalance.CoreClass
 
         private List<Transaction> transactions;
 
-		public List<Transaction> TransactionCollection
-		{
-			get { return transactions; }
-			set { this.transactions = value; }
-		}
+        public List<Transaction> TransactionCollection
+        {
+            get { return transactions; }
+            set { this.transactions = value; }
+        }
 
         public TradeList()
         {
@@ -110,53 +110,23 @@ namespace CoinBalance.CoreClass
             return TradedExchange != null ? TradedExchange.Name : null;
         }
 
-   //     public void CalculateTotalValue(int TradeYear, string Symbol = "ALL")
-   //     {
-   //         this.TradeYear = TradeYear;
-
-   //         if (Symbol is "ALL")
-   //         {
-   //             TotalQtyBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear).Sum(t => t.Quantity);
-   //             TotalQtySell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear).Sum(t => t.Quantity);
-   //             TxCountBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear).Count();
-   //             TxCountSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear).Count();
-   //             TotalValueBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear).Sum(t => t.TradeGrossValue);
-   //             TotalValueSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear).Sum(t => t.TradeGrossValue);
-   //             RealizedBookValue = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear).Sum(t => t.RealizedBookValue);
-   //             AverageBookPrice = 0;
-   //         }
-   //         else
-			//{
-    //            TotalQtyBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Sum(t => t.Quantity);
-				//TotalQtySell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Sum(t => t.Quantity);
-				//TxCountBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Count();
-				//TxCountSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Count();
-				//TotalValueBuy = transactions.Where(t => t.BuySell == EnuBuySell.Buy && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Sum(t => t.TradeGrossValue);
-				//TotalValueSell = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Sum(t => t.TradeGrossValue);
-        //        RealizedBookValue = transactions.Where(t => t.BuySell == EnuBuySell.Sell && t.TradeDate.Year == TradeYear && t.TradecCoinSymbol == Symbol).Sum(t => t.RealizedBookValue);
-        //        AverageBookPrice = transactions.Single(t => t.TradeDate == transactions.Max(tt => tt.TradeDate)).BookPrice;
-        //    }
-
-        //    CalculatePL();
-        //}
-
-        public void AggregateTransaction(Instrument tradedCoin, 
-                                         string exchangeCode, 
-                                         EnuBuySell buysell, 
-                                         double qty, 
+        public void AggregateTransaction(string symbol,
+                                         EnuBuySell buysell,
+                                         double qty,
                                          double tradePrice,
-                                         EnuCCY settleCcy, 
-                                         DateTime tradeDate, 
-                                         double fee, 
-                                         EnuTxAggregateFlag flag = EnuTxAggregateFlag.Daliy)
+                                         EnuCCY settleCcy,
+                                         DateTime tradeDate,
+                                         double fee,
+                                         Exchange exchange)
         {
+
             Transaction tx;
+            var instrumentId = exchange.GetIdForExchange(symbol);
 
-            if (transactions.Any(t => (t.TradecCoinSymbol == tradedCoin.Symbol1 && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date && t.SettlementCCY == settleCcy)))
+            if (transactions.Any(t => (t.CoinId == instrumentId && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date && t.SettlementCCY == settleCcy)))
             {
-                tx = transactions.Single(t => (t.TradecCoinSymbol == tradedCoin.Symbol1 && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date && t.SettlementCCY == settleCcy));
+                tx = transactions.Single(t => (t.CoinId == instrumentId && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date && t.SettlementCCY == settleCcy));
 
-                //double newqty;
                 var newqty = tx.Quantity + qty;
 
                 tx.TradePriceSettle = (tx.TradePriceSettle * tx.Quantity + tradePrice * qty) / newqty;
@@ -166,8 +136,8 @@ namespace CoinBalance.CoreClass
             }
             else
             {
-                tx = new Transaction(tradedCoin, AppCore.GetExchange(exchangeCode));
-                tx.TxId = (transactions.Count + 1).ToString();
+                tx = new Transaction(AppCore.InstrumentList.GetByInstrumentId(instrumentId), exchange);
+                tx.TxId = (transactions.Count + 1);
                 tx.BuySell = buysell;
                 tx.SettlementCCY = settleCcy;
                 tx.Quantity = qty;
@@ -178,6 +148,16 @@ namespace CoinBalance.CoreClass
                 this.Attach(tx);
             }
 
+#if DEBUG
+            if (instrumentId == "augur")
+            {
+                System.Diagnostics.Debug.WriteLine("id:" + tx.TxId + " ,side:" + buysell +
+                                                   ", @price:" + tradePrice +
+                                                   ", @qty: " + qty +
+                                                   ", price:" + tx.TradePriceSettle + 
+                                                   ", quantity:" + tx.Quantity + ", fee=" + tx.Fee);
+            }
+#endif
         }
 
         private void CalculatePL()
@@ -185,7 +165,7 @@ namespace CoinBalance.CoreClass
 			TradedCoin = new List<string>();
             TradedCoinString = "";
 
-            foreach (var s in transactions.Select(x => x.TradecCoinSymbol).Distinct())
+            foreach (var s in transactions.Select(x => x.ColumnCoinSymbol).Distinct())
             {
                 string symbol = s;
                 double accumulated_value = 0;
@@ -196,7 +176,7 @@ namespace CoinBalance.CoreClass
                 TradedCoin.Add(symbol);
                 TradedCoinString += symbol + " ";
 
-                foreach (var tx in transactions.Where(t => t.TradecCoinSymbol == symbol).OrderBy(t => t.TradeDate))
+                foreach (var tx in transactions.Where(t => t.ColumnCoinSymbol == symbol).OrderBy(t => t.TradeDate))
                 {
                     if (tx.BuySell == EnuBuySell.Buy)
                     {
@@ -272,10 +252,4 @@ namespace CoinBalance.CoreClass
                                          
     }
 
-	public enum EnuTxAggregateFlag
-	{
-		Daliy,
-		Weekly,
-		Monthly
-	}
 }

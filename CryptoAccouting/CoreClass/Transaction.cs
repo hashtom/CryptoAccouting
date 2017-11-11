@@ -6,7 +6,7 @@ namespace CoinBalance.CoreClass
 {
     public class Transaction
     {
-        public string TxId { get; set; }
+        public int TxId { get; set; }
         public Instrument TradedCoin { get; }
         public EnuCCY SettlementCCY { get; set; }
         public DateTime TradeDate { get; set; }
@@ -20,7 +20,12 @@ namespace CoinBalance.CoreClass
         //public bool IsMargin { get; set; }
         //public DateTime UpdateTime { get; set; }
 
-        public string TradecCoinSymbol
+        public string CoinId
+        {
+            get { return TradedCoin.Id; }
+        }
+
+        public string ColumnCoinSymbol
         {
             get { return TradedCoin.Symbol1; }
         }
