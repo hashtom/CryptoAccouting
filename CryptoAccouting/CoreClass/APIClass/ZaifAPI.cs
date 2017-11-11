@@ -65,10 +65,10 @@ namespace CoinBalance.CoreClass.APIClass
         public static async Task<TradeList> FetchTransactionAsync(Exchange zaif, string calendarYear = "ALL")
         {
             _zaif = zaif;
+            var rawjsons = new List<string>();
 
             try
             {
-                //var http = new HttpClient();
                 var from = calendarYear == "ALL" ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
                 var to = calendarYear == "ALL" ? DateTime.Now.Date : new DateTime(int.Parse(calendarYear), 12, 31);
 
@@ -77,16 +77,31 @@ namespace CoinBalance.CoreClass.APIClass
 
                 var param = new Dictionary<string, string>
                 {
-                    //{ "currency_pair", "btc_jpy" },
-                    //{ "count", "15"},
-                    //{ "action", "bid" },
                     { "since", AppCore.ToEpochSeconds(from).ToString() },
                     { "end", AppCore.ToEpochSeconds(to).ToString() },
                     {"order", "ASC"}
                 };
+                rawjsons.Add(await SendAsync(path, "trade_history", param));
 
-                var rawjson = await SendAsync(path, "trade_history", param);
-                var tradelist = ParseTransaction(rawjson);
+                param = new Dictionary<string, string>
+                {
+                    {"currency_pair", "eth_jpy"},
+                    { "since", AppCore.ToEpochSeconds(from).ToString() },
+                    { "end", AppCore.ToEpochSeconds(to).ToString() },
+                    {"order", "ASC"}
+                };
+                rawjsons.Add(await SendAsync(path, "trade_history", param));
+
+                param = new Dictionary<string, string>
+                {
+                    {"currency_pair", "bch_jpy"},
+                    { "since", AppCore.ToEpochSeconds(from).ToString() },
+                    { "end", AppCore.ToEpochSeconds(to).ToString() },
+                    {"order", "ASC"}
+                };
+                rawjsons.Add(await SendAsync(path, "trade_history", param));
+
+                var tradelist = ParseTransaction(rawjsons);
                 return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
 
             }
@@ -181,74 +196,77 @@ namespace CoinBalance.CoreClass.APIClass
 
         }
 
-        private static TradeList ParseTransaction(string rawjson)
+        private static TradeList ParseTransaction(List<string> rawjsons)
         {
             JObject json;
+            var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _zaif };
 
             try
             {
-                json = JObject.Parse(rawjson);
-                if ((int)json.SelectToken("$.success") != 1)
+                foreach (var rawjson in rawjsons)
                 {
-                    throw new AppCoreParseException("API returned error: " + rawjson);
-                }
-                else
-                {
-                    var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _zaif };
-                    foreach (JProperty x in (JToken)json["return"])
+                    json = JObject.Parse(rawjson);
+                    if ((int)json.SelectToken("$.success") != 1)
                     {
-                        //Transaction Date Order must be ascending by design...
-                        EnuBuySell ebuysell;
-
-                        switch ((string)json["return"][x.Name]["your_action"])
-                        {
-                            case "bid":
-                                ebuysell = EnuBuySell.Buy;
-                                break;
-                            case "ask":
-                                ebuysell = EnuBuySell.Sell;
-                                break;
-                            default:
-                                ebuysell = EnuBuySell.Check;
-                                break;
-                        }
-
-                        var symbol = (string)json["return"][x.Name]["currency_pair"];
-                        EnuCCY settleccy;
-                        if (symbol.Contains("_jpy"))
-                        {
-                            settleccy = EnuCCY.JPY;
-                        }
-                        else if (symbol.Contains("_btc"))
-                        {
-                            settleccy = EnuCCY.BTC;
-                        }
-                        else
-                        {
-                            continue;
-                        }
-
-                        symbol = symbol.Replace("_jpy", "").Replace("_btc", "").ToUpper();
-                        //var instrumentId = _zaif.GetIdForExchange(symbol);
-
-                        tradelist.AggregateTransaction(symbol,
-                                                      ebuysell,
-                                                      (double)json["return"][x.Name]["amount"],
-                                                       (double)json["return"][x.Name]["price"],
-                                                       settleccy,
-                                                      AppCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
-                                                       (double)json["return"][x.Name]["fee"],
-                                                       _zaif
-                                                      );
+                        throw new AppCoreParseException("API returned error: " + rawjson);
                     }
-                    return tradelist;
+                    else
+                    {
+                        foreach (JProperty x in (JToken)json["return"])
+                        {
+                            //Transaction Date Order must be ascending by design...
+                            EnuBuySell ebuysell;
+
+                            switch ((string)json["return"][x.Name]["your_action"])
+                            {
+                                case "bid":
+                                    ebuysell = EnuBuySell.Buy;
+                                    break;
+                                case "ask":
+                                    ebuysell = EnuBuySell.Sell;
+                                    break;
+                                default:
+                                    ebuysell = EnuBuySell.Check;
+                                    break;
+                            }
+
+                            var symbol = (string)json["return"][x.Name]["currency_pair"];
+                            EnuCCY settleccy;
+                            if (symbol.Contains("_jpy"))
+                            {
+                                settleccy = EnuCCY.JPY;
+                            }
+                            else if (symbol.Contains("_btc"))
+                            {
+                                settleccy = EnuCCY.BTC;
+                            }
+                            else
+                            {
+                                continue;
+                            }
+
+                            symbol = symbol.Replace("_jpy", "").Replace("_btc", "").ToUpper();
+                            //var instrumentId = _zaif.GetIdForExchange(symbol);
+
+                            tradelist.AggregateTransaction(symbol,
+                                                          ebuysell,
+                                                          (double)json["return"][x.Name]["amount"],
+                                                           (double)json["return"][x.Name]["price"],
+                                                           settleccy,
+                                                          AppCore.FromEpochSeconds((long)json["return"][x.Name]["timestamp"]).Date,
+                                                           (double)json["return"][x.Name]["fee"],
+                                                           _zaif
+                                                          );
+                        }
+
+                    }
                 }
+                return tradelist; 
             }
             catch (Exception e)
             {
                 throw new AppCoreParseException(e.GetType() + ": " + e.Message);
             }
-
         }
 
 
