@@ -223,6 +223,9 @@
                     "symbol": "BITS"
                 },
                 {
+                    "symbol": "OC"
+                },
+                {
                     "symbol": "THC"
                 },
                 {
@@ -269,6 +272,9 @@
                 },
                 {
                     "symbol": "BSD"
+                },
+                {
+                    "symbol": "CRYPT"
                 },
                 {
                     "symbol": "START"
@@ -430,6 +436,9 @@
                     "symbol": "VTR"
                 },
                 {
+                    "symbol": "XPY"
+                },
+                {
                     "symbol": "XRP"
                 },
                 {
@@ -512,6 +521,9 @@
                 },
                 {
                     "symbol": "NTRN"
+                },
+                {
+                    "symbol": "SLING"
                 },
                 {
                     "symbol": "DMD"
@@ -667,6 +679,9 @@
                     "symbol": "SAFEX"
                 },
                 {
+                    "symbol": "PIVX"
+                },
+                {
                     "symbol": "WARP"
                 },
                 {
@@ -820,6 +835,9 @@
                     "symbol": "ARK"
                 },
                 {
+                    "symbol": "DYN"
+                },
+                {
                     "symbol": "MUSIC"
                 },
                 {
@@ -892,6 +910,9 @@
                     "symbol": "CRB"
                 },
                 {
+                    "symbol": "TROLL"
+                },
+                {
                     "symbol": "PTOY"
                 },
                 {
@@ -908,6 +929,9 @@
                 },
                 {
                     "symbol": "SNT"
+                },
+                {
+                    "symbol": "DCT"
                 },
                 {
                     "symbol": "XEL"
@@ -1192,61 +1216,10 @@
             "apibalance": "true",
             "listing": [
                 {
-                    "symbol": "1CR"
-                },
-                {
-                    "symbol": "ABY"
-                },
-                {
-                    "symbol": "AC"
-                },
-                {
-                    "symbol": "ACH"
-                },
-                {
-                    "symbol": "ADN"
-                },
-                {
-                    "symbol": "AEON"
-                },
-                {
-                    "symbol": "AERO"
-                },
-                {
-                    "symbol": "AIR"
-                },
-                {
                     "symbol": "AMP"
                 },
                 {
-                    "symbol": "APH"
-                },
-                {
-                    "symbol": "ARCH"
-                },
-                {
                     "symbol": "ARDR"
-                },
-                {
-                    "symbol": "AUR"
-                },
-                {
-                    "symbol": "AXIS"
-                },
-                {
-                    "symbol": "BALLS"
-                },
-                {
-                    "symbol": "BANK"
-                },
-                {
-                    "symbol": "BBL"
-                },
-                {
-                    "symbol": "BBR"
-                },
-                {
-                    "symbol": "BCC"
                 },
                 {
                     "symbol": "BCH"
@@ -1258,40 +1231,10 @@
                     "symbol": "BCY"
                 },
                 {
-                    "symbol": "BDC"
-                },
-                {
-                    "symbol": "BDG"
-                },
-                {
                     "symbol": "BELA"
                 },
                 {
-                    "symbol": "BITCNY"
-                },
-                {
-                    "symbol": "BITS"
-                },
-                {
-                    "symbol": "BITUSD"
-                },
-                {
                     "symbol": "BLK"
-                },
-                {
-                    "symbol": "BLOCK"
-                },
-                {
-                    "symbol": "BLU"
-                },
-                {
-                    "symbol": "BNS"
-                },
-                {
-                    "symbol": "BONES"
-                },
-                {
-                    "symbol": "BOST"
                 },
                 {
                     "symbol": "BTC"
@@ -1300,79 +1243,19 @@
                     "symbol": "BTCD"
                 },
                 {
-                    "symbol": "BTCS"
-                },
-                {
                     "symbol": "BTM"
                 },
                 {
                     "symbol": "BTS"
                 },
                 {
-                    "symbol": "BURN"
-                },
-                {
                     "symbol": "BURST"
-                },
-                {
-                    "symbol": "C2"
-                },
-                {
-                    "symbol": "CACH"
-                },
-                {
-                    "symbol": "CAI"
-                },
-                {
-                    "symbol": "CC"
-                },
-                {
-                    "symbol": "CCN"
-                },
-                {
-                    "symbol": "CGA"
-                },
-                {
-                    "symbol": "CHA"
-                },
-                {
-                    "symbol": "CINNI"
                 },
                 {
                     "symbol": "CLAM"
                 },
                 {
-                    "symbol": "CNL"
-                },
-                {
-                    "symbol": "CNMT"
-                },
-                {
-                    "symbol": "CNOTE"
-                },
-                {
-                    "symbol": "COMM"
-                },
-                {
-                    "symbol": "CON"
-                },
-                {
-                    "symbol": "CORG"
-                },
-                {
-                    "symbol": "CRYPT"
-                },
-                {
-                    "symbol": "CURE"
-                },
-                {
                     "symbol": "CVC"
-                },
-                {
-                    "symbol": "CYC"
-                },
-                {
-                    "symbol": "DAO"
                 },
                 {
                     "symbol": "DASH"
@@ -1384,55 +1267,10 @@
                     "symbol": "DGB"
                 },
                 {
-                    "symbol": "DICE"
-                },
-                {
-                    "symbol": "DIEM"
-                },
-                {
-                    "symbol": "DIME"
-                },
-                {
-                    "symbol": "DIS"
-                },
-                {
-                    "symbol": "DNS"
-                },
-                {
                     "symbol": "DOGE"
                 },
                 {
-                    "symbol": "DRKC"
-                },
-                {
-                    "symbol": "DRM"
-                },
-                {
-                    "symbol": "DSH"
-                },
-                {
-                    "symbol": "DVK"
-                },
-                {
-                    "symbol": "EAC"
-                },
-                {
-                    "symbol": "EBT"
-                },
-                {
-                    "symbol": "ECC"
-                },
-                {
-                    "symbol": "EFL"
-                },
-                {
                     "symbol": "EMC2"
-                },
-                {
-                    "symbol": "EMO"
-                },
-                {
-                    "symbol": "ENC"
                 },
                 {
                     "symbol": "ETC"
@@ -1441,28 +1279,10 @@
                     "symbol": "ETH"
                 },
                 {
-                    "symbol": "eTOK"
-                },
-                {
-                    "symbol": "EXE"
-                },
-                {
                     "symbol": "EXP"
                 },
                 {
-                    "symbol": "FAC"
-                },
-                {
-                    "symbol": "FCN"
-                },
-                {
                     "symbol": "FCT"
-                },
-                {
-                    "symbol": "FIBRE"
-                },
-                {
-                    "symbol": "FLAP"
                 },
                 {
                     "symbol": "FLDC"
@@ -1471,241 +1291,34 @@
                     "symbol": "FLO"
                 },
                 {
-                    "symbol": "FLT"
-                },
-                {
-                    "symbol": "FOX"
-                },
-                {
-                    "symbol": "FRAC"
-                },
-                {
-                    "symbol": "FRK"
-                },
-                {
-                    "symbol": "FRQ"
-                },
-                {
-                    "symbol": "FVZ"
-                },
-                {
-                    "symbol": "FZ"
-                },
-                {
-                    "symbol": "FZN"
-                },
-                {
                     "symbol": "GAME"
-                },
-                {
-                    "symbol": "GAP"
                 },
                 {
                     "symbol": "GAS"
                 },
                 {
-                    "symbol": "GDN"
-                },
-                {
-                    "symbol": "GEMZ"
-                },
-                {
-                    "symbol": "GEO"
-                },
-                {
-                    "symbol": "GIAR"
-                },
-                {
-                    "symbol": "GLB"
-                },
-                {
-                    "symbol": "GML"
-                },
-                {
                     "symbol": "GNO"
-                },
-                {
-                    "symbol": "GNS"
                 },
                 {
                     "symbol": "GNT"
                 },
                 {
-                    "symbol": "GOLD"
-                },
-                {
-                    "symbol": "GPC"
-                },
-                {
-                    "symbol": "GPUC"
-                },
-                {
                     "symbol": "GRC"
-                },
-                {
-                    "symbol": "GRCX"
-                },
-                {
-                    "symbol": "GRS"
-                },
-                {
-                    "symbol": "GUE"
-                },
-                {
-                    "symbol": "H2O"
-                },
-                {
-                    "symbol": "HIRO"
-                },
-                {
-                    "symbol": "HOT"
                 },
                 {
                     "symbol": "HUC"
                 },
                 {
-                    "symbol": "HUGE"
-                },
-                {
-                    "symbol": "HVC"
-                },
-                {
-                    "symbol": "HYP"
-                },
-                {
-                    "symbol": "HZ"
-                },
-                {
-                    "symbol": "IFC"
-                },
-                {
-                    "symbol": "INDEX"
-                },
-                {
-                    "symbol": "IOC"
-                },
-                {
-                    "symbol": "ITC"
-                },
-                {
-                    "symbol": "IXC"
-                },
-                {
-                    "symbol": "JLH"
-                },
-                {
-                    "symbol": "JPC"
-                },
-                {
-                    "symbol": "JUG"
-                },
-                {
-                    "symbol": "KDC"
-                },
-                {
-                    "symbol": "KEY"
-                },
-                {
                     "symbol": "LBC"
-                },
-                {
-                    "symbol": "LC"
-                },
-                {
-                    "symbol": "LCL"
-                },
-                {
-                    "symbol": "LEAF"
-                },
-                {
-                    "symbol": "LGC"
-                },
-                {
-                    "symbol": "LOL"
-                },
-                {
-                    "symbol": "LOVE"
-                },
-                {
-                    "symbol": "LQD"
                 },
                 {
                     "symbol": "LSK"
                 },
                 {
-                    "symbol": "LTBC"
-                },
-                {
                     "symbol": "LTC"
                 },
                 {
-                    "symbol": "LTCX"
-                },
-                {
                     "symbol": "MAID"
-                },
-                {
-                    "symbol": "MAST"
-                },
-                {
-                    "symbol": "MAX"
-                },
-                {
-                    "symbol": "MCN"
-                },
-                {
-                    "symbol": "MEC"
-                },
-                {
-                    "symbol": "METH"
-                },
-                {
-                    "symbol": "MIL"
-                },
-                {
-                    "symbol": "MIN"
-                },
-                {
-                    "symbol": "MINT"
-                },
-                {
-                    "symbol": "MMC"
-                },
-                {
-                    "symbol": "MMNXT"
-                },
-                {
-                    "symbol": "MMXIV"
-                },
-                {
-                    "symbol": "MNTA"
-                },
-                {
-                    "symbol": "MON"
-                },
-                {
-                    "symbol": "MRC"
-                },
-                {
-                    "symbol": "MRS"
-                },
-                {
-                    "symbol": "MTS"
-                },
-                {
-                    "symbol": "MUN"
-                },
-                {
-                    "symbol": "MYR"
-                },
-                {
-                    "symbol": "MZC"
-                },
-                {
-                    "symbol": "N5X"
-                },
-                {
-                    "symbol": "NAS"
                 },
                 {
                     "symbol": "NAUT"
@@ -1714,34 +1327,13 @@
                     "symbol": "NAV"
                 },
                 {
-                    "symbol": "NBT"
-                },
-                {
                     "symbol": "NEOS"
-                },
-                {
-                    "symbol": "NL"
                 },
                 {
                     "symbol": "NMC"
                 },
                 {
-                    "symbol": "NOBL"
-                },
-                {
                     "symbol": "NOTE"
-                },
-                {
-                    "symbol": "NOXT"
-                },
-                {
-                    "symbol": "NRS"
-                },
-                {
-                    "symbol": "NSR"
-                },
-                {
-                    "symbol": "NTX"
                 },
                 {
                     "symbol": "NXC"
@@ -1750,37 +1342,16 @@
                     "symbol": "NXT"
                 },
                 {
-                    "symbol": "NXTI"
-                },
-                {
                     "symbol": "OMG"
                 },
                 {
                     "symbol": "OMNI"
                 },
                 {
-                    "symbol": "OPAL"
-                },
-                {
-                    "symbol": "PAND"
-                },
-                {
                     "symbol": "PASC"
                 },
                 {
-                    "symbol": "PAWN"
-                },
-                {
-                    "symbol": "PIGGY"
-                },
-                {
                     "symbol": "PINK"
-                },
-                {
-                    "symbol": "PLX"
-                },
-                {
-                    "symbol": "PMC"
                 },
                 {
                     "symbol": "POT"
@@ -1789,37 +1360,7 @@
                     "symbol": "PPC"
                 },
                 {
-                    "symbol": "PRC"
-                },
-                {
-                    "symbol": "PRT"
-                },
-                {
-                    "symbol": "PTS"
-                },
-                {
-                    "symbol": "Q2C"
-                },
-                {
-                    "symbol": "QBK"
-                },
-                {
-                    "symbol": "QCN"
-                },
-                {
-                    "symbol": "QORA"
-                },
-                {
-                    "symbol": "QTL"
-                },
-                {
                     "symbol": "RADS"
-                },
-                {
-                    "symbol": "RBY"
-                },
-                {
-                    "symbol": "RDD"
                 },
                 {
                     "symbol": "REP"
@@ -1828,52 +1369,13 @@
                     "symbol": "RIC"
                 },
                 {
-                    "symbol": "RZR"
-                },
-                {
                     "symbol": "SBD"
                 },
                 {
                     "symbol": "SC"
                 },
                 {
-                    "symbol": "SDC"
-                },
-                {
-                    "symbol": "SHIBE"
-                },
-                {
-                    "symbol": "SHOPX"
-                },
-                {
-                    "symbol": "SILK"
-                },
-                {
                     "symbol": "SJCX"
-                },
-                {
-                    "symbol": "SLR"
-                },
-                {
-                    "symbol": "SMC"
-                },
-                {
-                    "symbol": "SOC"
-                },
-                {
-                    "symbol": "SPA"
-                },
-                {
-                    "symbol": "SQL"
-                },
-                {
-                    "symbol": "SRCC"
-                },
-                {
-                    "symbol": "SRG"
-                },
-                {
-                    "symbol": "SSD"
                 },
                 {
                     "symbol": "STEEM"
@@ -1885,70 +1387,13 @@
                     "symbol": "STRAT"
                 },
                 {
-                    "symbol": "SUM"
-                },
-                {
-                    "symbol": "SUN"
-                },
-                {
-                    "symbol": "SWARM"
-                },
-                {
-                    "symbol": "SXC"
-                },
-                {
-                    "symbol": "SYNC"
-                },
-                {
                     "symbol": "SYS"
-                },
-                {
-                    "symbol": "TAC"
-                },
-                {
-                    "symbol": "TOR"
-                },
-                {
-                    "symbol": "TRUST"
-                },
-                {
-                    "symbol": "TWE"
-                },
-                {
-                    "symbol": "UIS"
-                },
-                {
-                    "symbol": "ULTC"
-                },
-                {
-                    "symbol": "UNITY"
-                },
-                {
-                    "symbol": "URO"
-                },
-                {
-                    "symbol": "USDE"
                 },
                 {
                     "symbol": "USDT"
                 },
                 {
-                    "symbol": "UTC"
-                },
-                {
-                    "symbol": "UTIL"
-                },
-                {
-                    "symbol": "UVC"
-                },
-                {
                     "symbol": "VIA"
-                },
-                {
-                    "symbol": "VOOT"
-                },
-                {
-                    "symbol": "VOX"
                 },
                 {
                     "symbol": "VRC"
@@ -1957,67 +1402,16 @@
                     "symbol": "VTC"
                 },
                 {
-                    "symbol": "WC"
-                },
-                {
-                    "symbol": "WDC"
-                },
-                {
-                    "symbol": "WIKI"
-                },
-                {
-                    "symbol": "WOLF"
-                },
-                {
-                    "symbol": "X13"
-                },
-                {
-                    "symbol": "XAI"
-                },
-                {
-                    "symbol": "XAP"
-                },
-                {
                     "symbol": "XBC"
-                },
-                {
-                    "symbol": "XC"
-                },
-                {
-                    "symbol": "XCH"
-                },
-                {
-                    "symbol": "XCN"
                 },
                 {
                     "symbol": "XCP"
                 },
                 {
-                    "symbol": "XCR"
-                },
-                {
-                    "symbol": "XDN"
-                },
-                {
-                    "symbol": "XDP"
-                },
-                {
                     "symbol": "XEM"
                 },
                 {
-                    "symbol": "XHC"
-                },
-                {
-                    "symbol": "XLB"
-                },
-                {
-                    "symbol": "XMG"
-                },
-                {
                     "symbol": "XMR"
-                },
-                {
-                    "symbol": "XPB"
                 },
                 {
                     "symbol": "XPM"
@@ -2026,34 +1420,7 @@
                     "symbol": "XRP"
                 },
                 {
-                    "symbol": "XSI"
-                },
-                {
-                    "symbol": "XST"
-                },
-                {
-                    "symbol": "XSV"
-                },
-                {
-                    "symbol": "XUSD"
-                },
-                {
                     "symbol": "XVC"
-                },
-                {
-                    "symbol": "XXC"
-                },
-                {
-                    "symbol": "YACC"
-                },
-                {
-                    "symbol": "YANG"
-                },
-                {
-                    "symbol": "YC"
-                },
-                {
-                    "symbol": "YIN"
                 },
                 {
                     "symbol": "ZEC"

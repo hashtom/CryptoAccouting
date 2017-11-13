@@ -20,7 +20,7 @@ namespace CoinBalance.CoreClass
         {
             Coin = coin;
             //LatestPriceBTC = 0;
-            LatestPriceUSD = 0;
+            //LatestPriceUSD = 0;
         }
 
         public double LatestPriceBase()

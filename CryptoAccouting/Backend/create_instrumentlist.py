@@ -2,10 +2,13 @@
 import requests
 import os
 
-url = "https://api.coinmarketcap.com/v1/ticker/?limit=500"
+url = "https://api.coinmarketcap.com/v1/ticker/?limit=0"
 logo_url = "https://files.coinmarketcap.com/static/img/coins/32x32/"
-basedir = "/home/bridgeplace/scripts/"
-#basedir = "/Users/name/Downloads"
+
+#basedir = "/home/bridgeplace/www/coinbalance/develop/"
+#basedir = "/home/bridgeplace/www/coinbalance/v1.0/"
+#basedir = "/home/bridgeplace/scripts/"
+basedir = "/Users/name/Downloads/"
 
 def download_image(url, timeout = 10):
     response = requests.get(url, allow_redirects=False, timeout=timeout)
@@ -56,9 +59,10 @@ for ins in InstrumentList:
                 "id":ins["id"]
                         })
         try:
-            image = download_image(logo_url + ins["id"] + ".png")
-            if os.path.exists(basedir + "/images/" + ins["id"] + ".png"):
-                save_image(basedir + "/images/" + ins["id"] + ".png", image)
+            if (os.path.exists(basedir + "images/" + ins["id"] + ".png") is False):
+                print(basedir + "images/" + ins["id"] + ".png")
+                image = download_image(logo_url + ins["id"] + ".png")
+                save_image(basedir + "images/" + ins["id"] + ".png", image)
         except KeyboardInterrupt:
             break
         except Exception as err:

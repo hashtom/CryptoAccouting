@@ -120,39 +120,49 @@ namespace CoinBalance.CoreClass.APIClass
             {
                 jarray = await Task.Run(() => JArray.Parse(rawjson));
                 jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
+
+                foreach (var coin in instrumentlist) //.Where(x => x.PriceSourceCode == "coinmarketcap" || x.PriceSourceCode is null))
+                {
+                    //Parse Market Data 
+                    if (coin.MarketPrice == null)
+                    {
+                        var p = new Price(coin);
+                        coin.MarketPrice = p;
+                    }
+
+                    var jtoken = jarray.SelectToken("[?(@.id == '" + coin.Id + "')]");
+                    var jtoken_yesterday = jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]");
+                    var jtoken_bitcoin = jarray.SelectToken("[?(@.id == 'bitcoin')]");
+
+                    if (jtoken != null)
+                    {
+
+                        coin.MarketPrice.LatestPriceBTC = (double)jtoken["price_btc"];
+                        coin.MarketPrice.LatestPriceUSD = (double)jtoken["price_usd"];
+                        coin.MarketPrice.PriceSource = "coinmarketcap";
+                        coin.MarketPrice.DayVolume = jtoken_bitcoin != null ? (double)jtoken["24h_volume_usd"] / (double)jtoken_bitcoin["price_usd"] : 0;
+                        coin.MarketPrice.MarketCap = (double)jtoken["market_cap_usd"];
+
+                        if (jtoken_yesterday != null)
+                        {
+                            coin.MarketPrice.PriceBTCBefore24h = (double)jtoken_yesterday["price_btc"];
+                            coin.MarketPrice.PriceUSDBefore24h = (double)jtoken_yesterday["price_usd"];
+                        }
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": Failed to update " + coin.Name + " price.");
+                        //throw new AppCoreParseException("Failed to update " + coin.Name + " price.");
+                    }
+
+                    coin.MarketPrice.PriceDate = DateTime.Now;
+                    coin.MarketPrice.USDCrossRate = crossrate;
+                }
             }
             catch (Exception e)
             {
                 throw new AppCoreParseException("Exception during parsing coinmarketcap Json: " + e.Message);
             }
-
-            foreach (var coin in instrumentlist) //.Where(x => x.PriceSourceCode == "coinmarketcap" || x.PriceSourceCode is null))
-            {
-                //Parse Market Data 
-                if (coin.MarketPrice == null)
-                {
-                    var p = new Price(coin);
-                    coin.MarketPrice = p;
-                }
-
-                if (jarray.SelectToken("[?(@.id == '" + coin.Id + "')]") != null)
-                {
-                    coin.MarketPrice.LatestPriceBTC = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_btc"];
-                    coin.MarketPrice.LatestPriceUSD = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_usd"];
-                    coin.MarketPrice.PriceSource = "coinmarketcap";
-                    coin.MarketPrice.DayVolume = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["24h_volume_usd"] / (double)jarray.SelectToken("[?(@.id == 'bitcoin')]")["price_usd"];
-                    coin.MarketPrice.MarketCap = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["market_cap_usd"];
-                    coin.MarketPrice.PriceDate = DateTime.Now;//ApplicationCore.FromEpochSeconds((long)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["last_updated"]);
-                    coin.MarketPrice.PriceBTCBefore24h = (double)jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_btc"];
-                    coin.MarketPrice.PriceUSDBefore24h = (double)jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_usd"];
-                    coin.MarketPrice.USDCrossRate = crossrate;
-                }
-                else
-                {
-                    throw new AppCoreParseException("Failed to update " + coin.Name + " price.");
-                }
-            }
-
         }
 
 

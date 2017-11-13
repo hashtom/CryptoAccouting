@@ -5,6 +5,8 @@ import requests
 import re
 import pandas as pd
 
+#basedir = "/home/bridgeplace/www/coinbalance/develop/"
+#basedir = "/home/bridgeplace/www/coinbalance/v1.0/"
 #basedir = "/home/bridgeplace/scripts/"
 basedir = "/Users/tomoaki/Downloads/"
 
@@ -111,19 +113,16 @@ exchanges.append(bitstamp_dict)
 # Bittrex
 bittrex_baseurl = "https://bittrex.com"
 bittrex = requests.get(bittrex_baseurl + "/api/v1.1/public/getcurrencies").json()
-#bittrex_text = requests.get(bittrex_baseurl + "/api/v1.1/public/getcurrencies").text
 bittrex_dict = { "code": "Bittrex",
                 "name": "Bittrex",
                 "apiprice": "true",
                 "apitrade": "true",
                 "apibalance": "true"
                 }
-                #"listing": bittrex_coins}
 
 if bittrex["success"] == True:
     df = pd.read_json(json.dumps(bittrex["result"]), orient='records')
-    #coins.set_index('Currency', inplace=True)
-    df.drop(df[df.IsActive != True].index, inplace=True)
+    #df.drop(df[df.IsActive != True].index, inplace=True)
     bittrex_coins = pd.DataFrame(df['Currency'])
     bittrex_coins.rename(columns={'Currency':'symbol'}, inplace=True)
     bittrex_coins.drop(bittrex_coins[bittrex_coins.symbol=="BCC"].index, inplace=True)
@@ -259,9 +258,10 @@ poloniex_dict = {"code": "Poloniex",
                  "apitrade": "true",
                  "apibalance": "true"
                  }
-poloniex_symbols = pd.DataFrame({"symbol":list(poloniex.keys())})
+df_poloniex = pd.DataFrame.from_dict(poloniex, orient='index')
+df_poloniex.drop(df_poloniex[df_poloniex.delisted==1].index, inplace=True)
+poloniex_symbols = pd.DataFrame({"symbol":list(df_poloniex.index)})
 poloniex_symbols.drop_duplicates(inplace=True)
-
 poloniex_symbols.drop(poloniex_symbols[poloniex_symbols.symbol=="STR"].index, inplace=True)
 symbols = poloniex_symbols.to_dict(orient='records')
 symbols.append({"symbol2" : "STR"})

@@ -162,6 +162,7 @@
     <None Include="Backend\create_instrumentlist.py" />
     <None Include="Backend\create_exchangelist.py" />
     <None Include="Backend\market_latest.cgi" />
+    <None Include="Backend\daily_update.sh" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
