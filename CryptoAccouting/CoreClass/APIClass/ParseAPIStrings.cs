@@ -114,20 +114,29 @@ namespace CoinBalance.CoreClass.APIClass
 
         public static async Task ParseCoinMarketCapJsonAsync(string rawjson, string rawjson_yesterday, InstrumentList instrumentlist, CrossRate crossrate)
         {
+            JArray jarray, jarray_yesterday;
+
             try
             {
-                var jarray = await Task.Run(() => JArray.Parse(rawjson));
-                var jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
+                jarray = await Task.Run(() => JArray.Parse(rawjson));
+                jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
+            }
+            catch (Exception e)
+            {
+                throw new AppCoreParseException("Exception during parsing coinmarketcap Json: " + e.Message);
+            }
 
-                foreach (var coin in instrumentlist) //.Where(x => x.PriceSourceCode == "coinmarketcap" || x.PriceSourceCode is null))
+            foreach (var coin in instrumentlist) //.Where(x => x.PriceSourceCode == "coinmarketcap" || x.PriceSourceCode is null))
+            {
+                //Parse Market Data 
+                if (coin.MarketPrice == null)
                 {
-                    //Parse Market Data 
-                    if (coin.MarketPrice == null)
-                    {
-                        var p = new Price(coin);
-                        coin.MarketPrice = p;
-                    }
+                    var p = new Price(coin);
+                    coin.MarketPrice = p;
+                }
 
+                if (jarray.SelectToken("[?(@.id == '" + coin.Id + "')]") != null)
+                {
                     coin.MarketPrice.LatestPriceBTC = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_btc"];
                     coin.MarketPrice.LatestPriceUSD = (double)jarray.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_usd"];
                     coin.MarketPrice.PriceSource = "coinmarketcap";
@@ -138,11 +147,12 @@ namespace CoinBalance.CoreClass.APIClass
                     coin.MarketPrice.PriceUSDBefore24h = (double)jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]")["price_usd"];
                     coin.MarketPrice.USDCrossRate = crossrate;
                 }
+                else
+                {
+                    throw new AppCoreParseException("Failed to update " + coin.Name + " price.");
+                }
             }
-            catch (Exception e)
-            {
-                throw new AppCoreParseException("Exception during parsing coinmarketcap Json: " + e.Message);
-            }
+
         }
 
 

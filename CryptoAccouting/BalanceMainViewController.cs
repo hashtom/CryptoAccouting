@@ -10,11 +10,8 @@
                 {
                     try                     {
                         await RefreshPriceAsync();                     }
-                    catch (Exception)                     {
-                        this.PopUpWarning("Warning", "Unable to obtain latest prices. Please check Internet connection.", () => RefreshControl.EndRefreshing());
-                        //UIAlertController okAlertController = UIAlertController.Create("Warning", "Unable to obtain latest prices. Please check Internet connection.", UIAlertControllerStyle.Alert);
-                        //okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
-                        //this.PresentViewController(okAlertController, true, () => RefreshControl.EndRefreshing());                     }                     finally                     {                         RefreshControl.EndRefreshing();                         ReDrawScreen();                     }                 };                  ReDrawScreen();                  if (!AppCore.IsInternetReachable())                 {                     this.PopUpWarning("Warning", "Unable to Connect Internet!");
+                    catch (Exception ex)                     {                         if (!AppCore.IsInternetReachable())                         {                             this.PopUpWarning("Warning", "Unable to Connect Internet!", () => RefreshControl.EndRefreshing());                         }                         else                         {
+                            this.PopUpWarning("Warning", "Unable to obtain latest prices." + ex.Message, () => RefreshControl.EndRefreshing());                         }                     }                     finally                     {                         RefreshControl.EndRefreshing();                         ReDrawScreen();                     }                 };                  ReDrawScreen();                  if (!AppCore.IsInternetReachable())                 {                     this.PopUpWarning("Warning", "Unable to Connect Internet!");
                 }
                 else                 {
                     //run the last

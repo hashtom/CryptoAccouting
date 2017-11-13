@@ -222,7 +222,6 @@ namespace CoinBalance.CoreClass.APIClass
                         }
 
                         symbol = symbol.Replace("BTC_", "").Replace("ETH_", "").Replace("USDT_", "");
-                        //var instrumentId = _poloniex.GetIdForExchange(symbol);
 
                         tradelist.AggregateTransaction(symbol,
                                                       ebuysell,

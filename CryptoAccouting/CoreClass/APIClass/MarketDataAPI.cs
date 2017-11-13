@@ -169,12 +169,6 @@ namespace CoinBalance.CoreClass.APIClass
             var filename = InstrumentID + ".png";
             string TargetUri = coinbalance_url + "/images/" + filename;
 
-            //if (!Reachability.IsHostReachable(TargetUri))
-            //{
-            //    throw new AppCoreNetworkException("Host is not reachable: " + coinbalance_url);
-            //}
-            //else
-            //{
             try
             {
                 var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Images");
@@ -206,8 +200,6 @@ namespace CoinBalance.CoreClass.APIClass
                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchCoinLogoAsync: " + e.GetType() + ": " + e.Message);
                 throw;
             }
-
-            //}
         }
 
         public static async Task<List<CrossRate>> FetchCrossRateAsync()

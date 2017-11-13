@@ -175,8 +175,8 @@ namespace CoinBalance.CoreClass.APIClass
 
                     foreach (var elem in jarray)
                     {
-                        var comm = (double)elem["Commission"];
-                        if (comm > 0)
+                        //var comm = (double)elem["Commission"];
+                        if ((double)elem["Quantity"] - (double)elem["QuantityRemaining"] > 0)
                         {
                             //Transaction Date Order must be ascending by design...
                             EnuBuySell ebuysell;
@@ -216,7 +216,6 @@ namespace CoinBalance.CoreClass.APIClass
                             }
 
                             symbol = symbol.Replace("BTC-", "").Replace("ETH-", "").Replace("USDT-", "");
-                            //var instrumentId = _bittrex.GetIdForExchange(symbol);
 
                             tradelist.AggregateTransaction(symbol,
                                                           ebuysell,
@@ -224,7 +223,7 @@ namespace CoinBalance.CoreClass.APIClass
                                                            (double)elem["PricePerUnit"],
                                                            settleccy,
                                                            DateTime.Parse((string)elem["TimeStamp"]),
-                                                          comm,
+                                                           (double)elem["Commission"],
                                                            _bittrex
                                                           );
                         }

@@ -72,7 +72,7 @@ namespace CoinBalance
                                                                              }
                                                                              catch (Exception ex)
                                                                              {
-                                                                                 this.PopUpWarning("Warning", "Unable to update price data: " + ex.GetType(), null);
+                                                                                 this.PopUpWarning("Warning", "Unable to update price data: " + ex.Message, null);
                                                                                  System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": ViewDidLoad: buttonPriceSource: " + ex.GetType() + ": " + ex.Message);
                                                                                  thisCoin.PriceSourceCode = prevItem;
                                                                                  //buttonPriceSource.SetTitle(prevItem, UIControlState.Normal);
