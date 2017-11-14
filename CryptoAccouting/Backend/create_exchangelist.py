@@ -8,7 +8,7 @@ import pandas as pd
 #basedir = "/home/bridgeplace/www/coinbalance/develop/"
 #basedir = "/home/bridgeplace/www/coinbalance/v1.0/"
 #basedir = "/home/bridgeplace/scripts/"
-basedir = "/Users/tomoaki/Downloads/"
+basedir = "/Users/name/Downloads/"
 
 exchanges = []
 ExchangeList = {"exchanges": exchanges}
@@ -246,7 +246,10 @@ for ins in bitfinex:
 
 bitfinex_symbols = pd.DataFrame({"symbol":bitfinex_symbols})
 bitfinex_symbols.drop_duplicates(inplace=True)
-bitfinex_dict["listing"] = bitfinex_symbols.to_dict(orient='records')
+bitfinex_symbols.drop(bitfinex_symbols[bitfinex_symbols.symbol=="IOT"].index, inplace=True)
+symbols = bitfinex_symbols.to_dict(orient='records')
+symbols.append({"symbol2" : "IOT"})
+bitfinex_dict["listing"] = symbols
 
 exchanges.append(bitfinex_dict)
 

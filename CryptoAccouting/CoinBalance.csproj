@@ -146,11 +146,13 @@
     <Folder Include="CoreClass\APIClass\" />
     <Folder Include="Bundlefile\" />
     <Folder Include="Backend\" />
+    <Folder Include="Resources\ja.lproj\" />
+    <Folder Include="Base.lproj\" />
   </ItemGroup>
   <ItemGroup>
-    <InterfaceDefinition Include="LaunchScreen.storyboard" />
-    <InterfaceDefinition Include="Main.storyboard" />
     <InterfaceDefinition Include="UIClass\CoinViewCell.xib" />
+    <InterfaceDefinition Include="Base.lproj\Main.storyboard" />
+    <InterfaceDefinition Include="Base.lproj\LaunchScreen.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -259,6 +261,9 @@
     <BundleResource Include="Images\pltab.png" />
     <BundleResource Include="Images\garbage.png" />
     <BundleResource Include="Resources\Default-568h%402x.png" />
+    <BundleResource Include="Resources\ja.lproj\Localizable.strings" />
+    <BundleResource Include="Resources\ja.lproj\Main.strings" />
+    <BundleResource Include="Base.lproj\Localizable.strings" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Remove="iTunesArtwork" />

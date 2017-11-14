@@ -1,0 +1,50 @@
+﻿/* Tab Bar */
+"21285.title" = "残高";
+"bMp-oQ-u4I.title" = "取引";
+"22496.title" = "設定";
+
+/* Main View Controller */
+"859.title" = "コインバランス";
+"28444.text" = "金額";
+"28445.text" = "24h収益率";
+
+/* Transaction View Controller*/
+"v7Z-pL-f3v.title" = "直近の取引表示(Beta)";
+"40t-xf-m9c.title" = "保存";
+"XVl-Im-sDm.text" = "買";
+"XVl-Im-sDm.text" = "買"; "XNO-tD-mKz.text" = "売"; "9I2-3e-xPn.text" = "注文数"; "z41-BW-Rw0.text" = "取引/BTC"; "h7s-9T-vZv.text" = "取引";
+"eIs-k4-e9h.text" = "注)取引は日次で集計しています";
+"e77-jJ-AW0.normalTitle" = "取引所";
+"q0F-50-Mum.normalTitle" = "表示";
+
+/* Detail View Controller */
+"28485.title" = "保有詳細";
+"26702.text" = "価格";
+"H9Q-L9-UeZ.text" = "出来高";
+"26294.text" = "保有数量";
+"26296.text" = "保有金額";
+"Xsd-D9-IKf.text" = "データソース";
+      
+/* Edit View Conrtoller */
+"24618.title" = "ポジション編集";
+"oVW-d8-bZo.text" = "保有なし";
+"24714.text" = "保有数量";
+"24721.text" = "取引日";
+"20711.text" = "売買取引所";
+"yYi-bK-1bE.text" = "今の保管先";
+"nK1-1y-bmk.normalTitle" = "削除";
+
+/* Setting View Conroller */
+"22424.title" = "設定";
+"16397.text" = "表示通貨";
+"16852.text" = "APIキー設定";
+"28024.text" = "最新コインデータの取得";
+"iqY-IA-JtR.text" = "キャッシュ削除";
+"A4i-nd-oMK.text" = "About";
+
+/* API Setting View Controller */
+"28853.title" = "APIキー設定";
+"28413.normalTitle" = "取引所";
+"yNw-a0-zYj.normalTitle" = "残高のインポート";
+
+/* About View Controller */

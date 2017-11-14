@@ -2,7 +2,7 @@
 import requests
 import os
 
-url = "https://api.coinmarketcap.com/v1/ticker/?limit=0"
+url = "https://api.coinmarketcap.com/v1/ticker/?limit=0"  #may remove lower rank below
 logo_url = "https://files.coinmarketcap.com/static/img/coins/32x32/"
 
 #basedir = "/home/bridgeplace/www/coinbalance/develop/"
@@ -50,14 +50,24 @@ for ins in InstrumentList:
                 "symbol2":"STR",
                 "id":ins["id"]
                 })
-        else:
+        elif ins["id"] == "iota":
             data.append({
                 "active":"true",
                 "rank":ins["rank"],
                 "name":ins["name"],
                 "symbol":ins["symbol"],
+                "symbol2":"IOT",
                 "id":ins["id"]
-                        })
+                })
+        else:
+            if int(ins["rank"]) < 501:
+                data.append({
+                    "active":"true",
+                    "rank":ins["rank"],
+                    "name":ins["name"],
+                    "symbol":ins["symbol"],
+                    "id":ins["id"]
+                            })
         try:
             if (os.path.exists(basedir + "images/" + ins["id"] + ".png") is False):
                 print(basedir + "images/" + ins["id"] + ".png")

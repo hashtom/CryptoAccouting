@@ -991,6 +991,9 @@
                     "symbol": "VIB"
                 },
                 {
+                    "symbol": "MER"
+                },
+                {
                     "symbol2": "BCC"
                 }
             ]
@@ -1165,9 +1168,6 @@
                     "symbol": "XRP"
                 },
                 {
-                    "symbol": "IOT"
-                },
-                {
                     "symbol": "EOS"
                 },
                 {
@@ -1205,6 +1205,9 @@
                 },
                 {
                     "symbol": "DAT"
+                },
+                {
+                    "symbol2": "IOT"
                 }
             ]
         },
