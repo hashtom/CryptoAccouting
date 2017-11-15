@@ -119,6 +119,9 @@
     <Reference Include="Syncfusion.Pdf.Portable">
       <HintPath>..\..\..\..\Documents\Syncfusion\15.3.0.26\Xamarin\lib\pcl\Syncfusion.Pdf.Portable.dll</HintPath>
     </Reference>
+    <Reference Include="Syncfusion.SFChart.iOS">
+      <HintPath>..\..\..\..\Documents\Syncfusion\15.3.0.26\Xamarin\lib\ios-unified\Syncfusion.SFChart.iOS.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -247,9 +250,9 @@
     <Compile Include="CoreClass\AppCoreException.cs" />
     <Compile Include="CoreClass\APIClass\CoinbalanceAPI.cs" />
     <Compile Include="CoreClass\APIClass\PoloniexAPI.cs" />
-    <Compile Include="CoinExposureViewController.cs" />
-    <Compile Include="CoinExposureViewController.designer.cs">
-      <DependentUpon>CoinExposureViewController.cs</DependentUpon>
+    <Compile Include="ExposureViewController.cs" />
+    <Compile Include="ExposureViewController.designer.cs">
+      <DependentUpon>ExposureViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="CryptoViewController.cs" />
   </ItemGroup>

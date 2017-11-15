@@ -6,7 +6,7 @@
 
                 //Color Design                 var gradient = new CAGradientLayer();                 gradient.Frame = this.BalanceTopView.Bounds;                 gradient.NeedsDisplayOnBoundsChange = true;                 gradient.MasksToBounds = true;                 gradient.Colors = new CGColor[] { UIColor.FromRGB(0, 126, 167).CGColor, UIColor.FromRGB(0, 168, 232).CGColor };                 //NavigationController.NavigationBar.Layer.InsertSublayer(gradient, 0);                 this.BalanceTopView.Layer.InsertSublayer(gradient, 0); 
     			// Configure Segmented control
-    			ConfigureSegmentButton();                  RefreshControl = new UIRefreshControl();                 RefreshControl.ValueChanged += async (sender, e) =>
+    			//ConfigureSegmentButton();                  RefreshControl = new UIRefreshControl();                 RefreshControl.ValueChanged += async (sender, e) =>
                 {
                     try                     {
                         await RefreshPriceAsync();                     }
@@ -58,27 +58,27 @@
 				//	navctlr.SetPosition(item);
 				//}             }
         }
-         private void ConfigureSegmentButton()
-        {
+         //private void ConfigureSegmentButton()
+        //{
 
-            SegmentBalance.ValueChanged += (sender, e) =>
-            {
-                var selectedSegmentId = (sender as UISegmentedControl).SelectedSegment;
+        //    SegmentBalance.ValueChanged += (sender, e) =>
+        //    {
+        //        var selectedSegmentId = (sender as UISegmentedControl).SelectedSegment;
 
-                switch (selectedSegmentId)
-                {
-                    case 0:
-                        TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");
-                        TableView.Source = new CoinTableSource(mybalance, this);
-                        break;
-                    case 1:
-                        TableView.RegisterClassForCellReuse(typeof(CoinStoreCell), "CoinStorageCell");                         //TableView.RegisterNibForCellReuse(CoinStorageCell.Nib, "CoinStorageCell");
-                        TableView.Source = new CoinStoreTableSource(AppCore.CoinStorageList, this);
-                        break;
-                    default:
-                        break;
-                }                 ReDrawScreen();
-            };          }          public override void ReDrawScreen()         {
+        //        switch (selectedSegmentId)
+        //        {
+        //            case 0:
+        //                TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");
+        //                TableView.Source = new CoinTableSource(mybalance, this);
+        //                break;
+        //            case 1:
+        //                TableView.RegisterClassForCellReuse(typeof(CoinStoreCell), "CoinStorageCell");         //                //TableView.RegisterNibForCellReuse(CoinStorageCell.Nib, "CoinStorageCell");
+        //                TableView.Source = new CoinStoreTableSource(AppCore.CoinStorageList, this);
+        //                break;
+        //            default:
+        //                break;
+        //        }         //        ReDrawScreen();
+        //    };          //}          public override void ReDrawScreen()         {
             if (AppCore.Balance != null)             {                 labelCcy.Text = AppCore.BaseCurrency.ToString();                 labelTotalFiat.Text = AppCore.NumberFormat(mybalance.LatestFiatValueBase());                 labelTotalBTC.Text = AppCore.NumberFormat(mybalance.AmountBTC());                 label1dPct.Text = AppCore.NumberFormat(mybalance.BaseRet1d(), true, false) + "%";                 label1dPct.TextColor = mybalance.BaseRet1d() >= 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);                 labelLastUpdate.Text = mybalance.PriceDateTime !=                      DateTime.MinValue ? "Price Updated: " + mybalance.PriceDateTime.ToShortDateString() + " " + mybalance.PriceDateTime.ToShortTimeString()                     : "";                 TableView.ReloadData();
             }          } 
         partial void ButtonAddNew_Activated(UIBarButtonItem sender)

@@ -9,8 +9,8 @@ using System.CodeDom.Compiler;
 
 namespace CoinBalance
 {
-	[Register ("CoinExposureViewController")]
-	partial class CoinExposureViewController
+	[Register ("ExposureViewController")]
+	partial class ExposureViewController
 	{
 		[Outlet]
 		UIKit.UIView ExposureDrawingView { get; set; }

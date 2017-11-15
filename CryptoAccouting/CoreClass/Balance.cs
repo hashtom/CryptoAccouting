@@ -18,6 +18,11 @@ namespace CoinBalance.CoreClass
             BalanceByCoin = new List<Position>();
         }
 
+        public List<Position> BalanceCollection
+        {
+            get { return BalanceByCoin.Where(x => x.WatchOnly == false).ToList(); }
+        }
+
         public void AttachInstruments(InstrumentList instrumentist)
         {
             positions.ForEach(x => x.AttachInstrument(instrumentist.First(y => y.Symbol1 == x.Coin.Symbol1)));

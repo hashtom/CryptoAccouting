@@ -41,10 +41,6 @@ namespace CoinBalance
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UILabel labelTotalFiat { get; set; }
 
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UIKit.UISegmentedControl SegmentBalance { get; set; }
-
 		[Action ("ButtonAddNew_Activated:")]
 		partial void ButtonAddNew_Activated (UIKit.UIBarButtonItem sender);
 		
@@ -88,11 +84,6 @@ namespace CoinBalance
 			if (labelTotalFiat != null) {
 				labelTotalFiat.Dispose ();
 				labelTotalFiat = null;
-			}
-
-			if (SegmentBalance != null) {
-				SegmentBalance.Dispose ();
-				SegmentBalance = null;
 			}
 		}
 	}

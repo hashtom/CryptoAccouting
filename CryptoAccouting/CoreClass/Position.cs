@@ -41,10 +41,15 @@ namespace CoinBalance.CoreClass
             BalanceDate = DateTime.Now.Date;
         }
 
-        //public double BookPriceBase(CrossRate USDCrossRate) //todo booking fx rate
-        //{
-        //    return Coin.MarketPrice == null ? 0 : BookPriceUSD * USDCrossRate.Rate;
-        //}
+        public string ColumnCoinSymbol
+        {
+            get { return Coin.Symbol1; }
+        }
+
+        public double ColumnAmountBTC
+        {
+            get { return LatestAmountBTC; }
+        }
 
         public double LatestAmountBTC
         {
