@@ -21,9 +21,6 @@ namespace CoinBalance
 		UIKit.UIButton buttonExchange { get; set; }
 
 		[Outlet]
-		UIKit.UIButton buttonFetchPosition { get; set; }
-
-		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UITextField textAPIKey { get; set; }
 
@@ -47,11 +44,6 @@ namespace CoinBalance
 			if (buttonExchange != null) {
 				buttonExchange.Dispose ();
 				buttonExchange = null;
-			}
-
-			if (buttonFetchPosition != null) {
-				buttonFetchPosition.Dispose ();
-				buttonFetchPosition = null;
 			}
 
 			if (textAPIKey != null) {

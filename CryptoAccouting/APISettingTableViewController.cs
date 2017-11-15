@@ -23,46 +23,45 @@ namespace CoinBalance
         {
             base.ViewDidLoad();
             buttonDone.Enabled = false;
-            buttonFetchPosition.Enabled = false;
+            //buttonFetchPosition.Enabled = false;
             textAPIKey.Enabled = false;
             textAPISecret.Enabled = false;
 
+            //buttonFetchPosition.TouchUpInside += async (object sender, EventArgs e) =>
+            //{
+            //    List<Position> positions;
 
-            buttonFetchPosition.TouchUpInside += async (object sender, EventArgs e) =>
-            {
-                List<Position> positions;
+            //    if (thisExchange != null)
+            //    {
+            //        var bounds = TableView.Bounds;
+            //        loadPop = new LoadingOverlay(bounds);
+            //        TableView.Add(loadPop);
 
-                if (thisExchange != null)
-                {
-                    var bounds = TableView.Bounds;
-                    loadPop = new LoadingOverlay(bounds);
-                    TableView.Add(loadPop);
+            //        try
+            //        {
+            //            positions = await ExchangeAPI.FetchPositionAsync(thisExchange);
 
-                    try
-                    {
-                        positions = await ExchangeAPI.FetchPositionAsync(thisExchange);
+            //            if (positions.Any())
+            //            {
+            //                    AddBalance(positions);
+            //                this.PopUpWarning("Import Position", "Successfully Imported.");
+            //            }
+            //            else
+            //            {
+            //                PopUpWarning("Warning", "There is no balance to get imported.");
+            //            }
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            PopUpWarning("Warning", "Couldn't get positions from the exchange: " + ex.Message);
 
-                        if (positions.Any())
-                        {
-                                AddBalance(positions);
-                            this.PopUpWarning("Import Position", "Successfully Imported.");
-                        }
-                        else
-                        {
-                            PopUpWarning("Warning", "There is no balance to get imported.");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        PopUpWarning("Warning", "Couldn't get positions from the exchange: " + ex.Message);
-
-                    }
-                    finally
-                    {
-                        loadPop.Hide();
-                    }
-                }
-            };
+            //        }
+            //        finally
+            //        {
+            //            loadPop.Hide();
+            //        }
+            //    }
+            //};
         }
 
         partial void ButtonExchange_TouchUpInside(UIButton sender)
@@ -81,7 +80,7 @@ namespace CoinBalance
                                                                      textAPIKey.Text = exc.Key == null ? "" : exc.Key;
                                                                      textAPISecret.Text = exc.Secret == null ? "" : exc.Secret;
                                                                      buttonDone.Enabled = true;
-                                                                     buttonFetchPosition.Enabled = true;
+                                                                     //buttonFetchPosition.Enabled = true;
                                                                      textAPIKey.Enabled = true;
                                                                      textAPISecret.Enabled = true;
                                                                  }

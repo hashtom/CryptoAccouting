@@ -4,13 +4,13 @@
 "22496.title" = "設定";
 
 /* Main View Controller */
-"859.title" = "コインバランス";
+"859.title" = "コイン残高";
 "28444.text" = "評価金額";
 "28445.text" = "24h収益率";
 
 /* Coin Exposure View Controller */
 "qvi-a2-3dC.title" = "エクスポージャ";
-"BGG-Io-sWa.title" = "コインエクスポージャ";
+"BGG-Io-sWa.title" = "エクスポージャ";
 
 /* Transaction View Controller*/
 "v7Z-pL-f3v.title" = "直近の取引(Beta)";
@@ -42,6 +42,7 @@
 "22424.title" = "設定";
 "16397.text" = "表示通貨";
 "16852.text" = "APIキー設定";
+"oAa-m3-Wvy.text" = "残高のインポート";
 "28024.text" = "最新コインデータの取得";
 "iqY-IA-JtR.text" = "キャッシュ削除";
 "A4i-nd-oMK.text" = "About";
@@ -49,6 +50,10 @@
 /* API Setting View Controller */
 "28853.title" = "APIキー設定";
 "28413.normalTitle" = "取引所";
-"yNw-a0-zYj.normalTitle" = "残高のインポート";
+
+/* Import Position View Controller */
+"2Bx-em-zt2.title" = "残高のインポート";
+"LYd-61-sKW.normalTitle" = "取引所";
+"3QZ-zg-uFV.normalTitle" = "残高のインポート";
 
 /* About View Controller */

@@ -255,6 +255,10 @@
       <DependentUpon>ExposureViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="CryptoViewController.cs" />
+    <Compile Include="ImportTableViewController.cs" />
+    <Compile Include="ImportTableViewController.designer.cs">
+      <DependentUpon>ImportTableViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />
@@ -273,6 +277,7 @@
     <BundleResource Include="Resources\ja.lproj\Main.strings" />
     <BundleResource Include="Base.lproj\Localizable.strings" />
     <BundleResource Include="Images\exptab.png" />
+    <BundleResource Include="Images\import.png" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Remove="iTunesArtwork" />

@@ -2,11 +2,7 @@ using Foundation;
 using System;
 using UIKit;
 using System.ComponentModel;
-using QuickLook;
 using CoreGraphics;
-using CoreAnimation;
-using System.Linq;
-using System.Threading.Tasks;
 using Syncfusion.SfDataGrid;
 using Syncfusion.SfChart.iOS;
 using CoinBalance.CoreClass;
@@ -52,35 +48,34 @@ namespace CoinBalance
         private void initAssetChart()
         {
             sfChart = new SFChart();
-            //sfChart.Title.Text = "Coin Location";
+            sfChart.Title.Text = "Asset Weights";
 
             SFPieSeries pieSeries = new SFPieSeries()
             {
                 ItemsSource = myBalance.BalanceCollection,
                 XBindingPath = "ColumnCoinSymbol",
                 YBindingPath = "ColumnAmountBTC",
-                //CircularCoefficient = 0.75,
-                //StartAngle = 75,
-                //EndAngle = 435,
-                EnableSmartLabels = true,
-                DataMarkerPosition = SFChartCircularSeriesLabelPosition.Inside,
-                //ConnectorLineType = SFChartConnectorLineType.Bezier,
-                //VisibleOnLegend = true,
-                LegendIcon = SFChartLegendIcon.Rectangle    
+                //CircularCoefficient = 0.75,  
             };
 
+            pieSeries.DataMarkerPosition = SFChartCircularSeriesLabelPosition.Inside;
             pieSeries.DataMarker.LabelContent = SFChartLabelContent.Percentage;
+            pieSeries.EnableSmartLabels = true;
+            pieSeries.ConnectorLineType = SFChartConnectorLineType.Bezier;
+            pieSeries.DataMarker.ShowLabel = true;
+            pieSeries.LegendIcon = SFChartLegendIcon.Rectangle;
+
             sfChart.Series.Add(pieSeries);
 
             sfChart.Legend.Visible = true;
             //sfChart.Legend.Orientation = SFChartLegendOrientation.Vertical;
-            sfChart.Legend.ToggleSeriesVisibility = true;
+            //sfChart.Legend.ToggleSeriesVisibility = true;
         }
 
         private void initStorageChart()
         {
             sfChart = new SFChart();
-            //sfChart.Title.Text = "Coin Location";
+            sfChart.Title.Text = "Coin Location";
 
             SFPieSeries pieSeries = new SFPieSeries()
             {
@@ -119,16 +114,17 @@ namespace CoinBalance
                 TextAlignment = UITextAlignment.Left
             };
 
-            GridTextColumn holdingColumn = new GridTextColumn()
+            GridNumericColumn holdingColumn = new GridNumericColumn()
             {
                 MappingName = "ColumnHolding",
-                HeaderText = "Holding"
+                HeaderText = "Holding(BTC)",
+                NumberDecimalDigits = 4
             };
 
             GridNumericColumn valueColumn = new GridNumericColumn()
             {
                 MappingName = "ColumnValue",
-                HeaderText = "Value",
+                HeaderText = "Fiat Value",
                 NumberDecimalDigits = 0
                 //NumberDecimalSeparator = ","
             };
@@ -140,9 +136,9 @@ namespace CoinBalance
             };
 
             sfGrid.Columns.Add(locationColumn);
+            sfGrid.Columns.Add(weightColumn);
             sfGrid.Columns.Add(holdingColumn);
             sfGrid.Columns.Add(valueColumn);
-            sfGrid.Columns.Add(weightColumn);
 
             //sfGrid.SortColumnDescriptions.Add(new SortColumnDescription()
             //{
