@@ -5,12 +5,16 @@
 
 /* Main View Controller */
 "859.title" = "コインバランス";
-"28444.text" = "金額";
+"28444.text" = "評価金額";
 "28445.text" = "24h収益率";
 
+/* Coin Exposure View Controller */
+"qvi-a2-3dC.title" = "エクスポージャ";
+"BGG-Io-sWa.title" = "コインエクスポージャ";
+
 /* Transaction View Controller*/
-"v7Z-pL-f3v.title" = "直近の取引表示(Beta)";
-"40t-xf-m9c.title" = "保存";
+"v7Z-pL-f3v.title" = "直近の取引(Beta)";
+"40t-xf-m9c.title" = "エクスポート";
 "XVl-Im-sDm.text" = "買";
 "XVl-Im-sDm.text" = "買"; "XNO-tD-mKz.text" = "売"; "9I2-3e-xPn.text" = "注文数"; "z41-BW-Rw0.text" = "取引/BTC"; "h7s-9T-vZv.text" = "取引";
 "eIs-k4-e9h.text" = "注)取引は日次で集計しています";

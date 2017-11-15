@@ -14,6 +14,12 @@ namespace CoinBalance.CoreClass
             storages = new List<CoinStorage>();
 		}
 
+        public List<CoinStorage> StorageCollection
+        {
+            get { return storages; }
+            set { this.storages = value; }
+        }
+
         public static CoinStorageList GetStorageListSelection()
         {
             var list = new CoinStorageList();

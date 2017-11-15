@@ -5,7 +5,7 @@ using System.IO;
 
 namespace CoinBalance
 {
-	public partial class AboutViewConroller : UIViewController
+    public partial class AboutViewConroller : CryptoViewController
 	{
 		public AboutViewConroller (IntPtr handle) : base (handle)
 		{

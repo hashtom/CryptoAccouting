@@ -247,6 +247,11 @@
     <Compile Include="CoreClass\AppCoreException.cs" />
     <Compile Include="CoreClass\APIClass\CoinbalanceAPI.cs" />
     <Compile Include="CoreClass\APIClass\PoloniexAPI.cs" />
+    <Compile Include="CoinExposureViewController.cs" />
+    <Compile Include="CoinExposureViewController.designer.cs">
+      <DependentUpon>CoinExposureViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CryptoViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />
@@ -264,6 +269,7 @@
     <BundleResource Include="Resources\ja.lproj\Localizable.strings" />
     <BundleResource Include="Resources\ja.lproj\Main.strings" />
     <BundleResource Include="Base.lproj\Localizable.strings" />
+    <BundleResource Include="Images\exptab.png" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Remove="iTunesArtwork" />

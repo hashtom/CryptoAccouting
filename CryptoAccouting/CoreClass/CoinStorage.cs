@@ -20,6 +20,26 @@ namespace CoinBalance.CoreClass
             BalanceOnStorage = new Balance();
         }
 
+        public string ColumnLocation
+        {
+            get { return Name; }
+        }
+
+        public string ColumnHolding
+        {
+            get { return "฿" + AppCore.NumberFormat(AmountBTC()); }
+        }
+
+        public string ColumnValue
+        {
+            get { return AppCore.NumberFormat(LatestFiatValueBase()); }
+        }
+       
+        public string ColumnWeight
+        {
+            get { return String.Format("{0:n2}", Weight * 100) + "%"; }
+        }
+
         public void ClearBalanceOnStorage()
         {
             BalanceOnStorage = new Balance();

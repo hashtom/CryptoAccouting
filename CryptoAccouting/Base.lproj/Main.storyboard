@@ -30,7 +30,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="2282">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="130"/>
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="129"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="2284">
@@ -41,7 +41,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="24928">
-                                    <rect key="frame" x="64" y="101" width="188" height="29"/>
+                                    <rect key="frame" x="64" y="100" width="188" height="29"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <segments>
                                         <segment title="Balance"/>
@@ -78,21 +78,21 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Price updated:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nrS-E7-nzm">
-                                    <rect key="frame" x="82" y="82" width="232" height="17"/>
+                                    <rect key="frame" x="82" y="81" width="232" height="17"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="24hr Change" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="28445">
-                                    <rect key="frame" x="235" y="35" width="80" height="21"/>
+                                    <rect key="frame" x="234" y="35" width="81" height="21"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="+00.00%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="28443">
-                                    <rect key="frame" x="235" y="55" width="80" height="25"/>
+                                    <rect key="frame" x="234" y="55" width="81" height="25"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -109,7 +109,7 @@
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CoinViewCell" id="14717">
-                                <rect key="frame" x="0.0" y="158" width="320" height="55"/>
+                                <rect key="frame" x="0.0" y="157" width="320" height="55"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="14717" id="14718">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="54.5"/>
@@ -120,7 +120,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CoinStorageCell" id="23927">
-                                <rect key="frame" x="0.0" y="213" width="320" height="55"/>
+                                <rect key="frame" x="0.0" y="212" width="320" height="55"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="23927" id="23928">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="54.5"/>
@@ -158,7 +158,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="717" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="984.375" y="-339.08450704225351"/>
+            <point key="canvasLocation" x="984.375" y="-339.08449999999999"/>
         </scene>
         <!--Balance-->
         <scene sceneID="718">
@@ -330,7 +330,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="15212" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1194.375" y="1926.7605633802816"/>
+            <point key="canvasLocation" x="1194" y="2749"/>
         </scene>
         <!--Trades-->
         <scene sceneID="p2J-VO-Fge">
@@ -352,7 +352,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a54-De-Xua" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="45" y="360"/>
+            <point key="canvasLocation" x="45" y="1181"/>
         </scene>
         <!--Recent Trades(Beta)-->
         <scene sceneID="8ay-YF-hb1">
@@ -415,7 +415,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e77-jJ-AW0">
-                                        <rect key="frame" x="7" y="114" width="170" height="30"/>
+                                        <rect key="frame" x="7" y="114" width="169" height="30"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.61886935759999995" green="0.83529411760000005" blue="0.97037760419999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -505,7 +505,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HbU-sy-l7w" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="982.5" y="358.0985915492958"/>
+            <point key="canvasLocation" x="983" y="1180"/>
         </scene>
         <!--損益-->
         <scene sceneID="s1G-G0-FWb">
@@ -527,7 +527,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cna-Nr-JqR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="45" y="1072"/>
+            <point key="canvasLocation" x="45" y="1893"/>
         </scene>
         <!--PL Summary-->
         <scene sceneID="17627">
@@ -1406,7 +1406,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="17634" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="984" y="1071"/>
+            <point key="canvasLocation" x="983" y="1892"/>
         </scene>
         <!--Edit Position-->
         <scene sceneID="20418">
@@ -1434,7 +1434,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="BTC" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="24374">
-                                                    <rect key="frame" x="71" y="32" width="100" height="25"/>
+                                                    <rect key="frame" x="71" y="32" width="47" height="25"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="20"/>
                                                     <nil key="textColor"/>
@@ -1445,7 +1445,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="IC2-Qx-yYU">
-                                                    <rect key="frame" x="263" y="20" width="49" height="31"/>
+                                                    <rect key="frame" x="263" y="20" width="51" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                 </switch>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Watch only" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oVW-d8-bZo">
@@ -1628,7 +1628,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="20425" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2754.375" y="-339.08450704225351"/>
+            <point key="canvasLocation" x="2754.375" y="-339.08449999999999"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="20726">
@@ -1642,13 +1642,14 @@
                     </tabBar>
                     <connections>
                         <segue destination="719" kind="relationship" relationship="viewControllers" id="21286"/>
+                        <segue destination="E5L-YW-Div" kind="relationship" relationship="viewControllers" id="ZnO-xK-fxM"/>
                         <segue destination="NlK-Sg-ajk" kind="relationship" relationship="viewControllers" id="u80-T4-ALd"/>
                         <segue destination="22123" kind="relationship" relationship="viewControllers" id="3oF-sK-AtX"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="20731" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-873" y="520"/>
+            <point key="canvasLocation" x="-1513" y="820"/>
         </scene>
         <!--Settings-->
         <scene sceneID="22122">
@@ -1671,7 +1672,59 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="22126" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="99" y="1927"/>
+            <point key="canvasLocation" x="98" y="2749"/>
+        </scene>
+        <!--Exposure-->
+        <scene sceneID="SFh-Bi-TfZ">
+            <objects>
+                <navigationController id="E5L-YW-Div" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Exposure" image="Images/exptab.png" id="qvi-a2-3dC"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="uhN-DN-niX">
+                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="tZx-nV-lcs" kind="relationship" relationship="rootViewController" id="dpL-lD-tjz"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sVC-U1-Hm3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="45" y="398"/>
+        </scene>
+        <!--Coin Exposure-->
+        <scene sceneID="FBW-ES-hzX">
+            <objects>
+                <viewController id="tZx-nV-lcs" customClass="CoinExposureViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="yxX-Rf-eJE"/>
+                        <viewControllerLayoutGuide type="bottom" id="EwL-fS-XXr"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ExK-RV-RbP">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Pt-6r-Kq1">
+                                <rect key="frame" x="0.0" y="64" width="320" height="174"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qPA-c1-dL2">
+                                <rect key="frame" x="0.0" y="237" width="320" height="282"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="0.61886935759999995" green="0.83529411760000005" blue="0.97037760419999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Coin Exposure" id="BGG-Io-sWa"/>
+                    <connections>
+                        <outlet property="ExposureDrawingView" destination="7Pt-6r-Kq1" id="CCq-o2-gfc"/>
+                        <outlet property="ExposureGridView" destination="qPA-c1-dL2" id="Bgm-8D-yXs"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hWf-ZD-F5o" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="982.5" y="397.18309859154931"/>
         </scene>
         <!--Symbol Selection View Conroller-->
         <scene sceneID="24375">
@@ -1877,7 +1930,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xoW-MD-Wjn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1965" y="-339.08450704225351"/>
+            <point key="canvasLocation" x="1965" y="-339.08449999999999"/>
         </scene>
         <!--API Settings-->
         <scene sceneID="28081">
@@ -2033,7 +2086,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="28088" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2386.875" y="1326.7605633802816"/>
+            <point key="canvasLocation" x="2387" y="2149"/>
         </scene>
         <!--About-->
         <scene sceneID="Eii-Ya-cjO">
@@ -2087,18 +2140,19 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hKT-cj-fjl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2386.875" y="2061.9718309859154"/>
+            <point key="canvasLocation" x="2387" y="2884"/>
         </scene>
     </scenes>
     <resources>
-        <image name="Images/app.png" width="16" height="16"/>
-        <image name="Images/garbage.png" width="16" height="16"/>
+        <image name="Images/app.png" width="20" height="20"/>
+        <image name="Images/exptab.png" width="16" height="16"/>
+        <image name="Images/garbage.png" width="32" height="32"/>
         <image name="Images/jpy.png" width="598" height="554"/>
         <image name="Images/key.png" width="922" height="808"/>
-        <image name="Images/pltab.png" width="16" height="16"/>
+        <image name="Images/pltab.png" width="32" height="32"/>
         <image name="Images/positiontab.png" width="32" height="32"/>
         <image name="Images/settingstab.png" width="32" height="32"/>
-        <image name="Images/tradetab.png" width="16" height="16"/>
+        <image name="Images/tradetab.png" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="27361"/>
