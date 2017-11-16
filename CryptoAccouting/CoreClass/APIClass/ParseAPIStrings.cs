@@ -141,7 +141,7 @@ namespace CoinBalance.CoreClass.APIClass
                         coin.MarketPrice.LatestPriceUSD = (double)jtoken["price_usd"];
                         coin.MarketPrice.PriceSource = "coinmarketcap";
                         coin.MarketPrice.DayVolume = jtoken_bitcoin != null ? (double)jtoken["24h_volume_usd"] / (double)jtoken_bitcoin["price_usd"] : 0;
-                        coin.MarketPrice.MarketCap = (double)jtoken["market_cap_usd"];
+                        coin.MarketPrice.MarketCap = (string)jtoken["market_cap_usd"] != null ? (double)jtoken["market_cap_usd"] : 0;
 
                         if (jtoken_yesterday != null)
                         {

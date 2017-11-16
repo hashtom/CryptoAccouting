@@ -14,7 +14,7 @@
 
 /* Transaction View Controller*/
 "v7Z-pL-f3v.title" = "直近の取引(Beta)";
-"40t-xf-m9c.title" = "エクスポート";
+"40t-xf-m9c.title" = "Export";
 "XVl-Im-sDm.text" = "買";
 "XVl-Im-sDm.text" = "買"; "XNO-tD-mKz.text" = "売"; "9I2-3e-xPn.text" = "注文数"; "z41-BW-Rw0.text" = "取引/BTC"; "h7s-9T-vZv.text" = "取引";
 "eIs-k4-e9h.text" = "注)取引は日次で集計しています";
@@ -31,7 +31,7 @@
       
 /* Edit View Conrtoller */
 "24618.title" = "ポジション編集";
-"oVW-d8-bZo.text" = "保有なし";
+"oVW-d8-bZo.text" = "表示のみ";
 "24714.text" = "保有数量";
 "24721.text" = "取引日";
 "20711.text" = "売買取引所";
@@ -45,7 +45,7 @@
 "oAa-m3-Wvy.text" = "残高のインポート";
 "28024.text" = "最新コインデータの取得";
 "iqY-IA-JtR.text" = "キャッシュ削除";
-"A4i-nd-oMK.text" = "About";
+"A4i-nd-oMK.text" = "CoinBalanceについて";
 
 /* API Setting View Controller */
 "28853.title" = "APIキー設定";

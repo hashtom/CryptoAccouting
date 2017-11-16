@@ -21,7 +21,7 @@ namespace CoinBalance
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            buttonImport.Enabled = false;
+            buttonImport.Alpha= 0;
 
 
             buttonImport.TouchUpInside += async (sender, e) => 
@@ -30,6 +30,7 @@ namespace CoinBalance
 
                 if (thisExchange != null)
                 {
+                    buttonImport.Enabled = false;
                     var bounds = TableView.Bounds;
                     loadPop = new LoadingOverlay(bounds);
                     TableView.Add(loadPop);
@@ -55,6 +56,7 @@ namespace CoinBalance
                     finally
                     {
                         loadPop.Hide();
+                        buttonImport.Enabled = true;
                     }
                 }
             };
@@ -73,7 +75,7 @@ namespace CoinBalance
                                                                      {
                                                                          buttonExchange.SetTitle(exc.Name, UIControlState.Normal);
                                                                          thisExchange = exc;
-                                                                         buttonImport.Enabled = true;
+                                                                         buttonImport.Alpha = 1;
                                                                      }
                                                                 ));
                 }

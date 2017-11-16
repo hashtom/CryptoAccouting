@@ -3,6 +3,7 @@ using System;
 using UIKit;
 using System.ComponentModel;
 using CoreGraphics;
+//using CoreAnimation;
 using Syncfusion.SfDataGrid;
 using Syncfusion.SfChart.iOS;
 using CoinBalance.CoreClass;
@@ -13,7 +14,7 @@ namespace CoinBalance
     public partial class ExposureViewController : UIViewController
     {
         SfDataGrid sfGrid;
-        SFChart sfChart;
+        SFChart sfChartCoinWeight, sfChartLocation;
         CoinStorageList myExposure;
         Balance myBalance;
 
@@ -21,34 +22,46 @@ namespace CoinBalance
         {
             myExposure = AppCore.CoinStorageList;
             myBalance = AppCore.Balance;
-            initAssetChart();
-            initDataGrid();
+            initCoinWeightChart();
+            initLocationChart();
+            //initDataGrid();
         }
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
+            //Color Design
+            //var gradient = new CAGradientLayer();
+            //gradient.Frame = ExposureDrawingView.Bounds;
+            //gradient.NeedsDisplayOnBoundsChange = true;
+            //gradient.MasksToBounds = true;
+            //gradient.Colors = new CGColor[] { UIColor.FromRGB(0, 126, 167).CGColor, UIColor.FromRGB(0, 168, 232).CGColor };
+            //ExposureDrawingView.Layer.InsertSublayer(gradient, 0);
+
             //Chart
-            ExposureDrawingView.AddSubview(sfChart);
-            sfChart.Frame = new CGRect(0, 0, ExposureDrawingView.Frame.Width, ExposureDrawingView.Frame.Height);
+            ExposureDrawingView.AddSubview(sfChartCoinWeight);
+            sfChartCoinWeight.Frame = new CGRect(0, 0, ExposureDrawingView.Frame.Width, ExposureDrawingView.Frame.Height);
+
+            ExposureGridView.AddSubview(sfChartLocation);
+            sfChartLocation.Frame = new CGRect(0, 0, ExposureGridView.Frame.Width, ExposureGridView.Frame.Height);
 
             //Grid
-            ExposureGridView.AddSubview(sfGrid);
-            this.sfGrid.Frame = new CGRect(0, 0, ExposureGridView.Frame.Width, ExposureGridView.Frame.Height);
+            //ExposureGridView.AddSubview(sfGrid);
+            //this.sfGrid.Frame = new CGRect(0, 0, ExposureGridView.Frame.Width, ExposureGridView.Frame.Height);
 
         }
 
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            sfGrid.ItemsSource = (myExposure.StorageCollection);
+            //sfGrid.ItemsSource = (myExposure.StorageCollection);
         }
 
-        private void initAssetChart()
+        private void initCoinWeightChart()
         {
-            sfChart = new SFChart();
-            sfChart.Title.Text = "Asset Weights";
+            sfChartCoinWeight = new SFChart();
+            sfChartCoinWeight.Title.Text = "Weight";
 
             SFPieSeries pieSeries = new SFPieSeries()
             {
@@ -65,24 +78,23 @@ namespace CoinBalance
             pieSeries.DataMarker.ShowLabel = true;
             pieSeries.LegendIcon = SFChartLegendIcon.Rectangle;
 
-            sfChart.Series.Add(pieSeries);
-
-            sfChart.Legend.Visible = true;
+            sfChartCoinWeight.Series.Add(pieSeries);
+            sfChartCoinWeight.Legend.Visible = true;
             //sfChart.Legend.Orientation = SFChartLegendOrientation.Vertical;
             //sfChart.Legend.ToggleSeriesVisibility = true;
         }
 
-        private void initStorageChart()
+        private void initLocationChart()
         {
-            sfChart = new SFChart();
-            sfChart.Title.Text = "Coin Location";
+            sfChartLocation = new SFChart();
+            sfChartLocation.Title.Text = "Location";
 
             SFPieSeries pieSeries = new SFPieSeries()
             {
                 ItemsSource = myExposure.StorageCollection,
                 XBindingPath = "Name",
-                YBindingPath = "Weight",
-                CircularCoefficient = 0.75,
+                YBindingPath = "ColumnHolding",
+                //CircularCoefficient = 0.75,
             };
 
             pieSeries.DataMarkerPosition = SFChartCircularSeriesLabelPosition.OutsideExtended;
@@ -92,7 +104,8 @@ namespace CoinBalance
             pieSeries.DataMarker.ShowLabel = true;
             pieSeries.LegendIcon = SFChartLegendIcon.Rectangle;
 
-            sfChart.Series.Add(pieSeries);
+            sfChartLocation.Series.Add(pieSeries);
+            sfChartLocation.Legend.Visible = true;
         }
 
         private void initDataGrid()

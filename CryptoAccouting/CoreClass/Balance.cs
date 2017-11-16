@@ -20,7 +20,7 @@ namespace CoinBalance.CoreClass
 
         public List<Position> BalanceCollection
         {
-            get { return BalanceByCoin.Where(x => x.WatchOnly == false).ToList(); }
+            get { return BalanceByCoin.Where(x => x.WatchOnly == false).Where(x => x.LatestAmountBTC > 0.0001).ToList(); }
         }
 
         public void AttachInstruments(InstrumentList instrumentist)

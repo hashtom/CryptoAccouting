@@ -16,8 +16,7 @@ namespace CoinBalance.CoreClass
 
         public List<CoinStorage> StorageCollection
         {
-            get { return storages; }
-            set { this.storages = value; }
+            get { return storages.Where(x=>x.Weight>0.001).ToList(); }
         }
 
         public static CoinStorageList GetStorageListSelection()
