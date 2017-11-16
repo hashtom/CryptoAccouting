@@ -15,6 +15,7 @@ namespace CoinBalance
     {
         SfDataGrid sfGrid;
         SFChart sfChartCoinWeight, sfChartLocation;
+        SFPieSeries CoinWeightSeries, LocationSeries;
         CoinStorageList myExposure;
         Balance myBalance;
 
@@ -55,7 +56,10 @@ namespace CoinBalance
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
+
             //sfGrid.ItemsSource = (myExposure.StorageCollection);
+            CoinWeightSeries.ItemsSource = myBalance.BalanceCollection;
+            LocationSeries.ItemsSource = myExposure.StorageCollection;
         }
 
         private void initCoinWeightChart()
@@ -63,22 +67,22 @@ namespace CoinBalance
             sfChartCoinWeight = new SFChart();
             sfChartCoinWeight.Title.Text = "Weight";
 
-            SFPieSeries pieSeries = new SFPieSeries()
+            CoinWeightSeries = new SFPieSeries()
             {
-                ItemsSource = myBalance.BalanceCollection,
+                //ItemsSource = myBalance.BalanceCollection,
                 XBindingPath = "ColumnCoinSymbol",
-                YBindingPath = "ColumnAmountBTC",
-                //CircularCoefficient = 0.75,  
+                YBindingPath = "ColumnAmountBTC"
+                //CircularCoefficient = 0.75,
             };
 
-            pieSeries.DataMarkerPosition = SFChartCircularSeriesLabelPosition.Inside;
-            pieSeries.DataMarker.LabelContent = SFChartLabelContent.Percentage;
-            pieSeries.EnableSmartLabels = true;
-            pieSeries.ConnectorLineType = SFChartConnectorLineType.Bezier;
-            pieSeries.DataMarker.ShowLabel = true;
-            pieSeries.LegendIcon = SFChartLegendIcon.Rectangle;
+            CoinWeightSeries.DataMarkerPosition = SFChartCircularSeriesLabelPosition.Inside;
+            CoinWeightSeries.DataMarker.LabelContent = SFChartLabelContent.Percentage;
+            CoinWeightSeries.EnableSmartLabels = true;
+            CoinWeightSeries.ConnectorLineType = SFChartConnectorLineType.Bezier;
+            CoinWeightSeries.DataMarker.ShowLabel = true;
+            CoinWeightSeries.LegendIcon = SFChartLegendIcon.Rectangle;
 
-            sfChartCoinWeight.Series.Add(pieSeries);
+            sfChartCoinWeight.Series.Add(CoinWeightSeries);
             sfChartCoinWeight.Legend.Visible = true;
             //sfChart.Legend.Orientation = SFChartLegendOrientation.Vertical;
             //sfChart.Legend.ToggleSeriesVisibility = true;
@@ -89,22 +93,22 @@ namespace CoinBalance
             sfChartLocation = new SFChart();
             sfChartLocation.Title.Text = "Location";
 
-            SFPieSeries pieSeries = new SFPieSeries()
+            LocationSeries = new SFPieSeries()
             {
-                ItemsSource = myExposure.StorageCollection,
+                //ItemsSource = myExposure.StorageCollection,
                 XBindingPath = "Name",
-                YBindingPath = "ColumnHolding",
+                YBindingPath = "ColumnHolding"
                 //CircularCoefficient = 0.75,
             };
 
-            pieSeries.DataMarkerPosition = SFChartCircularSeriesLabelPosition.OutsideExtended;
-            pieSeries.DataMarker.LabelContent = SFChartLabelContent.Percentage;
-            pieSeries.EnableSmartLabels = true;
-            pieSeries.ConnectorLineType = SFChartConnectorLineType.Bezier;
-            pieSeries.DataMarker.ShowLabel = true;
-            pieSeries.LegendIcon = SFChartLegendIcon.Rectangle;
+            LocationSeries.DataMarkerPosition = SFChartCircularSeriesLabelPosition.OutsideExtended;
+            LocationSeries.DataMarker.LabelContent = SFChartLabelContent.Percentage;
+            LocationSeries.EnableSmartLabels = true;
+            LocationSeries.ConnectorLineType = SFChartConnectorLineType.Bezier;
+            LocationSeries.DataMarker.ShowLabel = true;
+            LocationSeries.LegendIcon = SFChartLegendIcon.Rectangle;
 
-            sfChartLocation.Series.Add(pieSeries);
+            sfChartLocation.Series.Add(LocationSeries);
             sfChartLocation.Legend.Visible = true;
         }
 
