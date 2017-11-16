@@ -65,7 +65,7 @@ namespace CoinBalance
         private void initCoinWeightChart()
         {
             sfChartCoinWeight = new SFChart();
-            sfChartCoinWeight.Title.Text = "Weight";
+            sfChartCoinWeight.Title.Text = "Coin Weight";
 
             CoinWeightSeries = new SFPieSeries()
             {
@@ -91,7 +91,7 @@ namespace CoinBalance
         private void initLocationChart()
         {
             sfChartLocation = new SFChart();
-            sfChartLocation.Title.Text = "Location";
+            sfChartLocation.Title.Text = "Coin Location";
 
             LocationSeries = new SFPieSeries()
             {

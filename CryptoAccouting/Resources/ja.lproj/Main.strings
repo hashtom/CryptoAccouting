@@ -53,6 +53,7 @@
 
 /* Import Position View Controller */
 "2Bx-em-zt2.title" = "残高のインポート";
+"90E-em-gVj.text" = "APIキーの設定すると残高をインポートできます";
 "LYd-61-sKW.normalTitle" = "取引所";
 "3QZ-zg-uFV.normalTitle" = "残高のインポート";
 
