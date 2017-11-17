@@ -367,7 +367,7 @@
             </objects>
             <point key="canvasLocation" x="45" y="1181"/>
         </scene>
-        <!--Recent Trades(Beta)-->
+        <!--Recent Trades-->
         <scene sceneID="8ay-YF-hb1">
             <objects>
                 <viewController storyboardIdentifier="TransactionViewC" id="fSk-S8-Su2" customClass="TransactionViewController" sceneMemberID="viewController">
@@ -496,7 +496,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Recent Trades(Beta)" id="v7Z-pL-f3v">
+                    <navigationItem key="navigationItem" title="Recent Trades" id="v7Z-pL-f3v">
                         <barButtonItem key="rightBarButtonItem" title="Export" id="40t-xf-m9c">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </barButtonItem>
