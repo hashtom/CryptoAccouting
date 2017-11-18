@@ -96,12 +96,20 @@ namespace CoinBalance.CoreClass.APIClass
                             }
                             break;
 
+                        case "HitBTC":
+                            if (exchanges.Any(x => x.Code == "HitBTC"))
+                            {
+                                var exchange = exchanges.First(x => x.Code == "HitBTC");
+                                if (exchange.HasListedCoins()) await HitbtcAPIAPI.FetchPriceAsync(exchange, coins);
+                            }
+                            break;
+
                         case "coinmarketcap":
                             //await FetchCoinMarketCapAsync(coins, crossrate);
                             break;
 
                         default:
-                            throw new AppCoreNetworkException("FetchCoinPricesAsync: Exchange code error. code: " + source);
+                            throw new AppCoreWarning("Please update to the newest version! (" + source + ")");
                     }
                 }
             }

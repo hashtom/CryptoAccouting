@@ -11,37 +11,27 @@ using Newtonsoft.Json.Linq;
 
 namespace CoinBalance.CoreClass.APIClass
 {
-    public static class BitfinexAPI
+    public static class HitbtcAPIAPI
     {
-        private const string BaseUrl = "https://api.bitfinex.com/v2";
-        private static Exchange _bitfinex;
+        private const string BaseUrl = "https://api.hitbtc.com/api/2/public";
+        private static Exchange _hitbtc;
         public const string SignHeaderName = "apisign";
         private static readonly Encoding encoding = Encoding.UTF8;
 
-        public static async Task FetchPriceAsync(Exchange bitfinex, InstrumentList coins)
+        public static async Task FetchPriceAsync(Exchange hitbtc, InstrumentList coins)
         {
-            _bitfinex = bitfinex;
+            _hitbtc = hitbtc;
             string request_symbols = null;
 
             try
             {
-                foreach (var id in coins.Where(x => x.PriceSourceCode == _bitfinex.Code).Select(x => x.Id))
-                {
-                    var symbol = _bitfinex.GetSymbolForExchange(id);
-                    request_symbols += id != "bitcoin" ? ",t" + symbol + "BTC" : "";
-                }
 
-                var param = new Dictionary<string, string>
-                {
-                    {"symbols", "tBTCUSD" + request_symbols},
-                };
-
-                var rawjson = await SendAsync(HttpMethod.Get, BaseUrl + "/tickers", param, false);
+                var rawjson = await SendAsync(HttpMethod.Get, BaseUrl + "/ticker", false);
                 await ParsePrice(rawjson, coins);
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": BitfinexAPI: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": HitbtcAPI: " + e.GetType() + ": " + e.Message);
                 throw;
             }
 
@@ -52,9 +42,9 @@ namespace CoinBalance.CoreClass.APIClass
             try
             {
                 var jarray = await Task.Run(() => JArray.Parse(rawjson));
-                var btctoken = jarray.First(x => (string)x[0] == "tBTCUSD");
+                var btctoken = jarray.First(x => (string)x["symbol"] == "BTCUSD");
 
-                foreach (var coin in coins.Where(x => x.PriceSourceCode == _bitfinex.Code))
+                foreach (var coin in coins.Where(x => x.PriceSourceCode == _hitbtc.Code))
                 {
                     if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
 
@@ -62,30 +52,30 @@ namespace CoinBalance.CoreClass.APIClass
                     {
                         coin.MarketPrice.LatestPriceBTC = 1;
                         coin.MarketPrice.PriceBTCBefore24h = 1;
-                        coin.MarketPrice.LatestPriceUSD = (double)btctoken[7];
-                        coin.MarketPrice.PriceUSDBefore24h = (double)btctoken[7] - (double)btctoken[5];
-                        coin.MarketPrice.DayVolume = (double)btctoken[8];
-                        coin.MarketPrice.PriceDate = DateTime.Now;
+                        coin.MarketPrice.LatestPriceUSD = (double)btctoken["last"];
+                        coin.MarketPrice.PriceUSDBefore24h = (double)btctoken["open"];
+                        coin.MarketPrice.DayVolume = (double)btctoken["volume"];
+                        coin.MarketPrice.PriceDate = (DateTime)btctoken["timestamp"];
                     }
                     else
                     {
-                        if (jarray.Any(x => (string)x[0] == "t" + _bitfinex.GetSymbolForExchange(coin.Id) + "BTC"))
+                        if (jarray.Any(x => (string)x["symbol"] == _hitbtc.GetSymbolForExchange(coin.Id) + "BTC"))
                         {
-                            var jtoken = jarray.First(x => (string)x[0] == "t" + _bitfinex.GetSymbolForExchange(coin.Id) + "BTC");
+                            var jtoken = jarray.First(x => (string)x["symbol"] == _hitbtc.GetSymbolForExchange(coin.Id) + "BTC");
 
-                            coin.MarketPrice.LatestPriceBTC = (double)jtoken[7];
-                            coin.MarketPrice.PriceBTCBefore24h = (double)jtoken[7] - (double)jtoken[5];
-                            coin.MarketPrice.LatestPriceUSD = (double)jtoken[7] * (double)btctoken[7];
-                            coin.MarketPrice.PriceUSDBefore24h = ((double)jtoken[7] - (double)jtoken[5]) * ((double)btctoken[7] + (double)btctoken[5]);
-                            coin.MarketPrice.DayVolume = (double)jtoken[8] * (double)jtoken[7];
-                            coin.MarketPrice.PriceDate = DateTime.Now;
+                            coin.MarketPrice.LatestPriceBTC = (double)jtoken["last"];
+                            coin.MarketPrice.PriceBTCBefore24h = (double)jtoken["open"];
+                            coin.MarketPrice.LatestPriceUSD = (double)jtoken["last"] * (double)btctoken["last"];
+                            coin.MarketPrice.PriceUSDBefore24h = (double)jtoken["open"] * (double)btctoken["open"];
+                            coin.MarketPrice.DayVolume = (double)jtoken["volumeQuote"];
+                            coin.MarketPrice.PriceDate = (DateTime)btctoken["timestamp"];
                         }
                     }
                 }
             }
             catch (Exception e)
             {
-                throw new AppCoreParseException(e.GetType() + ": BitfinexAPI: " + e.Message);
+                throw new AppCoreParseException(e.GetType() + ": HitbtcAPI: " + e.Message);
             }
         }
 
@@ -109,14 +99,14 @@ namespace CoinBalance.CoreClass.APIClass
             parameters = new Dictionary<string, string>(parameters);
 
             var nonce = DateTime.Now.Ticks;
-            parameters.Add("apikey", _bitfinex.Key);
+            parameters.Add("apikey", _hitbtc.Key);
             parameters.Add("nonce", nonce.ToString());
 
             var parameterString = convertParameterListToString(parameters);
             var completeUri = uri + "?" + parameterString;
 
             var uriBytes = encoding.GetBytes(completeUri);
-            using (var hmac = new HMACSHA512(encoding.GetBytes(_bitfinex.Secret)))
+            using (var hmac = new HMACSHA512(encoding.GetBytes(_hitbtc.Secret)))
             {
                 var hash = hmac.ComputeHash(uriBytes);
                 var hashText = byteToString(hash);

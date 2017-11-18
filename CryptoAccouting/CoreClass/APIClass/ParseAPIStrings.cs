@@ -259,7 +259,6 @@ namespace CoinBalance.CoreClass.APIClass
 
                 foreach (var market in (JArray)json["exchanges"])
                 {
-
                     var exchange = exlist.GetExchange((string)market["code"]);
                     exchange.Name = (string)market["name"];
 

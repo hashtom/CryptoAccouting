@@ -11,7 +11,7 @@
                     try                     {
                         await RefreshPriceAsync();                     }
                     catch (Exception ex)                     {                         if (!AppCore.IsInternetReachable())                         {                             this.PopUpWarning("Warning", "Unable to Connect Internet!", () => RefreshControl.EndRefreshing());                         }                         else                         {
-                            this.PopUpWarning("Warning", "Unable to obtain latest prices." + ex.Message, () => RefreshControl.EndRefreshing());                         }                     }                     finally                     {                         RefreshControl.EndRefreshing();                         ReDrawScreen();                     }                 };                  ReDrawScreen();                  if (!AppCore.IsInternetReachable())                 {                     this.PopUpWarning("Warning", "Unable to Connect Internet!");
+                            this.PopUpWarning("Warning", "Unable to obtain latest prices. " + ex.Message, () => RefreshControl.EndRefreshing());                         }                     }                     finally                     {                         RefreshControl.EndRefreshing();                         ReDrawScreen();                     }                 };                  ReDrawScreen();                  if (!AppCore.IsInternetReachable())                 {                     this.PopUpWarning("Warning", "Unable to Connect Internet!");
                 }
                 else                 {
                     //run the last

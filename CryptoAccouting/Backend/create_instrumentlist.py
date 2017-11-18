@@ -6,8 +6,6 @@ url = "https://api.coinmarketcap.com/v1/ticker/?limit=0"  #may remove lower rank
 logo_url = "https://files.coinmarketcap.com/static/img/coins/32x32/"
 
 #basedir = "/home/bridgeplace/www/coinbalance/develop/"
-#basedir = "/home/bridgeplace/www/coinbalance/v1.0/"
-#basedir = "/home/bridgeplace/scripts/"
 basedir = "/Users/name/Downloads/"
 
 def download_image(url, timeout = 10):
@@ -32,7 +30,16 @@ InstrumentList = requests.get(url).json()
 data = []
 #del InstrumentList[500:]
 for ins in InstrumentList:
-        if ins["id"] == "bitcoin-cash":
+        if ins["id"] == "bitcoin":
+            data.append({
+                "active":"true",
+                "rank":ins["rank"],
+                "name":ins["name"],
+                "symbol":ins["symbol"],
+                "symbol2":"XBT",
+                "id":ins["id"]
+                })
+        elif ins["id"] == "bitcoin-cash":
             data.append({
                 "active":"true",
                 "rank":ins["rank"],
@@ -40,7 +47,7 @@ for ins in InstrumentList:
                 "symbol":ins["symbol"],
                 "symbol2":"BCC",
                 "id":ins["id"]
-                })
+                    })
         elif ins["id"] == "stellar":
             data.append({
                 "active":"true",
@@ -59,8 +66,26 @@ for ins in InstrumentList:
                 "symbol2":"IOT",
                 "id":ins["id"]
                 })
+        elif ins["id"] == "dogecoin":
+            data.append({
+                "active":"true",
+                "rank":ins["rank"],
+                "name":ins["name"],
+                "symbol":ins["symbol"],
+                "symbol2":"XDG",
+                "id":ins["id"]
+                    })
+        elif ins["id"] == "bitgem":
+            data.append({
+                "active":"true",
+                "rank":ins["rank"],
+                "name":ins["name"],
+                "symbol": "bitgem",
+                "symbol2":"BTG",
+                "id":ins["id"]
+                    })
         else:
-            if int(ins["rank"]) < 501:
+            if int(ins["rank"]) < 1201:
                 data.append({
                     "active":"true",
                     "rank":ins["rank"],

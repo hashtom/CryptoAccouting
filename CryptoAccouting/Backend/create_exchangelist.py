@@ -6,23 +6,10 @@ import re
 import pandas as pd
 
 #basedir = "/home/bridgeplace/www/coinbalance/develop/"
-#basedir = "/home/bridgeplace/www/coinbalance/v1.0/"
-#basedir = "/home/bridgeplace/scripts/"
 basedir = "/Users/name/Downloads/"
 
 exchanges = []
 ExchangeList = {"exchanges": exchanges}
-
-#Other
-other_dict = { 
-        "code": "Other",
-        "name": "Other Exchange",
-        "apiprice": "false",
-        "apitrade": "false",
-        "apibalance": "false",
-        "listing": []
-        }
-exchanges.append(other_dict)
 
 #BitStamp
 bitstamp_dict = {
@@ -89,27 +76,57 @@ gemini_dict = {
 exchanges.append(gemini_dict)
 
 #Kraken
+#kraken = requests.get("https://api.kraken.com/0/public/Assets").json()
+#kraken_dict = {"code": "Kraken",
+#                 "name": "Kraken",
+#                 "apiprice": "true",
+#                 "apitrade": "false",
+#                 "apibalance": "false"
+#                 }
+#if kraken['error'] == []:
+#    df = pd.read_json(json.dumps(kraken["result"]), orient='index')
+#    df.drop(df[df.index == 'XDAO'].index,inplace=True)
+#    df.drop(df[df.index == 'KFEE'].index,inplace=True)
+#    df.drop(df[df.index == 'ZCAD'].index,inplace=True)
+#    df.drop(df[df.index == 'ZEUR'].index,inplace=True)
+#    df.drop(df[df.index == 'ZGBP'].index,inplace=True)
+#    df.drop(df[df.index == 'ZJPY'].index,inplace=True)
+#    df.drop(df[df.index == 'ZKRW'].index,inplace=True)
+#    df.drop(df[df.index == 'ZUSD'].index,inplace=True)
+#    df.drop(df[df.index == 'XBT'].index,inplace=True)
+#    df.drop(df[df.index == 'XDG'].index,inplace=True)
+#    df.drop(df[df.index == 'VEN'].index,inplace=True)
+#    kraken_symbols = pd.DataFrame({"symbol":list(df.altname)})
+#    symbols = kraken_symbols.to_dict(orient='records')
+#    symbols.append({"symbol2" : "XBT"})
+#    symbols.append({"symbol2" : "XDG"})
+#    kraken_dict["listing"] = symbols
+#    exchanges.append(kraken_dict)
+    
 kraken_dict = {
         "code": "Kraken",
         "name": "Kraken",
-        "apiprice": "false",
+        "apiprice": "true",
         "apitrade": "false",
         "apibalance": "false",
         "listing": [
-                { "symbol": "BTC" },
                 { "symbol": "BCH" },
-                { "symbol": "ETH" },
-                { "symbol": "XRP" },
-                { "symbol": "LTC" },
-                { "symbol": "ETC" },
                 { "symbol": "DASH" },
-                { "symbol": "XMR" },
-                { "symbol": "ZEC" },
+                { "symbol": "EOS" },
+                { "symbol": "GNO" },
+                { "symbol": "USDT" },
+                { "symbol": "ETC" },
+                { "symbol": "ETH" },
                 { "symbol": "ICN" },
-                { "symbol": "XLM" },
-                { "symbol": "DOGE" },
+                { "symbol": "LTC" },
+                { "symbol": "MLN" },
+                { "symbol": "NMC" },
                 { "symbol": "REP" },
-                { "symbol": "MLN" }
+                { "symbol2": "XBT" },
+                { "symbol2": "XDG" },
+                { "symbol": "XLM" },
+                { "symbol": "XMR" },
+                { "symbol": "XRP" },
                 ]
         }
 exchanges.append(kraken_dict)
@@ -292,9 +309,42 @@ bithumb_dict = {
         }
 exchanges.append(bithumb_dict)
 
-#Coinone
+#HitBTC
+hitbtc = requests.get("https://api.hitbtc.com/api/2/public/currency").json()
+hitbtc_dict = {"code": "HitBTC",
+                 "name": "HitBTC",
+                 "apiprice": "true",
+                 "apitrade": "false",
+                 "apibalance": "false"
+                 }
+df_hitbtc = pd.DataFrame.from_dict(hitbtc)
+df_hitbtc.drop(df_hitbtc[df_hitbtc.crypto==False].index, inplace=True)
+hitbtc_symbols = pd.DataFrame({"symbol":list(df_hitbtc.id)})
+#hitbtc_symbols.drop(hitbtc_symbols[hitbtc_symbols.symbol=="STR"].index, inplace=True)
+symbols = hitbtc_symbols.to_dict(orient='records')
+#symbols.append({"symbol2" : "STR"})
+hitbtc_dict["listing"] = symbols
+exchanges.append(hitbtc_dict)
 
-#Korbit
+#Cryptopia
+cryptopia = requests.get("https://www.cryptopia.co.nz/api/GetCurrencies").json()
+cryptopia_dict = {"code": "Cryptopia",
+                 "name": "Cryptopia",
+                 "apiprice": "true",
+                 "apitrade": "false",
+                 "apibalance": "false"
+                 }
+
+if cryptopia['Success'] == True:
+    df = pd.read_json(json.dumps(cryptopia["Data"]), orient='records')
+    df.drop(df[df.ListingStatus!="Active"].index, inplace=True)
+    cryptopia_symbols = pd.DataFrame({"symbol":list(df.Symbol)})
+    cryptopia_symbols.drop(cryptopia_symbols[cryptopia_symbols.symbol=="BTG"].index, inplace=True)
+    symbols = cryptopia_symbols.to_dict(orient='records')
+    symbols.append({"symbol2" : "BTG"})
+    cryptopia_dict["listing"] = symbols
+    exchanges.append(cryptopia_dict)
+
 
 #OTC
 otc_dict = { 
@@ -319,6 +369,17 @@ airdrop_dict = {
         }
 exchanges.append(airdrop_dict)
     
+#Other
+other_dict = { 
+        "code": "Other",
+        "name": "Other Exchange",
+        "apiprice": "false",
+        "apitrade": "false",
+        "apibalance": "false",
+        "listing": []
+        }
+exchanges.append(other_dict)
+
 # Create File
 json.dump(ExchangeList, open(basedir + 'ExchangeList.json', 'w',encoding='utf-8'),indent=4)
 

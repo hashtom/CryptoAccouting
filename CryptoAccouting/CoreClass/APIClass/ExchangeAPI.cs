@@ -90,11 +90,12 @@ namespace CoinBalance.CoreClass.APIClass
                     case "bitFlyer_l":
                         return await BitFlyerAPI.FetchTransactionAsync(exchange);
 
-                    case "Bitfinex":
+                    //case "Bitfinex":
                         //return await BitfinexAPI.FetchTransactionAsync(exchange);
 
                     default:
-                        throw new AppCoreNetworkException("ExchangeCode error. Code: " + exchange.Code);
+                        throw new AppCoreWarning("Please update to the newest version! (" + exchange.Code + ")");
+                        //throw new AppCoreNetworkException("ExchangeCode error. Code: " + exchange.Code);
                 }
 
             }
@@ -129,11 +130,11 @@ namespace CoinBalance.CoreClass.APIClass
                     case "bitFlyer_l":
                         return await BitFlyerAPI.FetchPositionAsync(exchange);
 
-                    case "Bitfinex":
+                    //case "Bitfinex":
                         //return await BitfinexAPI.FetchPositionAsync(exchange);
 
                     default:
-                        throw new AppCoreNetworkException("ExchangeCode error. Code: " + exchange.Code);
+                        throw new AppCoreWarning("Please update to the newest version! (" + exchange.Code + ")");
                 }
 
             }

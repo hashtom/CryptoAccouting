@@ -1,14 +1,6 @@
 {
     "exchanges": [
         {
-            "code": "Other",
-            "name": "Other Exchange",
-            "apiprice": "false",
-            "apitrade": "false",
-            "apibalance": "false",
-            "listing": []
-        },
-        {
             "code": "Bitstamp",
             "name": "Bitstamp",
             "apiprice": "true",
@@ -926,51 +918,60 @@
         {
             "code": "Kraken",
             "name": "Kraken",
-            "apiprice": "false",
+            "apiprice": "true",
             "apitrade": "false",
             "apibalance": "false",
             "listing": [
                 {
-                    "symbol": "BTC"
-                },
-                {
                     "symbol": "BCH"
-                },
-                {
-                    "symbol": "ETH"
-                },
-                {
-                    "symbol": "XRP"
-                },
-                {
-                    "symbol": "LTC"
-                },
-                {
-                    "symbol": "ETC"
                 },
                 {
                     "symbol": "DASH"
                 },
                 {
-                    "symbol": "XMR"
+                    "symbol": "EOS"
                 },
                 {
-                    "symbol": "ZEC"
+                    "symbol": "GNO"
+                },
+                {
+                    "symbol": "USDT"
+                },
+                {
+                    "symbol": "ETC"
+                },
+                {
+                    "symbol": "ETH"
                 },
                 {
                     "symbol": "ICN"
                 },
                 {
-                    "symbol": "XLM"
+                    "symbol": "LTC"
                 },
                 {
-                    "symbol": "DOGE"
+                    "symbol": "MLN"
+                },
+                {
+                    "symbol": "NMC"
                 },
                 {
                     "symbol": "REP"
                 },
                 {
-                    "symbol": "MLN"
+                    "symbol2": "XBT"
+                },
+                {
+                    "symbol2": "XDG"
+                },
+                {
+                    "symbol": "XLM"
+                },
+                {
+                    "symbol": "XMR"
+                },
+                {
+                    "symbol": "XRP"
                 }
             ]
         },
@@ -1479,6 +1480,2196 @@
             ]
         },
         {
+            "code": "HitBTC",
+            "name": "HitBTC",
+            "apiprice": "true",
+            "apitrade": "false",
+            "apibalance": "false",
+            "listing": [
+                {
+                    "symbol": "1ST"
+                },
+                {
+                    "symbol": "ADX"
+                },
+                {
+                    "symbol": "AE"
+                },
+                {
+                    "symbol": "AEON"
+                },
+                {
+                    "symbol": "AIR"
+                },
+                {
+                    "symbol": "AMB"
+                },
+                {
+                    "symbol": "AMP"
+                },
+                {
+                    "symbol": "ANT"
+                },
+                {
+                    "symbol": "ARDR"
+                },
+                {
+                    "symbol": "ARN"
+                },
+                {
+                    "symbol": "ART"
+                },
+                {
+                    "symbol": "ATB"
+                },
+                {
+                    "symbol": "ATL"
+                },
+                {
+                    "symbol": "ATM"
+                },
+                {
+                    "symbol": "ATS"
+                },
+                {
+                    "symbol": "AVT"
+                },
+                {
+                    "symbol": "BAS"
+                },
+                {
+                    "symbol": "BCC"
+                },
+                {
+                    "symbol": "BCH"
+                },
+                {
+                    "symbol": "BCN"
+                },
+                {
+                    "symbol": "BET"
+                },
+                {
+                    "symbol": "BKB"
+                },
+                {
+                    "symbol": "BMC"
+                },
+                {
+                    "symbol": "BMT"
+                },
+                {
+                    "symbol": "BNT"
+                },
+                {
+                    "symbol": "BQX"
+                },
+                {
+                    "symbol": "BTC"
+                },
+                {
+                    "symbol": "BTG"
+                },
+                {
+                    "symbol": "BTM"
+                },
+                {
+                    "symbol": "BUS"
+                },
+                {
+                    "symbol": "CCT"
+                },
+                {
+                    "symbol": "CDT"
+                },
+                {
+                    "symbol": "CDX"
+                },
+                {
+                    "symbol": "CFI"
+                },
+                {
+                    "symbol": "CLD"
+                },
+                {
+                    "symbol": "CND"
+                },
+                {
+                    "symbol": "CNX"
+                },
+                {
+                    "symbol": "COSS"
+                },
+                {
+                    "symbol": "CSNO"
+                },
+                {
+                    "symbol": "CTR"
+                },
+                {
+                    "symbol": "CTX"
+                },
+                {
+                    "symbol": "CVC"
+                },
+                {
+                    "symbol": "DASH"
+                },
+                {
+                    "symbol": "DCN"
+                },
+                {
+                    "symbol": "DCT"
+                },
+                {
+                    "symbol": "DDF"
+                },
+                {
+                    "symbol": "DENT"
+                },
+                {
+                    "symbol": "DGB"
+                },
+                {
+                    "symbol": "DGD"
+                },
+                {
+                    "symbol": "DICE"
+                },
+                {
+                    "symbol": "DLT"
+                },
+                {
+                    "symbol": "DNT"
+                },
+                {
+                    "symbol": "DOGE"
+                },
+                {
+                    "symbol": "DRT"
+                },
+                {
+                    "symbol": "DSH"
+                },
+                {
+                    "symbol": "EBET"
+                },
+                {
+                    "symbol": "EBTC"
+                },
+                {
+                    "symbol": "EBTCOLD"
+                },
+                {
+                    "symbol": "ECAT"
+                },
+                {
+                    "symbol": "EDG"
+                },
+                {
+                    "symbol": "EDO"
+                },
+                {
+                    "symbol": "ELE"
+                },
+                {
+                    "symbol": "EMC"
+                },
+                {
+                    "symbol": "EMGO"
+                },
+                {
+                    "symbol": "ENJ"
+                },
+                {
+                    "symbol": "EOS"
+                },
+                {
+                    "symbol": "ETBS"
+                },
+                {
+                    "symbol": "ETC"
+                },
+                {
+                    "symbol": "ETH"
+                },
+                {
+                    "symbol": "ETP"
+                },
+                {
+                    "symbol": "EVX"
+                },
+                {
+                    "symbol": "EXN"
+                },
+                {
+                    "symbol": "FCN"
+                },
+                {
+                    "symbol": "FUN"
+                },
+                {
+                    "symbol": "FYN"
+                },
+                {
+                    "symbol": "FYP"
+                },
+                {
+                    "symbol": "GAME"
+                },
+                {
+                    "symbol": "GNO"
+                },
+                {
+                    "symbol": "GUP"
+                },
+                {
+                    "symbol": "GVT"
+                },
+                {
+                    "symbol": "HAC"
+                },
+                {
+                    "symbol": "HDG"
+                },
+                {
+                    "symbol": "HGT"
+                },
+                {
+                    "symbol": "HPC"
+                },
+                {
+                    "symbol": "HVN"
+                },
+                {
+                    "symbol": "ICN"
+                },
+                {
+                    "symbol": "ICO"
+                },
+                {
+                    "symbol": "ICOS"
+                },
+                {
+                    "symbol": "IND"
+                },
+                {
+                    "symbol": "IXT"
+                },
+                {
+                    "symbol": "KICK"
+                },
+                {
+                    "symbol": "LA"
+                },
+                {
+                    "symbol": "LAT"
+                },
+                {
+                    "symbol": "LIFE"
+                },
+                {
+                    "symbol": "LRC"
+                },
+                {
+                    "symbol": "LSK"
+                },
+                {
+                    "symbol": "LTC"
+                },
+                {
+                    "symbol": "LUN"
+                },
+                {
+                    "symbol": "MAID"
+                },
+                {
+                    "symbol": "MANA"
+                },
+                {
+                    "symbol": "MCAP"
+                },
+                {
+                    "symbol": "MIPS"
+                },
+                {
+                    "symbol": "MNE"
+                },
+                {
+                    "symbol": "MSP"
+                },
+                {
+                    "symbol": "MTH"
+                },
+                {
+                    "symbol": "MYB"
+                },
+                {
+                    "symbol": "NDC"
+                },
+                {
+                    "symbol": "NEBL"
+                },
+                {
+                    "symbol": "NEO"
+                },
+                {
+                    "symbol": "NET"
+                },
+                {
+                    "symbol": "NTO"
+                },
+                {
+                    "symbol": "NXC"
+                },
+                {
+                    "symbol": "NXT"
+                },
+                {
+                    "symbol": "OAX"
+                },
+                {
+                    "symbol": "ODN"
+                },
+                {
+                    "symbol": "OMG"
+                },
+                {
+                    "symbol": "OPT"
+                },
+                {
+                    "symbol": "ORME"
+                },
+                {
+                    "symbol": "OTX"
+                },
+                {
+                    "symbol": "PAY"
+                },
+                {
+                    "symbol": "PING"
+                },
+                {
+                    "symbol": "PIX"
+                },
+                {
+                    "symbol": "PLBT"
+                },
+                {
+                    "symbol": "PLR"
+                },
+                {
+                    "symbol": "PLU"
+                },
+                {
+                    "symbol": "POE"
+                },
+                {
+                    "symbol": "POLL"
+                },
+                {
+                    "symbol": "PPC"
+                },
+                {
+                    "symbol": "PPT"
+                },
+                {
+                    "symbol": "PRE"
+                },
+                {
+                    "symbol": "PRG"
+                },
+                {
+                    "symbol": "PRO"
+                },
+                {
+                    "symbol": "PTOY"
+                },
+                {
+                    "symbol": "QAU"
+                },
+                {
+                    "symbol": "QCN"
+                },
+                {
+                    "symbol": "QTUM"
+                },
+                {
+                    "symbol": "QVT"
+                },
+                {
+                    "symbol": "REP"
+                },
+                {
+                    "symbol": "RKC"
+                },
+                {
+                    "symbol": "RLC"
+                },
+                {
+                    "symbol": "RVT"
+                },
+                {
+                    "symbol": "SAN"
+                },
+                {
+                    "symbol": "SBD"
+                },
+                {
+                    "symbol": "SC"
+                },
+                {
+                    "symbol": "SCL"
+                },
+                {
+                    "symbol": "SISA"
+                },
+                {
+                    "symbol": "SKIN"
+                },
+                {
+                    "symbol": "SMART"
+                },
+                {
+                    "symbol": "SNC"
+                },
+                {
+                    "symbol": "SNGLS"
+                },
+                {
+                    "symbol": "SNM"
+                },
+                {
+                    "symbol": "SNT"
+                },
+                {
+                    "symbol": "STEEM"
+                },
+                {
+                    "symbol": "STRAT"
+                },
+                {
+                    "symbol": "STU"
+                },
+                {
+                    "symbol": "STX"
+                },
+                {
+                    "symbol": "SUB"
+                },
+                {
+                    "symbol": "SUR"
+                },
+                {
+                    "symbol": "SWT"
+                },
+                {
+                    "symbol": "TAAS"
+                },
+                {
+                    "symbol": "TFL"
+                },
+                {
+                    "symbol": "TGT"
+                },
+                {
+                    "symbol": "TIME"
+                },
+                {
+                    "symbol": "TIX"
+                },
+                {
+                    "symbol": "TKN"
+                },
+                {
+                    "symbol": "TKR"
+                },
+                {
+                    "symbol": "TNT"
+                },
+                {
+                    "symbol": "TRST"
+                },
+                {
+                    "symbol": "TRX"
+                },
+                {
+                    "symbol": "UET"
+                },
+                {
+                    "symbol": "UGT"
+                },
+                {
+                    "symbol": "USD"
+                },
+                {
+                    "symbol": "VEN"
+                },
+                {
+                    "symbol": "VERI"
+                },
+                {
+                    "symbol": "VIB"
+                },
+                {
+                    "symbol": "VIBE"
+                },
+                {
+                    "symbol": "VOISE"
+                },
+                {
+                    "symbol": "WAVES"
+                },
+                {
+                    "symbol": "WEALTH"
+                },
+                {
+                    "symbol": "WINGS"
+                },
+                {
+                    "symbol": "WMGO"
+                },
+                {
+                    "symbol": "WTC"
+                },
+                {
+                    "symbol": "XAUR"
+                },
+                {
+                    "symbol": "XDN"
+                },
+                {
+                    "symbol": "XDNICCO"
+                },
+                {
+                    "symbol": "XEM"
+                },
+                {
+                    "symbol": "XMR"
+                },
+                {
+                    "symbol": "XRP"
+                },
+                {
+                    "symbol": "XUC"
+                },
+                {
+                    "symbol": "XVG"
+                },
+                {
+                    "symbol": "YOYOW"
+                },
+                {
+                    "symbol": "ZEC"
+                },
+                {
+                    "symbol": "ZRC"
+                },
+                {
+                    "symbol": "ZRX"
+                },
+                {
+                    "symbol": "ZSC"
+                }
+            ]
+        },
+        {
+            "code": "Cryptopia",
+            "name": "Cryptopia",
+            "apiprice": "true",
+            "apitrade": "false",
+            "apibalance": "false",
+            "listing": [
+                {
+                    "symbol": "1337"
+                },
+                {
+                    "symbol": "21M"
+                },
+                {
+                    "symbol": "300"
+                },
+                {
+                    "symbol": "42"
+                },
+                {
+                    "symbol": "808"
+                },
+                {
+                    "symbol": "8BIT"
+                },
+                {
+                    "symbol": "ACOIN"
+                },
+                {
+                    "symbol": "ACC"
+                },
+                {
+                    "symbol": "ADST"
+                },
+                {
+                    "symbol": "ALEX"
+                },
+                {
+                    "symbol": "ALIS"
+                },
+                {
+                    "symbol": "ALL"
+                },
+                {
+                    "symbol": "ABC"
+                },
+                {
+                    "symbol": "ALT"
+                },
+                {
+                    "symbol": "AGA"
+                },
+                {
+                    "symbol": "ACP"
+                },
+                {
+                    "symbol": "ANI"
+                },
+                {
+                    "symbol": "APX"
+                },
+                {
+                    "symbol": "ARCO"
+                },
+                {
+                    "symbol": "ARC"
+                },
+                {
+                    "symbol": "ARG"
+                },
+                {
+                    "symbol": "ARGUS"
+                },
+                {
+                    "symbol": "ARI"
+                },
+                {
+                    "symbol": "ARK"
+                },
+                {
+                    "symbol": "ABY"
+                },
+                {
+                    "symbol": "AC"
+                },
+                {
+                    "symbol": "ATH"
+                },
+                {
+                    "symbol": "ATMS"
+                },
+                {
+                    "symbol": "ATOM"
+                },
+                {
+                    "symbol": "ADC"
+                },
+                {
+                    "symbol": "REP"
+                },
+                {
+                    "symbol": "AUR"
+                },
+                {
+                    "symbol": "AU"
+                },
+                {
+                    "symbol": "B3"
+                },
+                {
+                    "symbol": "BTA"
+                },
+                {
+                    "symbol": "BAT"
+                },
+                {
+                    "symbol": "SAND"
+                },
+                {
+                    "symbol": "XBTS"
+                },
+                {
+                    "symbol": "BEEZ"
+                },
+                {
+                    "symbol": "BENJI"
+                },
+                {
+                    "symbol": "BERN"
+                },
+                {
+                    "symbol": "BEST"
+                },
+                {
+                    "symbol": "XBL"
+                },
+                {
+                    "symbol": "BIP"
+                },
+                {
+                    "symbol": "BIRD"
+                },
+                {
+                    "symbol": "BIS"
+                },
+                {
+                    "symbol": "BTB"
+                },
+                {
+                    "symbol": "BAY"
+                },
+                {
+                    "symbol": "BITB"
+                },
+                {
+                    "symbol": "BXC"
+                },
+                {
+                    "symbol": "BTDX"
+                },
+                {
+                    "symbol": "COAL"
+                },
+                {
+                    "symbol": "BTC"
+                },
+                {
+                    "symbol": "BTCS"
+                },
+                {
+                    "symbol": "BCH"
+                },
+                {
+                    "symbol": "BTCD"
+                },
+                {
+                    "symbol": "BCF"
+                },
+                {
+                    "symbol": "XBC"
+                },
+                {
+                    "symbol": "BTX"
+                },
+                {
+                    "symbol": "BDL"
+                },
+                {
+                    "symbol": "BRO"
+                },
+                {
+                    "symbol": "BSD"
+                },
+                {
+                    "symbol": "BITS"
+                },
+                {
+                    "symbol": "BLK"
+                },
+                {
+                    "symbol": "BLC"
+                },
+                {
+                    "symbol": "BLZ"
+                },
+                {
+                    "symbol": "BKCAT"
+                },
+                {
+                    "symbol": "BOP"
+                },
+                {
+                    "symbol": "BPL"
+                },
+                {
+                    "symbol": "TIX"
+                },
+                {
+                    "symbol": "BNX"
+                },
+                {
+                    "symbol": "BOLI"
+                },
+                {
+                    "symbol": "BGR"
+                },
+                {
+                    "symbol": "BRG"
+                },
+                {
+                    "symbol": "BOSON"
+                },
+                {
+                    "symbol": "CAP"
+                },
+                {
+                    "symbol": "BNC"
+                },
+                {
+                    "symbol": "BUMBA"
+                },
+                {
+                    "symbol": "BUN"
+                },
+                {
+                    "symbol": "BVB"
+                },
+                {
+                    "symbol": "GBYTE"
+                },
+                {
+                    "symbol": "BTM"
+                },
+                {
+                    "symbol": "CACH"
+                },
+                {
+                    "symbol": "CMPCO"
+                },
+                {
+                    "symbol": "CDN"
+                },
+                {
+                    "symbol": "CANN"
+                },
+                {
+                    "symbol": "XCI"
+                },
+                {
+                    "symbol": "CCN"
+                },
+                {
+                    "symbol": "CNNC"
+                },
+                {
+                    "symbol": "CAR"
+                },
+                {
+                    "symbol": "CSC"
+                },
+                {
+                    "symbol": "CAT"
+                },
+                {
+                    "symbol": "XCT"
+                },
+                {
+                    "symbol": "CTR"
+                },
+                {
+                    "symbol": "CHC"
+                },
+                {
+                    "symbol": "4CHN"
+                },
+                {
+                    "symbol": "CHESS"
+                },
+                {
+                    "symbol": "CRX"
+                },
+                {
+                    "symbol": "CLAM"
+                },
+                {
+                    "symbol": "CLOAK"
+                },
+                {
+                    "symbol": "COE"
+                },
+                {
+                    "symbol": "CFC"
+                },
+                {
+                    "symbol": "CTIC3"
+                },
+                {
+                    "symbol": "CTIC2"
+                },
+                {
+                    "symbol": "C2"
+                },
+                {
+                    "symbol": "CNO"
+                },
+                {
+                    "symbol": "CXT"
+                },
+                {
+                    "symbol": "XCXT"
+                },
+                {
+                    "symbol": "CMT"
+                },
+                {
+                    "symbol": "COMP"
+                },
+                {
+                    "symbol": "CPN"
+                },
+                {
+                    "symbol": "RAIN"
+                },
+                {
+                    "symbol": "CQST"
+                },
+                {
+                    "symbol": "CC"
+                },
+                {
+                    "symbol": "COPPER"
+                },
+                {
+                    "symbol": "CORG"
+                },
+                {
+                    "symbol": "COR"
+                },
+                {
+                    "symbol": "CRAVE"
+                },
+                {
+                    "symbol": "CRM"
+                },
+                {
+                    "symbol": "XCRE"
+                },
+                {
+                    "symbol": "CREA"
+                },
+                {
+                    "symbol": "CRYPT"
+                },
+                {
+                    "symbol": "CBX"
+                },
+                {
+                    "symbol": "CCB"
+                },
+                {
+                    "symbol": "CFT"
+                },
+                {
+                    "symbol": "CJ"
+                },
+                {
+                    "symbol": "CEFS"
+                },
+                {
+                    "symbol": "CRUR"
+                },
+                {
+                    "symbol": "OFF"
+                },
+                {
+                    "symbol": "QBT"
+                },
+                {
+                    "symbol": "FUNK"
+                },
+                {
+                    "symbol": "DPP"
+                },
+                {
+                    "symbol": "DAS"
+                },
+                {
+                    "symbol": "DALC"
+                },
+                {
+                    "symbol": "DARK"
+                },
+                {
+                    "symbol": "KED"
+                },
+                {
+                    "symbol": "DASH"
+                },
+                {
+                    "symbol": "DSH"
+                },
+                {
+                    "symbol": "DAXX"
+                },
+                {
+                    "symbol": "DRP"
+                },
+                {
+                    "symbol": "DDF"
+                },
+                {
+                    "symbol": "DCR"
+                },
+                {
+                    "symbol": "ONION"
+                },
+                {
+                    "symbol": "DNR"
+                },
+                {
+                    "symbol": "DCN"
+                },
+                {
+                    "symbol": "DEM"
+                },
+                {
+                    "symbol": "DFS"
+                },
+                {
+                    "symbol": "DIBC"
+                },
+                {
+                    "symbol": "DGB"
+                },
+                {
+                    "symbol": "DGC"
+                },
+                {
+                    "symbol": "DP"
+                },
+                {
+                    "symbol": "DIME"
+                },
+                {
+                    "symbol": "DIRTY"
+                },
+                {
+                    "symbol": "DCY"
+                },
+                {
+                    "symbol": "NOTE"
+                },
+                {
+                    "symbol": "DOGE"
+                },
+                {
+                    "symbol": "DON"
+                },
+                {
+                    "symbol": "DOPE"
+                },
+                {
+                    "symbol": "DOT"
+                },
+                {
+                    "symbol": "DRXNE"
+                },
+                {
+                    "symbol": "DBIX"
+                },
+                {
+                    "symbol": "EC"
+                },
+                {
+                    "symbol": "ECOB"
+                },
+                {
+                    "symbol": "ECO"
+                },
+                {
+                    "symbol": "EDDIE"
+                },
+                {
+                    "symbol": "EDRC"
+                },
+                {
+                    "symbol": "EDC"
+                },
+                {
+                    "symbol": "EFL"
+                },
+                {
+                    "symbol": "EMC2"
+                },
+                {
+                    "symbol": "ELC"
+                },
+                {
+                    "symbol": "ETN"
+                },
+                {
+                    "symbol": "ELM"
+                },
+                {
+                    "symbol": "ELP"
+                },
+                {
+                    "symbol": "EBG"
+                },
+                {
+                    "symbol": "EMB"
+                },
+                {
+                    "symbol": "MBRS"
+                },
+                {
+                    "symbol": "EMD"
+                },
+                {
+                    "symbol": "EMC"
+                },
+                {
+                    "symbol": "ETT"
+                },
+                {
+                    "symbol": "ENJ"
+                },
+                {
+                    "symbol": "EQT"
+                },
+                {
+                    "symbol": "ERY"
+                },
+                {
+                    "symbol": "ETB"
+                },
+                {
+                    "symbol": "ETH"
+                },
+                {
+                    "symbol": "ETC"
+                },
+                {
+                    "symbol": "ETHD"
+                },
+                {
+                    "symbol": "RIYA"
+                },
+                {
+                    "symbol": "EUC"
+                },
+                {
+                    "symbol": "EGC"
+                },
+                {
+                    "symbol": "EVR"
+                },
+                {
+                    "symbol": "EVIL"
+                },
+                {
+                    "symbol": "EVO"
+                },
+                {
+                    "symbol": "EXP"
+                },
+                {
+                    "symbol": "EPC"
+                },
+                {
+                    "symbol": "FCN"
+                },
+                {
+                    "symbol": "FCT"
+                },
+                {
+                    "symbol": "FST"
+                },
+                {
+                    "symbol": "FAZZ"
+                },
+                {
+                    "symbol": "FTC"
+                },
+                {
+                    "symbol": "FTCC"
+                },
+                {
+                    "symbol": "FFC"
+                },
+                {
+                    "symbol": "FRC"
+                },
+                {
+                    "symbol": "FLASH"
+                },
+                {
+                    "symbol": "FLAX"
+                },
+                {
+                    "symbol": "FLN"
+                },
+                {
+                    "symbol": "FLT"
+                },
+                {
+                    "symbol": "FONZ"
+                },
+                {
+                    "symbol": "XFT"
+                },
+                {
+                    "symbol": "FORT"
+                },
+                {
+                    "symbol": "FRN"
+                },
+                {
+                    "symbol": "FUEL"
+                },
+                {
+                    "symbol": "FJC"
+                },
+                {
+                    "symbol": "FUZZ"
+                },
+                {
+                    "symbol": "GAIA"
+                },
+                {
+                    "symbol": "GAME"
+                },
+                {
+                    "symbol": "UNITS"
+                },
+                {
+                    "symbol": "GAP"
+                },
+                {
+                    "symbol": "GAY"
+                },
+                {
+                    "symbol": "GCN"
+                },
+                {
+                    "symbol": "GEERT"
+                },
+                {
+                    "symbol": "GEO"
+                },
+                {
+                    "symbol": "BSTY"
+                },
+                {
+                    "symbol": "GNO"
+                },
+                {
+                    "symbol": "XGOX"
+                },
+                {
+                    "symbol": "GLD"
+                },
+                {
+                    "symbol": "GP"
+                },
+                {
+                    "symbol": "GPL"
+                },
+                {
+                    "symbol": "XGR"
+                },
+                {
+                    "symbol": "GNT"
+                },
+                {
+                    "symbol": "GPU"
+                },
+                {
+                    "symbol": "GDC"
+                },
+                {
+                    "symbol": "GRN"
+                },
+                {
+                    "symbol": "GRS"
+                },
+                {
+                    "symbol": "GXG"
+                },
+                {
+                    "symbol": "GRWI"
+                },
+                {
+                    "symbol": "GRW"
+                },
+                {
+                    "symbol": "GUN"
+                },
+                {
+                    "symbol": "HAC"
+                },
+                {
+                    "symbol": "HAL"
+                },
+                {
+                    "symbol": "HAV"
+                },
+                {
+                    "symbol": "HLM"
+                },
+                {
+                    "symbol": "HXX"
+                },
+                {
+                    "symbol": "HBN"
+                },
+                {
+                    "symbol": "HDLB"
+                },
+                {
+                    "symbol": "HSR"
+                },
+                {
+                    "symbol": "HUSH"
+                },
+                {
+                    "symbol": "HYP"
+                },
+                {
+                    "symbol": "I0C"
+                },
+                {
+                    "symbol": "ICOB"
+                },
+                {
+                    "symbol": "NKA"
+                },
+                {
+                    "symbol": "IN"
+                },
+                {
+                    "symbol": "IMS"
+                },
+                {
+                    "symbol": "IFC"
+                },
+                {
+                    "symbol": "IFLT"
+                },
+                {
+                    "symbol": "INFX"
+                },
+                {
+                    "symbol": "INN"
+                },
+                {
+                    "symbol": "INSN"
+                },
+                {
+                    "symbol": "HOLD"
+                },
+                {
+                    "symbol": "IFT"
+                },
+                {
+                    "symbol": "IQT"
+                },
+                {
+                    "symbol": "IRL"
+                },
+                {
+                    "symbol": "ITI"
+                },
+                {
+                    "symbol": "IXC"
+                },
+                {
+                    "symbol": "IZE"
+                },
+                {
+                    "symbol": "JET"
+                },
+                {
+                    "symbol": "JIN"
+                },
+                {
+                    "symbol": "XJO"
+                },
+                {
+                    "symbol": "KGB"
+                },
+                {
+                    "symbol": "KRB"
+                },
+                {
+                    "symbol": "KARM"
+                },
+                {
+                    "symbol": "KASH"
+                },
+                {
+                    "symbol": "KAYI"
+                },
+                {
+                    "symbol": "KEK"
+                },
+                {
+                    "symbol": "KING"
+                },
+                {
+                    "symbol": "KINGX"
+                },
+                {
+                    "symbol": "MEOW"
+                },
+                {
+                    "symbol": "KDC"
+                },
+                {
+                    "symbol": "KOBO"
+                },
+                {
+                    "symbol": "KMD"
+                },
+                {
+                    "symbol": "KRONE"
+                },
+                {
+                    "symbol": "KUMA"
+                },
+                {
+                    "symbol": "KURT"
+                },
+                {
+                    "symbol": "KUSH"
+                },
+                {
+                    "symbol": "KNC"
+                },
+                {
+                    "symbol": "LDC"
+                },
+                {
+                    "symbol": "LANA"
+                },
+                {
+                    "symbol": "LBC"
+                },
+                {
+                    "symbol": "LEPEN"
+                },
+                {
+                    "symbol": "LEA"
+                },
+                {
+                    "symbol": "LEAF"
+                },
+                {
+                    "symbol": "LEMON"
+                },
+                {
+                    "symbol": "XLC"
+                },
+                {
+                    "symbol": "LFTC"
+                },
+                {
+                    "symbol": "LINDA"
+                },
+                {
+                    "symbol": "LINX"
+                },
+                {
+                    "symbol": "LTB"
+                },
+                {
+                    "symbol": "LBTC"
+                },
+                {
+                    "symbol": "LTC"
+                },
+                {
+                    "symbol": "LCP"
+                },
+                {
+                    "symbol": "LTCU"
+                },
+                {
+                    "symbol": "LDOGE"
+                },
+                {
+                    "symbol": "LIT"
+                },
+                {
+                    "symbol": "LIZI"
+                },
+                {
+                    "symbol": "LOOK"
+                },
+                {
+                    "symbol": "LOT"
+                },
+                {
+                    "symbol": "LUX"
+                },
+                {
+                    "symbol": "LYC"
+                },
+                {
+                    "symbol": "MAC"
+                },
+                {
+                    "symbol": "MCRN"
+                },
+                {
+                    "symbol": "XMG"
+                },
+                {
+                    "symbol": "MAGN"
+                },
+                {
+                    "symbol": "MAID"
+                },
+                {
+                    "symbol": "MAR"
+                },
+                {
+                    "symbol": "MARS"
+                },
+                {
+                    "symbol": "MARX"
+                },
+                {
+                    "symbol": "MTNC"
+                },
+                {
+                    "symbol": "MZC"
+                },
+                {
+                    "symbol": "MEC"
+                },
+                {
+                    "symbol": "MGX"
+                },
+                {
+                    "symbol": "MLITE"
+                },
+                {
+                    "symbol": "MTL"
+                },
+                {
+                    "symbol": "MTLMC"
+                },
+                {
+                    "symbol": "MNE"
+                },
+                {
+                    "symbol": "MNM"
+                },
+                {
+                    "symbol": "MINEX"
+                },
+                {
+                    "symbol": "MINT"
+                },
+                {
+                    "symbol": "MGO"
+                },
+                {
+                    "symbol": "MOIN"
+                },
+                {
+                    "symbol": "MOJO"
+                },
+                {
+                    "symbol": "XMCC"
+                },
+                {
+                    "symbol": "XMR"
+                },
+                {
+                    "symbol": "$$$"
+                },
+                {
+                    "symbol": "MSP"
+                },
+                {
+                    "symbol": "MOTO"
+                },
+                {
+                    "symbol": "MRY"
+                },
+                {
+                    "symbol": "MUSIC"
+                },
+                {
+                    "symbol": "MCI"
+                },
+                {
+                    "symbol": "MST"
+                },
+                {
+                    "symbol": "MYB"
+                },
+                {
+                    "symbol": "XMY"
+                },
+                {
+                    "symbol": "NMC"
+                },
+                {
+                    "symbol": "NAMO"
+                },
+                {
+                    "symbol": "NAV"
+                },
+                {
+                    "symbol": "NEBL"
+                },
+                {
+                    "symbol": "NEO"
+                },
+                {
+                    "symbol": "NET"
+                },
+                {
+                    "symbol": "NETKO"
+                },
+                {
+                    "symbol": "NDAO"
+                },
+                {
+                    "symbol": "NTRN"
+                },
+                {
+                    "symbol": "NEVA"
+                },
+                {
+                    "symbol": "XEM"
+                },
+                {
+                    "symbol": "NXS"
+                },
+                {
+                    "symbol": "NOBL"
+                },
+                {
+                    "symbol": "NLC2"
+                },
+                {
+                    "symbol": "NVC"
+                },
+                {
+                    "symbol": "NYAN"
+                },
+                {
+                    "symbol": "NZDT"
+                },
+                {
+                    "symbol": "ODN"
+                },
+                {
+                    "symbol": "888"
+                },
+                {
+                    "symbol": "OK"
+                },
+                {
+                    "symbol": "OOO"
+                },
+                {
+                    "symbol": "OMG"
+                },
+                {
+                    "symbol": "OPAL"
+                },
+                {
+                    "symbol": "OSC"
+                },
+                {
+                    "symbol": "OTN"
+                },
+                {
+                    "symbol": "ORB"
+                },
+                {
+                    "symbol": "ORME"
+                },
+                {
+                    "symbol": "OX"
+                },
+                {
+                    "symbol": "OZC"
+                },
+                {
+                    "symbol": "PAC"
+                },
+                {
+                    "symbol": "PAK"
+                },
+                {
+                    "symbol": "PND"
+                },
+                {
+                    "symbol": "DUO"
+                },
+                {
+                    "symbol": "PASL"
+                },
+                {
+                    "symbol": "CON"
+                },
+                {
+                    "symbol": "PPC"
+                },
+                {
+                    "symbol": "PENG"
+                },
+                {
+                    "symbol": "PEPE"
+                },
+                {
+                    "symbol": "PTC"
+                },
+                {
+                    "symbol": "XPD"
+                },
+                {
+                    "symbol": "PHS"
+                },
+                {
+                    "symbol": "PXC"
+                },
+                {
+                    "symbol": "PHO"
+                },
+                {
+                    "symbol": "RICKS"
+                },
+                {
+                    "symbol": "PIE"
+                },
+                {
+                    "symbol": "PIGGY"
+                },
+                {
+                    "symbol": "PLR"
+                },
+                {
+                    "symbol": "PINK"
+                },
+                {
+                    "symbol": "PIRL"
+                },
+                {
+                    "symbol": "PIVX"
+                },
+                {
+                    "symbol": "XPTX"
+                },
+                {
+                    "symbol": "PLC"
+                },
+                {
+                    "symbol": "PCC"
+                },
+                {
+                    "symbol": "POP"
+                },
+                {
+                    "symbol": "POST"
+                },
+                {
+                    "symbol": "POSW"
+                },
+                {
+                    "symbol": "POT"
+                },
+                {
+                    "symbol": "POWR"
+                },
+                {
+                    "symbol": "XPM"
+                },
+                {
+                    "symbol": "PXI"
+                },
+                {
+                    "symbol": "PROC"
+                },
+                {
+                    "symbol": "PR"
+                },
+                {
+                    "symbol": "PURA"
+                },
+                {
+                    "symbol": "VIDZ"
+                },
+                {
+                    "symbol": "PUT"
+                },
+                {
+                    "symbol": "QTUM"
+                },
+                {
+                    "symbol": "QRK"
+                },
+                {
+                    "symbol": "QTL"
+                },
+                {
+                    "symbol": "Q2C"
+                },
+                {
+                    "symbol": "QWARK"
+                },
+                {
+                    "symbol": "RBBT"
+                },
+                {
+                    "symbol": "XRA"
+                },
+                {
+                    "symbol": "RED"
+                },
+                {
+                    "symbol": "RDD"
+                },
+                {
+                    "symbol": "RNS"
+                },
+                {
+                    "symbol": "R"
+                },
+                {
+                    "symbol": "XRE"
+                },
+                {
+                    "symbol": "RBT"
+                },
+                {
+                    "symbol": "RPC"
+                },
+                {
+                    "symbol": "RKC"
+                },
+                {
+                    "symbol": "XRY"
+                },
+                {
+                    "symbol": "RBY"
+                },
+                {
+                    "symbol": "RUP"
+                },
+                {
+                    "symbol": "RC"
+                },
+                {
+                    "symbol": "SAFEX"
+                },
+                {
+                    "symbol": "SKR"
+                },
+                {
+                    "symbol": "STV"
+                },
+                {
+                    "symbol": "SBC"
+                },
+                {
+                    "symbol": "SCORE"
+                },
+                {
+                    "symbol": "SRC"
+                },
+                {
+                    "symbol": "SEL"
+                },
+                {
+                    "symbol": "SDRN"
+                },
+                {
+                    "symbol": "SXC"
+                },
+                {
+                    "symbol": "SHA"
+                },
+                {
+                    "symbol": "SAK"
+                },
+                {
+                    "symbol": "SHRM"
+                },
+                {
+                    "symbol": "SIB"
+                },
+                {
+                    "symbol": "611"
+                },
+                {
+                    "symbol": "SJW"
+                },
+                {
+                    "symbol": "SKC"
+                },
+                {
+                    "symbol": "SKIN"
+                },
+                {
+                    "symbol": "SKY"
+                },
+                {
+                    "symbol": "SLOTH"
+                },
+                {
+                    "symbol": "SMART"
+                },
+                {
+                    "symbol": "SMC"
+                },
+                {
+                    "symbol": "SCL"
+                },
+                {
+                    "symbol": "SOIL"
+                },
+                {
+                    "symbol": "SFC"
+                },
+                {
+                    "symbol": "SONG"
+                },
+                {
+                    "symbol": "SOON"
+                },
+                {
+                    "symbol": "SPACE"
+                },
+                {
+                    "symbol": "SPN"
+                },
+                {
+                    "symbol": "XSPEC"
+                },
+                {
+                    "symbol": "XID"
+                },
+                {
+                    "symbol": "SPT"
+                },
+                {
+                    "symbol": "SPR"
+                },
+                {
+                    "symbol": "SQL"
+                },
+                {
+                    "symbol": "STRC"
+                },
+                {
+                    "symbol": "START"
+                },
+                {
+                    "symbol": "XST"
+                },
+                {
+                    "symbol": "SLG"
+                },
+                {
+                    "symbol": "STC"
+                },
+                {
+                    "symbol": "STRAT"
+                },
+                {
+                    "symbol": "SUMO"
+                },
+                {
+                    "symbol": "BUCKS"
+                },
+                {
+                    "symbol": "SWING"
+                },
+                {
+                    "symbol": "SYNX"
+                },
+                {
+                    "symbol": "AMP"
+                },
+                {
+                    "symbol": "TAJ"
+                },
+                {
+                    "symbol": "TSE"
+                },
+                {
+                    "symbol": "TEK"
+                },
+                {
+                    "symbol": "PAY"
+                },
+                {
+                    "symbol": "TRC"
+                },
+                {
+                    "symbol": "TER"
+                },
+                {
+                    "symbol": "TES"
+                },
+                {
+                    "symbol": "USDT"
+                },
+                {
+                    "symbol": "CHIEF"
+                },
+                {
+                    "symbol": "TGC"
+                },
+                {
+                    "symbol": "TIT"
+                },
+                {
+                    "symbol": "TTC"
+                },
+                {
+                    "symbol": "TOA"
+                },
+                {
+                    "symbol": "TOP"
+                },
+                {
+                    "symbol": "TX"
+                },
+                {
+                    "symbol": "TZC"
+                },
+                {
+                    "symbol": "TRI"
+                },
+                {
+                    "symbol": "TTY"
+                },
+                {
+                    "symbol": "TRK"
+                },
+                {
+                    "symbol": "TRUMP"
+                },
+                {
+                    "symbol": "TRBO"
+                },
+                {
+                    "symbol": "UBQ"
+                },
+                {
+                    "symbol": "UTC"
+                },
+                {
+                    "symbol": "UNIC"
+                },
+                {
+                    "symbol": "UNIFY"
+                },
+                {
+                    "symbol": "UIS"
+                },
+                {
+                    "symbol": "UMO"
+                },
+                {
+                    "symbol": "UNO"
+                },
+                {
+                    "symbol": "UR"
+                },
+                {
+                    "symbol": "VCC"
+                },
+                {
+                    "symbol": "VPRC"
+                },
+                {
+                    "symbol": "XVG"
+                },
+                {
+                    "symbol": "VRC"
+                },
+                {
+                    "symbol": "VRM"
+                },
+                {
+                    "symbol": "V"
+                },
+                {
+                    "symbol": "VUC"
+                },
+                {
+                    "symbol": "VISIO"
+                },
+                {
+                    "symbol": "VIVO"
+                },
+                {
+                    "symbol": "VSM"
+                },
+                {
+                    "symbol": "WRC"
+                },
+                {
+                    "symbol": "WW"
+                },
+                {
+                    "symbol": "WSX"
+                },
+                {
+                    "symbol": "WEED"
+                },
+                {
+                    "symbol": "WILD"
+                },
+                {
+                    "symbol": "WC"
+                },
+                {
+                    "symbol": "WLC"
+                },
+                {
+                    "symbol": "WDC"
+                },
+                {
+                    "symbol": "XCO"
+                },
+                {
+                    "symbol": "XBY"
+                },
+                {
+                    "symbol": "YOVI"
+                },
+                {
+                    "symbol": "ZAP"
+                },
+                {
+                    "symbol": "ZEC"
+                },
+                {
+                    "symbol": "ZCL"
+                },
+                {
+                    "symbol": "XZC"
+                },
+                {
+                    "symbol": "ZEIT"
+                },
+                {
+                    "symbol": "ZEN"
+                },
+                {
+                    "symbol": "ZER"
+                },
+                {
+                    "symbol": "ZET"
+                },
+                {
+                    "symbol": "ZOI"
+                },
+                {
+                    "symbol": "ZSE"
+                },
+                {
+                    "symbol2": "BTG"
+                }
+            ]
+        },
+        {
             "code": "OTC",
             "name": "Over The Counter",
             "apiprice": "false",
@@ -1489,6 +3680,14 @@
         {
             "code": "AirDrop",
             "name": "Air Drop",
+            "apiprice": "false",
+            "apitrade": "false",
+            "apibalance": "false",
+            "listing": []
+        },
+        {
+            "code": "Other",
+            "name": "Other Exchange",
             "apiprice": "false",
             "apitrade": "false",
             "apibalance": "false",

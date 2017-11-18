@@ -258,6 +258,7 @@
       <DependentUpon>ImportTableViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="CoreClass\APIClass\BitfinexAPI.cs" />
+    <Compile Include="CoreClass\APIClass\HitbtcAPI.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />
