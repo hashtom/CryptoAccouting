@@ -91,7 +91,7 @@ namespace CoinBalance
         private void initLocationChart()
         {
             sfChartLocation = new SFChart();
-            sfChartLocation.Title.Text = "Coin Location";
+            sfChartLocation.Title.Text = "Wallet Location";
 
             LocationSeries = new SFPieSeries()
             {

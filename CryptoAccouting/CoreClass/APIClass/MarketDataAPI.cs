@@ -22,12 +22,6 @@ namespace CoinBalance.CoreClass.APIClass
         public static async Task FetchCoinPricesAsync(ExchangeList exchanges, InstrumentList coins, List<CrossRate> crossrates)
         {
 
-            //if (!Reachability.IsHostReachable(coinbalance_url))
-            //{
-            //    throw new AppCoreNetworkException("Host is not reachable: " + coinbalance_url);
-            //}
-            //else
-            //{
             try
             {
                 if (crossrates is null) crossrates = await FetchCrossRateAsync();
@@ -91,6 +85,14 @@ namespace CoinBalance.CoreClass.APIClass
                             {
                                 var exchange = exchanges.First(x => x.Code == "Poloniex");
                                 if (exchange.HasListedCoins()) await PoloniexAPI.FetchPriceAsync(exchange, coins);
+                            }
+                            break;
+
+                        case "Bitfinex":
+                            if (exchanges.Any(x => x.Code == "Bitfinex"))
+                            {
+                                var exchange = exchanges.First(x => x.Code == "Bitfinex");
+                                if (exchange.HasListedCoins()) await BitfinexAPI.FetchPriceAsync(exchange, coins);
                             }
                             break;
 

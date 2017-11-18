@@ -25,55 +25,55 @@ namespace CoinBalance.CoreClass.APIClass
             try
             {
                 var rawjson = await SendAsync(HttpMethod.Get, BaseUrl + "/api/v1.1/public/getmarketsummaries", false);
-                var jobj = await Task.Run(() => JObject.Parse(rawjson));
-                var jarray = (JArray)jobj["result"];
-                var btcjrow = jarray.First(x => (string)x["MarketName"] == "USDT-BTC");
+                await ParsePrice(rawjson, coins);
+                //var jobj = await Task.Run(() => JObject.Parse(rawjson));
+                //var jarray = (JArray)jobj["result"];
+                //var btcjrow = jarray.First(x => (string)x["MarketName"] == "USDT-BTC");
 
-                foreach (var coin in coins.Where(x => x.PriceSourceCode == bittrex.Code))
-                {
-                    if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
+                //foreach (var coin in coins.Where(x => x.PriceSourceCode == bittrex.Code))
+                //{
+                //    if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
 
-                    if (coin.Id is "bitcoin")
-                    {
-                        coin.MarketPrice.LatestPriceBTC = 1;
-                        coin.MarketPrice.PriceBTCBefore24h = 1;
-                        coin.MarketPrice.LatestPriceUSD = (double)btcjrow["Last"];
-                        coin.MarketPrice.PriceUSDBefore24h = (double)btcjrow["PrevDay"];
-                        coin.MarketPrice.DayVolume = (double)btcjrow["Volume"];
-                        coin.MarketPrice.PriceDate = (DateTime)btcjrow["TimeStamp"];
-                    }
-                    else if (coin.Id is "tether")
-                    {
-                        coin.MarketPrice.LatestPriceBTC = 1 / (double)btcjrow["Last"];
-                        coin.MarketPrice.PriceBTCBefore24h = 1 / (double)btcjrow["PrevDay"];
-                        coin.MarketPrice.LatestPriceUSD = 1;
-                        coin.MarketPrice.PriceUSDBefore24h = 1;
-                        coin.MarketPrice.DayVolume = (double)btcjrow["Volume"];
-                        coin.MarketPrice.PriceDate = (DateTime)btcjrow["TimeStamp"];
-                    }
-                    else
-                    {
-                        if (jarray.Any(x => (string)x["MarketName"] == "BTC-" + bittrex.GetSymbolForExchange(coin.Id)))
-                        {
-                            var jrow = jarray.First(x => (string)x["MarketName"] == "BTC-" + _bittrex.GetSymbolForExchange(coin.Id));
-                            coin.MarketPrice.LatestPriceBTC = (double)jrow["Last"];
-                            coin.MarketPrice.PriceBTCBefore24h = (double)jrow["PrevDay"];
-                            coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"] * (double)btcjrow["Last"];
-                            coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"] * (double)btcjrow["PrevDay"];
-                            coin.MarketPrice.DayVolume = (double)jrow["BaseVolume"];
-                            coin.MarketPrice.PriceDate = (DateTime)jrow["TimeStamp"];
-                        }
-                    }
+                //    if (coin.Id is "bitcoin")
+                //    {
+                //        coin.MarketPrice.LatestPriceBTC = 1;
+                //        coin.MarketPrice.PriceBTCBefore24h = 1;
+                //        coin.MarketPrice.LatestPriceUSD = (double)btcjrow["Last"];
+                //        coin.MarketPrice.PriceUSDBefore24h = (double)btcjrow["PrevDay"];
+                //        coin.MarketPrice.DayVolume = (double)btcjrow["Volume"];
+                //        coin.MarketPrice.PriceDate = (DateTime)btcjrow["TimeStamp"];
+                //    }
+                //    else if (coin.Id is "tether")
+                //    {
+                //        coin.MarketPrice.LatestPriceBTC = 1 / (double)btcjrow["Last"];
+                //        coin.MarketPrice.PriceBTCBefore24h = 1 / (double)btcjrow["PrevDay"];
+                //        coin.MarketPrice.LatestPriceUSD = 1;
+                //        coin.MarketPrice.PriceUSDBefore24h = 1;
+                //        coin.MarketPrice.DayVolume = (double)btcjrow["Volume"];
+                //        coin.MarketPrice.PriceDate = (DateTime)btcjrow["TimeStamp"];
+                //    }
+                //    else
+                //    {
+                //        if (jarray.Any(x => (string)x["MarketName"] == "BTC-" + bittrex.GetSymbolForExchange(coin.Id)))
+                //        {
+                //            var jrow = jarray.First(x => (string)x["MarketName"] == "BTC-" + _bittrex.GetSymbolForExchange(coin.Id));
+                //            coin.MarketPrice.LatestPriceBTC = (double)jrow["Last"];
+                //            coin.MarketPrice.PriceBTCBefore24h = (double)jrow["PrevDay"];
+                //            coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"] * (double)btcjrow["Last"];
+                //            coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"] * (double)btcjrow["PrevDay"];
+                //            coin.MarketPrice.DayVolume = (double)jrow["BaseVolume"];
+                //            coin.MarketPrice.PriceDate = (DateTime)jrow["TimeStamp"];
+                //        }
+                //    }
 
-                    //coin.MarketPrice.USDCrossRate = crossrate;
-                }
+                //    //coin.MarketPrice.USDCrossRate = crossrate;
+                //}
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": BittrexAPI: " + e.GetType() + ": " + e.Message);
                 throw;
             }
-
         }
 
         public static async Task<List<Position>> FetchPositionAsync(Exchange bittrex)
@@ -100,8 +100,6 @@ namespace CoinBalance.CoreClass.APIClass
 
             try
             {
-                //var from = calendarYear == null ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
-                //var to = calendarYear == null ? DateTime.Now : new DateTime(int.Parse(calendarYear), 12, 31);
                 var rawjson = await SendAsync(HttpMethod.Get, BaseUrl + "/api/v1.1/account/getorderhistory");
                 var tradelist = ParseTransaction(rawjson);
                 return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
@@ -112,6 +110,59 @@ namespace CoinBalance.CoreClass.APIClass
                 throw;
             }
 
+        }
+
+        private static async Task ParsePrice(string rawjson, InstrumentList coins)
+        {
+            try
+            {
+                var jobj = await Task.Run(() => JObject.Parse(rawjson));
+                var jarray = (JArray)jobj["result"];
+                var btcjrow = jarray.First(x => (string)x["MarketName"] == "USDT-BTC");
+
+                foreach (var coin in coins.Where(x => x.PriceSourceCode == _bittrex.Code))
+                {
+                    if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
+
+                    if (coin.Id is "bitcoin")
+                    {
+                        coin.MarketPrice.LatestPriceBTC = 1;
+                        coin.MarketPrice.PriceBTCBefore24h = 1;
+                        coin.MarketPrice.LatestPriceUSD = (double)btcjrow["Last"];
+                        coin.MarketPrice.PriceUSDBefore24h = (double)btcjrow["PrevDay"];
+                        coin.MarketPrice.DayVolume = (double)btcjrow["Volume"];
+                        coin.MarketPrice.PriceDate = (DateTime)btcjrow["TimeStamp"];
+                    }
+                    else if (coin.Id is "tether")
+                    {
+                        coin.MarketPrice.LatestPriceBTC = 1 / (double)btcjrow["Last"];
+                        coin.MarketPrice.PriceBTCBefore24h = 1 / (double)btcjrow["PrevDay"];
+                        coin.MarketPrice.LatestPriceUSD = 1;
+                        coin.MarketPrice.PriceUSDBefore24h = 1;
+                        coin.MarketPrice.DayVolume = (double)btcjrow["Volume"];
+                        coin.MarketPrice.PriceDate = (DateTime)btcjrow["TimeStamp"];
+                    }
+                    else
+                    {
+                        if (jarray.Any(x => (string)x["MarketName"] == "BTC-" + _bittrex.GetSymbolForExchange(coin.Id)))
+                        {
+                            var jrow = jarray.First(x => (string)x["MarketName"] == "BTC-" + _bittrex.GetSymbolForExchange(coin.Id));
+                            coin.MarketPrice.LatestPriceBTC = (double)jrow["Last"];
+                            coin.MarketPrice.PriceBTCBefore24h = (double)jrow["PrevDay"];
+                            coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"] * (double)btcjrow["Last"];
+                            coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"] * (double)btcjrow["PrevDay"];
+                            coin.MarketPrice.DayVolume = (double)jrow["BaseVolume"];
+                            coin.MarketPrice.PriceDate = (DateTime)jrow["TimeStamp"];
+                        }
+                    }
+
+                    //coin.MarketPrice.USDCrossRate = crossrate;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new AppCoreParseException(e.GetType() + ": BittrexAPI: " + e.Message);
+            }
         }
 
         private static List<Position> ParsePosition(string rawjson)
@@ -233,7 +284,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch (Exception e)
             {
-                throw new AppCoreParseException(e.GetType() + ": " + e.Message);
+                throw new AppCoreParseException(e.GetType() + ": BittrexAPI: " + e.Message);
             }
         }
 
@@ -293,28 +344,9 @@ namespace CoinBalance.CoreClass.APIClass
         private static async Task<string> SendAsync(HttpMethod httpMethod, string uri, bool includeAuthentication = true) => await SendAsync(httpMethod, uri, new Dictionary<string, string>(), includeAuthentication);
         private static async Task<string> SendAsync(HttpMethod httpMethod, string uri, IDictionary<string, string> parameters, bool includeAuthentication = true)
         {
-            //if (!Reachability.IsHostReachable(BaseUrl))
-            //{
-            //    throw new AppCoreNetworkException("Host is not reachable: " + BaseUrl);
-            //}
-            //else
-            //{
             var request = createRequest(httpMethod, uri, parameters, includeAuthentication);
-            //var httpClient = new HttpClient();
             using (var http = new HttpClient())
             {
-                //HttpResponseMessage response = null;
-                //while (response == null)
-                //{
-                //    try
-                //    {
-                //        response = await httpClient.SendAsync(request);
-                //    }
-                //    catch (Exception)
-                //    {
-                //        response = null;
-                //    }
-                //}
                 var response = await http.SendAsync(request);
                 response.EnsureSuccessStatusCode();
                 return await response.Content.ReadAsStringAsync();

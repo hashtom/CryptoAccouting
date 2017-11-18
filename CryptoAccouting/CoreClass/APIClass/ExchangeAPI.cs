@@ -90,6 +90,9 @@ namespace CoinBalance.CoreClass.APIClass
                     case "bitFlyer_l":
                         return await BitFlyerAPI.FetchTransactionAsync(exchange);
 
+                    case "Bitfinex":
+                        //return await BitfinexAPI.FetchTransactionAsync(exchange);
+
                     default:
                         throw new AppCoreNetworkException("ExchangeCode error. Code: " + exchange.Code);
                 }
@@ -125,6 +128,9 @@ namespace CoinBalance.CoreClass.APIClass
 
                     case "bitFlyer_l":
                         return await BitFlyerAPI.FetchPositionAsync(exchange);
+
+                    case "Bitfinex":
+                        //return await BitfinexAPI.FetchPositionAsync(exchange);
 
                     default:
                         throw new AppCoreNetworkException("ExchangeCode error. Code: " + exchange.Code);

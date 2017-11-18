@@ -23,7 +23,139 @@ other_dict = {
         "listing": []
         }
 exchanges.append(other_dict)
-       
+
+#BitStamp
+bitstamp_dict = {
+        "code": "Bitstamp",
+        "name": "Bitstamp",
+        "apiprice": "true",
+        "apitrade": "false",
+        "apibalance": "false",
+        "listing": [ 
+                { "symbol": "BTC" },
+                { "symbol": "XRP" }
+                ]
+        }
+exchanges.append(bitstamp_dict)
+
+# Bittrex
+bittrex_baseurl = "https://bittrex.com"
+bittrex = requests.get(bittrex_baseurl + "/api/v1.1/public/getcurrencies").json()
+bittrex_dict = { "code": "Bittrex",
+                "name": "Bittrex",
+                "apiprice": "true",
+                "apitrade": "true",
+                "apibalance": "true"
+                }
+
+if bittrex["success"] == True:
+    df = pd.read_json(json.dumps(bittrex["result"]), orient='records')
+    #df.drop(df[df.IsActive != True].index, inplace=True)
+    bittrex_coins = pd.DataFrame(df['Currency'])
+    bittrex_coins.rename(columns={'Currency':'symbol'}, inplace=True)
+    bittrex_coins.drop(bittrex_coins[bittrex_coins.symbol=="BCC"].index, inplace=True)
+    symbols = bittrex_coins.to_dict(orient='records')
+    symbols.append({"symbol2" : "BCC"})
+    bittrex_dict["listing"] = symbols
+    exchanges.append(bittrex_dict)
+
+#GDAX
+gdax_dict = { 
+        "code": "GDAX",
+        "name": "GDAX",
+        "apiprice": "false",
+        "apitrade": "false",
+        "apibalance": "false",
+         "listing": [
+                 { "symbol": "BTC" },
+                 { "symbol": "LTC" },
+                 { "symbol": "ETH" }
+                 ]
+         }
+exchanges.append(gdax_dict)
+
+#Gemini
+gemini_dict = { 
+        "code": "Gemini",
+        "name": "Gemini",
+        "apiprice": "false",
+        "apitrade": "false",
+        "apibalance": "false",
+         "listing": [
+                 { "symbol": "BTC" },
+                 { "symbol": "ETH" }
+                 ]
+         }
+exchanges.append(gemini_dict)
+
+#Kraken
+kraken_dict = {
+        "code": "Kraken",
+        "name": "Kraken",
+        "apiprice": "false",
+        "apitrade": "false",
+        "apibalance": "false",
+        "listing": [
+                { "symbol": "BTC" },
+                { "symbol": "BCH" },
+                { "symbol": "ETH" },
+                { "symbol": "XRP" },
+                { "symbol": "LTC" },
+                { "symbol": "ETC" },
+                { "symbol": "DASH" },
+                { "symbol": "XMR" },
+                { "symbol": "ZEC" },
+                { "symbol": "ICN" },
+                { "symbol": "XLM" },
+                { "symbol": "DOGE" },
+                { "symbol": "REP" },
+                { "symbol": "MLN" }
+                ]
+        }
+exchanges.append(kraken_dict)
+
+#BitFinex
+bitfinex = requests.get("https://api.bitfinex.com/v1/symbols").json()
+bitfinex_dict = {"code": "Bitfinex",
+                 "name": "Bitfinex",
+                 "apiprice": "true",
+                 "apitrade": "false",
+                 "apibalance": "false"
+                 }
+bitfinex_symbols = [] #pd.Series()
+for ins in bitfinex:
+    if re.search(r"\w\w\wusd",ins) or re.search(r"\w\w\wbtc",ins) :
+        bitfinex_symbols.append(ins[0:3].upper())
+
+bitfinex_symbols = pd.DataFrame({"symbol":bitfinex_symbols})
+bitfinex_symbols.drop_duplicates(inplace=True)
+bitfinex_symbols.drop(bitfinex_symbols[bitfinex_symbols.symbol=="IOT"].index, inplace=True)
+symbols = bitfinex_symbols.to_dict(orient='records')
+symbols.append({"symbol2" : "IOT"})
+bitfinex_dict["listing"] = symbols
+
+exchanges.append(bitfinex_dict)
+
+#Poloniex
+poloniex = requests.get("https://poloniex.com/public?command=returnCurrencies").json()
+poloniex_dict = {"code": "Poloniex",
+                 "name": "Poloniex",
+                 "apiprice": "true",
+                 "apitrade": "true",
+                 "apibalance": "true"
+                 }
+df_poloniex = pd.DataFrame.from_dict(poloniex, orient='index')
+df_poloniex.drop(df_poloniex[df_poloniex.delisted==1].index, inplace=True)
+poloniex_symbols = pd.DataFrame({"symbol":list(df_poloniex.index)})
+poloniex_symbols.drop_duplicates(inplace=True)
+poloniex_symbols.drop(poloniex_symbols[poloniex_symbols.symbol=="STR"].index, inplace=True)
+symbols = poloniex_symbols.to_dict(orient='records')
+symbols.append({"symbol2" : "STR"})
+poloniex_dict["listing"] = symbols
+#poloniex_dict["listing"] = poloniex_symbols.to_dict(orient='records')
+
+exchanges.append(poloniex_dict)
+
 #Zaif
 zaif_dict = { 
         "code": "Zaif",
@@ -96,41 +228,6 @@ coincheck_dict = {
         }
 exchanges.append(coincheck_dict)
 
-#BitStamp
-bitstamp_dict = {
-        "code": "Bitstamp",
-        "name": "Bitstamp",
-        "apiprice": "true",
-        "apitrade": "false",
-        "apibalance": "false",
-        "listing": [ 
-                { "symbol": "BTC" },
-                { "symbol": "XRP" }
-                ]
-        }
-exchanges.append(bitstamp_dict)
-
-# Bittrex
-bittrex_baseurl = "https://bittrex.com"
-bittrex = requests.get(bittrex_baseurl + "/api/v1.1/public/getcurrencies").json()
-bittrex_dict = { "code": "Bittrex",
-                "name": "Bittrex",
-                "apiprice": "true",
-                "apitrade": "true",
-                "apibalance": "true"
-                }
-
-if bittrex["success"] == True:
-    df = pd.read_json(json.dumps(bittrex["result"]), orient='records')
-    #df.drop(df[df.IsActive != True].index, inplace=True)
-    bittrex_coins = pd.DataFrame(df['Currency'])
-    bittrex_coins.rename(columns={'Currency':'symbol'}, inplace=True)
-    bittrex_coins.drop(bittrex_coins[bittrex_coins.symbol=="BCC"].index, inplace=True)
-    symbols = bittrex_coins.to_dict(orient='records')
-    symbols.append({"symbol2" : "BCC"})
-    bittrex_dict["listing"] = symbols
-    exchanges.append(bittrex_dict)
-
 #BTCBOX
 btcbox_dict = { 
         "code": "BTCBox",
@@ -173,108 +270,6 @@ bitbank_dict = {
          }
 exchanges.append(bitbank_dict)
  
-#GDAX
-gdax_dict = { 
-        "code": "GDAX",
-        "name": "GDAX",
-        "apiprice": "false",
-        "apitrade": "false",
-        "apibalance": "false",
-         "listing": [
-                 { "symbol": "BTC" },
-                 { "symbol": "LTC" },
-                 { "symbol": "ETH" }
-                 ]
-         }
-exchanges.append(gdax_dict)
-
-#Gemini
-gemini_dict = { 
-        "code": "Gemini",
-        "name": "Gemini",
-        "apiprice": "false",
-        "apitrade": "false",
-        "apibalance": "false",
-         "listing": [
-                 { "symbol": "BTC" },
-                 { "symbol": "ETH" }
-                 ]
-         }
-exchanges.append(gemini_dict)
-
-#Kraken
-kraken_dict = {
-        "code": "Kraken",
-        "name": "Kraken",
-        "apiprice": "false",
-        "apitrade": "false",
-        "apibalance": "false",
-        "listing": [
-                { "symbol": "BTC" },
-                { "symbol": "BCH" },
-                { "symbol": "ETH" },
-                { "symbol": "XRP" },
-                { "symbol": "LTC" },
-                { "symbol": "ETC" },
-                { "symbol": "DASH" },
-                { "symbol": "XMR" },
-                { "symbol": "ZEC" },
-                { "symbol": "ICN" },
-                { "symbol": "XLM" },
-                { "symbol": "DOGE" },
-                { "symbol": "REP" },
-                { "symbol": "MLN" }
-                ]
-        }
-exchanges.append(kraken_dict)
-
-#Gatecoin
-    
-
-#BitFinex
-bitfinex = requests.get("https://api.bitfinex.com/v1/symbols").json()
-bitfinex_dict = {"code": "BitFinex",
-                 "name": "BitFinex",
-                 "apiprice": "false",
-                 "apitrade": "false",
-                 "apibalance": "false"
-                 }
-bitfinex_symbols = [] #pd.Series()
-for ins in bitfinex:
-    if re.search(r"\w\w\wusd",ins) or re.search(r"\w\w\wbtc",ins) :
-        bitfinex_symbols.append(ins[0:3].upper())
-
-bitfinex_symbols = pd.DataFrame({"symbol":bitfinex_symbols})
-bitfinex_symbols.drop_duplicates(inplace=True)
-bitfinex_symbols.drop(bitfinex_symbols[bitfinex_symbols.symbol=="IOT"].index, inplace=True)
-symbols = bitfinex_symbols.to_dict(orient='records')
-symbols.append({"symbol2" : "IOT"})
-bitfinex_dict["listing"] = symbols
-
-exchanges.append(bitfinex_dict)
-
-#Poloniex
-poloniex = requests.get("https://poloniex.com/public?command=returnCurrencies").json()
-poloniex_dict = {"code": "Poloniex",
-                 "name": "Poloniex",
-                 "apiprice": "true",
-                 "apitrade": "true",
-                 "apibalance": "true"
-                 }
-df_poloniex = pd.DataFrame.from_dict(poloniex, orient='index')
-df_poloniex.drop(df_poloniex[df_poloniex.delisted==1].index, inplace=True)
-poloniex_symbols = pd.DataFrame({"symbol":list(df_poloniex.index)})
-poloniex_symbols.drop_duplicates(inplace=True)
-poloniex_symbols.drop(poloniex_symbols[poloniex_symbols.symbol=="STR"].index, inplace=True)
-symbols = poloniex_symbols.to_dict(orient='records')
-symbols.append({"symbol2" : "STR"})
-poloniex_dict["listing"] = symbols
-#poloniex_dict["listing"] = poloniex_symbols.to_dict(orient='records')
-
-exchanges.append(poloniex_dict)
-
-#BitMEX
-
 #Bithumb
 bithumb_dict = {
         "code": "Bithumb",

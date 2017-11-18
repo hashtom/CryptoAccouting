@@ -203,7 +203,6 @@
     <Compile Include="UIClass\CoinViewCell.designer.cs">
       <DependentUpon>CoinViewCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="UIClass\CoinStoreTableSource.cs" />
     <Compile Include="BalanceEditViewController.cs" />
     <Compile Include="BalanceEditViewController.designer.cs">
       <DependentUpon>BalanceEditViewController.cs</DependentUpon>
@@ -233,7 +232,6 @@
     <Compile Include="CoreClass\APIClass\BittrexAPI.cs" />
     <Compile Include="CoreClass\APIClass\BItstampAPI.cs" />
     <Compile Include="UIClass\CoinBookingCell.cs" />
-    <Compile Include="UIClass\CoinStoreCell.cs" />
     <Compile Include="TransactionViewController.cs" />
     <Compile Include="TransactionViewController.designer.cs">
       <DependentUpon>TransactionViewController.cs</DependentUpon>
@@ -259,6 +257,7 @@
     <Compile Include="ImportTableViewController.designer.cs">
       <DependentUpon>ImportTableViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="CoreClass\APIClass\BitfinexAPI.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />

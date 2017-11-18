@@ -9,117 +9,6 @@
             "listing": []
         },
         {
-            "code": "Zaif",
-            "name": "Zaif",
-            "apiprice": "true",
-            "apitrade": "true",
-            "apibalance": "true",
-            "listing": [
-                {
-                    "symbol": "BTC"
-                },
-                {
-                    "symbol": "MONA"
-                },
-                {
-                    "symbol": "XEM"
-                },
-                {
-                    "symbol": "ETH"
-                },
-                {
-                    "symbol": "BCH"
-                }
-            ]
-        },
-        {
-            "code": "bitFlyer_l",
-            "name": "bitFlyer(lightn",
-            "apiprice": "true",
-            "apitrade": "true",
-            "apibalance": "true",
-            "listing": [
-                {
-                    "symbol": "BTC"
-                }
-            ]
-        },
-        {
-            "code": "bitFlyer",
-            "name": "bitFlyer",
-            "apiprice": "false",
-            "apitrade": "false",
-            "apibalance": "false",
-            "listing": [
-                {
-                    "symbol": "BTC"
-                },
-                {
-                    "symbol": "LTC"
-                },
-                {
-                    "symbol": "ETH"
-                },
-                {
-                    "symbol": "ETC"
-                },
-                {
-                    "symbol": "MONA"
-                },
-                {
-                    "symbol": "BCH"
-                }
-            ]
-        },
-        {
-            "code": "CoinCheck",
-            "name": "CoinCheck",
-            "apiprice": "true",
-            "apitrade": "true",
-            "apibalance": "true",
-            "listing": [
-                {
-                    "symbol": "BTC"
-                },
-                {
-                    "symbol": "ETH"
-                },
-                {
-                    "symbol": "BCH"
-                },
-                {
-                    "symbol": "ETC"
-                },
-                {
-                    "symbol": "LSK"
-                },
-                {
-                    "symbol": "FCT"
-                },
-                {
-                    "symbol": "XMR"
-                },
-                {
-                    "symbol": "REP"
-                },
-                {
-                    "symbol": "XRP"
-                },
-                {
-                    "symbol": "ZEC"
-                },
-                {
-                    "symbol": "XEM"
-                },
-                {
-                    "symbol": "LTC"
-                },
-                {
-                    "symbol": "DASH"
-                }
-            ]
-        },
-        {
             "code": "Bitstamp",
             "name": "Bitstamp",
             "apiprice": "true",
@@ -994,52 +883,10 @@
                     "symbol": "MER"
                 },
                 {
+                    "symbol": "POWR"
+                },
+                {
                     "symbol2": "BCC"
-                }
-            ]
-        },
-        {
-            "code": "BTCBox",
-            "name": "BTCBox",
-            "apiprice": "false",
-            "apitrade": "false",
-            "apibalance": "false",
-            "listing": [
-                {
-                    "symbol": "BTC"
-                },
-                {
-                    "symbol": "BCH"
-                }
-            ]
-        },
-        {
-            "code": "Quoine",
-            "name": "Quoine",
-            "apiprice": "false",
-            "apitrade": "false",
-            "apibalance": "false",
-            "listing": [
-                {
-                    "symbol": "BTC"
-                },
-                {
-                    "symbol": "BCH"
-                }
-            ]
-        },
-        {
-            "code": "Bitbank",
-            "name": "Bitbank",
-            "apiprice": "false",
-            "apitrade": "false",
-            "apibalance": "false",
-            "listing": [
-                {
-                    "symbol": "BTC"
-                },
-                {
-                    "symbol": "BCH"
                 }
             ]
         },
@@ -1128,9 +975,9 @@
             ]
         },
         {
-            "code": "BitFinex",
-            "name": "BitFinex",
-            "apiprice": "false",
+            "code": "Bitfinex",
+            "name": "Bitfinex",
+            "apiprice": "true",
             "apitrade": "false",
             "apibalance": "false",
             "listing": [
@@ -1433,6 +1280,162 @@
                 },
                 {
                     "symbol2": "STR"
+                }
+            ]
+        },
+        {
+            "code": "Zaif",
+            "name": "Zaif",
+            "apiprice": "true",
+            "apitrade": "true",
+            "apibalance": "true",
+            "listing": [
+                {
+                    "symbol": "BTC"
+                },
+                {
+                    "symbol": "MONA"
+                },
+                {
+                    "symbol": "XEM"
+                },
+                {
+                    "symbol": "ETH"
+                },
+                {
+                    "symbol": "BCH"
+                }
+            ]
+        },
+        {
+            "code": "bitFlyer_l",
+            "name": "bitFlyer(lightn",
+            "apiprice": "true",
+            "apitrade": "true",
+            "apibalance": "true",
+            "listing": [
+                {
+                    "symbol": "BTC"
+                }
+            ]
+        },
+        {
+            "code": "bitFlyer",
+            "name": "bitFlyer",
+            "apiprice": "false",
+            "apitrade": "false",
+            "apibalance": "false",
+            "listing": [
+                {
+                    "symbol": "BTC"
+                },
+                {
+                    "symbol": "LTC"
+                },
+                {
+                    "symbol": "ETH"
+                },
+                {
+                    "symbol": "ETC"
+                },
+                {
+                    "symbol": "MONA"
+                },
+                {
+                    "symbol": "BCH"
+                }
+            ]
+        },
+        {
+            "code": "CoinCheck",
+            "name": "CoinCheck",
+            "apiprice": "true",
+            "apitrade": "true",
+            "apibalance": "true",
+            "listing": [
+                {
+                    "symbol": "BTC"
+                },
+                {
+                    "symbol": "ETH"
+                },
+                {
+                    "symbol": "BCH"
+                },
+                {
+                    "symbol": "ETC"
+                },
+                {
+                    "symbol": "LSK"
+                },
+                {
+                    "symbol": "FCT"
+                },
+                {
+                    "symbol": "XMR"
+                },
+                {
+                    "symbol": "REP"
+                },
+                {
+                    "symbol": "XRP"
+                },
+                {
+                    "symbol": "ZEC"
+                },
+                {
+                    "symbol": "XEM"
+                },
+                {
+                    "symbol": "LTC"
+                },
+                {
+                    "symbol": "DASH"
+                }
+            ]
+        },
+        {
+            "code": "BTCBox",
+            "name": "BTCBox",
+            "apiprice": "false",
+            "apitrade": "false",
+            "apibalance": "false",
+            "listing": [
+                {
+                    "symbol": "BTC"
+                },
+                {
+                    "symbol": "BCH"
+                }
+            ]
+        },
+        {
+            "code": "Quoine",
+            "name": "Quoine",
+            "apiprice": "false",
+            "apitrade": "false",
+            "apibalance": "false",
+            "listing": [
+                {
+                    "symbol": "BTC"
+                },
+                {
+                    "symbol": "BCH"
+                }
+            ]
+        },
+        {
+            "code": "Bitbank",
+            "name": "Bitbank",
+            "apiprice": "false",
+            "apitrade": "false",
+            "apibalance": "false",
+            "listing": [
+                {
+                    "symbol": "BTC"
+                },
+                {
+                    "symbol": "BCH"
                 }
             ]
         },

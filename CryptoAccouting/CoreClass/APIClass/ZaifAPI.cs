@@ -21,7 +21,6 @@ namespace CoinBalance.CoreClass.APIClass
         {
             string rawjson;
             _zaif = zaif;
-            //_crossrate = crossrate;
             _USDJPYrate = USDJPYrate;
 
             try

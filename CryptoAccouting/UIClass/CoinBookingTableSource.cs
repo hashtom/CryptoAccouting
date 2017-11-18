@@ -148,7 +148,7 @@ namespace CoinBalance.UIClass
                 TextColor = UIColor.White,
                 TextAlignment = UITextAlignment.Center,
                 BackgroundColor = UIColor.Clear,
-                Text = "Storage"
+                Text = "Wallet"
             };
 
 			var showTD = (float)tv.Frame.Width > 320 ? true : false;
