@@ -259,6 +259,7 @@
     </Compile>
     <Compile Include="CoreClass\APIClass\BitfinexAPI.cs" />
     <Compile Include="CoreClass\APIClass\HitbtcAPI.cs" />
+    <Compile Include="CoreClass\APIClass\KrakenAPI.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />

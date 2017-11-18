@@ -21,7 +21,6 @@ namespace CoinBalance.CoreClass.APIClass
         public static async Task FetchPriceAsync(Exchange hitbtc, InstrumentList coins)
         {
             _hitbtc = hitbtc;
-            string request_symbols = null;
 
             try
             {
