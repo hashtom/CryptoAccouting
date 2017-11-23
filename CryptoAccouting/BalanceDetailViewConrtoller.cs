@@ -63,11 +63,7 @@ namespace CoinBalance
                                                                              buttonPriceSource.Enabled = false;
                                                                              try
                                                                              {
-                                                                                 //var bounds = View.Bounds;
-                                                                                 //LoadPop = new LoadingOverlay(bounds);
-                                                                                 //View.Add(LoadPop);
                                                                                  await AppCore.FetchMarketDataAsync(thisCoin);
-                                                                                 //ReDrawScreen();
                                                                                  AppCore.SavePriceSourceXML();
                                                                              }
                                                                              catch (Exception ex)
@@ -75,13 +71,11 @@ namespace CoinBalance
                                                                                  this.PopUpWarning("Warning", "Unable to update price data. " + ex.Message, null);
                                                                                  System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": ViewDidLoad: buttonPriceSource: " + ex.GetType() + ": " + ex.Message);
                                                                                  thisCoin.PriceSourceCode = prevItem;
-                                                                                 //buttonPriceSource.SetTitle(prevItem, UIControlState.Normal);
                                                                              }
                                                                              finally
                                                                              {
                                                                                  buttonPriceSource.Enabled = true;
                                                                                  ReDrawScreen();
-                                                                                 //LoadPop.Hide();
                                                                              }
                                                                          }
                                                                    ));
@@ -110,8 +104,15 @@ namespace CoinBalance
             imageCoin.Image = logo == null ? null : UIImage.FromFile(logo);
             labelName.Text = thisCoin.Name;
 
-            var sourcecode = pricesources.Where(x => x.Item2 == thisCoin.PriceSourceCode).Select(x => x.Item1).First();
-            buttonPriceSource.SetTitle(sourcecode, UIControlState.Normal);
+            if (pricesources.Any(x => x.Item2 == thisCoin.PriceSourceCode))
+            {
+                buttonPriceSource.SetTitle(pricesources.Where(x => x.Item2 == thisCoin.PriceSourceCode).Select(x => x.Item1).First(), UIControlState.Normal);
+            }
+            else
+            {
+                thisCoin.PriceSourceCode = "coinmarketcap";
+                buttonPriceSource.SetTitle(thisCoin.PriceSourceCode, UIControlState.Normal);
+            }
 
             if (booking_positions.Any())
             {

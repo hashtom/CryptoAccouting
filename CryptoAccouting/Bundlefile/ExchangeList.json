@@ -918,7 +918,7 @@
         {
             "code": "Kraken",
             "name": "Kraken",
-            "apiprice": "true",
+            "apiprice": "false",
             "apitrade": "false",
             "apibalance": "false",
             "listing": [
@@ -2076,7 +2076,7 @@
         {
             "code": "Cryptopia",
             "name": "Cryptopia",
-            "apiprice": "true",
+            "apiprice": "false",
             "apitrade": "false",
             "apibalance": "false",
             "listing": [

@@ -189,9 +189,10 @@ namespace CoinBalance.CoreClass.APIClass
                     rawjson = http.GetStringAsync(coinbalance_url + "/InstrumentList.json").Result;
                 }
 
-                //StorageAPI.SaveFile(rawjson, InstrumentListFile);
                 var InstrumentList = ParseAPIStrings.ParseInstrumentListJson(rawjson);
+
                 StorageAPI.LoadPriceSource(InstrumentList);
+                StorageAPI.SaveFile(rawjson, InstrumentListFile);
                 return InstrumentList;
             }
             catch (Exception e)

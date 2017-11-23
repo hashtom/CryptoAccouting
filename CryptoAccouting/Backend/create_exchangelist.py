@@ -106,7 +106,7 @@ exchanges.append(gemini_dict)
 kraken_dict = {
         "code": "Kraken",
         "name": "Kraken",
-        "apiprice": "true",
+        "apiprice": "false",
         "apitrade": "false",
         "apibalance": "false",
         "listing": [
@@ -330,7 +330,7 @@ exchanges.append(hitbtc_dict)
 cryptopia = requests.get("https://www.cryptopia.co.nz/api/GetCurrencies").json()
 cryptopia_dict = {"code": "Cryptopia",
                  "name": "Cryptopia",
-                 "apiprice": "true",
+                 "apiprice": "false",
                  "apitrade": "false",
                  "apibalance": "false"
                  }

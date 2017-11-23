@@ -160,19 +160,18 @@ namespace CoinBalance.CoreClass.APIClass
 
         public static InstrumentList LoadInstrument()
         {
-            const string InstrumentListFile = MarketDataAPI.InstrumentListFile;
             InstrumentList instrumentlist;
             string rawjson;
 
-            //try
-            //{
-            //    rawjson = LoadFromFile(InstrumentListFile);
-            //}
-            //catch (Exception e)
-            //{
-                rawjson = LoadBundleFile(InstrumentListFile);
-                //System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadInstrument(continued with bundlefile): " + e.GetType() + ": " + e.Message);
-            //}
+            try
+            {
+                rawjson = LoadFromFile(MarketDataAPI.InstrumentListFile);
+            }
+            catch (Exception e)
+            {
+                rawjson = LoadBundleFile(MarketDataAPI.InstrumentListFile);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadInstrument(continued with bundlefile): " + e.GetType() + ": " + e.Message);
+            }
 
             try
             {
@@ -196,9 +195,46 @@ namespace CoinBalance.CoreClass.APIClass
             }
         }
 
+        public static ExchangeList LoadExchangeList()
+        {
+            string rawjson;
+            try
+            {
+                rawjson = StorageAPI.LoadFromFile(MarketDataAPI.ExchangeListFile);
+            }
+            catch (Exception e)
+            {
+                rawjson = LoadBundleFile(MarketDataAPI.ExchangeListFile);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadExchangeList(continued with bundlefile): " + e.GetType() + ": " + e.Message);
+            }
+
+            try
+            {
+                return ParseAPIStrings.ParseExchangeListJson(rawjson);
+            }
+            catch (AppCoreInstrumentException e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(Process terminated): " + e.GetType() + ": " + e.Message);
+                throw;
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(Fatal Error): " + e.GetType() + ": " + e.Message);
+                throw new AppCoreExchangeException(e.GetType() + ": " + e.Message);
+            }
+
+        }
+
         public static void LoadPriceSource(InstrumentList instrumentlist)
         {
-            ParseAPIStrings.ParsePriceSourceXML(LoadFromFile(PriceSourceFile), instrumentlist);
+            try
+            {
+                ParseAPIStrings.ParsePriceSourceXML(LoadFromFile(PriceSourceFile), instrumentlist);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadPriceSource: " + e.GetType() + ": " + e.Message);
+            }
         }
 
         public static async Task<List<CrossRate>> LoadCrossRateAsync()

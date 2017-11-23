@@ -28,18 +28,21 @@ namespace CoinBalance.CoreClass
 
         public Exchange GetExchange(string exchangecode)
         {
-            if (exchangecode != "")
+            if (exchangecode != "" && exchangecode != null)
             {
-                if (!exchanges.Any(x => x.Code == exchangecode))
-                {
-                    this.Attach(new Exchange(exchangecode, EnuCoinStorageType.Exchange));
-                }
-
-                return exchanges.First(x => x.Code == exchangecode);
+                return !exchanges.Any(x => x.Code == exchangecode) ? null : exchanges.First(x => x.Code == exchangecode);
+                //if (!exchanges.Any(x => x.Code == exchangecode))
+                //{
+                //    this.Attach(new Exchange(exchangecode, EnuCoinStorageType.Exchange));
+                //}
+                //else
+                //{
+                //    return exchanges.First(x => x.Code == exchangecode);
+                //}
             }
             else
             {
-                throw new AppCoreException("No Exchange");
+                throw new AppCoreException("Exchange Code is blank or null");
             }
         }
 

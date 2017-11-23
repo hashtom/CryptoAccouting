@@ -15,11 +15,13 @@ namespace CoinBalance.CoreClass
         public string PriceSourceCode { get; set; }
 		public int rank { get; set; }
         //public bool IsActive { get; set; }
+        const string defaultprice = "coinmarketcap";
+
 
         public Instrument(string id)
         {
             Id = id;
-            PriceSourceCode = "coinmarketcap";
+            PriceSourceCode = defaultprice;
         }
 
         public Balance BalanceOnInstrument(Balance totalbalance)
@@ -38,6 +40,11 @@ namespace CoinBalance.CoreClass
 				return bal;
 			}
 		}
+
+        public void ClearAttributes()
+        {
+            PriceSourceCode = defaultprice;
+        }
     }
 
 	public enum InstrumentType

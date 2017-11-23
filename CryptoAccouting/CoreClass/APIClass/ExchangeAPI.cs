@@ -8,9 +8,10 @@ namespace CoinBalance.CoreClass.APIClass
 {
     public static class ExchangeAPI
     {
-        const string ExchangeListfile = "ExchangeList.json";
 
-        public static void FetchExchangeList(ExchangeList exlist)
+        const string ExchangeListfile = MarketDataAPI.ExchangeListFile;
+
+        public static ExchangeList FetchExchangeList()
         {
             string coinbalance_url = CoinbalanceAPI.coinbalance_url;
             string rawjson;
@@ -22,27 +23,21 @@ namespace CoinBalance.CoreClass.APIClass
                     var res = http.GetAsync(coinbalance_url + "/" + ExchangeListfile).Result;
                     res.EnsureSuccessStatusCode();
                     rawjson = res.Content.ReadAsStringAsync().Result;
-                    //if (!res.IsSuccessStatusCode)
-                    //{
-                    //    throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
-                    //}
-                    //else
-                    //{
-                    //    rawjson = res.Content.ReadAsStringAsync().Result;
-                    //}
                 }
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(process continued with file): " + e.GetType() + ": " + e.Message);
-                rawjson = StorageAPI.LoadFromFile(ExchangeListfile);
-                if (rawjson == null) rawjson = StorageAPI.LoadBundleFile(ExchangeListfile);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList: " + e.GetType() + ": " + e.Message);
+                throw;
+                //rawjson = StorageAPI.LoadFromFile(ExchangeListfile);
+                //if (rawjson == null) rawjson = StorageAPI.LoadBundleFile(ExchangeListfile);
             }
 
             try
             {
-                ParseAPIStrings.ParseExchangeListJson(rawjson, exlist);
+                var exchangelist = ParseAPIStrings.ParseExchangeListJson(rawjson);
                 StorageAPI.SaveFile(rawjson, ExchangeListfile);
+                return exchangelist;
             }
             catch(AppCoreInstrumentException e)
             {
@@ -51,16 +46,18 @@ namespace CoinBalance.CoreClass.APIClass
             }
             catch(Exception e)
             {
-                try
-                {
-                    System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(process continued with file): " + e.GetType() + ": " + e.Message);
-                    ParseAPIStrings.ParseExchangeListJson(StorageAPI.LoadBundleFile(ExchangeListfile), exlist);
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(Fatal Error): " + e.GetType() + ": " + e.Message);
-                    throw new AppCoreExchangeException(ex.GetType() + ": " + ex.Message);
-                }
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(Fatal Error): " + e.GetType() + ": " + e.Message);
+                throw new AppCoreExchangeException(e.GetType() + ": " + e.Message);
+                //try
+                //{
+                //    System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(process continued with file): " + e.GetType() + ": " + e.Message);
+                //    ParseAPIStrings.ParseExchangeListJson(StorageAPI.LoadBundleFile(ExchangeListfile), exlist);
+                //}
+                //catch (Exception ex)
+                //{
+                //    System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchExchangeList(Fatal Error): " + e.GetType() + ": " + e.Message);
+                //    throw new AppCoreExchangeException(ex.GetType() + ": " + ex.Message);
+                //}
             }
 
         }

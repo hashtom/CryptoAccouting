@@ -247,8 +247,9 @@ namespace CoinBalance.CoreClass.APIClass
             }
         }
 
-        public static void ParseExchangeListJson(string rawjson, ExchangeList exlist)
+        public static ExchangeList ParseExchangeListJson(string rawjson) //, ExchangeList exlist)
         {
+            ExchangeList exchangelist = new ExchangeList();
             JObject json;
 
             if (AppCore.InstrumentList is null) throw new AppCoreParseException("InstrumentList is null.");
@@ -259,7 +260,12 @@ namespace CoinBalance.CoreClass.APIClass
 
                 foreach (var market in (JArray)json["exchanges"])
                 {
-                    var exchange = exlist.GetExchange((string)market["code"]);
+                    var exchange = exchangelist.GetExchange((string)market["code"]);
+                    if(exchange is null)
+                    {
+                        exchange = new Exchange((string)market["code"], EnuCoinStorageType.Exchange);
+                        exchangelist.Attach(exchange);
+                    }
                     exchange.Name = (string)market["name"];
 
                     var listing = (JArray)market["listing"];
@@ -299,6 +305,8 @@ namespace CoinBalance.CoreClass.APIClass
             {
                 throw new AppCoreParseException("Exception during parsing Exchangelist Json: " + e.Message);
             }
+
+            return exchangelist;
         }
     }
 }

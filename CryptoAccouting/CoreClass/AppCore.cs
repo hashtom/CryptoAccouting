@@ -34,11 +34,11 @@
 
             //Initialize 
             CoinStorageList = new CoinStorageList(); 
-            try             {                 try
-                {                     InstrumentList = MarketDataAPI.FetchAllCoinData();                 }
-                catch (Exception e)                 {                     System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: Failed to read InstrumentList: " + e.GetType() + ": " + e.Message);
-                    InstrumentList = StorageAPI.LoadInstrument(); // Load Bundle file
-                }                  LoadExchangeList();                  Balance = StorageAPI.LoadBalanceXML(InstrumentList);                 RefreshBalance();                  try
+            try             {                 //try
+                //{                 InstrumentList = StorageAPI.LoadInstrument(); //MarketDataAPI.FetchAllCoinData();                 //}
+                //catch (Exception e)                 //{                     //System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: Failed to read InstrumentList: " + e.GetType() + ": " + e.Message);
+                    //InstrumentList = StorageAPI.LoadInstrument(); // Load Bundle file
+                //}                 //LoadExchangeList();                  //if (PublicExchangeList is null) PublicExchangeList = new ExchangeList();                 PublicExchangeList = StorageAPI.LoadExchangeList();                  Balance = StorageAPI.LoadBalanceXML(InstrumentList);                 RefreshBalance();                  try
                 {
                     //Load App Configuration + API keys
                     StorageAPI.LoadAppSettingXML();                 }                 catch (Exception e)                 {                     BaseCurrency = EnuBaseFiatCCY.USD; //Default setting                     System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: Failed to read AppSettingfile" + e.GetType() + ": " + e.Message);                     //throw new AppCoreWarning(e.Message);                 }             }             catch (AppCoreBalanceException e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 Balance = new Balance();                 //throw;             }             catch (Exception e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 throw;             }          }          public static async Task LoadCrossRateAsync()
@@ -57,11 +57,9 @@
             else
             {                 throw new AppCoreBalanceException("Balance object is null");             }
         }          public static void SaveAppSetting()
-        {             StorageAPI.SaveAppSettingXML(AppName, BaseCurrency, PublicExchangeList);         }          private static void LoadExchangeList()
-        {
-            if (PublicExchangeList is null) PublicExchangeList = new ExchangeList();             ExchangeAPI.FetchExchangeList(PublicExchangeList);         }          public static void SyncLatestCoins()         {             try             {
-                InstrumentList = MarketDataAPI.FetchAllCoinData();
-                if (Balance != null) Balance.AttachInstruments(InstrumentList);
+        {             StorageAPI.SaveAppSettingXML(AppName, BaseCurrency, PublicExchangeList);         }          //private static void LoadExchangeList()
+        //{         //    ExchangeAPI.FetchExchangeList(PublicExchangeList);         //}          public static void SyncLatestCoins()         {             try             {
+                InstrumentList = MarketDataAPI.FetchAllCoinData();                 PublicExchangeList = ExchangeAPI.FetchExchangeList();                  if (Balance != null) Balance.AttachInstruments(InstrumentList);
                 Task.Run(async () => await FetchCoinLogoTop100Async());             }
             catch (Exception e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": SyncLatestCoins: " + e.GetType() + ": " + e.Message);                 throw;             }         }          public static async Task FetchCoinLogoAsync(Instrument coin)         {              await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);         }          public static async Task FetchCoinLogoFromBalanceAsync()         {             foreach (var pos in Balance)             {
                 await MarketDataAPI.FetchCoinLogoAsync(pos.Coin.Id, false);             }         }          public static async Task FetchCoinLogoTop100Async()         {             if (InstrumentList == null)
@@ -142,5 +140,5 @@
                 }                 if (symbol != null) strnumber = symbol + " " + strnumber;             }              return strnumber;
         }          public static void RemoveAllCache()         {             //Base Currency
             baseCurrency = EnuBaseFiatCCY.USD;              //Clear API keys
-            PublicExchangeList.ClearAPIKeys();              //Clear Position Attributes             CoinStorageList.Clear();             foreach(var pos in Balance)             {                 pos.ClearAttributes();                 if (pos.CoinStorage != null) AttachCoinStorage(pos.CoinStorage.Code, pos.CoinStorage.StorageType, pos);             }             RefreshBalance();              //Modify & Remove files             StorageAPI.SaveBalanceXML(Balance);
+            PublicExchangeList.ClearAPIKeys();              //Clear Position Attributes             CoinStorageList.Clear();             foreach(var pos in Balance)             {                 pos.ClearAttributes();                 pos.Coin.ClearAttributes();                 if (pos.CoinStorage != null) AttachCoinStorage(pos.CoinStorage.Code, pos.CoinStorage.StorageType, pos);             }             RefreshBalance();              //Modify & Remove files             StorageAPI.SaveBalanceXML(Balance);
             StorageAPI.RemoveAllCache();         }      }  } 
