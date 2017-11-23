@@ -21,12 +21,18 @@ namespace CoinBalance
 		UIKit.UIButton buttonExchange { get; set; }
 
 		[Outlet]
+		UIKit.UILabel labelCustomerID { get; set; }
+
+		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UITextField textAPIKey { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UITextField textAPISecret { get; set; }
+
+		[Outlet]
+		UIKit.UITextField textCustomerID { get; set; }
 
 		[Action ("ButtonDone_Activated:")]
 		partial void ButtonDone_Activated (UIKit.UIBarButtonItem sender);
@@ -54,6 +60,16 @@ namespace CoinBalance
 			if (textAPISecret != null) {
 				textAPISecret.Dispose ();
 				textAPISecret = null;
+			}
+
+			if (labelCustomerID != null) {
+				labelCustomerID.Dispose ();
+				labelCustomerID = null;
+			}
+
+			if (textCustomerID != null) {
+				textCustomerID.Dispose ();
+				textCustomerID = null;
 			}
 		}
 	}

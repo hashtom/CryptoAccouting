@@ -8,6 +8,7 @@ namespace CoinBalance.CoreClass
     {
         public string Key { get; set; }
         public string Secret { get; set; }
+        public string CustomerID { get; set; }
         public bool HasPriceAPI { get; set; }
         public bool HasTradeAPI { get; set; }
         public bool HasBalanceAPI { get; set; }
@@ -22,6 +23,7 @@ namespace CoinBalance.CoreClass
             ExchangeSymbolMap = new List<SymbolMap>();
             Key = "";
             Secret = "";
+            CustomerID = "";
             if (storagetype != EnuCoinStorageType.Exchange) throw new Exception();
         }
 
@@ -39,6 +41,12 @@ namespace CoinBalance.CoreClass
         {
             Key = "";
             Secret = "";
+            CustomerID = "";
+        }
+
+        public bool UseCustomerID()
+        {
+            return (Code is "Bitstamp");
         }
 
         public bool IsListed(string instrumemntID)

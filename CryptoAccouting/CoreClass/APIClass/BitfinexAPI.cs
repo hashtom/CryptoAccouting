@@ -15,7 +15,6 @@ namespace CoinBalance.CoreClass.APIClass
     {
         private const string BaseUrl = "https://api.bitfinex.com/v2";
         private static Exchange _bitfinex;
-        public const string SignHeaderName = "apisign";
         private static readonly Encoding encoding = Encoding.UTF8;
 
         public static async Task FetchPriceAsync(Exchange bitfinex, InstrumentList coins)
@@ -106,7 +105,7 @@ namespace CoinBalance.CoreClass.APIClass
         private static (string uri, string hash) createRequestAuthentication(string uri) => createRequestAuthentication(uri, new Dictionary<string, string>());
         private static (string uri, string hash) createRequestAuthentication(string uri, IDictionary<string, string> parameters)
         {
-            parameters = new Dictionary<string, string>(parameters);
+            //parameters = new Dictionary<string, string>(parameters);
 
             var nonce = DateTime.Now.Ticks;
             parameters.Add("apikey", _bitfinex.Key);
@@ -131,7 +130,7 @@ namespace CoinBalance.CoreClass.APIClass
             {
                 (var completeUri, var hash) = createRequestAuthentication(uri, parameters);
                 var request = new HttpRequestMessage(httpMethod, completeUri);
-                request.Headers.Add(SignHeaderName, hash);
+                request.Headers.Add("TBA", hash);
                 return request;
             }
             else

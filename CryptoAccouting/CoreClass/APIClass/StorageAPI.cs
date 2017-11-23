@@ -270,8 +270,9 @@ namespace CoinBalance.CoreClass.APIClass
                 foreach (var elem in apikeysXE)
                 {
                     var exchange = AppCore.GetExchange((string)elem.Attribute("name").Value);
-                    exchange.Key = elem.Element("key").Value;
-                    exchange.Secret = elem.Element("secret").Value;
+                    exchange.Key = elem.Element("key") != null ? elem.Element("key").Value : "";
+                    exchange.Secret = elem.Element("secret") != null ? elem.Element("secret").Value : "";
+                    exchange.CustomerID = elem.Element("customer") != null ? elem.Element("customer").Value : "";
                 }
 
                 AppCore.BaseCurrency = baseccy;
@@ -302,7 +303,8 @@ namespace CoinBalance.CoreClass.APIClass
                 XElement key = new XElement("exchange",
                                             new XAttribute("name", exchange.Code),
                                             new XElement("key", exchange.Key),
-                                            new XElement("secret", exchange.Secret)
+                                            new XElement("secret", exchange.Secret),
+                                            new XElement("customer", exchange.CustomerID)
                                            );
                 apikeys.Add(key);
             }

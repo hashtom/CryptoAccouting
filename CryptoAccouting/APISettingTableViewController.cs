@@ -13,7 +13,7 @@ namespace CoinBalance
     {
 
         Exchange thisExchange;
-        LoadingOverlay loadPop;
+        //LoadingOverlay loadPop;
 
         public APISettingTableViewController (IntPtr handle) : base (handle)
         {
@@ -26,42 +26,8 @@ namespace CoinBalance
             //buttonFetchPosition.Enabled = false;
             textAPIKey.Enabled = false;
             textAPISecret.Enabled = false;
-
-            //buttonFetchPosition.TouchUpInside += async (object sender, EventArgs e) =>
-            //{
-            //    List<Position> positions;
-
-            //    if (thisExchange != null)
-            //    {
-            //        var bounds = TableView.Bounds;
-            //        loadPop = new LoadingOverlay(bounds);
-            //        TableView.Add(loadPop);
-
-            //        try
-            //        {
-            //            positions = await ExchangeAPI.FetchPositionAsync(thisExchange);
-
-            //            if (positions.Any())
-            //            {
-            //                    AddBalance(positions);
-            //                this.PopUpWarning("Import Position", "Successfully Imported.");
-            //            }
-            //            else
-            //            {
-            //                PopUpWarning("Warning", "There is no balance to get imported.");
-            //            }
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            PopUpWarning("Warning", "Couldn't get positions from the exchange: " + ex.Message);
-
-            //        }
-            //        finally
-            //        {
-            //            loadPop.Hide();
-            //        }
-            //    }
-            //};
+            labelCustomerID.Alpha = 0;
+            textCustomerID.Alpha = 0;
         }
 
         partial void ButtonExchange_TouchUpInside(UIButton sender)
@@ -80,9 +46,10 @@ namespace CoinBalance
                                                                      textAPIKey.Text = exc.Key == null ? "" : exc.Key;
                                                                      textAPISecret.Text = exc.Secret == null ? "" : exc.Secret;
                                                                      buttonDone.Enabled = true;
-                                                                     //buttonFetchPosition.Enabled = true;
                                                                      textAPIKey.Enabled = true;
                                                                      textAPISecret.Enabled = true;
+                                                                     labelCustomerID.Alpha = exc.UseCustomerID() ? 1 : 0;
+                                                                     textCustomerID.Alpha = exc.UseCustomerID() ? 1 : 0;
                                                                  }
                                                             ));
             }
@@ -100,6 +67,7 @@ namespace CoinBalance
             {
                 thisExchange.Key = textAPIKey.Text;
                 thisExchange.Secret = textAPISecret.Text;
+                thisExchange.CustomerID = textCustomerID.Text;
                 AppCore.SaveAppSetting();
             }
         }

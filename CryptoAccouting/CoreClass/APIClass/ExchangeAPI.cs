@@ -79,7 +79,8 @@ namespace CoinBalance.CoreClass.APIClass
                         return await BittrexAPI.FetchTransactionAsync(exchange);
 
                     case "Bitstamp":
-                        throw new AppCoreNetworkException("Bitstamp will be supported soon!");
+                        return await BItstampAPI.FetchTransactionAsync(exchange);
+                        //throw new AppCoreNetworkException("Bitstamp will be supported soon!");
 
                     case "Poloniex":
                         return await PoloniexAPI.FetchTransactionAsync(exchange);
@@ -120,7 +121,8 @@ namespace CoinBalance.CoreClass.APIClass
                         return  await BittrexAPI.FetchPositionAsync(exchange);
 
                     case "Bitstamp":
-                        throw new AppCoreNetworkException("Bitstamp will be supported soon!");
+                        return await BItstampAPI.FetchPositionAsync(exchange);
+                        //throw new AppCoreNetworkException("Bitstamp will be supported soon!");
 
                     case "Poloniex":
                         return await PoloniexAPI.FetchPositionAsync(exchange);
