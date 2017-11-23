@@ -30,10 +30,6 @@ namespace CoinBalance
         {
             base.ViewDidLoad();
 
-            //TableView.SectionFooterHeight = 0;
-
-            //thisPriceSource = thisCoin.Symbol1 == "BTC" ? "Bitstamp" : "Bittrex";
-
             PrepareDatePicker();
             ReDrawScreen();
             InitializeUserInteractionStates();
@@ -93,9 +89,6 @@ namespace CoinBalance
                     if (AppCore.Balance.HasBalance(thisCoin))
                     {
                         this.PopUpWarning("Warning", "You have already got this coin in your balance. You can only add single Watch-only coin.");
-                        //UIAlertController okAlertController = UIAlertController.Create("Warning", "You have already got this coin in your balance. You can only add single Watch-only coin.", UIAlertControllerStyle.Alert);
-                        //okAlertController.AddAction(UIAlertAction.Create("Close", UIAlertActionStyle.Default, (obj) => switchWatchOnly.SetState(false, false)));
-                        //this.PresentViewController(okAlertController, true, null);
                     }
                     else
                     {
@@ -164,7 +157,6 @@ namespace CoinBalance
                 };
 
                 buttonTradeDate.SetTitle(dateFormatter.ToString(modalPicker.DatePicker.Date), UIControlState.Normal);
-                //textBalanceDate.Text = dateFormatter.ToString(modalPicker.DatePicker.Date);
                 thisBalanceDate = (DateTime)modalPicker.DatePicker.Date;
             };
 

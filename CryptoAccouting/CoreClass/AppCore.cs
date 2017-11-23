@@ -101,7 +101,7 @@
             if (storage is null)             {
                 switch (storagetype)
                 {
-                    case EnuCoinStorageType.Exchange:                         storage = GetExchange(storagecode);                         CoinStorageList.Attach(storage);
+                    case EnuCoinStorageType.Exchange:                         storage = GetExchange(storagecode);                         if (storage is null) storage = new Exchange(storagecode, storagetype);                         CoinStorageList.Attach(storage);
                         break;
                     default:                         storage = new Wallet(storagecode, storagetype);                         CoinStorageList.Attach(storage);
                         break;
