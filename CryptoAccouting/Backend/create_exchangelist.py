@@ -16,8 +16,8 @@ bitstamp_dict = {
         "code": "Bitstamp",
         "name": "Bitstamp",
         "apiprice": "true",
-        "apitrade": "false",
-        "apibalance": "false",
+        "apitrade": "true",
+        "apibalance": "true",
         "listing": [ 
                 { "symbol": "BTC" },
                 { "symbol": "XRP" }
