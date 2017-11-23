@@ -12,7 +12,7 @@ namespace CoinBalance.CoreClass
         public bool HasTradeAPI { get; set; }
         public bool HasBalanceAPI { get; set; }
         public string LogoFileName { get; set; }
-        public TradeList TradeList { get; private set; }
+        //public TradeList TradeList { get; private set; }
         private InstrumentList Coins;
         private List<SymbolMap> ExchangeSymbolMap;
 
@@ -25,7 +25,7 @@ namespace CoinBalance.CoreClass
             if (storagetype != EnuCoinStorageType.Exchange) throw new Exception();
         }
 
-        public bool APIKeyAvailable()
+        public bool APIKeySaved()
         {
             return (PrivateAPIAvailable() && Key != "" && Secret != "");
         }
@@ -91,10 +91,10 @@ namespace CoinBalance.CoreClass
             }
         }
 
-        public void AttachTradeList(TradeList tradelist)
-        {
-            this.TradeList = tradelist;
-        }
+        //public void AttachTradeList(TradeList tradelist)
+        //{
+        //    this.TradeList = tradelist;
+        //}
 
         private class SymbolMap
         {

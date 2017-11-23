@@ -22,16 +22,16 @@ namespace CoinBalance
         {
             base.ViewDidLoad();
 
-            Task.Run(async () =>
-            {
+            //Task.Run(async () =>
+            //{
                 //if (!AppDelegate.IsInDesignerView)
                 //{
-                await AppCore.LoadTradeListsAsync("Zaif");
-                    myTradeList = AppCore.GetExchangeTradeList("Zaif");
+                //await AppCore.LoadTradeListsAsync("Zaif");
+                    //myTradeList = AppCore.GetExchangeTradeList("Zaif");
                     //myTradeList.CalculateTotalValue(DateTime.Now.Year);
                     DrawScreen();
                 //}
-            });
+            //});
         }
 
 		public override void ViewWillAppear(bool animated)
@@ -76,7 +76,7 @@ namespace CoinBalance
 			//this.LabelSellValue2.Text = String.Format("{0:n0}", myTradeList.TotalOtherTradeValueSell);
 			//this.LabelTotalValue.Text = String.Format("{0:n0}", (myTradeList.TotalOtherTradeValueBuy + myTradeList.TotalOtherTradeValueSell));
 
-            this.LabelTradedCoins.Text = AppCore.GetExchangeTradeList("Zaif").TradedCoinString;
+            //this.LabelTradedCoins.Text = AppCore.GetExchangeTradeList("Zaif").TradedCoinString;
 			//foreach (var coinname in ApplicationCore.GetExchange(EnuExchangeType.Zaif).TradeLists.Select(x => x.TradedCoin.Name))
 			//{
 			//	this.LabelTradedCoins.Text += coinname + " ";

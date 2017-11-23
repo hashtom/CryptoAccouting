@@ -14,17 +14,17 @@ namespace CoinBalance.CoreClass
             exchanges = new List<Exchange>();
         }
 
-        public TradeList GetTradelist(string exchangecode)
-        {
-            if (exchanges != null && exchangecode != "" && exchanges.Any(x => x.Code == exchangecode))
-            {
-                return this.First(x => x.Code == exchangecode).TradeList;
-            }
-            else
-            {
-                throw new AppCoreException("No Tradelist");
-            }
-        }
+        //public TradeList GetTradelist(string exchangecode)
+        //{
+        //    if (exchanges != null && exchangecode != "" && exchanges.Any(x => x.Code == exchangecode))
+        //    {
+        //        return this.First(x => x.Code == exchangecode).TradeList;
+        //    }
+        //    else
+        //    {
+        //        throw new AppCoreException("No Tradelist");
+        //    }
+        //}
 
         public Exchange GetExchange(string exchangecode)
         {
@@ -70,7 +70,7 @@ namespace CoinBalance.CoreClass
 
         public void ClearAPIKeys()
         {
-            foreach (var ex in exchanges.Where(x=>x.APIKeyAvailable()))
+            foreach (var ex in exchanges.Where(x=>x.APIKeySaved()))
             {
                 ex.ClearAPIKeys();
             }

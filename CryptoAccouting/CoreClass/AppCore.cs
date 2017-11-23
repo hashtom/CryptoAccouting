@@ -71,17 +71,20 @@
                 {
                     await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);
                 }             }         }          public static void SavePriceSourceXML()         {             StorageAPI.SavePriceSourceXML(InstrumentList);         }          public static void SaveMyBalanceXML()
-        {             StorageAPI.SaveBalanceXML(Balance);         }          public static async Task LoadTradeListsAsync(string ExchangeCode)
+        {             StorageAPI.SaveBalanceXML(Balance);         }          public static async Task<TradeList> LoadTradeListsAsync(Exchange exchange)
         {
-            var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              if (exchange.APIKeyAvailable())             {                 exchange.AttachTradeList(await ExchangeAPI.FetchTradeListAsync(exchange));                 //PublicExchangeList.Attach(exchange); //do you need?             }else             {                 throw new AppCoreException("API Keys are not available to load trades.");             }         }          public static Exchange GetExchange(string Code)
+            //var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              if (exchange.APIKeySaved())             {                 return await ExchangeAPI.FetchTradeListAsync(exchange);                 //exchange.AttachTradeList(await ExchangeAPI.FetchTradeListAsync(exchange));                 //PublicExchangeList.Attach(exchange); //do you need?             }else             {                 throw new AppCoreException("API Keys are not saved.");             }         }          public static async Task<List<Position>> LoadPositionAsync(Exchange exchange)         {             if (exchange.APIKeySaved())             {
+                return await ExchangeAPI.FetchPositionAsync(exchange);
+            }
+            else             {                 throw new AppCoreException("API Keys are not saved.");             }         }          public static Exchange GetExchange(string Code)
         {             return PublicExchangeList.GetExchange(Code);         }
 
         public static ExchangeList GetExchangeListByInstrument(string id)
         {
             return PublicExchangeList.GetExchangesByInstrument(id);
-        }          public static TradeList GetExchangeTradeList(string exchangeCode)
-        {             return PublicExchangeList.GetTradelist(exchangeCode);
-        }
+        }          //public static TradeList GetExchangeTradeList(string exchangeCode)
+        //{         //    return PublicExchangeList.GetTradelist(exchangeCode);
+        //}
          public static long ToEpochSeconds(DateTime dt)         {             var dto = new DateTimeOffset(dt.Ticks, new TimeSpan(+09, 00, 00));             return dto.ToUnixTimeSeconds();         } 
         public static DateTime FromEpochSeconds(long EpochSeconds)
         {

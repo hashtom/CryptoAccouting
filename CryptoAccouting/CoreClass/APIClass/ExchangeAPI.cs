@@ -105,6 +105,7 @@ namespace CoinBalance.CoreClass.APIClass
 
         internal static async Task<List<Position>> FetchPositionAsync(Exchange exchange)
         {
+            
             try
             {
                 switch (exchange.Code)

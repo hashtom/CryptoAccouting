@@ -37,7 +37,7 @@ namespace CoinBalance
 
                     try
                     {
-                        positions = await ExchangeAPI.FetchPositionAsync(thisExchange);
+                        positions = await AppCore.LoadPositionAsync(thisExchange);
 
                         if (positions.Any())
                         {
