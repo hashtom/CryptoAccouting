@@ -44,8 +44,7 @@ namespace CoinBalance.CoreClass.APIClass
             try
             {
                 var rawjson = await SendAsync(HttpMethod.Post, BaseUrl + "balance/");
-                //return ParsePosition(rawjson);
-                return null;
+                return ParsePosition(rawjson);
             }
             catch (Exception e)
             {
@@ -62,9 +61,8 @@ namespace CoinBalance.CoreClass.APIClass
             try
             {
                 var rawjson = await SendAsync(HttpMethod.Post, BaseUrl + "user_transactions/");
-                //var tradelist = ParseTransaction(rawjson);
-                //return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
-                return null;
+                var tradelist = ParseTransaction(rawjson);
+                return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
             }
             catch (Exception e)
             {
@@ -106,6 +104,104 @@ namespace CoinBalance.CoreClass.APIClass
                 coin.MarketPrice.DayVolume = (double)jobj["volume"] * coin.MarketPrice.LatestPriceBTC;
                 coin.MarketPrice.PriceDate = DateTime.Now;//ApplicationCore.FromEpochSeconds((long)jobj["timestamp"]);
                                                           //coin.MarketPrice.USDCrossRate = crossrate;
+            }
+            catch (Exception e)
+            {
+                throw new AppCoreParseException(e.GetType() + ": BitstampAPI: " + e.Message);
+            }
+        }
+
+        private static List<Position> ParsePosition(string rawjson)
+        {
+            try
+            {
+                List<Position> positions;
+                var json = JObject.Parse(rawjson);
+                positions = new List<Position>();
+
+                foreach(var coin in _bitstamp.ListedCoins)
+                {
+                    var qty = (double)json[_bitstamp.GetSymbolForExchange(coin.Id).ToLower() + "_balance"];
+                    if(qty > 0)
+                    {
+                        var pos = new Position(coin)
+                        {
+                            Amount = qty,
+                            BookedExchange = _bitstamp
+                        };
+                        positions.Add(pos);
+                    }
+                }
+
+                return positions;
+            }
+            catch (Exception e)
+            {
+                throw new AppCoreParseException(e.GetType() + " :BitstampAPI: " + e.Message);
+            }
+
+        }
+
+        private static TradeList ParseTransaction(string rawjson)
+        {
+            string symbol;
+            EnuBuySell ebuysell;
+            EnuCCY settleCur;
+            double price;
+
+            try
+            {
+                var tradelist = new TradeList() { SettlementCCY = EnuCCY.USD, TradedExchange = _bitstamp };
+                var jarray = JArray.Parse(rawjson);
+
+                foreach (var elem in jarray)
+                {
+
+                    if ((string)elem["type"] == "2") // MarketTrade
+                    {
+                        if ((string)elem["btc"] != null)
+                        {
+                            symbol = "BTC";
+                        }
+                        else if((string)elem["xrp"] != null)
+                        {
+                            symbol = "XRP";
+                        }
+                        else
+                        {
+                            continue;
+                        }
+
+                        if(elem["usd"] != null)
+                        {
+                            ebuysell = (double)elem["usd"] > 0 ? EnuBuySell.Sell : EnuBuySell.Buy;
+                            settleCur = EnuCCY.USD;
+                            price = (double)elem["btc_usd"];
+                        }
+                        else if (elem["eur"] != null)
+                        {
+                            ebuysell = (double)elem["eur"] > 0 ? EnuBuySell.Sell : EnuBuySell.Buy;
+                            settleCur = EnuCCY.EUR;
+                            price = (double)elem["btc_eur"];
+                        }
+                        else
+                        {
+                            continue;
+                        }
+
+                        tradelist.AggregateTransaction(symbol,
+                                                       ebuysell,
+                                                       (double)elem["btc"],
+                                                       price,
+                                                       settleCur,
+                                                       DateTime.Parse((string)elem["datetime"]).Date,
+                                                       (double)elem["fee"],
+                                                       _bitstamp
+                                                          );
+                    }
+                }
+
+                return tradelist;
             }
             catch (Exception e)
             {

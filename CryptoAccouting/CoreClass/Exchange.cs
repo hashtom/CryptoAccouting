@@ -14,12 +14,12 @@ namespace CoinBalance.CoreClass
         public bool HasBalanceAPI { get; set; }
         public string LogoFileName { get; set; }
         //public TradeList TradeList { get; private set; }
-        private InstrumentList Coins;
+        public InstrumentList ListedCoins { get; private set; }
         private List<SymbolMap> ExchangeSymbolMap;
 
         public Exchange(string code, EnuCoinStorageType storagetype) : base(code, storagetype)
         {
-            Coins = new InstrumentList();
+            ListedCoins = new InstrumentList();
             ExchangeSymbolMap = new List<SymbolMap>();
             Key = "";
             Secret = "";
@@ -51,12 +51,12 @@ namespace CoinBalance.CoreClass
 
         public bool IsListed(string instrumemntID)
         {
-            return Coins.Any(x => x.Id == instrumemntID);
+            return ListedCoins.Any(x => x.Id == instrumemntID);
         }
 
         public void AttachListedCoin(Instrument coin)
         {
-            if (!Coins.Any(c => c.Id == coin.Id)) Coins.Attach(coin);
+            if (!ListedCoins.Any(c => c.Id == coin.Id)) ListedCoins.Attach(coin);
         }
 
         public void AttachSymbolMap(string instrumentID, string Symbol, EnuSymbolMapType symbolmaptype)
@@ -80,14 +80,14 @@ namespace CoinBalance.CoreClass
 
         public bool HasListedCoins()
         {
-            return Coins.Any() ? true : false;
+            return ListedCoins.Any() ? true : false;
         }
 
         public string GetSymbolForExchange(string instrumentID)
         {
             if (HasListedCoins())
             {
-                var coin = Coins.GetByInstrumentId(instrumentID);
+                var coin = ListedCoins.GetByInstrumentId(instrumentID);
                 var type = ExchangeSymbolMap.Any(x => x.InstrumentID == instrumentID) ?
                                             ExchangeSymbolMap.First(x => x.InstrumentID == instrumentID).SymbolMapType :
                                             EnuSymbolMapType.Symbol1;
