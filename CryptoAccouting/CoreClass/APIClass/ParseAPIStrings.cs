@@ -151,7 +151,7 @@ namespace CoinBalance.CoreClass.APIClass
                     }
                     else
                     {
-                        System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": Failed to update " + coin.Name + " price.");
+                        System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + " :ParseCoinMarketCapJsonAsync: Failed to update " + coin.Name + " price.");
                         //throw new AppCoreParseException("Failed to update " + coin.Name + " price.");
                     }
 

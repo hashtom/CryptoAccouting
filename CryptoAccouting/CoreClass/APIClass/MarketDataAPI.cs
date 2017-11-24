@@ -21,7 +21,6 @@ namespace CoinBalance.CoreClass.APIClass
 
         public static async Task FetchCoinPricesAsync(ExchangeList exchanges, InstrumentList coins, List<CrossRate> crossrates)
         {
-
             try
             {
                 if (crossrates is null) crossrates = await FetchCrossRateAsync();
@@ -129,7 +128,9 @@ namespace CoinBalance.CoreClass.APIClass
             {
                 using (var http = new HttpClient())
                 {
+                    //string rank = (instrumentlist.Max(x => x.rank) + 1).ToString();
                     //rawjson = await http.GetStringAsync(coinbalance_url + "/market/market_latest.cgi");
+                    //rawjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/?limit=" + rank);
                     rawjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/?limit=0");
                 }
 
