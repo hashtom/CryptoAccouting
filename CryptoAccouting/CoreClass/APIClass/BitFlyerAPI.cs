@@ -194,15 +194,15 @@ namespace CoinBalance.CoreClass.APIClass
                         ebuysell = EnuBuySell.Check;
                     }
 
-                    tradelist.AggregateTransaction("bitcoin",
+                    tradelist.AggregateTransaction(_bitflyer.GetSymbolForExchange("bitcoin"),
                                                    ebuysell,
                                                    (double)elem["size"],
                                                    (double)elem["price"],
                                                    EnuCCY.JPY,
                                                    DateTime.Parse((string)elem["exec_date"]).Date,
-                                                   (double)elem["commission"],
+                                                   (double)elem["commission"] * (double)elem["price"],
                                                    _bitflyer
-                                                      );
+                                                  );
                 }
 
                 return tradelist;
