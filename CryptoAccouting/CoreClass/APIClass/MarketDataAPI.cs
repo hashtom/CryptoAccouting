@@ -130,7 +130,7 @@ namespace CoinBalance.CoreClass.APIClass
                     rawjson_yesterday = await http.GetStringAsync(coinbalance_url + "/market/market_yesterday.json");
                     //btcjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/bitcoin");
 
-                    rawjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/?limit=150");
+                    rawjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/?limit=300");
                     await ParseAPIStrings.ParseCoinMarketCapJsonAsync(rawjson, rawjson_yesterday, instrumentlist, crossrate);
 
                     foreach (var coin in instrumentlist.Where(x=>x.rank is int.MaxValue))
