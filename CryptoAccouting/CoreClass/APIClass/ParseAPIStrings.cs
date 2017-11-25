@@ -112,17 +112,19 @@ namespace CoinBalance.CoreClass.APIClass
         }
 
 
-        public static async Task ParseCoinMarketCapJsonAsync(string rawjson, string rawjson_yesterday, InstrumentList instrumentlist, CrossRate crossrate)
+        public static async Task ParseCoinMarketCapJsonAsync(string rawjson, string rawcoinjson, string rawjson_yesterday, Instrument coin, CrossRate crossrate)
         {
-            JArray jarray, jarray_yesterday;
-
+            
             try
             {
-                jarray = await Task.Run(() => JArray.Parse(rawjson));
-                jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
+                var btctoken = await Task.Run(() => JArray.Parse(rawjson).SelectToken("[?(@.id == 'bitcoin')]"));
+                var jtoken = await Task.Run(() => JArray.Parse(rawcoinjson).First());
 
-                foreach (var coin in instrumentlist) //.Where(x => x.PriceSourceCode == "coinmarketcap" || x.PriceSourceCode is null))
+                if (jtoken != null)
                 {
+                    var jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
+                    var jtoken_yesterday = jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]");
+
                     //Parse Market Data 
                     if (coin.MarketPrice == null)
                     {
@@ -130,12 +132,55 @@ namespace CoinBalance.CoreClass.APIClass
                         coin.MarketPrice = p;
                     }
 
+                    coin.MarketPrice.LatestPriceBTC = (double)jtoken["price_btc"];
+                    coin.MarketPrice.LatestPriceUSD = (double)jtoken["price_usd"];
+                    coin.MarketPrice.PriceSource = "coinmarketcap";
+                    coin.MarketPrice.DayVolume = btctoken != null ? (double)jtoken["24h_volume_usd"] / (double)btctoken["price_usd"] : 0;
+                    coin.MarketPrice.MarketCap = (string)jtoken["market_cap_usd"] != null ? (double)jtoken["market_cap_usd"] : 0;
+
+                    if (jtoken_yesterday != null)
+                    {
+                        coin.MarketPrice.PriceBTCBefore24h = (double)jtoken_yesterday["price_btc"];
+                        coin.MarketPrice.PriceUSDBefore24h = (double)jtoken_yesterday["price_usd"];
+                    }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + " :ParseCoinMarketCapJsonAsync: Failed to update " + coin.Name + " price.");
+                    //throw new AppCoreParseException("Failed to update " + coin.Name + " price.");
+                }
+
+                coin.MarketPrice.PriceDate = DateTime.Now;
+                coin.MarketPrice.USDCrossRate = crossrate;
+            }
+            catch (Exception e)
+            {
+                throw new AppCoreParseException("Exception during parsing coinmarketcap Json: " + e.Message);
+            }
+        }
+
+        public static async Task ParseCoinMarketCapJsonAsync(string rawjson, string rawjson_yesterday, InstrumentList instrumentlist, CrossRate crossrate)
+        {
+
+            try
+            {
+                var jarray = await Task.Run(() => JArray.Parse(rawjson));
+                var jarray_yesterday = await Task.Run(() => JArray.Parse(rawjson_yesterday));
+                var jtoken_bitcoin = jarray.SelectToken("[?(@.id == 'bitcoin')]");
+
+                foreach (var coin in instrumentlist) //.Where(x => x.PriceSourceCode == "coinmarketcap" || x.PriceSourceCode is null))
+                {
+                    
                     var jtoken = jarray.SelectToken("[?(@.id == '" + coin.Id + "')]");
                     var jtoken_yesterday = jarray_yesterday.SelectToken("[?(@.id == '" + coin.Id + "')]");
-                    var jtoken_bitcoin = jarray.SelectToken("[?(@.id == 'bitcoin')]");
 
                     if (jtoken != null)
                     {
+                        if (coin.MarketPrice == null)
+                        {
+                            var p = new Price(coin);
+                            coin.MarketPrice = p;
+                        }
 
                         coin.MarketPrice.LatestPriceBTC = (double)jtoken["price_btc"];
                         coin.MarketPrice.LatestPriceUSD = (double)jtoken["price_usd"];
@@ -148,23 +193,25 @@ namespace CoinBalance.CoreClass.APIClass
                             coin.MarketPrice.PriceBTCBefore24h = (double)jtoken_yesterday["price_btc"];
                             coin.MarketPrice.PriceUSDBefore24h = (double)jtoken_yesterday["price_usd"];
                         }
+
+                        coin.MarketPrice.PriceDate = DateTime.Now;
+                        coin.MarketPrice.USDCrossRate = crossrate;
+                        coin.rank = (int)jtoken["rank"];
                     }
                     else
                     {
+                        coin.rank = int.MaxValue;
                         System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + " :ParseCoinMarketCapJsonAsync: Failed to update " + coin.Name + " price.");
                         //throw new AppCoreParseException("Failed to update " + coin.Name + " price.");
                     }
-
-                    coin.MarketPrice.PriceDate = DateTime.Now;
-                    coin.MarketPrice.USDCrossRate = crossrate;
                 }
+
             }
             catch (Exception e)
             {
                 throw new AppCoreParseException("Exception during parsing coinmarketcap Json: " + e.Message);
             }
         }
-
 
         public static Balance ParseBalanceXML(string balanceXML, InstrumentList instrumentlist)
         {

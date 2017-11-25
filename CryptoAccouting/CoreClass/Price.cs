@@ -14,13 +14,10 @@ namespace CoinBalance.CoreClass
         public double MarketCap { get; set; }
         public CrossRate USDCrossRate { get; set; }
 		public DateTime PriceDate { get; set; }
-        //public DateTime UpdateTime { get; set; }
 
         public Price(Instrument coin)
         {
             Coin = coin;
-            //LatestPriceBTC = 0;
-            //LatestPriceUSD = 0;
         }
 
         public double LatestPriceBase()

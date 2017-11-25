@@ -121,26 +121,26 @@ namespace CoinBalance.CoreClass.APIClass
 
         private static async Task FetchCoinMarketCapAsync(InstrumentList instrumentlist, CrossRate crossrate)
         {
-            string rawjson;
-            string rawjson_yesterday;
+            string rawjson, rawjson_yesterday;
 
             try
             {
                 using (var http = new HttpClient())
                 {
-                    //string rank = (instrumentlist.Max(x => x.rank) + 1).ToString();
-                    //rawjson = await http.GetStringAsync(coinbalance_url + "/market/market_latest.cgi");
-                    //rawjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/?limit=" + rank);
-                    rawjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/?limit=0");
-                }
-
-                using (var http = new HttpClient())
-                {
                     rawjson_yesterday = await http.GetStringAsync(coinbalance_url + "/market/market_yesterday.json");
+                    //btcjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/bitcoin");
+
+                    rawjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/?limit=150");
+                    await ParseAPIStrings.ParseCoinMarketCapJsonAsync(rawjson, rawjson_yesterday, instrumentlist, crossrate);
+
+                    foreach (var coin in instrumentlist.Where(x=>x.rank is int.MaxValue))
+                    {
+                        //rawjson = await http.GetStringAsync(coinbalance_url + "/market/market_latest.cgi");
+                        var rawcoinjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/" + coin.Id);
+
+                        await ParseAPIStrings.ParseCoinMarketCapJsonAsync(rawjson, rawcoinjson, rawjson_yesterday, coin, crossrate);
+                    }
                 }
-
-                await ParseAPIStrings.ParseCoinMarketCapJsonAsync(rawjson, rawjson_yesterday, instrumentlist, crossrate);
-
             }
             catch (Exception e)
             {
@@ -149,35 +149,35 @@ namespace CoinBalance.CoreClass.APIClass
             }
         }
 
-        private static async Task FetchCoinMarketCapAsync(Instrument coin, CrossRate crossrate)
-        {
-            string rawjson;
-            string rawjson_yesterday;
+        //private static async Task FetchCoinMarketCapAsync(Instrument coin, CrossRate crossrate)
+        //{
+        //    string rawjson;
+        //    string rawjson_yesterday;
 
-            try
-            {
-                using (var http = new HttpClient())
-                {
-                    rawjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/" + coin.Id);
-                }
+        //    try
+        //    {
+        //        using (var http = new HttpClient())
+        //        {
+        //            rawjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/" + coin.Id);
+        //        }
 
-                using (var http = new HttpClient())
-                {
-                    rawjson_yesterday = await http.GetStringAsync(coinbalance_url + "/market/market_yesterday.json");
-                }
+        //        using (var http = new HttpClient())
+        //        {
+        //            rawjson_yesterday = await http.GetStringAsync(coinbalance_url + "/market/market_yesterday.json");
+        //        }
 
-                var instrumentlist = new InstrumentList();
-                instrumentlist.Attach(coin);
+        //        var instrumentlist = new InstrumentList();
+        //        instrumentlist.Attach(coin);
 
-                await ParseAPIStrings.ParseCoinMarketCapJsonAsync(rawjson, rawjson_yesterday, instrumentlist, crossrate);
+        //        await ParseAPIStrings.ParseCoinMarketCapJsonAsync(rawjson, rawjson_yesterday, instrumentlist, crossrate);
 
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchCoinMarketCapAsync: " + e.GetType() + ": " + e.Message);
-                throw;
-            }
-        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchCoinMarketCapAsync: " + e.GetType() + ": " + e.Message);
+        //        throw;
+        //    }
+        //}
 
         public static InstrumentList FetchAllCoinData()
         {
