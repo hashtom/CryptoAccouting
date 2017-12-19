@@ -59,7 +59,7 @@ namespace CoinBalance.CoreClass.APIClass
                             if (exchanges.Any(x => x.Code == "Zaif"))
                             {
                                 var exchange = exchanges.First(x => x.Code == "Zaif");
-                                if (exchange.HasListedCoins()) await ZaifAPI.FetchPriceAsync(exchange, coins, usdjpy);
+                                if (exchange.HasListedCoins()) await ZaifAPI2.FetchPriceAsync(exchange, coins, usdjpy);
                             }
                             break;
 

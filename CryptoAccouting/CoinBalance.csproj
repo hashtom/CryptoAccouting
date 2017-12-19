@@ -122,6 +122,9 @@
     <Reference Include="Syncfusion.SFChart.iOS">
       <HintPath>..\..\..\..\Documents\Syncfusion\15.3.0.26\Xamarin\lib\ios-unified\Syncfusion.SFChart.iOS.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\packages\RestSharp.106.1.0\lib\netstandard2.0\RestSharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -151,6 +154,10 @@
     <Folder Include="Backend\" />
     <Folder Include="Resources\ja.lproj\" />
     <Folder Include="Base.lproj\" />
+    <Folder Include="CoreClass\APIClass\Zaif\" />
+    <Folder Include="CoreClass\APIClass\Bitflyer\" />
+    <Folder Include="CoreClass\APIClass\CoinCheck\" />
+    <Folder Include="CoreClass\APIClass\Bitstamp\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="UIClass\CoinViewCell.xib" />
@@ -191,7 +198,6 @@
     </Compile>
     <Compile Include="CoreClass\APIClass\MarketDataAPI.cs" />
     <Compile Include="CoreClass\APIClass\StorageAPI.cs" />
-    <Compile Include="CoreClass\APIClass\ZaifAPI.cs" />
     <Compile Include="CoreClass\AppCore.cs" />
     <Compile Include="CoreClass\APIClass\ExchangeAPI.cs" />
     <Compile Include="PLTableViewController.cs" />
@@ -230,7 +236,6 @@
     <Compile Include="CoreClass\Wallet.cs" />
     <Compile Include="CoreClass\InstrumentList.cs" />
     <Compile Include="CoreClass\APIClass\BittrexAPI.cs" />
-    <Compile Include="CoreClass\APIClass\BItstampAPI.cs" />
     <Compile Include="UIClass\CoinBookingCell.cs" />
     <Compile Include="TransactionViewController.cs" />
     <Compile Include="TransactionViewController.designer.cs">
@@ -241,8 +246,6 @@
     <Compile Include="AboutViewConroller.designer.cs">
       <DependentUpon>AboutViewConroller.cs</DependentUpon>
     </Compile>
-    <Compile Include="CoreClass\APIClass\CoinCheckAPI.cs" />
-    <Compile Include="CoreClass\APIClass\BitFlyerAPI.cs" />
     <Compile Include="UIClass\PreviewControllerDS.cs" />
     <Compile Include="CoreClass\APIClass\ParseAPIStrings.cs" />
     <Compile Include="CoreClass\AppCoreException.cs" />
@@ -260,6 +263,18 @@
     <Compile Include="CoreClass\APIClass\BitfinexAPI.cs" />
     <Compile Include="CoreClass\APIClass\HitbtcAPI.cs" />
     <Compile Include="CoreClass\APIClass\KrakenAPI.cs" />
+    <Compile Include="CoreClass\APIClass\Zaif\ZaifAPI.cs" />
+    <Compile Include="CoreClass\APIClass\Zaif\BalanceJS.cs" />
+    <Compile Include="CoreClass\APIClass\RestUtil.cs" />
+    <Compile Include="CoreClass\AssetType.cs" />
+    <Compile Include="CoreClass\APIClass\Util.cs" />
+    <Compile Include="CoreClass\APIClass\Zaif\ZaifAPI2.cs" />
+    <Compile Include="CoreClass\APIClass\Zaif\TickerJS.cs" />
+    <Compile Include="CoreClass\APIClass\Zaif\TradeHIstoryJS.cs" />
+    <Compile Include="CoreClass\APIClass\Zaif\TradeHisotryParam.cs" />
+    <Compile Include="CoreClass\APIClass\CoinCheck\CoinCheckAPI.cs" />
+    <Compile Include="CoreClass\APIClass\Bitflyer\BitFlyerAPI.cs" />
+    <Compile Include="CoreClass\APIClass\Bitstamp\BItstampAPI.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />

@@ -70,7 +70,7 @@ namespace CoinBalance.CoreClass.APIClass
                 switch (exchange.Code)
                 {
                     case "Zaif":
-                        return await ZaifAPI.FetchTransactionAsync(exchange);
+                        return await ZaifAPI2.FetchTransactionAsync(exchange);
 
                     case "CoinCheck":
                         return await CoinCheckAPI.FetchTransactionAsync(exchange);
@@ -112,7 +112,7 @@ namespace CoinBalance.CoreClass.APIClass
                 switch (exchange.Code)
                 {
                     case "Zaif":
-                        return await ZaifAPI.FetchPositionAsync(exchange);
+                        return await ZaifAPI2.FetchPositionAsync(exchange);
 
                     case "CoinCheck":
                         return await CoinCheckAPI.FetchPositionAsync(exchange);

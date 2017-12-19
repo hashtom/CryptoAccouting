@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using RestSharp;
 
 namespace CoinBalance.CoreClass.APIClass
 {
@@ -16,6 +17,8 @@ namespace CoinBalance.CoreClass.APIClass
         private static Exchange _zaif;
         //private static CrossRate _crossrate;
         private static CrossRate _USDJPYrate;
+        private static string group_id;
+        private static AssetType assetType;
 
         public static async Task FetchPriceAsync(Exchange zaif, InstrumentList coins, CrossRate USDJPYrate)
         {
@@ -316,6 +319,45 @@ namespace CoinBalance.CoreClass.APIClass
                 //throw new AppCoreNetworkException("http response error. status code: " + res.StatusCode);
 
             return rawjson;
+        }
+
+        private static RestRequest BuildRequest(string method, string zaifmethod, string body = "")
+        {
+            var nonce = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            var message = $"nonce={nonce}&method={zaifmethod}";
+            if (body != "") message += $"&{body}";
+            string path;
+
+            switch (assetType)
+            {
+                case AssetType.Cash:
+                    path = "/tapi";
+                    break;
+                case AssetType.Margin:
+                    path = "/tlapi";
+                    message += $"&type=margin";
+                    break;
+                case AssetType.FX:
+                    path = "/tlapi";
+                    message += $"&type=futures&group_id=1";
+                    break;
+                case AssetType.Futures:
+                    path = "/tlapi";
+                    if (group_id == null) throw new InvalidOperationException("group id is not specified.");
+                    message += $"&type=futures&group_id={group_id}";
+                    break;
+                default:
+                    throw new InvalidOperationException();
+            }
+
+            var sign = Util.SHA512NewHmac(_zaif.Secret, message);
+            var req = RestUtil.CreateJsonRestRequest(path, false);
+            req.Method = Util.ParseEnum<Method>(method);
+
+            req.AddParameter("application/x-www-form-urlencoded", message, ParameterType.RequestBody);
+            req.AddHeader("key", _zaif.Key);
+            req.AddHeader("sign", sign);
+            return req;
         }
     }
 }

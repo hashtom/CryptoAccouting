@@ -240,6 +240,11 @@ namespace CoinBalance.CoreClass
             return transactions.Count;
         }
 
+        public void AddRange(TradeList tradelist)
+        {
+            transactions.AddRange(tradelist);
+        }
+
 		public IEnumerator<Transaction> GetEnumerator()
 		{
 			for (int i = 0; i <= transactions.Count - 1; i++) yield return transactions[i];
