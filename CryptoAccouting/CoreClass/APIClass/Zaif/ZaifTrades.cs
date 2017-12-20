@@ -2,7 +2,7 @@
 
 namespace CoinBalance.CoreClass.APIClass
 {
-    public class TradeHIstoryJS
+    public class ZaifTrades
     {
         public int success { get; set; }
         public Dictionary<string, trade> return_ { get; set; }

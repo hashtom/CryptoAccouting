@@ -2,7 +2,7 @@
 
 namespace CoinBalance.CoreClass.APIClass
 {
-    public class BalanceJS
+    public class ZaifBalance
     {
         public int success { get; set; }
         public Info return_ { get; set; }

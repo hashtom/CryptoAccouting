@@ -264,14 +264,13 @@
     <Compile Include="CoreClass\APIClass\HitbtcAPI.cs" />
     <Compile Include="CoreClass\APIClass\KrakenAPI.cs" />
     <Compile Include="CoreClass\APIClass\Zaif\ZaifAPI.cs" />
-    <Compile Include="CoreClass\APIClass\Zaif\BalanceJS.cs" />
+    <Compile Include="CoreClass\APIClass\Zaif\ZaifBalance.cs" />
     <Compile Include="CoreClass\APIClass\RestUtil.cs" />
     <Compile Include="CoreClass\AssetType.cs" />
     <Compile Include="CoreClass\APIClass\Util.cs" />
     <Compile Include="CoreClass\APIClass\Zaif\ZaifAPI2.cs" />
-    <Compile Include="CoreClass\APIClass\Zaif\TickerJS.cs" />
-    <Compile Include="CoreClass\APIClass\Zaif\TradeHIstoryJS.cs" />
-    <Compile Include="CoreClass\APIClass\Zaif\TradeHisotryParam.cs" />
+    <Compile Include="CoreClass\APIClass\Zaif\ZaifTicker.cs" />
+    <Compile Include="CoreClass\APIClass\Zaif\ZaifTrades.cs" />
     <Compile Include="CoreClass\APIClass\CoinCheck\CoinCheckAPI.cs" />
     <Compile Include="CoreClass\APIClass\Bitflyer\BitFlyerAPI.cs" />
     <Compile Include="CoreClass\APIClass\Bitstamp\BItstampAPI.cs" />

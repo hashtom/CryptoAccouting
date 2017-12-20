@@ -29,7 +29,7 @@ namespace CoinBalance.CoreClass.APIClass
                     var path = $"/api/1/ticker/{_zaif.GetSymbolForExchange(coin.Id).ToLower()}_jpy";
                     var req = RestUtil.CreateJsonRestRequest(path);
 
-                    var response = await _restClient.ExecuteTaskAsync<TickerJS>(req);
+                    var response = await _restClient.ExecuteTaskAsync<ZaifTicker>(req);
                     if (response.ErrorException != null)
                     {
                         System.Diagnostics.Debug.WriteLine($"Failed to receive price from Zaif.");
@@ -78,7 +78,7 @@ namespace CoinBalance.CoreClass.APIClass
             try
             {
                 var req = BuildRequest("POST", "get_info");
-                var balance = await RestUtil.ExecuteRequestAsync<BalanceJS>(_restClient, req);
+                var balance = await RestUtil.ExecuteRequestAsync<ZaifBalance>(_restClient, req);
 
                 var positions = new List<Position>();
                 foreach (var fund in balance.return_.funds)
@@ -139,22 +139,16 @@ namespace CoinBalance.CoreClass.APIClass
         private static async Task<TradeList> GetTradeHistoryAsync(DateTime since, DateTime end, string currency_pair = null)
         {
             var tradelist = new TradeList();
-            var trades_history = new Dictionary<string, TradeHIstoryJS.trade>();
-            int limit = 100;
-
-            //var param = new TradeHisotryParam()
-            //{
-            //    count = limit,
-            //    since = AppCore.ToEpochSeconds(since),
-            //    end = AppCore.ToEpochSeconds(end),
-            //    order = "DESC"
-            //};
-            //if (currency_pair != null) param.currency_pair = currency_pair;
+            var trades_history = new Dictionary<string, ZaifTrades.trade>();
+            int from = 0;
+            int limit = 500;
+            string order = "ASC";
 
             var results = await GetTradeHistoryAsync(limit,
                                                      AppCore.ToEpochSeconds(since),
                                                      AppCore.ToEpochSeconds(end),
-                                                     "DESC",
+                                                     from,
+                                                     order,
                                                      currency_pair);
 
             while (true)
@@ -176,11 +170,14 @@ namespace CoinBalance.CoreClass.APIClass
                     break;
                 }
 
+                from += limit + 1;
+
                 //param.since = results.return_.Last().Value.timestamp;
                 results = await GetTradeHistoryAsync(limit,
-                                                     results.return_.Last().Value.timestamp,
+                                                     AppCore.ToEpochSeconds(since),
                                                      AppCore.ToEpochSeconds(end),
-                                                     "DESC",
+                                                     from,
+                                                     order,
                                                      currency_pair);
             }
 
@@ -235,14 +232,21 @@ namespace CoinBalance.CoreClass.APIClass
         }
 
 
-        private static async Task<TradeHIstoryJS> GetTradeHistoryAsync(int limit, long since, long end, string order = "DESC", string currency_pair = null)
+        private static async Task<ZaifTrades> GetTradeHistoryAsync(int limit, long since, long end, int from = 0, string order = "DESC", string currency_pair = null)
         {
             var method = "POST";
             var zaifmethod = "trade_history";
 
-            //var body = JsonConvert.SerializeObject(param);
+            var body = $"count={limit}&order={order}";
 
-            var body = $"count={limit}&order={order}&since={since}&end={end}";
+            if (from != 0)
+            {
+                body += $"&from={from}";
+            }
+            else
+            {
+                body += $"&since={since}&end={end}";
+            }
 
             if (currency_pair != null)
             {
@@ -250,7 +254,7 @@ namespace CoinBalance.CoreClass.APIClass
             }
 
             var req = BuildRequest(method, zaifmethod, body);
-            var result = await RestUtil.ExecuteRequestAsync<TradeHIstoryJS>(_restClient, req);
+            var result = await RestUtil.ExecuteRequestAsync<ZaifTrades>(_restClient, req);
             if (result.success != 1)
             {
                 throw new InvalidOperationException($"{zaifmethod} failed. message:{result.error}");

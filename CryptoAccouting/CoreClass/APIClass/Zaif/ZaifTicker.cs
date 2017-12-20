@@ -1,7 +1,7 @@
 ﻿
 namespace CoinBalance.CoreClass.APIClass
 {
-    public class TickerJS
+    public class ZaifTicker
     {
         public decimal last { get; set; }
         public decimal high { get; set; }
