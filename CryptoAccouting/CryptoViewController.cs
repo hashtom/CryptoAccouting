@@ -1,8 +1,8 @@
 ﻿using Foundation;
 using System;
 using UIKit;
-using CoinBalance.CoreClass;
-using CoinBalance.UIClass;
+using CoinBalance.CoreModel;
+using CoinBalance.UIModel;
 
 namespace CoinBalance
 {

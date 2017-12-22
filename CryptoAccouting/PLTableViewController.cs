@@ -1,8 +1,8 @@
 using Foundation;
 using System;
 using UIKit;
-using CoinBalance.UIClass;
-using CoinBalance.CoreClass;
+using CoinBalance.UIModel;
+using CoinBalance.CoreModel;
 using System.Collections.Generic;
 using CoreGraphics;
 using System.Linq;

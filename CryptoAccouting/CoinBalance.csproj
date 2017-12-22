@@ -149,18 +149,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="CoreClass\APIClass\" />
     <Folder Include="Bundlefile\" />
     <Folder Include="Backend\" />
     <Folder Include="Resources\ja.lproj\" />
     <Folder Include="Base.lproj\" />
-    <Folder Include="CoreClass\APIClass\Zaif\" />
-    <Folder Include="CoreClass\APIClass\Bitflyer\" />
-    <Folder Include="CoreClass\APIClass\CoinCheck\" />
-    <Folder Include="CoreClass\APIClass\Bitstamp\" />
+    <Folder Include="CoreAPI\" />
   </ItemGroup>
   <ItemGroup>
-    <InterfaceDefinition Include="UIClass\CoinViewCell.xib" />
+    <InterfaceDefinition Include="UIModel\CoinViewCell.xib" />
     <InterfaceDefinition Include="Base.lproj\Main.storyboard" />
     <InterfaceDefinition Include="Base.lproj\LaunchScreen.storyboard" />
   </ItemGroup>
@@ -183,30 +179,27 @@
     <Compile Include="BalanceMainViewController.designer.cs">
       <DependentUpon>BalanceMainViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="CoreClass\Instrument.cs" />
-    <Compile Include="CoreClass\Position.cs" />
-    <Compile Include="UIClass\CoinTableSource.cs" />
-    <Compile Include="CoreClass\Exchange.cs" />
-    <Compile Include="CoreClass\Balance.cs" />
-    <Compile Include="CoreClass\Price.cs" />
-    <Compile Include="CoreClass\Transaction.cs" />
-    <Compile Include="CoreClass\TradeList.cs" />
-    <Compile Include="UIClass\NavigationDrawer.cs" />
+    <Compile Include="CoreModel\Instrument.cs" />
+    <Compile Include="CoreModel\Position.cs" />
+    <Compile Include="UIModel\CoinTableSource.cs" />
+    <Compile Include="CoreModel\Exchange.cs" />
+    <Compile Include="CoreModel\Balance.cs" />
+    <Compile Include="CoreModel\Price.cs" />
+    <Compile Include="CoreModel\Transaction.cs" />
+    <Compile Include="CoreModel\TradeList.cs" />
+    <Compile Include="UIModel\NavigationDrawer.cs" />
     <Compile Include="SettingTableViewController.cs" />
     <Compile Include="SettingTableViewController.designer.cs">
       <DependentUpon>SettingTableViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="CoreClass\APIClass\MarketDataAPI.cs" />
-    <Compile Include="CoreClass\APIClass\StorageAPI.cs" />
-    <Compile Include="CoreClass\AppCore.cs" />
-    <Compile Include="CoreClass\APIClass\ExchangeAPI.cs" />
+    <Compile Include="CoreModel\AppCore.cs" />
     <Compile Include="PLTableViewController.cs" />
     <Compile Include="PLTableViewController.designer.cs">
       <DependentUpon>PLTableViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="CoreClass\ExchangeList.cs" />
-    <Compile Include="UIClass\CoinViewCell.cs" />
-    <Compile Include="UIClass\CoinViewCell.designer.cs">
+    <Compile Include="CoreModel\ExchangeList.cs" />
+    <Compile Include="UIModel\CoinViewCell.cs" />
+    <Compile Include="UIModel\CoinViewCell.designer.cs">
       <DependentUpon>CoinViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="BalanceEditViewController.cs" />
@@ -217,40 +210,35 @@
     <Compile Include="SymbolSelectionViewConroller.designer.cs">
       <DependentUpon>SymbolSelectionViewConroller.cs</DependentUpon>
     </Compile>
-    <Compile Include="UIClass\CustomPickerModel.cs" />
-    <Compile Include="CoreClass\APIClass\Reachability.cs" />
+    <Compile Include="UIModel\CustomPickerModel.cs" />
     <Compile Include="BalanceDetailViewConrtoller.cs" />
     <Compile Include="BalanceDetailViewConrtoller.designer.cs">
       <DependentUpon>BalanceDetailViewConrtoller.cs</DependentUpon>
     </Compile>
     <Compile Include="CryptoTableViewController.cs" />
-    <Compile Include="UIClass\CoinBookingTableSource.cs" />
-    <Compile Include="CoreClass\CrossRate.cs" />
-    <Compile Include="UIClass\AppSetting.cs" />
+    <Compile Include="UIModel\CoinBookingTableSource.cs" />
+    <Compile Include="CoreModel\CrossRate.cs" />
+    <Compile Include="UIModel\AppSetting.cs" />
     <Compile Include="APISettingTableViewController.cs" />
     <Compile Include="APISettingTableViewController.designer.cs">
       <DependentUpon>APISettingTableViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="CoreClass\CoinStorage.cs" />
-    <Compile Include="CoreClass\CoinStorageList.cs" />
-    <Compile Include="CoreClass\Wallet.cs" />
-    <Compile Include="CoreClass\InstrumentList.cs" />
-    <Compile Include="CoreClass\APIClass\BittrexAPI.cs" />
-    <Compile Include="UIClass\CoinBookingCell.cs" />
+    <Compile Include="CoreModel\CoinStorage.cs" />
+    <Compile Include="CoreModel\CoinStorageList.cs" />
+    <Compile Include="CoreModel\Wallet.cs" />
+    <Compile Include="CoreModel\InstrumentList.cs" />
+    <Compile Include="UIModel\CoinBookingCell.cs" />
     <Compile Include="TransactionViewController.cs" />
     <Compile Include="TransactionViewController.designer.cs">
       <DependentUpon>TransactionViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="UIClass\LoadingOverlay.cs" />
+    <Compile Include="UIModel\LoadingOverlay.cs" />
     <Compile Include="AboutViewConroller.cs" />
     <Compile Include="AboutViewConroller.designer.cs">
       <DependentUpon>AboutViewConroller.cs</DependentUpon>
     </Compile>
-    <Compile Include="UIClass\PreviewControllerDS.cs" />
-    <Compile Include="CoreClass\APIClass\ParseAPIStrings.cs" />
-    <Compile Include="CoreClass\AppCoreException.cs" />
-    <Compile Include="CoreClass\APIClass\CoinbalanceAPI.cs" />
-    <Compile Include="CoreClass\APIClass\PoloniexAPI.cs" />
+    <Compile Include="UIModel\PreviewControllerDS.cs" />
+    <Compile Include="CoreModel\AppCoreException.cs" />
     <Compile Include="ExposureViewController.cs" />
     <Compile Include="ExposureViewController.designer.cs">
       <DependentUpon>ExposureViewController.cs</DependentUpon>
@@ -260,20 +248,33 @@
     <Compile Include="ImportTableViewController.designer.cs">
       <DependentUpon>ImportTableViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="CoreClass\APIClass\BitfinexAPI.cs" />
-    <Compile Include="CoreClass\APIClass\HitbtcAPI.cs" />
-    <Compile Include="CoreClass\APIClass\KrakenAPI.cs" />
-    <Compile Include="CoreClass\APIClass\Zaif\ZaifAPI.cs" />
-    <Compile Include="CoreClass\APIClass\Zaif\ZaifBalance.cs" />
-    <Compile Include="CoreClass\APIClass\RestUtil.cs" />
-    <Compile Include="CoreClass\AssetType.cs" />
-    <Compile Include="CoreClass\APIClass\Util.cs" />
-    <Compile Include="CoreClass\APIClass\Zaif\ZaifAPI2.cs" />
-    <Compile Include="CoreClass\APIClass\Zaif\ZaifTicker.cs" />
-    <Compile Include="CoreClass\APIClass\Zaif\ZaifTrades.cs" />
-    <Compile Include="CoreClass\APIClass\CoinCheck\CoinCheckAPI.cs" />
-    <Compile Include="CoreClass\APIClass\Bitflyer\BitFlyerAPI.cs" />
-    <Compile Include="CoreClass\APIClass\Bitstamp\BItstampAPI.cs" />
+    <Compile Include="CoreModel\AssetType.cs" />
+    <Compile Include="CoreAPI\BitfinexAPI.cs" />
+    <Compile Include="CoreAPI\Bitflyer\BitFlyerAPI.cs" />
+    <Compile Include="CoreAPI\Bitstamp\BItstampAPI.cs" />
+    <Compile Include="CoreAPI\BittrexAPI.cs" />
+    <Compile Include="CoreAPI\CoinbalanceAPI.cs" />
+    <Compile Include="CoreAPI\CoinCheck\CoinCheckBalance.cs" />
+    <Compile Include="CoreAPI\CoinCheck\CoinCheckAPI.cs" />
+    <Compile Include="CoreAPI\CoinCheck\CoinCheckLeveragePosition.cs" />
+    <Compile Include="CoreAPI\CoinCheck\CoinCheckTransactions.cs" />
+    <Compile Include="CoreAPI\ExchangeAPI.cs" />
+    <Compile Include="CoreAPI\HitbtcAPI.cs" />
+    <Compile Include="CoreAPI\KrakenAPI.cs" />
+    <Compile Include="CoreAPI\MarketDataAPI.cs" />
+    <Compile Include="CoreAPI\ParseAPIStrings.cs" />
+    <Compile Include="CoreAPI\PoloniexAPI.cs" />
+    <Compile Include="CoreAPI\Reachability.cs" />
+    <Compile Include="CoreAPI\RestUtil.cs" />
+    <Compile Include="CoreAPI\StorageAPI.cs" />
+    <Compile Include="CoreAPI\Util.cs" />
+    <Compile Include="CoreAPI\Zaif\ZaifAPI.cs" />
+    <Compile Include="CoreAPI\Zaif\ZaifAPI2.cs" />
+    <Compile Include="CoreAPI\Zaif\ZaifBalance.cs" />
+    <Compile Include="CoreAPI\Zaif\ZaifTicker.cs" />
+    <Compile Include="CoreAPI\Zaif\ZaifTrades.cs" />
+    <Compile Include="CoreAPI\CoinCheck\CoinCheckAPI2.cs" />
+    <Compile Include="CoreAPI\CoinCheck\CoinCheckRate.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />

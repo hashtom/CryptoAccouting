@@ -1,6 +1,6 @@
 ﻿using Foundation;
 using UIKit;
-using CoinBalance.CoreClass;
+using CoinBalance.CoreModel;
 
 namespace CoinBalance
 {

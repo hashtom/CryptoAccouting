@@ -1,4 +1,4 @@
-﻿using Foundation; using System; using System.IO; using UIKit; using QuickLook; using CoreGraphics; using CoreAnimation; using System.Linq; using System.Threading.Tasks; using Syncfusion.SfDataGrid; using Syncfusion.SfDataGrid.Exporting; using CoinBalance.CoreClass; using CoinBalance.UIClass;
+﻿using Foundation; using System; using System.IO; using UIKit; using QuickLook; using CoreGraphics; using CoreAnimation; using System.Linq; using System.Threading.Tasks; using Syncfusion.SfDataGrid; using Syncfusion.SfDataGrid.Exporting; using CoinBalance.CoreModel; using CoinBalance.UIModel;
 
 namespace CoinBalance
 {

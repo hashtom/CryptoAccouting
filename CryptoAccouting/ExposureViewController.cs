@@ -6,8 +6,8 @@ using CoreGraphics;
 //using CoreAnimation;
 using Syncfusion.SfDataGrid;
 using Syncfusion.SfChart.iOS;
-using CoinBalance.CoreClass;
-using CoinBalance.UIClass;
+using CoinBalance.CoreModel;
+using CoinBalance.UIModel;
 
 namespace CoinBalance
 {
