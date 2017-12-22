@@ -251,7 +251,6 @@
     </Compile>
     <Compile Include="CoreModel\AssetType.cs" />
     <Compile Include="CoreAPI\BitfinexAPI.cs" />
-    <Compile Include="CoreAPI\Bitflyer\BitFlyerAPI.cs" />
     <Compile Include="CoreAPI\Bitstamp\BItstampAPI.cs" />
     <Compile Include="CoreAPI\BittrexAPI.cs" />
     <Compile Include="CoreAPI\CoinbalanceAPI.cs" />
