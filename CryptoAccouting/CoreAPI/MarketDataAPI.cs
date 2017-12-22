@@ -76,7 +76,7 @@ namespace CoinBalance.CoreAPI
                             if (exchanges.Any(x => x.Code == "bitFlyer_l"))
                             {
                                 var exchange = exchanges.First(x => x.Code == "bitFlyer_l");
-                                if (exchange.HasListedCoins()) await BitFlyerAPI.FetchPriceAsync(exchange, coins, usdjpy);
+                                if (exchange.HasListedCoins()) await BitFlyerAPI2.FetchPriceAsync(exchange, coins, usdjpy);
                             }
                             break;
 

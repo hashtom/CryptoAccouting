@@ -74,7 +74,6 @@ namespace CoinBalance.CoreModel
     public enum EnuBuySell
     {
         Buy,
-        Sell,
-        Check
+        Sell
     }
 }

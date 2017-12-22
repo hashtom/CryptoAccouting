@@ -154,6 +154,7 @@
     <Folder Include="Resources\ja.lproj\" />
     <Folder Include="Base.lproj\" />
     <Folder Include="CoreAPI\" />
+    <Folder Include="CoreAPI\Quoine\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="UIModel\CoinViewCell.xib" />
@@ -273,6 +274,13 @@
     <Compile Include="CoreAPI\Zaif\ZaifTrades.cs" />
     <Compile Include="CoreAPI\CoinCheck\CoinCheckAPI2.cs" />
     <Compile Include="CoreAPI\CoinCheck\CoinCheckRate.cs" />
+    <Compile Include="CoreAPI\Bitflyer\BitflyerBalance.cs" />
+    <Compile Include="CoreAPI\Bitflyer\BitflyerPosition.cs" />
+    <Compile Include="CoreAPI\Bitflyer\BitflyerAPI2.cs" />
+    <Compile Include="CoreAPI\Quoine\QuoineAdapter.cs" />
+    <Compile Include="CoreAPI\Quoine\QuoineTradingAccounts.cs" />
+    <Compile Include="CoreAPI\Bitflyer\BitflyerTicker.cs" />
+    <Compile Include="CoreAPI\Bitflyer\BitflyerExecution.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />

@@ -87,7 +87,7 @@ namespace CoinBalance.CoreAPI
                         return await PoloniexAPI.FetchTransactionAsync(exchange);
 
                     case "bitFlyer_l":
-                        return await BitFlyerAPI.FetchTransactionAsync(exchange);
+                        return await BitFlyerAPI2.FetchTransactionAsync(exchange);
 
                     //case "Bitfinex":
                         //return await BitfinexAPI.FetchTransactionAsync(exchange);
@@ -129,7 +129,7 @@ namespace CoinBalance.CoreAPI
                         return await PoloniexAPI.FetchPositionAsync(exchange);
 
                     case "bitFlyer_l":
-                        return await BitFlyerAPI.FetchPositionAsync(exchange);
+                        return await BitFlyerAPI2.FetchPositionAsync(exchange);
 
                     //case "Bitfinex":
                         //return await BitfinexAPI.FetchPositionAsync(exchange);

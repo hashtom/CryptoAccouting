@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using System.Linq;
 using RestSharp;
 using CoinBalance.CoreModel;
@@ -196,8 +195,7 @@ namespace CoinBalance.CoreAPI
                         ebuysell = EnuBuySell.Sell;
                         break;
                     default:
-                        ebuysell = EnuBuySell.Check;
-                        break;
+                        throw new NotImplementedException();
                 }
 
                 var symbol = trade.Value.currency_pair;

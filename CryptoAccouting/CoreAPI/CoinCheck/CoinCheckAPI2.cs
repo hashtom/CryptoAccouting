@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Text;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Security.Cryptography;
-using Newtonsoft.Json.Linq;
 using System.Linq;
 using CoinBalance.CoreModel;
 using RestSharp;
@@ -218,8 +214,6 @@ namespace CoinBalance.CoreAPI
             var req = BuildRequest(path);
             return await RestUtil.ExecuteRequestAsync<CoinCheckTransactions>(_restClient, req);
         }
-
-
 
         private static RestRequest BuildRequest(string path, string method = "GET", string body = "")
         {

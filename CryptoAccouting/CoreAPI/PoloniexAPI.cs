@@ -219,7 +219,7 @@ namespace CoinBalance.CoreAPI
                         }
                         else
                         {
-                            ebuysell = EnuBuySell.Check;
+                            throw new NotImplementedException();
                         }
 
                         symbol = symbol.Replace("BTC_", "").Replace("ETH_", "").Replace("USDT_", "");

@@ -202,7 +202,7 @@ namespace CoinBalance.CoreAPI
                             }
                             else
                             {
-                                ebuysell = EnuBuySell.Check;
+                                throw new NotImplementedException();
                             }
 
                             var symbol = (string)elem["Exchange"];
