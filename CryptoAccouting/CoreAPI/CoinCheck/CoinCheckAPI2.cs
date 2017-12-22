@@ -17,7 +17,7 @@ namespace CoinBalance.CoreAPI
         private static Exchange _coincheck;
         private static CrossRate _USDJPYrate;
         private static IRestClient _restClient = new RestClient(new Uri(ApiRoot));
-        private static AssetType _assetType = AssetType.Cash;
+        //private static AssetType _assetType = AssetType.Cash;
 
         public static async Task FetchPriceAsync(Exchange coincheck, InstrumentList coins, CrossRate USDJPYrate)
         {

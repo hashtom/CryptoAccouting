@@ -255,7 +255,6 @@
     <Compile Include="CoreAPI\BittrexAPI.cs" />
     <Compile Include="CoreAPI\CoinbalanceAPI.cs" />
     <Compile Include="CoreAPI\CoinCheck\CoinCheckBalance.cs" />
-    <Compile Include="CoreAPI\CoinCheck\CoinCheckAPI.cs" />
     <Compile Include="CoreAPI\CoinCheck\CoinCheckLeveragePosition.cs" />
     <Compile Include="CoreAPI\CoinCheck\CoinCheckTransactions.cs" />
     <Compile Include="CoreAPI\ExchangeAPI.cs" />
@@ -268,7 +267,6 @@
     <Compile Include="CoreAPI\RestUtil.cs" />
     <Compile Include="CoreAPI\StorageAPI.cs" />
     <Compile Include="CoreAPI\Util.cs" />
-    <Compile Include="CoreAPI\Zaif\ZaifAPI.cs" />
     <Compile Include="CoreAPI\Zaif\ZaifAPI2.cs" />
     <Compile Include="CoreAPI\Zaif\ZaifBalance.cs" />
     <Compile Include="CoreAPI\Zaif\ZaifTicker.cs" />
