@@ -123,7 +123,7 @@
       <HintPath>..\..\..\..\Documents\Syncfusion\15.3.0.26\Xamarin\lib\ios-unified\Syncfusion.SFChart.iOS.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp">
-      <HintPath>..\packages\RestSharp.106.1.0\lib\netstandard2.0\RestSharp.dll</HintPath>
+      <HintPath>..\packages\RestSharp.106.2.0\lib\netstandard2.0\RestSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
