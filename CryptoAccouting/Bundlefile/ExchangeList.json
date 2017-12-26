@@ -1,5 +1,17 @@
 {
     "exchanges": [
+      {
+        "code": "Quoine",
+        "name": "Quoine",
+        "apiprice": "true",
+        "apitrade": "true",
+        "apibalance": "true",
+        "listing": [
+          {
+            "symbol": "BTC"
+          }
+        ]
+      },
         {
             "code": "Bitstamp",
             "name": "Bitstamp",

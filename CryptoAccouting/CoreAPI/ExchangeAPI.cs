@@ -89,8 +89,8 @@ namespace CoinBalance.CoreAPI
                     case "bitFlyer_l":
                         return await BitFlyerAPI2.FetchTransactionAsync(exchange);
 
-                    //case "Bitfinex":
-                        //return await BitfinexAPI.FetchTransactionAsync(exchange);
+                    case "Quoine":
+                        return await QuoineAPI.FetchExecutionAsync(exchange);
 
                     default:
                         throw new AppCoreWarning("Please update to the newest version! (" + exchange.Code + ")");
@@ -131,8 +131,8 @@ namespace CoinBalance.CoreAPI
                     case "bitFlyer_l":
                         return await BitFlyerAPI2.FetchPositionAsync(exchange);
 
-                    //case "Bitfinex":
-                        //return await BitfinexAPI.FetchPositionAsync(exchange);
+                    case "Quoine":
+                        return await QuoineAPI.FetchPositionAsync(exchange);
 
                     default:
                         throw new AppCoreWarning("Please update to the newest version! (" + exchange.Code + ")");

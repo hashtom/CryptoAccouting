@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-//using Jose;
+using Newtonsoft.Json;
 
 namespace CoinBalance.CoreAPI
 {
@@ -57,11 +57,25 @@ namespace CoinBalance.CoreAPI
             return (T) Enum.Parse(typeof(T), value, true);
         }
 
-        //public static string JwtHs256Encode(object payload, string secret)
-        //{
-        //    var secbyte = Encoding.UTF8.GetBytes(secret);
-        //    return JWT.Encode(payload, secbyte, JwsAlgorithm.HS256);
-        //}
+        public static string JwtHs256Encode(object payload, string secret)
+        {
+            //var secbyte = Encoding.UTF8.GetBytes(secret);
+            //return JWT.Encode(payload, secbyte, JwsAlgorithm.HS256);
+
+            byte[] headerBytes = Encoding.UTF8.GetBytes("{\"alg\":\"HS256\",\"typ\":\"JWT\"}");
+            string header = Convert.ToBase64String(headerBytes);
+
+            byte[] payloadBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(payload));
+            string body = Convert.ToBase64String(payloadBytes);
+
+            var header_body = header + "." + body;
+
+            byte[] chaHash = new HMACSHA256(Encoding.UTF8.GetBytes(secret)).ComputeHash(Encoding.UTF8.GetBytes(header_body));
+            string sign = Convert.ToBase64String(chaHash);
+
+            return header_body + "." + sign;
+
+        }
 
         public static IEnumerable<T> Enums<T>()
         {

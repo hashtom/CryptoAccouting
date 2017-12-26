@@ -1,6 +1,8 @@
-﻿namespace CoinBalance.CoreAPI
+﻿using System;
+
+namespace CoinBalance.CoreAPI
 {
-    public class QuoineTradingAccounts
+    public class QuoineTradingAccount
     {
         public int Id { get; set; }
         public int LeverageLevel { get; set; }
@@ -15,8 +17,8 @@
         public string CurrencyPairCode { get; set; }
         public decimal Position { get; set; }
         public decimal Balance { get; set; }
-        public long CreatedAt { get; set; }
-        public long UpdatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
         public string PusherChannel { get; set; }
         public decimal MarginPercent { get; set; }
         public int ProductId { get; set; }

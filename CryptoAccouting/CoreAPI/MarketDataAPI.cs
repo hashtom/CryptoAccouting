@@ -104,6 +104,14 @@ namespace CoinBalance.CoreAPI
                             }
                             break;
 
+                        case "Quoine":
+                            if (exchanges.Any(x => x.Code == "Quoine"))
+                            {
+                                var exchange = exchanges.First(x => x.Code == "Quoine");
+                                if (exchange.HasListedCoins()) await QuoineAPI.FetchPriceAsync(exchange, coins);
+                            }
+                            break;
+
                         case "coinmarketcap":
                             //await FetchCoinMarketCapAsync(coins, crossrate);
                             break;

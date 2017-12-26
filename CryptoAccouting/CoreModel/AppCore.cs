@@ -106,7 +106,7 @@
                     default:                         storage = new Wallet(storagecode, storagetype);                         CoinStorageList.Attach(storage);
                         break;
                 }
-            }              storage.AttachPosition(pos);             pos.AttachCoinStorage(storage);         }          public static CrossRate GetCrossRate(EnuBaseFiatCCY CCY)         {             return USDCrossRates is null ? null : USDCrossRates.First(x => x.Currency == CCY);         } 
+            }              storage.AttachPosition(pos);             pos.AttachCoinStorage(storage);         }          public static double GetLatestCrossRate()         {             return USDCrossRates is null ? 0 : USDCrossRates.First(x => x.Currency == baseCurrency).Rate;         } 
 		public static bool IsInternetReachable()
 		{
             return Reachability.IsHostReachable(CoinbalanceAPI.coinbalance_url);
