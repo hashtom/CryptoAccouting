@@ -125,7 +125,7 @@ namespace CoinBalance.CoreAPI
             try
             {
                 var transactions = new List<CoinCheckTransactions.Datum>();
-                var results = await GetTransactionsAsync();
+                var results = await FetchTransactionsPageAsync();
                 if (results.success != true)
                 {
                     throw new AppCoreParseException("Coincheck returned error: " + results);
@@ -147,7 +147,7 @@ namespace CoinBalance.CoreAPI
                     }
 
                     var lastId = results.data.Last().id;
-                    results = await GetTransactionsAsync(lastId);
+                    results = await FetchTransactionsPageAsync(lastId);
                     if (results.success != true)
                     {
                         throw new AppCoreParseException("Coincheck returned error: " + results);
@@ -197,7 +197,7 @@ namespace CoinBalance.CoreAPI
             }
         }
 
-        private static async Task<CoinCheckTransactions> GetTransactionsAsync(string after = null, string before = null, int limit = 100,
+        private static async Task<CoinCheckTransactions> FetchTransactionsPageAsync(string after = null, string before = null, int limit = 100,
             string order = "desc")
         {
             var path = $"/api/exchange/orders/transactions_pagination?limit={limit}&order={order}";

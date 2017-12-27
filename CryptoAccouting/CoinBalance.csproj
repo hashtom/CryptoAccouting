@@ -276,14 +276,13 @@
     <Compile Include="CoreAPI\Bitflyer\BitflyerBalance.cs" />
     <Compile Include="CoreAPI\Bitflyer\BitflyerPosition.cs" />
     <Compile Include="CoreAPI\Bitflyer\BitflyerAPI2.cs" />
-    <Compile Include="CoreAPI\Quoine\QuoineAdapter.cs" />
     <Compile Include="CoreAPI\Quoine\QuoineTradingAccount.cs" />
     <Compile Include="CoreAPI\Bitflyer\BitflyerTicker.cs" />
     <Compile Include="CoreAPI\Bitflyer\BitflyerExecution.cs" />
     <Compile Include="CoreAPI\Quoine\QuoineAPI.cs" />
     <Compile Include="CoreAPI\Quoine\QuoineProduct.cs" />
     <Compile Include="CoreAPI\Quoine\QuoineBalance.cs" />
-    <Compile Include="CoreAPI\Quoine\QuoineTrade.cs" />
+    <Compile Include="CoreAPI\Quoine\QuoineTrades.cs" />
     <Compile Include="CoreAPI\Quoine\QuoineExecutions.cs" />
   </ItemGroup>
   <ItemGroup>

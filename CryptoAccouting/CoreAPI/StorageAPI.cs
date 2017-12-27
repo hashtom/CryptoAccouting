@@ -199,15 +199,15 @@ namespace CoinBalance.CoreAPI
         public static ExchangeList LoadExchangeList()
         {
             string rawjson;
-            try
-            {
-                rawjson = StorageAPI.LoadFromFile(MarketDataAPI.ExchangeListFile);
-            }
-            catch (Exception e)
-            {
+            //try
+            //{
+            //    rawjson = LoadFromFile(MarketDataAPI.ExchangeListFile);
+            //}
+            //catch (Exception e)
+            //{
                 rawjson = LoadBundleFile(MarketDataAPI.ExchangeListFile);
-                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadExchangeList(continued with bundlefile): " + e.GetType() + ": " + e.Message);
-            }
+                //System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadExchangeList(continued with bundlefile): " + e.GetType() + ": " + e.Message);
+            //}
 
             try
             {

@@ -11,20 +11,6 @@ basedir = "/Users/name/Downloads/"
 exchanges = []
 ExchangeList = {"exchanges": exchanges}
 
-
-#Quoine
-quoine_dict = {
-        "code": "Quoine",
-        "name": "Quoine",
-        "apiprice": "true",
-        "apitrade": "true",
-        "apibalance": "true",
-        "listing": [ 
-                { "symbol": "BTC" }
-                ]
-        }
-exchanges.append(quoine_dict)
-
 #BitStamp
 bitstamp_dict = {
         "code": "Bitstamp",
@@ -277,9 +263,9 @@ exchanges.append(btcbox_dict)
 quoine_dict = { 
         "code": "Quoine",
         "name": "Quoine",
-        "apiprice": "false",
-        "apitrade": "false",
-        "apibalance": "false",
+        "apiprice": "true",
+        "apitrade": "true",
+        "apibalance": "true",
          "listing": [
                  { "symbol": "BTC" },
                  { "symbol": "BCH" }

@@ -14,7 +14,7 @@ namespace CoinBalance.CoreAPI
         private static Exchange _quoine;
         //private static CrossRate _USDJPYrate;
         private static IRestClient _restClient = new RestClient(new Uri(ApiRoot));
-        private static Dictionary<string, string> ProductIdMap = new Dictionary<string, string>();
+        private static Dictionary<string, QuoineProduct> ProductIdMap = new Dictionary<string, QuoineProduct>();
 
         public static async Task FetchPriceAsync(Exchange quoine, InstrumentList coins)
         {
@@ -27,8 +27,8 @@ namespace CoinBalance.CoreAPI
                 {
                     if (coin.MarketPrice == null) coin.MarketPrice = new Price(coin);
 
-                    var product_id = GetProductID(_quoine.GetSymbolForExchange(coin.Id));
-                    var path = $"/products/{product_id}";
+                    var product = GetProduct(_quoine.GetSymbolForExchange(coin.Id));
+                    var path = $"/products/{product.Id}";
 
                     var req = RestUtil.CreateJsonRestRequest(path);
                     var response = await _restClient.ExecuteGetTaskAsync<QuoineProduct>(req);
@@ -43,19 +43,19 @@ namespace CoinBalance.CoreAPI
                     if (coin.Id is "bitcoin")
                     {
                         coin.MarketPrice.LatestPriceBTC = 1;
-                        coin.MarketPrice.LatestPriceUSD = (double)result.last_traded_price / AppCore.GetLatestCrossRate();
+                        //coin.MarketPrice.LatestPriceUSD = (double)result.last_traded_price / AppCore.GetLatestCrossRate();
                     }
                     else
                     {
                         var btcprice = AppCore.Bitcoin.MarketPrice;
                         if (btcprice != null)
                         {
-                            coin.MarketPrice.LatestPriceUSD = (double)result.last_traded_price / AppCore.GetLatestCrossRate();
+                            //coin.MarketPrice.LatestPriceUSD = (double)result.last_traded_price / AppCore.GetLatestCrossRate();
                             coin.MarketPrice.LatestPriceBTC = coin.MarketPrice.LatestPriceUSD / btcprice.LatestPriceUSD;
                         }
                     }
 
-                    coin.MarketPrice.DayVolume = (double)result.volume_24h;
+                    //coin.MarketPrice.DayVolume = (double)result.volume_24h;
                     coin.MarketPrice.PriceDate = DateTime.Now;
                 }
             }
@@ -112,35 +112,45 @@ namespace CoinBalance.CoreAPI
         public static async Task<TradeList> FetchMarginTransactionAsync(Exchange quoine)
         {
             _quoine = quoine;
-            var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _quoine };
             var path = "/trades";
+            var tradelist = new TradeList()
+            {
+                SettlementCCY = (EnuCCY)AppCore.BaseCurrency,
+                TradedExchange = _quoine
+            };
 
             try
             {
+                var products = _quoine.ListedCoins.Select(x => GetProduct(_quoine.GetSymbolForExchange(x.Id))).ToList();
                 var req = BuildRequest(path);
-                var results = await RestUtil.ExecuteRequestAsync<List<QuoineTrade>>(_restClient, req);
+                var trades = await RestUtil.ExecuteRequestAsync<QuoineTrades>(_restClient, req);
 
-                foreach (var result in results)
+                foreach (var trade in trades.models)
                 {
 
-                    tradelist.AggregateTransaction(_quoine.GetSymbolForExchange("bitcoin"),
-                                                   result.side.Contains("long")? EnuBuySell.Buy : EnuBuySell.Sell,
-                                                   (double)result.open_quantity,
-                                                   (double)result.open_price,
-                                                   EnuCCY.JPY,
-                                                   result.created_at,
-                                                   0,
-                                                   _quoine
-                                                  );
+                    var symbol = products.First(x => x.currency_pair_code == trade.currency_pair_code).base_currency;
 
-                    if (result.close_quantity > 0)
+                    if (trade.open_quantity > 0)
                     {
-                        tradelist.AggregateTransaction(_quoine.GetSymbolForExchange("bitcoin"),
-                                                       result.side.Contains("long") ? EnuBuySell.Sell : EnuBuySell.Buy,
-                                                       (double)result.close_quantity,
-                                                       (double)result.close_price,
+                        tradelist.AggregateTransaction(symbol,
+                                                       trade.side.Contains("long") ? EnuBuySell.Buy : EnuBuySell.Sell,
+                                                       (double)trade.open_quantity,
+                                                       (double)trade.open_price,
                                                        EnuCCY.JPY,
-                                                       result.created_at,
+                                                       trade.created_at,
+                                                       0,
+                                                       _quoine
+                                                      );
+                    }
+
+                    if (trade.close_quantity > 0)
+                    {
+                        tradelist.AggregateTransaction(symbol,
+                                                       trade.side.Contains("long") ? EnuBuySell.Sell : EnuBuySell.Buy,
+                                                       (double)trade.close_quantity,
+                                                       (double)trade.close_price,
+                                                       EnuCCY.JPY,
+                                                       trade.created_at,
                                                        0,
                                                        _quoine
                                                       );
@@ -159,10 +169,13 @@ namespace CoinBalance.CoreAPI
         public static async Task<TradeList> FetchExecutionAsync(Exchange quoine)
         {
             _quoine = quoine;
-            var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _quoine };
+            var tradelist = new TradeList()
+            {
+                SettlementCCY = (EnuCCY)AppCore.BaseCurrency,
+                TradedExchange = _quoine
+            };
             var executions = new List<QuoineExecutions.execution>();
-
-            var product_ids = _quoine.ListedCoins.Select(x => GetProductID(_quoine.GetSymbolForExchange(x.Id))).ToList();
+            var product_ids = _quoine.ListedCoins.Select(x => GetProduct(_quoine.GetSymbolForExchange(x.Id)).Id).ToList();
 
             try
             {
@@ -199,14 +212,14 @@ namespace CoinBalance.CoreAPI
             }
         }
 
-        private static string GetProductID(string Quoinecurrency)
+        private static QuoineProduct GetProduct(string Quoinecurrency)
         {
 
-            if(ProductIdMap == null) 
+            if(!ProductIdMap.Any()) 
             {
-                ProductIdMap = new Dictionary<string, string>();
+                //ProductIdMap = new Dictionary<string, string>();
 
-                var path = $"/products";
+                var path = $"/products/";
 
                 var req = RestUtil.CreateJsonRestRequest(path);
                 var response = _restClient.Execute<List<QuoineProduct>>(req);
@@ -216,13 +229,14 @@ namespace CoinBalance.CoreAPI
                 }
 
                 foreach(var product in response.Data.
+                        Where(x=>x.disabled == false).
                         Where(x=>x.currency == AppCore.BaseCurrency.ToString()))
                 {
-                    ProductIdMap.Add(product.code, product.currency);
+                    ProductIdMap.Add(product.Id, product);
                 }
             }
 
-            return ProductIdMap.First(x => x.Value == Quoinecurrency).Key;
+            return ProductIdMap.First(x => x.Value.base_currency == Quoinecurrency).Value;
         }
 
         private static RestRequest BuildRequest(string path, string method = "GET", string body = "")
