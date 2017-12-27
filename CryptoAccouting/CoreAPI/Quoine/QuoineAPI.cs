@@ -14,7 +14,7 @@ namespace CoinBalance.CoreAPI
         private static Exchange _quoine;
         //private static CrossRate _USDJPYrate;
         private static IRestClient _restClient = new RestClient(new Uri(ApiRoot));
-        private static Dictionary<string, QuoineProduct> ProductIdMap = new Dictionary<string, QuoineProduct>();
+        private static List<QuoineProduct> Products = new List<QuoineProduct>();
 
         public static async Task FetchPriceAsync(Exchange quoine, InstrumentList coins)
         {
@@ -109,51 +109,67 @@ namespace CoinBalance.CoreAPI
 
         }
 
-        public static async Task<TradeList> FetchMarginTransactionAsync(Exchange quoine)
+        public static async Task<TradeList> FetchTransactionAsync(Exchange quoine)
         {
             _quoine = quoine;
             var path = "/trades";
-            var tradelist = new TradeList()
-            {
-                SettlementCCY = (EnuCCY)AppCore.BaseCurrency,
-                TradedExchange = _quoine
-            };
+            var tradelist = new TradeList() { SettlementCCY = (EnuCCY)AppCore.BaseCurrency, TradedExchange = _quoine };
+            var transactions = new List<QuoineTrades.Trade>();
 
             try
             {
-                var products = _quoine.ListedCoins.Select(x => GetProduct(_quoine.GetSymbolForExchange(x.Id))).ToList();
                 var req = BuildRequest(path);
-                var trades = await RestUtil.ExecuteRequestAsync<QuoineTrades>(_restClient, req);
+                var trades = await FetchTransactionsPageAsync();
+
+                while (true)
+                {
+                    transactions.AddRange(trades.models);
+
+                    if (trades.current_page == trades.total_pages)
+                    {
+                        break;
+                    }
+
+                    trades = await FetchTransactionsPageAsync(trades.current_page + 1);
+                }
 
                 foreach (var trade in trades.models)
                 {
-
-                    var symbol = products.First(x => x.currency_pair_code == trade.currency_pair_code).base_currency;
-
-                    if (trade.open_quantity > 0)
+                    var products = GetProducts();
+                    if (!products.Any(x => x.currency_pair_code == trade.currency_pair_code))
                     {
-                        tradelist.AggregateTransaction(symbol,
-                                                       trade.side.Contains("long") ? EnuBuySell.Buy : EnuBuySell.Sell,
-                                                       (double)trade.open_quantity,
-                                                       (double)trade.open_price,
-                                                       EnuCCY.JPY,
-                                                       trade.created_at,
-                                                       0,
-                                                       _quoine
-                                                      );
+                        System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + $": FetchTransactionAsync: Warning no pair {trade.currency_pair_code} found.");
                     }
-
-                    if (trade.close_quantity > 0)
+                    else
                     {
-                        tradelist.AggregateTransaction(symbol,
-                                                       trade.side.Contains("long") ? EnuBuySell.Sell : EnuBuySell.Buy,
-                                                       (double)trade.close_quantity,
-                                                       (double)trade.close_price,
-                                                       EnuCCY.JPY,
-                                                       trade.created_at,
-                                                       0,
-                                                       _quoine
-                                                      );
+                        var symbol = products.First(x => x.currency_pair_code == trade.currency_pair_code).base_currency;
+
+                        if (trade.open_quantity > 0)
+                        {
+                            tradelist.AggregateTransaction(symbol,
+                                                           trade.side.Contains("long") ? EnuBuySell.Buy : EnuBuySell.Sell,
+                                                           (double)trade.open_quantity,
+                                                           (double)trade.open_price,
+                                                           EnuCCY.JPY,
+                                                           trade.created_at,
+                                                           0,
+                                                           _quoine
+                                                          );
+                        }
+
+                        if (trade.close_quantity > 0)
+                        {
+                            tradelist.AggregateTransaction(symbol,
+                                                           trade.side.Contains("long") ? EnuBuySell.Buy : EnuBuySell.Sell,
+                                                           (double)trade.close_quantity,
+                                                           (double)trade.close_price,
+                                                           EnuCCY.JPY,
+                                                           trade.created_at,
+                                                           0,
+                                                           _quoine
+                                                          );
+                        }
+
                     }
                 }
 
@@ -175,52 +191,59 @@ namespace CoinBalance.CoreAPI
                 TradedExchange = _quoine
             };
             var executions = new List<QuoineExecutions.execution>();
-            var product_ids = _quoine.ListedCoins.Select(x => GetProduct(_quoine.GetSymbolForExchange(x.Id)).Id).ToList();
+            var products = GetProducts();
 
             try
             {
-                
-                foreach (var product_id in product_ids)
+                foreach (var product in products)
                 {
-                    var path = $"/executions/me?product_id={product_id}&limit=1000";
+                    var path = $"/executions/me?product_id={product.Id}&limit=1000";
                     var req = BuildRequest(path);
                     var results = await RestUtil.ExecuteRequestAsync<QuoineExecutions>(_restClient, req);
                     executions.AddRange(results.models);
+
+                    foreach (var execution in executions)
+                    {
+
+                        tradelist.AggregateTransaction(product.base_currency,
+                                                       execution.my_side.Contains("buy") ? EnuBuySell.Buy : EnuBuySell.Sell,
+                                                       (double)execution.quantity,
+                                                       (double)execution.price,
+                                                       EnuCCY.JPY,
+                                                       execution.created_at,
+                                                       0,
+                                                       _quoine
+                                                      );
+
+                    }
                 }
-
-                foreach (var execution in executions)
-                {
-
-                    tradelist.AggregateTransaction(_quoine.GetSymbolForExchange("bitcoin"),
-                                                   execution.my_side.Contains("buy") ? EnuBuySell.Buy : EnuBuySell.Sell,
-                                                   (double)execution.quantity,
-                                                   (double)execution.price,
-                                                   EnuCCY.JPY,
-                                                   execution.created_at,
-                                                   0,
-                                                   _quoine
-                                                  );
-
-                }
-
-                return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchTransactionAsync: " + e.GetType() + ": " + e.Message);
                 throw;
             }
+
+            return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
         }
 
-        private static QuoineProduct GetProduct(string Quoinecurrency)
+        private static async Task<QuoineTrades> FetchTransactionsPageAsync(int page = 0, int limit = 100)
         {
-
-            if(!ProductIdMap.Any()) 
+            var path = $"/trades?limit={limit}";
+            if (page != 0)
             {
-                //ProductIdMap = new Dictionary<string, string>();
+                path += $"&page={page}";
+            }
 
+            var req = BuildRequest(path);
+            return await RestUtil.ExecuteRequestAsync<QuoineTrades>(_restClient, req);
+        }
+
+        private static List<QuoineProduct> GetProducts()
+        {
+            if (!Products.Any(x => x.base_currency == AppCore.BaseCurrency.ToString()))
+            {
                 var path = $"/products/";
-
                 var req = RestUtil.CreateJsonRestRequest(path);
                 var response = _restClient.Execute<List<QuoineProduct>>(req);
                 if (response.ErrorException != null)
@@ -228,15 +251,19 @@ namespace CoinBalance.CoreAPI
                     throw response.ErrorException;
                 }
 
-                foreach(var product in response.Data.
-                        Where(x=>x.disabled == false).
-                        Where(x=>x.currency == AppCore.BaseCurrency.ToString()))
+                foreach (var product in response.Data.
+                        Where(x => x.disabled == false).
+                        Where(x => x.currency == AppCore.BaseCurrency.ToString()))
                 {
-                    ProductIdMap.Add(product.Id, product);
+                    Products.Add(product);
                 }
             }
+            return Products;
+        }
 
-            return ProductIdMap.First(x => x.Value.base_currency == Quoinecurrency).Value;
+        private static QuoineProduct GetProduct(string Quoinecurrency)
+        {
+            return GetProducts().First(x => x.base_currency == Quoinecurrency);
         }
 
         private static RestRequest BuildRequest(string path, string method = "GET", string body = "")

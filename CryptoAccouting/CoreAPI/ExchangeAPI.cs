@@ -90,7 +90,7 @@ namespace CoinBalance.CoreAPI
 
                     case "Quoine":
                         //return await QuoineAPI.FetchExecutionAsync(exchange);
-                        return await QuoineAPI.FetchMarginTransactionAsync(exchange);
+                        return await QuoineAPI.FetchTransactionAsync(exchange);
                     default:
                         throw new AppCoreWarning("Please update to the newest version! (" + exchange.Code + ")");
                         //throw new AppCoreNetworkException("ExchangeCode error. Code: " + exchange.Code);

@@ -59,7 +59,7 @@
         }          public static void SaveAppSetting()
         {             StorageAPI.SaveAppSettingXML(AppName, BaseCurrency, PublicExchangeList);         }          //private static void LoadExchangeList()
         //{         //    ExchangeAPI.FetchExchangeList(PublicExchangeList);         //}          public static void SyncLatestCoins()         {             try             {
-                InstrumentList = MarketDataAPI.FetchAllCoinData();                 PublicExchangeList = ExchangeAPI.FetchExchangeList();                  if (Balance != null) Balance.AttachInstruments(InstrumentList);
+                InstrumentList = MarketDataAPI.FetchAllCoinData();                 //PublicExchangeList = ExchangeAPI.FetchExchangeList();                  if (Balance != null) Balance.AttachInstruments(InstrumentList);
                 Task.Run(async () => await FetchCoinLogoTop100Async());             }
             catch (Exception e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": SyncLatestCoins: " + e.GetType() + ": " + e.Message);                 throw;             }         }          public static async Task FetchCoinLogoAsync(Instrument coin)         {              await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);         }          public static async Task FetchCoinLogoFromBalanceAsync()         {             foreach (var pos in Balance)             {
                 await MarketDataAPI.FetchCoinLogoAsync(pos.Coin.Id, false);             }         }          public static async Task FetchCoinLogoTop100Async()         {             if (InstrumentList == null)

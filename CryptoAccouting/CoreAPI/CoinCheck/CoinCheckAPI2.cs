@@ -121,10 +121,10 @@ namespace CoinBalance.CoreAPI
         {
             _coincheck = coincheck;
             var searchAfter = new DateTime(2012, 1, 1);
+            var transactions = new List<CoinCheckTransactions.Datum>();
 
             try
             {
-                var transactions = new List<CoinCheckTransactions.Datum>();
                 var results = await FetchTransactionsPageAsync();
                 if (results.success != true)
                 {
