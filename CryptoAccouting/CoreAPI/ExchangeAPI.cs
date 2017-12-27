@@ -89,8 +89,8 @@ namespace CoinBalance.CoreAPI
                         return await BitFlyerAPI2.FetchTransactionAsync(exchange);
 
                     case "Quoine":
-                        //return await QuoineAPI.FetchExecutionAsync(exchange);
-                        return await QuoineAPI.FetchTransactionAsync(exchange);
+                        return await QuoineAPI.FetchExecutionAsync(exchange);
+                        //return await QuoineAPI.FetchTransactionAsync(exchange);
                     default:
                         throw new AppCoreWarning("Please update to the newest version! (" + exchange.Code + ")");
                         //throw new AppCoreNetworkException("ExchangeCode error. Code: " + exchange.Code);

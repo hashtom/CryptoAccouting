@@ -12,7 +12,6 @@ namespace CoinBalance.CoreAPI
 
         private const string ApiRoot = "https://api.quoine.com";
         private static Exchange _quoine;
-        //private static CrossRate _USDJPYrate;
         private static IRestClient _restClient = new RestClient(new Uri(ApiRoot));
         private static List<QuoineProduct> Products = new List<QuoineProduct>();
 
@@ -43,19 +42,19 @@ namespace CoinBalance.CoreAPI
                     if (coin.Id is "bitcoin")
                     {
                         coin.MarketPrice.LatestPriceBTC = 1;
-                        //coin.MarketPrice.LatestPriceUSD = (double)result.last_traded_price / AppCore.GetLatestCrossRate();
+                        coin.MarketPrice.LatestPriceUSD = (double)result.last_traded_price / AppCore.GetLatestCrossRate();
                     }
                     else
                     {
                         var btcprice = AppCore.Bitcoin.MarketPrice;
                         if (btcprice != null)
                         {
-                            //coin.MarketPrice.LatestPriceUSD = (double)result.last_traded_price / AppCore.GetLatestCrossRate();
+                            coin.MarketPrice.LatestPriceUSD = (double)result.last_traded_price / AppCore.GetLatestCrossRate();
                             coin.MarketPrice.LatestPriceBTC = coin.MarketPrice.LatestPriceUSD / btcprice.LatestPriceUSD;
                         }
                     }
 
-                    //coin.MarketPrice.DayVolume = (double)result.volume_24h;
+                    coin.MarketPrice.DayVolume = (double)result.volume_24h;
                     coin.MarketPrice.PriceDate = DateTime.Now;
                 }
             }
@@ -190,7 +189,7 @@ namespace CoinBalance.CoreAPI
                 SettlementCCY = (EnuCCY)AppCore.BaseCurrency,
                 TradedExchange = _quoine
             };
-            var executions = new List<QuoineExecutions.execution>();
+            //var executions = new List<QuoineExecutions.execution>();
             var products = GetProducts();
 
             try
@@ -200,9 +199,9 @@ namespace CoinBalance.CoreAPI
                     var path = $"/executions/me?product_id={product.Id}&limit=1000";
                     var req = BuildRequest(path);
                     var results = await RestUtil.ExecuteRequestAsync<QuoineExecutions>(_restClient, req);
-                    executions.AddRange(results.models);
+                    //executions.AddRange(results.models);
 
-                    foreach (var execution in executions)
+                    foreach (var execution in results.models)
                     {
 
                         tradelist.AggregateTransaction(product.base_currency,
@@ -241,7 +240,7 @@ namespace CoinBalance.CoreAPI
 
         private static List<QuoineProduct> GetProducts()
         {
-            if (!Products.Any(x => x.base_currency == AppCore.BaseCurrency.ToString()))
+            if (!Products.Any(x => x.currency == AppCore.BaseCurrency.ToString()))
             {
                 var path = $"/products/";
                 var req = RestUtil.CreateJsonRestRequest(path);
@@ -255,7 +254,11 @@ namespace CoinBalance.CoreAPI
                         Where(x => x.disabled == false).
                         Where(x => x.currency == AppCore.BaseCurrency.ToString()))
                 {
-                    Products.Add(product);
+                    var instrumentid = _quoine.GetIdForExchange(product.base_currency);
+                    if (_quoine.IsListed(instrumentid))
+                    {
+                        Products.Add(product);
+                    }
                 }
             }
             return Products;

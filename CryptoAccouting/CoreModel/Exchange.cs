@@ -54,6 +54,12 @@ namespace CoinBalance.CoreModel
             return ListedCoins.Any(x => x.Id == instrumemntID);
         }
 
+        //public bool IsListed(string symbol)
+        //{
+        //    var id = GetIdForExchange(symbol);
+        //    return ListedCoins.Any(x => x.Id == id) ? true : false;
+        //}
+
         public void AttachListedCoin(Instrument coin)
         {
             if (!ListedCoins.Any(c => c.Id == coin.Id)) ListedCoins.Attach(coin);
