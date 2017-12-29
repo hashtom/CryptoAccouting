@@ -52,9 +52,9 @@
                 {
                     await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);
                 }             }         }          public static void SavePriceSourceXML()         {             StorageAPI.SavePriceSourceXML(InstrumentList);         }          public static void SaveMyBalanceXML()
-        {             StorageAPI.SaveBalanceXML(Balance);         }          public static async Task<TradeList> LoadTradeListsAsync(Exchange exchange)
+        {             StorageAPI.SaveBalanceXML(Balance);         }          public static async Task<TradeList> LoadTradeListsAsync(Exchange exchange, int calendarYear)
         {
-            //var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              if (exchange.APIKeySaved())             {                 return await ExchangeAPI.FetchTradeListAsync(exchange);                 //exchange.AttachTradeList(await ExchangeAPI.FetchTradeListAsync(exchange));                 //PublicExchangeList.Attach(exchange); //do you need?             }else             {                 throw new AppCoreException("API Keys are not saved.");             }         }          public static async Task<List<Position>> LoadPositionAsync(Exchange exchange)         {             if (exchange.APIKeySaved())             {
+            //var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              if (exchange.APIKeySaved())             {                 return await ExchangeAPI.FetchTradeListAsync(exchange, calendarYear);                 //exchange.AttachTradeList(await ExchangeAPI.FetchTradeListAsync(exchange));                 //PublicExchangeList.Attach(exchange); //do you need?             }else             {                 throw new AppCoreException("API Keys are not saved.");             }         }          public static async Task<List<Position>> LoadPositionAsync(Exchange exchange)         {             if (exchange.APIKeySaved())             {
                 return await ExchangeAPI.FetchPositionAsync(exchange);
             }
             else             {                 throw new AppCoreException("API Keys are not saved.");             }         }          public static Exchange GetExchange(string Code)

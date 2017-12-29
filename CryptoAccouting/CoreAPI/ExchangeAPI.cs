@@ -62,7 +62,7 @@ namespace CoinBalance.CoreAPI
 
         }
 
-        internal static async Task<TradeList> FetchTradeListAsync(Exchange exchange, AssetType assettype = AssetType.Cash)
+        internal static async Task<TradeList> FetchTradeListAsync(Exchange exchange, int CalendarYear = 0)
         {
 
             try
@@ -70,7 +70,7 @@ namespace CoinBalance.CoreAPI
                 switch (exchange.Code)
                 {
                     case "Zaif":
-                        return await ZaifAPI2.FetchTransactionAsync(exchange, assettype);
+                        return await ZaifAPI2.FetchTransactionAsync(exchange, CalendarYear);
 
                     case "CoinCheck":
                         return await CoinCheckAPI2.FetchTransactionAsync(exchange);

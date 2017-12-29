@@ -464,14 +464,18 @@
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e77-jJ-AW0">
                                         <rect key="frame" x="8" y="101" width="145" height="30"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" red="0.61886935759999995" green="0.83529411760000005" blue="0.97037760419999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <state key="normal" title="Select Exchange">
-                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        </state>
+                                        <color key="backgroundColor" red="0.46202266219999999" green="0.83828371759999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <state key="normal" title="Select Exchange"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tlO-QS-0xN">
+                                        <rect key="frame" x="171" y="101" width="141" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.46202266219999999" green="0.83828371759999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" title="Calendar Year"/>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.39215686274509803" green="0.45098039215686275" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.0" green="0.40000000000000002" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7lx-Su-XSa">
                                 <rect key="frame" x="0.0" y="214" width="320" height="305"/>
@@ -491,6 +495,7 @@
                         <outlet property="TransactionView" destination="7lx-Su-XSa" id="wSA-eC-i4f"/>
                         <outlet property="barbuttonShare" destination="40t-xf-m9c" id="f5d-N2-NRG"/>
                         <outlet property="buttonExchange" destination="e77-jJ-AW0" id="NMV-jK-Lh3"/>
+                        <outlet property="buttonYear" destination="tlO-QS-0xN" id="name-outlet-tlO-QS-0xN"/>
                         <outlet property="labelBTCBuy" destination="pfI-Mw-4Mc" id="MXi-am-QVY"/>
                         <outlet property="labelBTCSell" destination="BFS-zI-Nf9" id="QD8-2L-TVu"/>
                         <outlet property="labelNumBuy" destination="D8n-SS-Ohn" id="zhd-P1-Fwi"/>
@@ -502,7 +507,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HbU-sy-l7w" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="982.5" y="1179.9300000000001"/>
+            <point key="canvasLocation" x="982.5" y="1179.9295774647887"/>
         </scene>
         <!--LeveragePL-->
         <scene sceneID="s1G-G0-FWb">
@@ -702,7 +707,7 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="backgroundColor" red="0.61886935759999995" green="0.83529411760000005" blue="0.97037760419999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                     <state key="normal" title="Delete" image="Images/garbage.png">
-                                                        <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     </state>
                                                 </button>
                                             </subviews>
@@ -1343,7 +1348,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KiD-9y-jID" userLabel="TradeTopView">
-                                <rect key="frame" x="0.0" y="64" width="320" height="151"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="142"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Buy" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jYS-CR-hlC">
@@ -1426,17 +1431,21 @@
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V9d-wD-dcf">
                                         <rect key="frame" x="8" y="101" width="145" height="30"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" red="0.61886935759999995" green="0.83529411760000005" blue="0.97037760419999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <state key="normal" title="Select Exchange">
-                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        </state>
+                                        <color key="backgroundColor" red="0.59999999999999998" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <state key="normal" title="Select Exchange"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wrG-jV-M0a">
+                                        <rect key="frame" x="171" y="101" width="141" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.59999999999999998" green="0.80000000000000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="Calendar Year"/>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.39215686274509803" green="0.45098039215686275" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.0" green="0.40000000000000002" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EzM-dh-Xdm">
-                                <rect key="frame" x="0.0" y="214" width="320" height="305"/>
+                                <rect key="frame" x="0.0" y="207" width="320" height="312"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="0.96843406939999999" blue="0.95383295040000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </view>
@@ -1447,11 +1456,12 @@
                     <connections>
                         <outlet property="PositionPLView" destination="EzM-dh-Xdm" id="name-outlet-EzM-dh-Xdm"/>
                         <outlet property="buttonExchange" destination="V9d-wD-dcf" id="name-outlet-V9d-wD-dcf"/>
+                        <outlet property="buttonYear" destination="wrG-jV-M0a" id="name-outlet-wrG-jV-M0a"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="29259" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="983" y="1893"/>
+            <point key="canvasLocation" x="982.5" y="1892.9580000000001"/>
         </scene>
     </scenes>
     <resources>

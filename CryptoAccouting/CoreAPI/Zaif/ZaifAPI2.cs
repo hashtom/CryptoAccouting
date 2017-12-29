@@ -111,32 +111,31 @@ namespace CoinBalance.CoreAPI
 
         }
 
-        public static async Task<TradeList> FetchTransactionAsync(Exchange zaif, AssetType type, string calendarYear = "ALL")
+        public static async Task<TradeList> FetchTransactionAsync(Exchange zaif, int calendarYear = 0)
         {
             _zaif = zaif;
             _restClient.BaseUrl = new Uri(ApiRoot);
             TradeList tradelist = null;
 
-            var from = calendarYear == "ALL" ? new DateTime(2012, 1, 1) : new DateTime(int.Parse(calendarYear), 1, 1);
-            var to = calendarYear == "ALL" ? DateTime.Now.Date : new DateTime(int.Parse(calendarYear), 12, 31);
-
+            var from = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
+            var to = calendarYear == 0 ? DateTime.Now.Date : new DateTime(calendarYear, 12, 31);
 
             try
             {
-                switch (type)
-                {
-                    case AssetType.Cash:
+                //switch (type)
+                //{
+                    //case AssetType.Cash:
                         tradelist = await GetTradeHistoryAsync(from, to);
                         tradelist.AddRange(await GetTradeHistoryAsync(from, to, "eth_jpy"));
                         tradelist.AddRange(await GetTradeHistoryAsync(from, to, "bch_jpy"));
-                        break;
+                //        break;
 
-                    case AssetType.Margin:
+                //    case AssetType.Margin:
 
-                        break;
-                    default:
-                        throw new InvalidOperationException();
-                }
+                //        break;
+                //    default:
+                //        throw new InvalidOperationException();
+                //}
 
                 return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
             }

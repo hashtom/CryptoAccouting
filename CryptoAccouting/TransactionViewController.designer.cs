@@ -56,6 +56,10 @@ namespace CoinBalance
         [Outlet]
         UIKit.UIView TransactionView { get; set; }
 
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton buttonYear { get; set; }
+
         void ReleaseDesignerOutlets ()
         {
             if (barbuttonShare != null) {
@@ -66,6 +70,11 @@ namespace CoinBalance
             if (buttonExchange != null) {
                 buttonExchange.Dispose ();
                 buttonExchange = null;
+            }
+
+            if (buttonYear != null) {
+                buttonYear.Dispose ();
+                buttonYear = null;
             }
 
             if (labelBTCBuy != null) {

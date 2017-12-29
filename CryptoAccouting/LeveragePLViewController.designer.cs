@@ -19,6 +19,10 @@ namespace CoinBalance.Base.lproj
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton buttonYear { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIView PositionPLView { get; set; }
 
         void ReleaseDesignerOutlets ()
@@ -26,6 +30,11 @@ namespace CoinBalance.Base.lproj
             if (buttonExchange != null) {
                 buttonExchange.Dispose ();
                 buttonExchange = null;
+            }
+
+            if (buttonYear != null) {
+                buttonYear.Dispose ();
+                buttonYear = null;
             }
 
             if (PositionPLView != null) {
