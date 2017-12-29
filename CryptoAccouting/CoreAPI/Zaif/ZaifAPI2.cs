@@ -137,7 +137,8 @@ namespace CoinBalance.CoreAPI
                 //        throw new InvalidOperationException();
                 //}
 
-                return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
+                //return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
+                return tradelist;
             }
             catch (Exception e)
             {

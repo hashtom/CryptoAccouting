@@ -73,22 +73,22 @@ namespace CoinBalance.CoreAPI
                         return await ZaifAPI2.FetchTransactionAsync(exchange, CalendarYear);
 
                     case "CoinCheck":
-                        return await CoinCheckAPI2.FetchTransactionAsync(exchange);
+                        return await CoinCheckAPI2.FetchTransactionAsync(exchange, CalendarYear);
 
                     case "Bittrex":
-                        return await BittrexAPI.FetchTransactionAsync(exchange);
+                        return await BittrexAPI.FetchTransactionAsync(exchange, CalendarYear);
 
                     case "Bitstamp":
-                        return await BItstampAPI.FetchTransactionAsync(exchange);
+                        return await BItstampAPI.FetchTransactionAsync(exchange, CalendarYear);
 
                     case "Poloniex":
-                        return await PoloniexAPI.FetchTransactionAsync(exchange);
+                        return await PoloniexAPI.FetchTransactionAsync(exchange, CalendarYear);
 
                     case "bitFlyer_l":
-                        return await BitFlyerAPI2.FetchTransactionAsync(exchange);
+                        return await BitFlyerAPI2.FetchTransactionAsync(exchange, CalendarYear);
 
                     case "Quoine":
-                        return await QuoineAPI.FetchExecutionAsync(exchange);
+                        return await QuoineAPI.FetchExecutionAsync(exchange, CalendarYear);
                         //return await QuoineAPI.FetchTransactionAsync(exchange);
                     default:
                         throw new AppCoreWarning("Please update to the newest version! (" + exchange.Code + ")");

@@ -59,7 +59,7 @@ namespace CoinBalance.CoreAPI
 
         }
 
-        public static async Task<TradeList> FetchTransactionAsync(Exchange poloniex)
+        public static async Task<TradeList> FetchTransactionAsync(Exchange poloniex, int calendarYear = 0)
         {
             _poloniex = poloniex;
 

@@ -183,7 +183,7 @@ namespace CoinBalance.CoreAPI
             }
         }
 
-        public static async Task<TradeList> FetchExecutionAsync(Exchange quoine)
+        public static async Task<TradeList> FetchExecutionAsync(Exchange quoine, int calendarYear = 0)
         {
             _quoine = quoine;
             var tradelist = new TradeList()

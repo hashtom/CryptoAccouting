@@ -53,7 +53,7 @@ namespace CoinBalance.CoreAPI
 
         }
 
-        public static async Task<TradeList> FetchTransactionAsync(Exchange bittrex)
+        public static async Task<TradeList> FetchTransactionAsync(Exchange bittrex, int calendarYear = 0)
         {
             _bittrex = bittrex;
 

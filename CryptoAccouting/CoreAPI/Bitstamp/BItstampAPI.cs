@@ -55,7 +55,7 @@ namespace CoinBalance.CoreAPI
 
         }
 
-        public static async Task<TradeList> FetchTransactionAsync(Exchange bitstamp)
+        public static async Task<TradeList> FetchTransactionAsync(Exchange bitstamp, int calendarYear = 0)
         {
             _bitstamp = bitstamp;
 

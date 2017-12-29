@@ -109,7 +109,7 @@ namespace CoinBalance.CoreAPI
 
         }
 
-        public static async Task<TradeList> FetchTransactionAsync(Exchange bitflyer)
+        public static async Task<TradeList> FetchTransactionAsync(Exchange bitflyer, int calendarYear = 0)
         {
             _bitflyer = bitflyer;
             var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _bitflyer };
