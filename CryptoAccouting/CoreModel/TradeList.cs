@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-//using System.Collections.ObjectModel;
 
 namespace CoinBalance.CoreModel
 {
@@ -20,7 +19,7 @@ namespace CoinBalance.CoreModel
         {
             get
             {
-                return transactions.Where(t => t.BuySell == EnuBuySell.Buy).Sum(t => t.NumTransaction);
+                return transactions.Where(t => t.Side == EnuSide.Buy).Sum(t => t.NumTransaction);
             }
         }
 
@@ -28,7 +27,7 @@ namespace CoinBalance.CoreModel
         {
             get
             {
-                return transactions.Where(t => t.BuySell == EnuBuySell.Sell).Sum(t => t.NumTransaction);
+                return transactions.Where(t => t.Side == EnuSide.Sell).Sum(t => t.NumTransaction);
             }
         }
 
@@ -36,7 +35,7 @@ namespace CoinBalance.CoreModel
         {
             get
             {
-                return transactions.Where(t => t.BuySell == EnuBuySell.Buy).
+                return transactions.Where(t => t.Side == EnuSide.Buy).
                                    Where(t => t.SettlementCCY == EnuCCY.BTC).
                                    Sum(t => t.TradeNetValue);
             }
@@ -46,7 +45,7 @@ namespace CoinBalance.CoreModel
         {
             get
             {
-                return transactions.Where(t => t.BuySell == EnuBuySell.Sell).
+                return transactions.Where(t => t.Side == EnuSide.Sell).
                                  Where(t => t.SettlementCCY == EnuCCY.BTC).
                                  Sum(t => t.TradeNetValue);
             }
@@ -56,7 +55,7 @@ namespace CoinBalance.CoreModel
         {
             get
             {
-                return transactions.Where(t => t.BuySell == EnuBuySell.Buy).
+                return transactions.Where(t => t.Side == EnuSide.Buy).
                                Where(t => t.SettlementCCY == SettlementCCY).
                                Sum(t => t.TradeNetValue);
             }
@@ -66,7 +65,7 @@ namespace CoinBalance.CoreModel
         {
             get
             {
-                return transactions.Where(t => t.BuySell == EnuBuySell.Sell).
+                return transactions.Where(t => t.Side == EnuSide.Sell).
                                Where(t => t.SettlementCCY == SettlementCCY).
                                Sum(t => t.TradeNetValue);
             }
@@ -76,7 +75,7 @@ namespace CoinBalance.CoreModel
         {
             get
             {
-                return transactions.Where(t => t.BuySell == EnuBuySell.Sell).
+                return transactions.Where(t => t.Side == EnuSide.Sell).
                                    Sum(t => t.RealizedBookValue);
             }
         }
@@ -95,14 +94,14 @@ namespace CoinBalance.CoreModel
             //this.SettlementCCY = settlementCCY;
         }
 
-        public double TotalQuantity(string instrumentId, EnuBuySell buysell)
+        public double TotalQuantity(string instrumentId, EnuSide side)
         {
-            return transactions.Where(x => x.TradedCoin.Id == instrumentId).Where(x => x.BuySell == buysell).Sum(x => x.Quantity);
+            return transactions.Where(x => x.TradedCoin.Id == instrumentId).Where(x => x.Side == side).Sum(x => x.Quantity);
         }
 
-        public double TotalNetValue(string instrumentId, EnuBuySell buysell)
+        public double TotalNetValue(string instrumentId, EnuSide side)
         {
-            return transactions.Where(x => x.TradedCoin.Id == instrumentId).Where(x => x.BuySell == buysell).Sum(x => x.TradeNetValue);
+            return transactions.Where(x => x.TradedCoin.Id == instrumentId).Where(x => x.Side == side).Sum(x => x.TradeNetValue);
         }
 
         public string ExchangeName()
@@ -111,7 +110,8 @@ namespace CoinBalance.CoreModel
         }
 
         public void AggregateTransaction(string symbol,
-                                         EnuBuySell buysell,
+                                         AssetType type,
+                                         EnuSide side,
                                          double qty,
                                          double tradePrice,
                                          EnuCCY settleCcy,
@@ -123,9 +123,9 @@ namespace CoinBalance.CoreModel
             Transaction tx;
             var instrumentId = exchange.GetIdForExchange(symbol);
 
-            if (transactions.Any(t => (t.CoinId == instrumentId && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date && t.SettlementCCY == settleCcy)))
+            if (transactions.Any(t => (t.CoinId == instrumentId && t.Type == type && t.Side == side && t.TradeDate.Date == tradeDate.Date && t.SettlementCCY == settleCcy)))
             {
-                tx = transactions.Single(t => (t.CoinId == instrumentId && t.BuySell == buysell && t.TradeDate.Date == tradeDate.Date && t.SettlementCCY == settleCcy));
+                tx = transactions.Single(t => (t.CoinId == instrumentId && t.Type == type && t.Side == side && t.TradeDate.Date == tradeDate.Date && t.SettlementCCY == settleCcy));
 
                 var newqty = tx.Quantity + qty;
 
@@ -138,7 +138,8 @@ namespace CoinBalance.CoreModel
             {
                 tx = new Transaction(AppCore.InstrumentList.GetByInstrumentId(instrumentId), exchange);
                 tx.TxId = (transactions.Count + 1);
-                tx.BuySell = buysell;
+                tx.Type = type;
+                tx.Side = side;
                 tx.SettlementCCY = settleCcy;
                 tx.Quantity = qty;
                 tx.TradePriceSettle = tradePrice;
@@ -147,17 +148,6 @@ namespace CoinBalance.CoreModel
                 tx.NumTransaction = 1;
                 this.Attach(tx);
             }
-
-#if DEBUG
-            if (instrumentId == "augur")
-            {
-                System.Diagnostics.Debug.WriteLine("id:" + tx.TxId + " ,side:" + buysell +
-                                                   ", @price:" + tradePrice +
-                                                   ", @qty: " + qty +
-                                                   ", price:" + tx.TradePriceSettle + 
-                                                   ", quantity:" + tx.Quantity + ", fee=" + tx.Fee);
-            }
-#endif
         }
 
         private void CalculatePL()
@@ -178,7 +168,7 @@ namespace CoinBalance.CoreModel
 
                 foreach (var tx in transactions.Where(t => t.ColumnCoinSymbol == symbol).OrderBy(t => t.TradeDate))
                 {
-                    if (tx.BuySell == EnuBuySell.Buy)
+                    if (tx.Side == EnuSide.Buy)
                     {
                         //Buy : Update Bookcost
                         current_bookprice = (accumulated_value + tx.TradeNetValue) / (accumulated_qty + tx.Quantity);
@@ -186,7 +176,7 @@ namespace CoinBalance.CoreModel
                         accumulated_value += tx.TradeNetValue;
                         accumulated_qty += tx.Quantity;
                     }
-                    else if (tx.BuySell == EnuBuySell.Sell)
+                    else if (tx.Side == EnuSide.Sell)
                     {
                         //Sell : Reduce Accumulated value
                         accumulated_value -= tx.TradeNetValue;

@@ -8,17 +8,17 @@ namespace CoinBalance.CoreModel
     {
         public int TxId { get; set; }
         public Instrument TradedCoin { get; }
+        public AssetType Type { get; set; }
         public EnuCCY SettlementCCY { get; set; }
         public DateTime TradeDate { get; set; }
         public Exchange TradeExchange { get; }
-        public EnuBuySell BuySell { get; set; }
+        public EnuSide Side { get; set; }
         public double Quantity { get; set; }
         public double TradePriceSettle { get; set; }
         public double Fee { get; set; }
         public double BookPrice { get; set; }
+        //public string BrokerCode { get; set; }
         public int NumTransaction { get; set; }
-        //public bool IsMargin { get; set; }
-        //public DateTime UpdateTime { get; set; }
 
         public string CoinId
         {
@@ -37,7 +37,7 @@ namespace CoinBalance.CoreModel
 
         public double TradeNetValue
         {
-            get { return BuySell == EnuBuySell.Buy ? TradePriceSettle * Quantity - Fee : TradePriceSettle * Quantity + Fee; }
+            get { return Side == EnuSide.Buy ? TradePriceSettle * Quantity - Fee : TradePriceSettle * Quantity + Fee; }
         }
 
         public string ColumnTradePriceSettle
@@ -52,14 +52,14 @@ namespace CoinBalance.CoreModel
 
         public double RealizedBookValue
         {
-            get { return BuySell == EnuBuySell.Sell ? BookPrice * Quantity : 0; }
+            get { return Side == EnuSide.Sell ? BookPrice * Quantity : 0; }
         }
 
         public double RealizedPL
         {
             // calculate Realized PL when one side of trase is Base Fiat Currency
             // ignore trades both sides are Crypto for Realized PL calculation 
-            get { return (BuySell == EnuBuySell.Sell) ? (TradePriceSettle - BookPrice) * Quantity - Fee : 0; }
+            get { return (Side == EnuSide.Sell) ? (TradePriceSettle - BookPrice) * Quantity - Fee : 0; }
         }
 
         public Transaction(Instrument coin, Exchange exchange)
@@ -71,7 +71,7 @@ namespace CoinBalance.CoreModel
 
     }
 
-    public enum EnuBuySell
+    public enum EnuSide
     {
         Buy,
         Sell

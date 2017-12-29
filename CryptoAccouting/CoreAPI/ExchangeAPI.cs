@@ -62,7 +62,7 @@ namespace CoinBalance.CoreAPI
 
         }
 
-        internal static async Task<TradeList> FetchTradeListAsync(Exchange exchange)
+        internal static async Task<TradeList> FetchTradeListAsync(Exchange exchange, AssetType assettype = AssetType.Cash)
         {
 
             try
@@ -70,7 +70,7 @@ namespace CoinBalance.CoreAPI
                 switch (exchange.Code)
                 {
                     case "Zaif":
-                        return await ZaifAPI2.FetchTransactionAsync(exchange);
+                        return await ZaifAPI2.FetchTransactionAsync(exchange, assettype);
 
                     case "CoinCheck":
                         return await CoinCheckAPI2.FetchTransactionAsync(exchange);
@@ -80,7 +80,6 @@ namespace CoinBalance.CoreAPI
 
                     case "Bitstamp":
                         return await BItstampAPI.FetchTransactionAsync(exchange);
-                        //throw new AppCoreNetworkException("Bitstamp will be supported soon!");
 
                     case "Poloniex":
                         return await PoloniexAPI.FetchTransactionAsync(exchange);

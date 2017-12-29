@@ -194,10 +194,6 @@
       <DependentUpon>SettingTableViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="CoreModel\AppCore.cs" />
-    <Compile Include="PLTableViewController.cs" />
-    <Compile Include="PLTableViewController.designer.cs">
-      <DependentUpon>PLTableViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="CoreModel\ExchangeList.cs" />
     <Compile Include="UIModel\CoinViewCell.cs" />
     <Compile Include="UIModel\CoinViewCell.designer.cs">
@@ -284,6 +280,13 @@
     <Compile Include="CoreAPI\Quoine\QuoineBalance.cs" />
     <Compile Include="CoreAPI\Quoine\QuoineTrades.cs" />
     <Compile Include="CoreAPI\Quoine\QuoineExecutions.cs" />
+    <Compile Include="CoreAPI\Zaif\ZaifPositions.cs" />
+    <Compile Include="CoreModel\LeveragePosition.cs" />
+    <Compile Include="CoreModel\LeveragePL.cs" />
+    <Compile Include="LeveragePLViewController.cs" />
+    <Compile Include="LeveragePLViewController.designer.cs">
+      <DependentUpon>LeveragePLViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />

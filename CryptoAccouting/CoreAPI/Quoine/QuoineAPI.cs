@@ -146,7 +146,8 @@ namespace CoinBalance.CoreAPI
                         if (trade.open_quantity > 0)
                         {
                             tradelist.AggregateTransaction(symbol,
-                                                           trade.side.Contains("long") ? EnuBuySell.Buy : EnuBuySell.Sell,
+                                                           AssetType.Cash,
+                                                           trade.side.Contains("long") ? EnuSide.Buy : EnuSide.Sell,
                                                            (double)trade.open_quantity,
                                                            (double)trade.open_price,
                                                            EnuCCY.JPY,
@@ -159,7 +160,8 @@ namespace CoinBalance.CoreAPI
                         if (trade.close_quantity > 0)
                         {
                             tradelist.AggregateTransaction(symbol,
-                                                           trade.side.Contains("long") ? EnuBuySell.Buy : EnuBuySell.Sell,
+                                                           AssetType.Cash,
+                                                           trade.side.Contains("long") ? EnuSide.Buy : EnuSide.Sell,
                                                            (double)trade.close_quantity,
                                                            (double)trade.close_price,
                                                            EnuCCY.JPY,
@@ -205,7 +207,8 @@ namespace CoinBalance.CoreAPI
                     {
 
                         tradelist.AggregateTransaction(product.base_currency,
-                                                       execution.my_side.Contains("buy") ? EnuBuySell.Buy : EnuBuySell.Sell,
+                                                       AssetType.Cash,
+                                                       execution.my_side.Contains("buy") ? EnuSide.Buy : EnuSide.Sell,
                                                        (double)execution.quantity,
                                                        (double)execution.price,
                                                        EnuCCY.JPY,

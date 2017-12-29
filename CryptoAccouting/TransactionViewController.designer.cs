@@ -22,10 +22,6 @@ namespace CoinBalance
 
 
         [Outlet]
-        UIKit.UIButton buttonSearch { get; set; }
-
-
-        [Outlet]
         UIKit.UILabel labelBTCBuy { get; set; }
 
 
@@ -70,11 +66,6 @@ namespace CoinBalance
             if (buttonExchange != null) {
                 buttonExchange.Dispose ();
                 buttonExchange = null;
-            }
-
-            if (buttonSearch != null) {
-                buttonSearch.Dispose ();
-                buttonSearch = null;
             }
 
             if (labelBTCBuy != null) {

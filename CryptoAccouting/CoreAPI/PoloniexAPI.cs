@@ -206,16 +206,16 @@ namespace CoinBalance.CoreAPI
                     foreach (var elem in jarray)
                     {
                         //Transaction Date Order must be ascending by design...
-                        EnuBuySell ebuysell;
+                        EnuSide ebuysell;
                         var buysell = (string)elem["type"];
 
                         if (buysell.Contains("buy"))
                         {
-                            ebuysell = EnuBuySell.Buy;
+                            ebuysell = EnuSide.Buy;
                         }
                         else if (buysell.Contains("sell"))
                         {
-                            ebuysell = EnuBuySell.Sell;
+                            ebuysell = EnuSide.Sell;
                         }
                         else
                         {
@@ -225,7 +225,8 @@ namespace CoinBalance.CoreAPI
                         symbol = symbol.Replace("BTC_", "").Replace("ETH_", "").Replace("USDT_", "");
 
                         tradelist.AggregateTransaction(symbol,
-                                                      ebuysell,
+                                                       AssetType.Cash,
+                                                       ebuysell,
                                                        (double)elem["amount"],
                                                        (double)elem["rate"],
                                                        settleccy,

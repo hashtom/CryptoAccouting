@@ -158,15 +158,15 @@ namespace CoinBalance.CoreAPI
 
                 foreach (var tx in transactions)
                 {
-                    EnuBuySell ebuysell;
+                    EnuSide ebuysell;
 
                     switch (tx.side)
                     {
                         case "buy":
-                            ebuysell = EnuBuySell.Buy;
+                            ebuysell = EnuSide.Buy;
                             break;
                         case "sell":
-                            ebuysell = EnuBuySell.Sell;
+                            ebuysell = EnuSide.Sell;
                             break;
                         default:
                             throw new NotImplementedException();
@@ -177,7 +177,8 @@ namespace CoinBalance.CoreAPI
                     decimal val = (decimal)tx.funds.GetType().GetProperty(symbol.ToLower()).GetValue(tx.funds);
 
                     tradelist.AggregateTransaction(symbol,
-                                                  ebuysell,
+                                                   AssetType.Cash,
+                                                   ebuysell,
                                                    Math.Abs((double)val),
                                                    (double)tx.rate,
                                                    EnuCCY.JPY,

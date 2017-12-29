@@ -10,25 +10,6 @@
             {                 return InstrumentList.GetByInstrumentId("bitcoin");
             }         }
 
-        //public static NavigationDrawer Navigation { get; set; }
-
-        //public static NavigationDrawer InitializeSlideMenu(UIView BalanceTableView,
-        //                                                   UITableViewController PositionViewC,
-        //                                                   UIViewController TransactionViewC,
-        //                                                   UITableViewController PLViewC,
-        //                                                   UIViewController PerfViewC,
-        //                                                   UIViewController SettingViewC)
-        //{
-        //    Navigation = new NavigationDrawer(BalanceTableView.Frame.Width, BalanceTableView.Frame.Height,
-        //                                      PositionViewC,
-        //                                      TransactionViewC,
-        //                                      PLViewC,
-        //                                      PerfViewC,
-        //                                      SettingViewC);
-        //    Navigation.AddView(BalanceTableView);
-        //    return Navigation;
-        //}
-
         public static void InitializeCore()
         {
 

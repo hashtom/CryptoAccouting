@@ -123,15 +123,15 @@ namespace CoinBalance.CoreAPI
                 foreach (var result in results)
                 {
 
-                    EnuBuySell ebuysell;
+                    EnuSide ebuysell;
 
                     if (result.side.Contains("BUY"))
                     {
-                        ebuysell = EnuBuySell.Buy;
+                        ebuysell = EnuSide.Buy;
                     }
                     else if (result.side.Contains("SELL"))
                     {
-                        ebuysell = EnuBuySell.Sell;
+                        ebuysell = EnuSide.Sell;
                     }
                     else
                     {
@@ -139,6 +139,7 @@ namespace CoinBalance.CoreAPI
                     }
 
                     tradelist.AggregateTransaction(_bitflyer.GetSymbolForExchange("bitcoin"),
+                                                   AssetType.Cash,
                                                    ebuysell,
                                                    (double)result.size,
                                                    (double)result.price,
