@@ -41,8 +41,10 @@ if bittrex["success"] == True:
     bittrex_coins = pd.DataFrame(df['Currency'])
     bittrex_coins.rename(columns={'Currency':'symbol'}, inplace=True)
     bittrex_coins.drop(bittrex_coins[bittrex_coins.symbol=="BCC"].index, inplace=True)
+    bittrex_coins.drop(bittrex_coins[bittrex_coins.symbol=="IOTA"].index, inplace=True)
     symbols = bittrex_coins.to_dict(orient='records')
     symbols.append({"symbol2" : "BCC"})
+    symbols.append({"symbol2" : "IOTA"})
     bittrex_dict["listing"] = symbols
     exchanges.append(bittrex_dict)
 
@@ -359,10 +361,9 @@ binance_symbols = pd.DataFrame(df['symbol'])
 binance_symbols = binance_symbols[binance_symbols.symbol.str.contains('BTC')]
 binance_symbols = binance_symbols.symbol.str.replace('BTC', '')
 binance_symbols = pd.DataFrame(binance_symbols)
+binance_symbols.drop(binance_symbols[binance_symbols.symbol=="IOTA"].index, inplace=True)
 symbols = binance_symbols.to_dict(orient='records')
-bittrex_dict["listing"] = symbols
-exchanges.append(bittrex_dict)
-
+symbols.append({"symbol2" : "IOTA"})
 binance_dict["listing"] = symbols
 exchanges.append(binance_dict)
 

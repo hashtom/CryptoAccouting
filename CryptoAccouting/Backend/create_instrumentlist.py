@@ -63,7 +63,7 @@ for ins in InstrumentList:
                 "rank":ins["rank"],
                 "name":ins["name"],
                 "symbol":ins["symbol"],
-                "symbol2":"IOT",
+                "symbol2":"IOTA",
                 "id":ins["id"]
                 })
         elif ins["id"] == "dogecoin":
