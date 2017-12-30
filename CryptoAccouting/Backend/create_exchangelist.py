@@ -345,6 +345,26 @@ if cryptopia['Success'] == True:
     cryptopia_dict["listing"] = symbols
     exchanges.append(cryptopia_dict)
 
+#Binance
+binance = requests.get("https://api.binance.com/api/v1/ticker/allPrices").json()
+binance_dict = {"code": "Binance",
+                 "name": "Binance",
+                 "apiprice": "true",
+                 "apitrade": "true",
+                 "apibalance": "true"
+                 }
+
+df = pd.read_json(json.dumps(binance))
+binance_symbols = pd.DataFrame(df['symbol'])
+binance_symbols = binance_symbols[binance_symbols.symbol.str.contains('BTC')]
+binance_symbols = binance_symbols.symbol.str.replace('BTC', '')
+binance_symbols = pd.DataFrame(binance_symbols)
+symbols = binance_symbols.to_dict(orient='records')
+bittrex_dict["listing"] = symbols
+exchanges.append(bittrex_dict)
+
+binance_dict["listing"] = symbols
+exchanges.append(binance_dict)
 
 #OTC
 otc_dict = { 

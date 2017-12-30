@@ -87,7 +87,7 @@
                     default:                         storage = new Wallet(storagecode, storagetype);                         CoinStorageList.Attach(storage);
                         break;
                 }
-            }              storage.AttachPosition(pos);             pos.AttachCoinStorage(storage);         }          public static double GetLatestCrossRate()         {             return USDCrossRates is null ? 0 : USDCrossRates.First(x => x.Currency == baseCurrency).Rate;         } 
+            }              storage.AttachPosition(pos);             pos.AttachCoinStorage(storage);         }          public static double GetLatestCrossRate()         {             return USDCrossRates is null ? 0 : USDCrossRates.First(x => x.Currency == baseCurrency).Rate;         }          public static double GetPrevCrossRate()         {             return USDCrossRates is null ? 0 : USDCrossRates.First(x => x.Currency == baseCurrency).RateBefore24h;         } 
 		public static bool IsInternetReachable()
 		{
             return Reachability.IsHostReachable(CoinbalanceAPI.coinbalance_url);

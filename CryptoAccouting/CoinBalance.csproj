@@ -157,6 +157,7 @@
     <Folder Include="CoreAPI\Quoine\" />
     <Folder Include="CoreAPI\Bittrex\" />
     <Folder Include="CoreAPI\Poloniex\" />
+    <Folder Include="CoreAPI\Binance\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="UIModel\CoinViewCell.xib" />
@@ -289,6 +290,8 @@
     </Compile>
     <Compile Include="CoreAPI\Bittrex\BittrexAPI.cs" />
     <Compile Include="CoreAPI\Poloniex\PoloniexAPI.cs" />
+    <Compile Include="CoreAPI\Binance\BinanceAPI.cs" />
+    <Compile Include="CoreAPI\Binance\BinanceTicker.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />
