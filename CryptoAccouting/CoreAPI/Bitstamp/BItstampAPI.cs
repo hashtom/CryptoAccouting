@@ -58,12 +58,21 @@ namespace CoinBalance.CoreAPI
         public static async Task<TradeList> FetchTransactionAsync(Exchange bitstamp, int calendarYear = 0)
         {
             _bitstamp = bitstamp;
+            int limit = 500;
+            int offset = 0;
 
+            var param = new Dictionary<string, string>()
+            {
+                {"limit",limit.ToString()},
+                {"offset", offset.ToString()}
+            };
+       
             try
             {
-                var rawjson = await SendAsync(HttpMethod.Post, BaseUrl + "user_transactions/");
+                var rawjson = await SendAsync(HttpMethod.Post, BaseUrl + "user_transactions/", param);
                 var tradelist = ParseTransaction(rawjson);
-                return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
+                //return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
+                return tradelist;
             }
             catch (Exception e)
             {

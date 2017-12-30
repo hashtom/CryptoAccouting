@@ -112,15 +112,41 @@ namespace CoinBalance.CoreAPI
         public static async Task<TradeList> FetchTransactionAsync(Exchange bitflyer, int calendarYear = 0)
         {
             _bitflyer = bitflyer;
-            var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _bitflyer };
-            var path = $"/v1/me/getexecutions?product_code=BTC_JPY";
-
+            //var path = $"/v1/me/getexecutions?product_code=BTC_JPY";
+            int limit = 500;
+            var searchAfter = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
+            var searchBefore = calendarYear == 0 ? DateTime.Now.Date : new DateTime(calendarYear, 12, 31);
+            var transactions = new List<BitflyerExecution>();
             try
             {
-                var req = BuildRequest(path);
-                var results = await RestUtil.ExecuteRequestAsync<List<BitflyerExecution>>(_restClient, req);
+                //var req = BuildRequest(path);
+                //var results = await RestUtil.ExecuteRequestAsync<List<BitflyerExecution>>(_restClient, req);
+                var results = await FetchTransactionsPageAsync(limit);
 
-                foreach (var result in results)
+                while (true)
+                {
+                    transactions.AddRange(results.
+                                          Where(x => searchAfter < x.exec_date).
+                                          Where(x => searchBefore >= x.exec_date));
+
+                    if (searchAfter > results.Last().exec_date)
+                    {
+                        break;
+                    }
+
+                    if (results.Count == 0 ||
+                        limit > results.Count)
+                    {
+                        break;
+                    }
+
+                    var lastId = results.Last().id;
+                    results = await FetchTransactionsPageAsync(limit, lastId);
+                }
+
+                var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _bitflyer };
+
+                foreach (var result in transactions)
                 {
 
                     EnuSide ebuysell;
@@ -150,7 +176,8 @@ namespace CoinBalance.CoreAPI
                                                   );
                 }
 
-                return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
+                //return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
+                return tradelist;
             }
             catch (Exception e)
             {
@@ -158,6 +185,32 @@ namespace CoinBalance.CoreAPI
                 throw;
             }
 
+        }
+
+        public static async Task<List<BitflyerExecution>> FetchTransactionsPageAsync(int limit = 500, string after = null, string before = null)
+        {
+            var path = $"/v1/me/getexecutions?product_code=BTC_JPY&count={limit}";
+
+            if (after != null)
+            {
+                path += $"&after={after}";
+            }
+
+            if (before != null)
+            {
+                path += $"&before={before}";
+            }
+
+            try
+            {
+                var req = BuildRequest(path);
+                return await RestUtil.ExecuteRequestAsync<List<BitflyerExecution>>(_restClient, req);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchTransactionAsync: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
         }
 
         private static RestRequest BuildRequest(string path, string method = "GET", string body = "")

@@ -120,13 +120,14 @@ namespace CoinBalance.CoreAPI
         public static async Task<TradeList> FetchTransactionAsync(Exchange coincheck, int calendarYear = 0)
         {
             _coincheck = coincheck;
+            int limit = 500;
             var searchAfter = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
             var searchBefore = calendarYear == 0 ? DateTime.Now.Date : new DateTime(calendarYear, 12, 31);
             var transactions = new List<CoinCheckTransactions.Datum>();
 
             try
             {
-                var results = await FetchTransactionsPageAsync();
+                var results = await FetchTransactionsPageAsync(limit);
                 if (results.success != true)
                 {
                     throw new AppCoreParseException("Coincheck returned error: " + results);
@@ -150,7 +151,7 @@ namespace CoinBalance.CoreAPI
                     }
 
                     var lastId = results.data.Last().id;
-                    results = await FetchTransactionsPageAsync(lastId);
+                    results = await FetchTransactionsPageAsync(limit, lastId);
                     if (results.success != true)
                     {
                         throw new AppCoreParseException("Coincheck returned error: " + results);
@@ -201,8 +202,7 @@ namespace CoinBalance.CoreAPI
             }
         }
 
-        private static async Task<CoinCheckTransactions> FetchTransactionsPageAsync(string after = null, string before = null, int limit = 100,
-            string order = "desc")
+        private static async Task<CoinCheckTransactions> FetchTransactionsPageAsync(int limit, string after = null, string before = null, string order = "desc")
         {
             var path = $"/api/exchange/orders/transactions_pagination?limit={limit}&order={order}";
             if (after != null)

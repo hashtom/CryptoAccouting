@@ -6,11 +6,11 @@ namespace CoinBalance.CoreAPI
     public class QuoineExecutions
     {
 
-        public List<execution> models { get; set; }
+        public List<Execution> models { get; set; }
         public int current_page { get; set; }
         public int total_pages { get; set; }
 
-        public class execution
+        public class Execution
         {
             public int Id { get; set; }
             public decimal quantity { get; set; }

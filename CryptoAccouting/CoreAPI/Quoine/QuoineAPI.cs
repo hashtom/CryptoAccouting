@@ -111,14 +111,13 @@ namespace CoinBalance.CoreAPI
         public static async Task<TradeList> FetchTransactionAsync(Exchange quoine)
         {
             _quoine = quoine;
-            var path = "/trades";
+            int limit = 500;
             var tradelist = new TradeList() { SettlementCCY = (EnuCCY)AppCore.BaseCurrency, TradedExchange = _quoine };
             var transactions = new List<QuoineTrades.Trade>();
 
             try
             {
-                var req = BuildRequest(path);
-                var trades = await FetchTransactionsPageAsync();
+                var trades = await FetchTransactionsPageAsync(limit);
 
                 while (true)
                 {
@@ -129,7 +128,7 @@ namespace CoinBalance.CoreAPI
                         break;
                     }
 
-                    trades = await FetchTransactionsPageAsync(trades.current_page + 1);
+                    trades = await FetchTransactionsPageAsync(limit, trades.current_page + 1);
                 }
 
                 foreach (var trade in trades.models)
@@ -186,24 +185,40 @@ namespace CoinBalance.CoreAPI
         public static async Task<TradeList> FetchExecutionAsync(Exchange quoine, int calendarYear = 0)
         {
             _quoine = quoine;
-            var tradelist = new TradeList()
-            {
-                SettlementCCY = (EnuCCY)AppCore.BaseCurrency,
-                TradedExchange = _quoine
-            };
-            //var executions = new List<QuoineExecutions.execution>();
+            int limit = 500;
+            var searchAfter = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
+            var searchBefore = calendarYear == 0 ? DateTime.Now.Date : new DateTime(calendarYear, 12, 31);
+            var tradelist = new TradeList() { SettlementCCY = (EnuCCY)AppCore.BaseCurrency, TradedExchange = _quoine };
             var products = GetProducts();
 
             try
             {
                 foreach (var product in products)
                 {
-                    var path = $"/executions/me?product_id={product.Id}&limit=1000";
-                    var req = BuildRequest(path);
-                    var results = await RestUtil.ExecuteRequestAsync<QuoineExecutions>(_restClient, req);
+                    //var path = $"/executions/me?product_id={product.Id}&limit={limit}";
+                    //var req = BuildRequest(path);
+                    //var results = await RestUtil.ExecuteRequestAsync<QuoineExecutions>(_restClient, req);
                     //executions.AddRange(results.models);
+                    var executions = new List<QuoineExecutions.Execution>();
 
-                    foreach (var execution in results.models)
+                    var results = await FetchExecutionsPageAsync(product.Id, limit);
+
+                    while (true)
+                    {
+                        executions.AddRange(results.models.
+                                              Where(x => searchAfter < x.created_at).
+                                              Where(x => searchBefore >= x.created_at));
+
+                        if (results.current_page == results.total_pages)
+                        {
+                            break;
+                        }
+
+                        results = await FetchExecutionsPageAsync(product.Id, limit, results.current_page + 1);
+                    }
+
+
+                    foreach (var execution in executions)
                     {
 
                         tradelist.AggregateTransaction(product.base_currency,
@@ -226,10 +241,11 @@ namespace CoinBalance.CoreAPI
                 throw;
             }
 
-            return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
+            //return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
+            return tradelist;
         }
 
-        private static async Task<QuoineTrades> FetchTransactionsPageAsync(int page = 0, int limit = 100)
+        private static async Task<QuoineTrades> FetchTransactionsPageAsync(int limit, int page = 0)
         {
             var path = $"/trades?limit={limit}";
             if (page != 0)
@@ -239,6 +255,18 @@ namespace CoinBalance.CoreAPI
 
             var req = BuildRequest(path);
             return await RestUtil.ExecuteRequestAsync<QuoineTrades>(_restClient, req);
+        }
+
+        private static async Task<QuoineExecutions> FetchExecutionsPageAsync(string productid, int limit, int page = 0)
+        {
+            var path = $"/executions/me?product_id={productid}&limit={limit}";
+            if (page != 0)
+            {
+                path += $"&page={page}";
+            }
+
+            var req = BuildRequest(path);
+            return await RestUtil.ExecuteRequestAsync<QuoineExecutions>(_restClient, req);
         }
 
         private static List<QuoineProduct> GetProducts()
