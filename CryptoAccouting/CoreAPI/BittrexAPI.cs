@@ -60,8 +60,9 @@ namespace CoinBalance.CoreAPI
             try
             {
                 var rawjson = await SendAsync(HttpMethod.Get, BaseUrl + "/api/v1.1/account/getorderhistory");
-                var tradelist = ParseTransaction(rawjson);
-                return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
+                return ParseTransaction(rawjson);
+
+                //return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
             }
             catch (Exception e)
             {

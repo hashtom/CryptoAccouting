@@ -58,28 +58,59 @@ namespace CoinBalance.CoreAPI
         public static async Task<TradeList> FetchTransactionAsync(Exchange bitstamp, int calendarYear = 0)
         {
             _bitstamp = bitstamp;
-            int limit = 500;
+            JArray trades = new JArray();
+            var path = BaseUrl + "user_transactions/";
+            int limit = 100;
             int offset = 0;
+            var searchAfter = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
+            var searchBefore = calendarYear == 0 ? DateTime.Now.Date : new DateTime(calendarYear, 12, 31);
 
-            var param = new Dictionary<string, string>()
-            {
-                {"limit",limit.ToString()},
-                {"offset", offset.ToString()}
-            };
+            var param = new Dictionary<string, string>();
+            param.Add("limit", limit.ToString());
        
             try
             {
-                var rawjson = await SendAsync(HttpMethod.Post, BaseUrl + "user_transactions/", param);
-                var tradelist = ParseTransaction(rawjson);
+                var rawjson = await SendAsync(HttpMethod.Post, path, param);
+
+                while (true)
+                {
+                    var jarray = JArray.Parse(rawjson);
+                    foreach (var token in jarray)
+                    {
+                        if (searchAfter < DateTime.Parse((string)token["datetime"]) &&
+                            searchBefore >= DateTime.Parse((string)token["datetime"]))
+                        {
+                            trades.Add(token);
+                        }
+                    }
+
+                    if (jarray.Count() == 0 || limit > jarray.Count())
+                    {
+                        break;
+                    }
+
+                    if(DateTime.Parse((string)jarray.Last["datetime"]) < searchAfter)
+                    {
+                        break;
+                    }
+
+                    param.Clear();
+                    param.Add("limit", limit.ToString());
+                    param.Add("offset", offset.ToString());
+                    rawjson = await SendAsync(HttpMethod.Post, path, param);
+
+                    offset += limit;
+                }
+
+                return ParseTransaction(trades);
+
                 //return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
-                return tradelist;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": BitstampAPI: " + e.GetType() + ": " + e.Message);
                 throw;
             }
-
         }
 
         private static async Task ParsePrice(string rawjson, Instrument coin)
@@ -152,7 +183,7 @@ namespace CoinBalance.CoreAPI
 
         }
 
-        private static TradeList ParseTransaction(string rawjson)
+        private static TradeList ParseTransaction(JArray jarray)
         {
             string symbol;
             EnuSide ebuysell;
@@ -162,7 +193,7 @@ namespace CoinBalance.CoreAPI
             try
             {
                 var tradelist = new TradeList() { SettlementCCY = EnuCCY.USD, TradedExchange = _bitstamp };
-                var jarray = JArray.Parse(rawjson);
+                //var jarray = JArray.Parse(rawjson);
 
                 foreach (var elem in jarray)
                 {
