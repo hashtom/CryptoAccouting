@@ -122,31 +122,34 @@ namespace CoinBalance.CoreModel
 
             Transaction tx;
             var instrumentId = exchange.GetIdForExchange(symbol);
-
-            if (transactions.Any(t => (t.CoinId == instrumentId && t.Type == type && t.Side == side && t.TradeDate.Date == tradeDate.Date && t.SettlementCCY == settleCcy)))
+            if (instrumentId != null)
             {
-                tx = transactions.Single(t => (t.CoinId == instrumentId && t.Type == type && t.Side == side && t.TradeDate.Date == tradeDate.Date && t.SettlementCCY == settleCcy));
 
-                var newqty = tx.Quantity + qty;
+                if (transactions.Any(t => (t.CoinId == instrumentId && t.Type == type && t.Side == side && t.TradeDate.Date == tradeDate.Date && t.SettlementCCY == settleCcy)))
+                {
+                    tx = transactions.Single(t => (t.CoinId == instrumentId && t.Type == type && t.Side == side && t.TradeDate.Date == tradeDate.Date && t.SettlementCCY == settleCcy));
 
-                tx.TradePriceSettle = (tx.TradePriceSettle * tx.Quantity + tradePrice * qty) / newqty;
-                tx.Quantity = newqty;
-                tx.Fee += fee;
-                tx.NumTransaction++;
-            }
-            else
-            {
-                tx = new Transaction(AppCore.InstrumentList.GetByInstrumentId(instrumentId), exchange);
-                tx.TxId = (transactions.Count + 1);
-                tx.Type = type;
-                tx.Side = side;
-                tx.SettlementCCY = settleCcy;
-                tx.Quantity = qty;
-                tx.TradePriceSettle = tradePrice;
-                tx.TradeDate = tradeDate;
-                tx.Fee = fee;
-                tx.NumTransaction = 1;
-                this.Attach(tx);
+                    var newqty = tx.Quantity + qty;
+
+                    tx.TradePriceSettle = (tx.TradePriceSettle * tx.Quantity + tradePrice * qty) / newqty;
+                    tx.Quantity = newqty;
+                    tx.Fee += fee;
+                    tx.NumTransaction++;
+                }
+                else
+                {
+                    tx = new Transaction(AppCore.InstrumentList.GetByInstrumentId(instrumentId), exchange);
+                    tx.TxId = (transactions.Count + 1);
+                    tx.Type = type;
+                    tx.Side = side;
+                    tx.SettlementCCY = settleCcy;
+                    tx.Quantity = qty;
+                    tx.TradePriceSettle = tradePrice;
+                    tx.TradeDate = tradeDate;
+                    tx.Fee = fee;
+                    tx.NumTransaction = 1;
+                    this.Attach(tx);
+                }
             }
         }
 

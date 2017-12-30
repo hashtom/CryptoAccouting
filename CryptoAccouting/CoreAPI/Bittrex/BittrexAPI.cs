@@ -60,9 +60,9 @@ namespace CoinBalance.CoreAPI
             try
             {
                 var rawjson = await SendAsync(HttpMethod.Get, BaseUrl + "/api/v1.1/account/getorderhistory");
-                return ParseTransaction(rawjson);
+                var tradelist = ParseTransaction(rawjson);
 
-                //return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
+                return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange. Bittrex only provides recent trades data.");
             }
             catch (Exception e)
             {

@@ -62,26 +62,25 @@ namespace CoinBalance.CoreAPI
         public static async Task<TradeList> FetchTransactionAsync(Exchange poloniex, int calendarYear = 0)
         {
             _poloniex = poloniex;
+            int limit = 500;
+            var searchAfter = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
+            var searchBefore = calendarYear == 0 ? DateTime.Now.Date : new DateTime(calendarYear, 12, 31);
+            var from = AppCore.ToEpochSeconds(searchAfter);
+            var to = AppCore.ToEpochSeconds(searchBefore);
 
             try
             {
-                var from = AppCore.ToEpochSeconds(new DateTime(2013, 1, 1)).ToString();
-                var to = AppCore.ToEpochSeconds(DateTime.Now).ToString();
-
                 Uri path = new Uri("tradingApi", UriKind.Relative);
-
-                var rawjson = await SendAsync(path, HttpMethod.Post, "command=returnTradeHistory&currencyPair=all" + "&start=" + from + "&end=" + to);
-                var tradelist = ParseTransaction(rawjson);
-                return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
+                var rawjson = await SendAsync(path, HttpMethod.Post, $"command=returnTradeHistory&currencyPair=all&start={from}&end={to}&limit={limit}");
+                return ParseTransaction(rawjson);
+                // tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchTransactionAsync: " + e.GetType() + ": " + e.Message);
                 throw;
             }
-
         }
-
 
         private static async Task ParsePrice(string rawjson, InstrumentList coins)
         {
@@ -176,9 +175,11 @@ namespace CoinBalance.CoreAPI
 
         private static TradeList ParseTransaction(string rawjson)
         {
+            var tradelist = new TradeList() { SettlementCCY = EnuCCY.BTC, TradedExchange = _poloniex };
+            if (rawjson == "[]") return tradelist;
+
             try
             {
-                var tradelist = new TradeList() { SettlementCCY = EnuCCY.BTC, TradedExchange = _poloniex };
                 var json = JObject.Parse(rawjson);
 
                 foreach (JProperty x in (JToken)json)

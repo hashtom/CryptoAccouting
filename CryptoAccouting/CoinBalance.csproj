@@ -155,6 +155,8 @@
     <Folder Include="Base.lproj\" />
     <Folder Include="CoreAPI\" />
     <Folder Include="CoreAPI\Quoine\" />
+    <Folder Include="CoreAPI\Bittrex\" />
+    <Folder Include="CoreAPI\Poloniex\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="UIModel\CoinViewCell.xib" />
@@ -248,7 +250,6 @@
     <Compile Include="CoreModel\AssetType.cs" />
     <Compile Include="CoreAPI\BitfinexAPI.cs" />
     <Compile Include="CoreAPI\Bitstamp\BItstampAPI.cs" />
-    <Compile Include="CoreAPI\BittrexAPI.cs" />
     <Compile Include="CoreAPI\CoinbalanceAPI.cs" />
     <Compile Include="CoreAPI\CoinCheck\CoinCheckBalance.cs" />
     <Compile Include="CoreAPI\CoinCheck\CoinCheckLeveragePosition.cs" />
@@ -258,7 +259,6 @@
     <Compile Include="CoreAPI\KrakenAPI.cs" />
     <Compile Include="CoreAPI\MarketDataAPI.cs" />
     <Compile Include="CoreAPI\ParseAPIStrings.cs" />
-    <Compile Include="CoreAPI\PoloniexAPI.cs" />
     <Compile Include="CoreAPI\Reachability.cs" />
     <Compile Include="CoreAPI\RestUtil.cs" />
     <Compile Include="CoreAPI\StorageAPI.cs" />
@@ -287,6 +287,8 @@
     <Compile Include="LeveragePLViewController.designer.cs">
       <DependentUpon>LeveragePLViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="CoreAPI\Bittrex\BittrexAPI.cs" />
+    <Compile Include="CoreAPI\Poloniex\PoloniexAPI.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />

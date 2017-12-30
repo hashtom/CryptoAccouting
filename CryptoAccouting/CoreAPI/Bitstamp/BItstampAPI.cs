@@ -60,7 +60,7 @@ namespace CoinBalance.CoreAPI
             _bitstamp = bitstamp;
             JArray trades = new JArray();
             var path = BaseUrl + "user_transactions/";
-            int limit = 100;
+            int limit = 500;
             int offset = 0;
             var searchAfter = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
             var searchBefore = calendarYear == 0 ? DateTime.Now.Date : new DateTime(calendarYear, 12, 31);
