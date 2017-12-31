@@ -775,7 +775,6 @@
                         <segue destination="719" kind="relationship" relationship="viewControllers" id="21286"/>
                         <segue destination="E5L-YW-Div" kind="relationship" relationship="viewControllers" id="ZnO-xK-fxM"/>
                         <segue destination="NlK-Sg-ajk" kind="relationship" relationship="viewControllers" id="u80-T4-ALd"/>
-                        <segue destination="xl9-BT-Mz3" kind="relationship" relationship="viewControllers" id="Rbj-xV-Wry"/>
                         <segue destination="22123" kind="relationship" relationship="viewControllers" id="3oF-sK-AtX"/>
                     </connections>
                 </tabBarController>
