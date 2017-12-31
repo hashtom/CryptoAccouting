@@ -37,6 +37,12 @@ namespace CoinBalance.CoreAPI
             ).TotalMilliseconds;
         }
 
+        public static string GenerateTimeStamp(DateTime dt)
+        {
+            var dtOffset = new DateTimeOffset(dt);
+            return dtOffset.ToUnixTimeMilliseconds().ToString();
+        }
+
         public static string GenerateNewHmac(string secret, string message)
         {
             var hmc = new HMACSHA256(Encoding.ASCII.GetBytes(secret));
@@ -86,6 +92,18 @@ namespace CoinBalance.CoreAPI
         {
             var power = Convert.ToDecimal(Math.Pow(10, decimalPlaces));
             return Math.Floor(d * power) / power;
+        }
+
+        public static long ToEpochSeconds(DateTime dt)
+        {
+            var dto = new DateTimeOffset(dt.Ticks, new TimeSpan(+09, 00, 00));
+            return dto.ToUnixTimeSeconds();
+        }
+
+        public static DateTime FromEpochSeconds(long EpochSeconds)
+        {
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            return epoch.AddSeconds(EpochSeconds);
         }
     }
 }

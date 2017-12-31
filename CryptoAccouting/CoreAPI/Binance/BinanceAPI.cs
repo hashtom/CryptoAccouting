@@ -152,26 +152,28 @@ namespace CoinBalance.CoreAPI
 
                     var results = await FetchTransactionsPageAsync(symbol, limit);
 
-                    while (true)
+                    if (results.Any())
                     {
-                        var buffers = results.Where(x => searchAfter < x.time).Where(x => searchBefore >= x.time);
-                        buffers.ToList().ForEach(x => transactions.Add(symbol, x));
-
-                        if (searchAfter > results.Last().time)
+                        while (true)
                         {
-                            break;
-                        }
+                            var buffers = results.Where(x => searchAfter < x.time).Where(x => searchBefore >= x.time);
+                            buffers.ToList().ForEach(x => transactions.Add(symbol, x));
 
-                        if (results.Count == 0 ||
-                            limit > results.Count)
-                        {
-                            break;
-                        }
+                            if (searchAfter > results.Last().time)
+                            {
+                                break;
+                            }
 
-                        var lastId = results.Last().id;
-                        results = await FetchTransactionsPageAsync(symbol, limit, lastId);
+                            if (results.Count == 0 ||
+                                limit > results.Count)
+                            {
+                                break;
+                            }
+
+                            var lastId = results.Last().id;
+                            results = await FetchTransactionsPageAsync(symbol, limit, lastId);
+                        }
                     }
-
                 }
 
                 var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _binance };
@@ -202,25 +204,31 @@ namespace CoinBalance.CoreAPI
 
         private static async Task<List<BinanceTrade>> FetchTransactionsPageAsync(string symbol, int limit, int fromid = 0)
         {
-            var path = $"/api/v3/myTrades?symbol={symbol}&limit={limit}";
+            var path = $"/api/v3/myTrades";
+            var param = $"symbol={symbol}&limit={limit}";
+
             if (fromid != 0)
             {
-                path += $"&fromId={fromid}";
+                param += $"&fromId={fromid}";
             }
 
-            var req = BuildRequest(path);
+            var req = BuildRequest(path, param);
             return await RestUtil.ExecuteRequestAsync<List<BinanceTrade>>(_restClient, req);
         }
 
-        private static RestRequest BuildRequest(string path, string method = "GET", string body = "")
+        private static RestRequest BuildRequest(string path, string param = "", string method = "GET", string body = "")
         {
-            body += (!string.IsNullOrWhiteSpace(body) ? "&timestamp=" : "timestamp=") + AppCore.ToEpochSeconds(DateTime.Now);
-            var sign = Util.GenerateNewHmac(_binance.Secret, body);
-            body += $"&signature={sign}";
+            param += (!string.IsNullOrWhiteSpace(param) ? "&timestamp=" : "timestamp=") + Util.GenerateTimeStamp(DateTime.Now);
+            var sign = Util.GenerateNewHmac(_binance.Secret, param);
+            param += $"&signature={sign}";
 
-            var req = RestUtil.CreateJsonRestRequest(path);
+            var req = RestUtil.CreateJsonRestRequest($"{path}?{param}");
             req.Method = Util.ParseEnum<Method>(method);
-            req.AddParameter("application/json", body, ParameterType.RequestBody);
+            if (body != "")
+            {
+                req.AddParameter("application/json", body, ParameterType.RequestBody);
+            }
+            req.AddHeader("X-MBX-APIKEY", _binance.Key);
             return req;
         }
     }

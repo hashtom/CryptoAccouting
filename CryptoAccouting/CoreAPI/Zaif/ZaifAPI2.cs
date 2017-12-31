@@ -156,8 +156,8 @@ namespace CoinBalance.CoreAPI
             string order = "ASC";
 
             var results = await GetTradeHistoryAsync(limit,
-                                                     AppCore.ToEpochSeconds(since),
-                                                     AppCore.ToEpochSeconds(end),
+                                                     Util.ToEpochSeconds(since),
+                                                     Util.ToEpochSeconds(end),
                                                      from,
                                                      order,
                                                      currency_pair);
@@ -185,8 +185,8 @@ namespace CoinBalance.CoreAPI
 
                 //param.since = results.return_.Last().Value.timestamp;
                 results = await GetTradeHistoryAsync(limit,
-                                                     AppCore.ToEpochSeconds(since),
-                                                     AppCore.ToEpochSeconds(end),
+                                                     Util.ToEpochSeconds(since),
+                                                     Util.ToEpochSeconds(end),
                                                      from,
                                                      order,
                                                      currency_pair);
@@ -234,7 +234,7 @@ namespace CoinBalance.CoreAPI
                                                (double)trade.Value.amount,
                                                (double)trade.Value.price,
                                                settleccy,
-                                               AppCore.FromEpochSeconds((long)trade.Value.timestamp).Date,
+                                               Util.FromEpochSeconds((long)trade.Value.timestamp).Date,
                                                (double)fee,
                                                _zaif);
             }
@@ -251,11 +251,11 @@ namespace CoinBalance.CoreAPI
             string order = "ASC";
 
             var results = await GetLeveragePositionsAsync(limit,
-                                                     AppCore.ToEpochSeconds(since),
-                                                     AppCore.ToEpochSeconds(end),
-                                                     from,
-                                                     order,
-                                                     currency_pair);
+                                                          Util.ToEpochSeconds(since),
+                                                          Util.ToEpochSeconds(end),
+                                                          from,
+                                                          order,
+                                                          currency_pair);
 
             while (true)
             {
@@ -280,8 +280,8 @@ namespace CoinBalance.CoreAPI
 
                 //param.since = results.return_.Last().Value.timestamp;
                 results = await GetLeveragePositionsAsync(limit,
-                                                     AppCore.ToEpochSeconds(since),
-                                                     AppCore.ToEpochSeconds(end),
+                                                          Util.ToEpochSeconds(since),
+                                                          Util.ToEpochSeconds(end),
                                                      from,
                                                      order,
                                                      currency_pair);

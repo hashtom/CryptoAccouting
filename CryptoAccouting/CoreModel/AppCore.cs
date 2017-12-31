@@ -58,12 +58,6 @@
         public static ExchangeList GetExchangeListByInstrument(string id)
         {
             return PublicExchangeList.GetExchangesByInstrument(id);
-        }
-         public static long ToEpochSeconds(DateTime dt)         {             var dto = new DateTimeOffset(dt.Ticks, new TimeSpan(+09, 00, 00));             return dto.ToUnixTimeSeconds();         } 
-        public static DateTime FromEpochSeconds(long EpochSeconds)
-        {
-            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            return epoch.AddSeconds(EpochSeconds);
         }          public static void RefreshBalance()         {             //if (InstrumentList != null) InstrumentList.AttachCrossRate(USDCrossRate);             Balance.RefreshBalanceData();             CoinStorageList.RecalculateWeights();         }          public static void AttachPosition(Position position, bool DoRefreshBalance = true)         {             Balance.Attach(position);             if (DoRefreshBalance) RefreshBalance();             Task.Run(async () => await FetchCoinLogoAsync(position.Coin));         }          public static void DetachPosition(Position position, bool DoRefreshBalance = true)         {             Balance.Detach(position);             CoinStorageList.DetachPosition(position);             if (DoRefreshBalance) RefreshBalance();         }          public static void DetachPositionByCoin(string InstrumentId, bool DoRefreshBalance = true)         {             Balance.DetachPositionByCoin(InstrumentId);             CoinStorageList.DetachPositionByCoin(InstrumentId);             if (DoRefreshBalance) RefreshBalance();         }          private static void DetachPositionByStorage(CoinStorage storage)         {             Balance.DetachPositionByStorage(storage);             storage.DetachPositionByStorage(storage);             //CoinStorageList.Detach(exchange);         }          public static void AttachPositionByStorage(CoinStorage storage, List<Position> positions, bool DoRefreshBalance = true)         {                          DetachPositionByStorage(storage);              foreach (var pos in positions)             {                 AttachCoinStorage(storage.Code, storage.StorageType, pos);                 //pos.AttachCoinStorage(storage);                 //storage.AttachPosition(pos);                 AttachPosition(pos, false);             }             if (DoRefreshBalance) RefreshBalance();         } 
         public static async Task FetchMarketDataAsync(Instrument coin)
         {
