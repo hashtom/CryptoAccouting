@@ -5,7 +5,6 @@ import requests
 import re
 import pandas as pd
 
-#basedir = "/home/bridgeplace/www/coinbalance/develop/"
 basedir = "/Users/name/Downloads/"
 
 exchanges = []
@@ -362,8 +361,11 @@ binance_symbols = binance_symbols[binance_symbols.symbol.str.contains('BTC')]
 binance_symbols = binance_symbols.symbol.str.replace('BTC', '')
 binance_symbols = pd.DataFrame(binance_symbols)
 binance_symbols.drop(binance_symbols[binance_symbols.symbol=="IOTA"].index, inplace=True)
+binance_symbols.drop(binance_symbols[binance_symbols.symbol=="BCC"].index, inplace=True)
 symbols = binance_symbols.to_dict(orient='records')
 symbols.append({"symbol2" : "IOTA"})
+symbols.append({"symbol2" : "BCC"})
+symbols.append({"symbol" : "BTC"})
 binance_dict["listing"] = symbols
 exchanges.append(binance_dict)
 

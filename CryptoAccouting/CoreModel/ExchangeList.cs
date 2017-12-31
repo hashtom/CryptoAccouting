@@ -97,6 +97,11 @@ namespace CoinBalance.CoreModel
 			return exchanges.Count;
 		}
 
+        public void Sort()
+        {
+            exchanges = exchanges.OrderBy(x => x.Name).ToList();
+        }
+
         public IEnumerator<Exchange> GetEnumerator()
 		{
 			for (int i = 0; i <= exchanges.Count - 1; i++) yield return exchanges[i];

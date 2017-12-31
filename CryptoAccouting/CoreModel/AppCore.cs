@@ -15,14 +15,11 @@
 
             //Initialize 
             CoinStorageList = new CoinStorageList(); 
-            try             {                 //try
-                //{                 InstrumentList = StorageAPI.LoadInstrument(); //MarketDataAPI.FetchAllCoinData();                 //}
-                //catch (Exception e)                 //{                     //System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: Failed to read InstrumentList: " + e.GetType() + ": " + e.Message);
-                    //InstrumentList = StorageAPI.LoadInstrument(); // Load Bundle file
-                //}                 //LoadExchangeList();                  //if (PublicExchangeList is null) PublicExchangeList = new ExchangeList();                 PublicExchangeList = StorageAPI.LoadExchangeList();                  Balance = StorageAPI.LoadBalanceXML(InstrumentList);                 RefreshBalance();                  try
+            try             {                 InstrumentList = StorageAPI.LoadInstrument(); 
+                PublicExchangeList = StorageAPI.LoadExchangeList();                  Balance = StorageAPI.LoadBalanceXML(InstrumentList);                 RefreshBalance();                  try
                 {
                     //Load App Configuration + API keys
-                    StorageAPI.LoadAppSettingXML();                 }                 catch (Exception e)                 {                     BaseCurrency = EnuBaseFiatCCY.USD; //Default setting                     System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: Failed to read AppSettingfile" + e.GetType() + ": " + e.Message);                     //throw new AppCoreWarning(e.Message);                 }             }             catch (AppCoreBalanceException e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 Balance = new Balance();                 //throw;             }             catch (Exception e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 throw;             }          }          public static async Task LoadCrossRateAsync()
+                    StorageAPI.LoadAppSettingXML();                 }                 catch (Exception e)                 {                     BaseCurrency = EnuBaseFiatCCY.USD; //Default setting                     System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: Failed to read AppSettingfile" + e.GetType() + ": " + e.Message);                 }             }             catch (AppCoreBalanceException e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 Balance = new Balance();                 //throw;             }             catch (Exception e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": InitializeCore: " + e.GetType() + ": " + e.Message);                 throw;             }          }          public static async Task LoadCrossRateAsync()
         {             try             {
                 USDCrossRates = await MarketDataAPI.FetchCrossRateAsync();
             }             catch(Exception e)             {                 USDCrossRates = await StorageAPI.LoadCrossRateAsync();                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": LoadCrossRateAsync(continued with file): " + e.GetType() + ": " + e.Message);             }         } 
@@ -30,16 +27,13 @@
         { 
             if (Balance != null)
             {                 try                 {
-                    var mycoins = new InstrumentList(); 
+                    var mycoins = new InstrumentList();
                     Balance.Select(x => x.Coin).Distinct().ToList().ForEach(x => mycoins.Attach(x));
-                    //if (!mycoins.Any(x => x.Id == "bitcoin")) mycoins.DetachByInstrumentId("bitcoin");
-                    //mycoins.Insert(0, Bitcoin); 
-                    await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRates);                      Balance.PriceDateTime = DateTime.Now;                     RefreshBalance(); //update weights,etc with latest price                     //SaveMyBalanceXML();//save balance with latest price                  }                 catch(Exception e)                 {                     System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchMarketDataFromBalanceAsync: " + e.GetType() + ": " + e.Message);                     throw;                 }              }
+                    await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRates);                      Balance.PriceDateTime = DateTime.Now;                     RefreshBalance(); //update weights,etc with latest price                 }                 catch(Exception e)                 {                     System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchMarketDataFromBalanceAsync: " + e.GetType() + ": " + e.Message);                     throw;                 }             }
             else
             {                 throw new AppCoreBalanceException("Balance object is null");             }
         }          public static void SaveAppSetting()
-        {             StorageAPI.SaveAppSettingXML(AppName, BaseCurrency, PublicExchangeList);         }          //private static void LoadExchangeList()
-        //{         //    ExchangeAPI.FetchExchangeList(PublicExchangeList);         //}          public static void SyncLatestCoins()         {             try             {
+        {             StorageAPI.SaveAppSettingXML(AppName, BaseCurrency, PublicExchangeList);         }          public static void SyncLatestCoins()         {             try             {
                 InstrumentList = MarketDataAPI.FetchAllCoinData();                 //PublicExchangeList = ExchangeAPI.FetchExchangeList();                  if (Balance != null) Balance.AttachInstruments(InstrumentList);
                 Task.Run(async () => await FetchCoinLogoTop100Async());             }
             catch (Exception e)             {                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": SyncLatestCoins: " + e.GetType() + ": " + e.Message);                 throw;             }         }          public static async Task FetchCoinLogoAsync(Instrument coin)         {              await MarketDataAPI.FetchCoinLogoAsync(coin.Id, false);         }          public static async Task FetchCoinLogoFromBalanceAsync()         {             foreach (var pos in Balance)             {
@@ -54,7 +48,8 @@
                 }             }         }          public static void SavePriceSourceXML()         {             StorageAPI.SavePriceSourceXML(InstrumentList);         }          public static void SaveMyBalanceXML()
         {             StorageAPI.SaveBalanceXML(Balance);         }          public static async Task<TradeList> LoadTradeListsAsync(Exchange exchange, int calendarYear)
         {
-            //var exchange = GetExchange(ExchangeCode);             //var apikey = APIKeys.Where(x => x.ExchangeType == extype).First();              if (exchange.APIKeySaved())             {                 return await ExchangeAPI.FetchTradeListAsync(exchange, calendarYear);                 //exchange.AttachTradeList(await ExchangeAPI.FetchTradeListAsync(exchange));                 //PublicExchangeList.Attach(exchange); //do you need?             }else             {                 throw new AppCoreException("API Keys are not saved.");             }         }          public static async Task<List<Position>> LoadPositionAsync(Exchange exchange)         {             if (exchange.APIKeySaved())             {
+            if (exchange.APIKeySaved())             {                 return await ExchangeAPI.FetchTradeListAsync(exchange, calendarYear);             }
+            else             {                 throw new AppCoreException("API Keys are not saved.");             }         }          public static async Task<List<Position>> LoadPositionAsync(Exchange exchange)         {             if (exchange.APIKeySaved())             {
                 return await ExchangeAPI.FetchPositionAsync(exchange);
             }
             else             {                 throw new AppCoreException("API Keys are not saved.");             }         }          public static Exchange GetExchange(string Code)
@@ -63,15 +58,12 @@
         public static ExchangeList GetExchangeListByInstrument(string id)
         {
             return PublicExchangeList.GetExchangesByInstrument(id);
-        }          //public static TradeList GetExchangeTradeList(string exchangeCode)
-        //{         //    return PublicExchangeList.GetTradelist(exchangeCode);
-        //}
+        }
          public static long ToEpochSeconds(DateTime dt)         {             var dto = new DateTimeOffset(dt.Ticks, new TimeSpan(+09, 00, 00));             return dto.ToUnixTimeSeconds();         } 
         public static DateTime FromEpochSeconds(long EpochSeconds)
         {
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             return epoch.AddSeconds(EpochSeconds);
-
         }          public static void RefreshBalance()         {             //if (InstrumentList != null) InstrumentList.AttachCrossRate(USDCrossRate);             Balance.RefreshBalanceData();             CoinStorageList.RecalculateWeights();         }          public static void AttachPosition(Position position, bool DoRefreshBalance = true)         {             Balance.Attach(position);             if (DoRefreshBalance) RefreshBalance();             Task.Run(async () => await FetchCoinLogoAsync(position.Coin));         }          public static void DetachPosition(Position position, bool DoRefreshBalance = true)         {             Balance.Detach(position);             CoinStorageList.DetachPosition(position);             if (DoRefreshBalance) RefreshBalance();         }          public static void DetachPositionByCoin(string InstrumentId, bool DoRefreshBalance = true)         {             Balance.DetachPositionByCoin(InstrumentId);             CoinStorageList.DetachPositionByCoin(InstrumentId);             if (DoRefreshBalance) RefreshBalance();         }          private static void DetachPositionByStorage(CoinStorage storage)         {             Balance.DetachPositionByStorage(storage);             storage.DetachPositionByStorage(storage);             //CoinStorageList.Detach(exchange);         }          public static void AttachPositionByStorage(CoinStorage storage, List<Position> positions, bool DoRefreshBalance = true)         {                          DetachPositionByStorage(storage);              foreach (var pos in positions)             {                 AttachCoinStorage(storage.Code, storage.StorageType, pos);                 //pos.AttachCoinStorage(storage);                 //storage.AttachPosition(pos);                 AttachPosition(pos, false);             }             if (DoRefreshBalance) RefreshBalance();         } 
         public static async Task FetchMarketDataAsync(Instrument coin)
         {

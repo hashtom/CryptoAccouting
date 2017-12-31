@@ -90,9 +90,11 @@ namespace CoinBalance.CoreAPI
                     case "Quoine":
                         return await QuoineAPI.FetchExecutionAsync(exchange, CalendarYear);
                         //return await QuoineAPI.FetchTransactionAsync(exchange);
+                    case "Binance":
+                        return await BinanceAPI.FetchTransactionAsync(exchange, CalendarYear);
+
                     default:
-                        throw new AppCoreWarning("Please update to the newest version! (" + exchange.Code + ")");
-                        //throw new AppCoreNetworkException("ExchangeCode error. Code: " + exchange.Code);
+                        throw new AppCoreWarning($"Please update to the newest version to use {exchange.Name}");
                 }
 
             }
@@ -121,7 +123,6 @@ namespace CoinBalance.CoreAPI
 
                     case "Bitstamp":
                         return await BItstampAPI.FetchPositionAsync(exchange);
-                        //throw new AppCoreNetworkException("Bitstamp will be supported soon!");
 
                     case "Poloniex":
                         return await PoloniexAPI.FetchPositionAsync(exchange);
@@ -132,8 +133,11 @@ namespace CoinBalance.CoreAPI
                     case "Quoine":
                         return await QuoineAPI.FetchPositionAsync(exchange);
 
+                    case "Binance":
+                        return await BinanceAPI.FetchPositionAsync(exchange);
+
                     default:
-                        throw new AppCoreWarning("Please update to the newest version! (" + exchange.Code + ")");
+                        throw new AppCoreWarning($"Please update to the newest version to use {exchange.Name}");
                 }
 
             }

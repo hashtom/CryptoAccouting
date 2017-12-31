@@ -86,5 +86,142 @@ namespace CoinBalance.CoreAPI
 
         }
 
+        public static async Task<List<Position>> FetchPositionAsync(Exchange binance)
+        {
+            _binance = binance;
+            var path = "/api/v3/account";
+            var positions = new List<Position>();
+
+            try
+            {
+                var req = BuildRequest(path);
+                var results = await RestUtil.ExecuteRequestAsync<BinanceAccount>(_restClient, req);
+
+                foreach (var result in results.balances)
+                {
+                    var instrumentId = _binance.GetIdForExchange(result.asset);
+                    var coin = AppCore.InstrumentList.GetByInstrumentId(instrumentId);
+                    if (coin != null)
+                    {
+                        var qty = (double)result.free;
+                        if (qty > 0)
+                        {
+                            var pos = new Position(coin)
+                            {
+                                Amount = qty,
+                                BookedExchange = _binance
+                            };
+                            positions.Add(pos);
+                        }
+                    }
+                }
+
+                return positions;
+
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchPositionAsync: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
+
+        }
+
+        public static async Task<TradeList> FetchTransactionAsync(Exchange binance, int calendarYear = 0)
+        {
+            _binance = binance;
+            int limit = 500;
+            var searchAfter = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
+            var searchBefore = calendarYear == 0 ? DateTime.Now.Date : new DateTime(calendarYear, 12, 31);
+            var transactions = new Dictionary<string, BinanceTrade>();
+
+            try
+            {
+                foreach (var coin in _binance.ListedCoins)
+                {
+                    string symbol;
+
+                    if (coin.Id == "bitcoin" || coin.Id == "tether")
+                    {
+                        symbol = "BTCUSDT";
+                    }
+                    else
+                    {
+                        symbol = _binance.GetSymbolForExchange(coin.Id) + "BTC";
+                    }
+
+                    var results = await FetchTransactionsPageAsync(symbol, limit);
+
+                    while (true)
+                    {
+                        var buffers = results.Where(x => searchAfter < x.time).Where(x => searchBefore >= x.time);
+                        buffers.ToList().ForEach(x => transactions.Add(symbol, x));
+
+                        if (searchAfter > results.Last().time)
+                        {
+                            break;
+                        }
+
+                        if (results.Count == 0 ||
+                            limit > results.Count)
+                        {
+                            break;
+                        }
+
+                        var lastId = results.Last().id;
+                        results = await FetchTransactionsPageAsync(symbol, limit, lastId);
+                    }
+
+                }
+
+                var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _binance };
+
+                foreach (var tx in transactions)
+                {
+                    tradelist.AggregateTransaction(tx.Key,
+                                                   AssetType.Cash,
+                                                   tx.Value.isBuyer ? EnuSide.Buy : EnuSide.Sell,
+                                                   Math.Abs((double)tx.Value.qty),
+                                                   (double)tx.Value.price,
+                                                   EnuCCY.BTC,
+                                                   tx.Value.time,
+                                                   (double)tx.Value.commission,
+                                                   _binance
+                                                  );
+                }
+
+                //return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
+                return tradelist;
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchTransactionAsync: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
+        }
+
+        private static async Task<List<BinanceTrade>> FetchTransactionsPageAsync(string symbol, int limit, int fromid = 0)
+        {
+            var path = $"/api/v3/myTrades?symbol={symbol}&limit={limit}";
+            if (fromid != 0)
+            {
+                path += $"&fromId={fromid}";
+            }
+
+            var req = BuildRequest(path);
+            return await RestUtil.ExecuteRequestAsync<List<BinanceTrade>>(_restClient, req);
+        }
+
+        private static RestRequest BuildRequest(string path, string method = "GET", string body = "")
+        {
+            body += (!string.IsNullOrWhiteSpace(body) ? "&timestamp=" : "timestamp=") + AppCore.ToEpochSeconds(DateTime.Now);
+            var sign = Util.GenerateNewHmac(_binance.Secret, body);
+            body += $"&signature={sign}";
+
+            var req = RestUtil.CreateJsonRestRequest(path);
+            req.Method = Util.ParseEnum<Method>(method);
+            req.AddParameter("application/json", body, ParameterType.RequestBody);
+            return req;
+        }
     }
 }

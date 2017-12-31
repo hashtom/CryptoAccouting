@@ -354,6 +354,7 @@ namespace CoinBalance.CoreAPI
                 throw new AppCoreParseException("Exception during parsing Exchangelist Json: " + e.Message);
             }
 
+            exchangelist.Sort();
             return exchangelist;
         }
     }

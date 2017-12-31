@@ -66,7 +66,8 @@ namespace CoinBalance
                 UIAlertController exchangeAlert = UIAlertController.Create("Exchange", "Choose Exchange", UIAlertControllerStyle.ActionSheet);
                 exchangeAlert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
 
-                foreach (var exc in AppCore.PublicExchangeList.Where(x => (x.HasTradeAPI == true || x.HasBalanceAPI)))
+                foreach (var exc in AppCore.PublicExchangeList.
+                         Where(x => (x.HasTradeAPI == true || x.HasBalanceAPI)))
                 {
                     exchangeAlert.AddAction(UIAlertAction.Create(exc.Name,
                                                                      UIAlertActionStyle.Default,

@@ -3859,6 +3859,9 @@
             "apitrade": "true",
             "apibalance": "true",
             "listing": [
+              {
+                "symbol": "BTC"
+              },
                 {
                     "symbol": "ETH"
                 },
@@ -3872,7 +3875,7 @@
                     "symbol": "NEO"
                 },
                 {
-                    "symbol": "BCC"
+                    "symbol2": "BCC"
                 },
                 {
                     "symbol": "GAS"

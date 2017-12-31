@@ -292,6 +292,8 @@
     <Compile Include="CoreAPI\Poloniex\PoloniexAPI.cs" />
     <Compile Include="CoreAPI\Binance\BinanceAPI.cs" />
     <Compile Include="CoreAPI\Binance\BinanceTicker.cs" />
+    <Compile Include="CoreAPI\Binance\BinanceAccount.cs" />
+    <Compile Include="CoreAPI\Binance\BinanceTrade.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />
