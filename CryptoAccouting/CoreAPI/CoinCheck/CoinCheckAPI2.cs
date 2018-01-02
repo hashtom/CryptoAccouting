@@ -122,7 +122,7 @@ namespace CoinBalance.CoreAPI
             _coincheck = coincheck;
             int limit = 500;
             var searchAfter = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
-            var searchBefore = calendarYear == 0 ? DateTime.Now.Date : new DateTime(calendarYear, 12, 31);
+            var searchBefore = new DateTime(calendarYear, 12, 31);
             var transactions = new List<CoinCheckTransactions.Datum>();
 
             try

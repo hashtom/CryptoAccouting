@@ -62,8 +62,8 @@ namespace CoinBalance.CoreAPI
             var path = BaseUrl + "user_transactions/";
             int limit = 500;
             int offset = 0;
-            var searchAfter = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
-            var searchBefore = calendarYear == 0 ? DateTime.Now.Date : new DateTime(calendarYear, 12, 31);
+            var from = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
+            var to = new DateTime(calendarYear, 12, 31);
 
             var param = new Dictionary<string, string>();
             param.Add("limit", limit.ToString());
@@ -77,8 +77,8 @@ namespace CoinBalance.CoreAPI
                     var jarray = JArray.Parse(rawjson);
                     foreach (var token in jarray)
                     {
-                        if (searchAfter < DateTime.Parse((string)token["datetime"]) &&
-                            searchBefore >= DateTime.Parse((string)token["datetime"]))
+                        if (from < DateTime.Parse((string)token["datetime"]) &&
+                            to >= DateTime.Parse((string)token["datetime"]))
                         {
                             trades.Add(token);
                         }
@@ -89,7 +89,7 @@ namespace CoinBalance.CoreAPI
                         break;
                     }
 
-                    if(DateTime.Parse((string)jarray.Last["datetime"]) < searchAfter)
+                    if(DateTime.Parse((string)jarray.Last["datetime"]) < from)
                     {
                         break;
                     }

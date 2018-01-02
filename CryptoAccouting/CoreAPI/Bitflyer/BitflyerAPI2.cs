@@ -114,8 +114,8 @@ namespace CoinBalance.CoreAPI
             _bitflyer = bitflyer;
             //var path = $"/v1/me/getexecutions?product_code=BTC_JPY";
             int limit = 500;
-            var searchAfter = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
-            var searchBefore = calendarYear == 0 ? DateTime.Now.Date : new DateTime(calendarYear, 12, 31);
+            var from = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
+            var to = new DateTime(calendarYear, 12, 31);
             var transactions = new List<BitflyerExecution>();
             try
             {
@@ -126,10 +126,10 @@ namespace CoinBalance.CoreAPI
                 while (true)
                 {
                     transactions.AddRange(results.
-                                          Where(x => searchAfter < x.exec_date).
-                                          Where(x => searchBefore >= x.exec_date));
+                                          Where(x => from < x.exec_date).
+                                          Where(x => to >= x.exec_date));
 
-                    if (searchAfter > results.Last().exec_date)
+                    if (from > results.Last().exec_date)
                     {
                         break;
                     }
