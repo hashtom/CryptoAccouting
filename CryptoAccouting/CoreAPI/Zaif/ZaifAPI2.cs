@@ -118,7 +118,7 @@ namespace CoinBalance.CoreAPI
             TradeList tradelist = null;
 
             var from = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
-            var to = new DateTime(DateTime.Now.Year, 12, 31);
+            var to = calendarYear == 0 ? new DateTime(DateTime.Now.Year, 12, 31) : new DateTime(calendarYear, 12, 31);
 
             try
             {
