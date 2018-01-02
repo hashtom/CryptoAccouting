@@ -131,9 +131,9 @@ namespace CoinBalance.CoreAPI
         {
             _binance = binance;
             int limit = 500;
-            var searchAfter = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
-            var searchBefore = calendarYear == 0 ? DateTime.Now.Date : new DateTime(calendarYear, 12, 31);
-            var transactions = new Dictionary<string, BinanceTrade>();
+            var from = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
+            var to = calendarYear == 0 ? DateTime.Now.Date : new DateTime(calendarYear, 12, 31);
+            var transactions = new Dictionary<BinanceTrade, string>();
 
             try
             {
@@ -156,22 +156,25 @@ namespace CoinBalance.CoreAPI
                     {
                         while (true)
                         {
-                            var buffers = results.Where(x => searchAfter < x.time).Where(x => searchBefore >= x.time);
-                            buffers.ToList().ForEach(x => transactions.Add(symbol, x));
+                            var buffers = results.Where(x => from < x.time).Where(x => to >= x.time);
 
-                            if (searchAfter > results.Last().time)
+                            foreach(var tx in buffers)
+                            {
+                                transactions.Add(tx, symbol);
+                            }
+
+                            if (to < results.Last().time)
                             {
                                 break;
                             }
 
-                            if (results.Count == 0 ||
-                                limit > results.Count)
+                            if (results.Count == 0 || limit > results.Count)
                             {
                                 break;
                             }
 
                             var lastId = results.Last().id;
-                            results = await FetchTransactionsPageAsync(symbol, limit, lastId);
+                            results = await FetchTransactionsPageAsync(symbol, limit, lastId + 1);
                         }
                     }
                 }
@@ -180,14 +183,14 @@ namespace CoinBalance.CoreAPI
 
                 foreach (var tx in transactions)
                 {
-                    tradelist.AggregateTransaction(tx.Key,
+                    tradelist.AggregateTransaction(tx.Value.Replace("BTC",""),
                                                    AssetType.Cash,
-                                                   tx.Value.isBuyer ? EnuSide.Buy : EnuSide.Sell,
-                                                   Math.Abs((double)tx.Value.qty),
-                                                   (double)tx.Value.price,
+                                                   tx.Key.isBuyer ? EnuSide.Buy : EnuSide.Sell,
+                                                   Math.Abs((double)tx.Key.qty),
+                                                   (double)tx.Key.price,
                                                    EnuCCY.BTC,
-                                                   tx.Value.time,
-                                                   (double)tx.Value.commission,
+                                                   tx.Key.time,
+                                                   (double)tx.Key.commission,
                                                    _binance
                                                   );
                 }
@@ -207,10 +210,10 @@ namespace CoinBalance.CoreAPI
             var path = $"/api/v3/myTrades";
             var param = $"symbol={symbol}&limit={limit}";
 
-            if (fromid != 0)
-            {
+            //if (fromid != 0)
+            //{
                 param += $"&fromId={fromid}";
-            }
+            //}
 
             var req = BuildRequest(path, param);
             return await RestUtil.ExecuteRequestAsync<List<BinanceTrade>>(_restClient, req);

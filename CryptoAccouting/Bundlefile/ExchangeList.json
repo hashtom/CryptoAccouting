@@ -3938,9 +3938,6 @@
                     "symbol": "SALT"
                 },
                 {
-                    "symbol": "MDA"
-                },
-                {
                     "symbol": "MTL"
                 },
                 {
@@ -3978,9 +3975,6 @@
                 },
                 {
                     "symbol": "OAX"
-                },
-                {
-                    "symbol": "ICN"
                 },
                 {
                     "symbol": "BTG"
@@ -4094,9 +4088,6 @@
                     "symbol": "ADA"
                 },
                 {
-                    "symbol": "PPT"
-                },
-                {
                     "symbol": "CMT"
                 },
                 {
@@ -4146,9 +4137,6 @@
                 },
                 {
                     "symbol": "NAV"
-                },
-                {
-                    "symbol": "LUN"
                 },
                 {
                     "symbol": "TRIG"
