@@ -64,7 +64,7 @@ namespace CoinBalance.CoreAPI
             _poloniex = poloniex;
             int limit = 500;
             var searchFrom = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
-            var searchTo =  new DateTime(calendarYear, 12, 31);
+            var searchTo =  new DateTime(DateTime.Now.Year, 12, 31);
             var from = Util.ToEpochSeconds(searchFrom);
             var to = Util.ToEpochSeconds(searchTo);
 
