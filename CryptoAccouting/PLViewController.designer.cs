@@ -7,12 +7,17 @@
 using Foundation;
 using System;
 using System.CodeDom.Compiler;
+using UIKit;
 
-namespace CoinBalance.Base.lproj
+namespace CoinBalance
 {
-    [Register ("LeveragePLViewController")]
-    partial class LeveragePLViewController
+    [Register ("PLViewController")]
+    partial class PLViewController
     {
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIBarButtonItem barbuttonShare { get; set; }
+
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton buttonExchange { get; set; }
@@ -23,10 +28,19 @@ namespace CoinBalance.Base.lproj
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIView PositionPLView { get; set; }
+        UIKit.UIView PLSpreadsheetView { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIView PLTopView { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
+            if (barbuttonShare != null) {
+                barbuttonShare.Dispose ();
+                barbuttonShare = null;
+            }
+
             if (buttonExchange != null) {
                 buttonExchange.Dispose ();
                 buttonExchange = null;
@@ -37,9 +51,14 @@ namespace CoinBalance.Base.lproj
                 buttonYear = null;
             }
 
-            if (PositionPLView != null) {
-                PositionPLView.Dispose ();
-                PositionPLView = null;
+            if (PLSpreadsheetView != null) {
+                PLSpreadsheetView.Dispose ();
+                PLSpreadsheetView = null;
+            }
+
+            if (PLTopView != null) {
+                PLTopView.Dispose ();
+                PLTopView = null;
             }
         }
     }

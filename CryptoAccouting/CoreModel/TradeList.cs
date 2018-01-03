@@ -5,14 +5,13 @@ using System.Linq;
 
 namespace CoinBalance.CoreModel
 {
-    public class TradeList : IEnumerable<Transaction>
+    public class TradeList : IEnumerable<Trade>
     {
         public List<string> TradedCoin { get; private set; }
-        //public int TradeYear { get; private set; }
         public string TradedCoinString { get; set; }
         public EnuCCY SettlementCCY { get; set; } // Fiat Only
-        public double UnrealizedBookValue { get; set; }
-        public double AverageBookPrice { get; set; }
+        //public double UnrealizedBookValue { get; set; }
+        //public double AverageBookPrice { get; set; }
         public Exchange TradedExchange { get; set; }
 
         public double NumOrdersBuy
@@ -71,18 +70,18 @@ namespace CoinBalance.CoreModel
             }
         }
 
-        public double RealizedBookValue
-        {
-            get
-            {
-                return transactions.Where(t => t.Side == EnuSide.Sell).
-                                   Sum(t => t.RealizedBookValue);
-            }
-        }
+        //public double RealizedBookValue
+        //{
+        //    get
+        //    {
+        //        return transactions.Where(t => t.Side == EnuSide.Sell).
+        //                           Sum(t => t.RealizedBookValue);
+        //    }
+        //}
 
-        private List<Transaction> transactions;
+        private List<Trade> transactions;
 
-        public List<Transaction> TransactionCollection
+        public List<Trade> TransactionCollection
         {
             get { return transactions; }
             set { this.transactions = value; }
@@ -90,8 +89,7 @@ namespace CoinBalance.CoreModel
 
         public TradeList()
         {
-            transactions = new List<Transaction>();
-            //this.SettlementCCY = settlementCCY;
+            transactions = new List<Trade>();
         }
 
         public double TotalQuantity(string instrumentId, EnuSide side)
@@ -120,7 +118,7 @@ namespace CoinBalance.CoreModel
                                          Exchange exchange)
         {
 
-            Transaction tx;
+            Trade tx;
             var instrumentId = exchange.GetIdForExchange(symbol);
             if (instrumentId != null)
             {
@@ -138,7 +136,7 @@ namespace CoinBalance.CoreModel
                 }
                 else
                 {
-                    tx = new Transaction(AppCore.InstrumentList.GetByInstrumentId(instrumentId), exchange);
+                    tx = new Trade(AppCore.InstrumentList.GetByInstrumentId(instrumentId), exchange);
                     tx.TxId = (transactions.Count + 1);
                     tx.Type = type;
                     tx.Side = side;
@@ -153,77 +151,60 @@ namespace CoinBalance.CoreModel
             }
         }
 
-        private void CalculatePL()
-        {
-			TradedCoin = new List<string>();
-            TradedCoinString = "";
+        // calculate Realized PL when settlement currency is Base Fiat Currency
+        // ignore trades both sides are Crypto for Realized PL calculation now
+   //     private void CalculateCashTradesPL()
+   //     {
+			//TradedCoin = new List<string>();
+        //    TradedCoinString = "";
 
-            foreach (var s in transactions.Select(x => x.ColumnCoinSymbol).Distinct())
-            {
-                string symbol = s;
-                double accumulated_value = 0;
-                double accumulated_qty = 0;
-                double current_bookprice = 0;
-                //UnrealizedBookValue = 0;
+        //    foreach (var s in transactions.Select(x => x.ColumnCoinSymbol).Distinct())
+        //    {
+        //        string symbol = s;
+        //        double accumulated_value = 0;
+        //        double accumulated_qty = 0;
+        //        double current_bookprice = 0;
+        //        //UnrealizedBookValue = 0;
 
-                TradedCoin.Add(symbol);
-                TradedCoinString += symbol + " ";
+        //        TradedCoin.Add(symbol);
+        //        TradedCoinString += symbol + " ";
 
-                foreach (var tx in transactions.Where(t => t.ColumnCoinSymbol == symbol).OrderBy(t => t.TradeDate))
-                {
-                    if (tx.Side == EnuSide.Buy)
-                    {
-                        //Buy : Update Bookcost
-                        current_bookprice = (accumulated_value + tx.TradeNetValue) / (accumulated_qty + tx.Quantity);
-                        tx.BookPrice = current_bookprice;
-                        accumulated_value += tx.TradeNetValue;
-                        accumulated_qty += tx.Quantity;
-                    }
-                    else if (tx.Side == EnuSide.Sell)
-                    {
-                        //Sell : Reduce Accumulated value
-                        accumulated_value -= tx.TradeNetValue;
-                        accumulated_qty -= tx.Quantity;
-                        tx.BookPrice = current_bookprice;
-                    }
-                }
-            }
-        }
-
-        //public void SwitchTrdeYear(int year)
-        //{
-        //    CalculateTotalValue(year);
+        //        foreach (var tx in transactions.
+        //                 Where(t => t.ColumnCoinSymbol == symbol).OrderBy(t => t.TradeDate).
+        //                 Where(t=> t.SettlementCCY == CoreAPI.Util.ParseEnum<EnuCCY>(AppCore.BaseCurrency.ToString())).
+        //                 Where(t=>t.Type == AssetType.Cash))
+        //        {
+        //            if (tx.Side == EnuSide.Buy)
+        //            {
+        //                //Buy : Update Bookcost
+        //                current_bookprice = (accumulated_value + tx.TradeNetValue) / (accumulated_qty + tx.Quantity);
+        //                tx.BookPrice = current_bookprice;
+        //                accumulated_value += tx.TradeNetValue;
+        //                accumulated_qty += tx.Quantity;
+        //            }
+        //            else if (tx.Side == EnuSide.Sell)
+        //            {
+        //                //Sell : Reduce Accumulated value
+        //                accumulated_value -= tx.TradeNetValue;
+        //                accumulated_qty -= tx.Quantity;
+        //                tx.BookPrice = current_bookprice;
+        //            }
+        //        }
+        //    }
         //}
 
-        //public int TxCountTradeYear(){
-        //    return transactions.Where(x => x.TradeDate.Year == this.TradeYear).Count();
-        //}
-
-        public double RealizedPL()
-        {
-			// calculate Realized PL when one side of trase is Base Fiat Currency
-			// ignore trades both sides are Crypto for Realized PL calculation now
-            //return transactions.Where(x=>x.TradeDate.Year == this.TradeYear).Sum(x => x.RealizedPL);
-            return transactions.Sum(x => x.RealizedPL);
-        }
-
-        public double UnrealizedPL(){
-            return 0;
-            //return (TotalQtyBuy - TotalQtySell) * (2300000 - LatestBookCost);
-        }
-
-        public void Attach(Transaction tx)
+        public void Attach(Trade tx)
         {
             if (transactions.Any(x => x.TxId == tx.TxId)) Detach(tx);
             transactions.Add(tx);
         }
 
-        public void Detach(Transaction tx)
+        public void Detach(Trade tx)
         {
             transactions.RemoveAll(x => x.TxId == tx.TxId);
         }
 
-        public Transaction GetByIndex(int indexNumber)
+        public Trade GetByIndex(int indexNumber)
         {
             return transactions[indexNumber];
         }
@@ -238,7 +219,7 @@ namespace CoinBalance.CoreModel
             transactions.AddRange(tradelist);
         }
 
-		public IEnumerator<Transaction> GetEnumerator()
+		public IEnumerator<Trade> GetEnumerator()
 		{
 			for (int i = 0; i <= transactions.Count - 1; i++) yield return transactions[i];
 		}

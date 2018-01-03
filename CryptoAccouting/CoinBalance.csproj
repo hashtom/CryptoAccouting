@@ -189,7 +189,7 @@
     <Compile Include="CoreModel\Exchange.cs" />
     <Compile Include="CoreModel\Balance.cs" />
     <Compile Include="CoreModel\Price.cs" />
-    <Compile Include="CoreModel\Transaction.cs" />
+    <Compile Include="CoreModel\Trade.cs" />
     <Compile Include="CoreModel\TradeList.cs" />
     <Compile Include="UIModel\NavigationDrawer.cs" />
     <Compile Include="SettingTableViewController.cs" />
@@ -283,17 +283,18 @@
     <Compile Include="CoreAPI\Quoine\QuoineExecutions.cs" />
     <Compile Include="CoreAPI\Zaif\ZaifPositions.cs" />
     <Compile Include="CoreModel\LeveragePosition.cs" />
-    <Compile Include="CoreModel\LeveragePL.cs" />
-    <Compile Include="LeveragePLViewController.cs" />
-    <Compile Include="LeveragePLViewController.designer.cs">
-      <DependentUpon>LeveragePLViewController.cs</DependentUpon>
-    </Compile>
+    <Compile Include="CoreModel\RealizedPL.cs" />
     <Compile Include="CoreAPI\Bittrex\BittrexAPI.cs" />
     <Compile Include="CoreAPI\Poloniex\PoloniexAPI.cs" />
     <Compile Include="CoreAPI\Binance\BinanceAPI.cs" />
     <Compile Include="CoreAPI\Binance\BinanceTicker.cs" />
     <Compile Include="CoreAPI\Binance\BinanceAccount.cs" />
     <Compile Include="CoreAPI\Binance\BinanceTrade.cs" />
+    <Compile Include="PLViewController.cs" />
+    <Compile Include="PLViewController.designer.cs">
+      <DependentUpon>PLViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CoreModel\RealizedPLList.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />

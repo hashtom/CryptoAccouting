@@ -10,18 +10,18 @@ namespace CoinBalance.CoreModel
         public EnuCCY SettlementCCY { get; set; }
         public DateTime TradeDate { get; set; }
         public Exchange TradeExchange { get; }
-        public EnuMarginSide Side { get; set; }
-        public double Quantity { get; set; }
-        public double TradePriceSettle { get; set; }
-        public double Fee { get; set; }
-        public double Profit { get; set; }
+        public EnuSide Side { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal TradePriceSettle { get; set; }
+        public decimal Fee { get; set; }
+        public decimal Profit { get; set; }
     }
 
-    public enum EnuMarginSide
-    {
-        Long,
-        Short
-    }
+    //public enum EnuMarginSide
+    //{
+    //    Long,
+    //    Short
+    //}
 
     public enum EnuMarginStatus
     {

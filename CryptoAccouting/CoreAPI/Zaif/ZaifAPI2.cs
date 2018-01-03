@@ -242,9 +242,9 @@ namespace CoinBalance.CoreAPI
             return tradelist;
         }
 
-        private static async Task<LeveragePL> GetLeveragePositionsAsync(DateTime since, DateTime end, string currency_pair = null)
+        private static async Task<RealizedPLList> GetLeveragePositionsAsync(DateTime since, DateTime end, string currency_pair = null)
         {
-            var leveragePL = new LeveragePL();
+            var leveragePL = new RealizedPLList();
             var leveragePositions = new Dictionary<string, ZaifPositions.position>();
             int from = 0;
             int limit = 500;
