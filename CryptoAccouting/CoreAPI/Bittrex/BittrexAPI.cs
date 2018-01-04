@@ -231,11 +231,11 @@ namespace CoinBalance.CoreAPI
                             tradelist.AggregateTransaction(symbol,
                                                            AssetType.Cash,
                                                            ebuysell,
-                                                           (double)elem["Quantity"] - (double)elem["QuantityRemaining"],
-                                                           (double)elem["PricePerUnit"],
+                                                           (decimal)elem["Quantity"] - (decimal)elem["QuantityRemaining"],
+                                                           (decimal)elem["PricePerUnit"],
                                                            settleccy,
                                                            DateTime.Parse((string)elem["TimeStamp"]),
-                                                           (double)elem["Commission"],
+                                                           (decimal)elem["Commission"],
                                                            _bittrex
                                                           );
                         }

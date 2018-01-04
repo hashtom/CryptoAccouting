@@ -149,7 +149,7 @@ namespace CoinBalance.CoreAPI
 
         private static async Task<TradeList> GetTradeHistoryAsync(DateTime since, DateTime end, string currency_pair = null)
         {
-            var tradelist = new TradeList();
+            var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _zaif };
             var trades_history = new Dictionary<string, ZaifTrades.trade>();
             int from = 0;
             int limit = 500;
@@ -231,20 +231,20 @@ namespace CoinBalance.CoreAPI
                 tradelist.AggregateTransaction(symbol,
                                                AssetType.Cash,
                                                ebuysell,
-                                               (double)trade.Value.amount,
-                                               (double)trade.Value.price,
+                                               (decimal)trade.Value.amount,
+                                               (decimal)trade.Value.price,
                                                settleccy,
                                                Util.FromEpochSeconds((long)trade.Value.timestamp).Date,
-                                               (double)fee,
+                                               (decimal)fee,
                                                _zaif);
             }
 
             return tradelist;
         }
 
-        private static async Task<RealizedPLList> GetLeveragePositionsAsync(DateTime since, DateTime end, string currency_pair = null)
+        private static async Task<List<RealizedPL>> GetLeveragePositionsAsync(DateTime since, DateTime end, string currency_pair = null)
         {
-            var leveragePL = new RealizedPLList();
+            var leveragePL = new List<RealizedPL>();
             var leveragePositions = new Dictionary<string, ZaifPositions.position>();
             int from = 0;
             int limit = 500;

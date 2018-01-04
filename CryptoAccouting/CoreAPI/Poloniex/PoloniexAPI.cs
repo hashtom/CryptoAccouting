@@ -228,11 +228,11 @@ namespace CoinBalance.CoreAPI
                         tradelist.AggregateTransaction(symbol,
                                                        AssetType.Cash,
                                                        ebuysell,
-                                                       (double)elem["amount"],
-                                                       (double)elem["rate"],
+                                                       (decimal)elem["amount"],
+                                                       (decimal)elem["rate"],
                                                        settleccy,
                                                        DateTime.Parse((string)elem["date"]),
-                                                       (double)elem["fee"]
+                                                       (decimal)elem["fee"]
                                                        ,_poloniex
                                                       );
                     }

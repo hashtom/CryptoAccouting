@@ -17,6 +17,7 @@ bitstamp_dict = {
         "apiprice": "true",
         "apitrade": "true",
         "apibalance": "true",
+        "calcPL" : "False",
         "listing": [ 
                 { "symbol": "BTC" },
                 { "symbol": "XRP" }
@@ -31,7 +32,8 @@ bittrex_dict = { "code": "Bittrex",
                 "name": "Bittrex",
                 "apiprice": "true",
                 "apitrade": "true",
-                "apibalance": "true"
+                "apibalance": "true",
+                "calcPL" : "False"
                 }
 
 if bittrex["success"] == True:
@@ -54,6 +56,7 @@ gdax_dict = {
         "apiprice": "false",
         "apitrade": "false",
         "apibalance": "false",
+        "calcPL" : "False",
          "listing": [
                  { "symbol": "BTC" },
                  { "symbol": "LTC" },
@@ -69,6 +72,7 @@ gemini_dict = {
         "apiprice": "false",
         "apitrade": "false",
         "apibalance": "false",
+        "calcPL" : "False",
          "listing": [
                  { "symbol": "BTC" },
                  { "symbol": "ETH" }
@@ -110,6 +114,7 @@ kraken_dict = {
         "apiprice": "false",
         "apitrade": "false",
         "apibalance": "false",
+        "calcPL" : "False",
         "listing": [
                 { "symbol": "BCH" },
                 { "symbol": "DASH" },
@@ -138,7 +143,8 @@ bitfinex_dict = {"code": "Bitfinex",
                  "name": "Bitfinex",
                  "apiprice": "true",
                  "apitrade": "false",
-                 "apibalance": "false"
+                 "apibalance": "false",
+                 "calcPL" : "False"
                  }
 bitfinex_symbols = [] #pd.Series()
 for ins in bitfinex:
@@ -160,7 +166,8 @@ poloniex_dict = {"code": "Poloniex",
                  "name": "Poloniex",
                  "apiprice": "true",
                  "apitrade": "true",
-                 "apibalance": "true"
+                 "apibalance": "true",
+                 "calcPL" : "False"
                  }
 df_poloniex = pd.DataFrame.from_dict(poloniex, orient='index')
 df_poloniex.drop(df_poloniex[df_poloniex.delisted==1].index, inplace=True)
@@ -181,6 +188,7 @@ zaif_dict = {
         "apiprice": "true",
         "apitrade": "true",
         "apibalance": "true",
+        "calcPL" : "true",
         "listing": [
              { "symbol": "BTC" },
              { "symbol": "MONA" },
@@ -198,6 +206,7 @@ bitflyer_dict = {
         "apiprice": "true",
         "apitrade": "true",
         "apibalance": "true",
+        "calcPL" : "true",
          "listing": [
                  { "symbol": "BTC" }
                  ]
@@ -210,6 +219,7 @@ bitflyer_otc_dict = {
         "apiprice": "false",
         "apitrade": "false",
         "apibalance": "false",
+        "calcPL" : "False",
          "listing": [
                  { "symbol": "BTC" },
                  { "symbol": "LTC" },
@@ -228,6 +238,7 @@ coincheck_dict = {
         "apiprice": "true",
         "apitrade": "true",
         "apibalance": "true",
+        "calcPL" : "true",
         "listing": [
                 { "symbol": "BTC" },
                 { "symbol": "ETH" },
@@ -253,6 +264,7 @@ btcbox_dict = {
         "apiprice": "false",
         "apitrade": "false",
         "apibalance": "false",
+        "calcPL" : "False",
          "listing": [
                  { "symbol": "BTC" },
                  { "symbol": "BCH" }
@@ -267,6 +279,7 @@ quoine_dict = {
         "apiprice": "true",
         "apitrade": "true",
         "apibalance": "true",
+        "calcPL" : "true",
          "listing": [
                  { "symbol": "BTC" },
                  { "symbol": "BCH" }
@@ -281,6 +294,7 @@ bitbank_dict = {
         "apiprice": "false",
         "apitrade": "false",
         "apibalance": "false",
+        "calcPL" : "False",
          "listing": [
                  { "symbol": "BTC" },
                  { "symbol": "BCH" }
@@ -295,6 +309,7 @@ bithumb_dict = {
         "apiprice": "false",
         "apitrade": "false",
         "apibalance": "false",
+        "calcPL" : "False",
         "listing": [
                 { "symbol": "BTC" }, 
                 { "symbol": "ETH" },
@@ -316,7 +331,8 @@ hitbtc_dict = {"code": "HitBTC",
                  "name": "HitBTC",
                  "apiprice": "true",
                  "apitrade": "false",
-                 "apibalance": "false"
+                 "apibalance": "false",
+                 "calcPL" : "False"
                  }
 df_hitbtc = pd.DataFrame.from_dict(hitbtc)
 df_hitbtc.drop(df_hitbtc[df_hitbtc.crypto==False].index, inplace=True)
@@ -333,7 +349,8 @@ cryptopia_dict = {"code": "Cryptopia",
                  "name": "Cryptopia",
                  "apiprice": "false",
                  "apitrade": "false",
-                 "apibalance": "false"
+                 "apibalance": "false",
+                 "calcPL" : "False",
                  }
 
 if cryptopia['Success'] == True:
@@ -352,7 +369,8 @@ binance_dict = {"code": "Binance",
                  "name": "Binance",
                  "apiprice": "true",
                  "apitrade": "true",
-                 "apibalance": "true"
+                 "apibalance": "true",
+                 "calcPL" : "False"
                  }
 
 df = pd.read_json(json.dumps(binance))
@@ -376,6 +394,7 @@ otc_dict = {
         "apiprice": "false",
         "apitrade": "false",
         "apibalance": "false",
+        "calcPL" : "False",
         "listing": []
         }
 
@@ -388,6 +407,7 @@ airdrop_dict = {
         "apiprice": "false",
         "apitrade": "false",
         "apibalance": "false",
+        "calcPL" : "False",
           "listing": []
         }
 exchanges.append(airdrop_dict)
@@ -399,6 +419,7 @@ other_dict = {
         "apiprice": "false",
         "apitrade": "false",
         "apibalance": "false",
+        "calcPL" : "False",
         "listing": []
         }
 exchanges.append(other_dict)

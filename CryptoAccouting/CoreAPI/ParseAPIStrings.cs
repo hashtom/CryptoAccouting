@@ -346,6 +346,7 @@ namespace CoinBalance.CoreAPI
                     exchange.HasPriceAPI = (bool)market["apiprice"];
                     exchange.HasTradeAPI = (bool)market["apitrade"];
                     exchange.HasBalanceAPI = (bool)market["apibalance"];
+                    exchange.CanCalcPL = (bool)market["calcPL"];
                 }
 
             }

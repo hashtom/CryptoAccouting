@@ -13,11 +13,9 @@ namespace CoinBalance.CoreModel
         public DateTime TradeDate { get; set; }
         public Exchange TradeExchange { get; }
         public EnuSide Side { get; set; }
-        public double Quantity { get; set; }
-        public double TradePriceSettle { get; set; }
-        public double Fee { get; set; }
-        //public double BookPrice { get; set; } = 0;
-        //public string BrokerCode { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal TradePriceSettle { get; set; }
+        public decimal Fee { get; set; }
         public int NumTransaction { get; set; }
 
         public string CoinId
@@ -30,12 +28,12 @@ namespace CoinBalance.CoreModel
             get { return TradedCoin.Symbol1; }
         }
 
-        public double TradeGrossValue
+        public decimal TradeGrossValue
         {
             get { return TradePriceSettle * Quantity; }
         }
 
-        public double TradeNetValue
+        public decimal TradeNetValue
         {
             get { return Side == EnuSide.Buy ? TradePriceSettle * Quantity - Fee : TradePriceSettle * Quantity + Fee; }
         }
@@ -49,16 +47,6 @@ namespace CoinBalance.CoreModel
         {
             get { return AppCore.NumberFormat(TradeNetValue); }
         }
-
-        //public double RealizedBookValue
-        //{
-        //    get { return Side == EnuSide.Sell ? BookPrice * Quantity : 0; }
-        //}
-
-        //public double RealizedPL
-        //{
-        //    get { return (Side == EnuSide.Sell) ? (TradePriceSettle - BookPrice) * Quantity - Fee : 0; }
-        //}
 
         public Trade(Instrument coin, Exchange exchange)
         {

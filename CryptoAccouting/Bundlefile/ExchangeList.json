@@ -6,6 +6,7 @@
             "apiprice": "true",
             "apitrade": "true",
             "apibalance": "true",
+            "calcPL": "False",
             "listing": [
                 {
                     "symbol": "BTC"
@@ -21,6 +22,7 @@
             "apiprice": "true",
             "apitrade": "true",
             "apibalance": "true",
+            "calcPL": "False",
             "listing": [
                 {
                     "symbol": "BTC"
@@ -900,6 +902,7 @@
             "apiprice": "false",
             "apitrade": "false",
             "apibalance": "false",
+            "calcPL": "False",
             "listing": [
                 {
                     "symbol": "BTC"
@@ -918,6 +921,7 @@
             "apiprice": "false",
             "apitrade": "false",
             "apibalance": "false",
+            "calcPL": "False",
             "listing": [
                 {
                     "symbol": "BTC"
@@ -933,6 +937,7 @@
             "apiprice": "false",
             "apitrade": "false",
             "apibalance": "false",
+            "calcPL": "False",
             "listing": [
                 {
                     "symbol": "BCH"
@@ -993,6 +998,7 @@
             "apiprice": "true",
             "apitrade": "false",
             "apibalance": "false",
+            "calcPL": "False",
             "listing": [
                 {
                     "symbol": "BTC"
@@ -1019,12 +1025,6 @@
                     "symbol": "DSH"
                 },
                 {
-                    "symbol": "BCC"
-                },
-                {
-                    "symbol": "BCU"
-                },
-                {
                     "symbol": "XRP"
                 },
                 {
@@ -1047,12 +1047,6 @@
                 },
                 {
                     "symbol": "QTM"
-                },
-                {
-                    "symbol": "BT1"
-                },
-                {
-                    "symbol": "BT2"
                 },
                 {
                     "symbol": "AVT"
@@ -1089,6 +1083,7 @@
             "apiprice": "true",
             "apitrade": "true",
             "apibalance": "true",
+            "calcPL": "False",
             "listing": [
                 {
                     "symbol": "AMP"
@@ -1305,6 +1300,7 @@
             "apiprice": "true",
             "apitrade": "true",
             "apibalance": "true",
+            "calcPL": "true",
             "listing": [
                 {
                     "symbol": "BTC"
@@ -1329,6 +1325,7 @@
             "apiprice": "true",
             "apitrade": "true",
             "apibalance": "true",
+            "calcPL": "true",
             "listing": [
                 {
                     "symbol": "BTC"
@@ -1341,6 +1338,7 @@
             "apiprice": "false",
             "apitrade": "false",
             "apibalance": "false",
+            "calcPL": "False",
             "listing": [
                 {
                     "symbol": "BTC"
@@ -1368,6 +1366,7 @@
             "apiprice": "true",
             "apitrade": "true",
             "apibalance": "true",
+            "calcPL": "true",
             "listing": [
                 {
                     "symbol": "BTC"
@@ -1416,6 +1415,7 @@
             "apiprice": "false",
             "apitrade": "false",
             "apibalance": "false",
+            "calcPL": "False",
             "listing": [
                 {
                     "symbol": "BTC"
@@ -1431,6 +1431,7 @@
             "apiprice": "true",
             "apitrade": "true",
             "apibalance": "true",
+            "calcPL": "true",
             "listing": [
                 {
                     "symbol": "BTC"
@@ -1446,6 +1447,7 @@
             "apiprice": "false",
             "apitrade": "false",
             "apibalance": "false",
+            "calcPL": "False",
             "listing": [
                 {
                     "symbol": "BTC"
@@ -1461,6 +1463,7 @@
             "apiprice": "false",
             "apitrade": "false",
             "apibalance": "false",
+            "calcPL": "False",
             "listing": [
                 {
                     "symbol": "BTC"
@@ -1500,6 +1503,7 @@
             "apiprice": "true",
             "apitrade": "false",
             "apibalance": "false",
+            "calcPL": "False",
             "listing": [
                 {
                     "symbol": "1ST"
@@ -1830,6 +1834,9 @@
                 },
                 {
                     "symbol": "KICK"
+                },
+                {
+                    "symbol": "KMD"
                 },
                 {
                     "symbol": "LA"
@@ -2196,6 +2203,7 @@
             "apiprice": "false",
             "apitrade": "false",
             "apibalance": "false",
+            "calcPL": "False",
             "listing": [
                 {
                     "symbol": "1337"
@@ -3858,10 +3866,8 @@
             "apiprice": "true",
             "apitrade": "true",
             "apibalance": "true",
+            "calcPL": "False",
             "listing": [
-              {
-                "symbol": "BTC"
-              },
                 {
                     "symbol": "ETH"
                 },
@@ -3873,9 +3879,6 @@
                 },
                 {
                     "symbol": "NEO"
-                },
-                {
-                    "symbol2": "BCC"
                 },
                 {
                     "symbol": "GAS"
@@ -3938,6 +3941,9 @@
                     "symbol": "SALT"
                 },
                 {
+                    "symbol": "MDA"
+                },
+                {
                     "symbol": "MTL"
                 },
                 {
@@ -3975,6 +3981,9 @@
                 },
                 {
                     "symbol": "OAX"
+                },
+                {
+                    "symbol": "ICN"
                 },
                 {
                     "symbol": "BTG"
@@ -4088,6 +4097,9 @@
                     "symbol": "ADA"
                 },
                 {
+                    "symbol": "PPT"
+                },
+                {
                     "symbol": "CMT"
                 },
                 {
@@ -4139,10 +4151,19 @@
                     "symbol": "NAV"
                 },
                 {
+                    "symbol": "LUN"
+                },
+                {
                     "symbol": "TRIG"
                 },
                 {
                     "symbol2": "IOTA"
+                },
+                {
+                    "symbol2": "BCC"
+                },
+                {
+                    "symbol": "BTC"
                 }
             ]
         },
@@ -4152,6 +4173,7 @@
             "apiprice": "false",
             "apitrade": "false",
             "apibalance": "false",
+            "calcPL": "False",
             "listing": []
         },
         {
@@ -4160,6 +4182,7 @@
             "apiprice": "false",
             "apitrade": "false",
             "apibalance": "false",
+            "calcPL": "False",
             "listing": []
         },
         {
@@ -4168,6 +4191,7 @@
             "apiprice": "false",
             "apitrade": "false",
             "apibalance": "false",
+            "calcPL": "False",
             "listing": []
         }
     ]

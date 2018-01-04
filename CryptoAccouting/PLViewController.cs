@@ -7,6 +7,7 @@ using CoreGraphics;
 using CoreAnimation;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Syncfusion.SfDataGrid;
 using Syncfusion.SfDataGrid.Exporting;
 using CoinBalance.CoreModel;
@@ -16,11 +17,13 @@ namespace CoinBalance
 {
     public partial class PLViewController : CryptoViewController
     {
+        public List<RealizedPL> PLCollection { get; set; } = new List<RealizedPL>();
+
         const int yearFrom = 2014;
         SfDataGrid sfGrid;
-        TradeList myTradeList;
+        TradeList myTradeList = new TradeList();
         Exchange thisExchange;
-        int calendarYear = 0;
+        int calendarYear = DateTime.Now.Year;
         LoadingOverlay loadPop;
 
         public PLViewController (IntPtr handle) : base (handle)
@@ -37,8 +40,6 @@ namespace CoinBalance
             //thisExchange = ApplicationCore.PublicExchangeList.First(x => x.APIReady == true);
             //calendaryear = DateTime.Now.Year.ToString();
             ReDrawScreen();
-
-            myTradeList = new TradeList();
             sfGrid.ItemsSource = (myTradeList.TransactionCollection);
             this.sfGrid.Frame = new CGRect(0, 0, PLSpreadsheetView.Frame.Width, PLSpreadsheetView.Frame.Height);
 
@@ -57,7 +58,7 @@ namespace CoinBalance
                 UIAlertController exchangeAlert = UIAlertController.Create("Exchange", "Choose Exchange", UIAlertControllerStyle.ActionSheet);
                 exchangeAlert.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
 
-                foreach (var exc in AppCore.PublicExchangeList.Where(x => x.Code == "Zaif"))
+                foreach (var exc in AppCore.PublicExchangeList.Where(x => x.CanCalcPL))
                 {
                     exchangeAlert.AddAction(UIAlertAction.Create(exc.Name,
                                                                      UIAlertActionStyle.Default,
@@ -79,12 +80,11 @@ namespace CoinBalance
 
                 foreach (int year in SearchYears())
                 {
-                    var title = year != 0 ? year.ToString() : "Max";
-                    yearAlert.AddAction(UIAlertAction.Create(title,
+                    yearAlert.AddAction(UIAlertAction.Create(year.ToString(),
                                                                      UIAlertActionStyle.Default,
                                                                      async (obj) =>
                                                                      {
-                                                                         buttonYear.SetTitle(title, UIControlState.Normal);
+                                                                         buttonYear.SetTitle(year.ToString(), UIControlState.Normal);
                                                                          calendarYear = year;
                                                                          if (thisExchange != null) await searchPLData();
                                                                      }
@@ -151,8 +151,7 @@ namespace CoinBalance
             if (thisExchange != null)
             {
                 buttonExchange.SetTitle(thisExchange.Name, UIControlState.Normal);
-                var title = calendarYear != 0 ? calendarYear.ToString() : "Max";
-                buttonYear.SetTitle(title, UIControlState.Normal);
+                buttonYear.SetTitle(calendarYear.ToString(), UIControlState.Normal);
             }
             else
             {
@@ -160,33 +159,19 @@ namespace CoinBalance
                 //buttonYear.Alpha = 0;
             }
 
-            if (myTradeList != null)
-            {
-                barbuttonShare.Enabled = myTradeList.Any() ? true : false;
+            barbuttonShare.Enabled = PLCollection.Any() ? true : false;
 
-                //labelNumBuy.Text = AppCore.NumberFormat(myTradeList.NumOrdersBuy, false, false);
-                //labelNumSell.Text = AppCore.NumberFormat(myTradeList.NumOrdersSell, false, false);
-                //labelBTCBuy.Text = AppCore.NumberFormat(myTradeList.TotalBTCTradeValueBuy, false, true);
-                //labelBTCSell.Text = AppCore.NumberFormat(myTradeList.TotalBTCTradeValueSell, false, true);
+            //Cash
+            var cashcollection = PLCollection.Where(x => x.PLType == EnuPLType.CashTrade).Where(x => x.TradeDate.Year == calendarYear).ToList();
 
-                if (myTradeList.SettlementCCY != EnuCCY.BTC)
-                {
-                    //labelSettleCrossBuy.Text = AppCore.NumberFormat(myTradeList.TotalExchangeSettleTradeValueBuy, false, true);
-                    //labelSettleCrossSell.Text = AppCore.NumberFormat(myTradeList.TotalExchangeSettleTradeValueSell, false, true);
-                    //labelSettleCrossText.Text = "Trades/" + myTradeList.SettlementCCY.ToString();
-                }
-                else
-                {
-                    //labelSettleCrossBuy.Text = "---";
-                    //labelSettleCrossSell.Text = "---";
-                    //labelSettleCrossText.Text = "---";
+            labelCashBook.Text = cashcollection.Any() ? AppCore.NumberFormat(cashcollection.Last().AvgBookPrice, false, false) : "0";
+            labelCashRPL.Text = cashcollection.Any() ? AppCore.NumberFormat(cashcollection.Sum(x => x.NetPL), false, false) : "0";
 
-                }
-            }
         }
 
         private async Task searchPLData()
         {
+            PLCollection = new List<RealizedPL>();
             var bounds = PLSpreadsheetView.Bounds;
             loadPop = new LoadingOverlay(bounds);
             PLSpreadsheetView.Add(loadPop);
@@ -196,15 +181,25 @@ namespace CoinBalance
 
             try
             {
-                myTradeList = await AppCore.LoadTradeListsAsync(thisExchange, calendarYear);
+                if (!myTradeList.Any() || myTradeList.ExchangeName() != thisExchange.Name)
+                {
+                    myTradeList = await AppCore.LoadTradeListsAsync(thisExchange);
+                }
+
                 if (myTradeList.Any())
                 {
-                    sfGrid.ItemsSource = myTradeList.TransactionCollection;
+                    var pldata = myTradeList.CalculateCashTradesPL();
+                    PLCollection.AddRange(pldata.Where(x => x.TradeDate.Year == calendarYear));
+                }
+
+                if(PLCollection.Any())
+                {
+                    sfGrid.ItemsSource = PLCollection;
                 }
                 else
                 {
                     thisExchange = prev_exc;
-                    this.PopUpWarning("Warning", "No data returned from the exchange.");
+                    this.PopUpWarning("Warning", $"There is no PL data at {thisExchange.Name} in {calendarYear}.");
                 }
             }
             catch (Exception ex)
@@ -225,11 +220,10 @@ namespace CoinBalance
 
         private int[] SearchYears()
         {
-            int[] years = new int[DateTime.Now.Year - yearFrom + 2];
-            years[0] = 0;
-            for (int i = 1; i <= years.Length - 1; i++)
+            int[] years = new int[DateTime.Now.Year - yearFrom + 1];
+            for (int i = 0; i <= years.Length - 1; i++)
             {
-                years[i] = yearFrom - 1 + i;
+                years[i] = yearFrom + i;
             }
             return years;
         }
@@ -284,13 +278,13 @@ namespace CoinBalance
             GridNumericColumn bookColumn = new GridNumericColumn()
             {
                 MappingName = "AvgBookPrice",
-                HeaderText = "Book"
+                HeaderText = "BookPrice"
             };
 
             GridNumericColumn closePriceColumn = new GridNumericColumn()
             {
                 MappingName = "ClosePrice",
-                HeaderText = "Close"
+                HeaderText = "ClosePrice"
             };
 
             GridNumericColumn TradeFeeColumn = new GridNumericColumn()
@@ -321,6 +315,13 @@ namespace CoinBalance
                 NumberDecimalDigits = 0
             };
 
+            GridNumericColumn PLColumn = new GridNumericColumn()
+            {
+                MappingName = "NetPL",
+                HeaderText = "Profit",
+                NumberDecimalDigits = 0
+            };
+
             sfGrid.Columns.Add(dateColumn);
             sfGrid.Columns.Add(coinColumn);
             sfGrid.Columns.Add(PLTypeColumn);
@@ -333,6 +334,7 @@ namespace CoinBalance
             sfGrid.Columns.Add(MarginFeeColumn);
             sfGrid.Columns.Add(SwapColumn);
             sfGrid.Columns.Add(DepWithFeeColumn);
+            sfGrid.Columns.Add(PLColumn);
         }
 
         private class TransactionStyle : DataGridStyle

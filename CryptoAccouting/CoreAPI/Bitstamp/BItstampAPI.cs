@@ -188,7 +188,7 @@ namespace CoinBalance.CoreAPI
             string symbol;
             EnuSide ebuysell;
             EnuCCY settleCur;
-            double price;
+            decimal price;
 
             try
             {
@@ -215,15 +215,15 @@ namespace CoinBalance.CoreAPI
 
                         if(elem["usd"] != null)
                         {
-                            ebuysell = (double)elem["usd"] > 0 ? EnuSide.Sell : EnuSide.Buy;
+                            ebuysell = (decimal)elem["usd"] > 0 ? EnuSide.Sell : EnuSide.Buy;
                             settleCur = EnuCCY.USD;
-                            price = (double)elem["btc_usd"];
+                            price = (decimal)elem["btc_usd"];
                         }
                         else if (elem["eur"] != null)
                         {
-                            ebuysell = (double)elem["eur"] > 0 ? EnuSide.Sell : EnuSide.Buy;
+                            ebuysell = (decimal)elem["eur"] > 0 ? EnuSide.Sell : EnuSide.Buy;
                             settleCur = EnuCCY.EUR;
-                            price = (double)elem["btc_eur"];
+                            price = (decimal)elem["btc_eur"];
                         }
                         else
                         {
@@ -233,11 +233,11 @@ namespace CoinBalance.CoreAPI
                         tradelist.AggregateTransaction(symbol,
                                                        AssetType.Cash,
                                                        ebuysell,
-                                                       (double)elem["btc"],
+                                                       (decimal)elem["btc"],
                                                        price,
                                                        settleCur,
                                                        DateTime.Parse((string)elem["datetime"]).Date,
-                                                       (double)elem["fee"],
+                                                       (decimal)elem["fee"],
                                                        _bitstamp
                                                           );
                     }

@@ -58,27 +58,7 @@
 				//	navctlr.SetPosition(item);
 				//}             }
         }
-         //private void ConfigureSegmentButton()
-        //{
-
-        //    SegmentBalance.ValueChanged += (sender, e) =>
-        //    {
-        //        var selectedSegmentId = (sender as UISegmentedControl).SelectedSegment;
-
-        //        switch (selectedSegmentId)
-        //        {
-        //            case 0:
-        //                TableView.RegisterNibForCellReuse(CoinViewCell.Nib, "CoinViewCell");
-        //                TableView.Source = new CoinTableSource(mybalance, this);
-        //                break;
-        //            case 1:
-        //                TableView.RegisterClassForCellReuse(typeof(CoinStoreCell), "CoinStorageCell");         //                //TableView.RegisterNibForCellReuse(CoinStorageCell.Nib, "CoinStorageCell");
-        //                TableView.Source = new CoinStoreTableSource(AppCore.CoinStorageList, this);
-        //                break;
-        //            default:
-        //                break;
-        //        }         //        ReDrawScreen();
-        //    };          //}          public override void ReDrawScreen()         {
+         public override void ReDrawScreen()         {
             if (AppCore.Balance != null)             {                 labelCcy.Text = AppCore.BaseCurrency.ToString();                 labelTotalFiat.Text = AppCore.NumberFormat(mybalance.LatestFiatValueBase());                 labelTotalBTC.Text = String.Format("{0:n2}", mybalance.AmountBTC());                 label1dPct.Text = AppCore.NumberFormat(mybalance.BaseRet1d(), true, false) + "%";                 label1dPct.TextColor = mybalance.BaseRet1d() >= 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);                 labelLastUpdate.Text = mybalance.PriceDateTime !=                      DateTime.MinValue ? "Price Updated: " + mybalance.PriceDateTime.ToShortDateString() + " " + mybalance.PriceDateTime.ToShortTimeString()                     : "";                 TableView.ReloadData();
             }          } 
         partial void ButtonAddNew_Activated(UIBarButtonItem sender)

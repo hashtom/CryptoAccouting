@@ -28,6 +28,42 @@ namespace CoinBalance
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelCashBook { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelCashRPL { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelCashUPL { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelFutBook { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelFutRPL { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelFutUPL { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelMarginBook { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelMarginRPL { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel labelMarginUPL { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIView PLSpreadsheetView { get; set; }
 
         [Outlet]
@@ -49,6 +85,51 @@ namespace CoinBalance
             if (buttonYear != null) {
                 buttonYear.Dispose ();
                 buttonYear = null;
+            }
+
+            if (labelCashBook != null) {
+                labelCashBook.Dispose ();
+                labelCashBook = null;
+            }
+
+            if (labelCashRPL != null) {
+                labelCashRPL.Dispose ();
+                labelCashRPL = null;
+            }
+
+            if (labelCashUPL != null) {
+                labelCashUPL.Dispose ();
+                labelCashUPL = null;
+            }
+
+            if (labelFutBook != null) {
+                labelFutBook.Dispose ();
+                labelFutBook = null;
+            }
+
+            if (labelFutRPL != null) {
+                labelFutRPL.Dispose ();
+                labelFutRPL = null;
+            }
+
+            if (labelFutUPL != null) {
+                labelFutUPL.Dispose ();
+                labelFutUPL = null;
+            }
+
+            if (labelMarginBook != null) {
+                labelMarginBook.Dispose ();
+                labelMarginBook = null;
+            }
+
+            if (labelMarginRPL != null) {
+                labelMarginRPL.Dispose ();
+                labelMarginRPL = null;
+            }
+
+            if (labelMarginUPL != null) {
+                labelMarginUPL.Dispose ();
+                labelMarginUPL = null;
             }
 
             if (PLSpreadsheetView != null) {

@@ -12,6 +12,7 @@ namespace CoinBalance.CoreModel
         public bool HasPriceAPI { get; set; }
         public bool HasTradeAPI { get; set; }
         public bool HasBalanceAPI { get; set; }
+        public bool CanCalcPL { get; set; }
         public string LogoFileName { get; set; }
         //public TradeList TradeList { get; private set; }
         public InstrumentList ListedCoins { get; private set; }

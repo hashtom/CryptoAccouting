@@ -167,11 +167,11 @@ namespace CoinBalance.CoreAPI
                     tradelist.AggregateTransaction(_bitflyer.GetSymbolForExchange("bitcoin"),
                                                    AssetType.Cash,
                                                    ebuysell,
-                                                   (double)result.size,
-                                                   (double)result.price,
+                                                   (decimal)result.size,
+                                                   (decimal)result.price,
                                                    EnuCCY.JPY,
                                                    result.exec_date.ToLocalTime(),
-                                                   (double)result.commission * (double)result.price,
+                                                   (decimal)result.commission * (decimal)result.price,
                                                    _bitflyer
                                                   );
                 }

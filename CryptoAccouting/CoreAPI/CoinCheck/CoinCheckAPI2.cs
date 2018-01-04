@@ -183,11 +183,11 @@ namespace CoinBalance.CoreAPI
                     tradelist.AggregateTransaction(symbol,
                                                    AssetType.Cash,
                                                    ebuysell,
-                                                   Math.Abs((double)val),
-                                                   (double)tx.rate,
+                                                   Math.Abs((decimal)val),
+                                                   (decimal)tx.rate,
                                                    EnuCCY.JPY,
                                                    Util.IsoDateTimeToLocal(tx.created_at),
-                                                   (double)tx.fee,
+                                                   (decimal)tx.fee,
                                                    _coincheck
                                                   );
                 }

@@ -186,11 +186,11 @@ namespace CoinBalance.CoreAPI
                     tradelist.AggregateTransaction(tx.Value.Replace("BTC",""),
                                                    AssetType.Cash,
                                                    tx.Key.isBuyer ? EnuSide.Buy : EnuSide.Sell,
-                                                   Math.Abs((double)tx.Key.qty),
-                                                   (double)tx.Key.price,
+                                                   Math.Abs((decimal)tx.Key.qty),
+                                                   (decimal)tx.Key.price,
                                                    EnuCCY.BTC,
                                                    tx.Key.time,
-                                                   (double)tx.Key.commission,
+                                                   (decimal)tx.Key.commission,
                                                    _binance
                                                   );
                 }

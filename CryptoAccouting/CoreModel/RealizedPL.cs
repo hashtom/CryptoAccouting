@@ -27,8 +27,13 @@ namespace CoinBalance.CoreModel
             get { return TradedCoin.Symbol1; }
         }
 
-        public RealizedPL(Exchange exchange)
+        public RealizedPL(Instrument coin, EnuPLType plType, DateTime tradeDate, EnuSide side, EnuBaseFiatCCY ccy, Exchange exchange)
         {
+            this.TradedCoin = coin;
+            this.PLType = plType;
+            this.TradeDate = tradeDate;
+            this.Side = side;
+            this.SettlementCCY = ccy;
             this.exchange = exchange;
         }
 
@@ -37,7 +42,7 @@ namespace CoinBalance.CoreModel
             get
             {
                 var priceDiff = Side == EnuSide.Buy ? (ClosePrice - AvgBookPrice) : -(ClosePrice - AvgBookPrice);
-                return TradeQty * priceDiff;
+                return Quantity * priceDiff;
             }
         }
 
@@ -46,7 +51,7 @@ namespace CoinBalance.CoreModel
             get
             {
                 var priceDiff = Side == EnuSide.Buy ? (ClosePrice - AvgBookPrice) : -(ClosePrice - AvgBookPrice);
-                return TradeQty * priceDiff - TradeFee - MarginFee;
+                return Quantity * priceDiff - TradeFee - MarginFee;
             }
         }
     }
