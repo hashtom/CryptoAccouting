@@ -41,7 +41,7 @@ namespace CoinBalance.CoreModel
         {
             get
             {
-                var priceDiff = Side == EnuSide.Buy ? (ClosePrice - AvgBookPrice) : -(ClosePrice - AvgBookPrice);
+                var priceDiff = Side == EnuSide.Sell ? (ClosePrice - AvgBookPrice) : -(ClosePrice - AvgBookPrice);
                 return Quantity * priceDiff;
             }
         }
@@ -50,7 +50,7 @@ namespace CoinBalance.CoreModel
         {
             get
             {
-                var priceDiff = Side == EnuSide.Buy ? (ClosePrice - AvgBookPrice) : -(ClosePrice - AvgBookPrice);
+                var priceDiff = Side == EnuSide.Sell ? (ClosePrice - AvgBookPrice) : -(ClosePrice - AvgBookPrice);
                 return Quantity * priceDiff - TradeFee - MarginFee;
             }
         }
