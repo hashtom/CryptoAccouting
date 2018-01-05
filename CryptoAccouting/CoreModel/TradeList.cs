@@ -180,7 +180,7 @@ namespace CoinBalance.CoreModel
                         pls.Add(pl);
 
                         //Sell : Reduce Accumulated value
-                        accumulated_value -= tx.TradeNetValue;
+                        accumulated_value -= tx.Quantity * current_bookprice;
                         accumulated_qty -= tx.Quantity;
                     }
                 }

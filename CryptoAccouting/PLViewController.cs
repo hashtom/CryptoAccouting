@@ -22,8 +22,10 @@ namespace CoinBalance
         const int yearFrom = 2014;
         SfDataGrid sfGrid;
         TradeList myTradeList = new TradeList();
-        Exchange thisExchange;
+        Exchange thisExchange = null;
         int calendarYear = DateTime.Now.Year;
+        Exchange Exchange_prev = null;
+        int Year_prev = DateTime.Now.Year;
         LoadingOverlay loadPop;
 
         public PLViewController (IntPtr handle) : base (handle)
@@ -164,9 +166,11 @@ namespace CoinBalance
             //Cash
             var cashcollection = PLCollection.Where(x => x.PLType == EnuPLType.CashTrade).Where(x => x.TradeDate.Year == calendarYear).ToList();
 
-            labelCashBook.Text = cashcollection.Any() ? AppCore.NumberFormat(cashcollection.Last().AvgBookPrice, false, false) : "0";
-            labelCashRPL.Text = cashcollection.Any() ? AppCore.NumberFormat(cashcollection.Sum(x => x.NetPL), false, false) : "0";
+            labelCashTrade.Text = cashcollection.Any() ? AppCore.NumberFormat(cashcollection.Sum(x => x.TradeValue), false, false) : "0";
+            labelCashBook.Text = cashcollection.Any() ? AppCore.NumberFormat(cashcollection.Sum(x => x.BookValue), false, false) : "0";
+            labelCashPL.Text = cashcollection.Any() ? AppCore.NumberFormat(cashcollection.Sum(x => x.NetPL), false, false) : "0";
 
+            //sfGrid.ItemsSource = PLCollection;
         }
 
         private async Task searchPLData()
@@ -177,7 +181,6 @@ namespace CoinBalance
             PLSpreadsheetView.Add(loadPop);
             buttonYear.Enabled = false;
             buttonExchange.Enabled = false;
-            var prev_exc = myTradeList?.TradedExchange != null ? myTradeList?.TradedExchange : thisExchange;
 
             try
             {
@@ -195,26 +198,29 @@ namespace CoinBalance
                 if(PLCollection.Any())
                 {
                     sfGrid.ItemsSource = PLCollection;
+                    ReDrawScreen();
+                    Exchange_prev = thisExchange;
+                    Year_prev = calendarYear;
                 }
                 else
                 {
-                    thisExchange = prev_exc;
+                    thisExchange = Exchange_prev != null ? Exchange_prev : thisExchange;
+                    calendarYear = Year_prev;
                     this.PopUpWarning("Warning", $"There is no PL data at {thisExchange.Name} in {calendarYear}.");
                 }
             }
             catch (Exception ex)
             {
-                thisExchange = prev_exc;
+                thisExchange = Exchange_prev != null ? Exchange_prev : thisExchange;
+                calendarYear = Year_prev;
                 this.PopUpWarning("Warning", ex.Message);
                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": ViewDidLoad: buttonSearch: " + ex.GetType() + ": " + ex.Message);
             }
             finally
             {
-                //thisExchange = myTradeList.Any() ? myTradeList.TradedExchange : thisExchange;
                 loadPop.Hide();
                 buttonYear.Enabled = true;
                 buttonExchange.Enabled = true;
-                ReDrawScreen();
             }
         }
 
@@ -269,6 +275,13 @@ namespace CoinBalance
                 HeaderText = "Side"
             };
 
+            GridNumericColumn PLColumn = new GridNumericColumn()
+            {
+                MappingName = "NetPL",
+                HeaderText = "Profit",
+                NumberDecimalDigits = 0
+            };
+
             GridNumericColumn qtyColumn = new GridNumericColumn()
             {
                 MappingName = "Quantity",
@@ -281,10 +294,22 @@ namespace CoinBalance
                 HeaderText = "BookPrice"
             };
 
+            GridNumericColumn bookValueColumn = new GridNumericColumn()
+            {
+                MappingName = "BookValue",
+                HeaderText = "BookValue"
+            };
+
             GridNumericColumn closePriceColumn = new GridNumericColumn()
             {
                 MappingName = "ClosePrice",
                 HeaderText = "ClosePrice"
+            };
+
+            GridNumericColumn tradeValueColumn = new GridNumericColumn()
+            {
+                MappingName = "TradeValue",
+                HeaderText = "TradeValue"
             };
 
             GridNumericColumn TradeFeeColumn = new GridNumericColumn()
@@ -315,21 +340,16 @@ namespace CoinBalance
                 NumberDecimalDigits = 0
             };
 
-            GridNumericColumn PLColumn = new GridNumericColumn()
-            {
-                MappingName = "NetPL",
-                HeaderText = "Profit",
-                NumberDecimalDigits = 0
-            };
-
             sfGrid.Columns.Add(dateColumn);
             sfGrid.Columns.Add(coinColumn);
             sfGrid.Columns.Add(PLTypeColumn);
             sfGrid.Columns.Add(settleColumn);
             sfGrid.Columns.Add(sideColumn);
             sfGrid.Columns.Add(qtyColumn);
-            sfGrid.Columns.Add(bookColumn);
             sfGrid.Columns.Add(closePriceColumn);
+            sfGrid.Columns.Add(tradeValueColumn);
+            sfGrid.Columns.Add(bookValueColumn);
+            sfGrid.Columns.Add(bookColumn);
             sfGrid.Columns.Add(TradeFeeColumn);
             sfGrid.Columns.Add(MarginFeeColumn);
             sfGrid.Columns.Add(SwapColumn);

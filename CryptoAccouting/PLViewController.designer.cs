@@ -32,11 +32,11 @@ namespace CoinBalance
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelCashRPL { get; set; }
+        UIKit.UILabel labelCashPL { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelCashUPL { get; set; }
+        UIKit.UILabel labelCashTrade { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -44,11 +44,11 @@ namespace CoinBalance
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelFutRPL { get; set; }
+        UIKit.UILabel labelFutPL { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelFutUPL { get; set; }
+        UIKit.UILabel labelFutTrade { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -56,11 +56,11 @@ namespace CoinBalance
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelMarginRPL { get; set; }
+        UIKit.UILabel labelMarginPL { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelMarginUPL { get; set; }
+        UIKit.UILabel labelMarginTrade { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -92,14 +92,14 @@ namespace CoinBalance
                 labelCashBook = null;
             }
 
-            if (labelCashRPL != null) {
-                labelCashRPL.Dispose ();
-                labelCashRPL = null;
+            if (labelCashPL != null) {
+                labelCashPL.Dispose ();
+                labelCashPL = null;
             }
 
-            if (labelCashUPL != null) {
-                labelCashUPL.Dispose ();
-                labelCashUPL = null;
+            if (labelCashTrade != null) {
+                labelCashTrade.Dispose ();
+                labelCashTrade = null;
             }
 
             if (labelFutBook != null) {
@@ -107,14 +107,14 @@ namespace CoinBalance
                 labelFutBook = null;
             }
 
-            if (labelFutRPL != null) {
-                labelFutRPL.Dispose ();
-                labelFutRPL = null;
+            if (labelFutPL != null) {
+                labelFutPL.Dispose ();
+                labelFutPL = null;
             }
 
-            if (labelFutUPL != null) {
-                labelFutUPL.Dispose ();
-                labelFutUPL = null;
+            if (labelFutTrade != null) {
+                labelFutTrade.Dispose ();
+                labelFutTrade = null;
             }
 
             if (labelMarginBook != null) {
@@ -122,14 +122,14 @@ namespace CoinBalance
                 labelMarginBook = null;
             }
 
-            if (labelMarginRPL != null) {
-                labelMarginRPL.Dispose ();
-                labelMarginRPL = null;
+            if (labelMarginPL != null) {
+                labelMarginPL.Dispose ();
+                labelMarginPL = null;
             }
 
-            if (labelMarginUPL != null) {
-                labelMarginUPL.Dispose ();
-                labelMarginUPL = null;
+            if (labelMarginTrade != null) {
+                labelMarginTrade.Dispose ();
+                labelMarginTrade = null;
             }
 
             if (PLSpreadsheetView != null) {

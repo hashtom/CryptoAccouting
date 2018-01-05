@@ -37,6 +37,22 @@ namespace CoinBalance.CoreModel
             this.exchange = exchange;
         }
 
+        public decimal BookValue
+        {
+            get
+            {
+                return Quantity * AvgBookPrice;
+            }
+        }
+
+        public decimal TradeValue
+        {
+            get
+            {
+                return Quantity * ClosePrice;
+            }
+        }
+
         public decimal GrossPL
         {
             get
