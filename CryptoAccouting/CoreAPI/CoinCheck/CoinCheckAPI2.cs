@@ -120,10 +120,48 @@ namespace CoinBalance.CoreAPI
         public static async Task<TradeList> FetchTransactionAsync(Exchange coincheck, int calendarYear = 0)
         {
             _coincheck = coincheck;
-            //int limit = 25;
+            var leveragetransactions = new List<CoinCheckLeveragePosition.Order>();
+            var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _coincheck };
+
+            var transactions = await GetTransactionsAsync(calendarYear);
+            var leveragePositions = await GetLeveragePositionsAsync(calendarYear);
+            leveragePositions.ForEach(x => leveragetransactions.Add(x.new_order));
+            leveragePositions.ForEach(x => leveragetransactions.AddRange(x.close_orders));
+
+            try
+            {
+                foreach (var tx in transactions)
+                {
+                    var symbol = tx.pair;
+                    symbol = symbol.Replace("_jpy", "").ToUpper();
+                    decimal val = (decimal)tx.funds.GetType().GetProperty(symbol.ToLower()).GetValue(tx.funds);
+
+                    tradelist.AggregateTransaction(symbol,
+                                                   leveragetransactions.Any(x => x.id == tx.order_id) ? AssetType.Margin : AssetType.Cash,
+                                                   Util.ParseEnum<EnuSide>(tx.side),
+                                                   Math.Abs((decimal)val),
+                                                   (decimal)tx.rate,
+                                                   EnuCCY.JPY,
+                                                   Util.IsoDateTimeToLocal(tx.created_at),
+                                                   (decimal)tx.fee,
+                                                   _coincheck
+                                                  );
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchTransactionAsync: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
+
+            return tradelist;
+        }
+
+        private static async Task<List<CoinCheckTransactions.transaction>> GetTransactionsAsync(int calendarYear = 0)
+        {
             var from = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
             var to = calendarYear == 0 ? new DateTime(DateTime.Now.Year, 12, 31) : new DateTime(calendarYear, 12, 31);
-            var transactions = new List<CoinCheckTransactions.Datum>();
+            var transactions = new List<CoinCheckTransactions.transaction>();
 
             try
             {
@@ -138,7 +176,7 @@ namespace CoinBalance.CoreAPI
                     transactions.AddRange(results.data.
                                           Where(x => from < Util.IsoDateTimeToLocal(x.created_at)).
                                           Where(x => to >= Util.IsoDateTimeToLocal(x.created_at)));
-                    
+
                     if (to < Util.IsoDateTimeToLocal(results.data.Last().created_at))
                     {
                         break;
@@ -157,48 +195,86 @@ namespace CoinBalance.CoreAPI
                     }
                 }
 
-                var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _coincheck };
-
-                foreach (var tx in transactions)
-                {
-                    EnuSide ebuysell;
-
-                    switch (tx.side)
-                    {
-                        case "buy":
-                            ebuysell = EnuSide.Buy;
-                            break;
-                        case "sell":
-                            ebuysell = EnuSide.Sell;
-                            break;
-                        default:
-                            throw new NotImplementedException();
-                    }
-
-                    var symbol = tx.pair;
-                    symbol = symbol.Replace("_jpy", "").ToUpper();
-                    decimal val = (decimal)tx.funds.GetType().GetProperty(symbol.ToLower()).GetValue(tx.funds);
-
-                    tradelist.AggregateTransaction(symbol,
-                                                   AssetType.Cash,
-                                                   ebuysell,
-                                                   Math.Abs((decimal)val),
-                                                   (decimal)tx.rate,
-                                                   EnuCCY.JPY,
-                                                   Util.IsoDateTimeToLocal(tx.created_at),
-                                                   (decimal)tx.fee,
-                                                   _coincheck
-                                                  );
-                }
-
-                //return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
-                return tradelist;
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchTransactionAsync: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": GetTransactionsAsync: " + e.GetType() + ": " + e.Message);
                 throw;
             }
+
+            return transactions;
+
+        }
+
+        private static async Task<List<CoinCheckLeveragePosition.position>> GetLeveragePositionsAsync(int calendarYear = 0)
+        {
+            
+            var from = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
+            var to = calendarYear == 0 ? new DateTime(DateTime.Now.Year, 12, 31) : new DateTime(calendarYear, 12, 31);
+            var positions = new List<CoinCheckLeveragePosition.position>();
+
+            try
+            {
+                var results = await GetLeveragePositionsPageAsync();
+                if (results.success != true)
+                {
+                    throw new AppCoreParseException("Coincheck returned error: " + results);
+                }
+
+                while (true)
+                {
+                    positions.AddRange(results.data.
+                                       Where(x => from < Util.IsoDateTimeToLocal(x.created_at)).
+                                       Where(x => to >= Util.IsoDateTimeToLocal(x.created_at)));
+
+                    if (to < Util.IsoDateTimeToLocal(results.data.Last().created_at))
+                    {
+                        break;
+                    }
+
+                    if (results.data.Count == 0 || results.pagination.limit > results.data.Count)
+                    {
+                        break;
+                    }
+
+                    var lastId = results.data.Last().id;
+                    results = await GetLeveragePositionsPageAsync(null, null, lastId);
+                    if (results.success != true)
+                    {
+                        throw new AppCoreParseException("Coincheck returned error: " + results);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": GetLeveragePositionsAsync: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
+
+            return positions;
+
+        }
+
+        private static async Task<CoinCheckLeveragePosition> GetLeveragePositionsPageAsync(string status = null, string after = null, string before = null, string order = "asc")
+        {
+            var path = $"/api/exchange/leverage/positions?limit=50&order={order}";
+
+            if (status != null)
+            {
+                path += $"&atatus={status}";
+            }
+
+            if (after != null)
+            {
+                path += $"&starting_after={after}";
+            }
+
+            if (before != null)
+            {
+                path += $"&ending_before={before}";
+            }
+            var req = BuildRequest(path);
+            return await RestUtil.ExecuteRequestAsync<CoinCheckLeveragePosition>(_restClient, req);
         }
 
         private static async Task<CoinCheckTransactions> FetchTransactionsPageAsync(string after = null, string before = null, string order = "asc")

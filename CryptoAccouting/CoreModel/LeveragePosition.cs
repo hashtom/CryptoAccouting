@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace CoinBalance.CoreModel
 {
     public class LeveragePosition
@@ -16,12 +17,6 @@ namespace CoinBalance.CoreModel
         public decimal Fee { get; set; }
         public decimal Profit { get; set; }
     }
-
-    //public enum EnuMarginSide
-    //{
-    //    Long,
-    //    Short
-    //}
 
     public enum EnuMarginStatus
     {

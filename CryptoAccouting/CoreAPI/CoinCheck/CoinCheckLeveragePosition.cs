@@ -6,7 +6,7 @@ namespace CoinBalance.CoreAPI
     {
         public bool success { get; set; }
         public Pagination pagination { get; set; }
-        public List<Datum> data { get; set; }
+        public List<position> data { get; set; }
 
         public class Pagination
         {
@@ -16,7 +16,7 @@ namespace CoinBalance.CoreAPI
             public object ending_before { get; set; }
         }
 
-        public class NewOrder
+        public class Order
         {
             public string id { get; set; }
             public string side { get; set; }
@@ -27,18 +27,7 @@ namespace CoinBalance.CoreAPI
             public string created_at { get; set; }
         }
 
-        public class CloseOrder
-        {
-            public string id { get; set; }
-            public string side { get; set; }
-            public string rate { get; set; }
-            public string amount { get; set; }
-            public string pending_amount { get; set; }
-            public string status { get; set; }
-            public string created_at { get; set; }
-        }
-
-        public class Datum
+        public class position
         {
             public string id { get; set; }
             public string pair { get; set; }
@@ -51,8 +40,8 @@ namespace CoinBalance.CoreAPI
             public string all_amount { get; set; }
             public string side { get; set; }
             public string pl { get; set; }
-            public NewOrder new_order { get; set; }
-            public List<CloseOrder> close_orders { get; set; }
+            public Order new_order { get; set; }
+            public List<Order> close_orders { get; set; }
         }
     }
 }

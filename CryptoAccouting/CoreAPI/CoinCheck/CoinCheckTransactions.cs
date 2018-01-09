@@ -7,7 +7,7 @@ namespace CoinBalance.CoreAPI
     {
         public bool success { get; set; }
         public Pagination pagination { get; set; }
-        public List<Datum> data { get; set; }
+        public List<transaction> data { get; set; }
 
         public class Pagination
         {
@@ -34,7 +34,7 @@ namespace CoinBalance.CoreAPI
             public decimal Dash { get; set; }
         }
 
-        public class Datum
+        public class transaction
         {
             public string id { get; set; }
             public string order_id { get; set; }
