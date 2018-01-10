@@ -13,7 +13,6 @@ namespace CoinBalance.CoreAPI
         private static Exchange _coincheck;
         private static CrossRate _USDJPYrate;
         private static IRestClient _restClient = new RestClient(new Uri(ApiRoot));
-        //private static AssetType _assetType = AssetType.Cash;
 
         public static async Task FetchPriceAsync(Exchange coincheck, InstrumentList coins, CrossRate USDJPYrate)
         {
@@ -142,7 +141,7 @@ namespace CoinBalance.CoreAPI
                                                    Math.Abs((decimal)val),
                                                    (decimal)tx.rate,
                                                    EnuCCY.JPY,
-                                                   Util.IsoDateTimeToLocal(tx.created_at),
+                                                   tx.created_at,
                                                    (decimal)tx.fee,
                                                    _coincheck
                                                   );
@@ -155,6 +154,44 @@ namespace CoinBalance.CoreAPI
             }
 
             return tradelist;
+        }
+
+        public static async Task<List<RealizedPL>> FetchLeveragePLAsync(Exchange coincheck, int calendarYear = 0)
+        {
+            _coincheck = coincheck;
+            var pldata = new List<RealizedPL>();
+            var leveragePositions = await GetLeveragePositionsAsync(calendarYear, "closed");
+
+            try
+            {
+
+                foreach (var p in leveragePositions)
+                {
+                    var symbol = p.pair.Replace("_jpy", "").ToUpper();
+                    var id = _coincheck.GetIdForExchange(symbol);
+                    var pl = new RealizedPL(
+                        AppCore.InstrumentList.GetByInstrumentId(id),
+                        EnuPLType.MarginTrade,
+                        p.closed_at,
+                        Util.ParseEnum<EnuSide>(p.side) == EnuSide.Buy ? EnuSide.Sell : EnuSide.Buy,
+                        EnuBaseFiatCCY.JPY,
+                        p.all_amount,
+                        p.open_rate,
+                        p.closed_rate,
+                        _coincheck);
+
+                    var grossprofit = p.side == "buy" ? (p.closed_rate - p.open_rate) * p.all_amount : (p.open_rate - p.closed_rate) * p.all_amount;
+                    pl.MarginFee = grossprofit - p.pl;
+                    pldata.Add(pl);
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchTransactionAsync: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
+
+            return pldata;
         }
 
         private static async Task<List<CoinCheckTransactions.transaction>> GetTransactionsAsync(int calendarYear = 0)
@@ -173,11 +210,9 @@ namespace CoinBalance.CoreAPI
 
                 while (true)
                 {
-                    transactions.AddRange(results.data.
-                                          Where(x => from < Util.IsoDateTimeToLocal(x.created_at)).
-                                          Where(x => to >= Util.IsoDateTimeToLocal(x.created_at)));
+                    transactions.AddRange(results.data.Where(x => from < x.created_at).Where(x => to >= x.created_at));
 
-                    if (to < Util.IsoDateTimeToLocal(results.data.Last().created_at))
+                    if (to < results.data.Last().created_at)
                     {
                         break;
                     }
@@ -206,16 +241,16 @@ namespace CoinBalance.CoreAPI
 
         }
 
-        private static async Task<List<CoinCheckLeveragePosition.position>> GetLeveragePositionsAsync(int calendarYear = 0)
+        private static async Task<List<CoinCheckLeveragePosition.position>> GetLeveragePositionsAsync(int calendarYear = 0, string status = null)
         {
-            
+
             var from = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
             var to = calendarYear == 0 ? new DateTime(DateTime.Now.Year, 12, 31) : new DateTime(calendarYear, 12, 31);
             var positions = new List<CoinCheckLeveragePosition.position>();
 
             try
             {
-                var results = await GetLeveragePositionsPageAsync();
+                var results = await GetLeveragePositionsPageAsync(status);
                 if (results.success != true)
                 {
                     throw new AppCoreParseException("Coincheck returned error: " + results);
@@ -223,11 +258,9 @@ namespace CoinBalance.CoreAPI
 
                 while (true)
                 {
-                    positions.AddRange(results.data.
-                                       Where(x => from < Util.IsoDateTimeToLocal(x.created_at)).
-                                       Where(x => to >= Util.IsoDateTimeToLocal(x.created_at)));
+                    positions.AddRange(results.data.Where(x => from < x.created_at).Where(x => to >= x.created_at));
 
-                    if (to < Util.IsoDateTimeToLocal(results.data.Last().created_at))
+                    if (to < results.data.Last().created_at)
                     {
                         break;
                     }
@@ -238,7 +271,7 @@ namespace CoinBalance.CoreAPI
                     }
 
                     var lastId = results.data.Last().id;
-                    results = await GetLeveragePositionsPageAsync(null, null, lastId);
+                    results = await GetLeveragePositionsPageAsync(status, null, lastId);
                     if (results.success != true)
                     {
                         throw new AppCoreParseException("Coincheck returned error: " + results);
@@ -261,7 +294,7 @@ namespace CoinBalance.CoreAPI
 
             if (status != null)
             {
-                path += $"&atatus={status}";
+                path += $"&status={status}";
             }
 
             if (after != null)

@@ -165,10 +165,20 @@ namespace CoinBalance
 
             //Cash
             var cashcollection = PLCollection.Where(x => x.PLType == EnuPLType.CashTrade).Where(x => x.TradeDate.Year == calendarYear).ToList();
+            var margincollection = PLCollection.Where(x => x.PLType == EnuPLType.MarginTrade).Where(x => x.TradeDate.Year == calendarYear).ToList();
+            var futurescollection = PLCollection.Where(x => x.PLType == EnuPLType.FuturesTrade).Where(x => x.TradeDate.Year == calendarYear).ToList();
 
-            labelCashTrade.Text = cashcollection.Any() ? AppCore.NumberFormat(cashcollection.Sum(x => x.TradeValue), false, false) : "0";
-            labelCashBook.Text = cashcollection.Any() ? AppCore.NumberFormat(cashcollection.Sum(x => x.BookValue), false, false) : "0";
+            labelCashTrade.Text = cashcollection.Any() ? AppCore.NumberFormat(cashcollection.Sum(x => x.CloseValue), false, false) : "0";
+            labelCashBook.Text = cashcollection.Any() ? AppCore.NumberFormat(cashcollection.Sum(x => x.OpenValue), false, false) : "0";
             labelCashPL.Text = cashcollection.Any() ? AppCore.NumberFormat(cashcollection.Sum(x => x.NetPL), false, false) : "0";
+
+            labelMarginTrade.Text = margincollection.Any() ? AppCore.NumberFormat(margincollection.Sum(x => x.CloseValue), false, false) : "0";
+            labelMarginBook.Text = margincollection.Any() ? AppCore.NumberFormat(margincollection.Sum(x => x.OpenValue), false, false) : "0";
+            labelMarginPL.Text = margincollection.Any() ? AppCore.NumberFormat(margincollection.Sum(x => x.NetPL), false, false) : "0";
+
+            labelFutTrade.Text = futurescollection.Any() ? AppCore.NumberFormat(futurescollection.Sum(x => x.CloseValue), false, false) : "0";
+            labelFutBook.Text = futurescollection.Any() ? AppCore.NumberFormat(futurescollection.Sum(x => x.OpenValue), false, false) : "0";
+            labelFutPL.Text = futurescollection.Any() ? AppCore.NumberFormat(futurescollection.Sum(x => x.NetPL), false, false) : "0";
 
             //sfGrid.ItemsSource = PLCollection;
         }
@@ -193,6 +203,12 @@ namespace CoinBalance
                 {
                     var pldata = myTradeList.CalculateCashTradesPL();
                     PLCollection.AddRange(pldata.Where(x => x.TradeDate.Year == calendarYear));
+                }
+
+                var leveragePL = await AppCore.LoadLeveragePLAsync(thisExchange, calendarYear);
+                if (leveragePL.Any())
+                {
+                    PLCollection.AddRange(leveragePL);
                 }
 
                 if(PLCollection.Any())
@@ -285,31 +301,36 @@ namespace CoinBalance
             GridNumericColumn qtyColumn = new GridNumericColumn()
             {
                 MappingName = "Quantity",
-                HeaderText = "Quantity"
+                HeaderText = "Quantity",
+                NumberDecimalDigits = 4
             };
 
-            GridNumericColumn bookColumn = new GridNumericColumn()
+            GridNumericColumn openPriceColumn = new GridNumericColumn()
             {
-                MappingName = "AvgBookPrice",
-                HeaderText = "BookPrice"
+                MappingName = "OpenPrice",
+                HeaderText = "BookPrice",
+                NumberDecimalDigits = 0
             };
 
-            GridNumericColumn bookValueColumn = new GridNumericColumn()
+            GridNumericColumn openValueColumn = new GridNumericColumn()
             {
-                MappingName = "BookValue",
-                HeaderText = "BookValue"
+                MappingName = "OpenValue",
+                HeaderText = "BookValue",
+                NumberDecimalDigits = 0
             };
 
             GridNumericColumn closePriceColumn = new GridNumericColumn()
             {
                 MappingName = "ClosePrice",
-                HeaderText = "ClosePrice"
+                HeaderText = "TradePrice",
+                NumberDecimalDigits = 0
             };
 
-            GridNumericColumn tradeValueColumn = new GridNumericColumn()
+            GridNumericColumn closeValueColumn = new GridNumericColumn()
             {
-                MappingName = "TradeValue",
-                HeaderText = "TradeValue"
+                MappingName = "CloseValue",
+                HeaderText = "TradeValue",
+                NumberDecimalDigits = 0
             };
 
             GridNumericColumn TradeFeeColumn = new GridNumericColumn()
@@ -347,9 +368,9 @@ namespace CoinBalance
             sfGrid.Columns.Add(sideColumn);
             sfGrid.Columns.Add(qtyColumn);
             sfGrid.Columns.Add(closePriceColumn);
-            sfGrid.Columns.Add(tradeValueColumn);
-            sfGrid.Columns.Add(bookValueColumn);
-            sfGrid.Columns.Add(bookColumn);
+            sfGrid.Columns.Add(openPriceColumn);
+            sfGrid.Columns.Add(closeValueColumn);
+            sfGrid.Columns.Add(openValueColumn);
             sfGrid.Columns.Add(TradeFeeColumn);
             sfGrid.Columns.Add(MarginFeeColumn);
             sfGrid.Columns.Add(SwapColumn);

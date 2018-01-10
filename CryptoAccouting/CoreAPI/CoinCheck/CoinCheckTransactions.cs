@@ -38,7 +38,7 @@ namespace CoinBalance.CoreAPI
         {
             public string id { get; set; }
             public string order_id { get; set; }
-            public string created_at { get; set; }
+            public DateTime created_at { get; set; }
             public Funds funds { get; set; }
             public string pair { get; set; }
             public decimal rate { get; set; }

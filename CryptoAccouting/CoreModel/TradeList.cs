@@ -166,11 +166,9 @@ namespace CoinBalance.CoreModel
                     }
                     else if (tx.Side == EnuSide.Sell)
                     {
-                        var pl = new RealizedPL(tx.TradedCoin, EnuPLType.CashTrade, tx.TradeDate, tx.Side, AppCore.BaseCurrency, this.TradedExchange)
+                        var pl = new RealizedPL(tx.TradedCoin, EnuPLType.CashTrade, tx.TradeDate, tx.Side, AppCore.BaseCurrency,
+                                                tx.Quantity, current_bookprice, tx.TradePriceSettle, this.TradedExchange)
                         {
-                            Quantity = tx.Quantity,
-                            AvgBookPrice = current_bookprice,
-                            ClosePrice = tx.TradePriceSettle,
                             TradeFee = tx.Fee,
                             MarginFee = 0,
                             Swap = 0,

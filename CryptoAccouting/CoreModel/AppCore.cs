@@ -52,7 +52,7 @@
             else             {                 throw new AppCoreException("API Keys are not saved.");             }         }          public static async Task<List<Position>> LoadPositionAsync(Exchange exchange)         {             if (exchange.APIKeySaved())             {
                 return await ExchangeAPI.FetchPositionAsync(exchange);
             }
-            else             {                 throw new AppCoreException("API Keys are not saved.");             }         }          public static Exchange GetExchange(string Code)
+            else             {                 throw new AppCoreException("API Keys are not saved.");             }         }          public static async Task<List<RealizedPL>> LoadLeveragePLAsync(Exchange exchange, int calendarYear = 0)         {             if (exchange.APIKeySaved())             {                 return await ExchangeAPI.FetchLeveragePLAsync(exchange, calendarYear);             }             else             {                 throw new AppCoreException("API Keys are not saved.");             }         }          public static Exchange GetExchange(string Code)
         {             return PublicExchangeList.GetExchange(Code);         }
 
         public static ExchangeList GetExchangeListByInstrument(string id)

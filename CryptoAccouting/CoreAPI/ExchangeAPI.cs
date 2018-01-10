@@ -62,7 +62,7 @@ namespace CoinBalance.CoreAPI
 
         }
 
-        internal static async Task<TradeList> FetchTradeListAsync(Exchange exchange, int CalendarYear = 0)
+        internal static async Task<TradeList> FetchTradeListAsync(Exchange exchange, int calendarYear = 0)
         {
 
             try
@@ -70,28 +70,28 @@ namespace CoinBalance.CoreAPI
                 switch (exchange.Code)
                 {
                     case "Zaif":
-                        return await ZaifAPI2.FetchTransactionAsync(exchange, CalendarYear);
+                        return await ZaifAPI2.FetchTransactionAsync(exchange, calendarYear);
 
                     case "CoinCheck":
-                        return await CoinCheckAPI2.FetchTransactionAsync(exchange, CalendarYear);
+                        return await CoinCheckAPI2.FetchTransactionAsync(exchange, calendarYear);
 
                     case "Bittrex":
-                        return await BittrexAPI.FetchTransactionAsync(exchange, CalendarYear);
+                        return await BittrexAPI.FetchTransactionAsync(exchange, calendarYear);
 
                     case "Bitstamp":
-                        return await BItstampAPI.FetchTransactionAsync(exchange, CalendarYear);
+                        return await BItstampAPI.FetchTransactionAsync(exchange, calendarYear);
 
                     case "Poloniex":
-                        return await PoloniexAPI.FetchTransactionAsync(exchange, CalendarYear);
+                        return await PoloniexAPI.FetchTransactionAsync(exchange, calendarYear);
 
                     case "bitFlyer_l":
-                        return await BitFlyerAPI2.FetchTransactionAsync(exchange, CalendarYear);
+                        return await BitFlyerAPI2.FetchTransactionAsync(exchange, calendarYear);
 
                     case "Quoine":
-                        return await QuoineAPI.FetchExecutionAsync(exchange, CalendarYear);
+                        return await QuoineAPI.FetchExecutionAsync(exchange, calendarYear);
                         //return await QuoineAPI.FetchTransactionAsync(exchange);
                     case "Binance":
-                        return await BinanceAPI.FetchTransactionAsync(exchange, CalendarYear);
+                        return await BinanceAPI.FetchTransactionAsync(exchange, calendarYear);
 
                     default:
                         throw new AppCoreWarning($"Please update to the newest version to use {exchange.Name}");
@@ -147,6 +147,36 @@ namespace CoinBalance.CoreAPI
                 throw;
             }
 
+        }
+
+        internal static async Task<List<RealizedPL>> FetchLeveragePLAsync(Exchange exchange, int calendarYear)
+        {
+            try
+            {
+                switch (exchange.Code)
+                {
+                    case "Zaif":
+                        return new List<RealizedPL>();
+
+                    case "CoinCheck":
+                        return await CoinCheckAPI2.FetchLeveragePLAsync(exchange, calendarYear);
+
+                    case "bitFlyer_l":
+                        return new List<RealizedPL>();
+
+                    case "Quoine":
+                        return new List<RealizedPL>();
+
+                    default:
+                        throw new AppCoreWarning($"Please update to the newest version to use {exchange.Name}");
+                }
+
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchLeveragePLAsync: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
         }
 
     }

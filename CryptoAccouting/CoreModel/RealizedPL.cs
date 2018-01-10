@@ -14,7 +14,7 @@ namespace CoinBalance.CoreModel
         public EnuSide Side { get; set; }
         public EnuBaseFiatCCY SettlementCCY { get; set; }
         public decimal Quantity { get; set; }
-        public decimal AvgBookPrice { get; set; }
+        public decimal OpenPrice { get; set; }
         public decimal ClosePrice { get; set; }
         public decimal TradeFee { get; set; }
         public decimal MarginFee { get; set; }
@@ -27,25 +27,29 @@ namespace CoinBalance.CoreModel
             get { return TradedCoin.Symbol1; }
         }
 
-        public RealizedPL(Instrument coin, EnuPLType plType, DateTime tradeDate, EnuSide side, EnuBaseFiatCCY ccy, Exchange exchange)
+        public RealizedPL(Instrument coin, EnuPLType plType, DateTime tradeDate, EnuSide side, EnuBaseFiatCCY ccy, 
+                          decimal quantity, decimal avgBookPrice, decimal closePrice, Exchange exchange)
         {
             this.TradedCoin = coin;
             this.PLType = plType;
             this.TradeDate = tradeDate;
             this.Side = side;
             this.SettlementCCY = ccy;
+            this.Quantity = quantity;
+            this.OpenPrice = avgBookPrice;
+            this.ClosePrice = closePrice;
             this.exchange = exchange;
         }
 
-        public decimal BookValue
+        public decimal OpenValue
         {
             get
             {
-                return Quantity * AvgBookPrice;
+                return Quantity * OpenPrice;
             }
         }
 
-        public decimal TradeValue
+        public decimal CloseValue
         {
             get
             {
@@ -57,8 +61,7 @@ namespace CoinBalance.CoreModel
         {
             get
             {
-                var priceDiff = Side == EnuSide.Sell ? (ClosePrice - AvgBookPrice) : -(ClosePrice - AvgBookPrice);
-                return Quantity * priceDiff;
+                return Side == EnuSide.Sell ? (ClosePrice - OpenPrice) * Quantity : -(ClosePrice - OpenPrice) * Quantity;
             }
         }
 
@@ -66,8 +69,7 @@ namespace CoinBalance.CoreModel
         {
             get
             {
-                var priceDiff = Side == EnuSide.Sell ? (ClosePrice - AvgBookPrice) : -(ClosePrice - AvgBookPrice);
-                return Quantity * priceDiff - TradeFee - MarginFee;
+                return GrossPL - TradeFee - MarginFee;
             }
         }
     }

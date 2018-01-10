@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace CoinBalance.CoreAPI
 {
@@ -20,11 +21,11 @@ namespace CoinBalance.CoreAPI
         {
             public string id { get; set; }
             public string side { get; set; }
-            public object rate { get; set; }
-            public object amount { get; set; }
-            public string pending_amount { get; set; }
+            public decimal rate { get; set; }
+            public decimal amount { get; set; }
+            public decimal pending_amount { get; set; }
             public string status { get; set; }
-            public string created_at { get; set; }
+            public DateTime created_at { get; set; }
         }
 
         public class position
@@ -32,14 +33,14 @@ namespace CoinBalance.CoreAPI
             public string id { get; set; }
             public string pair { get; set; }
             public string status { get; set; }
-            public string created_at { get; set; }
-            public object closed_at { get; set; }
-            public string open_rate { get; set; }
-            public object closed_rate { get; set; }
+            public DateTime created_at { get; set; }
+            public DateTime closed_at { get; set; }
+            public decimal open_rate { get; set; }
+            public decimal closed_rate { get; set; }
             public decimal amount { get; set; }
-            public string all_amount { get; set; }
+            public decimal all_amount { get; set; }
             public string side { get; set; }
-            public string pl { get; set; }
+            public decimal pl { get; set; }
             public Order new_order { get; set; }
             public List<Order> close_orders { get; set; }
         }
