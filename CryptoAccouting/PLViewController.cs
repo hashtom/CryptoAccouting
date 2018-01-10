@@ -176,9 +176,9 @@ namespace CoinBalance
             labelMarginBook.Text = margincollection.Any() ? AppCore.NumberFormat(margincollection.Sum(x => x.OpenValue), false, false) : "0";
             labelMarginPL.Text = margincollection.Any() ? AppCore.NumberFormat(margincollection.Sum(x => x.NetPL), false, false) : "0";
 
-            labelTotalTrade.Text = PLCollection.Any() ? AppCore.NumberFormat(PLCollection.Sum(x => x.CloseValue), false, false) : "0";
-            labelTotalBook.Text = PLCollection.Any() ? AppCore.NumberFormat(PLCollection.Sum(x => x.OpenValue), false, false) : "0";
-            labelTotalPL.Text = PLCollection.Any() ? AppCore.NumberFormat(PLCollection.Sum(x => x.NetPL), false, false) : "0";
+            //labelTotalTrade.Text = PLCollection.Any() ? AppCore.NumberFormat(PLCollection.Sum(x => x.CloseValue), false, false) : "0";
+            //labelTotalBook.Text = PLCollection.Any() ? AppCore.NumberFormat(PLCollection.Sum(x => x.OpenValue), false, false) : "0";
+            //labelTotalPL.Text = PLCollection.Any() ? AppCore.NumberFormat(PLCollection.Sum(x => x.NetPL), false, false) : "0";
 
             //sfGrid.ItemsSource = PLCollection;
         }
