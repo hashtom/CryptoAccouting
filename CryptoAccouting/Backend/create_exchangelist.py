@@ -282,7 +282,8 @@ quoine_dict = {
         "calcPL" : "true",
          "listing": [
                  { "symbol": "BTC" },
-                 { "symbol": "BCH" }
+                 { "symbol": "BCH" },
+                 { "symbol": "ETH" },
                  ]
          }
 exchanges.append(quoine_dict)

@@ -108,32 +108,34 @@ namespace CoinBalance.CoreAPI
 
         }
 
-        public static async Task<TradeList> FetchTransactionAsync(Exchange quoine)
+        public static async Task<TradeList> FetchTransactionAsync(Exchange quoine, int calendarYear = 0)
         {
             _quoine = quoine;
             int limit = 500;
+            var from = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
+            var to = calendarYear == 0 ? new DateTime(DateTime.Now.Year, 12, 31) : new DateTime(calendarYear, 12, 31);
             var tradelist = new TradeList() { SettlementCCY = (EnuCCY)AppCore.BaseCurrency, TradedExchange = _quoine };
-            var transactions = new List<QuoineTrades.Trade>();
+            var orders = new List<QuoineOrders.Order>();
+            var products = GetProducts();
 
             try
             {
-                var trades = await FetchTransactionsPageAsync(limit);
+                var trades = await FetchOrdersPageAsync(limit);
 
                 while (true)
                 {
-                    transactions.AddRange(trades.models);
+                    orders.AddRange(trades.models.Where(x => x.filled_quantity > 0).Where(x => from < x.created_at).Where(x => to >= x.created_at));
 
                     if (trades.current_page == trades.total_pages)
                     {
                         break;
                     }
 
-                    trades = await FetchTransactionsPageAsync(limit, trades.current_page + 1);
+                    trades = await FetchOrdersPageAsync(limit, trades.current_page + 1);
                 }
 
-                foreach (var trade in trades.models)
+                foreach (var trade in orders)
                 {
-                    var products = GetProducts();
                     if (!products.Any(x => x.currency_pair_code == trade.currency_pair_code))
                     {
                         System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + $": FetchTransactionAsync: Warning no pair {trade.currency_pair_code} found.");
@@ -142,38 +144,23 @@ namespace CoinBalance.CoreAPI
                     {
                         var symbol = products.First(x => x.currency_pair_code == trade.currency_pair_code).base_currency;
 
-                        if (trade.open_quantity > 0)
+                        foreach (var e in trade.executions)
                         {
                             tradelist.AggregateTransaction(symbol,
-                                                           AssetType.Cash,
-                                                           trade.side.Contains("long") ? EnuSide.Buy : EnuSide.Sell,
-                                                           (decimal)trade.open_quantity,
-                                                           (decimal)trade.open_price,
+                                                           trade.leverage_level == 1 ? AssetType.Cash : AssetType.Margin,
+                                                           Util.ParseEnum<EnuSide>(e.my_side),
+                                                           e.quantity,
+                                                           e.price,
                                                            EnuCCY.JPY,
-                                                           trade.created_at,
+                                                           e.created_at,
                                                            0,
                                                            _quoine
                                                           );
                         }
-
-                        if (trade.close_quantity > 0)
-                        {
-                            tradelist.AggregateTransaction(symbol,
-                                                           AssetType.Cash,
-                                                           trade.side.Contains("long") ? EnuSide.Buy : EnuSide.Sell,
-                                                           (decimal)trade.close_quantity,
-                                                           (decimal)trade.close_price,
-                                                           EnuCCY.JPY,
-                                                           trade.created_at,
-                                                           0,
-                                                           _quoine
-                                                          );
-                        }
-
                     }
                 }
 
-                return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
+                return tradelist;
             }
             catch (Exception e)
             {
@@ -182,57 +169,42 @@ namespace CoinBalance.CoreAPI
             }
         }
 
-        public static async Task<TradeList> FetchExecutionAsync(Exchange quoine, int calendarYear = 0)
+
+        public static async Task<List<RealizedPL>> FetchLeveragePLAsync(Exchange quoine, int calendarYear = 0)
         {
             _quoine = quoine;
-            int limit = 500;
-            var from = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
-            var to = calendarYear == 0 ? new DateTime(DateTime.Now.Year, 12, 31) : new DateTime(calendarYear, 12, 31);
-            var tradelist = new TradeList() { SettlementCCY = (EnuCCY)AppCore.BaseCurrency, TradedExchange = _quoine };
+            var leveragePL = new List<RealizedPL>();
+            var leveragePositions = await GetLeverageTradesAsync(calendarYear, "closed");
             var products = GetProducts();
 
             try
             {
-                foreach (var product in products)
+                foreach (var p in leveragePositions)
                 {
-                    //var path = $"/executions/me?product_id={product.Id}&limit={limit}";
-                    //var req = BuildRequest(path);
-                    //var results = await RestUtil.ExecuteRequestAsync<QuoineExecutions>(_restClient, req);
-                    //executions.AddRange(results.models);
-                    var executions = new List<QuoineExecutions.Execution>();
+                    var symbol = products.First(x => x.currency_pair_code == p.currency_pair_code).base_currency;
+                    var id = _quoine.GetIdForExchange(symbol);
+                    var pl = new RealizedPL(
+                        AppCore.InstrumentList.GetByInstrumentId(id),
+                        p.leverage_level == 1 ? EnuPLType.CashTrade : EnuPLType.MarginTrade,
+                        p.created_at,
+                        p.side.Contains("long") ? EnuSide.Sell : EnuSide.Buy,
+                        Util.ParseEnum<EnuBaseFiatCCY>(p.funding_currency),
+                        p.quantity,
+                        p.open_price,
+                        p.close_price,
+                        _quoine);
 
-                    var results = await FetchExecutionsPageAsync(product.Id, limit);
-
-                    while (true)
+                    var grossprofit = p.side.Contains("long") ? (p.close_price - p.open_price) * p.close_quantity : (p.open_price - p.close_price) * p.close_quantity;
+                    if (p.leverage_level == 1)
                     {
-                        executions.AddRange(results.models.
-                                              Where(x => from < x.created_at).
-                                              Where(x => to >= x.created_at));
-
-                        if (results.current_page == results.total_pages)
-                        {
-                            break;
-                        }
-
-                        results = await FetchExecutionsPageAsync(product.Id, limit, results.current_page + 1);
+                        pl.TradeFee = grossprofit - p.close_pnl;
+                    }
+                    else
+                    {
+                        pl.MarginFee = grossprofit - p.close_pnl;
                     }
 
-
-                    foreach (var execution in executions)
-                    {
-
-                        tradelist.AggregateTransaction(product.base_currency,
-                                                       AssetType.Cash,
-                                                       execution.my_side.Contains("buy") ? EnuSide.Buy : EnuSide.Sell,
-                                                       (decimal)execution.quantity,
-                                                       (decimal)execution.price,
-                                                       EnuCCY.JPY,
-                                                       execution.created_at,
-                                                       0,
-                                                       _quoine
-                                                      );
-
-                    }
+                    leveragePL.Add(pl);
                 }
             }
             catch (Exception e)
@@ -241,13 +213,122 @@ namespace CoinBalance.CoreAPI
                 throw;
             }
 
-            //return tradelist.Any() ? tradelist : throw new AppCoreWarning("No data returned from the Exchange.");
-            return tradelist;
+            return leveragePL;
+
         }
 
-        private static async Task<QuoineTrades> FetchTransactionsPageAsync(int limit, int page = 0)
+        //public static async Task<TradeList> FetchExecutionAsync(Exchange quoine, int calendarYear = 0)
+        //{
+        //    _quoine = quoine;
+        //    int limit = 500;
+        //    var from = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
+        //    var to = calendarYear == 0 ? new DateTime(DateTime.Now.Year, 12, 31) : new DateTime(calendarYear, 12, 31);
+        //    var tradelist = new TradeList() { SettlementCCY = (EnuCCY)AppCore.BaseCurrency, TradedExchange = _quoine };
+        //    var products = GetProducts();
+
+        //    try
+        //    {
+        //        foreach (var product in products)
+        //        {
+        //            var executions = new List<QuoineExecutions.Execution>();
+
+        //            var results = await FetchExecutionsPageAsync(product.Id, limit);
+
+        //            while (true)
+        //            {
+        //                executions.AddRange(results.models.
+        //                                      Where(x => from < x.created_at).
+        //                                      Where(x => to >= x.created_at));
+
+        //                if (results.current_page == results.total_pages)
+        //                {
+        //                    break;
+        //                }
+
+        //                results = await FetchExecutionsPageAsync(product.Id, limit, results.current_page + 1);
+        //            }
+
+
+        //            foreach (var execution in executions)
+        //            {
+
+        //                tradelist.AggregateTransaction(product.base_currency,
+        //                                               AssetType.Cash,
+        //                                               execution.my_side.Contains("buy") ? EnuSide.Buy : EnuSide.Sell,
+        //                                               (decimal)execution.quantity,
+        //                                               (decimal)execution.price,
+        //                                               EnuCCY.JPY,
+        //                                               execution.created_at,
+        //                                               0,
+        //                                               _quoine
+        //                                              );
+
+        //            }
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchTransactionAsync: " + e.GetType() + ": " + e.Message);
+        //        throw;
+        //    }
+
+        //    return tradelist;
+        //}
+
+        private static async Task<List<QuoineTrades.Trade>> GetLeverageTradesAsync(int calendarYear = 0, string status = null)
         {
-            var path = $"/trades?limit={limit}";
+            int limit = 500;
+            var from = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
+            var to = calendarYear == 0 ? new DateTime(DateTime.Now.Year, 12, 31) : new DateTime(calendarYear, 12, 31);
+            var positions = new List<QuoineTrades.Trade>();
+
+            try
+            {
+                var results = await FetchLeverageTradesPageAsync(limit, status);
+
+                while (true)
+                {
+                    positions.AddRange(results.models.Where(x => x.pnl > 0).Where(x => from < x.created_at).Where(x => to >= x.created_at));
+
+                    if (results.current_page == results.total_pages)
+                    {
+                        break;
+                    }
+
+                    results = await FetchLeverageTradesPageAsync(limit, status, results.current_page + 1);
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": GetLeveragePositionsAsync: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
+
+            return positions;
+        }
+
+        private static async Task<QuoineOrders> FetchOrdersPageAsync(int limit, int page = 0)
+        {
+            var path = $"/orders?funding_currency={AppCore.BaseCurrency}&limit={limit}&with_details=1";
+            if (page != 0)
+            {
+                path += $"&page={page}";
+            }
+
+            var req = BuildRequest(path);
+
+            return await RestUtil.ExecuteRequestAsync<QuoineOrders>(_restClient, req);
+        }
+
+        private static async Task<QuoineTrades> FetchLeverageTradesPageAsync(int limit, string status, int page = 0)
+        {
+            var path = $"/trades?funding_currency={AppCore.BaseCurrency}&limit={limit}";
+
+            if(status != null)
+            {
+                path += $"&status={status}";
+            }
+
             if (page != 0)
             {
                 path += $"&page={page}";
@@ -257,17 +338,17 @@ namespace CoinBalance.CoreAPI
             return await RestUtil.ExecuteRequestAsync<QuoineTrades>(_restClient, req);
         }
 
-        private static async Task<QuoineExecutions> FetchExecutionsPageAsync(string productid, int limit, int page = 0)
-        {
-            var path = $"/executions/me?product_id={productid}&limit={limit}";
-            if (page != 0)
-            {
-                path += $"&page={page}";
-            }
+        //private static async Task<QuoineExecutions> FetchExecutionsPageAsync(string productid, int limit, int page = 0)
+        //{
+        //    var path = $"/executions/me?product_id={productid}&limit={limit}";
+        //    if (page != 0)
+        //    {
+        //        path += $"&page={page}";
+        //    }
 
-            var req = BuildRequest(path);
-            return await RestUtil.ExecuteRequestAsync<QuoineExecutions>(_restClient, req);
-        }
+        //    var req = BuildRequest(path);
+        //    return await RestUtil.ExecuteRequestAsync<QuoineExecutions>(_restClient, req);
+        //}
 
         private static List<QuoineProduct> GetProducts()
         {

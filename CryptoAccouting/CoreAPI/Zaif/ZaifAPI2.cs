@@ -13,8 +13,6 @@ namespace CoinBalance.CoreAPI
         private static Exchange _zaif;
         private static CrossRate _USDJPYrate;
         private static IRestClient _restClient = new RestClient(new Uri(ApiRoot));
-        //private static string _group_id = null;
-        //private static AssetType _assetType = AssetType.Cash;
 
         public static async Task FetchPriceAsync(Exchange zaif, InstrumentList coins, CrossRate USDJPYrate)
         {
@@ -123,12 +121,9 @@ namespace CoinBalance.CoreAPI
             try
             {
 
-                tradelist = await GetTradeHistoryAsync(AssetType.Cash, from, to);
-                tradelist.AddRange(await GetTradeHistoryAsync(AssetType.Cash, from, to, "eth_jpy"));
-                tradelist.AddRange(await GetTradeHistoryAsync(AssetType.Cash, from, to, "bch_jpy"));
-                //tradelist.AddRange(await GetTradeHistoryAsync(AssetType.Margin, from, to));
-                //tradelist.AddRange(await GetTradeHistoryAsync(AssetType.FX, from, to));
-                //tradelist.AddRange(await GetTradeHistoryAsync(AssetType.Futures, from, to));
+                tradelist = await GetTradeHistoryAsync(from, to);
+                tradelist.AddRange(await GetTradeHistoryAsync(from, to, "eth_jpy"));
+                tradelist.AddRange(await GetTradeHistoryAsync(from, to, "bch_jpy"));
                 return tradelist;
             }
             catch (Exception e)
@@ -146,7 +141,8 @@ namespace CoinBalance.CoreAPI
             {
                 var leveragePL = await GetLeveragePositionsAsync(AssetType.Margin, calendarYear);
                 leveragePL.AddRange(await GetLeveragePositionsAsync(AssetType.FX, calendarYear));
-                leveragePL.AddRange(await GetLeveragePositionsAsync(AssetType.Futures, calendarYear));
+                leveragePL.AddRange(await GetLeveragePositionsAsync(AssetType.Futures, calendarYear, null, "4"));
+                //leveragePL.AddRange(await GetLeveragePositionsAsync(AssetType.Futures, calendarYear, null, "5"));
 
                 return leveragePL;
             }
@@ -157,7 +153,7 @@ namespace CoinBalance.CoreAPI
             }
         }
 
-        private static async Task<TradeList> GetTradeHistoryAsync(AssetType assetType, DateTime since, DateTime end, string currency_pair = null)
+        private static async Task<TradeList> GetTradeHistoryAsync(DateTime since, DateTime end, string currency_pair = null)
         {
             EnuSide ebuysell;
             var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _zaif };
@@ -166,7 +162,7 @@ namespace CoinBalance.CoreAPI
             int limit = 500;
             string order = "ASC";
 
-            var results = await GetTradeHistoryPageAsync(assetType, 
+            var results = await GetTradeHistoryPageAsync( 
                                                          limit,
                                                          Util.ToEpochSeconds(since),
                                                          Util.ToEpochSeconds(end),
@@ -195,8 +191,7 @@ namespace CoinBalance.CoreAPI
 
                 from_id += limit + 1;
 
-                //param.since = results.return_.Last().Value.timestamp;
-                results = await GetTradeHistoryPageAsync(assetType,
+                results = await GetTradeHistoryPageAsync(
                                                          limit,
                                                          Util.ToEpochSeconds(since),
                                                          Util.ToEpochSeconds(end),
@@ -240,7 +235,7 @@ namespace CoinBalance.CoreAPI
                 var fee = trade.Value.fee_amount != null ? trade.Value.fee_amount : trade.Value.fee;
 
                 tradelist.AggregateTransaction(symbol,
-                                               assetType,
+                                               AssetType.Cash,
                                                ebuysell,
                                                (decimal)trade.Value.amount,
                                                (decimal)trade.Value.price,
@@ -253,7 +248,7 @@ namespace CoinBalance.CoreAPI
             return tradelist;
         }
 
-        private static async Task<List<RealizedPL>> GetLeveragePositionsAsync(AssetType assetType, int calendarYear = 0, string currency_pair = null)
+        private static async Task<List<RealizedPL>> GetLeveragePositionsAsync(AssetType assetType, int calendarYear = 0, string currency_pair = null, string group_id = null)
         {
             EnuSide ebuysell;
             EnuPLType pltype;
@@ -272,7 +267,8 @@ namespace CoinBalance.CoreAPI
                                                               Util.ToEpochSeconds(end),
                                                               from_id,
                                                               order,
-                                                              currency_pair);
+                                                              currency_pair,
+                                                              group_id);
             while (true)
             {
                 foreach (var p in results.return_)
@@ -300,7 +296,8 @@ namespace CoinBalance.CoreAPI
                                                             Util.ToEpochSeconds(end),
                                                             from_id,
                                                             order,
-                                                            currency_pair);
+                                                            currency_pair,
+                                                             group_id);
             }
 
             switch (assetType)
@@ -357,7 +354,7 @@ namespace CoinBalance.CoreAPI
             return leveragePL;
         }
 
-        private static async Task<ZaifTrades> GetTradeHistoryPageAsync(AssetType assetType, int limit, long since, long end, int from = 0, string order = "DESC", string currency_pair = null)
+        private static async Task<ZaifTrades> GetTradeHistoryPageAsync(int limit, long since, long end, int from = 0, string order = "DESC", string currency_pair = null)
         {
             var method = "POST";
             var zaifmethod = "trade_history";
@@ -378,7 +375,7 @@ namespace CoinBalance.CoreAPI
                 body += $"&currency_pair={currency_pair}";
             }
 
-            var req = BuildRequest(assetType, method, zaifmethod, body);
+            var req = BuildRequest(AssetType.Cash, method, zaifmethod, body);
             var result = await RestUtil.ExecuteRequestAsync<ZaifTrades>(_restClient, req);
             if (result.success != 1)
             {
@@ -387,7 +384,7 @@ namespace CoinBalance.CoreAPI
             return result;
         }
 
-        private static async Task<ZaifPositions> GetLeveragePositionsPageAsync(AssetType assetType, int limit, long since, long end, int from = 0, string order = "DESC", string currency_pair = null)
+        private static async Task<ZaifPositions> GetLeveragePositionsPageAsync(AssetType assetType, int limit, long since, long end, int from = 0, string order = "DESC", string currency_pair = null, string group_id = null)
         {
             var method = "POST";
             var zaifmethod = "get_positions";
@@ -408,7 +405,7 @@ namespace CoinBalance.CoreAPI
                 body += $"&currency_pair={currency_pair}";
             }
 
-            var req = BuildRequest(assetType, method, zaifmethod, body);
+            var req = BuildRequest(assetType, method, zaifmethod, body, group_id);
             var result = await RestUtil.ExecuteRequestAsync<ZaifPositions>(_restClient, req);
             if (result.success != 1)
             {
@@ -417,7 +414,7 @@ namespace CoinBalance.CoreAPI
             return result;
         }
 
-        private static RestRequest BuildRequest(AssetType assettype, string method, string zaifmethod, string body = "")
+        private static RestRequest BuildRequest(AssetType assettype, string method, string zaifmethod, string body = "", string group_id = null)
         {
             var nonce = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
             var message = $"nonce={nonce}&method={zaifmethod}";
@@ -439,7 +436,7 @@ namespace CoinBalance.CoreAPI
                     break;
                 case AssetType.Futures:
                     path = "/tlapi";
-                    var group_id = "4"; // "5"
+                    //var group_id = "4"; // "5"
                     message += $"&type=futures&group_id={group_id}";
                     break;
                 default:

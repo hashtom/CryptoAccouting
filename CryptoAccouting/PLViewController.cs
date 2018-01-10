@@ -166,7 +166,7 @@ namespace CoinBalance
             //Cash
             var cashcollection = PLCollection.Where(x => x.PLType == EnuPLType.CashTrade).Where(x => x.TradeDate.Year == calendarYear).ToList();
             var margincollection = PLCollection.Where(x => x.PLType == EnuPLType.MarginTrade).Where(x => x.TradeDate.Year == calendarYear).ToList();
-            var futurescollection = PLCollection.Where(x => x.PLType == EnuPLType.FuturesTrade).Where(x => x.TradeDate.Year == calendarYear).ToList();
+            //var futurescollection = PLCollection.Where(x => x.PLType == EnuPLType.FuturesTrade).Where(x => x.TradeDate.Year == calendarYear).ToList();
 
             labelCashTrade.Text = cashcollection.Any() ? AppCore.NumberFormat(cashcollection.Sum(x => x.CloseValue), false, false) : "0";
             labelCashBook.Text = cashcollection.Any() ? AppCore.NumberFormat(cashcollection.Sum(x => x.OpenValue), false, false) : "0";
@@ -176,9 +176,9 @@ namespace CoinBalance
             labelMarginBook.Text = margincollection.Any() ? AppCore.NumberFormat(margincollection.Sum(x => x.OpenValue), false, false) : "0";
             labelMarginPL.Text = margincollection.Any() ? AppCore.NumberFormat(margincollection.Sum(x => x.NetPL), false, false) : "0";
 
-            labelFutTrade.Text = futurescollection.Any() ? AppCore.NumberFormat(futurescollection.Sum(x => x.CloseValue), false, false) : "0";
-            labelFutBook.Text = futurescollection.Any() ? AppCore.NumberFormat(futurescollection.Sum(x => x.OpenValue), false, false) : "0";
-            labelFutPL.Text = futurescollection.Any() ? AppCore.NumberFormat(futurescollection.Sum(x => x.NetPL), false, false) : "0";
+            labelTotalTrade.Text = PLCollection.Any() ? AppCore.NumberFormat(PLCollection.Sum(x => x.CloseValue), false, false) : "0";
+            labelTotalBook.Text = PLCollection.Any() ? AppCore.NumberFormat(PLCollection.Sum(x => x.OpenValue), false, false) : "0";
+            labelTotalPL.Text = PLCollection.Any() ? AppCore.NumberFormat(PLCollection.Sum(x => x.NetPL), false, false) : "0";
 
             //sfGrid.ItemsSource = PLCollection;
         }

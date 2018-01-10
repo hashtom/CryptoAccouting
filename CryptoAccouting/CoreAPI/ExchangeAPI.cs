@@ -88,8 +88,8 @@ namespace CoinBalance.CoreAPI
                         return await BitFlyerAPI2.FetchTransactionAsync(exchange, calendarYear);
 
                     case "Quoine":
-                        return await QuoineAPI.FetchExecutionAsync(exchange, calendarYear);
-                        //return await QuoineAPI.FetchTransactionAsync(exchange);
+                        //return await QuoineAPI.FetchExecutionAsync(exchange, calendarYear);
+                        return await QuoineAPI.FetchTransactionAsync(exchange, calendarYear);
                     case "Binance":
                         return await BinanceAPI.FetchTransactionAsync(exchange, calendarYear);
 
@@ -165,7 +165,7 @@ namespace CoinBalance.CoreAPI
                         return new List<RealizedPL>();
 
                     case "Quoine":
-                        return new List<RealizedPL>();
+                        return await QuoineAPI.FetchLeveragePLAsync(exchange, calendarYear);
 
                     default:
                         throw new AppCoreWarning($"Please update to the newest version to use {exchange.Name}");

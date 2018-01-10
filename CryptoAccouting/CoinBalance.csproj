@@ -295,6 +295,7 @@
       <DependentUpon>PLViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="CoreModel\RealizedPLList.cs" />
+    <Compile Include="CoreAPI\Quoine\QuoineOrders.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />

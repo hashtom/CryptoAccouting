@@ -40,18 +40,6 @@ namespace CoinBalance
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelFutBook { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelFutPL { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel labelFutTrade { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel labelMarginBook { get; set; }
 
         [Outlet]
@@ -100,21 +88,6 @@ namespace CoinBalance
             if (labelCashTrade != null) {
                 labelCashTrade.Dispose ();
                 labelCashTrade = null;
-            }
-
-            if (labelFutBook != null) {
-                labelFutBook.Dispose ();
-                labelFutBook = null;
-            }
-
-            if (labelFutPL != null) {
-                labelFutPL.Dispose ();
-                labelFutPL = null;
-            }
-
-            if (labelFutTrade != null) {
-                labelFutTrade.Dispose ();
-                labelFutTrade = null;
             }
 
             if (labelMarginBook != null) {
