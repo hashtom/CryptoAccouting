@@ -159,7 +159,7 @@ namespace CoinBalance.CoreAPI
         public static async Task<List<RealizedPL>> FetchLeveragePLAsync(Exchange coincheck, int calendarYear = 0)
         {
             _coincheck = coincheck;
-            var pldata = new List<RealizedPL>();
+            var leveragePL = new List<RealizedPL>();
             var leveragePositions = await GetLeveragePositionsAsync(calendarYear, "closed");
 
             try
@@ -182,7 +182,7 @@ namespace CoinBalance.CoreAPI
 
                     var grossprofit = p.side == "buy" ? (p.closed_rate - p.open_rate) * p.all_amount : (p.open_rate - p.closed_rate) * p.all_amount;
                     pl.MarginFee = grossprofit - p.pl;
-                    pldata.Add(pl);
+                    leveragePL.Add(pl);
                 }
             }
             catch (Exception e)
@@ -191,7 +191,7 @@ namespace CoinBalance.CoreAPI
                 throw;
             }
 
-            return pldata;
+            return leveragePL;
         }
 
         private static async Task<List<CoinCheckTransactions.transaction>> GetTransactionsAsync(int calendarYear = 0)

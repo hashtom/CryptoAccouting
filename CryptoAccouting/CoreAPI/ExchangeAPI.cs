@@ -156,7 +156,7 @@ namespace CoinBalance.CoreAPI
                 switch (exchange.Code)
                 {
                     case "Zaif":
-                        return new List<RealizedPL>();
+                        return await ZaifAPI2.FetchLeveragePLAsync(exchange, calendarYear);
 
                     case "CoinCheck":
                         return await CoinCheckAPI2.FetchLeveragePLAsync(exchange, calendarYear);

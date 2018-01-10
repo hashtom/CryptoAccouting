@@ -69,7 +69,7 @@ namespace CoinBalance.CoreModel
         {
             get
             {
-                return GrossPL - TradeFee - MarginFee;
+                return GrossPL - TradeFee - MarginFee + Swap;
             }
         }
     }

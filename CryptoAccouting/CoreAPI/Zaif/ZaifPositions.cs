@@ -30,6 +30,7 @@ namespace CoinBalance.CoreAPI
             public decimal deposit_price_jpy { get; set; }
             public decimal refunded_jpy { get; set; }
             public decimal refunded_price_jpy { get; set; }
+            public decimal swap { get; set; }
             public decimal guard_fee { get; set; }
         }
     }
