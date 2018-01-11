@@ -17,7 +17,7 @@ namespace CoinBalance.UIModel
 
         public static BalanceMainViewController balanceMainViewC { get; set; }
         public static TransactionViewController transViewC { get; set; }
-        //public static PLTableViewController plViewC { get; set; }
+        public static PLViewController plViewC { get; set; }
         public static SettingTableViewController settingViewC { get; set; }
         public static string Lang = NSBundle.MainBundle.PreferredLocalizations[0];
 	}
