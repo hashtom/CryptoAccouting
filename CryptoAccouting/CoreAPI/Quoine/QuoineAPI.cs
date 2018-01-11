@@ -120,7 +120,7 @@ namespace CoinBalance.CoreAPI
 
             try
             {
-                var trades = await FetchOrdersPageAsync(limit);
+                var trades = await GetOrdersPageAsync(limit);
 
                 while (true)
                 {
@@ -131,7 +131,7 @@ namespace CoinBalance.CoreAPI
                         break;
                     }
 
-                    trades = await FetchOrdersPageAsync(limit, trades.current_page + 1);
+                    trades = await GetOrdersPageAsync(limit, trades.current_page + 1);
                 }
 
                 foreach (var trade in orders)
@@ -187,7 +187,7 @@ namespace CoinBalance.CoreAPI
                         AppCore.InstrumentList.GetByInstrumentId(id),
                         p.leverage_level == 1 ? EnuPLType.CashTrade : EnuPLType.MarginTrade,
                         p.created_at,
-                        p.side.Contains("long") ? EnuSide.Sell : EnuSide.Buy,
+                        p.side.Contains("long") ? EnuSide.Buy : EnuSide.Sell,
                         Util.ParseEnum<EnuBaseFiatCCY>(p.funding_currency),
                         p.quantity,
                         p.open_price,
@@ -209,7 +209,7 @@ namespace CoinBalance.CoreAPI
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchTransactionAsync: " + e.GetType() + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchLeveragePLAsync: " + e.GetType() + ": " + e.Message);
                 throw;
             }
 
@@ -284,7 +284,7 @@ namespace CoinBalance.CoreAPI
 
             try
             {
-                var results = await FetchLeverageTradesPageAsync(limit, status);
+                var results = await GetLeverageTradesPageAsync(limit, status);
 
                 while (true)
                 {
@@ -295,7 +295,7 @@ namespace CoinBalance.CoreAPI
                         break;
                     }
 
-                    results = await FetchLeverageTradesPageAsync(limit, status, results.current_page + 1);
+                    results = await GetLeverageTradesPageAsync(limit, status, results.current_page + 1);
                 }
             }
             catch (Exception e)
@@ -307,7 +307,7 @@ namespace CoinBalance.CoreAPI
             return positions;
         }
 
-        private static async Task<QuoineOrders> FetchOrdersPageAsync(int limit, int page = 0)
+        private static async Task<QuoineOrders> GetOrdersPageAsync(int limit, int page = 0)
         {
             var path = $"/orders?funding_currency={AppCore.BaseCurrency}&limit={limit}&with_details=1";
             if (page != 0)
@@ -320,7 +320,7 @@ namespace CoinBalance.CoreAPI
             return await RestUtil.ExecuteRequestAsync<QuoineOrders>(_restClient, req);
         }
 
-        private static async Task<QuoineTrades> FetchLeverageTradesPageAsync(int limit, string status, int page = 0)
+        private static async Task<QuoineTrades> GetLeverageTradesPageAsync(int limit, string status, int page = 0)
         {
             var path = $"/trades?funding_currency={AppCore.BaseCurrency}&limit={limit}";
 

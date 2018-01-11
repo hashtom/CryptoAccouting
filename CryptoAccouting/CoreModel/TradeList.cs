@@ -141,12 +141,34 @@ namespace CoinBalance.CoreModel
 
         // calculate Realized PL when settlement currency is Base Fiat Currency
         // ignore trades both sides are Crypto for Realized PL calculation now
-        public List<RealizedPL> CalculateCashTradesPL()
+        public List<RealizedPL> CalculateTradesPL(AssetType assetType = AssetType.Cash)
         {
+            string status;
             var pls = new List<RealizedPL>();
+            var pltype = new EnuPLType();
+
+            switch (assetType)
+            {
+                case AssetType.Cash:
+                    pltype = EnuPLType.CashTrade;
+                    break;
+                case AssetType.Margin:
+                    pltype = EnuPLType.MarginTrade;
+                    break;
+                case AssetType.FX:
+                    pltype = EnuPLType.FXTrade;
+                    break;
+                case AssetType.Futures:
+                    pltype = EnuPLType.FuturesTrade;
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
 
             foreach (var s in transactions.Select(x => x.CoinId).Distinct())
             {
+                EnuSide side_closed;
+                decimal balance = 0;
                 decimal accumulated_value = 0;
                 decimal accumulated_qty = 0;
                 decimal current_bookprice = 0;
@@ -154,19 +176,42 @@ namespace CoinBalance.CoreModel
                 foreach (var tx in transactions.
                          Where(t => t.CoinId == s).OrderBy(t => t.TradeDate).
                          Where(t=> t.SettlementCCY == CoreAPI.Util.ParseEnum<EnuCCY>(AppCore.BaseCurrency.ToString())).
-                         Where(t=>t.Type == AssetType.Cash))
+                         Where(t=>t.Type == assetType))
                 {
-                    
-                    if (tx.Side == EnuSide.Buy)
+
+                    if (balance > 0)
+                    {
+                        status = tx.Side == EnuSide.Buy ? "open" : "closed";
+                    }
+                    else if (balance < 0)
+                    {
+                        status = tx.Side == EnuSide.Buy ? "closed" : "open";
+                    }else
+                    {
+                        status = "open";
+                    }
+
+                    if (status == "open")
                     {
                         //Buy : Update Bookcost
                         current_bookprice = (accumulated_value + tx.TradeNetValue) / (accumulated_qty + tx.Quantity);
                         accumulated_value += tx.TradeNetValue;
                         accumulated_qty += tx.Quantity;
+                        balance += tx.Side == EnuSide.Buy ? tx.Quantity : -tx.Quantity;
                     }
-                    else if (tx.Side == EnuSide.Sell)
+                    else if (status == "closed")
                     {
-                        var pl = new RealizedPL(tx.TradedCoin, EnuPLType.CashTrade, tx.TradeDate, tx.Side, AppCore.BaseCurrency,
+                        
+                        if (assetType == AssetType.Cash)
+                        {
+                            side_closed = tx.Side;
+                        }
+                        else
+                        {
+                            side_closed = tx.Side == EnuSide.Buy ? EnuSide.Sell : EnuSide.Buy;
+                        }
+
+                        var pl = new RealizedPL(tx.TradedCoin, pltype, tx.TradeDate, side_closed, AppCore.BaseCurrency,
                                                 tx.Quantity, current_bookprice, tx.TradePriceSettle, this.TradedExchange)
                         {
                             TradeFee = tx.Fee,
@@ -180,6 +225,7 @@ namespace CoinBalance.CoreModel
                         //Sell : Reduce Accumulated value
                         accumulated_value -= tx.Quantity * current_bookprice;
                         accumulated_qty -= tx.Quantity;
+                        balance += tx.Side == EnuSide.Buy ? tx.Quantity : -tx.Quantity;
                     }
                 }
             }

@@ -173,7 +173,7 @@ namespace CoinBalance.CoreAPI
                         AppCore.InstrumentList.GetByInstrumentId(id),
                         EnuPLType.MarginTrade,
                         p.closed_at,
-                        Util.ParseEnum<EnuSide>(p.side) == EnuSide.Buy ? EnuSide.Sell : EnuSide.Buy,
+                        Util.ParseEnum<EnuSide>(p.side),
                         EnuBaseFiatCCY.JPY,
                         p.all_amount,
                         p.open_rate,

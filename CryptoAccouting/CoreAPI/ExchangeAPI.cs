@@ -88,8 +88,8 @@ namespace CoinBalance.CoreAPI
                         return await BitFlyerAPI2.FetchTransactionAsync(exchange, calendarYear);
 
                     case "Quoine":
-                        //return await QuoineAPI.FetchExecutionAsync(exchange, calendarYear);
                         return await QuoineAPI.FetchTransactionAsync(exchange, calendarYear);
+
                     case "Binance":
                         return await BinanceAPI.FetchTransactionAsync(exchange, calendarYear);
 
@@ -161,8 +161,8 @@ namespace CoinBalance.CoreAPI
                     case "CoinCheck":
                         return await CoinCheckAPI2.FetchLeveragePLAsync(exchange, calendarYear);
 
-                    case "bitFlyer_l":
-                        return new List<RealizedPL>();
+                    case "bitFlyer_l": 
+                        return await BitFlyerAPI2.FetchLeveragePLAsync(exchange, calendarYear);
 
                     case "Quoine":
                         return await QuoineAPI.FetchLeveragePLAsync(exchange, calendarYear);

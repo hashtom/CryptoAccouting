@@ -201,7 +201,7 @@ namespace CoinBalance
 
                 if (myTradeList.Any())
                 {
-                    var pldata = myTradeList.CalculateCashTradesPL();
+                    var pldata = myTradeList.CalculateTradesPL();
                     PLCollection.AddRange(pldata.Where(x => x.TradeDate.Year == calendarYear));
                 }
 

@@ -61,7 +61,23 @@ namespace CoinBalance.CoreModel
         {
             get
             {
-                return Side == EnuSide.Sell ? (ClosePrice - OpenPrice) * Quantity : -(ClosePrice - OpenPrice) * Quantity;
+                switch (PLType)
+                {
+                    case EnuPLType.CashTrade:
+                        return Side == EnuSide.Sell ? (ClosePrice - OpenPrice) * Quantity : -(ClosePrice - OpenPrice) * Quantity;
+
+                    case EnuPLType.MarginTrade:
+                        return Side == EnuSide.Buy ? (ClosePrice - OpenPrice) * Quantity : -(ClosePrice - OpenPrice) * Quantity;
+
+                    case EnuPLType.FXTrade:
+                        return Side == EnuSide.Buy ? (ClosePrice - OpenPrice) * Quantity : -(ClosePrice - OpenPrice) * Quantity;
+
+                    case EnuPLType.FuturesTrade:
+                        return Side == EnuSide.Buy ? (ClosePrice - OpenPrice) * Quantity : -(ClosePrice - OpenPrice) * Quantity;
+
+                    default:
+                        return TradeFee + MarginFee + DepWithFee - Swap;
+                }
             }
         }
 
@@ -78,6 +94,7 @@ namespace CoinBalance.CoreModel
     {
         CashTrade,
         MarginTrade,
+        FXTrade,
         FuturesTrade,
         CashDeposit,
         CashWithdrawal,

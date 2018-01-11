@@ -326,10 +326,10 @@ namespace CoinBalance.CoreAPI
                 switch (p.Value.action)
                 {
                     case "bid":
-                        ebuysell = EnuSide.Sell;
+                        ebuysell = EnuSide.Buy;
                         break;
                     case "ask":
-                        ebuysell = EnuSide.Buy;
+                        ebuysell = EnuSide.Sell;
                         break;
                     default:
                         throw new NotImplementedException();

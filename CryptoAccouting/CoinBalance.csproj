@@ -294,7 +294,6 @@
     <Compile Include="PLViewController.designer.cs">
       <DependentUpon>PLViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="CoreModel\RealizedPLList.cs" />
     <Compile Include="CoreAPI\Quoine\QuoineOrders.cs" />
   </ItemGroup>
   <ItemGroup>
