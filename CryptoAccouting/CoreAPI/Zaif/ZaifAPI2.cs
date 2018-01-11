@@ -115,15 +115,15 @@ namespace CoinBalance.CoreAPI
             _restClient.BaseUrl = new Uri(ApiRoot);
             TradeList tradelist = null;
 
-            var from = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
-            var to = calendarYear == 0 ? new DateTime(DateTime.Now.Year, 12, 31) : new DateTime(calendarYear, 12, 31);
-
             try
             {
 
-                tradelist = await GetTradeHistoryAsync(from, to);
-                tradelist.AddRange(await GetTradeHistoryAsync(from, to, "eth_jpy"));
-                tradelist.AddRange(await GetTradeHistoryAsync(from, to, "bch_jpy"));
+                tradelist = await GetTradeHistoryAsync(calendarYear);
+                tradelist.AddRange(await GetTradeHistoryAsync(calendarYear, "eth_jpy"));
+                tradelist.AddRange(await GetTradeHistoryAsync(calendarYear, "bch_jpy"));
+                tradelist.AddRange(await GetLeverageTradeHistoryAsync(AssetType.FX, calendarYear));
+                tradelist.AddRange(await GetLeverageTradeHistoryAsync(AssetType.Margin, calendarYear));
+                //tradelist.AddRange(await GetLeverageTradeHistoryAsync(AssetType.Futures, calendarYear, null, "4"));
                 return tradelist;
             }
             catch (Exception e)
@@ -141,7 +141,7 @@ namespace CoinBalance.CoreAPI
             {
                 var leveragePL = await GetLeveragePositionsAsync(AssetType.Margin, calendarYear);
                 leveragePL.AddRange(await GetLeveragePositionsAsync(AssetType.FX, calendarYear));
-                leveragePL.AddRange(await GetLeveragePositionsAsync(AssetType.Futures, calendarYear, null, "4"));
+                //leveragePL.AddRange(await GetLeveragePositionsAsync(AssetType.Futures, calendarYear, null, "4"));
                 //leveragePL.AddRange(await GetLeveragePositionsAsync(AssetType.Futures, calendarYear, null, "5"));
 
                 return leveragePL;
@@ -153,16 +153,20 @@ namespace CoinBalance.CoreAPI
             }
         }
 
-        private static async Task<TradeList> GetTradeHistoryAsync(DateTime since, DateTime end, string currency_pair = null)
+        private static async Task<TradeList> GetTradeHistoryAsync(int calendarYear = 0, string currency_pair = null)
         {
             EnuSide ebuysell;
+
+            var since = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
+            var end = calendarYear == 0 ? new DateTime(DateTime.Now.Year, 12, 31) : new DateTime(calendarYear, 12, 31);
+
             var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _zaif };
             var trades_history = new Dictionary<string, ZaifTrades.trade>();
             int from_id = 0;
             int limit = 500;
             string order = "ASC";
 
-            var results = await GetTradeHistoryPageAsync( 
+            var results = await GetTradeHistoryPageAsync(
                                                          limit,
                                                          Util.ToEpochSeconds(since),
                                                          Util.ToEpochSeconds(end),
@@ -202,7 +206,7 @@ namespace CoinBalance.CoreAPI
 
             foreach (var trade in trades_history)
             {
-                
+
                 switch (trade.Value.your_action)
                 {
                     case "bid":
@@ -243,6 +247,121 @@ namespace CoinBalance.CoreAPI
                                                Util.FromEpochSeconds((long)trade.Value.timestamp).Date,
                                                (decimal)fee,
                                                _zaif);
+            }
+
+            return tradelist;
+        }
+
+        private static async Task<TradeList> GetLeverageTradeHistoryAsync(AssetType assetType, int calendarYear = 0, string currency_pair = null, string group_id = null)
+        {
+            EnuSide ebuysell;
+
+            var since = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
+            var end = calendarYear == 0 ? new DateTime(DateTime.Now.Year, 12, 31) : new DateTime(calendarYear, 12, 31);
+
+            var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _zaif };
+
+            var leveragePositions = new Dictionary<string, ZaifPositions.position>();
+            int from_id = 0;
+            int limit = 500;
+            string order = "ASC";
+
+            var results = await GetLeveragePositionsPageAsync(assetType,
+                                                              limit,
+                                                              Util.ToEpochSeconds(since),
+                                                              Util.ToEpochSeconds(end),
+                                                              from_id,
+                                                              order,
+                                                              currency_pair,
+                                                              group_id);
+            while (true)
+            {
+                foreach (var p in results.return_)
+                {
+                    var timestamp = Util.UnixTimeStampToDateTime(p.Value.timestamp);
+                    if (since < timestamp)
+                        leveragePositions.Add(p.Key, p.Value);
+
+                    if (since > timestamp)
+                    {
+                        continue;
+                    }
+                }
+
+                if (results.return_.Count == 0 || limit > results.return_.Count)
+                {
+                    break;
+                }
+
+                from_id += limit + 1;
+
+                results = await GetLeveragePositionsPageAsync(assetType,
+                                                            limit,
+                                                            Util.ToEpochSeconds(since),
+                                                            Util.ToEpochSeconds(end),
+                                                            from_id,
+                                                            order,
+                                                            currency_pair,
+                                                             group_id);
+            }
+
+            foreach (var p in leveragePositions)
+            {
+
+                switch (p.Value.action)
+                {
+                    case "bid":
+                        ebuysell = EnuSide.Buy;
+                        break;
+                    case "ask":
+                        ebuysell = EnuSide.Sell;
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+
+                var symbol = p.Value.currency_pair;
+                EnuCCY settleccy;
+                if (symbol.Contains("_jpy"))
+                {
+                    settleccy = EnuCCY.JPY;
+                }
+                else if (symbol.Contains("_btc"))
+                {
+                    settleccy = EnuCCY.BTC;
+                }
+                else
+                {
+                    continue;
+                }
+
+                symbol = symbol.Replace("_jpy", "").Replace("_btc", "").ToUpper();
+
+                if (p.Value.amount_done > 0)
+                {
+                    tradelist.AggregateTransaction(symbol,
+                                                   assetType,
+                                                   ebuysell,
+                                                   (decimal)p.Value.amount_done,
+                                                   (decimal)p.Value.price_avg,
+                                                   settleccy,
+                                                   Util.FromEpochSeconds((long)p.Value.timestamp).Date,
+                                                   p.Value.fee_spent,
+                                                   _zaif);
+                }
+
+                if (p.Value.close_done > 0)
+                {
+                    tradelist.AggregateTransaction(symbol,
+                                                   assetType,
+                                                   ebuysell == EnuSide.Buy ? EnuSide.Sell : EnuSide.Buy,
+                                                   (decimal)p.Value.close_done,
+                                                   (decimal)p.Value.close_avg,
+                                                   settleccy,
+                                                   Util.FromEpochSeconds((long)p.Value.timestamp_closed).Date,
+                                                   p.Value.guard_fee - p.Value.swap,
+                                                   _zaif);
+                }
             }
 
             return tradelist;
@@ -303,17 +422,20 @@ namespace CoinBalance.CoreAPI
             switch (assetType)
             {
                 case AssetType.Cash:
-                    pltype = EnuPLType.CashTrade;
-                    break;
+                    throw new InvalidOperationException();
+
                 case AssetType.Margin:
                     pltype = EnuPLType.MarginTrade;
                     break;
+
                 case AssetType.FX:
-                    pltype = EnuPLType.MarginTrade;
+                    pltype = EnuPLType.FXTrade;
                     break;
+
                 case AssetType.Futures:
                     pltype = EnuPLType.FuturesTrade;
                     break;
+
                 default:
                     throw new NotImplementedException();
             }
