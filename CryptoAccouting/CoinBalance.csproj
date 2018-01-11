@@ -158,6 +158,7 @@
     <Folder Include="CoreAPI\Bittrex\" />
     <Folder Include="CoreAPI\Poloniex\" />
     <Folder Include="CoreAPI\Binance\" />
+    <Folder Include="CoreAPI\CoinMarketCap\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="UIModel\CoinViewCell.xib" />
@@ -295,6 +296,7 @@
       <DependentUpon>PLViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="CoreAPI\Quoine\QuoineOrders.cs" />
+    <Compile Include="CoreAPI\CoinMarketCap\CMCTicker.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />

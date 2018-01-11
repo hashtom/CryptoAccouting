@@ -7,6 +7,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using CoinBalance.CoreModel;
+using RestSharp;
 
 namespace CoinBalance.CoreAPI
 {
@@ -138,26 +139,48 @@ namespace CoinBalance.CoreAPI
 
         private static async Task FetchCoinMarketCapAsync(InstrumentList instrumentlist, CrossRate crossrate)
         {
-            string rawjson, rawjson_yesterday;
-
             try
             {
-                using (var http = new HttpClient())
+
+                var data_yesterday = await GetMarketDataYesterday();
+                var data_btc = await GetMarketDataLatest("bitcoin");
+
+                foreach (var coin in instrumentlist)
                 {
-                    rawjson_yesterday = await http.GetStringAsync(coinbalance_url + "/market/market_yesterday.json");
-                    //btcjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/bitcoin");
+                    var data_latest = await GetMarketDataLatest(coin.Id);
 
-                    rawjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/?limit=300");
-                    await ParseAPIStrings.ParseCoinMarketCapJsonAsync(rawjson, rawjson_yesterday, instrumentlist, crossrate);
-
-                    foreach (var coin in instrumentlist.Where(x=>x.rank is int.MaxValue))
+                    if (data_latest != null)
                     {
-                        //rawjson = await http.GetStringAsync(coinbalance_url + "/market/market_latest.cgi");
-                        var rawcoinjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/" + coin.Id);
+                        if (coin.MarketPrice == null)
+                        {
+                            var p = new Price(coin);
+                            coin.MarketPrice = p;
+                        }
 
-                        await ParseAPIStrings.ParseCoinMarketCapJsonAsync(rawjson, rawcoinjson, rawjson_yesterday, coin, crossrate);
+                        coin.MarketPrice.LatestPriceBTC = (double)data_latest.price_btc;
+                        coin.MarketPrice.LatestPriceUSD = (double)data_latest.price_usd;
+                        coin.MarketPrice.PriceSource = "coinmarketcap";
+                        coin.MarketPrice.DayVolume = data_btc != null ? (double)data_latest._24h_volume_usd / (double)data_btc.price_usd : 0;
+                        coin.MarketPrice.MarketCap = data_latest.market_cap_usd != null ? (double)data_latest.market_cap_usd : 0;
+
+                        if (data_yesterday.Any(x=>x.id == coin.Id))
+                        {
+                            coin.MarketPrice.PriceBTCBefore24h = (double)data_yesterday.First(x=>x.id == coin.Id).price_btc;
+                            coin.MarketPrice.PriceUSDBefore24h = (double)data_yesterday.First(x => x.id == coin.Id).price_usd;
+                        }
+
+                        coin.MarketPrice.PriceDate = data_latest.last_updated;
+                        coin.MarketPrice.USDCrossRate = crossrate;
+                        coin.rank = data_latest.rank;
+                    }
+                    else
+                    {
+                        coin.rank = int.MaxValue;
+                        System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + " :FetchCoinMarketCapAsync: Failed to update " + coin.Name + " price.");
+                        //throw new AppCoreParseException("Failed to update " + coin.Name + " price.");
                     }
                 }
+
             }
             catch (Exception e)
             {
@@ -166,28 +189,28 @@ namespace CoinBalance.CoreAPI
             }
         }
 
-        //private static async Task FetchCoinMarketCapAsync(Instrument coin, CrossRate crossrate)
+        //private static async Task FetchCoinMarketCapAsync_old(InstrumentList instrumentlist, CrossRate crossrate)
         //{
-        //    string rawjson;
-        //    string rawjson_yesterday;
+        //    string rawjson, rawjson_yesterday;
 
         //    try
         //    {
         //        using (var http = new HttpClient())
         //        {
-        //            rawjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/" + coin.Id);
-        //        }
-
-        //        using (var http = new HttpClient())
-        //        {
         //            rawjson_yesterday = await http.GetStringAsync(coinbalance_url + "/market/market_yesterday.json");
+        //            //btcjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/bitcoin");
+
+        //            rawjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/?limit=20");
+        //            await ParseAPIStrings.ParseCoinMarketCapJsonAsync(rawjson, rawjson_yesterday, instrumentlist, crossrate);
+
+        //            foreach (var coin in instrumentlist.Where(x=>x.rank is int.MaxValue))
+        //            {
+        //                //rawjson = await http.GetStringAsync(coinbalance_url + "/market/market_latest.cgi");
+        //                var rawcoinjson = await http.GetStringAsync(coinmarketcap_url + "/v1/ticker/" + coin.Id);
+
+        //                await ParseAPIStrings.ParseCoinMarketCapJsonAsync(rawjson, rawcoinjson, rawjson_yesterday, coin, crossrate);
+        //            }
         //        }
-
-        //        var instrumentlist = new InstrumentList();
-        //        instrumentlist.Attach(coin);
-
-        //        await ParseAPIStrings.ParseCoinMarketCapJsonAsync(rawjson, rawjson_yesterday, instrumentlist, crossrate);
-
         //    }
         //    catch (Exception e)
         //    {
@@ -293,6 +316,56 @@ namespace CoinBalance.CoreAPI
             }catch(Exception e)
             {
                 System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchCrossRateAsync: Parsing Cross rate: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
+        }
+
+        private static async Task<CMCTicker> GetMarketDataLatest(string InstrumrntId)
+        {
+            var client = new RestClient(new Uri(coinmarketcap_url));
+
+            try
+            {
+                var path = $"/v1/ticker/{InstrumrntId}";
+                var req = RestUtil.CreateJsonRestRequest(path);
+
+                var results = await client.ExecuteTaskAsync<List<CMCTicker>>(req);
+                if (results.ErrorException != null)
+                {
+                    throw results.ErrorException;
+                }
+
+                return results.Data.First();
+
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": GetMarketDataLatest: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
+        }
+
+        private static async Task<List<CMCTicker>> GetMarketDataYesterday()
+        {
+            var client = new RestClient(new Uri(coinbalance_url));
+
+            try
+            {
+                var path = "/market/market_yesterday.json";
+                var req = RestUtil.CreateJsonRestRequest(path);
+
+                var results = await client.ExecuteTaskAsync<List<CMCTicker>>(req);
+                if (results.ErrorException != null)
+                {
+                    throw results.ErrorException;
+                }
+
+                return results.Data;
+
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": GetMarketDataYesterday: " + e.GetType() + ": " + e.Message);
                 throw;
             }
         }
