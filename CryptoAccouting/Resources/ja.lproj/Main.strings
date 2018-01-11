@@ -1,6 +1,8 @@
 ﻿/* Tab Bar */
 "21285.title" = "残高";
+"qvi-a2-3dC.title" = "エクスポージャ";
 "bMp-oQ-u4I.title" = "取引";
+"b5d-xK-Nxx.title" = "損益";
 "22496.title" = "設定";
 
 /* Main View Controller */
@@ -9,7 +11,6 @@
 "28445.text" = "24h収益率";
 
 /* Coin Exposure View Controller */
-"qvi-a2-3dC.title" = "エクスポージャ";
 "BGG-Io-sWa.title" = "エクスポージャ";
 
 /* Transaction View Controller*/
@@ -19,7 +20,6 @@
 "XVl-Im-sDm.text" = "買"; "XNO-tD-mKz.text" = "売"; "9I2-3e-xPn.text" = "注文数"; "z41-BW-Rw0.text" = "取引/BTC"; "h7s-9T-vZv.text" = "取引";
 "eIs-k4-e9h.text" = "注)取引は日次で集計しています";
 "e77-jJ-AW0.normalTitle" = "取引所";
-"q0F-50-Mum.normalTitle" = "表示";
 
 /* Detail View Controller */
 "28485.title" = "保有詳細";
@@ -37,6 +37,15 @@
 "20711.text" = "売買取引所";
 "yYi-bK-1bE.text" = "今の保管先";
 "nK1-1y-bmk.normalTitle" = "削除";
+
+/* PL View Conrtoller */
+"h0Q-yC-eAH.title" = "損益計算";
+"jYS-CR-hlC.text" = "現物";
+"J6u-wL-boB.text" = "取引金額";
+"RSy-6n-A3M.text" = "コスト";
+"sax-n8-58A.text" = "実現損益";
+"Dre-kQ-x7v.text" = "注)JPY取引のみ対応しています";
+"V9d-wD-dcf.normalTitle" = "取引所";
 
 /* Setting View Conroller */
 "22424.title" = "設定";
