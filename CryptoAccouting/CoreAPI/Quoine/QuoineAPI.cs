@@ -317,6 +317,26 @@ namespace CoinBalance.CoreAPI
             return positions;
         }
 
+        private static async Task<List<QuoineTradingAccount>> GetTradingAccountAsync(int calendarYear = 0, string status = null)
+        {
+            int limit = 500;
+            var from = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
+            var to = calendarYear == 0 ? new DateTime(DateTime.Now.Year, 12, 31) : new DateTime(calendarYear, 12, 31);
+            var accounts = new List<QuoineTradingAccount>();
+
+            try
+            {
+                accounts = await GetTradeAccountPageAsync(limit);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": GetLeveragePositionsAsync: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
+
+            return accounts;
+        }
+
         private static async Task<QuoineOrders> GetOrdersPageAsync(int limit, int page = 0)
         {
             var path = $"/orders?funding_currency={AppCore.BaseCurrency}&limit={limit}&with_details=1";
@@ -346,6 +366,19 @@ namespace CoinBalance.CoreAPI
 
                 var req = BuildRequest(path);
             return await RestUtil.ExecuteRequestAsync<QuoineTrades>(_restClient, req);
+        }
+
+        private static async Task<List<QuoineTradingAccount>> GetTradeAccountPageAsync(int limit, int page = 0)
+        {
+            var path = $"/trading_accounts?funding_currency={AppCore.BaseCurrency}&limit={limit}";
+
+            if (page != 0)
+            {
+                path += $"&page={page}";
+            }
+
+            var req = BuildRequest(path);
+            return await RestUtil.ExecuteRequestAsync<List<QuoineTradingAccount>>(_restClient, req);
         }
 
         //private static async Task<QuoineExecutions> FetchExecutionsPageAsync(string productid, int limit, int page = 0)
