@@ -173,80 +173,82 @@ namespace CoinBalance.CoreAPI
                                                          from_id,
                                                          order,
                                                          currency_pair);
-
-            while (true)
+            if (results.return_.Any())
             {
-                foreach (var trade in results.return_)
+                while (true)
                 {
-                    var timestamp = Util.UnixTimeStampToDateTime(trade.Value.timestamp);
-                    if (since < timestamp)
-                        trades_history.Add(trade.Key, trade.Value);
+                    foreach (var trade in results.return_)
+                    {
+                        var timestamp = Util.UnixTimeStampToDateTime(trade.Value.timestamp);
+                        if (since < timestamp)
+                            trades_history.Add(trade.Key, trade.Value);
 
-                    if (since > timestamp)
+                        if (since > timestamp)
+                        {
+                            continue;
+                        }
+                    }
+
+                    if (results.return_.Count == 0 || limit > results.return_.Count)
+                    {
+                        break;
+                    }
+
+                    from_id += limit + 1;
+
+                    results = await GetTradeHistoryPageAsync(
+                                                             limit,
+                                                             Util.ToEpochSeconds(since),
+                                                             Util.ToEpochSeconds(end),
+                                                             from_id,
+                                                             order,
+                                                             currency_pair);
+                }
+
+                foreach (var trade in trades_history)
+                {
+
+                    switch (trade.Value.your_action)
+                    {
+                        case "bid":
+                            ebuysell = EnuSide.Buy;
+                            break;
+                        case "ask":
+                            ebuysell = EnuSide.Sell;
+                            break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+
+                    var symbol = trade.Value.currency_pair;
+                    EnuCCY settleccy;
+                    if (symbol.Contains("_jpy"))
+                    {
+                        settleccy = EnuCCY.JPY;
+                    }
+                    else if (symbol.Contains("_btc"))
+                    {
+                        settleccy = EnuCCY.BTC;
+                    }
+                    else
                     {
                         continue;
                     }
+
+                    symbol = symbol.Replace("_jpy", "").Replace("_btc", "").ToUpper();
+
+                    var fee = trade.Value.fee_amount != null ? trade.Value.fee_amount : trade.Value.fee;
+
+                    tradelist.AggregateTransaction(symbol,
+                                                   AssetType.Cash,
+                                                   ebuysell,
+                                                   (decimal)trade.Value.amount,
+                                                   (decimal)trade.Value.price,
+                                                   settleccy,
+                                                   Util.FromEpochSeconds((long)trade.Value.timestamp).Date,
+                                                   (decimal)fee,
+                                                   _zaif);
                 }
-
-                if (results.return_.Count == 0 || limit > results.return_.Count)
-                {
-                    break;
-                }
-
-                from_id += limit + 1;
-
-                results = await GetTradeHistoryPageAsync(
-                                                         limit,
-                                                         Util.ToEpochSeconds(since),
-                                                         Util.ToEpochSeconds(end),
-                                                         from_id,
-                                                         order,
-                                                         currency_pair);
-            }
-
-            foreach (var trade in trades_history)
-            {
-
-                switch (trade.Value.your_action)
-                {
-                    case "bid":
-                        ebuysell = EnuSide.Buy;
-                        break;
-                    case "ask":
-                        ebuysell = EnuSide.Sell;
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
-
-                var symbol = trade.Value.currency_pair;
-                EnuCCY settleccy;
-                if (symbol.Contains("_jpy"))
-                {
-                    settleccy = EnuCCY.JPY;
-                }
-                else if (symbol.Contains("_btc"))
-                {
-                    settleccy = EnuCCY.BTC;
-                }
-                else
-                {
-                    continue;
-                }
-
-                symbol = symbol.Replace("_jpy", "").Replace("_btc", "").ToUpper();
-
-                var fee = trade.Value.fee_amount != null ? trade.Value.fee_amount : trade.Value.fee;
-
-                tradelist.AggregateTransaction(symbol,
-                                               AssetType.Cash,
-                                               ebuysell,
-                                               (decimal)trade.Value.amount,
-                                               (decimal)trade.Value.price,
-                                               settleccy,
-                                               Util.FromEpochSeconds((long)trade.Value.timestamp).Date,
-                                               (decimal)fee,
-                                               _zaif);
             }
 
             return tradelist;

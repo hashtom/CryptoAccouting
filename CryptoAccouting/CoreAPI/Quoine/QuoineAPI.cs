@@ -122,40 +122,44 @@ namespace CoinBalance.CoreAPI
             {
                 var trades = await GetOrdersPageAsync(limit);
 
-                while (true)
+                if (trades.models.Any())
                 {
-                    orders.AddRange(trades.models.Where(x => x.filled_quantity > 0).Where(x => from < x.created_at).Where(x => to >= x.created_at));
 
-                    if (trades.current_page == trades.total_pages)
+                    while (true)
                     {
-                        break;
-                    }
+                        orders.AddRange(trades.models.Where(x => x.filled_quantity > 0).Where(x => from < x.created_at).Where(x => to >= x.created_at));
 
-                    trades = await GetOrdersPageAsync(limit, trades.current_page + 1);
-                }
-
-                foreach (var trade in orders)
-                {
-                    if (!products.Any(x => x.currency_pair_code == trade.currency_pair_code))
-                    {
-                        System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + $": FetchTransactionAsync: Warning no pair {trade.currency_pair_code} found.");
-                    }
-                    else
-                    {
-                        var symbol = products.First(x => x.currency_pair_code == trade.currency_pair_code).base_currency;
-
-                        foreach (var e in trade.executions)
+                        if (trades.current_page == trades.total_pages)
                         {
-                            tradelist.AggregateTransaction(symbol,
-                                                           trade.leverage_level == 1 ? AssetType.Cash : AssetType.Margin,
-                                                           Util.ParseEnum<EnuSide>(e.my_side),
-                                                           e.quantity,
-                                                           e.price,
-                                                           EnuCCY.JPY,
-                                                           e.created_at,
-                                                           0,
-                                                           _quoine
-                                                          );
+                            break;
+                        }
+
+                        trades = await GetOrdersPageAsync(limit, trades.current_page + 1);
+                    }
+
+                    foreach (var trade in orders)
+                    {
+                        if (!products.Any(x => x.currency_pair_code == trade.currency_pair_code))
+                        {
+                            System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + $": FetchTransactionAsync: Warning no pair {trade.currency_pair_code} found.");
+                        }
+                        else
+                        {
+                            var symbol = products.First(x => x.currency_pair_code == trade.currency_pair_code).base_currency;
+
+                            foreach (var e in trade.executions)
+                            {
+                                tradelist.AggregateTransaction(symbol,
+                                                               trade.leverage_level == 1 ? AssetType.Cash : AssetType.Margin,
+                                                               Util.ParseEnum<EnuSide>(e.my_side),
+                                                               e.quantity,
+                                                               e.price,
+                                                               EnuCCY.JPY,
+                                                               e.created_at,
+                                                               0,
+                                                               _quoine
+                                                              );
+                            }
                         }
                     }
                 }

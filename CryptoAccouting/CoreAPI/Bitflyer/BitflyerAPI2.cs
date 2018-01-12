@@ -150,67 +150,72 @@ namespace CoinBalance.CoreAPI
             var from = calendarYear == 0 ? new DateTime(2012, 1, 1) : new DateTime(calendarYear, 1, 1);
             var to = calendarYear == 0 ? new DateTime(DateTime.Now.Year, 12, 31) : new DateTime(calendarYear, 12, 31);
             var transactions = new List<BitflyerExecution>();
+            var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _bitflyer };
+
             try
             {
                 var results = await GetTransactionsPageAsync(producrCode, limit);
 
-                while (true)
+                if (results.Any())
                 {
-                    transactions.AddRange(results.
-                                          Where(x => from < x.exec_date).
-                                          Where(x => to >= x.exec_date));
 
-                    if (from > results.Last().exec_date)
+                    while (true)
                     {
-                        break;
+                        transactions.AddRange(results.
+                                              Where(x => from < x.exec_date).
+                                              Where(x => to >= x.exec_date));
+
+                        if (from > results.Last().exec_date)
+                        {
+                            break;
+                        }
+
+                        if (results.Count == 0 ||
+                            limit > results.Count)
+                        {
+                            break;
+                        }
+
+                        var lastId = results.Last().id;
+                        results = await GetTransactionsPageAsync(producrCode, limit, lastId);
                     }
 
-                    if (results.Count == 0 ||
-                        limit > results.Count)
+
+                    foreach (var result in transactions)
                     {
-                        break;
+                        switch (producrCode)
+                        {
+                            case "BTC_JPY":
+                                assetType = AssetType.Cash;
+                                break;
+
+                            case "FX_BTC_JPY":
+                                assetType = AssetType.FX;
+                                break;
+
+                            case "BTCJPY_MAT1WK":
+                                assetType = AssetType.Futures;
+                                break;
+
+                            case "BTCJPY_MAT2WK":
+                                assetType = AssetType.Futures;
+                                break;
+
+                            default:
+                                throw new NotImplementedException();
+                        }
+
+                        tradelist.AggregateTransaction(_bitflyer.GetSymbolForExchange("bitcoin"),
+                                                       assetType,
+                                                       Util.ParseEnum<EnuSide>(result.side),
+                                                       (decimal)result.size,
+                                                       (decimal)result.price,
+                                                       EnuCCY.JPY,
+                                                       result.exec_date.ToLocalTime(),
+                                                       (decimal)result.commission * (decimal)result.price,
+                                                       _bitflyer
+                                                      );
                     }
-
-                    var lastId = results.Last().id;
-                    results = await GetTransactionsPageAsync(producrCode, limit, lastId);
-                }
-
-                var tradelist = new TradeList() { SettlementCCY = EnuCCY.JPY, TradedExchange = _bitflyer };
-
-                foreach (var result in transactions)
-                {
-                    switch (producrCode)
-                    {
-                        case "BTC_JPY":
-                            assetType = AssetType.Cash;
-                            break;
-
-                        case "FX_BTC_JPY":
-                            assetType = AssetType.FX;
-                            break;
-
-                        case "BTCJPY_MAT1WK":
-                            assetType = AssetType.Futures;
-                            break;
-
-                        case "BTCJPY_MAT2WK":
-                            assetType = AssetType.Futures;
-                            break;
-
-                        default:
-                            throw new NotImplementedException();
-                    }
-
-                    tradelist.AggregateTransaction(_bitflyer.GetSymbolForExchange("bitcoin"),
-                                                   assetType,
-                                                   Util.ParseEnum<EnuSide>(result.side),
-                                                   (decimal)result.size,
-                                                   (decimal)result.price,
-                                                   EnuCCY.JPY,
-                                                   result.exec_date.ToLocalTime(),
-                                                   (decimal)result.commission * (decimal)result.price,
-                                                   _bitflyer
-                                                  );
                 }
 
                 return tradelist;
