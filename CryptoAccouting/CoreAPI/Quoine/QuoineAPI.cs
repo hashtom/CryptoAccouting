@@ -185,30 +185,36 @@ namespace CoinBalance.CoreAPI
             {
                 foreach (var p in leveragePositions)
                 {
-                    var symbol = products.First(x => x.currency_pair_code == p.currency_pair_code).base_currency;
-                    var id = _quoine.GetIdForExchange(symbol);
-                    var pl = new RealizedPL(
-                        AppCore.InstrumentList.GetByInstrumentId(id),
-                        p.leverage_level == 1 ? EnuPLType.CashTrade : EnuPLType.MarginTrade,
-                        p.created_at,
-                        p.side.Contains("long") ? EnuSide.Buy : EnuSide.Sell,
-                        Util.ParseEnum<EnuBaseFiatCCY>(p.funding_currency),
-                        p.quantity,
-                        p.open_price,
-                        p.close_price,
-                        _quoine);
-
-                    var grossprofit = p.side.Contains("long") ? (p.close_price - p.open_price) * p.close_quantity : (p.open_price - p.close_price) * p.close_quantity;
-                    if (p.leverage_level == 1)
+                    if (p.close_quantity > 0 && p.pnl != 0)
                     {
-                        pl.TradeFee = grossprofit - p.close_pnl;
-                    }
-                    else
-                    {
-                        pl.MarginFee = grossprofit - p.close_pnl;
-                    }
+                        var symbol = products.First(x => x.currency_pair_code == p.currency_pair_code).base_currency;
+                        var id = _quoine.GetIdForExchange(symbol);
+                        var pl = new RealizedPL(
+                            AppCore.InstrumentList.GetByInstrumentId(id),
+                            p.leverage_level == 1 ? EnuPLType.CashTrade : EnuPLType.MarginTrade,
+                            p.updated_at,
+                            p.side.Contains("long") ? EnuSide.Buy : EnuSide.Sell,
+                            Util.ParseEnum<EnuBaseFiatCCY>(p.funding_currency),
+                            p.close_quantity,
+                            p.open_price,
+                            p.close_price,
+                            _quoine);
 
-                    leveragePL.Add(pl);
+                        var grossprofit = p.side.Contains("long") ? (p.close_price - p.open_price) * p.close_quantity : (p.open_price - p.close_price) * p.close_quantity;
+
+                        // No fee information in this output //todo
+
+                        //if (p.leverage_level == 1)
+                        //{
+                        //    pl.TradeFee = grossprofit - p.close_pnl;
+                        //}
+                        //else
+                        //{
+                        //    pl.MarginFee = grossprofit - p.close_pnl;
+                        //}
+
+                        leveragePL.Add(pl);
+                    }
                 }
             }
             catch (Exception e)
@@ -292,7 +298,7 @@ namespace CoinBalance.CoreAPI
 
                 while (true)
                 {
-                    positions.AddRange(results.models.Where(x => x.pnl > 0).Where(x => from < x.created_at).Where(x => to >= x.created_at));
+                    positions.AddRange(results.models.Where(x => from < x.created_at).Where(x => to >= x.created_at));
 
                     if (results.current_page == results.total_pages)
                     {
@@ -338,7 +344,7 @@ namespace CoinBalance.CoreAPI
                 path += $"&page={page}";
             }
 
-            var req = BuildRequest(path);
+                var req = BuildRequest(path);
             return await RestUtil.ExecuteRequestAsync<QuoineTrades>(_restClient, req);
         }
 
