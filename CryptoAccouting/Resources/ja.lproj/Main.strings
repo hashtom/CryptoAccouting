@@ -67,3 +67,4 @@
 "3QZ-zg-uFV.normalTitle" = "残高のインポート";
 
 /* About View Controller */
+"YoR-cM-unR.text" = "CoinBalanceの損益計算は参考情報です。APIの制約で正確なデータではない可能性があります。確定申告には利用しないでください。";
