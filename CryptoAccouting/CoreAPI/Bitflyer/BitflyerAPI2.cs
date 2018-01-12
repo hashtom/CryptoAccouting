@@ -115,8 +115,8 @@ namespace CoinBalance.CoreAPI
 
             var tradelist = await GetTransactionsAsync(calendarYear);
             tradelist.AddRange(await GetTransactionsAsync(calendarYear,"FX_BTC_JPY"));
-            tradelist.AddRange(await GetTransactionsAsync(calendarYear, "BTCJPY_MAT1WK"));
-            tradelist.AddRange(await GetTransactionsAsync(calendarYear, "BTCJPY_MAT2WK"));
+            //tradelist.AddRange(await GetTransactionsAsync(calendarYear, "BTCJPY_MAT1WK"));
+            //tradelist.AddRange(await GetTransactionsAsync(calendarYear, "BTCJPY_MAT2WK"));
 
             return tradelist;
         }
@@ -143,7 +143,7 @@ namespace CoinBalance.CoreAPI
             return leveragePL.Where(x => x.TradeDate >= from).Where(x => x.TradeDate <= to).ToList();
         }
 
-        private static async Task<TradeList> GetTransactionsAsync(int calendarYear = 0, string producrCode = "BTC_JPY")
+        private static async Task<TradeList> GetTransactionsAsync(int calendarYear = 0, string productCode = "BTC_JPY")
         {
             AssetType assetType;
             int limit = 500;
@@ -154,7 +154,7 @@ namespace CoinBalance.CoreAPI
 
             try
             {
-                var results = await GetTransactionsPageAsync(producrCode, limit);
+                var results = await GetTransactionsPageAsync(productCode, limit);
 
                 if (results.Any())
                 {
@@ -177,13 +177,13 @@ namespace CoinBalance.CoreAPI
                         }
 
                         var lastId = results.Last().id;
-                        results = await GetTransactionsPageAsync(producrCode, limit, lastId);
+                        results = await GetTransactionsPageAsync(productCode, limit, lastId);
                     }
 
 
                     foreach (var result in transactions)
                     {
-                        switch (producrCode)
+                        switch (productCode)
                         {
                             case "BTC_JPY":
                                 assetType = AssetType.Cash;
@@ -193,16 +193,17 @@ namespace CoinBalance.CoreAPI
                                 assetType = AssetType.FX;
                                 break;
 
-                            case "BTCJPY_MAT1WK":
-                                assetType = AssetType.Futures;
-                                break;
+                            //case "BTCJPY_MAT1WK":
+                            //    assetType = AssetType.Futures;
+                            //    break;
 
-                            case "BTCJPY_MAT2WK":
-                                assetType = AssetType.Futures;
-                                break;
+                            //case "BTCJPY_MAT2WK":
+                                //assetType = AssetType.Futures;
+                                //break;
 
                             default:
-                                throw new NotImplementedException();
+                                assetType = productCode.Contains("BTCJPY") ? AssetType.Futures : throw new NotImplementedException();
+                                break;
                         }
 
                         tradelist.AggregateTransaction(_bitflyer.GetSymbolForExchange("bitcoin"),
@@ -228,9 +229,9 @@ namespace CoinBalance.CoreAPI
 
         }
 
-        public static async Task<List<BitflyerExecution>> GetTransactionsPageAsync(string producrCode = "BTC_JPY", int limit = 500, string after = null, string before = null)
+        public static async Task<List<BitflyerExecution>> GetTransactionsPageAsync(string productCode = "BTC_JPY", int limit = 500, string after = null, string before = null)
         {
-            var path = $"/v1/me/getexecutions?product_code={producrCode}&count={limit}";
+            var path = $"/v1/me/getexecutions?product_code={productCode}&count={limit}";
 
             if (after != null)
             {
@@ -254,9 +255,9 @@ namespace CoinBalance.CoreAPI
             }
         }
 
-        public static async Task<List<BitflyerPosition>> GetLeveragePositionPageAsync(string producrCode = "BTC_JPY", int limit = 500, string after = null, string before = null)
+        public static async Task<List<BitflyerPosition>> GetLeveragePositionPageAsync(string productCode = "BTC_JPY", int limit = 500, string after = null, string before = null)
         {
-            var path = $"/v1/me/getexecutions?product_code={producrCode}&count={limit}";
+            var path = $"/v1/me/getexecutions?product_code={productCode}&count={limit}";
 
             if (after != null)
             {
