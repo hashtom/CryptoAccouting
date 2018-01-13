@@ -74,7 +74,7 @@ namespace CoinBalance.CoreAPI
                             coin.MarketPrice.LatestPriceUSD = (double)btctoken["last"];
                             coin.MarketPrice.PriceUSDBefore24h = (double)btctoken["open"];
                             coin.MarketPrice.DayVolume = (double)btctoken["volume"];
-                            coin.MarketPrice.PriceDate = (DateTime)btctoken["timestamp"];
+                            //coin.MarketPrice.PriceDate = (DateTime)btctoken["timestamp"];
                         }
                         else
                         {
@@ -87,9 +87,11 @@ namespace CoinBalance.CoreAPI
                                 coin.MarketPrice.LatestPriceUSD = (double)jtoken["last"] * (double)btctoken["last"];
                                 coin.MarketPrice.PriceUSDBefore24h = (double)jtoken["open"] * (double)btctoken["open"];
                                 coin.MarketPrice.DayVolume = (double)jtoken["volumeQuote"];
-                                coin.MarketPrice.PriceDate = (DateTime)btctoken["timestamp"];
+                               // coin.MarketPrice.PriceDate = (DateTime)btctoken["timestamp"];
                             }
                         }
+
+                        coin.MarketPrice.PriceDate = DateTime.Now;
                     }
                 }
             }

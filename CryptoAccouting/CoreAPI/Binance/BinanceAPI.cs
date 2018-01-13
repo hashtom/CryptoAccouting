@@ -74,7 +74,7 @@ namespace CoinBalance.CoreAPI
                             coin.MarketPrice.DayVolume = (double)result.quoteVolume;
                         }
                     }
-                    coin.MarketPrice.PriceDate = result.closeTime;
+                    coin.MarketPrice.PriceDate = DateTime.Now; //result.closeTime.ToLocalTime();
 
                 }
             }
