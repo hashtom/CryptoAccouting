@@ -298,7 +298,7 @@ namespace CoinBalance.CoreAPI
 
                 while (true)
                 {
-                    positions.AddRange(results.models.Where(x => from < x.created_at).Where(x => to >= x.created_at));
+                    positions.AddRange(results.models.Where(x => from < x.updated_at).Where(x => to >= x.updated_at));
 
                     if (results.current_page == results.total_pages)
                     {

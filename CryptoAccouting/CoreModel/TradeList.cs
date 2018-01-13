@@ -178,17 +178,25 @@ namespace CoinBalance.CoreModel
                          Where(t=> t.SettlementCCY == CoreAPI.Util.ParseEnum<EnuCCY>(AppCore.BaseCurrency.ToString())).
                          Where(t=>t.Type == assetType))
                 {
-
-                    if (balance > 0)
+                    
+                    if (assetType == AssetType.Cash)
                     {
                         status = tx.Side == EnuSide.Buy ? "open" : "closed";
                     }
-                    else if (balance < 0)
+                    else
                     {
-                        status = tx.Side == EnuSide.Buy ? "closed" : "open";
-                    }else
-                    {
-                        status = "open";
+                        if (balance > 0)
+                        {
+                            status = tx.Side == EnuSide.Buy ? "open" : "closed";
+                        }
+                        else if (balance < 0)
+                        {
+                            status = tx.Side == EnuSide.Buy ? "closed" : "open";
+                        }
+                        else
+                        {
+                            status = "open";
+                        }
                     }
 
                     if (status == "open")
@@ -199,11 +207,16 @@ namespace CoinBalance.CoreModel
                         accumulated_qty += tx.Quantity;
                         balance += tx.Side == EnuSide.Buy ? tx.Quantity : -tx.Quantity;
                     }
-                    else if (status == "closed")
+                    else if (status == "closed" )
                     {
                         
                         if (assetType == AssetType.Cash)
                         {
+                            if (accumulated_qty < tx.Quantity)
+                            {
+                                continue;
+                            }
+
                             side_closed = tx.Side;
                         }
                         else
