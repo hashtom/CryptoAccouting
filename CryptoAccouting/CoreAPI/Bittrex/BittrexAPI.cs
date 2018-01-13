@@ -112,7 +112,7 @@ namespace CoinBalance.CoreAPI
                             coin.MarketPrice.LatestPriceUSD = (double)jrow["Last"] * (double)btcjrow["Last"];
                             coin.MarketPrice.PriceUSDBefore24h = (double)jrow["PrevDay"] * (double)btcjrow["PrevDay"];
                             coin.MarketPrice.DayVolume = (double)jrow["BaseVolume"];
-                            coin.MarketPrice.PriceDate = = DateTime.Now; //(DateTime)jrow["TimeStamp"];
+                            coin.MarketPrice.PriceDate = DateTime.Now; //(DateTime)jrow["TimeStamp"];
                         }
                     }
 
