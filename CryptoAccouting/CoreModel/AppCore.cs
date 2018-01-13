@@ -8,8 +8,7 @@
                 baseCurrency = value;
             }         }          public static CrossRate USDCrossRate         {             get             {                 return USDCrossRates.First(x => x.Currency == baseCurrency);             }         }          public static Instrument Bitcoin         {             get
             {                 return InstrumentList.GetByInstrumentId("bitcoin");
-            }         }
-
+            }         } 
         public static void InitializeCore()
         {
 
@@ -29,7 +28,7 @@
             {                 try                 {
                     var mycoins = new InstrumentList();
                     Balance.Select(x => x.Coin).Distinct().ToList().ForEach(x => mycoins.Attach(x));
-                    await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRates);                      Balance.PriceDateTime = DateTime.Now;                     RefreshBalance(); //update weights,etc with latest price                 }                 catch(Exception e)                 {                     System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchMarketDataFromBalanceAsync: " + e.GetType() + ": " + e.Message);                     throw;                 }             }
+                    await MarketDataAPI.FetchCoinPricesAsync(PublicExchangeList, mycoins, USDCrossRates);                      Balance.PriceDateTime =   mycoins.First().MarketPrice.PriceDate.ToLocalTime();                     RefreshBalance(); //update weights,etc with latest price                 }                 catch(Exception e)                 {                     System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": FetchMarketDataFromBalanceAsync: " + e.GetType() + ": " + e.Message);                     throw;                 }             }
             else
             {                 throw new AppCoreBalanceException("Balance object is null");             }
         }          public static void SaveAppSetting()

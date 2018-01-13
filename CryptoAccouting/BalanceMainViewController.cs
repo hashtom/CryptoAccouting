@@ -18,7 +18,7 @@
                     Task.Run(async () => await AppCore.FetchCoinLogoTop100Async());                 }              }             catch (Exception e)             {
                 this.PopUpWarning("Error", "Critical issue: " + e.GetType() + ": " + e.Message);                 this.mybalance = new Balance();             } 
         }          public async override void ViewWillAppear(bool animated)         {
-            base.ViewWillAppear(animated);              if (position_count != mybalance.BalanceByCoin.Count)             {                 TableView.Source = new CoinTableSource(mybalance, this);                 position_count = mybalance.BalanceByCoin.Count;             }              ReDrawScreen(); //need this              var updatetime = AppCore.Balance.PriceDateTime.AddSeconds(60);             if (DateTime.Now > updatetime)             {
+            base.ViewWillAppear(animated);              if (position_count != mybalance.BalanceByCoin.Count)             {                 TableView.Source = new CoinTableSource(mybalance, this);                 position_count = mybalance.BalanceByCoin.Count;             }              ReDrawScreen(); //need this              if (mybalance.PriceDateTime < DateTime.Now.AddSeconds(-500))             {
                 try
                 {
                     await AppCore.LoadCrossRateAsync();
@@ -34,7 +34,6 @@
                 {
                     ReDrawScreen();
                 }             }
-
         }          public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
             base.PrepareForSegue(segue, sender);
@@ -59,7 +58,8 @@
 				//}             }
         }
          public override void ReDrawScreen()         {
-            if (AppCore.Balance != null)             {                 labelCcy.Text = AppCore.BaseCurrency.ToString();                 labelTotalFiat.Text = AppCore.NumberFormat(mybalance.LatestFiatValueBase());                 labelTotalBTC.Text = String.Format("{0:n2}", mybalance.AmountBTC());                 label1dPct.Text = AppCore.NumberFormat(mybalance.BaseRet1d(), true, false) + "%";                 label1dPct.TextColor = mybalance.BaseRet1d() >= 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);                 labelLastUpdate.Text = mybalance.PriceDateTime !=                      DateTime.MinValue ? "Price Updated: " + mybalance.PriceDateTime.ToShortDateString() + " " + mybalance.PriceDateTime.ToShortTimeString()                     : "";                 TableView.ReloadData();
+            if (AppCore.Balance != null)             {                 labelCcy.Text = AppCore.BaseCurrency.ToString();                 labelTotalFiat.Text = AppCore.NumberFormat(mybalance.LatestFiatValueBase());                 labelTotalBTC.Text = String.Format("{0:n2}", mybalance.AmountBTC());                 label1dPct.Text = AppCore.NumberFormat(mybalance.BaseRet1d(), true, false) + "%";                 label1dPct.TextColor = mybalance.BaseRet1d() >= 0 ? UIColor.FromRGB(247, 255, 247) : UIColor.FromRGB(128, 0, 0);                 labelLastUpdate.Text = mybalance.PriceDateTime !=
+                    DateTime.MinValue ? $"Price Updated: {AppCore.Balance.PriceDateTime.ToShortDateString()} {AppCore.Balance.PriceDateTime.ToShortTimeString()}" : "";                 TableView.ReloadData();
             }          } 
         partial void ButtonAddNew_Activated(UIBarButtonItem sender)
         {

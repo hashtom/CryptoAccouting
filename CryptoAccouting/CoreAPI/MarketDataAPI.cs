@@ -21,6 +21,10 @@ namespace CoinBalance.CoreAPI
         public const string CrossRatefile_today = "crossrate_today.json";
         public const string CrossRatefile_yesterday = "crossrate_yesterday.json";
 
+        static List<CMCTicker> data_yesterday;
+        static List<CMCTicker> rankData;
+
+
         public static async Task FetchCoinPricesAsync(ExchangeList exchanges, InstrumentList coins, List<CrossRate> crossrates)
         {
             try
@@ -139,15 +143,48 @@ namespace CoinBalance.CoreAPI
 
         private static async Task FetchCoinMarketCapAsync(InstrumentList instrumentlist, CrossRate crossrate)
         {
+            int rank = 200;
+
             try
             {
+                
+                if (data_yesterday is null)
+                {
+                    data_yesterday = await GetMarketDataYesterday();
+                }
+                else
+                {
+                    //if(Util.FromEpochSeconds(data_yesterday.First().last_updated) < DateTime.Now.AddSeconds(-1800))
+                    if (data_yesterday.First().last_updated < DateTime.Now.AddSeconds(-1800))
+                    {
+                        data_yesterday = await GetMarketDataYesterday();
+                    }
+                }
 
-                var data_yesterday = await GetMarketDataYesterday();
-                var data_btc = await GetMarketDataLatest("bitcoin");
+                if (rankData is null)
+                {
+                    rankData = await GetMarketDataRankLatest(rank);
+                }
+                else
+                {
+                    //if (Util.FromEpochSeconds(rankData.First().last_updated) < DateTime.Now.AddSeconds(-60))
+                    if (rankData.First().last_updated.ToLocalTime() < DateTime.Now.AddSeconds(-600))
+                    {
+                        rankData = await GetMarketDataRankLatest(rank);
+                    }
+                    else
+                    {
+                        return;
+                    }
+
+                }
+
+                var data_btc = rankData.First(x => x.id == "bitcoin");
 
                 foreach (var coin in instrumentlist)
                 {
-                    var data_latest = await GetMarketDataLatest(coin.Id);
+                    var data_latest = rankData.Any(x => x.id == coin.Id) ? rankData.First(x => x.id == coin.Id) : await GetMarketDataLatest(coin.Id);
+                    //var data_latest = rankData.Any(x => x.id == coin.Id) ? rankData.First(x => x.id == coin.Id) : null;
 
                     if (data_latest != null)
                     {
@@ -169,6 +206,7 @@ namespace CoinBalance.CoreAPI
                             coin.MarketPrice.PriceUSDBefore24h = (double)data_yesterday.First(x => x.id == coin.Id).price_usd;
                         }
 
+                        //coin.MarketPrice.PriceDate = Util.UnixTimeStampToDateTime(data_latest.last_updated);
                         coin.MarketPrice.PriceDate = data_latest.last_updated;
                         coin.MarketPrice.USDCrossRate = crossrate;
                         coin.rank = data_latest.rank;
@@ -345,6 +383,31 @@ namespace CoinBalance.CoreAPI
             }
         }
 
+        private static async Task<List<CMCTicker>> GetMarketDataRankLatest(int rank)
+        {
+            var client = new RestClient(new Uri(coinmarketcap_url));
+
+            try
+            {
+                var path = $"/v1/ticker/?limit={rank}";
+                var req = RestUtil.CreateJsonRestRequest(path);
+
+                var results = await client.ExecuteTaskAsync<List<CMCTicker>>(req);
+                if (results.ErrorException != null)
+                {
+                    throw results.ErrorException;
+                }
+
+                return results.Data;
+
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() + ": GetMarketDataLatest: " + e.GetType() + ": " + e.Message);
+                throw;
+            }
+        }
+
         private static async Task<List<CMCTicker>> GetMarketDataYesterday()
         {
             var client = new RestClient(new Uri(coinbalance_url));
@@ -360,7 +423,11 @@ namespace CoinBalance.CoreAPI
                     throw results.ErrorException;
                 }
 
-                return results.Data;
+                var data = results.Data;
+                //data.ForEach(x => x.last_updated = Util.ToEpochSeconds(DateTime.Now));
+                data.ForEach(x => x.last_updated = DateTime.Now);
+
+                return data;
 
             }
             catch (Exception e)
