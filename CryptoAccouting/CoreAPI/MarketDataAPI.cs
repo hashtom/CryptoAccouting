@@ -174,9 +174,19 @@ namespace CoinBalance.CoreAPI
                     }
                     else
                     {
-                        return;
+                        if (instrumentlist.Count() == 1)
+                        {
+                            var singlecoin = instrumentlist.First();
+                            if(!rankData.Any(x => x.id == singlecoin.Id))
+                            {
+                                rankData.Add(await GetMarketDataLatest(singlecoin.Id));
+                            }
+                        }
+                        else
+                        {
+                            return;
+                        }
                     }
-
                 }
 
                 var data_btc = rankData.First(x => x.id == "bitcoin");
