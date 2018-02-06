@@ -1487,9 +1487,9 @@
             "code": "Bitbank",
             "name": "Bitbank",
             "apiprice": "true",
-            "apitrade": "true",
+            "apitrade": "false",
             "apibalance": "true",
-            "calcPL": "true",
+            "calcPL": "false",
             "listing": [
                 {
                     "symbol": "BTC"
