@@ -793,9 +793,6 @@
                     "symbol": "CRB"
                 },
                 {
-                    "symbol": "TROLL"
-                },
-                {
                     "symbol": "PTOY"
                 },
                 {
@@ -887,6 +884,9 @@
                 },
                 {
                     "symbol": "UKG"
+                },
+                {
+                    "symbol": "IGNIS"
                 },
                 {
                     "symbol2": "BCC"
@@ -1071,6 +1071,45 @@
                 },
                 {
                     "symbol": "SNT"
+                },
+                {
+                    "symbol": "BAT"
+                },
+                {
+                    "symbol": "MNA"
+                },
+                {
+                    "symbol": "FUN"
+                },
+                {
+                    "symbol": "ZRX"
+                },
+                {
+                    "symbol": "TNB"
+                },
+                {
+                    "symbol": "SPK"
+                },
+                {
+                    "symbol": "TRX"
+                },
+                {
+                    "symbol": "RCN"
+                },
+                {
+                    "symbol": "RLC"
+                },
+                {
+                    "symbol": "AID"
+                },
+                {
+                    "symbol": "SNG"
+                },
+                {
+                    "symbol": "REP"
+                },
+                {
+                    "symbol": "ELF"
                 },
                 {
                     "symbol2": "IOT"
@@ -1440,23 +1479,29 @@
                     "symbol": "BCH"
                 },
                 {
-                  "symbol": "ETH"
+                    "symbol": "ETH"
                 }
             ]
         },
         {
             "code": "Bitbank",
             "name": "Bitbank",
-            "apiprice": "false",
-            "apitrade": "false",
-            "apibalance": "false",
-            "calcPL": "False",
+            "apiprice": "true",
+            "apitrade": "true",
+            "apibalance": "true",
+            "calcPL": "true",
             "listing": [
                 {
                     "symbol": "BTC"
                 },
                 {
-                    "symbol": "BCH"
+                    "symbol2": "BCC"
+                },
+                {
+                    "symbol": "XRP"
+                },
+                {
+                    "symbol": "MONA"
                 }
             ]
         },
@@ -1557,6 +1602,9 @@
                     "symbol": "ATS"
                 },
                 {
+                    "symbol": "AVH"
+                },
+                {
                     "symbol": "AVT"
                 },
                 {
@@ -1608,7 +1656,13 @@
                     "symbol": "BUS"
                 },
                 {
+                    "symbol": "C20"
+                },
+                {
                     "symbol": "CAPP"
+                },
+                {
+                    "symbol": "CAS"
                 },
                 {
                     "symbol": "CCT"
@@ -1623,6 +1677,12 @@
                     "symbol": "CFI"
                 },
                 {
+                    "symbol": "CHAT"
+                },
+                {
+                    "symbol": "CL"
+                },
+                {
                     "symbol": "CLD"
                 },
                 {
@@ -1633,6 +1693,9 @@
                 },
                 {
                     "symbol": "COSS"
+                },
+                {
+                    "symbol": "COV"
                 },
                 {
                     "symbol": "CPAY"
@@ -1713,9 +1776,6 @@
                     "symbol": "EBTCOLD"
                 },
                 {
-                    "symbol": "ECAT"
-                },
-                {
                     "symbol": "ECH"
                 },
                 {
@@ -1723,6 +1783,12 @@
                 },
                 {
                     "symbol": "EDO"
+                },
+                {
+                    "symbol": "EET"
+                },
+                {
+                    "symbol": "EKO"
                 },
                 {
                     "symbol": "ELE"
@@ -1735,6 +1801,9 @@
                 },
                 {
                     "symbol": "EMGO"
+                },
+                {
+                    "symbol": "ENG"
                 },
                 {
                     "symbol": "ENJ"
@@ -1788,6 +1857,9 @@
                     "symbol": "GNO"
                 },
                 {
+                    "symbol": "GRMD"
+                },
+                {
                     "symbol": "GUP"
                 },
                 {
@@ -1821,10 +1893,16 @@
                     "symbol": "ICOS"
                 },
                 {
+                    "symbol": "IDH"
+                },
+                {
                     "symbol": "IND"
                 },
                 {
                     "symbol": "INDI"
+                },
+                {
+                    "symbol": "IPL"
                 },
                 {
                     "symbol": "ITS"
@@ -1974,13 +2052,13 @@
                     "symbol": "PRE"
                 },
                 {
+                    "symbol": "PREMINE"
+                },
+                {
                     "symbol": "PRG"
                 },
                 {
                     "symbol": "PRO"
-                },
-                {
-                    "symbol": "PRS"
                 },
                 {
                     "symbol": "PTOY"
@@ -2032,6 +2110,9 @@
                 },
                 {
                     "symbol": "SMS"
+                },
+                {
+                    "symbol": "SMT"
                 },
                 {
                     "symbol": "SNC"
@@ -2094,6 +2175,9 @@
                     "symbol": "TIME"
                 },
                 {
+                    "symbol": "TIO"
+                },
+                {
                     "symbol": "TIX"
                 },
                 {
@@ -2106,6 +2190,9 @@
                     "symbol": "TNT"
                 },
                 {
+                    "symbol": "TRAC"
+                },
+                {
                     "symbol": "TRST"
                 },
                 {
@@ -2116,6 +2203,9 @@
                 },
                 {
                     "symbol": "UGT"
+                },
+                {
+                    "symbol": "ULTC"
                 },
                 {
                     "symbol": "USD"
@@ -2139,7 +2229,13 @@
                     "symbol": "VOISE"
                 },
                 {
+                    "symbol": "W3C"
+                },
+                {
                     "symbol": "WAVES"
+                },
+                {
+                    "symbol": "WAX"
                 },
                 {
                     "symbol": "WEALTH"
@@ -2440,9 +2536,6 @@
                     "symbol": "BOSON"
                 },
                 {
-                    "symbol": "CAP"
-                },
-                {
                     "symbol": "BNC"
                 },
                 {
@@ -2482,6 +2575,9 @@
                     "symbol": "CNNC"
                 },
                 {
+                    "symbol": "CAN"
+                },
+                {
                     "symbol": "CAPP"
                 },
                 {
@@ -2500,7 +2596,7 @@
                     "symbol": "CHC"
                 },
                 {
-                    "symbol": "4CHN"
+                    "symbol": "CHAN"
                 },
                 {
                     "symbol": "CHESS"
@@ -2525,6 +2621,9 @@
                 },
                 {
                     "symbol": "C2"
+                },
+                {
+                    "symbol": "CL"
                 },
                 {
                     "symbol": "CNO"
@@ -2567,9 +2666,6 @@
                 },
                 {
                     "symbol": "COR"
-                },
-                {
-                    "symbol": "CRAVE"
                 },
                 {
                     "symbol": "CRM"
@@ -2630,9 +2726,6 @@
                 },
                 {
                     "symbol": "DASH"
-                },
-                {
-                    "symbol": "DSH"
                 },
                 {
                     "symbol": "DAXX"
@@ -2708,6 +2801,9 @@
                 },
                 {
                     "symbol": "DRXNE"
+                },
+                {
+                    "symbol": "DRPU"
                 },
                 {
                     "symbol": "DBIX"
@@ -3232,9 +3328,6 @@
                     "symbol": "MOJO"
                 },
                 {
-                    "symbol": "XMCC"
-                },
-                {
                     "symbol": "XMR"
                 },
                 {
@@ -3242,6 +3335,9 @@
                 },
                 {
                     "symbol": "MONK"
+                },
+                {
+                    "symbol": "XMCC"
                 },
                 {
                     "symbol": "MSP"
@@ -3589,9 +3685,6 @@
                     "symbol": "SLOTH"
                 },
                 {
-                    "symbol": "SMART"
-                },
-                {
                     "symbol": "SMC"
                 },
                 {
@@ -3605,6 +3698,9 @@
                 },
                 {
                     "symbol": "SFC"
+                },
+                {
+                    "symbol": "SCT"
                 },
                 {
                     "symbol": "SONG"
@@ -3728,6 +3824,9 @@
                 },
                 {
                     "symbol": "TTY"
+                },
+                {
+                    "symbol": "TRX"
                 },
                 {
                     "symbol": "TRK"
@@ -4158,6 +4257,36 @@
                 },
                 {
                     "symbol": "TRIG"
+                },
+                {
+                    "symbol": "APPC"
+                },
+                {
+                    "symbol": "VIBE"
+                },
+                {
+                    "symbol": "RLC"
+                },
+                {
+                    "symbol": "INS"
+                },
+                {
+                    "symbol": "PIVX"
+                },
+                {
+                    "symbol": "IOST"
+                },
+                {
+                    "symbol": "CHAT"
+                },
+                {
+                    "symbol": "STEEM"
+                },
+                {
+                    "symbol": "NANO"
+                },
+                {
+                    "symbol": "VIA"
                 },
                 {
                     "symbol2": "IOTA"

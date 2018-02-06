@@ -136,6 +136,9 @@ namespace CoinBalance.CoreAPI
                     case "Binance":
                         return await BinanceAPI.FetchPositionAsync(exchange);
 
+                    case "Bitbank":
+                        return await BitbankAPI.FetchPositionAsync(exchange);
+
                     default:
                         throw new AppCoreWarning($"Please update to the newest version to use {exchange.Name}");
                 }

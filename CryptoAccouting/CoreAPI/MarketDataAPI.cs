@@ -125,6 +125,14 @@ namespace CoinBalance.CoreAPI
                             }
                             break;
 
+                        case "Bitbank":
+                            if (exchanges.Any(x => x.Code == "Bitbank"))
+                            {
+                                var exchange = exchanges.First(x => x.Code == "Bitbank");
+                                if (exchange.HasListedCoins()) await BitbankAPI.FetchPriceAsync(exchange, coins, usdjpy);
+                            }
+                            break;
+
                         case "coinmarketcap":
                             //await FetchCoinMarketCapAsync(coins, crossrate);
                             break;

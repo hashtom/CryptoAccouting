@@ -5,7 +5,7 @@ import requests
 import re
 import pandas as pd
 
-basedir = "/Users/name/Downloads/"
+basedir = "/Users/user/Downloads/"
 
 exchanges = []
 ExchangeList = {"exchanges": exchanges}
@@ -292,13 +292,15 @@ exchanges.append(quoine_dict)
 bitbank_dict = { 
         "code": "Bitbank",
         "name": "Bitbank",
-        "apiprice": "false",
-        "apitrade": "false",
-        "apibalance": "false",
-        "calcPL" : "False",
+        "apiprice": "true",
+        "apitrade": "true",
+        "apibalance": "true",
+        "calcPL" : "true",
          "listing": [
                  { "symbol": "BTC" },
-                 { "symbol": "BCH" }
+                 { "symbol2": "BCC" },
+                 { "symbol": "XRP" },
+                 { "symbol": "MONA" }
                  ]
          }
 exchanges.append(bitbank_dict)

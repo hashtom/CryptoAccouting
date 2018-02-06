@@ -159,6 +159,7 @@
     <Folder Include="CoreAPI\Poloniex\" />
     <Folder Include="CoreAPI\Binance\" />
     <Folder Include="CoreAPI\CoinMarketCap\" />
+    <Folder Include="CoreAPI\Bitbank\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="UIModel\CoinViewCell.xib" />
@@ -297,6 +298,10 @@
     </Compile>
     <Compile Include="CoreAPI\Quoine\QuoineOrders.cs" />
     <Compile Include="CoreAPI\CoinMarketCap\CMCTicker.cs" />
+    <Compile Include="CoreAPI\Bitbank\BitbankAsset.cs" />
+    <Compile Include="CoreAPI\Bitbank\BitbankTradeHistory.cs" />
+    <Compile Include="CoreAPI\Bitbank\BitbankAPI.cs" />
+    <Compile Include="CoreAPI\Bitbank\BitbankTicker.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\jpy.png" />

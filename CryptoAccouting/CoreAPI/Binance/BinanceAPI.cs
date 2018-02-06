@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using CoinBalance.CoreModel;
 using RestSharp;
+using static System.Threading.Thread;
 
 namespace CoinBalance.CoreAPI
 {
@@ -175,6 +176,7 @@ namespace CoinBalance.CoreAPI
 
                             var lastId = results.Last().id;
                             results = await FetchTransactionsPageAsync(symbol, limit, lastId + 1);
+                            Sleep(500);
                         }
                     }
                 }

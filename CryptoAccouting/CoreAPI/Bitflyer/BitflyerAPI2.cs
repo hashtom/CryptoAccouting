@@ -9,7 +9,6 @@ namespace CoinBalance.CoreAPI
 {
     public static class BitFlyerAPI2
     {
-
         private const string ApiRoot = "https://api.bitflyer.jp";
         private static Exchange _bitflyer;
         private static CrossRate _USDJPYrate;
